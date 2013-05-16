@@ -1,10 +1,10 @@
 package com.powerdata.openpa.padbc;
 
-public class ACLine extends BaseObject
+public class PhaseShifterWinding extends BaseObject
 {
-	private ACLineList _list;
+	private PhaseShftWndList _list;
 	
-	public ACLine(int ndx, ACLineList list)
+	public PhaseShifterWinding(int ndx, PhaseShftWndList list)
 	{
 		super(ndx);
 		_list = list;
@@ -16,8 +16,8 @@ public class ACLine extends BaseObject
 	public int getToNode() {return _list.getToNode(getIndex());}
 	public float getR() {return _list.getR(getIndex());}
 	public float getX() {return _list.getX(getIndex());}
-	public float getFromBChg() {return _list.getFromBChg(getIndex());}
-	public float getToBChg() {return _list.getToBChg(getIndex());}
+	public float getPhaseShift() {return _list.getPhaseShift(getIndex());}
+	
 	public void updateActvPower(float p) {_list.updateActvPower(getIndex(), p);}
 	public void updateReacPower(float q) {_list.updateReacPower(getIndex(), q);}
 
