@@ -2,7 +2,7 @@ package com.powerdata.openpa.padbc;
 
 import java.util.AbstractList;
 
-public abstract class NodeList extends AbstractList<Node> implements PowerAppsDBList
+public abstract class NodeList extends AbstractList<Node> implements BaseList
 {
 	public abstract float getNominalKV(int ndx);
 

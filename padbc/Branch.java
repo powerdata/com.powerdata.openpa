@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class Branch extends PowerAppsDBObject 
+public abstract class Branch extends BaseObject 
 {
 	public Branch(int ndx)
 	{

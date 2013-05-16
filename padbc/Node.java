@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public class Node extends PowerAppsDBObject
+public class Node extends BaseObject
 {
 	private NodeList _list;
 	

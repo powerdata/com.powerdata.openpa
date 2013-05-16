@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public interface PowerAppsDBList
+public interface BaseList
 {
 	public abstract String getID(int ndx);
 }

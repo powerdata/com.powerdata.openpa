@@ -45,8 +45,6 @@ public class PerfTestACLineList extends ACLineList
 
 	@Override
 	public void updateReacPower(int ndx, float q) {} 
-
-
 	
 	@Override
 	public int size() {return _size;}
@@ -107,14 +105,21 @@ public class PerfTestACLineList extends ACLineList
 		return System.currentTimeMillis() - ts;
 	}
 
+	public void report(String desc, long time, long base)
+	{
+		long pcnt = (100*time)/base;
+		System.out.printf("%25s: %3dms (%3d%%)%n",desc,time,pcnt);
+	}
+	
 	public void test()
 	{
-		System.out.println("Native Array: "+testNative());
-		System.out.println("Accessor through List: "+testAccessor());
-		System.out.println("Accessor through Object: "+testObject());
-		System.out.println("Convenient For Loop: "+testPrettyFor());
-		System.out.println("Iterator: "+testListIterator());
-		System.out.println("List Iterator: "+testListIterator());
+		long n = testNative();
+		report("Native Array",n,n);
+		report("Accessor through List",testAccessor(),n);
+		report("Accessor through Object",testObject(),n);
+		report("Convenient For Loop",testPrettyFor(),n);
+		report("Iterator",testIterator(),n);
+		report("List Iterator",testListIterator(),n);
 	}
 	
 	/**
@@ -125,6 +130,4 @@ public class PerfTestACLineList extends ACLineList
 		PerfTestACLineList test = new PerfTestACLineList(100000000);
 		test.test();
 	}
-
-
 }
