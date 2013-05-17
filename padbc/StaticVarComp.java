@@ -31,7 +31,10 @@ public class StaticVarComp extends BaseObject
 	/* MVAr case */
 //	public float getMinMVAr() {return _list.getMinMVAr(getIndex());}
 //	public float getMaxMVAr() {return _list.getMaxMVAr(getIndex());}
+//  public float getKVSetpt() {return _list.getKVSetpt(getIndex());}
+//  public float getMVArSett() {return _list.getMVArSetpt(getIndex());}
 	
+	public float getReacPwr() {return _list.getReacPwr(getIndex());}
 	public void updateReacPwr(float b) {_list.updateReacPwr(getIndex(), b);}
 	// public void updateMVAr(float mvar) {_list.updateMVAr(getIndex(), mvar);}
 

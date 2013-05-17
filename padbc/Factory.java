@@ -7,9 +7,13 @@ public interface Factory
 	public SeriesReactorList getSeriesReactors();
 	public TransformerWndList getTransformerWindings();
 	public PhaseShftWndList getPhaseShifterWindings();
-	
 
-//	public TwoTermDCLineList getTwoTermDCLines();
+	/** return all branches */
+	public BranchList getBranches();
+	
+/* TODO:  Determine how DC links could be considered as a branch if the app wants a simplified view and just uses getBranches() */
+
+	//	public TwoTermDCLineList getTwoTermDCLines();
 //	public MultiTermDCLineList getMultiTermDCLines();
 //	public VscDCLineList getVscDCLines();
 	

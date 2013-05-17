@@ -19,6 +19,8 @@ public abstract class StaticVarCompList extends AbstractList<StaticVarComp> impl
 	public abstract float getBSetpt(int ndx);
 	public abstract float getVoltageSetpt(int ndx);
 
+	public abstract float getReacPwr(int index);
 	public abstract void updateReacPwr(int ndx, float b);
+
 
 }
