@@ -164,11 +164,13 @@ public class LinkNet implements Cloneable
 	{
 		long st = System.currentTimeMillis();
 		int ncnt = getNodeCapacity();
-		BitSet seen = new BitSet(ncnt);
+		//BitSet seen = new BitSet(ncnt);
 		//ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
 		int stack[] = new int[ncnt];
 		int stackptr = 0;
 		int nrem = ncnt;
+		boolean used[] = new boolean[ncnt];
+		int usedndx = 0;
 		/** map node to an island */
 		int nodeIslandMap[] = new int[ncnt];
 		Arrays.fill(nodeIslandMap, Empty);
@@ -182,10 +184,13 @@ public class LinkNet implements Cloneable
 		while (nrem > 0)
 		{
 			// start out with a new island
-			int nextnode = seen.nextClearBit(0);
+			//x int nextnode = seen.nextClearBit(0);
+			while(used[usedndx] && usedndx < ncnt) ++usedndx;
+			int nextnode  = usedndx;
 			//stack.push(nextnode);
 			stack[stackptr++] = nextnode;
-			seen.set(nextnode);
+			//x seen.set(nextnode);
+			used[usedndx] = true;
 			//islandIndex.add(nfound);
 			boolean valid = false;
 			//while(!stack.isEmpty())
@@ -203,11 +208,13 @@ public class LinkNet implements Cloneable
 				while (end >= 0)
 				{
 					int far = _far[end];
-					if (far >= 0 && !seen.get(far))
+					//x if (far >= 0 && !seen.get(far))
+					if (far >= 0 && !used[far])
 					{
 						//stack.push(far);
 						stack[stackptr++] = far;
-						seen.set(far);
+						//x seen.set(far);
+						used[far] = true;
 					}
 					end = _next[end];
 				}
@@ -326,7 +333,7 @@ public class LinkNet implements Cloneable
 			int nodes[] = ln.getNodes();
 			ft = System.currentTimeMillis();
 			System.out.println("Time to get all branches: "+(ft-st)+"ms");
-			/*
+
 			for(int i=0; i<nodes.length; i++)
 			{
 				int node = nodes[i];
@@ -334,19 +341,16 @@ public class LinkNet implements Cloneable
 				for(int n : ln.findNodes(node)) System.out.print(" "+n);
 				System.out.println("");
 			}
-			*/
 			st = System.currentTimeMillis();
 			int islands[][] = ln.findGroups();
 			ft = System.currentTimeMillis();
 			System.out.println("Time to get all islands: "+(ft-st)+"ms");
-			/*
 			for(int i=0; i<islands.length; i++)
 			{
 				System.out.print("Island "+i+":");
 				for(int n : islands[i]) System.out.print(" "+n);
 				System.out.println("");
 			}
-			*/
 		}
 		catch(Exception e)
 		{
