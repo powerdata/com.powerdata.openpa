@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class StaticVarCompList extends AbstractList<StaticVarComp> implements BaseList
+public abstract class StaticVarCompList extends BaseList<StaticVarComp>
 {
 	public enum SVCMode
 	{

@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class TransformerWndList extends AbstractList<TransformerWinding> implements BaseList
+public abstract class TransformerWndList extends BaseList<TransformerWinding>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);

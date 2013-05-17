@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class GeneratorList extends AbstractList<Generator> implements BaseList
+public abstract class GeneratorList extends BaseList<Generator>
 {
 	public enum AVRMode {OFF, ON;}
 	public enum GenMode {OFF, MAN, AGC, EDC, LFC;}

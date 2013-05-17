@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class LoadList extends AbstractList<Load> implements BaseList
+public abstract class LoadList extends BaseList<Load>
 {
 	@Override
 	public Load get(int ndx) {return new Load(ndx, this);}

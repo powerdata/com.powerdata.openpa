@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class SeriesReactorList extends AbstractList<SeriesReactor> implements BaseList
+public abstract class SeriesReactorList extends BaseList<SeriesReactor>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);
