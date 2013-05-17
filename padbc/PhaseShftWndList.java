@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class PhaseShftWndList extends AbstractList<PhaseShifterWinding> implements BaseList
+public abstract class PhaseShftWndList extends BaseList<PhaseShifterWinding>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);

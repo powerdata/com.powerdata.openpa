@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class ACLineList extends AbstractList<ACLine> implements BaseList
+public abstract class ACLineList extends BaseList<ACLine>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);
@@ -18,7 +16,5 @@ public abstract class ACLineList extends AbstractList<ACLine> implements BaseLis
 	
 	@Override
 	public ACLine get(int ndx) {return new ACLine(ndx, this);}
-
-	public abstract StringAttrib<ACLine> mapStringAttribute(String name);
 
 }

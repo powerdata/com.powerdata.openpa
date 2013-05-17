@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class SeriesCapacitorList extends AbstractList<SeriesCapacitor> implements BaseList
+public abstract class SeriesCapacitorList extends BaseList<SeriesCapacitor>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);

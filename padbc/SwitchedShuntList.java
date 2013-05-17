@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class SwitchedShuntList extends AbstractList<SwitchedShunt> implements BaseList
+public abstract class SwitchedShuntList extends BaseList<SwitchedShunt>
 {
 	@Override
 	public SwitchedShunt get(int ndx) {return new SwitchedShunt(ndx, this);}

@@ -1,8 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-import java.util.AbstractList;
-
-public abstract class BranchList extends AbstractList<Branch> implements BaseList
+public abstract class BranchList extends BaseList<Branch>
 {
 	/** get from-side node */
 	public abstract int getFromNode(int ndx);
@@ -34,6 +32,4 @@ public abstract class BranchList extends AbstractList<Branch> implements BaseLis
 	@Override
 	public Branch get(int ndx) {return new Branch(ndx, this);}
 	
-	public abstract StringAttrib<Branch> mapStringAttribute(String name);
-
 }

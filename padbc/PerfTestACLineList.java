@@ -122,6 +122,14 @@ public class PerfTestACLineList extends ACLineList
 		report("List Iterator",testListIterator(),n);
 	}
 	
+	@Override
+	public StringAttrib<ACLine> mapStringAttrib(String attribname) {return null;}
+	@Override
+	public FloatAttrib<ACLine> mapFloatAttrib(String attribname) {return null;}
+	@Override
+	public IntAttrib<ACLine> mapIntAttrib(String attribname) {return null;}
+	@Override
+	public BooleanAttrib<ACLine> mapBooleanAttrib(String attribname) {return null;}
 	/**
 	 * @param args
 	 */
@@ -131,12 +139,4 @@ public class PerfTestACLineList extends ACLineList
 		test.test();
 	}
 
-	@Override
-	public StringAttrib<ACLine> mapStringAttribute(String name)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 }
