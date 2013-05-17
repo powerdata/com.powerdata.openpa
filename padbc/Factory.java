@@ -16,8 +16,8 @@ public interface Factory
 	/* 1-term devices */
 	public GeneratorList getGenerators();
 	public LoadList getLoads();
-//	public SwitchedShuntList getSwitchedShunts();
-//	public StaticVarCompList getStaticVarCompensators();
+	public SwitchedShuntList getSwitchedShunts();
+	public StaticVarCompList getStaticVarCompensators();
 	
 	public NodeList getNodes();
 }
