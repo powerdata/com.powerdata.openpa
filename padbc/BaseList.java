@@ -8,5 +8,5 @@ public interface BaseList
 	 */
 	public abstract String getID(int ndx);
 	
-//	public abstract <T extends BaseObject> StringAttrb<T> mapStringAttrb(String attribname);
+//	public abstract <T extends BaseObject> StringAttrb<T> mapStringAttrib(String attribname);
 }

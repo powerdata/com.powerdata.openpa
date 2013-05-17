@@ -131,18 +131,12 @@ public class PerfTestACLineList extends ACLineList
 		test.test();
 	}
 
-//	@Override
-//	public <T extends BaseObject> StringAttrb<T> mapStringAttrb(
-//			String attribname)
-//	{
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	public StringAttrib<ACLine> mapStringAttribute(String name)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
-//	@Override 
-//	public StringAttrb<ACLine> mapStringAttrb(String name)
-//	{
-//		//TODO
-//		return null;
-//	}
 }

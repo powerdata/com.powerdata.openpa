@@ -34,6 +34,6 @@ public abstract class BranchList extends AbstractList<Branch> implements BaseLis
 	@Override
 	public Branch get(int ndx) {return new Branch(ndx, this);}
 	
-	public abstract StringAttrib<Branch> getStringAttribute(String name);
+	public abstract StringAttrib<Branch> mapStringAttribute(String name);
 
 }
