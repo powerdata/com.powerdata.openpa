@@ -19,4 +19,6 @@ public abstract class ACLineList extends AbstractList<ACLine> implements BaseLis
 	@Override
 	public ACLine get(int ndx) {return new ACLine(ndx, this);}
 
+	public abstract StringAttrib<ACLine> getStringAttribute(String name);
+
 }

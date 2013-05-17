@@ -21,4 +21,7 @@ public class Load extends BaseObject
 
 	public void updateActvPwr(float p) {_list.updateActvPwr(getIndex(), p);}
 	public void updateReacPwr(float q) {_list.updateReacPwr(getIndex(), q);}
+
+//	public void updateMW(float p) {_list.updateMW(getIndex(), p);}
+//	public void updateMVAr(float q) {_list.updateMVAr(getIndex(), q);}
 }

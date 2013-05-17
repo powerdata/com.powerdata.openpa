@@ -7,6 +7,6 @@ public interface BaseList
 	 * reporting and debugging purposes
 	 */
 	public abstract String getID(int ndx);
-	//TODO:  Add method to handle generic attribute
 	
+//	public abstract <T extends BaseObject> StringAttrb<T> mapStringAttrb(String attribname);
 }

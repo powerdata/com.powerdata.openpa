@@ -11,11 +11,14 @@ public interface Factory
 	/** return all branches */
 	public BranchList getBranches();
 	
-/* TODO:  Determine how DC links could be considered as a branch if the app wants a simplified view and just uses getBranches() */
+	/*
+	 * TODO: Determine how DC links could be considered as a branch if the app
+	 * wants a simplified view and just uses getBranches()
+	 */
 
-	//	public TwoTermDCLineList getTwoTermDCLines();
-//	public MultiTermDCLineList getMultiTermDCLines();
-//	public VscDCLineList getVscDCLines();
+	// public TwoTermDCLineList getTwoTermDCLines();
+	// public MultiTermDCLineList getMultiTermDCLines();
+	// public VscDCLineList getVscDCLines();
 	
 	/* 1-term devices */
 	public GeneratorList getGenerators();

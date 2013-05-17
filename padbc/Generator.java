@@ -48,7 +48,7 @@ public class Generator extends BaseObject
 //	
 
 	
-	/* These commented out attributes would be used to support an OTS, but maybe not just the power flow */	
+	/* These commented out attributes would be used to support an OTS */	
 //	public UnitCtrlMode getUnitCtrlMode();
 //	public float getMinRatedGrossActvPwr();
 //	public float getMaxRatedGrossActvPwr();
