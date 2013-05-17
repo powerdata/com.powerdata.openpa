@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Random;
 
 public class LinkNet implements Cloneable
 {
@@ -20,15 +21,20 @@ public class LinkNet implements Cloneable
 	protected int _far[] = new int[0];
 	protected int _brcnt = 0;
 	protected int _cnt[] = new int[0];
+	protected int _maxnode = 0;
 
 	public void ensureCapacity(int nodes, int branches)
 	{
-		if (nodes >= _list.length)
+		if (nodes > _maxnode)
 		{
-			int l = _list.length;
-			_list = Arrays.copyOf(_list, nodes*2);
-			Arrays.fill(_list, l, _list.length, Empty);
-			_cnt  = Arrays.copyOf(_cnt, _list.length);
+			_maxnode = nodes;
+			if (nodes >= _list.length)
+			{
+				int l = _list.length;
+				_list = Arrays.copyOf(_list, nodes*2);
+				Arrays.fill(_list, l, _list.length, Empty);
+				_cnt = Arrays.copyOf(_cnt, _list.length);
+			}
 		}
 		if (branches >= _next.length)
 		{
@@ -69,6 +75,7 @@ public class LinkNet implements Cloneable
 		
 		_far[endp] = qnode;
 		_far[endq] = pnode;
+		
 		++(_cnt[pnode]);
 		++(_cnt[qnode]);
 
@@ -94,27 +101,28 @@ public class LinkNet implements Cloneable
 		}
 		return -1;
 	}
-	public void iterateConnections(int node)
+	public int[] findNodes(int node)
 	{
+		int nodes[] = new int[_cnt[node]];
+		int ndx = 0;
 		int end = _list[node];
 		while (end >= 0)
 		{
 			int far = _far[end];
 			if (far >= 0)
 			{
-				System.out.printf("Node: %d, far: %d, end/2: %d%n",node,far,end/2);
-				//if (!it.iterate(node, far, end / 2)) return;
+				nodes[ndx++] = far;
 			}
 			end = _next[end];
 		}
+		return nodes;
 	}
 
 	/**
-	 * Determine all islands, and report result in IslandOrganizer.  
-	 * @return
+	 * Determine all islands.  
+	 * @return two dim array[island][nodes]
 	 */
-	//public IslandOrganizer findIslands()
-	public void findIslands()
+	public int[][] findIslands()
 	{
 		int ncnt = getNodeCapacity();
 		BitSet seen = new BitSet(ncnt);
@@ -124,7 +132,7 @@ public class LinkNet implements Cloneable
 		int nodeIslandMap[] = new int[ncnt];
 		int islandCounts[] = new int[ncnt];
 		/** order nodes by island */
-		int busbyisland[] = new int[ncnt];
+		//int busbyisland[] = new int[ncnt];
 		ArrayList<Integer> islandIndex = new ArrayList<Integer>(); 
 		int nfound = 0;
 		int nisland = 0;
@@ -141,7 +149,7 @@ public class LinkNet implements Cloneable
 				int p = stack.pop();
 				nodeIslandMap[p] = nisland;
 				islandCounts[nisland] += 1;
-				busbyisland[nfound++] = p;
+				//busbyisland[nfound++] = p;
 				--nrem;
 				int end = _list[p];
 				while (end >= 0)
@@ -157,14 +165,21 @@ public class LinkNet implements Cloneable
 			}
 			++nisland;
 		}
-		System.out.printf("Island Count: %d%n", nisland);
-		//return new IslandOrganizer(nodeIslandMap, busbyisland,
-		//	islandIndex.toArray());
+		// Organize results into a 2d array
+		int iofs[] = new int[nisland];
+		int islands[][] = new int[nisland][];
+		for(int i=0; i<nisland; i++) islands[i] = new int[islandCounts[i]];
+		for(int i=0; i<ncnt; i++)
+		{
+			int indx = nodeIslandMap[i];
+			islands[indx][iofs[indx]++] = i;
+		}
+		return islands;
 	}
 	
 	public int getNodeCapacity()
 	{
-		return _list.length;
+		return _maxnode+1;
 	}
 	
 	public void eliminateBranch(int brofs, boolean eliminate)
@@ -191,6 +206,7 @@ public class LinkNet implements Cloneable
 				++_far[endb];
 				_far[enda] *= -1;
 				_far[endb] *= -1;
+				
 			}
 		}
 	}
@@ -220,39 +236,20 @@ public class LinkNet implements Cloneable
 		System.arraycopy(_cnt, 0, rv._cnt, 0, nnode);
 		
 		return rv;
-		
 	}
 	
-	public static class NodesOfBranch
-	{
-		public int p;
-		public int q;
-	}
-	
-	public void getNodesForBranch(int br, NodesOfBranch result)
+	public int[] getNodesForBranch(int br)
 	{
 		int endq = br*2;
 		int endp = endq+1;
-		result.p = _far[endp];
-		result.q = _far[endq];
+		return new int[] {_far[endp],_far[endq]};
 	}
 
-	public void getNodesForBranches(int[] br, int brofs, int brcnt,
-		int[] pnode, int pnofs,
-		int[] qnode, int qnofs)
-	{
-		for (int ibr=0; ibr < brcnt; ++ibr, ++brofs)
-		{
-			int endq = br[brofs]*2;
-			int endp = endq+1;
-			pnode[pnofs++] = _far[endp];
-			qnode[qnofs++] = _far[endq];
-		}
-	}
 	public int[] getConnectionCounts()
 	{
 		return _cnt;
 	}
+	
 	public static void main(String args[])
 	{
 		LinkNet ln = new LinkNet();
@@ -262,7 +259,18 @@ public class LinkNet implements Cloneable
 		ln.addBranch(4, 5);
 		ln.addBranch(5, 6);
 		
-		ln.iterateConnections(2);
-		ln.findIslands();
+		for(int i=0; i<7; i++)
+		{
+			System.out.print("Node "+i+":");
+			for(int n : ln.findNodes(i)) System.out.print(" "+n);
+			System.out.println("");
+		}
+		int islands[][] = ln.findIslands();
+		for(int i=0; i<islands.length; i++)
+		{
+			System.out.print("Island "+i+":");
+			for(int n : islands[i]) System.out.print(" "+n);
+			System.out.println("");
+		}
 	}
 }
