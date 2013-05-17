@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Random;
 
 public class LinkNet implements Cloneable
 {
@@ -101,6 +100,11 @@ public class LinkNet implements Cloneable
 		}
 		return -1;
 	}
+	/**
+	 * Return an array of connected nodes.
+	 * @param node
+	 * @return
+	 */
 	public int[] findNodes(int node)
 	{
 		int nodes[] = new int[_cnt[node]];
@@ -117,54 +121,100 @@ public class LinkNet implements Cloneable
 		}
 		return nodes;
 	}
+	/**
+	 * Return an array of all valid nodes.  This array will omit any
+	 * undefined nodes.
+	 * @return array of nodes
+	 */
+	public int[] getNodes()
+	{
+		int nodes[] = new int[_maxnode+1];
+		int nofs = 0;
+		for(int i=0; i<nodes.length; i++)
+		{
+			if (_list[i] > -1) nodes[nofs++] = i;
+		}
+		return Arrays.copyOf(nodes, nofs);
+	}
+	/**
+	 * Return the nodes for a branch.
+	 * @param br
+	 * @return array of two nodes
+	 */
+	public int[] getNodesForBranch(int br)
+	{
+		int endq = br*2;
+		int endp = endq+1;
+		return new int[] {_far[endp],_far[endq]};
+	}
+	/**
+	 * Return an array of counts for every possible node.
+	 * @return
+	 */
+	public int[] getConnectionCounts()
+	{
+		return _cnt;
+	}
 
 	/**
-	 * Determine all islands.  
-	 * @return two dim array[island][nodes]
+	 * Determine all connected groups of nodes.  
+	 * @return two dim array[group][nodes]
 	 */
-	public int[][] findIslands()
+	public int[][] findGroups()
 	{
+		long st = System.currentTimeMillis();
 		int ncnt = getNodeCapacity();
 		BitSet seen = new BitSet(ncnt);
-		ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+		//ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+		int stack[] = new int[ncnt];
+		int stackptr = 0;
 		int nrem = ncnt;
 		/** map node to an island */
 		int nodeIslandMap[] = new int[ncnt];
+		Arrays.fill(nodeIslandMap, Empty);
 		int islandCounts[] = new int[ncnt];
 		/** order nodes by island */
 		//int busbyisland[] = new int[ncnt];
-		ArrayList<Integer> islandIndex = new ArrayList<Integer>(); 
-		int nfound = 0;
+		//ArrayList<Integer> islandIndex = new ArrayList<Integer>(); 
+		//int nfound = 0;
 		int nisland = 0;
 		
 		while (nrem > 0)
 		{
 			// start out with a new island
 			int nextnode = seen.nextClearBit(0);
-			stack.push(nextnode);
+			//stack.push(nextnode);
+			stack[stackptr++] = nextnode;
 			seen.set(nextnode);
-			islandIndex.add(nfound);
-			while(!stack.isEmpty())
+			//islandIndex.add(nfound);
+			boolean valid = false;
+			//while(!stack.isEmpty())
+			while(stackptr > 0)
 			{
-				int p = stack.pop();
+				--nrem;
+				//int p = stack.pop();
+				int p = stack[--stackptr];
+				int end = _list[p];
+				if (end < 0) break;
+				valid = true;
 				nodeIslandMap[p] = nisland;
 				islandCounts[nisland] += 1;
 				//busbyisland[nfound++] = p;
-				--nrem;
-				int end = _list[p];
 				while (end >= 0)
 				{
 					int far = _far[end];
 					if (far >= 0 && !seen.get(far))
 					{
-						stack.push(far);
+						//stack.push(far);
+						stack[stackptr++] = far;
 						seen.set(far);
 					}
 					end = _next[end];
 				}
 			}
-			++nisland;
+			if (valid) ++nisland;
 		}
+		long mt = System.currentTimeMillis();
 		// Organize results into a 2d array
 		int iofs[] = new int[nisland];
 		int islands[][] = new int[nisland][];
@@ -172,8 +222,13 @@ public class LinkNet implements Cloneable
 		for(int i=0; i<ncnt; i++)
 		{
 			int indx = nodeIslandMap[i];
-			islands[indx][iofs[indx]++] = i;
+			if (indx >= 0) islands[indx][iofs[indx]++] = i;
 		}
+		
+		long ft = System.currentTimeMillis();
+		
+		System.out.printf("Island groupings: %dms, Array building %dms, total %dms%n",mt-st,ft-mt,ft-st);
+		
 		return islands;
 	}
 	
@@ -238,39 +293,64 @@ public class LinkNet implements Cloneable
 		return rv;
 	}
 	
-	public int[] getNodesForBranch(int br)
-	{
-		int endq = br*2;
-		int endp = endq+1;
-		return new int[] {_far[endp],_far[endq]};
-	}
-
-	public int[] getConnectionCounts()
-	{
-		return _cnt;
-	}
 	
 	public static void main(String args[])
 	{
-		LinkNet ln = new LinkNet();
-		ln.addBranch(0, 1);
-		ln.addBranch(0, 2);
-		ln.addBranch(2, 3);
-		ln.addBranch(4, 5);
-		ln.addBranch(5, 6);
-		
-		for(int i=0; i<7; i++)
-		{
-			System.out.print("Node "+i+":");
-			for(int n : ln.findNodes(i)) System.out.print(" "+n);
-			System.out.println("");
+		try
+		{			
+			LinkNet ln = new LinkNet();
+			//ln.addBranch(1, 2);
+			//ln.addBranch(3, 4);
+			//ln.addBranch(3, 5);
+			// get some test data and load it in
+			SimpleCSV csv = new SimpleCSV("testdata/branches.csv");
+			
+			int eqa[] = new int[csv.getRowCount()];
+			int eqb[] = new int[csv.getRowCount()];
+			
+			for(int r=0; r<csv.getRowCount(); r++)
+			{
+				eqa[r] = Integer.parseInt(csv.get("EQA", r));
+				eqb[r] = Integer.parseInt(csv.get("EQB", r));
+			}
+			
+			long st = System.currentTimeMillis();
+			for(int r=0; r<csv.getRowCount(); r++)
+			{
+				ln.addBranch(eqa[r], eqb[r]);
+			}
+			long ft = System.currentTimeMillis();
+			System.out.println("Time to load "+eqa.length+" branches: "+(ft-st)+"ms");
+			
+			st = System.currentTimeMillis();
+			int nodes[] = ln.getNodes();
+			ft = System.currentTimeMillis();
+			System.out.println("Time to get all branches: "+(ft-st)+"ms");
+			/*
+			for(int i=0; i<nodes.length; i++)
+			{
+				int node = nodes[i];
+				System.out.print("Node "+node+":");
+				for(int n : ln.findNodes(node)) System.out.print(" "+n);
+				System.out.println("");
+			}
+			*/
+			st = System.currentTimeMillis();
+			int islands[][] = ln.findGroups();
+			ft = System.currentTimeMillis();
+			System.out.println("Time to get all islands: "+(ft-st)+"ms");
+			/*
+			for(int i=0; i<islands.length; i++)
+			{
+				System.out.print("Island "+i+":");
+				for(int n : islands[i]) System.out.print(" "+n);
+				System.out.println("");
+			}
+			*/
 		}
-		int islands[][] = ln.findIslands();
-		for(int i=0; i<islands.length; i++)
+		catch(Exception e)
 		{
-			System.out.print("Island "+i+":");
-			for(int n : islands[i]) System.out.print(" "+n);
-			System.out.println("");
+			System.out.println("Error: "+e);
 		}
 	}
 }
