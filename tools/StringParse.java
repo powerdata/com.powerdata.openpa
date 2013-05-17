@@ -38,31 +38,18 @@ public class StringParse
 		this(bufferToParse, _WhiteSpace, false);
 	}
 
-	public void setWhiteSpace(String whiteSpace)
+	public StringParse setWhiteSpace(String whiteSpace)
 	{
 		_whiteSpace = whiteSpace;
+		return this;
 	}
 
-	public void setQuoteChar(char qchar)
+	public StringParse setQuoteChar(char qchar)
 	{
 		_quoteChar = qchar;
+		return this;
 	}
 
-	public void advanceToNextToken()
-	{
-		// pass any white space
-		while ((_nxtOfs < _strlen)
-				&& (_whiteSpace.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
-			++_nxtOfs;
-		// pass the next delimiter
-		if ((_nxtOfs < _strlen)
-				&& (_delimiters.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
-			++_nxtOfs;
-		// pass any white space
-		while ((_nxtOfs < _strlen)
-				&& (_whiteSpace.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
-			++_nxtOfs;
-	}
 	protected void advancePastWhitespace()
 	{
 		while ((_nxtOfs < _strlen) && (_whiteSpace.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
@@ -90,9 +77,6 @@ public class StringParse
 	public String nextToken()
 	{
 		// advance to the next token
-		//advanceToNextToken();
-		//advancePastWhitespace();
-		//advancePastDelimiter();
 		advancePastWhitespace();
 		// make sure we aren't done
 		_delimiterFound = false;

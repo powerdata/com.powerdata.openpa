@@ -99,12 +99,12 @@ public class SimpleCSV
 		_colNames = null;
 		// assume a header
 		String line = r.readLine();
-		setHeader(new StringParse(line,",").getTokens());
+		setHeader(new StringParse(line,",").setQuoteChar('\'').getTokens());
 		// load the data
 		while((line = r.readLine()) != null)
 		{
 			if (line.startsWith("#")) continue;
-			String vals[] = new StringParse(line,",").getTokens();
+			String vals[] = new StringParse(line,",").setQuoteChar('\'').getTokens();
 			for(int i=0; i<vals.length; i++)
 			{
 				_cols.get(i).add(vals[i]);
@@ -145,16 +145,16 @@ public class SimpleCSV
 		if(s.indexOf('"') != -1 || s.indexOf('\\') != -1)
 		{
 			// replace with special characters
-			s = s.replaceAll("\"", "\001");
+			s = s.replaceAll("'", "\001");
 			s = s.replaceAll("\\", "\002");
 			// now replace with escaped versions
-			s = s.replaceAll("\001", "\\\"");
+			s = s.replaceAll("\001", "\\'");
 			s = s.replaceAll("\002", "\\\\");
 		}
 		// if this is not a number then quote it
 		if (!IsNumber(s))
 		{
-			s = "\""+s+"\"";
+			s = "'"+s+"'";
 		}
 		return s;
 	}
@@ -194,7 +194,7 @@ public class SimpleCSV
 		try
 		{
 			System.out.println(System.getProperty("user.dir"));
-			SimpleCSV csv = new SimpleCSV("testdata/branches.csv");
+			SimpleCSV csv = new SimpleCSV("testdata/db/Branches.csv");
 			csv.save(System.out);
 		}
 		catch(Exception e)
