@@ -1,7 +1,12 @@
 package com.powerdata.openpa.padbc;
 
-public interface Factory
+public interface Container
 {
+	/** Get the name of this collection */
+	public String getCollectionName();
+	
+	/* Equipment lists */
+	
 	public ACLineList getACLines();
 	public SeriesCapacitorList getSeriesCapacitors();
 	public SeriesReactorList getSeriesReactors();
@@ -27,4 +32,6 @@ public interface Factory
 	public StaticVarCompList getStaticVarCompensators();
 	
 	public NodeList getNodes();
+	
+
 }

@@ -14,4 +14,4 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	public abstract FloatAttrib<T>   mapFloatAttrib(String attribname);
 	public abstract IntAttrib<T>     mapIntAttrib(String attribname);
 	public abstract BooleanAttrib<T> mapBooleanAttrib(String attribname);
-	}
+}
