@@ -1,9 +1,6 @@
 package com.powerdata.openpa.tools;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 
 public class LinkNet implements Cloneable
 {
@@ -18,10 +15,18 @@ public class LinkNet implements Cloneable
 	protected int _next[] = new int[0];
 	/** Node index at far end of connection */
 	protected int _far[] = new int[0];
+	/** Number of branches so far */
 	protected int _brcnt = 0;
+	/** Number of connections for each node */
 	protected int _cnt[] = new int[0];
 	protected int _maxnode = 0;
-
+	/**
+	 * Ensure that the arrays will accommodate the number of nodes and branches
+	 * specified.  The algorithm over sizes by a factor of 2 to reduce memory
+	 * allocation overhead.  This is something that could probably be tuned.
+	 * @param nodes
+	 * @param branches
+	 */
 	public void ensureCapacity(int nodes, int branches)
 	{
 		if (nodes > _maxnode)
@@ -162,58 +167,46 @@ public class LinkNet implements Cloneable
 	 */
 	public int[][] findGroups()
 	{
-		long st = System.currentTimeMillis();
 		int ncnt = getNodeCapacity();
-		//BitSet seen = new BitSet(ncnt);
-		//ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+		/** create a very simple stack */
 		int stack[] = new int[ncnt];
 		int stackptr = 0;
+		/** track how many nodes are remaining */
 		int nrem = ncnt;
+		/** mark each node that has been seen */
 		boolean used[] = new boolean[ncnt];
 		int usedndx = 0;
 		/** map node to an island */
 		int nodeIslandMap[] = new int[ncnt];
 		Arrays.fill(nodeIslandMap, Empty);
+		/** track how many nodes are in each island */
 		int islandCounts[] = new int[ncnt];
-		/** order nodes by island */
-		//int busbyisland[] = new int[ncnt];
-		//ArrayList<Integer> islandIndex = new ArrayList<Integer>(); 
-		//int nfound = 0;
+		/** number of islands found */
 		int nisland = 0;
 		
 		while (nrem > 0)
 		{
 			// start out with a new island
-			//x int nextnode = seen.nextClearBit(0);
 			while(used[usedndx] && usedndx < ncnt) ++usedndx;
 			int nextnode  = usedndx;
-			//stack.push(nextnode);
 			stack[stackptr++] = nextnode;
-			//x seen.set(nextnode);
 			used[usedndx] = true;
-			//islandIndex.add(nfound);
 			boolean valid = false;
-			//while(!stack.isEmpty())
 			while(stackptr > 0)
 			{
 				--nrem;
-				//int p = stack.pop();
 				int p = stack[--stackptr];
 				int end = _list[p];
 				if (end < 0) break;
 				valid = true;
 				nodeIslandMap[p] = nisland;
 				islandCounts[nisland] += 1;
-				//busbyisland[nfound++] = p;
 				while (end >= 0)
 				{
 					int far = _far[end];
-					//x if (far >= 0 && !seen.get(far))
 					if (far >= 0 && !used[far])
 					{
-						//stack.push(far);
 						stack[stackptr++] = far;
-						//x seen.set(far);
 						used[far] = true;
 					}
 					end = _next[end];
@@ -221,7 +214,7 @@ public class LinkNet implements Cloneable
 			}
 			if (valid) ++nisland;
 		}
-		long mt = System.currentTimeMillis();
+		
 		// Organize results into a 2d array
 		int iofs[] = new int[nisland];
 		int islands[][] = new int[nisland][];
@@ -231,19 +224,22 @@ public class LinkNet implements Cloneable
 			int indx = nodeIslandMap[i];
 			if (indx >= 0) islands[indx][iofs[indx]++] = i;
 		}
-		
-		long ft = System.currentTimeMillis();
-		
-		System.out.printf("Island groupings: %dms, Array building %dms, total %dms%n",mt-st,ft-mt,ft-st);
-		
 		return islands;
 	}
-	
+	/**
+	 * Return the maximum node number used.  The resulting system may
+	 * be sparse, so this may not be exactly the node count.
+	 * @return
+	 */
 	public int getNodeCapacity()
 	{
 		return _maxnode+1;
 	}
-	
+	/**
+	 * Remove a node from service.
+	 * @param brofs
+	 * @param eliminate
+	 */
 	public void eliminateBranch(int brofs, boolean eliminate)
 	{
 		int enda = brofs*2;
@@ -300,7 +296,10 @@ public class LinkNet implements Cloneable
 		return rv;
 	}
 	
-	
+	/**
+	 * Just for unit testing.
+	 * @param args
+	 */
 	public static void main(String args[])
 	{
 		try

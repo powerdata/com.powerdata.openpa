@@ -14,13 +14,25 @@ import java.util.HashMap;
 
 /**
  * Utility to easiy read and write CSV files.
+ * 
+ * This requires that the first row in the file is the "header" and not
+ * data.
+ * 
+ * A CSV model can be created by using the default constructor, then 
+ * setting a header using setHeader().  After that call addRow() for
+ * each new row.
+ * 
  * @author marck
  */
 public class SimpleCSV
 {
+	/** Array of column names */
 	String _colNames[] = null;
+	/** Array of columns */
 	ArrayList<ArrayList<String>> _cols = new ArrayList<ArrayList<String>>();
+	/** Array of columns by name */
 	HashMap<String,ArrayList<String>> _colsByName = new HashMap<String,ArrayList<String>>();
+	/** Number of rows */
 	int _rowCount = 0;
 
 	public SimpleCSV(){}
