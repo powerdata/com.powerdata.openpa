@@ -9,4 +9,8 @@ public abstract class Area extends BaseObject implements Container
 		super(ndx);
 		_list = list;
 	}
+	
+	@Override
+	public String getID() {return _list.getID(getIndex());}
+	public String getAreaName() {return _list.getAreaName(getIndex());}
 }

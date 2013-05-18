@@ -2,8 +2,7 @@ package com.powerdata.openpa.padbc;
 
 public interface Container
 {
-	/** Get the name of this collection */
-	public String getCollectionName();
+	public String getContainerName();
 	
 	/* Equipment lists */
 	
@@ -12,8 +11,13 @@ public interface Container
 	public SeriesReactorList getSeriesReactors();
 	public TransformerWndList getTransformerWindings();
 	public PhaseShftWndList getPhaseShifterWindings();
+	public GeneratorList getGenerators();
+	public LoadList getLoads();
+	public SwitchedShuntList getSwitchedShunts();
+	public StaticVarCompList getStaticVarCompensators();
+	public NodeList getNodes();
 
-	/** return all branches */
+	/** return all branches as a single list*/
 	public BranchList getBranches();
 	
 	/*
@@ -24,14 +28,10 @@ public interface Container
 	// public TwoTermDCLineList getTwoTermDCLines();
 	// public MultiTermDCLineList getMultiTermDCLines();
 	// public VscDCLineList getVscDCLines();
-	
-	/* 1-term devices */
-	public GeneratorList getGenerators();
-	public LoadList getLoads();
-	public SwitchedShuntList getSwitchedShunts();
-	public StaticVarCompList getStaticVarCompensators();
-	
-	public NodeList getNodes();
-	
 
+	public AreaList getAreas();
+	public OwnerList getOwners();
+	public StationList getStations();
+	public VoltageLevelList getVoltageLevels();
+	public TopNodeList getTopNodes();
 }
