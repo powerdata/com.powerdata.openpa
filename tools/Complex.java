@@ -1,4 +1,4 @@
-package com.powerdata.openpa.cmplxnum;
+package com.powerdata.openpa.tools;
 
 /**
  * Immutable complex variable

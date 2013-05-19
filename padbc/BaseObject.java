@@ -2,7 +2,7 @@ package com.powerdata.openpa.padbc;
 
 public abstract class BaseObject
 {
-	private int _ndx;
+	protected int _ndx;
 	
 	public BaseObject(int ndx)
 	{

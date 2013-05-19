@@ -1,5 +1,7 @@
 package com.powerdata.openpa.padbc;
 
+import java.io.IOException;
+
 public interface Container
 {
 	public String getContainerName();
@@ -15,7 +17,7 @@ public interface Container
 	public LoadList getLoads();
 	public SwitchedShuntList getSwitchedShunts();
 	public StaticVarCompList getStaticVarCompensators();
-	public NodeList getNodes();
+	public NodeList getNodes() throws IOException;
 
 	/** return all branches as a single list*/
 	public BranchList getBranches();

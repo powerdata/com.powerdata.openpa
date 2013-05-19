@@ -119,7 +119,7 @@ public class SimpleCSV
 			String vals[] = new StringParse(line,",").setQuoteChar('\'').getTokens();
 			for(int i=0; i<vals.length; i++)
 			{
-				_cols.get(i).add(vals[i]);
+				if (i < _cols.size()) _cols.get(i).add(vals[i]);
 			}
 			++_rowCount;
 		}

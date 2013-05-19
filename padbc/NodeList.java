@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class NodeList extends BaseList<Node>
+public abstract class NodeList<T extends Node> extends BaseList<T>
 {
 	public abstract float getNominalKV(int ndx);
 
@@ -13,5 +13,5 @@ public abstract class NodeList extends BaseList<Node>
 	public abstract void updateVang(int ndx, float va);
 
 	@Override
-	public Node get(int ndx) {return new Node(ndx, this);}
+	public abstract T get(int ndx);
 }
