@@ -1,5 +1,14 @@
 package com.powerdata.openpa.tools.psseproc;
 
+/**
+ * We have some documentation from some point before version 30. It has been
+ * used to import Version 29 files, but nothing else earlier was tested. The raw
+ * file documentation we have does not specify the version.
+ * 
+ * @author chris@powerdata.com
+ * 
+ */
+
 public class PsseClassSetVersion0 extends PsseClassSet
 {
 	public static final PsseClass Bus = new PsseClass("Bus", new PsseField[]

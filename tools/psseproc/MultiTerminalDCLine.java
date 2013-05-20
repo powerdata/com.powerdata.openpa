@@ -40,7 +40,7 @@ public class MultiTerminalDCLine extends PsseClass
 	}
 
 	@Override
-	public void processRecords(LineNumberReader rdr, PsseClassWriter wrtr,
+	public void processRecords(LineNumberReader rdr, PsseRecordProc wrtr,
 			String containerclass, String containerid) throws IOException,
 			PsseProcException
 	{
