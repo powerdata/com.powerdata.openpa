@@ -7,9 +7,9 @@ import com.powerdata.openpa.padbc.GeneratorList.UnitType;
 
 public class Generator extends BaseObject
 {
-	private GeneratorList _list;
+	private GeneratorList<?> _list;
 	
-	public Generator(int ndx, GeneratorList list)
+	public Generator(int ndx, GeneratorList<?> list)
 	{
 		super(ndx);
 		_list = list;

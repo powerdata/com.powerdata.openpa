@@ -2,9 +2,9 @@ package com.powerdata.openpa.padbc;
 
 public class Node extends BaseObject
 {
-	private NodeList _list;
+	private NodeList<?> _list;
 	
-	public Node(int ndx, NodeList list)
+	public Node(int ndx, NodeList<?> list)
 	{
 		super(ndx);
 		_list = list;

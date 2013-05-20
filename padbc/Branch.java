@@ -9,9 +9,9 @@ package com.powerdata.openpa.padbc;
  */
 public class Branch extends BaseObject
 {
-	private BranchList _list;
+	private BranchList<?> _list;
 	
-	public Branch(int ndx, BranchList list)
+	public Branch(int ndx, BranchList<?> list)
 	{
 		super(ndx);
 		_list = list;
