@@ -14,7 +14,6 @@ import com.powerdata.openpa.padbc.StaticVarCompList;
 import com.powerdata.openpa.padbc.StationList;
 import com.powerdata.openpa.padbc.SwitchedShuntList;
 import com.powerdata.openpa.padbc.TopNodeList;
-import com.powerdata.openpa.padbc.TransformerWndList;
 import com.powerdata.openpa.padbc.VoltageLevelList;
 
 public class Equipment implements com.powerdata.openpa.padbc.Container
@@ -23,6 +22,7 @@ public class Equipment implements com.powerdata.openpa.padbc.Container
 	GeneratorList _generatorList;
 	NodeList _nodeList;
 	BranchList _branchList;
+	TransformerWndList _transformerWndList;
 	
 	public Equipment(String dirpath)
 	{
@@ -38,7 +38,11 @@ public class Equipment implements com.powerdata.openpa.padbc.Container
 	@Override
 	public SeriesReactorList getSeriesReactors() { return null;	}
 	@Override
-	public TransformerWndList getTransformerWindings() { return null; }
+	public TransformerWndList getTransformerWindings() throws IOException
+	{
+		if (_transformerWndList == null) _transformerWndList = new TransformerWndList(this);
+		return _transformerWndList;
+	}
 	@Override
 	public PhaseShftWndList getPhaseShifterWindings() { return null; }
 	@Override
@@ -88,9 +92,14 @@ public class Equipment implements com.powerdata.openpa.padbc.Container
 			//{
 			//	System.out.println(g);
 			//}
-			for(Branch b : eq.getBranches())
+			//for(Branch b : eq.getBranches())
+			//{
+			//	System.out.println(b);
+			//}
+			eq.getTransformerWindings().dumpHeaders();
+			for(TransformerWinding w : eq.getTransformerWindings())
 			{
-				System.out.println(b);
+				w.dump();
 			}
 		}
 		catch (IOException e)

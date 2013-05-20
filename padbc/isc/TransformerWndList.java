@@ -26,6 +26,25 @@ public class TransformerWndList extends com.powerdata.openpa.padbc.TransformerWn
 		_size = _xfr.getRowCount();
 		_nodes = _eq.getNodes();
 	}
+	public void dumpHeaders()
+	{
+		String h[] = _xfr.getColumnNames();
+		for(int i=0; i<h.length; i++)
+		{
+			if(i>0) System.out.print(",");
+			System.out.print(h[i]);
+		}
+		System.out.println();		
+	}
+	public void dumpRow(int ndx)
+	{
+		for(int i=0; i<_xfr.getColCount(); i++)
+		{
+			if(i>0) System.out.print(",");
+			System.out.print(_xfr.get(i, ndx));
+		}
+		System.out.println();
+	}
 	@Override
 	public int getFromNode(int ndx)
 	{
@@ -59,7 +78,7 @@ public class TransformerWndList extends com.powerdata.openpa.padbc.TransformerWn
 	@Override
 	public void updateReacPower(int ndx, float q) {}
 	@Override
-	public TransformerWinding get(int ndx) { return null; }
+	public TransformerWinding get(int ndx) { return new TransformerWinding(ndx,this); }
 	@Override
 	public String getID(int ndx) { return null; }
 	@Override
@@ -79,5 +98,5 @@ public class TransformerWndList extends com.powerdata.openpa.padbc.TransformerWn
 		return null;
 	}
 	@Override
-	public int size() { return 0; }
+	public int size() { return _size; }
 }

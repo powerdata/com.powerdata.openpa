@@ -11,7 +11,7 @@ public interface Container
 	public ACLineList getACLines();
 	public SeriesCapacitorList getSeriesCapacitors();
 	public SeriesReactorList getSeriesReactors();
-	public TransformerWndList getTransformerWindings();
+	public TransformerWndList<?> getTransformerWindings() throws IOException;
 	public PhaseShftWndList getPhaseShifterWindings();
 	public GeneratorList<?> getGenerators() throws IOException;
 	public LoadList getLoads();
