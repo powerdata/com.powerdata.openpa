@@ -37,7 +37,7 @@ public class PsseClass
 	public String getVTable() {return _vtable;}
 	
 
-	public void processRecords(LineNumberReader rdr, PsseClassWriter wrtr,
+	public void processRecords(LineNumberReader rdr, PsseRecordProc wrtr,
 			String containerclass, String containerid) throws IOException,
 			PsseProcException
 	{
@@ -60,7 +60,7 @@ public class PsseClass
 		}
 	}
 	
-	public void processRecords(LineNumberReader rdr, PsseClassWriter wrtr,
+	public void processRecords(LineNumberReader rdr, PsseRecordProc wrtr,
 			int count, String containerclass, String containerid)
 			throws IOException, PsseProcException
 	{

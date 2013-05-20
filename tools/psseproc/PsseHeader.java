@@ -1,5 +1,7 @@
 package com.powerdata.openpa.tools.psseproc;
 
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,10 +40,11 @@ public class PsseHeader
 	private String _heading2;
 	private String _version;
 	
-	public PsseHeader(String l1, String l2, String l3)
+	public PsseHeader(LineNumberReader rdr) throws IOException
 	{
-		_heading1 = l2;
-		_heading2 = l3;
+		String l1 = rdr.readLine();
+		_heading1 = rdr.readLine();
+		_heading2 = rdr.readLine();
 		
 		// get the change code
 		Matcher cim = _CaseInfoPattern.matcher(l1);
