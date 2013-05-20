@@ -1,5 +1,7 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseList;
+
 public abstract class NodeList<T extends Node> extends BaseList<T>
 {
 	public abstract float getNominalKV(int ndx);

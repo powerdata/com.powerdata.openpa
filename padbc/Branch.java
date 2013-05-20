@@ -1,5 +1,7 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 /**
  * Provide generalized access to all branches.  
  * @author chris@powerdata.com
@@ -18,7 +20,7 @@ public class Branch extends BaseObject
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	/** get from-side node */
 	public int getFromNode() {return _list.getFromNode(getIndex());}
 	/** get to-side node */

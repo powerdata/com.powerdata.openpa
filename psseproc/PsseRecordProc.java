@@ -1,4 +1,4 @@
-package com.powerdata.openpa.tools.psseproc;
+package com.powerdata.openpa.psseproc;
 
 /**
  * Process individual records.  Subclass to provide appropriate implementation.

@@ -8,15 +8,15 @@ public interface Container
 	
 	/* Equipment lists */
 	
-	public ACLineList getACLines();
-	public SeriesCapacitorList getSeriesCapacitors();
-	public SeriesReactorList getSeriesReactors();
+	public ACLineList<?> getACLines();
+	public SeriesCapacitorList<?> getSeriesCapacitors();
+	public SeriesReactorList<?> getSeriesReactors();
 	public TransformerWndList<?> getTransformerWindings() throws IOException;
-	public PhaseShftWndList getPhaseShifterWindings();
+	public PhaseShftWndList<?> getPhaseShifterWindings();
 	public GeneratorList<?> getGenerators() throws IOException;
-	public LoadList getLoads();
-	public SwitchedShuntList getSwitchedShunts();
-	public StaticVarCompList getStaticVarCompensators();
+	public LoadList<?> getLoads();
+	public SwitchedShuntList<?> getSwitchedShunts();
+	public StaticVarCompList<?> getStaticVarCompensators();
 	public NodeList<?> getNodes() throws IOException;
 
 	/** return all branches as a single list*/
@@ -31,9 +31,9 @@ public interface Container
 	// public MultiTermDCLineList getMultiTermDCLines();
 	// public VscDCLineList getVscDCLines();
 
-	public AreaList getAreas();
-	public OwnerList getOwners();
-	public StationList getStations();
-	public VoltageLevelList getVoltageLevels();
-	public TopNodeList getTopNodes();
+	public AreaList<?> getAreas();
+	public OwnerList<?> getOwners();
+	public StationList<?> getStations();
+	public VoltageLevelList<?> getVoltageLevels();
+	public TopNodeList<?> getTopNodes();
 }

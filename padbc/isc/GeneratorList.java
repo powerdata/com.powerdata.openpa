@@ -2,11 +2,11 @@ package com.powerdata.openpa.padbc.isc;
 
 import java.io.IOException;
 
-import com.powerdata.openpa.padbc.BooleanAttrib;
-import com.powerdata.openpa.padbc.FloatAttrib;
-import com.powerdata.openpa.padbc.IntAttrib;
-import com.powerdata.openpa.padbc.StringAttrib;
+import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.FloatAttrib;
+import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
+import com.powerdata.openpa.tools.StringAttrib;
 
 public class GeneratorList extends com.powerdata.openpa.padbc.GeneratorList<Generator>
 {
@@ -90,7 +90,7 @@ public class GeneratorList extends com.powerdata.openpa.padbc.GeneratorList<Gene
 	@Override
 	public int getCtrlSwitch(int ndx) { return 0; }
 	@Override
-	public String getID(int ndx) { return "Gen:"+_gens.get(I,ndx)+":"+_gens.get(ID,ndx).trim();	}
+	public String getObjectID(int ndx) { return "Gen:"+_gens.get(I,ndx)+":"+_gens.get(ID,ndx).trim();	}
 	@Override
 	public StringAttrib<Generator> mapStringAttrib(String attribname) {
 		return null;
@@ -109,4 +109,10 @@ public class GeneratorList extends com.powerdata.openpa.padbc.GeneratorList<Gene
 	}
 	@Override
 	public int size() { return _size; }
+	@Override
+	public int getIndex(String id)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

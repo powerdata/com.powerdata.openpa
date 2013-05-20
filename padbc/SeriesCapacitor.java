@@ -1,17 +1,19 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class SeriesCapacitor extends BaseObject
 {
-	private SeriesCapacitorList _list;  
+	private SeriesCapacitorList<?> _list;  
 	
-	public SeriesCapacitor(int ndx, SeriesCapacitorList list)
+	public SeriesCapacitor(int ndx, SeriesCapacitorList<?> list)
 	{
 		super(ndx);
 		_list = list;
 	}
 
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public int getFromNode() {return _list.getFromNode(getIndex());}
 	public int getToNode() {return _list.getToNode(getIndex());}
 	public float getR() {return _list.getR(getIndex());}

@@ -1,17 +1,19 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class ACLine extends BaseObject
 {
-	private ACLineList _list;
+	private ACLineList<?> _list;
 	
-	public ACLine(int ndx, ACLineList list)
+	public ACLine(int ndx, ACLineList<?> list)
 	{
 		super(ndx);
 		_list = list;
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public int getFromNode() {return _list.getFromNode(getIndex());}
 	public int getToNode() {return _list.getToNode(getIndex());}
 	public float getR() {return _list.getR(getIndex());}

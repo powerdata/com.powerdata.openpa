@@ -1,19 +1,20 @@
 package com.powerdata.openpa.padbc;
 
 import com.powerdata.openpa.padbc.StaticVarCompList.SVCMode;
+import com.powerdata.openpa.tools.BaseObject;
 
 public class StaticVarComp extends BaseObject
 {
-	private StaticVarCompList _list;
+	private StaticVarCompList<?> _list;
 	
-	public StaticVarComp(int ndx, StaticVarCompList list)
+	public StaticVarComp(int ndx, StaticVarCompList<?> list)
 	{
 		super(ndx);
 		_list = list;
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	
 	/** return minimum susceptance limit in PU for 100MVA base */
 	public float getMinB() {return _list.getMinB(getIndex());}

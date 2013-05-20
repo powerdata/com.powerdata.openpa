@@ -1,4 +1,4 @@
-package com.powerdata.openpa.padbc;
+package com.powerdata.openpa.tools;
 
 public abstract class BaseObject
 {
@@ -10,5 +10,5 @@ public abstract class BaseObject
 	}
 
 	public int getIndex() {return _ndx;}
-	public abstract String getID();
+	public abstract String getObjectID();
 }

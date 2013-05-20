@@ -1,17 +1,19 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class Load extends BaseObject
 {
-	private LoadList _list;
+	private LoadList<?> _list;
 	
-	public Load(int ndx, LoadList list)
+	public Load(int ndx, LoadList<?> list)
 	{
 		super(ndx);
 		_list = list;
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public float getActvPwr() {return _list.getActvPwr(getIndex());}
 	public float getReacPwr() {return _list.getReacPwr(getIndex());}
 

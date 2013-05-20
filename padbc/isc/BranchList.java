@@ -2,11 +2,11 @@ package com.powerdata.openpa.padbc.isc;
 
 import java.io.IOException;
 
-import com.powerdata.openpa.padbc.BooleanAttrib;
-import com.powerdata.openpa.padbc.FloatAttrib;
-import com.powerdata.openpa.padbc.IntAttrib;
-import com.powerdata.openpa.padbc.StringAttrib;
+import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.FloatAttrib;
+import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
+import com.powerdata.openpa.tools.StringAttrib;
 
 public class BranchList extends com.powerdata.openpa.padbc.BranchList<Branch>
 {
@@ -78,7 +78,7 @@ public class BranchList extends com.powerdata.openpa.padbc.BranchList<Branch>
 	@Override
 	public Branch get(int ndx) { return new Branch(ndx,this); }
 	@Override
-	public String getID(int ndx)
+	public String getObjectID(int ndx)
 	{
 		return _branches.get(I, ndx)+":"+_branches.get(J, ndx)+":"+_branches.get(CKT, ndx);
 	}
@@ -100,4 +100,11 @@ public class BranchList extends com.powerdata.openpa.padbc.BranchList<Branch>
 	}
 	@Override
 	public int size() { return _size; }
+
+	@Override
+	public int getIndex(String id)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

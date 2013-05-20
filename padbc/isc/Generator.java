@@ -12,6 +12,6 @@ public class Generator extends com.powerdata.openpa.padbc.Generator
 	@Override
 	public String toString()
 	{
-		return String.format("[%d] %s Name: %s Node: %d",_ndx,getID(),getName(),getNode());
+		return String.format("[%d] %s Name: %s Node: %d",_ndx,getObjectID(),getName(),getNode());
 	}
 }

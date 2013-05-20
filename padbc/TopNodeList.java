@@ -1,6 +1,8 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class TopNodeList extends BaseList<TopNode>
+import com.powerdata.openpa.tools.BaseList;
+
+public abstract class TopNodeList<T extends TopNode> extends BaseList<T>
 {
 	// no methods yet
 }

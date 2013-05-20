@@ -1,4 +1,4 @@
-package com.powerdata.openpa.tools.psseproc;
+package com.powerdata.openpa.psseproc;
 
 /**
  * We have some documentation from some point before version 30. It has been
