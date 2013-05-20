@@ -5,125 +5,26 @@ import com.powerdata.openpa.tools.BaseList;
 public abstract class NontransformerBranchList<T extends NontransformerBranch> 
 	extends BaseList<T>
 {
+	public abstract Bus getFromBus(int ndx);
+	public abstract Bus getToBus(int ndx);
+	public abstract MeteredEnd getMeteredEnd(int ndx);
+	public abstract boolean inService(int ndx);
+	
+	public abstract String getI(int ndx);
+	public abstract String getJ(int ndx);
+	public abstract String getCKT(int ndx);
+	public abstract float getR(int ndx);
+	public abstract float getX(int ndx);
+	public abstract float getB(int ndx);
+	public abstract float getRATEA(int ndx);
+	public abstract float getRATEB(int ndx);
+	public abstract float getRATEC(int ndx);
+	public abstract float getGI(int ndx);
+	public abstract float getBI(int ndx);
+	public abstract float getGJ(int ndx);
+	public abstract float getBJ(int ndx);
+	public abstract int getST(int ndx);
+	public abstract float getLEN(int ndx);
 
-	public Bus getFromNode(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Bus getToNode(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MeteredEnd getMeteredEnd(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getCKT(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public float getR(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getX(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getB(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getRATEA(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getRATEB(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getRATEC(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getGI(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getBI(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getGJ(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public float getBJ(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public boolean inService(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public float getLEN(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public OwnershipList<?> getOwnership(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getI(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getJ(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getSTAT(int _ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-}
+	public abstract OwnershipList<?> getOwnership(int ndx);
+}	

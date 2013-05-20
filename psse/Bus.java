@@ -31,6 +31,8 @@ public class Bus extends BaseObject
 	public float getShuntConductance() {return _list.getShuntConductance(_ndx);}
 	/** Reactive component of shunt admittance to ground (BL) per-unit on 100MVA base */
 	public float getShuntSusceptance() {return _list.getShuntSusceptance(_ndx);}
+	/** Bus voltage phase angle in radians */
+	public float getVangRad() {return _list.getVangRad(_ndx);}
 	
 	
 	

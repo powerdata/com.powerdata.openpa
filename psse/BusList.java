@@ -31,6 +31,7 @@ public abstract class BusList<T extends Bus> extends BaseList<T>
 	public abstract AreaInterchange getAreaObject(int ndx);
 	public abstract Zone getZoneObject(int ndx);
 	public abstract Owner getOwnerObject(int ndx);
+	public abstract float getVangRad(int ndx);
 
 	/* raw methods */
 
