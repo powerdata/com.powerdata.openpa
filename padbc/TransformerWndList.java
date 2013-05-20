@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class TransformerWndList extends BaseList<TransformerWinding>
+public abstract class TransformerWndList<T extends TransformerWinding> extends BaseList<T>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);
@@ -19,5 +19,5 @@ public abstract class TransformerWndList extends BaseList<TransformerWinding>
 //	public abstract void updateMVAr(int ndx, float q);
 	
 	@Override
-	public TransformerWinding get(int ndx) {return new TransformerWinding(ndx, this);}
+	public abstract T get(int ndx); // {return new TransformerWinding(ndx, this);}
 }

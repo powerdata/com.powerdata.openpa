@@ -1,11 +1,9 @@
-package com.powerdata.openpa.padbc.incsys;
+package com.powerdata.openpa.padbc.isc;
 
-import com.powerdata.openpa.padbc.Generator;
-
-public class CsvGenerator extends Generator
+public class Generator extends com.powerdata.openpa.padbc.Generator
 {
-	private CsvGeneratorList _list;
-	public CsvGenerator(int ndx, CsvGeneratorList list)
+	private GeneratorList _list;
+	public Generator(int ndx, GeneratorList list)
 	{
 		super(ndx, list);
 		_list = list;

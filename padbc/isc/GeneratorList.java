@@ -1,15 +1,14 @@
-package com.powerdata.openpa.padbc.incsys;
+package com.powerdata.openpa.padbc.isc;
 
 import java.io.IOException;
 
 import com.powerdata.openpa.padbc.BooleanAttrib;
 import com.powerdata.openpa.padbc.FloatAttrib;
-import com.powerdata.openpa.padbc.GeneratorList;
 import com.powerdata.openpa.padbc.IntAttrib;
 import com.powerdata.openpa.padbc.StringAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class CsvGeneratorList extends GeneratorList<CsvGenerator>
+public class GeneratorList extends com.powerdata.openpa.padbc.GeneratorList<Generator>
 {
 	static final int I = 0;
 	static final int ID = 1;
@@ -32,28 +31,27 @@ public class CsvGeneratorList extends GeneratorList<CsvGenerator>
 	static final int O1 = 18;
 	static final int F1 = 19;
 	
-	CsvEquipment _eq;
+	Equipment _eq;
+	NodeList _nodes;
 	SimpleCSV _gens;
 	int _size;
-	int _node[];
-	public CsvGeneratorList(CsvEquipment eq) throws IOException
+
+	public GeneratorList(Equipment eq) throws IOException
 	{
 		_eq = eq;
 		_gens = new SimpleCSV(_eq.getDir().getPath()+"/Machines.csv");
 		_size = _gens.getRowCount();
-		CsvNodeList nodes = _eq.getNodes();
-		_node = new int[_size];
-		for(int i=0; i<_size; i++)
-		{
-			String busid = _gens.get(I,i);
-			_node[i] = nodes.get(i).getNdx(busid);
-		}
+		_nodes = _eq.getNodes();
 	}
 	public String getName(int ndx) { return _gens.get(ID, ndx); }
 	@Override
-	public CsvGenerator get(int ndx) { return new CsvGenerator(ndx,this); }
+	public Generator get(int ndx) { return new Generator(ndx,this); }
 	@Override
-	public int getNode(int ndx) { return _node[ndx]; }
+	public int getNode(int ndx)
+	{
+		String busid = _gens.get(I,ndx);
+		return _nodes.get(ndx).getNdx(busid);
+	}
 	@Override
 	public AVRMode getAVRMode(int ndx) { return null; }
 	@Override
@@ -94,19 +92,19 @@ public class CsvGeneratorList extends GeneratorList<CsvGenerator>
 	@Override
 	public String getID(int ndx) { return "Gen:"+_gens.get(I,ndx)+":"+_gens.get(ID,ndx).trim();	}
 	@Override
-	public StringAttrib<CsvGenerator> mapStringAttrib(String attribname) {
+	public StringAttrib<Generator> mapStringAttrib(String attribname) {
 		return null;
 	}
 	@Override
-	public FloatAttrib<CsvGenerator> mapFloatAttrib(String attribname) {
+	public FloatAttrib<Generator> mapFloatAttrib(String attribname) {
 		return null;
 	}
 	@Override
-	public IntAttrib<CsvGenerator> mapIntAttrib(String attribname) {
+	public IntAttrib<Generator> mapIntAttrib(String attribname) {
 		return null;
 	}
 	@Override
-	public BooleanAttrib<CsvGenerator> mapBooleanAttrib(String attribname) {
+	public BooleanAttrib<Generator> mapBooleanAttrib(String attribname) {
 		return null;
 	}
 	@Override

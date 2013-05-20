@@ -1,11 +1,9 @@
-package com.powerdata.openpa.padbc.incsys;
+package com.powerdata.openpa.padbc.isc;
 
-import com.powerdata.openpa.padbc.Node;
-
-public class CsvNode extends Node
+public class Node extends com.powerdata.openpa.padbc.Node
 {
-	private CsvNodeList _list;
-	public CsvNode(int ndx, CsvNodeList list)
+	private NodeList _list;
+	public Node(int ndx, NodeList list)
 	{
 		super(ndx, list);
 		_list = list;

@@ -1,17 +1,15 @@
-package com.powerdata.openpa.padbc.incsys;
+package com.powerdata.openpa.padbc.isc;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 import com.powerdata.openpa.padbc.BooleanAttrib;
 import com.powerdata.openpa.padbc.FloatAttrib;
 import com.powerdata.openpa.padbc.IntAttrib;
-import com.powerdata.openpa.padbc.NodeList;
 import com.powerdata.openpa.padbc.StringAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class CsvNodeList extends NodeList<CsvNode>
+public class NodeList extends com.powerdata.openpa.padbc.NodeList<Node>
 {
 	static final int FLAG = 0;
 	static final int I = 1;
@@ -24,12 +22,12 @@ public class CsvNodeList extends NodeList<CsvNode>
 	static final int VM = 8;
 	static final int VA = 9;
 	
-	CsvEquipment _eq;
+	Equipment _eq;
 	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	SimpleCSV _nodes;
 	int _size = 0;
 	
-	public CsvNodeList(CsvEquipment eq) throws IOException
+	public NodeList(Equipment eq) throws IOException
 	{
 		_eq = eq;
 		_nodes = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
@@ -60,27 +58,27 @@ public class CsvNodeList extends NodeList<CsvNode>
 	@Override
 	public void updateVang(int ndx, float va) { _nodes.set(VA, ndx, String.valueOf(va)); }
 	@Override
-	public StringAttrib<CsvNode> mapStringAttrib(String attribname)
+	public StringAttrib<Node> mapStringAttrib(String attribname)
 	{
 		return null;
 	}
 	@Override
-	public FloatAttrib<CsvNode> mapFloatAttrib(String attribname)
+	public FloatAttrib<Node> mapFloatAttrib(String attribname)
 	{
 		return null;
 	}
 	@Override
-	public IntAttrib<CsvNode> mapIntAttrib(String attribname)
+	public IntAttrib<Node> mapIntAttrib(String attribname)
 	{
 		return null;
 	}
 	@Override
-	public BooleanAttrib<CsvNode> mapBooleanAttrib(String attribname)
+	public BooleanAttrib<Node> mapBooleanAttrib(String attribname)
 	{
 		return null;
 	}
 	@Override
 	public int size() { return _size; }
 	@Override
-	public CsvNode get(int ndx) { return new CsvNode(ndx,this); }
+	public Node get(int ndx) { return new Node(ndx,this); }
 }

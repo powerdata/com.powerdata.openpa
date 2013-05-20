@@ -1,15 +1,14 @@
-package com.powerdata.openpa.padbc.incsys;
+package com.powerdata.openpa.padbc.isc;
 
 import java.io.IOException;
 
 import com.powerdata.openpa.padbc.BooleanAttrib;
-import com.powerdata.openpa.padbc.BranchList;
 import com.powerdata.openpa.padbc.FloatAttrib;
 import com.powerdata.openpa.padbc.IntAttrib;
 import com.powerdata.openpa.padbc.StringAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class CsvBranchList extends BranchList<CsvBranch>
+public class BranchList extends com.powerdata.openpa.padbc.BranchList<Branch>
 {
 	static final int I = 0;
 	static final int J = 1;
@@ -30,39 +29,40 @@ public class CsvBranchList extends BranchList<CsvBranch>
 	static final int F1 = 16;
 	static final int I1 = 17;
 	
-	CsvEquipment _eq;
+	Equipment _eq;
+	NodeList _nodes;
 	SimpleCSV _branches;
 	int _size;
-	int _i[];
-	int _j[];
 	
-	public CsvBranchList(CsvEquipment eq) throws IOException
+	public BranchList(Equipment eq) throws IOException
 	{
 		_eq = eq;
 		_branches = new SimpleCSV(_eq.getDir().getPath()+"/Branches.csv");
 		_size = _branches.getRowCount();
-		CsvNodeList nodes = _eq.getNodes();
-		_i = new int[_size];
-		_j = new int[_size];
-		for(int i=0; i<_size; i++)
-		{
-			String busid = _branches.get(I,i);
-			_i[i] = nodes.get(i).getNdx(busid);
-			busid = _branches.get(J, i);
-			_j[i] = nodes.get(i).getNdx(busid);
-		}
+		_nodes = _eq.getNodes();
 	}
 
 	@Override
-	public int getFromNode(int ndx) { return _i[ndx]; }
+	public int getFromNode(int ndx)
+	{
+		String busid = _branches.get(I,ndx);
+		return _nodes.get(ndx).getNdx(busid);
+	}
 	@Override
-	public int getToNode(int ndx) { return _j[ndx]; }
+	public int getToNode(int ndx)
+	{
+		String busid = _branches.get(J,ndx);
+		return _nodes.get(ndx).getNdx(busid);
+	}
 	@Override
 	public float getR(int ndx) { return 0; }
 	@Override
 	public float getX(int ndx) { return 0; }
 	@Override
-	public float getFromBChg(int ndx) { return 0; }
+	public float getFromBChg(int ndx)
+	{
+		return Float.parseFloat(_branches.get(B, ndx));
+	}
 	@Override
 	public float getToBChg(int ndx) { return 0; }
 	@Override
@@ -76,26 +76,26 @@ public class CsvBranchList extends BranchList<CsvBranch>
 	@Override
 	public void updateReacPower(int ndx, float q) { }
 	@Override
-	public CsvBranch get(int ndx) { return new CsvBranch(ndx,this); }
+	public Branch get(int ndx) { return new Branch(ndx,this); }
 	@Override
 	public String getID(int ndx)
 	{
 		return _branches.get(I, ndx)+":"+_branches.get(J, ndx)+":"+_branches.get(CKT, ndx);
 	}
 	@Override
-	public StringAttrib<CsvBranch> mapStringAttrib(String attribname) {
+	public StringAttrib<Branch> mapStringAttrib(String attribname) {
 		return null;
 	}
 	@Override
-	public FloatAttrib<CsvBranch> mapFloatAttrib(String attribname) {
+	public FloatAttrib<Branch> mapFloatAttrib(String attribname) {
 		return null;
 	}
 	@Override
-	public IntAttrib<CsvBranch> mapIntAttrib(String attribname) {
+	public IntAttrib<Branch> mapIntAttrib(String attribname) {
 		return null;
 	}
 	@Override
-	public BooleanAttrib<CsvBranch> mapBooleanAttrib(String attribname) {
+	public BooleanAttrib<Branch> mapBooleanAttrib(String attribname) {
 		return null;
 	}
 	@Override
