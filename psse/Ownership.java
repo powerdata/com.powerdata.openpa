@@ -13,11 +13,16 @@ public class Ownership extends BaseObject
 	}
 
 	@Override
-	public String getID() {return _list.getID(_ndx);}
+	public String getObjectID() {return _list.getObjectID(_ndx);}
 
 	/* Convenience Methods */
+
 	public Owner getOwner() {return _list.getOwner(_ndx);}
 	
+	/* raw psse methods */
+	
+	/** Owner number */
 	public int getO() {return _list.getO(_ndx);}
+	/** Fraction of total ownership assigned to owner */
 	public float getF() {return _list.getF(_ndx);}
 }

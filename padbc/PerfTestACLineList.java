@@ -25,7 +25,7 @@ public class PerfTestACLineList extends ACLineList<ACLine>
 	}
 	
 	@Override
-	public String getID(int ndx) {return String.valueOf(ndx);}
+	public String getObjectID(int ndx) {return String.valueOf(ndx);}
 	@Override
 	public int getIndex(String id) {return 0;}
 

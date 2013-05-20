@@ -90,7 +90,7 @@ public class GeneratorList extends com.powerdata.openpa.padbc.GeneratorList<Gene
 	@Override
 	public int getCtrlSwitch(int ndx) { return 0; }
 	@Override
-	public String getID(int ndx) { return "Gen:"+_gens.get(I,ndx)+":"+_gens.get(ID,ndx).trim();	}
+	public String getObjectID(int ndx) { return "Gen:"+_gens.get(I,ndx)+":"+_gens.get(ID,ndx).trim();	}
 	@Override
 	public StringAttrib<Generator> mapStringAttrib(String attribname) {
 		return null;

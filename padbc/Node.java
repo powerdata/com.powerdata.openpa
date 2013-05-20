@@ -13,7 +13,7 @@ public class Node extends BaseObject
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public float getNominalKV() {return _list.getNominalKV(getIndex());}
 	public float getVmag() {return _list.getVmag(getIndex());}
 	public float getVang() {return _list.getVang(getIndex());}

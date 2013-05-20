@@ -18,6 +18,6 @@ public class Node extends com.powerdata.openpa.padbc.Node
 	@Override
 	public String toString()
 	{
-		return String.format("[%d] %s Name: %s Area: %s",_ndx,getID(),getName(),getArea());
+		return String.format("[%d] %s Name: %s Area: %s",_ndx,getObjectID(),getName(),getArea());
 	}
 }

@@ -13,7 +13,7 @@ public class Zone extends BaseObject
 	}
 
 	@Override
-	public String getID() {return _list.getID(_ndx);}
+	public String getObjectID() {return _list.getObjectID(_ndx);}
 
 	/* raw PSS/e methods */
 	

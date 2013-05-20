@@ -46,7 +46,7 @@ public class NodeList extends com.powerdata.openpa.padbc.NodeList<Node>
 	public String getZone(int ndx) { return _nodes.get(ZONE, ndx); }
 	public String getOwner(int ndx) { return _nodes.get(OWNER, ndx); }
 	@Override
-	public String getID(int ndx) { return _nodes.get(I,ndx); }
+	public String getObjectID(int ndx) { return _nodes.get(I,ndx); }
 	@Override
 	public float getNominalKV(int ndx) { return Float.parseFloat(_nodes.get(BASEKV, ndx)); }
 	@Override

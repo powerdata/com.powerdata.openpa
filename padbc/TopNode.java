@@ -13,5 +13,5 @@ public abstract class TopNode extends BaseObject implements Container
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 }

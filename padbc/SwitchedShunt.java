@@ -13,7 +13,7 @@ public class SwitchedShunt extends BaseObject
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	
 	public float getNominalB() {return _list.getNominalB(getIndex());}
 	// public float getNominalMVAr() {return _list.getNominalMVAr(getIndex()));}

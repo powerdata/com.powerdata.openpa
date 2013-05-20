@@ -11,6 +11,6 @@ public class Branch extends com.powerdata.openpa.padbc.Branch
 	@Override
 	public String toString()
 	{
-		return String.format("[%d] %s %d,%d",_ndx,getID(),getFromNode(),getToNode());
+		return String.format("[%d] %s %d,%d",_ndx,getObjectID(),getFromNode(),getToNode());
 	}
 }

@@ -78,7 +78,7 @@ public class BranchList extends com.powerdata.openpa.padbc.BranchList<Branch>
 	@Override
 	public Branch get(int ndx) { return new Branch(ndx,this); }
 	@Override
-	public String getID(int ndx)
+	public String getObjectID(int ndx)
 	{
 		return _branches.get(I, ndx)+":"+_branches.get(J, ndx)+":"+_branches.get(CKT, ndx);
 	}

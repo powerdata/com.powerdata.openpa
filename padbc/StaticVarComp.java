@@ -14,7 +14,7 @@ public class StaticVarComp extends BaseObject
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	
 	/** return minimum susceptance limit in PU for 100MVA base */
 	public float getMinB() {return _list.getMinB(getIndex());}

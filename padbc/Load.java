@@ -13,7 +13,7 @@ public class Load extends BaseObject
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public float getActvPwr() {return _list.getActvPwr(getIndex());}
 	public float getReacPwr() {return _list.getReacPwr(getIndex());}
 

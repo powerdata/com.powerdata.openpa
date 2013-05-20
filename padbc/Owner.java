@@ -13,6 +13,6 @@ public abstract class Owner extends BaseObject implements Container
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public String getOwnerName() {return _list.getOwnerName(getIndex());}
 }

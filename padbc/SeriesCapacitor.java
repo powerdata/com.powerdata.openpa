@@ -13,7 +13,7 @@ public class SeriesCapacitor extends BaseObject
 	}
 
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	public int getFromNode() {return _list.getFromNode(getIndex());}
 	public int getToNode() {return _list.getToNode(getIndex());}
 	public float getR() {return _list.getR(getIndex());}

@@ -61,7 +61,7 @@ public class TransformerWndList extends com.powerdata.openpa.padbc.TransformerWn
 	@Override
 	public TransformerWinding get(int ndx) { return null; }
 	@Override
-	public String getID(int ndx) { return null; }
+	public String getObjectID(int ndx) { return null; }
 	@Override
 	public StringAttrib<TransformerWinding> mapStringAttrib(String attribname) {
 		return null;

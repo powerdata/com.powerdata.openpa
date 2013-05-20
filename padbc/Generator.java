@@ -17,7 +17,7 @@ public class Generator extends BaseObject
 	}
 	
 	@Override
-	public String getID() {return _list.getID(getIndex());}
+	public String getObjectID() {return _list.getObjectID(getIndex());}
 	
 	public int getNode() { return _list.getNode(getIndex()); }
 	public AVRMode getAVRMode() {return _list.getAVRMode(getIndex());}
