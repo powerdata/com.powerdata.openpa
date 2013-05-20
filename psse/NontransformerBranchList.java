@@ -6,16 +6,16 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 	extends BaseList<T>
 {
 
-	public int getFromNode(int _ndx)
+	public Bus getFromNode(int _ndx)
 	{
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
-	public int getToNode(int _ndx)
+	public Bus getToNode(int _ndx)
 	{
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	public MeteredEnd getMeteredEnd(int _ndx)
@@ -106,6 +106,24 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getI(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getJ(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getSTAT(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

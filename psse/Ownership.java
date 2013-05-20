@@ -15,6 +15,9 @@ public class Ownership extends BaseObject
 	@Override
 	public String getID() {return _list.getID(_ndx);}
 
+	/* Convenience Methods */
+	public Owner getOwner() {return _list.getOwner(_ndx);}
+	
 	public int getO() {return _list.getO(_ndx);}
 	public float getF() {return _list.getF(_ndx);}
 }
