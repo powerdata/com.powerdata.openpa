@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class TransformerWinding extends BaseObject
 {
-	private TransformerWndList _list;
+	private TransformerWndList<?> _list;
 	
-	public TransformerWinding(int ndx, TransformerWndList list)
+	public TransformerWinding(int ndx, TransformerWndList<?> list)
 	{
 		super(ndx);
 		_list = list;

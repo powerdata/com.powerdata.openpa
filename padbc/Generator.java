@@ -4,6 +4,7 @@ import com.powerdata.openpa.padbc.GeneratorList.AVRMode;
 import com.powerdata.openpa.padbc.GeneratorList.GenMode;
 import com.powerdata.openpa.padbc.GeneratorList.SyncMachMode;
 import com.powerdata.openpa.padbc.GeneratorList.UnitType;
+import com.powerdata.openpa.tools.BaseObject;
 
 public class Generator extends BaseObject
 {

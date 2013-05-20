@@ -37,21 +37,6 @@ public class PsseMemDB extends PsseRecordProc
 			int linenumber, String containerclass, String containerid)
 			throws PsseProcException
 	{
-//		String clname = pcclass.getClassName();
-//		int ncols = pcclass.getColumns().length;
-//		List<String[]> clist = _clmap.get(clname);
-//		int nrec = clist.size();
-//		clist.add(Arrays.copyOf(tok, ncols));
-//		PsseField[] vcols = pcclass.getVarCols();
-//		if (vcols != null)
-//		{
-//			String rtname = pcclass.getVTable();
-//			int nvc = vcols.length;
-//			List<String[]> vlist = _clmap.get(rtname);
-//		
-//
-//		
-//		return String.valueOf(nrec);
 		return null;
 	}
 

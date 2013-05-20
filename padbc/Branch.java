@@ -1,5 +1,7 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 /**
  * Provide generalized access to all branches.  
  * @author chris@powerdata.com

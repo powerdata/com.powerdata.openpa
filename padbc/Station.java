@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public abstract class Station extends BaseObject implements Container
 {
-	private StationList _list;
+	private StationList<?> _list;
 	
-	public Station(int ndx, StationList list)
+	public Station(int ndx, StationList<?> list)
 	{
 		super(ndx);
 		_list = list;

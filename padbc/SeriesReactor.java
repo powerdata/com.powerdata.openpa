@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class SeriesReactor extends BaseObject
 {
-	private SeriesReactorList _list;  
+	private SeriesReactorList<?> _list;  
 	
-	public SeriesReactor(int ndx, SeriesReactorList list)
+	public SeriesReactor(int ndx, SeriesReactorList<?> list)
 	{
 		super(ndx);
 		_list = list;

@@ -1,6 +1,8 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class VoltageLevelList extends BaseList<VoltageLevel>
+import com.powerdata.openpa.tools.BaseList;
+
+public abstract class VoltageLevelList<T extends VoltageLevel> extends BaseList<T>
 {
 	public abstract float getNominalKV(int ndx);
 }

@@ -1,5 +1,7 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class Node extends BaseObject
 {
 	private NodeList<?> _list;

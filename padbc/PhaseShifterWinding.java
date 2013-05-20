@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class PhaseShifterWinding extends BaseObject
 {
-	private PhaseShftWndList _list;
+	private PhaseShftWndList<?> _list;
 	
-	public PhaseShifterWinding(int ndx, PhaseShftWndList list)
+	public PhaseShifterWinding(int ndx, PhaseShftWndList<?> list)
 	{
 		super(ndx);
 		_list = list;

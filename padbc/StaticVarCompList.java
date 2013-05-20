@@ -1,15 +1,14 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class StaticVarCompList extends BaseList<StaticVarComp>
+import com.powerdata.openpa.tools.BaseList;
+
+public abstract class StaticVarCompList<T extends StaticVarComp> extends BaseList<T>
 {
 	public enum SVCMode
 	{
 		RegulateVoltage, FixedReactive;
 	}
 	
-	@Override
-	public StaticVarComp get(int ndx) {return new StaticVarComp(ndx, this);}
-
 	public abstract float getMinB(int ndx);
 	public abstract float getMaxB(int ndx);
 	public abstract float getSlope(int ndx);

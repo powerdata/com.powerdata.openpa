@@ -1,6 +1,8 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class PhaseShftWndList extends BaseList<PhaseShifterWinding>
+import com.powerdata.openpa.tools.BaseList;
+
+public abstract class PhaseShftWndList<T extends PhaseShifterWinding> extends BaseList<T>
 {
 	public abstract int getFromNode(int ndx);
 	public abstract int getToNode(int ndx);
@@ -11,10 +13,4 @@ public abstract class PhaseShftWndList extends BaseList<PhaseShifterWinding>
 	public abstract float getPhaseShift(int ndx);
 	public abstract void updateActvPower(int ndx, float p);
 	public abstract void updateReacPower(int ndx, float q);
-	
-//	public abstract void updateMW(int ndx, float p);
-//	public abstract void updateMVAr(int ndx, float q);
-	
-	@Override
-	public PhaseShifterWinding get(int ndx) {return new PhaseShifterWinding(ndx, this);}
 }

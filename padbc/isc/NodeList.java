@@ -3,11 +3,11 @@ package com.powerdata.openpa.padbc.isc;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.powerdata.openpa.padbc.BooleanAttrib;
-import com.powerdata.openpa.padbc.FloatAttrib;
-import com.powerdata.openpa.padbc.IntAttrib;
-import com.powerdata.openpa.padbc.StringAttrib;
+import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.FloatAttrib;
+import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
+import com.powerdata.openpa.tools.StringAttrib;
 
 public class NodeList extends com.powerdata.openpa.padbc.NodeList<Node>
 {
@@ -81,4 +81,10 @@ public class NodeList extends com.powerdata.openpa.padbc.NodeList<Node>
 	public int size() { return _size; }
 	@Override
 	public Node get(int ndx) { return new Node(ndx,this); }
+	@Override
+	public int getIndex(String id)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

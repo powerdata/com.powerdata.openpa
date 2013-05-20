@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class ACLine extends BaseObject
 {
-	private ACLineList _list;
+	private ACLineList<?> _list;
 	
-	public ACLine(int ndx, ACLineList list)
+	public ACLine(int ndx, ACLineList<?> list)
 	{
 		super(ndx);
 		_list = list;

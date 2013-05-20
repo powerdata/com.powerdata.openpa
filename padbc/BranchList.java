@@ -1,5 +1,7 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseList;
+
 public abstract class BranchList<T extends Branch> extends BaseList<T>
 {
 	/** get from-side node */

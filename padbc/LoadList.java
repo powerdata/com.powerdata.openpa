@@ -1,10 +1,9 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class LoadList extends BaseList<Load>
-{
-	@Override
-	public Load get(int ndx) {return new Load(ndx, this);}
+import com.powerdata.openpa.tools.BaseList;
 
+public abstract class LoadList<T extends Load> extends BaseList<T>
+{
 	public abstract float getReacPwr(int ndx);
 	public abstract float getActvPwr(int ndx);
 	public abstract void updateReacPwr(int ndx, float p);

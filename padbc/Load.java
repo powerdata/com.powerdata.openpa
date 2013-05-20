@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class Load extends BaseObject
 {
-	private LoadList _list;
+	private LoadList<?> _list;
 	
-	public Load(int ndx, LoadList list)
+	public Load(int ndx, LoadList<?> list)
 	{
 		super(ndx);
 		_list = list;

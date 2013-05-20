@@ -4,7 +4,12 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Random;
 
-public class PerfTestACLineList extends ACLineList
+import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.FloatAttrib;
+import com.powerdata.openpa.tools.IntAttrib;
+import com.powerdata.openpa.tools.StringAttrib;
+
+public class PerfTestACLineList extends ACLineList<ACLine>
 {
 	protected int _size;
 	protected float[] _data;
@@ -21,6 +26,8 @@ public class PerfTestACLineList extends ACLineList
 	
 	@Override
 	public String getID(int ndx) {return String.valueOf(ndx);}
+	@Override
+	public int getIndex(String id) {return 0;}
 
 	@Override
 	public int getFromNode(int ndx) {return 0;}
@@ -51,6 +58,7 @@ public class PerfTestACLineList extends ACLineList
 
 	public long testNative()
 	{
+		@SuppressWarnings("unused")
 		float sum = 0;
 		long ts = System.currentTimeMillis();
 		for(int i=0; i < _size; ++i)
@@ -60,6 +68,7 @@ public class PerfTestACLineList extends ACLineList
 	
 	public long testAccessor()
 	{
+		@SuppressWarnings("unused")
 		float sum = 0;
 		long ts = System.currentTimeMillis();
 		for(int i=0; i < _size; ++i)
@@ -69,6 +78,7 @@ public class PerfTestACLineList extends ACLineList
 	
 	public long testObject()
 	{
+		@SuppressWarnings("unused")
 		float sum = 0;
 		long ts = System.currentTimeMillis();
 		for(int i=0; i < _size; ++i)
@@ -78,6 +88,7 @@ public class PerfTestACLineList extends ACLineList
 	
 	public long testPrettyFor()
 	{
+		@SuppressWarnings("unused")
 		float sum = 0;
 		long ts = System.currentTimeMillis();
 		for(ACLine n : this)
@@ -87,6 +98,7 @@ public class PerfTestACLineList extends ACLineList
 	
 	public long testIterator()
 	{
+		@SuppressWarnings("unused")
 		float sum = 0;
 		Iterator<ACLine> li = iterator();
 		long ts = System.currentTimeMillis();
@@ -97,6 +109,7 @@ public class PerfTestACLineList extends ACLineList
 
 	public long testListIterator()
 	{
+		@SuppressWarnings("unused")
 		float sum = 0;
 		ListIterator<ACLine> li = listIterator();
 		long ts = System.currentTimeMillis();
@@ -137,6 +150,12 @@ public class PerfTestACLineList extends ACLineList
 	{
 		PerfTestACLineList test = new PerfTestACLineList(100000000);
 		test.test();
+	}
+
+	@Override
+	public ACLine get(int index)
+	{
+		return new ACLine(index, this);
 	}
 
 }

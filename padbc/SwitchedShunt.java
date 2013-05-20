@@ -1,10 +1,12 @@
 package com.powerdata.openpa.padbc;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public class SwitchedShunt extends BaseObject
 {
-	private SwitchedShuntList _list;
+	private SwitchedShuntList<?> _list;
 	
-	public SwitchedShunt(int ndx, SwitchedShuntList list)
+	public SwitchedShunt(int ndx, SwitchedShuntList<?> list)
 	{
 		super(ndx);
 		_list = list;
