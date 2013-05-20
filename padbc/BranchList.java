@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class BranchList extends BaseList<Branch>
+public abstract class BranchList<T extends Branch> extends BaseList<T>
 {
 	/** get from-side node */
 	public abstract int getFromNode(int ndx);
@@ -30,6 +30,6 @@ public abstract class BranchList extends BaseList<Branch>
 //	public abstract void updateMVAr(int ndx, float q);
 	
 	@Override
-	public Branch get(int ndx) {return new Branch(ndx, this);}
+	public abstract T get(int ndx); // {return new Branch(ndx, this);}
 	
 }

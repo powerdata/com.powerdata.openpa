@@ -13,14 +13,14 @@ public interface Container
 	public SeriesReactorList getSeriesReactors();
 	public TransformerWndList getTransformerWindings();
 	public PhaseShftWndList getPhaseShifterWindings();
-	public GeneratorList getGenerators();
+	public GeneratorList<?> getGenerators() throws IOException;
 	public LoadList getLoads();
 	public SwitchedShuntList getSwitchedShunts();
 	public StaticVarCompList getStaticVarCompensators();
-	public NodeList getNodes() throws IOException;
+	public NodeList<?> getNodes() throws IOException;
 
 	/** return all branches as a single list*/
-	public BranchList getBranches();
+	public BranchList<?> getBranches() throws IOException;
 	
 	/*
 	 * TODO: Determine how DC links could be considered as a branch if the app

@@ -24,31 +24,33 @@ public class CsvNodeList extends NodeList<CsvNode>
 	static final int VM = 8;
 	static final int VA = 9;
 	
+	CsvEquipment _eq;
 	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	SimpleCSV _nodes;
 	int _size = 0;
 	
-	public CsvNodeList(File dir) throws IOException
+	public CsvNodeList(CsvEquipment eq) throws IOException
 	{
-		_nodes = new SimpleCSV(dir.getPath()+"/Buses.csv");
+		_eq = eq;
+		_nodes = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
 		_size = _nodes.getRowCount();
 		for(int i=0; i<_size; i++) _idToNdx.put(_nodes.get(I, i), i);
 	}
 	public int getFlag(int ndx) { return Integer.parseInt(_nodes.get(FLAG,ndx)); }
-	@Override
-	public String getID(int ndx) { return _nodes.get(I,ndx); }
 	public int getNdx(String id)
 	{
 		Integer ndx = _idToNdx.get(id);
 		return (ndx != null)?ndx:-1;
 	}
 	public String getName(int ndx) { return _nodes.get(NAME,ndx); }
-	@Override
-	public float getNominalKV(int ndx) { return Float.parseFloat(_nodes.get(BASEKV, ndx)); }
 	public String getIDE(int ndx) { return _nodes.get(IDE,ndx); }
 	public String getArea(int ndx) { return _nodes.get(AREA, ndx); }
 	public String getZone(int ndx) { return _nodes.get(ZONE, ndx); }
 	public String getOwner(int ndx) { return _nodes.get(OWNER, ndx); }
+	@Override
+	public String getID(int ndx) { return _nodes.get(I,ndx); }
+	@Override
+	public float getNominalKV(int ndx) { return Float.parseFloat(_nodes.get(BASEKV, ndx)); }
 	@Override
 	public float getVmag(int ndx) { return Float.parseFloat(_nodes.get(VM, ndx)); }
 	@Override

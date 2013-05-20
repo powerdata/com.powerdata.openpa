@@ -1,6 +1,6 @@
 package com.powerdata.openpa.padbc;
 
-public abstract class GeneratorList extends BaseList<Generator>
+public abstract class GeneratorList<T extends Generator> extends BaseList<T>
 {
 	public enum AVRMode {OFF, ON;}
 	public enum GenMode {OFF, MAN, AGC, EDC, LFC;}
@@ -9,7 +9,8 @@ public abstract class GeneratorList extends BaseList<Generator>
 //	public enum UnitCtrlMode {Setpoint, Pulsed;}
 	
 	@Override
-	public Generator get(int ndx) {return new Generator(ndx, this);}
+	public abstract T get(int ndx);
+	public abstract int getNode(int ndx);
 	public abstract AVRMode getAVRMode(int ndx);
 	public abstract GenMode getGenMode(int ndx);
 	public abstract SyncMachMode getSyncMachMode(int ndx);

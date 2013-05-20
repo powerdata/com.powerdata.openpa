@@ -5,12 +5,8 @@ import java.io.IOException;
 
 import com.powerdata.openpa.padbc.ACLineList;
 import com.powerdata.openpa.padbc.AreaList;
-import com.powerdata.openpa.padbc.BranchList;
 import com.powerdata.openpa.padbc.Container;
-import com.powerdata.openpa.padbc.GeneratorList;
 import com.powerdata.openpa.padbc.LoadList;
-import com.powerdata.openpa.padbc.Node;
-import com.powerdata.openpa.padbc.NodeList;
 import com.powerdata.openpa.padbc.OwnerList;
 import com.powerdata.openpa.padbc.PhaseShftWndList;
 import com.powerdata.openpa.padbc.SeriesCapacitorList;
@@ -25,10 +21,15 @@ import com.powerdata.openpa.padbc.VoltageLevelList;
 public class CsvEquipment implements Container
 {
 	File _dir;
+	CsvGeneratorList _generatorList;
+	CsvNodeList _nodeList;
+	CsvBranchList _branchList;
+	
 	public CsvEquipment(String dirpath)
 	{
 		_dir = new File(dirpath);
 	}
+	public File getDir() { return _dir; }
 	@Override
 	public String getContainerName() { return "CsvEquipment"; }
 	@Override
@@ -42,7 +43,11 @@ public class CsvEquipment implements Container
 	@Override
 	public PhaseShftWndList getPhaseShifterWindings() { return null; }
 	@Override
-	public GeneratorList getGenerators() { return null; }
+	public CsvGeneratorList getGenerators() throws IOException
+	{
+		if( _generatorList == null) _generatorList = new CsvGeneratorList(this);
+		return _generatorList;
+	}
 	@Override
 	public LoadList getLoads() { return null; }
 	@Override
@@ -50,9 +55,17 @@ public class CsvEquipment implements Container
 	@Override
 	public StaticVarCompList getStaticVarCompensators() { return null; }
 	@Override
-	public CsvNodeList getNodes() throws IOException { return new CsvNodeList(_dir); }
+	public CsvNodeList getNodes() throws IOException
+	{
+		if( _nodeList == null) _nodeList = new CsvNodeList(this);
+		return _nodeList;
+	}
 	@Override
-	public BranchList getBranches() { return null; }
+	public CsvBranchList getBranches() throws IOException
+	{
+		if ( _branchList == null) _branchList = new CsvBranchList(this);
+		return _branchList;
+	}
 	@Override
 	public AreaList getAreas() { return null; }
 	@Override
@@ -68,11 +81,17 @@ public class CsvEquipment implements Container
 		try
 		{
 			CsvEquipment eq = new CsvEquipment("testdata/db");
-			CsvNodeList nl = eq.getNodes();
-			System.out.println("Node count: "+nl.size());
-			for(CsvNode n : nl)
+			//for(CsvNode n : eq.getNodes())
+			//{
+			//	System.out.println(n);
+			//}
+			//for(CsvGenerator g : eq.getGenerators())
+			//{
+			//	System.out.println(g);
+			//}
+			for(CsvBranch b : eq.getBranches())
 			{
-				System.out.println(n);
+				System.out.println(b);
 			}
 		}
 		catch (IOException e)
