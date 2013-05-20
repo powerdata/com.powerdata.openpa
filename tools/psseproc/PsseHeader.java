@@ -1,4 +1,4 @@
-package com.powerdata.openpa.tools.psseparse;
+package com.powerdata.openpa.tools.psseproc;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

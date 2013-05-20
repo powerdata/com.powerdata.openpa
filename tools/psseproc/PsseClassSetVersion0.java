@@ -1,4 +1,4 @@
-package com.powerdata.openpa.tools.psseparse;
+package com.powerdata.openpa.tools.psseproc;
 
 public class PsseClassSetVersion0 extends PsseClassSet
 {

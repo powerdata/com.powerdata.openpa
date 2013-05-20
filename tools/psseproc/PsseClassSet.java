@@ -1,12 +1,10 @@
-package com.powerdata.openpa.tools.psseparse;
-
-import com.powerdata.pse.PseModelReaderException;
+package com.powerdata.openpa.tools.psseproc;
 
 public abstract class PsseClassSet
 {
 	private static final int MaxConfigVerMajor = 30;
 	
-	public static PsseClassSet GetClassSetForVersion(String version) throws PseModelReaderException
+	public static PsseClassSet GetClassSetForVersion(String version) throws PsseProcException
 	{
 		int ix = version.indexOf('.');
 		String svmaj = null;
@@ -25,7 +23,7 @@ public abstract class PsseClassSet
 		}
 		else
 		{
-			throw new PseModelReaderException("Not configured for Version "+version);
+			throw new PsseProcException("Not configured for Version "+version);
 		}
 		
 		return rv;

@@ -1,9 +1,7 @@
-package com.powerdata.openpa.tools.psseparse;
+package com.powerdata.openpa.tools.psseproc;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
-
-import com.powerdata.pse.PseModelReaderException;
 
 public class MultiTerminalDCLine extends PsseClass
 {
@@ -44,7 +42,7 @@ public class MultiTerminalDCLine extends PsseClass
 	@Override
 	public void processRecords(LineNumberReader rdr, PsseClassWriter wrtr,
 			String containerclass, String containerid) throws IOException,
-			PseModelReaderException
+			PsseProcException
 	{
 		String[] tok = readRecord(rdr);
 		while (tok != null)

@@ -1,4 +1,4 @@
-package com.powerdata.openpa.tools.psseparse;
+package com.powerdata.openpa.tools.psseproc;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.powerdata.pse.PseModelReaderException;
-import com.powerdata.tools.utils.StringParse;
+import com.powerdata.openpa.tools.StringParse;
 
 public class PsseClass
 {
@@ -40,7 +39,7 @@ public class PsseClass
 
 	public void processRecords(LineNumberReader rdr, PsseClassWriter wrtr,
 			String containerclass, String containerid) throws IOException,
-			PseModelReaderException
+			PsseProcException
 	{
 		int lno = rdr.getLineNumber()+1;
 		String[] tokens = readRecord(rdr);
@@ -50,7 +49,7 @@ public class PsseClass
 			if (cn.equals("VoltageSourceConverterDCLine") ||
 				cn.equals("FACTSDevice"))
 			{
-				throw new PseModelReaderException(cn+" not validated");
+				throw new PsseProcException(cn+" not validated");
 			}
 		}
 		while (tokens != null)
@@ -63,7 +62,7 @@ public class PsseClass
 	
 	public void processRecords(LineNumberReader rdr, PsseClassWriter wrtr,
 			int count, String containerclass, String containerid)
-			throws IOException, PseModelReaderException
+			throws IOException, PsseProcException
 	{
 		for(int i=0; i < count; ++i)
 		{
