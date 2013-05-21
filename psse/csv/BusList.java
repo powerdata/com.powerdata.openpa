@@ -17,7 +17,7 @@ import com.powerdata.openpa.tools.StringAttrib;
 public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 {
 	/** parent container */
-	PsseEquipment _eq;
+	PsseModel _eq;
 	/** translate I to an offset */
 	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	/** number of items in the DB */
@@ -38,7 +38,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	int _gl[];
 	int _bl[];
 	
-	public BusList(PsseEquipment eq) throws IOException
+	public BusList(PsseModel eq) throws IOException
 	{
 		super(eq);
 		_eq 	= eq;

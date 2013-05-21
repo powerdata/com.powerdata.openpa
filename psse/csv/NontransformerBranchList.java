@@ -31,12 +31,12 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	static final int F1 = 16;
 	static final int I1 = 17;
 	
-	PsseEquipment _eq;
+	PsseModel _eq;
 	BusList _buses;
 	SimpleCSV _branches;
 	int _size;
 	
-	public NontransformerBranchList(PsseEquipment eq) throws IOException
+	public NontransformerBranchList(PsseModel eq) throws IOException
 	{
 		super(eq);
 		_eq = eq;

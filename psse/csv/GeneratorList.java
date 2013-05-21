@@ -33,11 +33,11 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	static final int O1 = 18;
 	static final int F1 = 19;
 	
-	PsseEquipment _eq;
+	PsseModel _eq;
 	BusList _buses;
 	SimpleCSV _gens;
 
-	public GeneratorList(PsseEquipment eq) throws IOException
+	public GeneratorList(PsseModel eq) throws IOException
 	{
 		super(eq);
 		_eq = eq;

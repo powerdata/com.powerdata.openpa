@@ -83,6 +83,7 @@ public class StringParse
 		if (_nxtOfs >= _strlen) return "";
 		// get the next character
 		char nxtChar = _parseLine.charAt(_nxtOfs);
+		char quoteChar = (nxtChar == '\'' || nxtChar == '"')?nxtChar:_quoteChar;
 		// initalize booleans for tracking our parsing
 		boolean quoteActive = false;
 		boolean escapeActive = false;
@@ -189,7 +190,7 @@ public class StringParse
 					}
 					break;
 				default: // all other characters
-					if (nxtChar == _quoteChar)
+					if (nxtChar == quoteChar)
 					{
 						if (escapeActive)
 						{
@@ -198,8 +199,18 @@ public class StringParse
 						}
 						else if (quoteActive)
 						{
-							if (_keepQuotes) _token.append(nxtChar);
-							quoteActive = false; /* mjr */
+							int nofs = _nxtOfs + 1;
+							if (nofs < _strlen && _parseLine.charAt(nofs) == quoteChar)
+							{
+								nxtChar = _parseLine.charAt(_nxtOfs);
+								_token.append(quoteChar);
+								_nxtOfs = nofs;
+							}
+							else
+							{
+								if (_keepQuotes) _token.append(nxtChar);
+								quoteActive = false; /* mjr */
+							}
 						}
 						else
 						{

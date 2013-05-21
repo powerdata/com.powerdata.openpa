@@ -17,12 +17,12 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	static final int J = 1;
 	static final int K = 2;
 
-	PsseEquipment _eq;
+	PsseModel _eq;
 	BusList _buses;
 	SimpleCSV _xfr;
 	int _size;
 	
-	public TransformerList(PsseEquipment eq) throws IOException
+	public TransformerList(PsseModel eq) throws IOException
 	{
 		super(eq);
 		_eq = eq;

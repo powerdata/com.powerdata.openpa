@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.io.File;
 import java.io.IOException;
 
-public class PsseEquipment extends com.powerdata.openpa.psse.PsseModel
+public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
@@ -13,7 +13,7 @@ public class PsseEquipment extends com.powerdata.openpa.psse.PsseModel
 	NontransformerBranchList _branchList;
 	TransformerList _transformerList;
 	
-	public PsseEquipment(String dirpath)
+	public PsseModel(String dirpath)
 	{
 		_dir = new File(dirpath);
 	}
@@ -48,7 +48,7 @@ public class PsseEquipment extends com.powerdata.openpa.psse.PsseModel
 	{
 		try
 		{
-			PsseEquipment eq = new PsseEquipment("testdata/db");
+			PsseModel eq = new PsseModel("testdata/db");
 			for(Bus b : eq.getBuses())
 			{
 				System.out.println(b);
