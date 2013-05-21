@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
-import com.powerdata.openpa.psse.TransformerStatus;
+import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
@@ -22,13 +22,20 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	SimpleCSV _xfr;
 	int _size;
 	
-	public TransformerList(PsseModel eq) throws IOException
+	public TransformerList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
-		_eq = eq;
-		_xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformers.csv");
-		_size = _xfr.getRowCount();
-		_buses = _eq.getBuses();
+		try
+		{
+			_eq = eq;
+			_xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformers.csv");
+			_size = _xfr.getRowCount();
+			_buses = _eq.getBuses();
+		}
+		catch(IOException e)
+		{
+			throw new PsseModelException(getClass().getName()+": "+e);
+		}
 	}
 
 	@Override

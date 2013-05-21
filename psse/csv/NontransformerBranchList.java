@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
@@ -36,13 +37,20 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	SimpleCSV _branches;
 	int _size;
 	
-	public NontransformerBranchList(PsseModel eq) throws IOException
+	public NontransformerBranchList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
-		_eq = eq;
-		_branches = new SimpleCSV(_eq.getDir().getPath()+"/Branches.csv");
-		_size = _branches.getRowCount();
-		_buses = _eq.getBuses();
+		try
+		{
+			_eq = eq;
+			_branches = new SimpleCSV(_eq.getDir().getPath()+"/Branches.csv");
+			_size = _branches.getRowCount();
+			_buses = _eq.getBuses();
+		}
+		catch(IOException e)
+		{
+			throw new PsseModelException(getClass().getName()+": "+e);
+		}
 	}
 
 	@Override

@@ -45,7 +45,8 @@ public class Generator extends BaseObject
 	/** min active power in MW */
 	public float getMinActvPwr() {return _list.getMinActvPwr(_ndx);}
 	
-
+	@Override
+	public String toString() { return _list.getObjectID(_ndx); }
 	
 	/* Raw PSS/e methods */
 	

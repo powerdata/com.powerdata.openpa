@@ -1,9 +1,11 @@
 package com.powerdata.openpa.psse.csv;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
@@ -12,105 +14,106 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Generator>
 {
-	static final int I = 0;
-	static final int ID = 1;
-	static final int PG = 2;
-	static final int QG = 3;
-	static final int QT = 4;
-	static final int QB = 5;
-	static final int VS = 6;
-	static final int IREG = 7;
-	static final int MBASE = 8;
-	static final int ZR = 9;
-	static final int ZX = 10;
-	static final int RT = 11;
-	static final int XT = 12;
-	static final int GTAP = 13;
-	static final int STAT = 14;
-	static final int RMPCT = 15;
-	static final int PT = 16;
-	static final int PB = 17;
-	static final int O1 = 18;
-	static final int F1 = 19;
-	
 	PsseModel _eq;
 	BusList _buses;
-	SimpleCSV _gens;
+	HashMap<String,Integer> _objIDtoNdx = new HashMap<String,Integer>();
+	int _size;
+	
+	String _i[];
+	String _id[];
+	float _pg[],_qg[],_qt[],_qb[],_vs[];
+	String _ireg[];
+	float _mbase[],_zr[],_zx[],_rt[],_xt[],_gtap[];
+	int _stat[];
+	float _rmpct[],_pt[],_pb[];
 
-	public GeneratorList(PsseModel eq) throws IOException
+	public GeneratorList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
-		_eq = eq;
-		_gens = new SimpleCSV(_eq.getDir().getPath()+"/Machines.csv");
-		_buses = _eq.getBuses();
+		try
+		{
+			_eq = eq;
+			_buses = _eq.getBuses();
+			String dbfile = _eq.getDir().getPath()+"/Machines.csv";
+			SimpleCSV gens = new SimpleCSV(dbfile);
+			_size	= gens.getRowCount();
+			_i		= gens.get("I");
+			_id		= gens.get("ID");
+			_pg		= gens.getFloats("PG");
+			_qg		= gens.getFloats("QG");
+			_qt		= gens.getFloats("QT");
+			_qb		= gens.getFloats("QB");
+			_vs		= gens.getFloats("VS");
+			_ireg	= gens.get("IREG");
+			_mbase	= gens.getFloats("MBASE");
+			_zr		= gens.getFloats("ZR");
+			_zx		= gens.getFloats("ZX");
+			_rt		= gens.getFloats("RT");
+			_xt		= gens.getFloats("XT");
+			_gtap	= gens.getFloats("GTAP");
+			_stat	= gens.getInts("STAT");
+			_rmpct	= gens.getFloats("RMPCT");
+			_pt		= gens.getFloats("PT");
+			_pb		= gens.getFloats("PB");
+			if (_i == null)
+			{
+				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
+			}
+			for(int i=0; i<_size; i++) _objIDtoNdx.put(_i[i]+":"+_id[i],i);
+		}
+		catch(IOException e)
+		{
+			throw new PsseModelException(getClass().getName()+": "+e);
+		}
 	}
-	public String getName(int ndx) { return _gens.get(ID, ndx); }
 	@Override
-	public Bus getBus(int ndx) { return null; }
+	public Bus getBus(int ndx) { return _buses.get(_i[ndx]); }
 	@Override
-	public float getActvPwr(int ndx) { return 0; }
+	public String getI(int ndx) { return _i[ndx]; }
 	@Override
-	public float getReacPwr(int ndx) { return 0; }
+	public String getID(int ndx) { return (_id != null)?_id[ndx]:super.getID(ndx); }
 	@Override
-	public float getMaxReacPwr(int ndx) { return 0; }
+	public float getPG(int ndx) { return (_pg != null)?_pg[ndx]:super.getPG(ndx); }
 	@Override
-	public float getMinReacPwr(int ndx) { return 0; }
+	public float getQG(int ndx) { return (_qg != null)?_qg[ndx]:super.getQG(ndx); }
 	@Override
-	public Bus getRemoteRegBus(int ndx) { return null; }
+	public float getQT(int ndx) { return (_qt != null)?_qt[ndx]:super.getQT(ndx); }
 	@Override
-	public float getMachR(int ndx) { return 0; }
+	public float getQB(int ndx) { return (_qb != null)?_qb[ndx]:super.getQB(ndx); }
 	@Override
-	public float getMachX(int ndx) { return 0; }
+	public float getVS(int ndx) { return (_vs != null)?_vs[ndx]:super.getVS(ndx); }
 	@Override
-	public float getStepupR(int ndx) { return 0; }
+	public String getIREG(int ndx) { return (_ireg != null)?_ireg[ndx]:super.getIREG(ndx);	}
 	@Override
-	public float getStepupX(int ndx) { return 0; }
+	public float getMBASE(int ndx) { return (_mbase != null)?_mbase[ndx]:super.getMBASE(ndx); }
 	@Override
-	public boolean inService(int ndx) { return false; }
+	public float getZR(int ndx) { return (_zr != null)?_zr[ndx]:super.getZR(ndx); }
 	@Override
-	public float getMaxActvPwr(int ndx) { return 0; }
+	public float getZX(int ndx) { return (_zx != null)?_zx[ndx]:super.getZX(ndx); }
 	@Override
-	public float getMinActvPwr(int ndx) { return 0; }
+	public float getRT(int ndx) { return (_rt != null)?_rt[ndx]:super.getRT(ndx); }
 	@Override
-	public String getI(int ndx) { return _gens.get(I, ndx); }
+	public float getXT(int ndx) { return (_xt != null)?_xt[ndx]:super.getXT(ndx); }
 	@Override
-	public String getID(int ndx) { return _gens.get(ID, ndx); }
+	public float getGTAP(int ndx) { return (_gtap != null)?_gtap[ndx]:super.getGTAP(ndx); }
 	@Override
-	public float getPG(int ndx) { return 0; }
+	public int getSTAT(int ndx) { return (_stat != null)?_stat[ndx]:super.getSTAT(ndx); }
 	@Override
-	public float getQG(int ndx) { return 0; }
+	public float getRMPCT(int ndx) { return (_rmpct != null)?_rmpct[ndx]:super.getRMPCT(ndx); }
 	@Override
-	public float getQT(int ndx) { return 0; }
+	public float getPT(int ndx) { return (_pt != null)?_pt[ndx]:super.getPT(ndx); }
 	@Override
-	public float getQB(int ndx) { return 0; }
-	@Override
-	public float getVS(int ndx) { return 0; }
-	@Override
-	public String getIREG(int ndx) { return "0"; }
-	@Override
-	public float getMBASE(int ndx) { return 0; }
-	@Override
-	public float getZR(int ndx) { return 0; }
-	@Override
-	public float getZX(int ndx) { return 0; }
-	@Override
-	public float getRT(int ndx) { return 0;	}
-	@Override
-	public float getXT(int ndx) { return 0; }
-	@Override
-	public float getGTAP(int ndx) { return 0; }
-	@Override
-	public int getSTAT(int ndx) { return 0; }
-	@Override
-	public float getRMPCT(int ndx) { return 0; }
-	@Override
-	public float getPT(int ndx) { return 0; }
-	@Override
-	public float getPB(int ndx) { return 0; }
+	public float getPB(int ndx) { return (_pb != null)?_pb[ndx]:super.getPB(ndx); }
 	@Override
 	public OwnershipList<?> getOwnership(int ndx) { return null; }
 	@Override
-	public String getObjectID(int ndx) { return null; }
+	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
+	@Override
+	public Generator get(String objectid)
+	{
+		Integer ndx = _objIDtoNdx.get(objectid);
+		return (ndx != null)?new Generator(ndx,this):null;
+	}
 	@Override
 	public StringAttrib<Generator> mapStringAttrib(String attribname) { return null; }
 	@Override
@@ -122,7 +125,5 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public Generator get(int index) { return new Generator(index,this); }
 	@Override
-	public Generator get(String objectid) {throw new UnsupportedOperationException();}
-	@Override
-	public int size() { return _gens.getRowCount(); }
+	public int size() { return _size; }
 }
