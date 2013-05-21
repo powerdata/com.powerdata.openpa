@@ -41,7 +41,7 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 		_eq = eq;
 		_branches = new SimpleCSV(_eq.getDir().getPath()+"/Branches.csv");
 		_size = _branches.getRowCount();
-		_buses = _eq.getBusses();
+		_buses = _eq.getBuses();
 	}
 
 	@Override

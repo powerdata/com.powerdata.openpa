@@ -34,7 +34,8 @@ public class Bus extends BaseObject
 	/** Bus voltage phase angle in radians */
 	public float getVangRad() {return _list.getVangRad(_ndx);}
 	
-	
+	@Override
+	public String toString() { return String.format("Bus[%d](%s) %s",_ndx,getObjectID(),getNAME()); }
 	
 	/* Raw PSS/e methods */
 	

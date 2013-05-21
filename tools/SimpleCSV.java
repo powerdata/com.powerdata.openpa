@@ -47,30 +47,52 @@ public class SimpleCSV
 	public String[] getColumnNames() { return _colNames; }
 	public int getRowCount() { return _rowCount; }
 	public int getColCount() { return (_colNames != null)?_colNames.length:0; }
-	public String get(int col, int row)
-	{
-		return _cols.get(col).get(row);
-	}
-	public String get(String name, int row)
-	{
-		return _colsByName.get(name).get(row);
-	}
-	public String[] get(int col)
-	{
-		return _cols.get(col).toArray(new String[0]);
-	}
-	public String[] get(String col)
-	{
-		return _colsByName.get(col).toArray(new String[0]);
-	}
-	public void set(int col, int row, String val)
-	{
-		_cols.get(col).set(row, val);
-	}
-	public String set(String name, int row, String val)
-	{
-		return _colsByName.get(name).set(row,val);
-	}
+	//
+	//	Get values based on column offset
+	//
+	public String get(int col, int row) { return _cols.get(col).get(row); }
+	public byte getByte(int col, int row) { return Byte.parseByte(get(col,row)); }
+	public short getShort(int col, int row) { return Short.parseShort(get(col,row)); }
+	public int getInt(int col, int row) { return Integer.parseInt(get(col,row)); }
+	public long getLong(int col, int row) { return Long.parseLong(get(col,row)); }
+	public float getFloat(int col, int row) { return Float.parseFloat(get(col,row)); }
+	public double getDouble(int col, int row) { return Double.parseDouble(get(col,row)); }
+	//
+	//	Get values based on column name
+	//
+	public String get(String col, int row) { return _colsByName.get(col).get(row);	}
+	public byte getByte(String col, int row) { return Byte.parseByte(get(col,row)); }
+	public short getShort(String col, int row) { return Short.parseShort(get(col,row)); }
+	public int getInt(String col, int row) { return Integer.parseInt(get(col,row)); }
+	public long getLong(String col, int row) { return Long.parseLong(get(col,row)); }
+	public float getFloat(String col, int row) { return Float.parseFloat(get(col,row)); }
+	public double getDouble(String col, int row) { return Double.parseDouble(get(col,row)); }
+	//
+	//	Get entire columns
+	//
+	public String[] get(int col) { return _cols.get(col).toArray(new String[0]); }
+	public String[] get(String col) { return _colsByName.get(col).toArray(new String[0]); }
+	//
+	//	Set values based on column offset
+	//
+	public void set(int col, int row, String val) { _cols.get(col).set(row, val); }
+	public void set(int col, int row, byte val) { set(col, row, String.valueOf(val)); }
+	public void set(int col, int row, short val) { set(col, row, String.valueOf(val)); }
+	public void set(int col, int row, int val) { set(col, row, String.valueOf(val)); }
+	public void set(int col, int row, long val) { set(col, row, String.valueOf(val)); }
+	public void set(int col, int row, float val) { set(col, row, String.valueOf(val)); }
+	public void set(int col, int row, double val) { set(col, row, String.valueOf(val)); }
+	//
+	//	Set values based on the column name
+	//
+	public String set(String col, int row, String val) { return _colsByName.get(col).set(row,val); }
+	public void set(String col, int row, byte val) { set(col, row, String.valueOf(val)); }
+	public void set(String col, int row, short val) { set(col, row, String.valueOf(val)); }
+	public void set(String col, int row, int val) { set(col, row, String.valueOf(val)); }
+	public void set(String col, int row, long val) { set(col, row, String.valueOf(val)); }
+	public void set(String col, int row, float val) { set(col, row, String.valueOf(val)); }
+	public void set(String col, int row, double val) { set(col, row, String.valueOf(val)); }
+	
 	public void setHeader(String header[])
 	{
 		_cols.clear();

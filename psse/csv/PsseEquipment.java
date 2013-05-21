@@ -3,17 +3,15 @@ package com.powerdata.openpa.psse.csv;
 import java.io.File;
 import java.io.IOException;
 
-import com.powerdata.openpa.psse.GeneratorList;
-import com.powerdata.openpa.psse.TransformerList;
-
 public class PsseEquipment implements com.powerdata.openpa.psse.Container
 {
+	/** root of the directory where the csv files are stored */
 	File _dir;
-	//GeneratorList _generatorList;
-	//NodeList _nodeList;
-	BusList _busses;
+	
+	GeneratorList _generatorList;
+	BusList _buses;
 	NontransformerBranchList _branchList;
-	//TransformerWndList _transformerWndList;
+	TransformerList _transformerList;
 	
 	public PsseEquipment(String dirpath)
 	{
@@ -23,15 +21,16 @@ public class PsseEquipment implements com.powerdata.openpa.psse.Container
 	@Override
 	public String getContainerName() { return "PsseEquipment"; }
 	@Override
-	public BusList getBusses() throws IOException
+	public BusList getBuses() throws IOException
 	{
-		if (_busses == null) _busses = new BusList(this);
-		return _busses;
+		if (_buses == null) _buses = new BusList(this);
+		return _buses;
 	}
 	@Override
-	public GeneratorList<?> getGenerators() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+	public GeneratorList getGenerators() throws IOException
+	{
+		if (_generatorList == null) _generatorList = new GeneratorList(this);
+		return _generatorList;
 	}
 	@Override
 	public NontransformerBranchList getNontransformerBranches() throws IOException
@@ -40,75 +39,24 @@ public class PsseEquipment implements com.powerdata.openpa.psse.Container
 		return _branchList;
 	}
 	@Override
-	public TransformerList<?> getTransformers() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/*
-	@Override
-	public String getContainerName() { return "CsvEquipment"; }
-	@Override
-	public ACLineList getACLines() { return null; }
-	@Override
-	public SeriesCapacitorList getSeriesCapacitors() { return null;	}
-	@Override
-	public SeriesReactorList getSeriesReactors() { return null;	}
-	@Override
-	public TransformerWndList getTransformerWindings() throws IOException
+	public TransformerList getTransformers() throws IOException
 	{
-		if (_transformerWndList == null) _transformerWndList = new TransformerWndList(this);
-		return _transformerWndList;
+		if (_transformerList == null) _transformerList = new TransformerList(this);
+		return _transformerList;
 	}
-	@Override
-	public PhaseShftWndList getPhaseShifterWindings() { return null; }
-	@Override
-	public GeneratorList getGenerators() throws IOException
-	{
-		if( _generatorList == null) _generatorList = new GeneratorList(this);
-		return _generatorList;
-	}
-	@Override
-	public LoadList getLoads() { return null; }
-	@Override
-	public SwitchedShuntList getSwitchedShunts() { return null;	}
-	@Override
-	public StaticVarCompList getStaticVarCompensators() { return null; }
-	@Override
-	public NodeList getNodes() throws IOException
-	{
-		if( _nodeList == null) _nodeList = new NodeList(this);
-		return _nodeList;
-	}
-	@Override
-	public NontransformerBranchList getBranches() throws IOException
-	{
-		if ( _branchList == null) _branchList = new NontransformerBranchList(this);
-		return _branchList;
-	}
-	@Override
-	public AreaList getAreas() { return null; }
-	@Override
-	public OwnerList getOwners() { return null;	}
-	@Override
-	public StationList getStations() { return null;	}
-	@Override
-	public VoltageLevelList getVoltageLevels() { return null; }
-	@Override
-	public TopNodeList getTopNodes() { return null;	}
-	*/
 	static public void main(String args[])
 	{
 		try
 		{
 			PsseEquipment eq = new PsseEquipment("testdata/db");
-			//for(CsvNode n : eq.getNodes())
+			//for(Bus b : eq.getBuses())
 			//{
-			//	System.out.println(n);
+			//	System.out.println(b);
 			//}
-			//for(CsvGenerator g : eq.getGenerators())
-			//{
-			//	System.out.println(g);
-			//}
+			for(Generator g : eq.getGenerators())
+			{
+				System.out.println(g);
+			}
 			//for(Branch b : eq.getBranches())
 			//{
 			//	System.out.println(b);

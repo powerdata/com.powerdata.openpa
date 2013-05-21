@@ -34,216 +34,94 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	static final int F1 = 19;
 	
 	PsseEquipment _eq;
-	BusList _busses;
+	BusList _buses;
 	SimpleCSV _gens;
-	int _size;
 
 	public GeneratorList(PsseEquipment eq) throws IOException
 	{
 		_eq = eq;
 		_gens = new SimpleCSV(_eq.getDir().getPath()+"/Machines.csv");
-		_size = _gens.getRowCount();
-		_busses = _eq.getBusses();
+		_buses = _eq.getBuses();
 	}
 	public String getName(int ndx) { return _gens.get(ID, ndx); }
 	@Override
-	public Bus getBus(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Bus getBus(int ndx) { return null; }
 	@Override
-	public String getActvPwr(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getActvPwr(int ndx) { return null; }
 	@Override
-	public String getReacPwr(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getReacPwr(int ndx) { return null; }
 	@Override
-	public String getMaxReacPwr(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getMaxReacPwr(int ndx) { return null; }
 	@Override
-	public String getMinReacPwr(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getMinReacPwr(int ndx) { return null; }
 	@Override
-	public Bus getRemoteRegBus(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Bus getRemoteRegBus(int ndx) { return null; }
 	@Override
-	public float getMachR(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getMachR(int ndx) { return 0; }
 	@Override
-	public float getMachX(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getMachX(int ndx) { return 0; }
 	@Override
-	public float getStepupR(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getStepupR(int ndx) { return 0; }
 	@Override
-	public float getStepupX(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getStepupX(int ndx) { return 0; }
 	@Override
-	public boolean inService(int ndx) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean inService(int ndx) { return false; }
 	@Override
-	public float getMaxActvPwr(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getMaxActvPwr(int ndx) { return 0; }
 	@Override
-	public float getMinActvPwr(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getMinActvPwr(int ndx) { return 0; }
 	@Override
-	public String getI(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getI(int ndx) { return _gens.get(I, ndx); }
 	@Override
-	public String getID(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getID(int ndx) { return _gens.get(ID, ndx); }
 	@Override
-	public String getPG(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getPG(int ndx) { return null; }
 	@Override
-	public String getQG(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getQG(int ndx) { return null; }
 	@Override
-	public String getQT(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getQT(int ndx) { return null; }
 	@Override
-	public String getQB(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getQB(int ndx) { return null; }
 	@Override
-	public float getVS(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getVS(int ndx) { return 0; }
 	@Override
-	public float getIREG(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getIREG(int ndx) { return 0; }
 	@Override
-	public float getMBASE(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getMBASE(int ndx) { return 0; }
 	@Override
-	public float getZR(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getZR(int ndx) { return 0; }
 	@Override
-	public float getZX(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getZX(int ndx) { return 0; }
 	@Override
-	public float getRT(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getRT(int ndx) { return 0;	}
 	@Override
-	public float getXT(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getXT(int ndx) { return 0; }
 	@Override
-	public float getGTAP(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getGTAP(int ndx) { return 0; }
 	@Override
-	public int getSTAT(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public int getSTAT(int ndx) { return 0; }
 	@Override
-	public float getRMPCT(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getRMPCT(int ndx) { return 0; }
 	@Override
-	public float getPT(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getPT(int ndx) { return 0; }
 	@Override
-	public float getPB(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getPB(int ndx) { return 0; }
 	@Override
-	public OwnershipList<?> getOwnership(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public OwnershipList<?> getOwnership(int ndx) { return null; }
 	@Override
-	public String getObjectID(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getObjectID(int ndx) { return null; }
 	@Override
-	public int getIndex(String id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public int getIndex(String id) { return 0; }
 	@Override
-	public StringAttrib<Generator> mapStringAttrib(String attribname) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public StringAttrib<Generator> mapStringAttrib(String attribname) { return null; }
 	@Override
-	public FloatAttrib<Generator> mapFloatAttrib(String attribname) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public FloatAttrib<Generator> mapFloatAttrib(String attribname) { return null; }
 	@Override
-	public IntAttrib<Generator> mapIntAttrib(String attribname) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public IntAttrib<Generator> mapIntAttrib(String attribname) { return null; }
 	@Override
-	public BooleanAttrib<Generator> mapBooleanAttrib(String attribname) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public BooleanAttrib<Generator> mapBooleanAttrib(String attribname) { return null; }
 	@Override
-	public Generator get(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Generator get(int index) { return new Generator(index,this); }
 	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public int size() { return _gens.getRowCount(); }
 }
