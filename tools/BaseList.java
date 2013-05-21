@@ -5,7 +5,8 @@ import java.util.AbstractList;
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
 {
 	public abstract String getObjectID(int ndx);
-	public abstract int getIndex(String id);
+	/** Get an object by it's ID */
+	public abstract T get(String objectid);
 	
 	public abstract StringAttrib<T>  mapStringAttrib(String attribname);
 	public abstract FloatAttrib<T>   mapFloatAttrib(String attribname);

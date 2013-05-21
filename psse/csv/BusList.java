@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.io.IOException;
 import java.util.HashMap;
 
+//import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
@@ -82,11 +83,12 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
-	public int getIndex(String id)
+	public Bus get(String id)
 	{
 		Integer ndx = _idToNdx.get(id);
-		return (ndx != null)?ndx:-1;
+		return (ndx == null) ? null : get(ndx);
 	}
+
 	@Override
 	public StringAttrib<Bus> mapStringAttrib(String attribname) { return null; }
 	@Override

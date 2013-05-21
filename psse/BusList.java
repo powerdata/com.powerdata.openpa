@@ -27,4 +27,5 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	public float getVM(int ndx) {return 1F;}
 	public float getVA(int ndx) {return 0F;}
 	public int getOWNER(int ndx) {return 1;}
+	
 }

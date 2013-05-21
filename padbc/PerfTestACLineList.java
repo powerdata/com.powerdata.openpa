@@ -26,8 +26,6 @@ public class PerfTestACLineList extends ACLineList<ACLine>
 	
 	@Override
 	public String getObjectID(int ndx) {return String.valueOf(ndx);}
-	@Override
-	public int getIndex(String id) {return 0;}
 
 	@Override
 	public int getFromNode(int ndx) {return 0;}
@@ -153,9 +151,8 @@ public class PerfTestACLineList extends ACLineList<ACLine>
 	}
 
 	@Override
-	public ACLine get(int index)
-	{
-		return new ACLine(index, this);
-	}
+	public ACLine get(int index) {return new ACLine(index, this);} 
 
+	@Override
+	public ACLine get(String objectid) {throw new UnsupportedOperationException();}
 }

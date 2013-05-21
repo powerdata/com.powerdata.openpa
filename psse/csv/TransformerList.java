@@ -255,12 +255,6 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	}
 
 	@Override
-	public int getIndex(String id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public StringAttrib<Transformer> mapStringAttrib(String attribname) {
 		// TODO Auto-generated method stub
 		return null;
@@ -291,9 +285,13 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	}
 
 	@Override
+	public Transformer get(String objectid) {throw new UnsupportedOperationException();}
+
+	@Override
 	public int size() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 }
 

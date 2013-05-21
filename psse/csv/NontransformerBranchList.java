@@ -172,12 +172,6 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	}
 
 	@Override
-	public int getIndex(String id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public StringAttrib<NontransformerBranch> mapStringAttrib(String attribname) {
 		// TODO Auto-generated method stub
 		return null;
@@ -209,9 +203,12 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	}
 
 	@Override
+	public NontransformerBranch get(String objectid) {throw new UnsupportedOperationException();}
+	
+	@Override
 	public int size() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 }

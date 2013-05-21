@@ -112,8 +112,6 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public String getObjectID(int ndx) { return null; }
 	@Override
-	public int getIndex(String id) { return 0; }
-	@Override
 	public StringAttrib<Generator> mapStringAttrib(String attribname) { return null; }
 	@Override
 	public FloatAttrib<Generator> mapFloatAttrib(String attribname) { return null; }
@@ -123,6 +121,8 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	public BooleanAttrib<Generator> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public Generator get(int index) { return new Generator(index,this); }
+	@Override
+	public Generator get(String objectid) {throw new UnsupportedOperationException();}
 	@Override
 	public int size() { return _gens.getRowCount(); }
 }

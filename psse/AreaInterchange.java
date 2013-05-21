@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import java.io.IOException;
+
 import com.powerdata.openpa.tools.BaseObject;
 
 public class AreaInterchange extends BaseObject
@@ -17,8 +19,8 @@ public class AreaInterchange extends BaseObject
 
 	/* convenience methods */
 	
-	/** Area slack bus for area interchange control */
-	public Bus getSlackBus() {return _list.getSlackBus(_ndx);}
+	/** Area slack bus for area interchange control */ 
+	public Bus getSlackBus() throws IOException {return _list.getSlackBus(_ndx);}
 	/** Desired net interchange leaving the area entered Per-unit on 100MVA base */
 	public float getIntExport() {return _list.getIntExport(_ndx);}
 	/** Interchange tolerance bandwidth p.u. on 100MVA base */
