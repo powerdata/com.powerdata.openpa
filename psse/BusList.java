@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import java.io.IOException;
-
 public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 {
 	public BusList(PsseModel model) {super(model);}
@@ -11,10 +9,10 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	public BusTypeCode getBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}
 	public float getShuntG(int ndx) {return 0F;}
 	public float getShuntB(int ndx) {return 0F;}
-	public AreaInterchange getAreaObject(int ndx) throws IOException {return null;}
-	public Zone getZoneObject(int ndx) throws IOException {return _model.getZones().get(getZONE(ndx));}
-	public Owner getOwnerObject(int ndx) throws IOException  {return _model.getOwners().get(getAREA(ndx));}
-	public float getVangRad(int ndx) throws IOException {return 0F;}
+	public AreaInterchange getAreaObject(int ndx) throws PsseModelException {return null;}
+	public Zone getZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
+	public Owner getOwnerObject(int ndx) throws PsseModelException  {return _model.getOwners().get(getAREA(ndx));}
+	public float getVangRad(int ndx) throws PsseModelException {return 0F;}
 
 	/* raw methods */
 

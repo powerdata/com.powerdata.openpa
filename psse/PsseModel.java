@@ -5,7 +5,7 @@ public abstract class PsseModel
 	public float getSBASE() {return 100F;}
 	
 	/** find a Bus by ID */ 
-	public Bus getBus(String id) throws IOException
+	public Bus getBus(String id) throws PsseModelException
 	{
 		return getBuses().get(id);
 	}
@@ -15,8 +15,8 @@ public abstract class PsseModel
 	abstract public GeneratorList<?> getGenerators() throws PsseModelException;
 	abstract public NontransformerBranchList<?> getNontransformerBranches() throws PsseModelException;
 	abstract public TransformerList<?> getTransformers() throws PsseModelException;
-	abstract public OwnerList<?> getOwners() throws IOException;
-	abstract public AreaInterchangeList<?> getAreas() throws IOException;
-	abstract public ZoneList<?> getZones() throws IOException;
+	abstract public OwnerList<?> getOwners() throws PsseModelException;
+	abstract public AreaInterchangeList<?> getAreas() throws PsseModelException;
+	abstract public ZoneList<?> getZones() throws PsseModelException;
 }
 

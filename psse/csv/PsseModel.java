@@ -2,7 +2,10 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 
+import com.powerdata.openpa.psse.AreaInterchangeList;
+import com.powerdata.openpa.psse.OwnerList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.ZoneList;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
@@ -45,6 +48,12 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		if (_transformerList == null) _transformerList = new TransformerList(this);
 		return _transformerList;
 	}
+	@Override
+	public OwnerList<?> getOwners() throws PsseModelException { return null; }
+	@Override
+	public AreaInterchangeList<?> getAreas() throws PsseModelException { return null; }
+	@Override
+	public ZoneList<?> getZones() throws PsseModelException { return null; }
 	static public void main(String args[])
 	{
 		try

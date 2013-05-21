@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import java.io.IOException;
-
 import com.powerdata.openpa.tools.BaseObject;
 
 public class Ownership extends BaseObject
@@ -19,7 +17,7 @@ public class Ownership extends BaseObject
 
 	/* Convenience Methods */
 
-	public Owner getOwner() throws IOException {return _list.getOwner(_ndx);}
+	public Owner getOwner() throws PsseModelException {return _list.getOwner(_ndx);}
 	
 	/* raw psse methods */
 	
