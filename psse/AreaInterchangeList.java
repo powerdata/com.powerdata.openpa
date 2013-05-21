@@ -11,8 +11,8 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Bas
 
 	/* Raw values */
 	public abstract int getI(int ndx);
-	public abstract String getISW(int ndx);
-	public abstract String getARNAME(int ndx);
-	public abstract float getPDES(int ndx);
-	public abstract float getPTOL(int ndx);
+	public String getISW(int ndx) {return "0";}
+	public String getARNAME(int ndx) {return "";}
+	public float getPDES(int ndx) {return 0F;}
+	public float getPTOL(int ndx) {return 10F;}
 }

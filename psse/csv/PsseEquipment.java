@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.io.File;
 import java.io.IOException;
 
-public class PsseEquipment implements com.powerdata.openpa.psse.Container
+public class PsseEquipment extends com.powerdata.openpa.psse.PsseModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;

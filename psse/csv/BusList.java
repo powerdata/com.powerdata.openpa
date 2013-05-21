@@ -3,9 +3,6 @@ package com.powerdata.openpa.psse.csv;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.powerdata.openpa.psse.AreaInterchange;
-import com.powerdata.openpa.psse.Owner;
-import com.powerdata.openpa.psse.Zone;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
@@ -24,8 +21,9 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	/** number of items in the DB */
 	int _size;
-	/** Object IDs */
+	/** object IDs (really just the bus number) */
 	String _ids[];
+	
 	// Base values from the CSV file
 	int _i[];
 	String _name[];
@@ -38,7 +36,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	float _va[];
 	int _gl[];
 	int _bl[];
-	int _type[];
 	
 	public BusList(PsseEquipment eq) throws IOException
 	{
@@ -58,7 +55,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 		_va		= buses.getFloats("VA");
 		_gl		= buses.getInts("GL");
 		_bl		= buses.getInts("BL");
-		_type	= buses.getInts("Flag");
 	}
 	@Override
 	public int getI(int ndx) { return _i[ndx]; }
@@ -69,9 +65,9 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:0; }
 	@Override
-	public int getGL(int ndx) { return (_gl != null)?_gl[ndx]:0; }
+	public float getGL(int ndx) { return (_gl != null)?_gl[ndx]:0; }
 	@Override
-	public int getBL(int ndx) { return (_bl != null)?_bl[ndx]:0; }
+	public float getBL(int ndx) { return (_bl != null)?_bl[ndx]:0; }
 	@Override
 	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:0; }
 	@Override

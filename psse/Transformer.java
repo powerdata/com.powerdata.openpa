@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.psse.TransformerList.TransformerStatus;
 import com.powerdata.openpa.tools.BaseObject;
 
 public class Transformer extends BaseObject

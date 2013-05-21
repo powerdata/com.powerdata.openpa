@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.TransformerStatus;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
@@ -72,7 +73,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	}
 
 	@Override
-	public com.powerdata.openpa.psse.TransformerList.TransformerStatus getInitTransformerStat(
+	public com.powerdata.openpa.psse.TransformerStatus getInitTransformerStat(
 			int ndx) {
 		// TODO Auto-generated method stub
 		return null;
