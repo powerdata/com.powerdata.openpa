@@ -5,11 +5,18 @@ import com.powerdata.openpa.tools.BaseList;
 public abstract class NontransformerBranchList<T extends NontransformerBranch> 
 	extends BaseList<T>
 {
+	public enum MeteredEnd
+	{
+		From, To;
+	}
+
+	/* Convenience Methods */
 	public abstract Bus getFromBus(int ndx);
 	public abstract Bus getToBus(int ndx);
 	public abstract MeteredEnd getMeteredEnd(int ndx);
 	public abstract boolean inService(int ndx);
 	
+	/* raw PSS/e methods */
 	public abstract String getI(int ndx);
 	public abstract String getJ(int ndx);
 	public abstract String getCKT(int ndx);

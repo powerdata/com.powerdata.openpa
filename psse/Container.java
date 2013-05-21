@@ -8,5 +8,5 @@ public interface Container
 	public BusList<?> getBusses() throws IOException;
 	public GeneratorList<?> getGenerators() throws IOException;
 	public NontransformerBranchList<?> getNontransformerBranches() throws IOException;
-	//public TransformerWndList<?> getTransformerWndList() throws IOException;
+	public TransformerList<?> getTransformers() throws IOException;
 }

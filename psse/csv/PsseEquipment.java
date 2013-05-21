@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.powerdata.openpa.psse.GeneratorList;
+import com.powerdata.openpa.psse.TransformerList;
 
 public class PsseEquipment implements com.powerdata.openpa.psse.Container
 {
@@ -37,6 +38,11 @@ public class PsseEquipment implements com.powerdata.openpa.psse.Container
 	{
 		if (_branchList == null) _branchList = new NontransformerBranchList(this);
 		return _branchList;
+	}
+	@Override
+	public TransformerList<?> getTransformers() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	/*
 	@Override

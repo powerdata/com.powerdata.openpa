@@ -3,7 +3,6 @@ package com.powerdata.openpa.psse.csv;
 import java.io.IOException;
 
 import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.MeteredEnd;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
