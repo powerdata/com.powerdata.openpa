@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import com.powerdata.openpa.psse.AreaInterchange;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Owner;
 import com.powerdata.openpa.psse.Zone;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -64,9 +65,9 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 		return (_type != null)?BusTypeCode.fromCode(_type[ndx]):BusTypeCode.Unknown;
 	}
 	@Override
-	public float getShuntConductance(int ndx) { return 0; }
+	public float getShuntG(int ndx) { return 0; }
 	@Override
-	public float getShuntSusceptance(int ndx) {	return 0; }
+	public float getShuntB(int ndx) {	return 0; }
 	@Override
 	public AreaInterchange getAreaObject(int ndx) {	return null; }
 	@Override
@@ -84,9 +85,9 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:0; }
 	@Override
-	public int getGL(int ndx) { return (_gl != null)?_gl[ndx]:0; }
+	public float getGL(int ndx) { return (_gl != null)?_gl[ndx]:0; }
 	@Override
-	public int getBL(int ndx) { return (_bl != null)?_bl[ndx]:0; }
+	public float getBL(int ndx) { return (_bl != null)?_bl[ndx]:0; }
 	@Override
 	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:0; }
 	@Override

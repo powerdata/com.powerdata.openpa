@@ -64,7 +64,7 @@ public class Generator extends BaseObject
 	/** Regulated voltage setpoint entered in p.u. */
 	public float getVS() {return _list.getVS(_ndx);}
 	/** remote regulated bus number or name.  Set to 0 if regulating local bus */
-	public float getIREG() {return _list.getIREG(_ndx);}
+	public String getIREG() {return _list.getIREG(_ndx);}
 	/** total MVA base of units represented in this machine */
 	public float getMBASE() {return _list.getMBASE(_ndx);}
 	/** machine resistance p.u. on MBASE base */

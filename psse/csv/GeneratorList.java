@@ -85,7 +85,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public float getVS(int ndx) { return 0; }
 	@Override
-	public float getIREG(int ndx) { return 0; }
+	public String getIREG(int ndx) { return "0"; }
 	@Override
 	public float getMBASE(int ndx) { return 0; }
 	@Override

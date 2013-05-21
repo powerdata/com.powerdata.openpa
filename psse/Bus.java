@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.psse.BusList.BusTypeCode;
 import com.powerdata.openpa.tools.BaseObject;
 
 public class Bus extends BaseObject
@@ -26,11 +25,10 @@ public class Bus extends BaseObject
 	public Zone getZoneObject() {return _list.getZoneObject(_ndx);}
 	/** Owner */
 	public Owner getOwnerObject() {return _list.getOwnerObject(_ndx);}
-	
 	/** Active component of shunt admittance to ground (GL) per-unit on 100MVA base */
-	public float getShuntConductance() {return _list.getShuntConductance(_ndx);}
+	public float getShuntG() {return _list.getShuntG(_ndx);}
 	/** Reactive component of shunt admittance to ground (BL) per-unit on 100MVA base */
-	public float getShuntSusceptance() {return _list.getShuntSusceptance(_ndx);}
+	public float getShuntB() {return _list.getShuntB(_ndx);}
 	/** Bus voltage phase angle in radians */
 	public float getVangRad() {return _list.getVangRad(_ndx);}
 	
@@ -48,9 +46,9 @@ public class Bus extends BaseObject
 	/** Bus type code */
 	public int getIDE() {return _list.getIDE(_ndx);}
 	/** Active component of shunt admittance to ground */
-	public int getGL() {return _list.getGL(_ndx);}
+	public float getGL() {return _list.getGL(_ndx);}
 	/** Reactive component of shunt admittance to ground */
-	public int getBL() {return _list.getBL(_ndx);}
+	public float getBL() {return _list.getBL(_ndx);}
 	/** Area number */
 	public int getAREA() {return _list.getAREA(_ndx);}
 	/** Zone number */

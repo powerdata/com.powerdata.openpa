@@ -4,10 +4,6 @@ import java.util.AbstractList;
 
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
 {
-	/**
-	 * return an identifier or name for this object which is meaningful for
-	 * reporting and debugging purposes
-	 */
 	public abstract String getObjectID(int ndx);
 	public abstract int getIndex(String id);
 	
