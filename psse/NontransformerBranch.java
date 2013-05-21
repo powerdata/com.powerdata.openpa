@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.NontransformerBranchList.MeteredEnd;
 import com.powerdata.openpa.tools.BaseObject;
 
 public class NontransformerBranch extends BaseObject
