@@ -21,13 +21,13 @@ public class Generator extends BaseObject
 	/** Generator bus */
 	public Bus getBus() {return _list.getBus(_ndx);}
 	/** Generator active power output p.u. on 100 MVA base */
-	public String getActvPwr() {return _list.getActvPwr(_ndx);}
+	public float getActvPwr() {return _list.getActvPwr(_ndx);}
 	/** Generator reactive power output p.u. on 100 MVA base */
-	public String getReacPwr() {return _list.getReacPwr(_ndx);}
+	public float getReacPwr() {return _list.getReacPwr(_ndx);}
 	/** Maximum generator reactive power output (p.u. on 100MVA base) */
-	public String getMaxReacPwr() {return _list.getMaxReacPwr(_ndx);}
+	public float getMaxReacPwr() {return _list.getMaxReacPwr(_ndx);}
 	/** Minimum generator reactive power output (p.u. on 100 MVA base) */
-	public String getMinReacPwr() {return _list.getMinReacPwr(_ndx);}
+	public float getMinReacPwr() {return _list.getMinReacPwr(_ndx);}
 	/** remote regulated bus.  Null if local */
 	public Bus getRemoteRegBus() {return _list.getRemoteRegBus(_ndx);}
 	/** machine resistance p.u. on 100 MVA base */
@@ -54,13 +54,13 @@ public class Generator extends BaseObject
 	/** Machine identifier */
 	public String getID() {return _list.getID(_ndx);}
 	/** Generator active power output in MW */
-	public String getPG() {return _list.getPG(_ndx);}
+	public float getPG() {return _list.getPG(_ndx);}
 	/** Generator reactive power output in MVAr */
-	public String getQG() {return _list.getQG(_ndx);}
+	public float getQG() {return _list.getQG(_ndx);}
 	/** Maximum generator reactive power output (MVAr) */
-	public String getQT() {return _list.getQT(_ndx);}
+	public float getQT() {return _list.getQT(_ndx);}
 	/** Minimum generator reactive power output (MVAr) */
-	public String getQB() {return _list.getQB(_ndx);}
+	public float getQB() {return _list.getQB(_ndx);}
 	/** Regulated voltage setpoint entered in p.u. */
 	public float getVS() {return _list.getVS(_ndx);}
 	/** remote regulated bus number or name.  Set to 0 if regulating local bus */

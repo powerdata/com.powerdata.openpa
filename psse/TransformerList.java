@@ -30,20 +30,23 @@ public abstract class TransformerList<T extends Transformer>
 
 	/* Convenience Methods */
 	
-	public abstract Bus getBus1(int ndx);
-	public abstract Bus getBus2(int ndx);
-	public abstract Bus getBus3(int ndx);
-	public abstract float getMagCondPerUnit(int ndx);
-	public abstract float getMagSuscPerUnit(int ndx);
-	public abstract float getNoLoadLoss(int ndx);
-	public abstract float getExcitingCurrent(int ndx);
-	public abstract TransformerStatus getInitTransformerStat(int ndx);
-	public abstract float getResistance1_2(int ndx);
-	public abstract float getReactance1_2(int ndx);
-	public abstract float getResistance2_3(int ndx);
-	public abstract float getReactance2_3(int ndx);
-	public abstract float getResistance3_1(int ndx);
-	public abstract float getReactance3_1(int ndx);
+	public Bus getBus1(int ndx) {return null;}
+	public Bus getBus2(int ndx) {return null;}
+	public Bus getBus3(int ndx) {return null;}
+	public float getMagCondPerUnit(int ndx) {return 0;}
+	public float getMagSuscPerUnit(int ndx) {return 0;}
+	public float getNoLoadLoss(int ndx) {return 0;}
+	public float getExcitingCurrent(int ndx) {return 0;}
+	public TransformerStatus getInitTransformerStat(int ndx)
+	{
+		return TransformerStatus.fromCode(getSTAT(ndx));
+	}
+	public float getResistance1_2(int ndx) {return 0;}
+	public float getReactance1_2(int ndx)  {return 0;}
+	public float getResistance2_3(int ndx) {return 0;}
+	public float getReactance2_3(int ndx) {return 0;}
+	public float getResistance3_1(int ndx) {return 0;}
+	public float getReactance3_1(int ndx) {return 0;}
 	
 	
 	/* Raw methods */

@@ -6,28 +6,28 @@ public abstract class GeneratorList<T extends Generator> extends BaseList<T>
 {
 	/* convenience methods */
 	
-	public abstract Bus getBus(int ndx);
-	public abstract String getActvPwr(int ndx);
-	public abstract String getReacPwr(int ndx);
-	public abstract String getMaxReacPwr(int ndx);
-	public abstract String getMinReacPwr(int ndx);
-	public abstract Bus getRemoteRegBus(int ndx);
-	public abstract float getMachR(int ndx);
-	public abstract float getMachX(int ndx);
-	public abstract float getStepupR(int ndx);
-	public abstract float getStepupX(int ndx);
-	public abstract boolean inService(int ndx);
-	public abstract float getMaxActvPwr(int ndx);
-	public abstract float getMinActvPwr(int ndx);
+	public Bus getBus(int ndx) {return null;}
+	public float getActvPwr(int ndx) {return 0;}
+	public float getReacPwr(int ndx) {return 0;}
+	public float getMaxReacPwr(int ndx) {return 0;}
+	public float getMinReacPwr(int ndx) {return 0;}
+	public Bus getRemoteRegBus(int ndx) {return null;}
+	public float getMachR(int ndx)  {return 0;}
+	public float getMachX(int ndx) {return 0;}
+	public float getStepupR(int ndx) {return 0;}
+	public float getStepupX(int ndx) {return 0;}
+	public boolean inService(int ndx) {return getSTAT(ndx) == 1;}
+	public float getMaxActvPwr(int ndx) {return 0;}
+	public float getMinActvPwr(int ndx) {return 0;}
 
 	/* raw methods */
 
 	public abstract String getI(int ndx);
 	public abstract String getID(int ndx);
-	public abstract String getPG(int ndx);
-	public abstract String getQG(int ndx);
-	public abstract String getQT(int ndx);
-	public abstract String getQB(int ndx);
+	public abstract float getPG(int ndx);
+	public abstract float getQG(int ndx);
+	public abstract float getQT(int ndx);
+	public abstract float getQB(int ndx);
 	public abstract float getVS(int ndx);
 	public abstract float getIREG(int ndx);
 	public abstract float getMBASE(int ndx);

@@ -5,9 +5,9 @@ import com.powerdata.openpa.tools.BaseList;
 public abstract class AreaInterchangeList<T extends AreaInterchange> extends BaseList<T>
 {
 	/* Convenience methods */
-	public abstract Bus getSlackBus(int ndx);
-	public abstract float getIntExport(int ndx);
-	public abstract float getIntTol(int ndx);
+	public Bus getSlackBus(int ndx) {return null;}
+	public float getIntExport(int ndx) {return 0;}
+	public float getIntTol(int ndx) {return 0;}
 
 	/* Raw values */
 	public abstract int getI(int ndx);

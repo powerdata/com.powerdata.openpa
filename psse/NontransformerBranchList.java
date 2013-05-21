@@ -11,10 +11,13 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 	}
 
 	/* Convenience Methods */
-	public abstract Bus getFromBus(int ndx);
-	public abstract Bus getToBus(int ndx);
-	public abstract MeteredEnd getMeteredEnd(int ndx);
-	public abstract boolean inService(int ndx);
+	public Bus getFromBus(int ndx) {return null;}
+	public Bus getToBus(int ndx)  {return null;}
+	public MeteredEnd getMeteredEnd(int ndx)
+	{
+		return (getJ(ndx).charAt(0) == '-') ? MeteredEnd.To : MeteredEnd.From;
+	}
+	public boolean inService(int ndx) {return getST(ndx) == 1;}
 	
 	/* raw PSS/e methods */
 	public abstract String getI(int ndx);

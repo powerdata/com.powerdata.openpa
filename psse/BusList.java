@@ -25,13 +25,13 @@ public abstract class BusList<T extends Bus> extends BaseList<T>
 	
 	/* convenience methods */
 	
-	public abstract BusTypeCode getBusType(int ndx);
-	public abstract float getShuntConductance(int ndx);
-	public abstract float getShuntSusceptance(int ndx);
-	public abstract AreaInterchange getAreaObject(int ndx);
-	public abstract Zone getZoneObject(int ndx);
-	public abstract Owner getOwnerObject(int ndx);
-	public abstract float getVangRad(int ndx);
+	public BusTypeCode getBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}
+	public float getShuntConductance(int ndx) {return 0;}
+	public float getShuntSusceptance(int ndx) {return 0;}
+	public AreaInterchange getAreaObject(int ndx) {return null;}
+	public Zone getZoneObject(int ndx) {return null;}
+	public Owner getOwnerObject(int ndx)  {return null;}
+	public float getVangRad(int ndx) {return 0;}
 
 	/* raw methods */
 
