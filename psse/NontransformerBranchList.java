@@ -1,14 +1,14 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseList;
-
 public abstract class NontransformerBranchList<T extends NontransformerBranch> 
-	extends BaseList<T>
+	extends PsseBaseList<T>
 {
 	public enum MeteredEnd
 	{
 		From, To;
 	}
+
+	public NontransformerBranchList(PsseModel model) {super(model);}
 
 	/* Convenience Methods */
 	public Bus getFromBus(int ndx) {return null;}

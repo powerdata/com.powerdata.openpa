@@ -1,9 +1,9 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseList;
-
-public abstract class BusList<T extends Bus> extends BaseList<T>
+public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 {
+	public BusList(PsseModel model) {super(model);}
+
 	/* convenience methods */
 	
 	public BusTypeCode getBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}

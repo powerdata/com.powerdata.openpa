@@ -39,6 +39,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	
 	public BusList(PsseEquipment eq) throws IOException
 	{
+		super(eq);
 		_eq 	= eq;
 		SimpleCSV buses = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
 		_size	= buses.getRowCount();

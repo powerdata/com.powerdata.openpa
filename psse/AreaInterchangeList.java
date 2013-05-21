@@ -1,9 +1,9 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseList;
-
-public abstract class AreaInterchangeList<T extends AreaInterchange> extends BaseList<T>
+public abstract class AreaInterchangeList<T extends AreaInterchange> extends PsseBaseList<T>
 {
+	public AreaInterchangeList(PsseModel model) {super(model);}
+
 	/* Convenience methods */
 	public Bus getSlackBus(int ndx) {return null;}
 	public float getIntExport(int ndx) {return 0;}

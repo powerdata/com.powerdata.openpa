@@ -1,9 +1,9 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseList;
-
-public abstract class OwnershipList<T extends Ownership> extends BaseList<T>
+public abstract class OwnershipList<T extends Ownership> extends PsseBaseList<T>
 {
+	public OwnershipList(PsseModel model) {super(model);}
+
 	/* convenience methods */
 	public abstract Owner getOwner(int ndx);
 

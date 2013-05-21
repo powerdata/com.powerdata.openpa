@@ -1,9 +1,9 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseList;
-
-public abstract class GeneratorList<T extends Generator> extends BaseList<T>
+public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 {
+	public GeneratorList(PsseModel model) {super(model);}
+	
 	/* convenience methods */
 	
 	public Bus getBus(int ndx) {return null;}

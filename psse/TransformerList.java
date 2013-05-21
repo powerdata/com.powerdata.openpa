@@ -1,11 +1,9 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseList;
-
 public abstract class TransformerList<T extends Transformer> 
-	extends BaseList<T>
+	extends PsseBaseList<T>
 {
-	
+	public TransformerList(PsseModel model) {super(model);}
 
 	/* Convenience Methods */
 	

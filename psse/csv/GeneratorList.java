@@ -39,6 +39,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 
 	public GeneratorList(PsseEquipment eq) throws IOException
 	{
+		super(eq);
 		_eq = eq;
 		_gens = new SimpleCSV(_eq.getDir().getPath()+"/Machines.csv");
 		_buses = _eq.getBuses();

@@ -24,6 +24,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	
 	public TransformerList(PsseEquipment eq) throws IOException
 	{
+		super(eq);
 		_eq = eq;
 		_xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformers.csv");
 		_size = _xfr.getRowCount();
