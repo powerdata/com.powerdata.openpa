@@ -50,7 +50,11 @@ public class SimpleCSV
 	//
 	//	Get values based on column offset
 	//
-	public String get(int col, int row) { return _cols.get(col).get(row); }
+	public String get(int col, int row)
+	{
+		ArrayList<String> vals = _cols.get(col);
+		return (vals == null)?"":vals.get(row);
+	}
 	public byte getByte(int col, int row) { return Byte.parseByte(get(col,row)); }
 	public short getShort(int col, int row) { return Short.parseShort(get(col,row)); }
 	public int getInt(int col, int row) { return Integer.parseInt(get(col,row)); }
@@ -60,7 +64,11 @@ public class SimpleCSV
 	//
 	//	Get values based on column name
 	//
-	public String get(String col, int row) { return _colsByName.get(col).get(row);	}
+	public String get(String col, int row)
+	{
+		ArrayList<String> vals = _colsByName.get(col);
+		return (vals == null)?"":vals.get(row);
+	}
 	public byte getByte(String col, int row) { return Byte.parseByte(get(col,row)); }
 	public short getShort(String col, int row) { return Short.parseShort(get(col,row)); }
 	public int getInt(String col, int row) { return Integer.parseInt(get(col,row)); }
@@ -70,8 +78,48 @@ public class SimpleCSV
 	//
 	//	Get entire columns
 	//
-	public String[] get(int col) { return _cols.get(col).toArray(new String[0]); }
-	public String[] get(String col) { return _colsByName.get(col).toArray(new String[0]); }
+	public String[] get(int col)
+	{
+		ArrayList<String> vals = _cols.get(col);
+		return (vals == null)?null:vals.toArray(new String[0]);
+	}
+	public String[] get(String col)
+	{
+		ArrayList<String> vals = _colsByName.get(col);
+		return (vals == null)?null:vals.toArray(new String[0]);
+	}
+	public float[] getFloats(int col) { return getFloats(get(col)); }
+	public float[] getFloats(String col) { return getFloats(get(col)); }
+	public float[] getFloats(String svals[])
+	{
+		float fvals[] = null;
+		if (svals != null)
+		{
+			fvals = new float[_rowCount];
+			for(int i=0; i<_rowCount; i++)
+			{
+				if (!IsNumber(svals[i])) return null;
+				fvals[i] = Float.parseFloat(svals[i]);
+			}
+		}
+		return fvals;
+	}
+	public int[] getInts(int col) { return getInts(get(col)); }
+	public int[] getInts(String col) { return getInts(get(col)); }
+	public int[] getInts(String svals[])
+	{
+		int fvals[] = null;
+		if (svals != null)
+		{
+			fvals = new int[_rowCount];
+			for(int i=0; i<_rowCount; i++)
+			{
+				if (!IsNumber(svals[i])) return null;
+				fvals[i] = Integer.parseInt(svals[i]);
+			}
+		}
+		return fvals;
+	}
 	//
 	//	Set values based on column offset
 	//

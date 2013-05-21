@@ -49,14 +49,14 @@ public class PsseEquipment implements com.powerdata.openpa.psse.Container
 		try
 		{
 			PsseEquipment eq = new PsseEquipment("testdata/db");
-			//for(Bus b : eq.getBuses())
-			//{
-			//	System.out.println(b);
-			//}
-			for(Generator g : eq.getGenerators())
+			for(Bus b : eq.getBuses())
 			{
-				System.out.println(g);
+				System.out.println(b);
 			}
+			//for(Generator g : eq.getGenerators())
+			//{
+			//	System.out.println(g);
+			//}
 			//for(Branch b : eq.getBranches())
 			//{
 			//	System.out.println(b);

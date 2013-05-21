@@ -18,36 +18,50 @@ import com.powerdata.openpa.tools.StringAttrib;
  */
 public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 {
-	// not mapped yet
-	static final int GL = -1;
-	static final int BL = -1;
-	
-	static final int FLAG = 0;
-	static final int I = 1;
-	static final int NAME = 2;
-	static final int BASEKV = 3;
-	static final int IDE = 4;
-	static final int AREA = 5;
-	static final int ZONE = 6;
-	static final int OWNER = 7;
-	static final int VM = 8;
-	static final int VA = 9;
-	
+	/** parent container */
 	PsseEquipment _eq;
+	/** translate I to an offset */
 	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
-	SimpleCSV _buses;
+	/** number of items in the DB */
+	int _size;
+	
+	// Base values from the CSV file
+	String _i[];
+	String _name[];
+	float _basekv[];
+	int _ide[];
+	int _area[];
+	int _zone[];
+	int _owner[];
+	float _vm[];
+	float _va[];
+	int _gl[];
+	int _bl[];
+	int _type[];
 	
 	public BusList(PsseEquipment eq) throws IOException
 	{
 		_eq = eq;
-		_buses = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
-		int size = _buses.getRowCount();
-		for(int i=0; i<size; i++) _idToNdx.put(_buses.get(I, i), i);
+		SimpleCSV buses = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
+		_size = buses.getRowCount();
+		_i		= buses.get("I");
+		for(int i=0; i<_size; i++) _idToNdx.put(_i[i], i);
+		_name	= buses.get("NAME");
+		_basekv	= buses.getFloats("BASKV");
+		_ide	= buses.getInts("IDE");
+		_area	= buses.getInts("AREA");
+		_zone	= buses.getInts("ZONE");
+		_owner	= buses.getInts("OWNER");
+		_vm		= buses.getFloats("VM");
+		_va		= buses.getFloats("VA");
+		_gl		= buses.getInts("GL");
+		_bl		= buses.getInts("BL");
+		_type	= buses.getInts("Flag");
 	}
 	@Override
 	public BusTypeCode getBusType(int ndx)
 	{
-		return BusTypeCode.fromCode(_buses.getInt(FLAG, ndx));
+		return (_type != null)?BusTypeCode.fromCode(_type[ndx]):BusTypeCode.Unknown;
 	}
 	@Override
 	public float getShuntConductance(int ndx) { return 0; }
@@ -62,29 +76,29 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public float getVangRad(int ndx) { return 0; }
 	@Override
-	public int getI(int ndx) { return _buses.getInt(I, ndx); }
+	public String getI(int ndx) { return _i[ndx]; }
 	@Override
-	public String getNAME(int ndx) { return _buses.get(NAME, ndx); }
+	public String getNAME(int ndx) { return (_name != null)?_name[ndx]:""; }
 	@Override
-	public float getBASKV(int ndx) { return _buses.getFloat(BASEKV, ndx); }
+	public float getBASKV(int ndx) { return (_basekv != null)?_basekv[ndx]:0; }
 	@Override
-	public int getIDE(int ndx) { return _buses.getInt(IDE, ndx); }
+	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:0; }
 	@Override
-	public int getGL(int ndx) { return 0; }
+	public int getGL(int ndx) { return (_gl != null)?_gl[ndx]:0; }
 	@Override
-	public int getBL(int ndx) { return 0; }
+	public int getBL(int ndx) { return (_bl != null)?_bl[ndx]:0; }
 	@Override
-	public int getAREA(int ndx) { return _buses.getInt(AREA, ndx); }
+	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:0; }
 	@Override
-	public int getZONE(int ndx) { return _buses.getInt(ZONE, ndx); }
+	public int getZONE(int ndx) { return (_zone != null)?_zone[ndx]:0; }
 	@Override
-	public float getVM(int ndx) { return _buses.getFloat(VM, ndx); }
+	public float getVM(int ndx) { return (_vm != null)?_vm[ndx]:0; }
 	@Override
-	public float getVA(int ndx) { return _buses.getFloat(VA, ndx); }
+	public float getVA(int ndx) { return (_va != null)?_va[ndx]:0; }
 	@Override
-	public int getOWNER(int ndx) { return _buses.getInt(OWNER, ndx); }
+	public int getOWNER(int ndx) { return (_owner != null)?_owner[ndx]:0; }
 	@Override
-	public String getObjectID(int ndx) { return _buses.get(I, ndx);	}
+	public String getObjectID(int ndx) { return _i[ndx];	}
 	@Override
 	public int getIndex(String id)
 	{
@@ -102,5 +116,5 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public Bus get(int index) { return new Bus(index,this);	}
 	@Override
-	public int size() { return _buses.getRowCount(); }
+	public int size() { return _size; }
 }
