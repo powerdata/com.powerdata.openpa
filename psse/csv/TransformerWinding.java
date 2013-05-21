@@ -1,4 +1,7 @@
-package com.powerdata.openpa.padbc.isc;
+package com.powerdata.openpa.psse.csv;
+
+public class TransformerWinding {}
+/*
 
 public class TransformerWinding extends com.powerdata.openpa.padbc.TransformerWinding 
 {
@@ -10,3 +13,4 @@ public class TransformerWinding extends com.powerdata.openpa.padbc.TransformerWi
 	}
 	public void dump() { _list.dumpRow(_ndx); }
 }
+*/

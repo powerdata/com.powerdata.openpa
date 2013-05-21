@@ -1,34 +1,44 @@
-package com.powerdata.openpa.padbc.isc;
+package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 import java.io.IOException;
 
-import com.powerdata.openpa.padbc.ACLineList;
-import com.powerdata.openpa.padbc.AreaList;
-import com.powerdata.openpa.padbc.LoadList;
-import com.powerdata.openpa.padbc.OwnerList;
-import com.powerdata.openpa.padbc.PhaseShftWndList;
-import com.powerdata.openpa.padbc.SeriesCapacitorList;
-import com.powerdata.openpa.padbc.SeriesReactorList;
-import com.powerdata.openpa.padbc.StaticVarCompList;
-import com.powerdata.openpa.padbc.StationList;
-import com.powerdata.openpa.padbc.SwitchedShuntList;
-import com.powerdata.openpa.padbc.TopNodeList;
-import com.powerdata.openpa.padbc.VoltageLevelList;
+import com.powerdata.openpa.psse.GeneratorList;
 
-public class Equipment implements com.powerdata.openpa.padbc.Container
+public class PsseEquipment implements com.powerdata.openpa.psse.Container
 {
 	File _dir;
-	GeneratorList _generatorList;
-	NodeList _nodeList;
-	BranchList _branchList;
-	TransformerWndList _transformerWndList;
+	//GeneratorList _generatorList;
+	//NodeList _nodeList;
+	BusList _busses;
+	NontransformerBranchList _branchList;
+	//TransformerWndList _transformerWndList;
 	
-	public Equipment(String dirpath)
+	public PsseEquipment(String dirpath)
 	{
 		_dir = new File(dirpath);
 	}
 	public File getDir() { return _dir; }
+	@Override
+	public String getContainerName() { return "PsseEquipment"; }
+	@Override
+	public BusList getBusses() throws IOException
+	{
+		if (_busses == null) _busses = new BusList(this);
+		return _busses;
+	}
+	@Override
+	public GeneratorList<?> getGenerators() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public NontransformerBranchList getNontransformerBranches() throws IOException
+	{
+		if (_branchList == null) _branchList = new NontransformerBranchList(this);
+		return _branchList;
+	}
+	/*
 	@Override
 	public String getContainerName() { return "CsvEquipment"; }
 	@Override
@@ -64,9 +74,9 @@ public class Equipment implements com.powerdata.openpa.padbc.Container
 		return _nodeList;
 	}
 	@Override
-	public BranchList getBranches() throws IOException
+	public NontransformerBranchList getBranches() throws IOException
 	{
-		if ( _branchList == null) _branchList = new BranchList(this);
+		if ( _branchList == null) _branchList = new NontransformerBranchList(this);
 		return _branchList;
 	}
 	@Override
@@ -79,11 +89,12 @@ public class Equipment implements com.powerdata.openpa.padbc.Container
 	public VoltageLevelList getVoltageLevels() { return null; }
 	@Override
 	public TopNodeList getTopNodes() { return null;	}
+	*/
 	static public void main(String args[])
 	{
 		try
 		{
-			Equipment eq = new Equipment("testdata/db");
+			PsseEquipment eq = new PsseEquipment("testdata/db");
 			//for(CsvNode n : eq.getNodes())
 			//{
 			//	System.out.println(n);
@@ -96,13 +107,13 @@ public class Equipment implements com.powerdata.openpa.padbc.Container
 			//{
 			//	System.out.println(b);
 			//}
-			eq.getTransformerWindings().dumpHeaders();
-			for(TransformerWinding w : eq.getTransformerWindings())
-			{
-				w.dump();
-			}
+			//eq.getTransformerWindings().dumpHeaders();
+			//for(TransformerWinding w : eq.getTransformerWindings())
+			//{
+			//	w.dump();
+			//}
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			System.out.println("ERROR: "+e);
 		}

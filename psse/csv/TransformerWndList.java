@@ -1,4 +1,4 @@
-package com.powerdata.openpa.padbc.isc;
+package com.powerdata.openpa.psse.csv;
 
 import java.io.IOException;
 
@@ -8,18 +8,20 @@ import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class TransformerWndList extends com.powerdata.openpa.padbc.TransformerWndList<TransformerWinding>
+public class TransformerWndList {}
+/*
+public class TransformerWndList extends com.powerdata.openpa.psse.TransformerWndList<TransformerWinding>
 {
 	static final int I = 0;
 	static final int J = 1;
 	static final int K = 2;
 
-	Equipment _eq;
-	NodeList _nodes;
+	PsseEquipment _eq;
+	BusList _nodes;
 	SimpleCSV _xfr;
 	int _size;
 	
-	public TransformerWndList(Equipment eq) throws IOException
+	public TransformerWndList(PsseEquipment eq) throws IOException
 	{
 		_eq = eq;
 		_xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformers.csv");
@@ -106,3 +108,4 @@ public class TransformerWndList extends com.powerdata.openpa.padbc.TransformerWn
 		return 0;
 	}
 }
+*/
