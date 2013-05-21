@@ -16,7 +16,7 @@ public abstract class StaticVarCompList<T extends StaticVarComp> extends BaseLis
 	public abstract float getBSetpt(int ndx);
 	public abstract float getVoltageSetpt(int ndx);
 
-	public abstract float getReacPwr(int index);
+	public abstract float getReacPwr(int ndx);
 	public abstract void updateReacPwr(int ndx, float b);
 
 

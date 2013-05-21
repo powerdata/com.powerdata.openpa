@@ -151,7 +151,7 @@ public class PerfTestACLineList extends ACLineList<ACLine>
 	}
 
 	@Override
-	public ACLine get(int index) {return new ACLine(index, this);} 
+	public ACLine get(int ndx) {return new ACLine(ndx, this);} 
 
 	@Override
 	public ACLine get(String objectid) {throw new UnsupportedOperationException();}
