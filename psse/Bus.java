@@ -40,7 +40,7 @@ public class Bus extends BaseObject
 	/* Raw PSS/e methods */
 	
 	/** Bus number */
-	public String getI() {return _list.getI(_ndx);}
+	public int getI() {return _list.getI(_ndx);}
 	/** Alphanumeric identifier */
 	public String getNAME() {return _list.getNAME(_ndx);}
 	/** Bus base voltage */

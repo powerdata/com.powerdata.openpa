@@ -98,7 +98,6 @@ public class SimpleCSV
 			fvals = new float[_rowCount];
 			for(int i=0; i<_rowCount; i++)
 			{
-				if (!IsNumber(svals[i])) return null;
 				fvals[i] = Float.parseFloat(svals[i]);
 			}
 		}
@@ -114,7 +113,6 @@ public class SimpleCSV
 			fvals = new int[_rowCount];
 			for(int i=0; i<_rowCount; i++)
 			{
-				if (!IsNumber(svals[i])) return null;
 				fvals[i] = Integer.parseInt(svals[i]);
 			}
 		}

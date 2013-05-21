@@ -35,7 +35,7 @@ public abstract class BusList<T extends Bus> extends BaseList<T>
 
 	/* raw methods */
 
-	public abstract String getI(int ndx);
+	public abstract int getI(int ndx);
 	public abstract String getNAME(int ndx);
 	public abstract float getBASKV(int ndx);
 	public abstract int getIDE(int ndx);

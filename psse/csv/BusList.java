@@ -24,9 +24,10 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	/** number of items in the DB */
 	int _size;
-	
+	/** Object IDs */
+	String _ids[];
 	// Base values from the CSV file
-	String _i[];
+	int _i[];
 	String _name[];
 	float _basekv[];
 	int _ide[];
@@ -41,11 +42,12 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	
 	public BusList(PsseEquipment eq) throws IOException
 	{
-		_eq = eq;
+		_eq 	= eq;
 		SimpleCSV buses = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
-		_size = buses.getRowCount();
-		_i		= buses.get("I");
-		for(int i=0; i<_size; i++) _idToNdx.put(_i[i], i);
+		_size	= buses.getRowCount();
+		_i		= buses.getInts("I");
+		_ids	= buses.get("I");
+		for(int i=0; i<_size; i++) _idToNdx.put(_ids[i], i);
 		_name	= buses.get("NAME");
 		_basekv	= buses.getFloats("BASKV");
 		_ide	= buses.getInts("IDE");
@@ -59,24 +61,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 		_type	= buses.getInts("Flag");
 	}
 	@Override
-	public BusTypeCode getBusType(int ndx)
-	{
-		return (_type != null)?BusTypeCode.fromCode(_type[ndx]):BusTypeCode.Unknown;
-	}
-	@Override
-	public float getShuntConductance(int ndx) { return 0; }
-	@Override
-	public float getShuntSusceptance(int ndx) {	return 0; }
-	@Override
-	public AreaInterchange getAreaObject(int ndx) {	return null; }
-	@Override
-	public Zone getZoneObject(int ndx) { return null; }
-	@Override
-	public Owner getOwnerObject(int ndx) { return null;	}
-	@Override
-	public float getVangRad(int ndx) { return 0; }
-	@Override
-	public String getI(int ndx) { return _i[ndx]; }
+	public int getI(int ndx) { return _i[ndx]; }
 	@Override
 	public String getNAME(int ndx) { return (_name != null)?_name[ndx]:""; }
 	@Override
@@ -98,7 +83,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public int getOWNER(int ndx) { return (_owner != null)?_owner[ndx]:0; }
 	@Override
-	public String getObjectID(int ndx) { return _i[ndx];	}
+	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
 	public int getIndex(String id)
 	{
