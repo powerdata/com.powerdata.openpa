@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import java.io.IOException;
+
 import com.powerdata.openpa.tools.BaseObject;
 
 public class Bus extends BaseObject
@@ -20,17 +22,17 @@ public class Bus extends BaseObject
 	/** enumerated IDE code */
 	public BusTypeCode getBusType() {return _list.getBusType(_ndx);}
 	/** Area */
-	public AreaInterchange getAreaObject() {return _list.getAreaObject(_ndx);}
+	public AreaInterchange getAreaObject() throws IOException {return _list.getAreaObject(_ndx);}
 	/** Zone */
-	public Zone getZoneObject() {return _list.getZoneObject(_ndx);}
+	public Zone getZoneObject() throws IOException {return _list.getZoneObject(_ndx);}
 	/** Owner */
-	public Owner getOwnerObject() {return _list.getOwnerObject(_ndx);}
+	public Owner getOwnerObject() throws IOException {return _list.getOwnerObject(_ndx);}
 	/** Active component of shunt admittance to ground (GL) per-unit on 100MVA base */
 	public float getShuntG() {return _list.getShuntG(_ndx);}
 	/** Reactive component of shunt admittance to ground (BL) per-unit on 100MVA base */
 	public float getShuntB() {return _list.getShuntB(_ndx);}
 	/** Bus voltage phase angle in radians */
-	public float getVangRad() {return _list.getVangRad(_ndx);}
+	public float getVangRad() throws IOException {return _list.getVangRad(_ndx);}
 	
 	@Override
 	public String toString() { return String.format("Bus[%d](%s) %s",_ndx,getObjectID(),getNAME()); }

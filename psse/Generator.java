@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import java.io.IOException;
+
 import com.powerdata.openpa.tools.BaseObject;
 
 public class Generator extends BaseObject
@@ -18,8 +20,8 @@ public class Generator extends BaseObject
 	
 	/* Convenience methods */
 
-	/** Generator bus */
-	public Bus getBus() {return _list.getBus(_ndx);}
+	/** Generator bus */ 
+	public Bus getBus() throws IOException {return _list.getBus(_ndx);}
 	/** Generator active power output p.u. on 100 MVA base */
 	public float getActvPwr() {return _list.getActvPwr(_ndx);}
 	/** Generator reactive power output p.u. on 100 MVA base */
@@ -29,7 +31,7 @@ public class Generator extends BaseObject
 	/** Minimum generator reactive power output (p.u. on 100 MVA base) */
 	public float getMinReacPwr() {return _list.getMinReacPwr(_ndx);}
 	/** remote regulated bus.  Null if local */
-	public Bus getRemoteRegBus() {return _list.getRemoteRegBus(_ndx);}
+	public Bus getRemoteRegBus() throws IOException {return _list.getRemoteRegBus(_ndx);}
 	/** machine resistance p.u. on 100 MVA base */
 	public float getMachR() {return _list.getMachR(_ndx);}
 	/** machine reactance p.u. on 100 MVA base */
