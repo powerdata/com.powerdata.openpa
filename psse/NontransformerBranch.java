@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import java.io.IOException;
+
 import com.powerdata.openpa.psse.NontransformerBranchList.MeteredEnd;
 import com.powerdata.openpa.tools.BaseObject;
 
@@ -20,9 +22,9 @@ public class NontransformerBranch extends BaseObject
 	/* Convenience methods */
 
 	/** From-side bus */
-	public Bus getFromBus() {return _list.getFromBus(_ndx);}
+	public Bus getFromBus() throws IOException {return _list.getFromBus(_ndx);}
 	/** To-side bus */
-	public Bus getToBus() {return _list.getToBus(_ndx);}
+	public Bus getToBus() throws IOException {return _list.getToBus(_ndx);}
 	/** Get "metered" end */
 	public MeteredEnd getMeteredEnd() {return _list.getMeteredEnd(_ndx);}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */

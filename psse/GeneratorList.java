@@ -1,17 +1,19 @@
 package com.powerdata.openpa.psse;
 
+import java.io.IOException;
+
 public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 {
 	public GeneratorList(PsseModel model) {super(model);}
 	
 	/* convenience methods */
 	
-	public Bus getBus(int ndx) {return null;}
+	public Bus getBus(int ndx) throws IOException {return _model.getBus(getI(ndx));}
 	public float getActvPwr(int ndx) {return 0F;}
 	public float getReacPwr(int ndx) {return 0F;}
 	public float getMaxReacPwr(int ndx) {return 0F;}
 	public float getMinReacPwr(int ndx) {return 0F;}
-	public Bus getRemoteRegBus(int ndx) {return null;}
+	public Bus getRemoteRegBus(int ndx) throws IOException {return _model.getBus(getIREG(ndx));}
 	public float getMachR(int ndx)  {return 0F;}
 	public float getMachX(int ndx) {return 0F;}
 	public float getStepupR(int ndx) {return 0F;}

@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import java.io.IOException;
+
 public abstract class NontransformerBranchList<T extends NontransformerBranch> 
 	extends PsseBaseList<T>
 {
@@ -11,11 +13,18 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 	public NontransformerBranchList(PsseModel model) {super(model);}
 
 	/* Convenience Methods */
-	public Bus getFromBus(int ndx) {return null;}
-	public Bus getToBus(int ndx)  {return null;}
+	public Bus getFromBus(int ndx) throws IOException {return _model.getBus(getI(ndx));}
+	public Bus getToBus(int ndx)  throws IOException
+	{
+		String j = getJ(ndx);
+		return _model.getBus((!j.isEmpty()&&j.charAt(0)=='-')?
+			j.substring(1):j); 
+	}
 	public MeteredEnd getMeteredEnd(int ndx)
 	{
-		return (getJ(ndx).charAt(0) == '-') ? MeteredEnd.To : MeteredEnd.From;
+		String j = getJ(ndx);
+		return (!j.isEmpty() && j.charAt(0) == '-') ? 
+			MeteredEnd.To : MeteredEnd.From;
 	}
 	public boolean inService(int ndx) {return getST(ndx) == 1;}
 	
