@@ -47,13 +47,13 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public Bus getBus(int ndx) { return null; }
 	@Override
-	public String getActvPwr(int ndx) { return null; }
+	public float getActvPwr(int ndx) { return 0; }
 	@Override
-	public String getReacPwr(int ndx) { return null; }
+	public float getReacPwr(int ndx) { return 0; }
 	@Override
-	public String getMaxReacPwr(int ndx) { return null; }
+	public float getMaxReacPwr(int ndx) { return 0; }
 	@Override
-	public String getMinReacPwr(int ndx) { return null; }
+	public float getMinReacPwr(int ndx) { return 0; }
 	@Override
 	public Bus getRemoteRegBus(int ndx) { return null; }
 	@Override
@@ -75,13 +75,13 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public String getID(int ndx) { return _gens.get(ID, ndx); }
 	@Override
-	public String getPG(int ndx) { return null; }
+	public float getPG(int ndx) { return 0; }
 	@Override
-	public String getQG(int ndx) { return null; }
+	public float getQG(int ndx) { return 0; }
 	@Override
-	public String getQT(int ndx) { return null; }
+	public float getQT(int ndx) { return 0; }
 	@Override
-	public String getQB(int ndx) { return null; }
+	public float getQB(int ndx) { return 0; }
 	@Override
 	public float getVS(int ndx) { return 0; }
 	@Override
