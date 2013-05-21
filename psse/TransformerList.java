@@ -7,7 +7,7 @@ public abstract class TransformerList<T extends Transformer>
 {
 	public enum TransformerStatus
 	{
-		OutOfService(0), InService(1), Wnd1Out(4), Wnd2Out(2), Wnd3Out(3);
+		Unknown(-1), OutOfService(0), InService(1), Wnd1Out(4), Wnd2Out(2), Wnd3Out(3);
 		private int _code;
 		TransformerStatus(int code)
 		{
@@ -23,7 +23,7 @@ public abstract class TransformerList<T extends Transformer>
 				case 2: return Wnd2Out;
 				case 3: return Wnd3Out;
 				case 4: return Wnd1Out;
-				default: return null;
+				default: return Unknown;
 			}
 		}
 	}

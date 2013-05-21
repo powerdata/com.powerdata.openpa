@@ -25,8 +25,7 @@ public class Transformer extends BaseObject
 	/** Winding 3 bus for 3 winding transformers*/
 	public Bus getBus3() {return _list.getBus3(_ndx);}
 
-	// TODO: Are the different values for MAG1, MAG2 based on CM different
-	// physical paremeters, or equivalent just with different units?
+	//TODO:  How to convert to per-unit when CM == 2
 	/** Magnetizing Conductance per-unit on 100 MVA Base */
 	public float getMagCondPerUnit() {return _list.getMagCondPerUnit(_ndx);}
 	/** Magnetizing Susceptance per-unit on 100 MVA Base */
@@ -37,6 +36,7 @@ public class Transformer extends BaseObject
 	public float getExcitingCurrent() {return _list.getExcitingCurrent(_ndx);}
 	/** Initial Transformer Status */
 	public TransformerStatus getInitTransformerStat() {return _list.getInitTransformerStat(_ndx);}
+	// TODO:  How to convert to per-unit impedance on 100MVA base when CZ =2 or 3
 	/** get resistance between windings 1 and 2 on 100 MVA base */
 	public float getResistance1_2() {return _list.getResistance1_2(_ndx);}
 	/** get Reactance between windings 1 and 2 on 100 MVA base */
@@ -49,6 +49,13 @@ public class Transformer extends BaseObject
 	public float getResistance3_1() {return _list.getResistance3_1(_ndx);}
 	/** get Reactance between windings 3 and 1 on 100 MVA base */
 	public float getReactance3_1() {return _list.getReactance3_1(_ndx);}
+	/** get star node angle in radians */
+//	public float getAnStarRad() {return _list.getAnStarRad(_ndx);}
+//	/** get winding 1 turns ratio p.u. on winding 1 bus base voltage or generate appropriate default */
+//	public float getWnd1Ratio() {return _list.getWnd1Ratio(_ndx);}
+//	/** get winding 1 nominal KV either directly or generate default value */
+//	public float getWnd1NomKV() {return _list.getWnd1NomKV(_ndx);}
+	
 	
 	
 	
@@ -99,6 +106,21 @@ public class Transformer extends BaseObject
 	public float getX3_1() {return _list.getX3_1(_ndx);}
 	/** get winding 2-3 base MVA */
 	public float getSBASE3_1() {return _list.getSBASE3_1(_ndx);}
+//	/** voltage magnitude at star node p.u. */
+//	public float getVMSTAR() {return _list.getVMSTAR(_ndx);}
+//	/** voltage angle at star node in degrees */
+//	public float getANSTAR() {return _list.getANSTAR(_ndx);}
+//	
+//	/* raw PSS/e methods (line 3) */
+//	
+//	/** winding 1 off-nominal turns ratio */
+//	public float getWINDV1() {return _list.getWINDV1(_ndx);}
+//	/** nominal winding 1 voltage in kV */
+//	public float getNOMV1() {return _list.getNOMV1(_ndx);}
+//	/** winding 1 phase shift (DEG) */
+//	public float getANG1() {return _list.getANG1(_ndx);}
+	
+	
 	
 	
 	/** return Ownership as a list */

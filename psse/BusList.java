@@ -6,7 +6,7 @@ public abstract class BusList<T extends Bus> extends BaseList<T>
 {
 	public enum BusTypeCode
 	{
-		Load(1), Gen(2), Slack(3), Isolated(4);
+		Unknown(-1), Load(1), Gen(2), Slack(3), Isolated(4);
 		private int _code;
 		BusTypeCode(int code) {_code = code;}
 		public int getCode() {return _code;}
@@ -18,7 +18,7 @@ public abstract class BusList<T extends Bus> extends BaseList<T>
 				case 2: return Gen;
 				case 3: return Slack;
 				case 4: return Isolated;
-				default: return null;
+				default: return Unknown;
 			}
 		}
 	}
