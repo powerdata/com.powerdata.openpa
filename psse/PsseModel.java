@@ -3,7 +3,12 @@ package com.powerdata.openpa.psse;
 import java.io.IOException;
 
 public abstract class PsseModel
-{
+{	
+	public static final float D2R = ((float)Math.PI)/180F;
+	public static float deg2rad(float deg) {return deg*D2R;}
+	public static float rad2deg(float rad) {return rad/D2R;}
+
+	
 	public float getSBASE() {return 100F;}
 	
 	/** find a Bus by ID */ 

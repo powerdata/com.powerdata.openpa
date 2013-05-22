@@ -11,10 +11,13 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	public BusTypeCode getBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}
 	public float getShuntG(int ndx) {return 0F;}
 	public float getShuntB(int ndx) {return 0F;}
-	public AreaInterchange getAreaObject(int ndx) throws IOException {return null;}
+	public AreaInterchange getAreaObject(int ndx) throws IOException
+	{
+		return _model.getAreas().get(getAREA(ndx));
+	}
 	public Zone getZoneObject(int ndx) throws IOException {return _model.getZones().get(getZONE(ndx));}
 	public Owner getOwnerObject(int ndx) throws IOException  {return _model.getOwners().get(getAREA(ndx));}
-	public float getVangRad(int ndx) throws IOException {return 0F;}
+	public float getVangRad(int ndx) throws IOException {return PsseModel.deg2rad(getVA(ndx));}
 
 	/* raw methods */
 
