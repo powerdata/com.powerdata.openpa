@@ -59,7 +59,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 			{
 				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
 			}
-			for(int i=0; i<_size; i++) _objIDtoNdx.put(_i[i]+":"+_id[i],i);
+			for(int i=0; i<_size; i++) _objIDtoNdx.put(getObjectID(i),i);
 		}
 		catch(IOException e)
 		{

@@ -64,6 +64,6 @@ public class NontransformerBranch extends BaseObject
 	/** return Ownership as a list */
 	public OwnershipList<?> getOwnership() {return _list.getOwnership(_ndx);}
 	
-	
-
+	@Override
+	public String toString() { return String.format("Brn[%d] %s",_ndx,getObjectID()); }
 }

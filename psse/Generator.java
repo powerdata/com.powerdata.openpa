@@ -46,8 +46,8 @@ public class Generator extends BaseObject
 	public float getMinActvPwr() {return _list.getMinActvPwr(_ndx);}
 	
 	@Override
-	public String toString() { return _list.getObjectID(_ndx); }
-	
+	public String toString() { return String.format("Gen[%d] %s",_ndx,getObjectID()); }
+
 	/* Raw PSS/e methods */
 	
 	/** bus number or name */
