@@ -23,5 +23,6 @@ public abstract class PsseModel
 	abstract public OwnerList<?> getOwners() throws PsseModelException;
 	abstract public AreaInterchangeList<?> getAreas() throws PsseModelException;
 	abstract public ZoneList<?> getZones() throws PsseModelException;
+	abstract public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException;
 }
 

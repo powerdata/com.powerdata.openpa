@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.io.File;
 
 import com.powerdata.openpa.psse.AreaInterchangeList;
+import com.powerdata.openpa.psse.ImpCorrTblList;
 import com.powerdata.openpa.psse.OwnerList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.ZoneList;
@@ -81,5 +82,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println("ERROR: "+e);
 		}
+	}
+	@Override
+	public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
