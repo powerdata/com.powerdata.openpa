@@ -10,13 +10,18 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}
-	public float getIntExport(int ndx) {return 0;}
-	public float getIntTol(int ndx) {return 0;}
 
 	/* Raw values */
 	public abstract int getI(int ndx);
-	public String getISW(int ndx) {return "0";}
-	public String getARNAME(int ndx) {return "";}
-	public float getPDES(int ndx) {return 0F;}
-	public float getPTOL(int ndx) {return 10F;}
+	public abstract String getISW(int ndx);
+	public abstract String getARNAME(int ndx);
+	public abstract float getPDES(int ndx);
+	public abstract float getPTOL(int ndx);
+
+	/* Default values */
+	protected String getDeftISW(int ndx) {return "0";}
+	protected String getDeftARNAME(int ndx) {return "";}
+	protected float getDeftPDES(int ndx) {return 0F;}
+	protected float getDeftPTOL(int ndx) {return 10F;}
+
 }

@@ -19,10 +19,6 @@ public class AreaInterchange extends BaseObject
 	
 	/** Area slack bus for area interchange control */ 
 	public Bus getSlackBus() throws PsseModelException {return _list.getSlackBus(_ndx);}
-	/** Desired net interchange leaving the area entered Per-unit on 100MVA base */
-	public float getIntExport() {return _list.getIntExport(_ndx);}
-	/** Interchange tolerance bandwidth p.u. on 100MVA base */
-	public float getIntTol() {return _list.getIntTol(_ndx);}
 	
 
 	/* raw PSS/e methods */
