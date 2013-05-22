@@ -59,7 +59,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 			{
 				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
 			}
-			for(int i=0; i<_size; i++) _objIDtoNdx.put(_i[i]+":"+_id[i],i);
+			for(int i=0; i<_size; i++) _objIDtoNdx.put(getObjectID(i),i);
 		}
 		catch(IOException e)
 		{
@@ -71,39 +71,39 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
-	public String getID(int ndx) { return (_id != null)?_id[ndx]:super.getID(ndx); }
+	public String getID(int ndx) { return (_id != null)?_id[ndx]:getDeftID(ndx); }
 	@Override
-	public float getPG(int ndx) { return (_pg != null)?_pg[ndx]:super.getPG(ndx); }
+	public float getPG(int ndx) { return (_pg != null)?_pg[ndx]:getDeftPG(ndx); }
 	@Override
-	public float getQG(int ndx) { return (_qg != null)?_qg[ndx]:super.getQG(ndx); }
+	public float getQG(int ndx) { return (_qg != null)?_qg[ndx]:getDeftQG(ndx); }
 	@Override
-	public float getQT(int ndx) { return (_qt != null)?_qt[ndx]:super.getQT(ndx); }
+	public float getQT(int ndx) { return (_qt != null)?_qt[ndx]:getDeftQT(ndx); }
 	@Override
-	public float getQB(int ndx) { return (_qb != null)?_qb[ndx]:super.getQB(ndx); }
+	public float getQB(int ndx) { return (_qb != null)?_qb[ndx]:getDeftQB(ndx); }
 	@Override
-	public float getVS(int ndx) { return (_vs != null)?_vs[ndx]:super.getVS(ndx); }
+	public float getVS(int ndx) { return (_vs != null)?_vs[ndx]:getDeftVS(ndx); }
 	@Override
-	public String getIREG(int ndx) { return (_ireg != null)?_ireg[ndx]:super.getIREG(ndx);	}
+	public String getIREG(int ndx) { return (_ireg != null)?_ireg[ndx]:getDeftIREG(ndx);	}
 	@Override
-	public float getMBASE(int ndx) { return (_mbase != null)?_mbase[ndx]:super.getMBASE(ndx); }
+	public float getMBASE(int ndx) { return (_mbase != null)?_mbase[ndx]:getDeftMBASE(ndx); }
 	@Override
-	public float getZR(int ndx) { return (_zr != null)?_zr[ndx]:super.getZR(ndx); }
+	public float getZR(int ndx) { return (_zr != null)?_zr[ndx]:getDeftZR(ndx); }
 	@Override
-	public float getZX(int ndx) { return (_zx != null)?_zx[ndx]:super.getZX(ndx); }
+	public float getZX(int ndx) { return (_zx != null)?_zx[ndx]:getDeftZX(ndx); }
 	@Override
-	public float getRT(int ndx) { return (_rt != null)?_rt[ndx]:super.getRT(ndx); }
+	public float getRT(int ndx) { return (_rt != null)?_rt[ndx]:getDeftRT(ndx); }
 	@Override
-	public float getXT(int ndx) { return (_xt != null)?_xt[ndx]:super.getXT(ndx); }
+	public float getXT(int ndx) { return (_xt != null)?_xt[ndx]:getDeftXT(ndx); }
 	@Override
-	public float getGTAP(int ndx) { return (_gtap != null)?_gtap[ndx]:super.getGTAP(ndx); }
+	public float getGTAP(int ndx) { return (_gtap != null)?_gtap[ndx]:getDeftGTAP(ndx); }
 	@Override
-	public int getSTAT(int ndx) { return (_stat != null)?_stat[ndx]:super.getSTAT(ndx); }
+	public int getSTAT(int ndx) { return (_stat != null)?_stat[ndx]:getDeftSTAT(ndx); }
 	@Override
-	public float getRMPCT(int ndx) { return (_rmpct != null)?_rmpct[ndx]:super.getRMPCT(ndx); }
+	public float getRMPCT(int ndx) { return (_rmpct != null)?_rmpct[ndx]:getDeftRMPCT(ndx); }
 	@Override
-	public float getPT(int ndx) { return (_pt != null)?_pt[ndx]:super.getPT(ndx); }
+	public float getPT(int ndx) { return (_pt != null)?_pt[ndx]:getDeftPT(ndx); }
 	@Override
-	public float getPB(int ndx) { return (_pb != null)?_pb[ndx]:super.getPB(ndx); }
+	public float getPB(int ndx) { return (_pb != null)?_pb[ndx]:getDeftPB(ndx); }
 	@Override
 	public OwnershipList<?> getOwnership(int ndx) { return null; }
 	@Override

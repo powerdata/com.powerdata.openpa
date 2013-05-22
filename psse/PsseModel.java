@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse;
 
 public abstract class PsseModel
-{
+{	
 	public float getSBASE() {return 100F;}
 	
 	/** find a Bus by ID */ 
@@ -18,5 +18,7 @@ public abstract class PsseModel
 	abstract public OwnerList<?> getOwners() throws PsseModelException;
 	abstract public AreaInterchangeList<?> getAreas() throws PsseModelException;
 	abstract public ZoneList<?> getZones() throws PsseModelException;
+	abstract public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException;
+	abstract public LoadList<?> getLoads() throws PsseModelException;
 }
 

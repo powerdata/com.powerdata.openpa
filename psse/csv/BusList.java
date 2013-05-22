@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import com.powerdata.openpa.psse.PsseModelException;
@@ -8,6 +7,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
+import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 /**
@@ -36,8 +36,8 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	int _owner[];
 	float _vm[];
 	float _va[];
-	int _gl[];
-	int _bl[];
+	float _gl[];
+	float _bl[];
 	
 	public BusList(PsseModel eq) throws PsseModelException
 	{
@@ -51,22 +51,24 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 			_i		= buses.getInts("I");
 			_ids	= buses.get("I");
 			for(int i=0; i<_size; i++) _idToNdx.put(_ids[i], i);
-			_name	= buses.get("NAME");
-			_basekv	= buses.getFloats("BASKV");
-			_ide	= buses.getInts("IDE");
-			_area	= buses.getInts("AREA");
-			_zone	= buses.getInts("ZONE");
-			_owner	= buses.getInts("OWNER");
-			_vm		= buses.getFloats("VM");
-			_va		= buses.getFloats("VA");
-			_gl		= buses.getInts("GL");
-			_bl		= buses.getInts("BL");
+			this.getClass().getSuperclass();
+			_name	= LoadArray.String(buses,"NAME",this,"getDeftNAME");
+			_basekv	= LoadArray.Float(buses,"BASKV",this,"getDeftBASKV");
+			_ide	= LoadArray.Int(buses,"IDE",this,"getDeftIDE");
+			_area	= LoadArray.Int(buses,"AREA",this,"getDeftAREA");
+			_zone	= LoadArray.Int(buses,"ZONE",this,"getDeftZONE");
+			_owner	= LoadArray.Int(buses,"OWNER",this,"getDeftOWNER");
+			_vm		= LoadArray.Float(buses,"VM",this,"getDeftVM");
+			_va		= LoadArray.Float(buses,"VA",this,"getDeftVA");
+			_gl		= LoadArray.Float(buses,"GL",this,"getDeftGL");
+			_bl		= LoadArray.Float(buses,"BL",this,"getDeftBL");
+			
 			if (_i == null)
 			{
 				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
 			}
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			throw new PsseModelException(getClass().getName()+": "+e);
 		}
@@ -74,25 +76,25 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public int getI(int ndx) { return _i[ndx]; }
 	@Override
-	public String getNAME(int ndx) { return (_name != null)?_name[ndx]:super.getNAME(ndx); }
+	public String getNAME(int ndx) { return (_name != null)?_name[ndx]:getDeftNAME(ndx); }
 	@Override
-	public float getBASKV(int ndx) { return (_basekv != null)?_basekv[ndx]:super.getBASKV(ndx); }
+	public float getBASKV(int ndx) { return (_basekv != null)?_basekv[ndx]:getDeftBASKV(ndx); }
 	@Override
-	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:super.getIDE(ndx); }
+	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:getDeftIDE(ndx); }
 	@Override
-	public float getGL(int ndx) { return (_gl != null)?_gl[ndx]:super.getGL(ndx); }
+	public float getGL(int ndx) { return (_gl != null)?_gl[ndx]:getDeftGL(ndx); }
 	@Override
-	public float getBL(int ndx) { return (_bl != null)?_bl[ndx]:super.getBL(ndx); }
+	public float getBL(int ndx) { return (_bl != null)?_bl[ndx]:getDeftBL(ndx); }
 	@Override
-	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:super.getAREA(ndx); }
+	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:getDeftAREA(ndx); }
 	@Override
-	public int getZONE(int ndx) { return (_zone != null)?_zone[ndx]:super.getZONE(ndx); }
+	public int getZONE(int ndx) { return (_zone != null)?_zone[ndx]:getDeftZONE(ndx); }
 	@Override
-	public float getVM(int ndx) { return (_vm != null)?_vm[ndx]:super.getVM(ndx); }
+	public float getVM(int ndx) { return (_vm != null)?_vm[ndx]:getDeftVM(ndx); }
 	@Override
-	public float getVA(int ndx) { return (_va != null)?_va[ndx]:super.getVA(ndx); }
+	public float getVA(int ndx) { return (_va != null)?_va[ndx]:getDeftVA(ndx); }
 	@Override
-	public int getOWNER(int ndx) { return (_owner != null)?_owner[ndx]:super.getOWNER(ndx); }
+	public int getOWNER(int ndx) { return (_owner != null)?_owner[ndx]:getDeftOWNER(ndx); }
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
