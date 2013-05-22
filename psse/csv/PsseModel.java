@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 import com.powerdata.openpa.psse.AreaInterchangeList;
 import com.powerdata.openpa.psse.OwnerList;
@@ -63,10 +64,13 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			//{
 			//	System.out.println(b);
 			//}
-			for(Generator g : eq.getGenerators())
-			{
-				System.out.println(g);
-			}
+			//for(Generator g : eq.getGenerators())
+			//{
+			//	System.out.println(g);
+			//}
+			GeneratorList gl = eq.getGenerators();
+			Method getI = GeneratorList.class.getMethod("getI", int.class);
+			System.out.println(gl.getI(10)+" "+getI.invoke(gl, 10));
 			//for(Branch b : eq.getBranches())
 			//{
 			//	System.out.println(b);
