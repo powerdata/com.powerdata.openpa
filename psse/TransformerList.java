@@ -214,79 +214,149 @@ public abstract class TransformerList<T extends Transformer>
 	
 	public abstract String getI(int ndx);
 	public abstract String getJ(int ndx);
-	public String getK(int ndx) {return "0";}
-	public String getCKT(int ndx) {return "1";}
-	public int getCW(int ndx) {return 1;}
-	public int getCZ(int ndx) {return 1;}
-	public int getCM(int ndx) {return 1;}
-	public float getMAG1(int ndx) {return 0;}
-	public float getMAG2(int ndx)  {return 0;}
-	public int getNMETR(int ndx) {return 2;}
-	public String getNAME(int ndx) {return "";}
-	public int getSTAT(int ndx) {return 1;}
-	public float getR1_2(int ndx) {return 0F;}
+	public abstract String getK(int ndx);
+	public abstract String getCKT(int ndx);
+	public abstract int getCW(int ndx);
+	public abstract int getCZ(int ndx);
+	public abstract int getCM(int ndx);
+	public abstract float getMAG1(int ndx);
+	public abstract float getMAG2(int ndx);
+	public abstract int getNMETR(int ndx);
+	public abstract String getNAME(int ndx);
+	public abstract int getSTAT(int ndx);
+	public abstract float getR1_2(int ndx);
 	public abstract float getX1_2(int ndx);
-	public float getSBASE1_2(int ndx) {return _model.getSBASE();}
-	public float getR2_3(int ndx) {return 0F;}
+	public abstract float getSBASE1_2(int ndx);
+	public abstract float getR2_3(int ndx);
 	public abstract float getX2_3(int ndx);
-	public float getSBASE2_3(int ndx) {return _model.getSBASE();}
-	public float getR3_1(int ndx) {return 0F;}
+	public abstract float getSBASE2_3(int ndx);
+	public abstract float getR3_1(int ndx);
 	public abstract float getX3_1(int ndx);
-	public float getSBASE3_1(int ndx) {return _model.getSBASE();}
-	public float getVMSTAR(int ndx) {return 1F;}
-	public float getANSTAR(int ndx) {return 0F;}
-	public float getWINDV1(int ndx) throws PsseModelException {return (getCW(ndx)==2)?getBus1(ndx).getBASKV():1F;}
-	public float getNOMV1(int ndx)  {return 0F;}
-	public float getANG1(int ndx)   {return 0F;}
-	public float getRATA1(int ndx) {return 0F;}
-	public float getRATB1(int ndx) {return 0F;}
-	public float getRATC1(int ndx) {return 0F;}
-	public int getCOD1(int ndx) {return 0;}
-	public String getCONT1(int ndx) {return "0";}
-	public float getRMA1(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
-	public float getRMI1(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
-	public float getVMA1(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
-	public float getVMI1(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
-	public int getNTP1(int ndx) {return 33;}
-	public int getTAB1(int ndx) {return 0;}
-	public float getCR1(int ndx) {return 0F;}
-	public float getCX1(int ndx) {return 0F;}
+	public abstract float getSBASE3_1(int ndx);
+	public abstract float getVMSTAR(int ndx);
+	public abstract float getANSTAR(int ndx);
+	public abstract float getWINDV1(int ndx) throws PsseModelException;
+	public abstract float getNOMV1(int ndx);
+	public abstract float getANG1(int ndx);
+	public abstract float getRATA1(int ndx);
+	public abstract float getRATB1(int ndx);
+	public abstract float getRATC1(int ndx);
+	public abstract int getCOD1(int ndx);
+	public abstract String getCONT1(int ndx);
+	public abstract float getRMA1(int ndx) throws PsseModelException;
+	public abstract float getRMI1(int ndx) throws PsseModelException;
+	public abstract float getVMA1(int ndx) throws PsseModelException;
+	public abstract float getVMI1(int ndx) throws PsseModelException;
+	public abstract int getNTP1(int ndx);
+	public abstract int getTAB1(int ndx);
+	public abstract float getCR1(int ndx);
+	public abstract float getCX1(int ndx);
 
-	public float getWINDV2(int ndx) throws PsseModelException {return (getCW(ndx)==2)?getBus2(ndx).getBASKV():1F;}
-	public float getNOMV2(int ndx)  {return 0F;}
-	public float getANG2(int ndx)   {return 0F;}
-	public float getRATA2(int ndx) {return 0F;}
-	public float getRATB2(int ndx) {return 0F;}
-	public float getRATC2(int ndx) {return 0F;}
-	public int getCOD2(int ndx) {return 0;}
-	public String getCONT2(int ndx) {return "0";}
-	public float getRMA2(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
-	public float getRMI2(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
-	public float getVMA2(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
-	public float getVMI2(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
-	public int getNTP2(int ndx) {return 33;}
-	public int getTAB2(int ndx) {return 0;}
-	public float getCR2(int ndx) {return 0F;}
-	public float getCX2(int ndx) {return 0F;}
+	public abstract float getWINDV2(int ndx) throws PsseModelException;
+	public abstract float getNOMV2(int ndx);
+	public abstract float getANG2(int ndx);
+	public abstract float getRATA2(int ndx);
+	public abstract float getRATB2(int ndx);
+	public abstract float getRATC2(int ndx);
+	public abstract int getCOD2(int ndx);
+	public abstract String getCONT2(int ndx);
+	public abstract float getRMA2(int ndx) throws PsseModelException;
+	public abstract float getRMI2(int ndx) throws PsseModelException;
+	public abstract float getVMA2(int ndx) throws PsseModelException;
+	public abstract float getVMI2(int ndx) throws PsseModelException;
+	public abstract int getNTP2(int ndx);
+	public abstract int getTAB2(int ndx);
+	public abstract float getCR2(int ndx);
+	public abstract float getCX2(int ndx);
 
 	// TODO:  Do we need any special checking if it's 2-winding(and hence none of these are valid...or line 4 for that matter)
-	public float getWINDV3(int ndx) throws PsseModelException {return (getCW(ndx)==2)?getBus3(ndx).getBASKV():1F;}
-	public float getNOMV3(int ndx)  {return 0F;}
-	public float getANG3(int ndx)   {return 0F;}
-	public float getRATA3(int ndx) {return 0F;}
-	public float getRATB3(int ndx) {return 0F;}
-	public float getRATC3(int ndx) {return 0F;}
-	public int getCOD3(int ndx) {return 0;}
-	public String getCONT3(int ndx) {return "0";}
-	public float getRMA3(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
-	public float getRMI3(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
-	public float getVMA3(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
-	public float getVMI3(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
-	public int getNTP3(int ndx) {return 33;}
-	public int getTAB3(int ndx) {return 0;}
-	public float getCR3(int ndx) {return 0F;}
-	public float getCX3(int ndx) {return 0F;}
+	public abstract float getWINDV3(int ndx) throws PsseModelException;
+	public abstract float getNOMV3(int ndx);
+	public abstract float getANG3(int ndx);
+	public abstract float getRATA3(int ndx);
+	public abstract float getRATB3(int ndx);
+	public abstract float getRATC3(int ndx);
+	public abstract int getCOD3(int ndx);
+	public abstract String getCONT3(int ndx);
+	public abstract float getRMA3(int ndx) throws PsseModelException;
+	public abstract float getRMI3(int ndx) throws PsseModelException;
+	public abstract float getVMA3(int ndx) throws PsseModelException;
+	public abstract float getVMI3(int ndx) throws PsseModelException;
+	public abstract int getNTP3(int ndx);
+	public abstract int getTAB3(int ndx);
+	public abstract float getCR3(int ndx);
+	public abstract float getCX3(int ndx);
 
 	public abstract OwnershipList<?> getOwnership(int ndx);
+
+
+	/* Default methods */
+	
+	public String getDeftK(int ndx) {return "0";}
+	public String getDeftCKT(int ndx) {return "1";}
+	public int getDeftCW(int ndx) {return 1;}
+	public int getDeftCZ(int ndx) {return 1;}
+	public int getDeftCM(int ndx) {return 1;}
+	public float getDeftMAG1(int ndx) {return 0;}
+	public float getDeftMAG2(int ndx)  {return 0;}
+	public int getDeftNMETR(int ndx) {return 2;}
+	public String getDeftNAME(int ndx) {return "";}
+	public int getDeftSTAT(int ndx) {return 1;}
+	public float getDeftR1_2(int ndx) {return 0F;}
+	public float getDeftSBASE1_2(int ndx) {return _model.getSBASE();}
+	public float getDeftR2_3(int ndx) {return 0F;}
+	public float getDeftSBASE2_3(int ndx) {return _model.getSBASE();}
+	public float getDeftR3_1(int ndx) {return 0F;}
+	public float getDeftSBASE3_1(int ndx) {return _model.getSBASE();}
+	public float getDeftVMSTAR(int ndx) {return 1F;}
+	public float getDeftANSTAR(int ndx) {return 0F;}
+	public float getDeftWINDV1(int ndx) throws PsseModelException {return (getCW(ndx)==2)?getBus1(ndx).getBASKV():1F;}
+	public float getDeftNOMV1(int ndx)  {return 0F;}
+	public float getDeftANG1(int ndx)   {return 0F;}
+	public float getDeftRATA1(int ndx) {return 0F;}
+	public float getDeftRATB1(int ndx) {return 0F;}
+	public float getDeftRATC1(int ndx) {return 0F;}
+	public int getDeftCOD1(int ndx) {return 0;}
+	public String getDeftCONT1(int ndx) {return "0";}
+	public float getDeftRMA1(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
+	public float getDeftRMI1(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
+	public float getDeftVMA1(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
+	public float getDeftVMI1(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
+	public int getDeftNTP1(int ndx) {return 33;}
+	public int getDeftTAB1(int ndx) {return 0;}
+	public float getDeftCR1(int ndx) {return 0F;}
+	public float getDeftCX1(int ndx) {return 0F;}
+	public float getDeftWINDV2(int ndx) throws PsseModelException {return (getDeftCW(ndx)==2)?getBus2(ndx).getBASKV():1F;}
+	public float getDeftNOMV2(int ndx)  {return 0F;}
+	public float getDeftANG2(int ndx)   {return 0F;}
+	public float getDeftRATA2(int ndx) {return 0F;}
+	public float getDeftRATB2(int ndx) {return 0F;}
+	public float getDeftRATC2(int ndx) {return 0F;}
+	public int getDeftCOD2(int ndx) {return 0;}
+	public String getDeftCONT2(int ndx) {return "0";}
+	public float getDeftRMA2(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
+	public float getDeftRMI2(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
+	public float getDeftVMA2(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
+	public float getDeftVMI2(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
+	public int getDeftNTP2(int ndx) {return 33;}
+	public int getDeftTAB2(int ndx) {return 0;}
+	public float getDeftCR2(int ndx) {return 0F;}
+	public float getDeftCX2(int ndx) {return 0F;}
+	public float getDeftWINDV3(int ndx) throws PsseModelException {return (getCW(ndx)==2)?getBus3(ndx).getBASKV():1F;}
+	public float getDeftNOMV3(int ndx)  {return 0F;}
+	public float getDeftANG3(int ndx)   {return 0F;}
+	public float getDeftRATA3(int ndx) {return 0F;}
+	public float getDeftRATB3(int ndx) {return 0F;}
+	public float getDeftRATC3(int ndx) {return 0F;}
+	public int getDeftCOD3(int ndx) {return 0;}
+	public String getDeftCONT3(int ndx) {return "0";}
+	public float getDeftRMA3(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
+	public float getDeftRMI3(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
+	public float getDeftVMA3(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
+	public float getDeftVMI3(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
+	public int getDeftNTP3(int ndx) {return 33;}
+	public int getDeftTAB3(int ndx) {return 0;}
+	public float getDeftCR3(int ndx) {return 0F;}
+	public float getDeftCX3(int ndx) {return 0F;}
 
 }	

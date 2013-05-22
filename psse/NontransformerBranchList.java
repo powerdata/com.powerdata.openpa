@@ -44,4 +44,17 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 	public abstract float getLEN(int ndx);
 
 	public abstract OwnershipList<?> getOwnership(int ndx);
+	
+	/* Defaults */
+	protected String getDeftCKT(int ndx) {return "1";}
+	protected float getDeftB(int ndx) {return 0F;}
+	protected float getDeftRATEA(int ndx) {return 0F;}
+	protected float getDeftRATEB(int ndx) {return 0F;}
+	protected float getDeftRATEC(int ndx) {return 0F;}
+	protected float getDeftGI(int ndx) {return 0F;}
+	protected float getDeftBI(int ndx) {return 0F;}
+	protected float getDeftGJ(int ndx) {return 0F;}
+	protected float getDeftBJ(int ndx) {return 0F;}
+	protected int getDeftST(int ndx) {return 1;}
+	protected float getDeftLEN(int ndx) {return 0F;}
 }	
