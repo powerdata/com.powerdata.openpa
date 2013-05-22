@@ -48,14 +48,10 @@ public class Transformer extends BaseObject
 	public float getResistance3_1() {return _list.getResistance3_1(_ndx);}
 	/** get Reactance between windings 3 and 1 on 100 MVA base */
 	public float getReactance3_1() {return _list.getReactance3_1(_ndx);}
-	/** get star node angle in radians */
-	public float getAnStarRad() {return _list.getAnStarRad(_ndx);}
 	/** get winding 1 turns ratio p.u. on winding 1 bus base voltage*/
 	public float getWnd1Ratio() throws PsseModelException {return _list.getWnd1Ratio(_ndx);}
 	/** get winding 1 nominal KV */
 	public float getWnd1NomKV() throws PsseModelException {return _list.getWnd1NomKV(_ndx);}
-	/** get phase shift 1 in rad */
-	public float getAng1Rad() {return _list.getAng1Rad(_ndx);}
 	/** Transformer Control Mode (COD1) */
 	public TransformerCtrlMode getCtrlMode1() {return _list.getCtrlMode1(_ndx);}
 	/** enable automatic control (COD1) */
@@ -90,8 +86,6 @@ public class Transformer extends BaseObject
 	public float getWnd2Ratio() throws PsseModelException {return _list.getWnd2Ratio(_ndx);}
 	/** get winding 2 nominal KV */
 	public float getWnd2NomKV() throws PsseModelException {return _list.getWnd2NomKV(_ndx);}
-	/** get phase shift 2 in rad */
-	public float getAng2Rad() {return _list.getAng2Rad(_ndx);}
 	/** Transformer Control Mode (COD2) */
 	public TransformerCtrlMode getCtrlMode2() {return _list.getCtrlMode2(_ndx);}
 	/** enable automatic control (COD2) */
@@ -126,8 +120,6 @@ public class Transformer extends BaseObject
 	public float getWnd3Ratio() throws PsseModelException {return _list.getWnd3Ratio(_ndx);}
 	/** get winding 3 nominal KV */
 	public float getWnd3NomKV() throws PsseModelException {return _list.getWnd3NomKV(_ndx);}
-	/** get phase shift 3 in rad */
-	public float getAng3Rad() {return _list.getAng3Rad(_ndx);}
 	/** Transformer Control Mode (COD3) */
 	public TransformerCtrlMode getCtrlMode3() {return _list.getCtrlMode3(_ndx);}
 	/** enable automatic control (COD3) */
@@ -190,7 +182,7 @@ public class Transformer extends BaseObject
 	
 	/** Measured resistance between winding 1 and winding 2 busses */
 	public float getR1_2() {return _list.getR1_2(_ndx);}
-	/** Measured reactiance between winding 1 and winding 2 busses */
+	/** Measured reactance between winding 1 and winding 2 busses */
 	public float getX1_2() {return _list.getX1_2(_ndx);}
 	/** get winding 1-2 base MVA */
 	public float getSBASE1_2() {return _list.getSBASE1_2(_ndx);}

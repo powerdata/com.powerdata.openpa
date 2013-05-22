@@ -29,8 +29,6 @@ public class Bus extends BaseObject
 	public float getShuntG() {return _list.getShuntG(_ndx);}
 	/** Reactive component of shunt admittance to ground (BL) per-unit on 100MVA base */
 	public float getShuntB() {return _list.getShuntB(_ndx);}
-	/** Bus voltage phase angle in radians */
-	public float getVangRad() throws PsseModelException {return _list.getVangRad(_ndx);}
 	
 	@Override
 	public String toString() { return String.format("Bus[%d](%s) %s",_ndx,getObjectID(),getNAME()); }

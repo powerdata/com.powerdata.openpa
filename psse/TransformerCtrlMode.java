@@ -4,7 +4,7 @@ public enum TransformerCtrlMode
 {
 	Unknown, None, Voltage, ReactivePowerFlow,
 	ActivePowerFlow, DCLine;
-	private static TransformerCtrlMode[] _Codes = new TransformerCtrlMode[]
+	private static final TransformerCtrlMode[] _Codes = new TransformerCtrlMode[]
 			{None, Voltage, ReactivePowerFlow, ActivePowerFlow, DCLine};
 	public static TransformerCtrlMode fromCode(int code)
 	{

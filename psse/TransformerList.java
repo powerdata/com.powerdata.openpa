@@ -5,54 +5,46 @@ public abstract class TransformerList<T extends Transformer>
 {
 	public TransformerList(PsseModel model) {super(model);}
 
-	protected float rmDefault(int ndx, char mm, int wnd, float defval,
-			TransformerCtrlMode mode) throws PsseModelException
-	{
-		int cw = getCW(ndx);
-		switch (mode)
-		{
-			case Voltage:
-			case ReactivePowerFlow:
-				if (cw == 2)
-				{
-					throw new PsseModelException("No default allowed for RM"
-							+ mm + wnd + " when |COD| is 1 or 2 and CW is 2");
-				}
-				return defval;
-			case ActivePowerFlow:
-				throw new PsseModelException("No default allowed for RM" + mm
-						+ wnd + " when |COD| is 3");
-			default:
-				return defval;
-		}
-	}
-
-	protected float vmDefault(int ndx, char mm, int wnd, float defval,
-			TransformerCtrlMode mode) throws PsseModelException
-	{
-		switch (mode)
-		{
-			case Voltage:
-			case None:
-			case DCLine:
-				return defval;
-			default:
-				throw new PsseModelException("No default allowed for VM" + mm
-						+ wnd + " wnd |COD| is 2 or 3");
-		}
-	}	
-
-	protected float ratioLim(int ndx, int rcod, Bus bus, float val)
+	protected float rmDefault(int ndx, char mm, int wnd, float defval, int abscod)
 			throws PsseModelException
 	{
-		int cod = Math.abs(rcod);
-		if (cod == 1 || cod == 2)
+		int cw = getCW(ndx);
+		if (cw == 2 && (abscod ==1 || abscod == 2))
+		{
+			throw new PsseModelException("No default allowed for RM"
+					+ mm + wnd + " when |COD| is 1 or 2 and CW is 2");
+		}
+		else if (abscod == 3)
+		{
+			throw new PsseModelException("No default allowed for RM" + mm
+					+ wnd + " when |COD| is 3");
+		}
+		return defval;
+	}		
+		
+	protected float vmDefault(int ndx, char mm, int wnd, float defval,
+			int abscod) throws PsseModelException
+	{
+		if (abscod == 2 || abscod == 3)
+		{
+			throw new PsseModelException("No default allowed for VM" + mm + wnd
+					+ " when |COD| is 2 or 3");
+		}
+		return defval;
+	}
+
+	protected float ratioLim(int ndx, int abscod, Bus bus, float val)
+			throws PsseModelException
+	{
+		if (abscod == 1 || abscod == 2)
 		{
 			return (getCW(ndx) == 2) ? val / getBus1(ndx).getBASKV() : val;
-		} else if (cod == 0 || cod == 4)
+		}
+		else if (abscod == 0 || abscod == 4)
 		{
 			return val;
-		} else
+		}
+		else
 		{
 			throw new PsseModelException(
 					"No valid ratio limits for Transformer " + getObjectID(ndx)
@@ -72,11 +64,10 @@ public abstract class TransformerList<T extends Transformer>
 		return val;
 	}
 
-	protected float voltLim(int ndx, int rcod, float val)
+	protected float voltLim(int ndx, int abscod, float val)
 			throws PsseModelException
 	{
-		int cod = Math.abs(rcod);
-		if (cod == 2 || cod == 3)
+		if (abscod == 2 || abscod == 3)
 		{
 			throw new PsseModelException(
 					"No valid controlled bus voltage limits for Transformer "
@@ -85,10 +76,10 @@ public abstract class TransformerList<T extends Transformer>
 		return val;
 	}
 
-	protected float reacPwrLim(int ndx, int rcod, float val)
+	protected float reacPwrLim(int ndx, int abscod, float val)
 			throws PsseModelException
 	{
-		if (Math.abs(rcod) != 2)
+		if (abscod != 2)
 		{
 			throw new PsseModelException(
 					"No valid reactive power limits for Transformer "
@@ -97,10 +88,10 @@ public abstract class TransformerList<T extends Transformer>
 		return val;
 	}
 
-	protected float actvPwrLim(int ndx, int rcod, float val)
+	protected float actvPwrLim(int ndx, int abscod, float val)
 			throws PsseModelException
 	{
-		if (Math.abs(rcod) != 3)
+		if (abscod != 3)
 		{
 			throw new PsseModelException(
 					"No valid active power limits for Transformer "
@@ -128,7 +119,6 @@ public abstract class TransformerList<T extends Transformer>
 	public float getReactance2_3(int ndx) {return 0;}
 	public float getResistance3_1(int ndx) {return 0;}
 	public float getReactance3_1(int ndx) {return 0;}
-	public float getAnStarRad(int ndx) {return PsseModel.deg2rad(getANSTAR(ndx));}
 	public float getWnd1Ratio(int ndx) throws PsseModelException
 	{
 		float wv1 = getWINDV1(ndx);
@@ -139,7 +129,6 @@ public abstract class TransformerList<T extends Transformer>
 		float nv1 = getNOMV1(ndx);
 		return (nv1==0F)?getBus1(ndx).getBASKV():nv1;
 	}
-	public float getAng1Rad(int ndx) {return PsseModel.deg2rad(getANG1(ndx));}
 	public TransformerCtrlMode getCtrlMode1(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD1(ndx)));}
 	public boolean enableAutoCtrl1(int ndx) {return getCOD1(ndx) > 0;}
 	public Bus getCtrlBus1(int ndx) throws PsseModelException
@@ -170,7 +159,6 @@ public abstract class TransformerList<T extends Transformer>
 		float nv = getNOMV2(ndx);
 		return (nv==0F)?getBus2(ndx).getBASKV():nv;
 	}
-	public float getAng2Rad(int ndx) {return PsseModel.deg2rad(getANG2(ndx));}
 	public TransformerCtrlMode getCtrlMode2(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD2(ndx)));}
 	public boolean enableAutoCtrl2(int ndx) {return getCOD2(ndx) > 0;}
 	public Bus getCtrlBus2(int ndx) throws PsseModelException
@@ -201,7 +189,6 @@ public abstract class TransformerList<T extends Transformer>
 		float nv = getNOMV3(ndx);
 		return (nv==0F)?getBus3(ndx).getBASKV():nv;
 	}
-	public float getAng3Rad(int ndx) {return PsseModel.deg2rad(getANG3(ndx));}
 	public TransformerCtrlMode getCtrlMode3(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD3(ndx)));}
 	public boolean enableAutoCtrl3(int ndx) {return getCOD3(ndx) > 0;}
 	public Bus getCtrlBus3(int ndx) throws PsseModelException
@@ -256,10 +243,10 @@ public abstract class TransformerList<T extends Transformer>
 	public float getRATC1(int ndx) {return 0F;}
 	public int getCOD1(int ndx) {return 0;}
 	public String getCONT1(int ndx) {return "0";}
-	public float getRMA1(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, getCtrlMode1(ndx));}
-	public float getRMI1(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, getCtrlMode1(ndx));}
-	public float getVMA1(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, getCtrlMode1(ndx));}
-	public float getVMI1(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, getCtrlMode1(ndx));}
+	public float getRMA1(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
+	public float getRMI1(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
+	public float getVMA1(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
+	public float getVMI1(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
 	public int getNTP1(int ndx) {return 33;}
 	public int getTAB1(int ndx) {return 0;}
 	public float getCR1(int ndx) {return 0F;}
@@ -273,10 +260,10 @@ public abstract class TransformerList<T extends Transformer>
 	public float getRATC2(int ndx) {return 0F;}
 	public int getCOD2(int ndx) {return 0;}
 	public String getCONT2(int ndx) {return "0";}
-	public float getRMA2(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, getCtrlMode2(ndx));}
-	public float getRMI2(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, getCtrlMode2(ndx));}
-	public float getVMA2(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, getCtrlMode2(ndx));}
-	public float getVMI2(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, getCtrlMode2(ndx));}
+	public float getRMA2(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
+	public float getRMI2(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
+	public float getVMA2(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
+	public float getVMI2(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
 	public int getNTP2(int ndx) {return 33;}
 	public int getTAB2(int ndx) {return 0;}
 	public float getCR2(int ndx) {return 0F;}
@@ -291,10 +278,10 @@ public abstract class TransformerList<T extends Transformer>
 	public float getRATC3(int ndx) {return 0F;}
 	public int getCOD3(int ndx) {return 0;}
 	public String getCONT3(int ndx) {return "0";}
-	public float getRMA3(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, getCtrlMode3(ndx));}
-	public float getRMI3(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, getCtrlMode3(ndx));}
-	public float getVMA3(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, getCtrlMode3(ndx));}
-	public float getVMI3(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, getCtrlMode3(ndx));}
+	public float getRMA3(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
+	public float getRMI3(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
+	public float getVMA3(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
+	public float getVMI3(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
 	public int getNTP3(int ndx) {return 33;}
 	public int getTAB3(int ndx) {return 0;}
 	public float getCR3(int ndx) {return 0F;}
