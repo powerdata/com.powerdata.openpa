@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import com.powerdata.openpa.psse.Bus;
