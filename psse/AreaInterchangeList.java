@@ -1,14 +1,12 @@
 package com.powerdata.openpa.psse;
 
-import java.io.IOException;
-
 public abstract class AreaInterchangeList<T extends AreaInterchange> extends PsseBaseList<T>
 {
 	public AreaInterchangeList(PsseModel model) {super(model);}
 
 	/* Convenience methods */
 	
-	public Bus getSlackBus(int ndx) throws IOException
+	public Bus getSlackBus(int ndx) throws PsseModelException
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}

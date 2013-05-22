@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.powerdata.openpa.psse.PsseModelException;
 //import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
@@ -38,48 +39,60 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	int _gl[];
 	int _bl[];
 	
-	public BusList(PsseModel eq) throws IOException
+	public BusList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
-		_eq 	= eq;
-		SimpleCSV buses = new SimpleCSV(_eq.getDir().getPath()+"/Buses.csv");
-		_size	= buses.getRowCount();
-		_i		= buses.getInts("I");
-		_ids	= buses.get("I");
-		for(int i=0; i<_size; i++) _idToNdx.put(_ids[i], i);
-		_name	= buses.get("NAME");
-		_basekv	= buses.getFloats("BASKV");
-		_ide	= buses.getInts("IDE");
-		_area	= buses.getInts("AREA");
-		_zone	= buses.getInts("ZONE");
-		_owner	= buses.getInts("OWNER");
-		_vm		= buses.getFloats("VM");
-		_va		= buses.getFloats("VA");
-		_gl		= buses.getInts("GL");
-		_bl		= buses.getInts("BL");
+		try
+		{
+			_eq 	= eq;
+			String dbfile = _eq.getDir().getPath()+"/Buses.csv";
+			SimpleCSV buses = new SimpleCSV(dbfile);
+			_size	= buses.getRowCount();
+			_i		= buses.getInts("I");
+			_ids	= buses.get("I");
+			for(int i=0; i<_size; i++) _idToNdx.put(_ids[i], i);
+			_name	= buses.get("NAME");
+			_basekv	= buses.getFloats("BASKV");
+			_ide	= buses.getInts("IDE");
+			_area	= buses.getInts("AREA");
+			_zone	= buses.getInts("ZONE");
+			_owner	= buses.getInts("OWNER");
+			_vm		= buses.getFloats("VM");
+			_va		= buses.getFloats("VA");
+			_gl		= buses.getInts("GL");
+			_bl		= buses.getInts("BL");
+			if (_i == null)
+			{
+				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
+			}
+		}
+		catch(IOException e)
+		{
+			throw new PsseModelException(getClass().getName()+": "+e);
+		}
 	}
 	@Override
 	public int getI(int ndx) { return _i[ndx]; }
 	@Override
-	public String getNAME(int ndx) { return (_name != null)?_name[ndx]:""; }
+	public String getNAME(int ndx) { return (_name != null)?_name[ndx]:super.getNAME(ndx); }
 	@Override
-	public float getBASKV(int ndx) { return (_basekv != null)?_basekv[ndx]:0; }
+	public float getBASKV(int ndx) { return (_basekv != null)?_basekv[ndx]:super.getBASKV(ndx); }
 	@Override
-	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:0; }
+	public int getIDE(int ndx) { return (_ide != null)?_ide[ndx]:super.getIDE(ndx); }
 	@Override
-	public float getGL(int ndx) { return (_gl != null)?_gl[ndx]:0; }
+	public float getGL(int ndx) { return (_gl != null)?_gl[ndx]:super.getGL(ndx); }
 	@Override
-	public float getBL(int ndx) { return (_bl != null)?_bl[ndx]:0; }
+	public float getBL(int ndx) { return (_bl != null)?_bl[ndx]:super.getBL(ndx); }
 	@Override
-	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:0; }
+	public int getAREA(int ndx) { return (_area != null)?_area[ndx]:super.getAREA(ndx); }
 	@Override
-	public int getZONE(int ndx) { return (_zone != null)?_zone[ndx]:0; }
+	public int getZONE(int ndx) { return (_zone != null)?_zone[ndx]:super.getZONE(ndx); }
 	@Override
-	public float getVM(int ndx) { return (_vm != null)?_vm[ndx]:0; }
+	public float getVM(int ndx) { return (_vm != null)?_vm[ndx]:super.getVM(ndx); }
 	@Override
-	public float getVA(int ndx) { return (_va != null)?_va[ndx]:0; }
+	public float getVA(int ndx) { return (_va != null)?_va[ndx]:super.getVA(ndx); }
 	@Override
-	public int getOWNER(int ndx) { return (_owner != null)?_owner[ndx]:0; }
+	public int getOWNER(int ndx) { return (_owner != null)?_owner[ndx]:super.getOWNER(ndx); }
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
@@ -88,7 +101,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 		Integer ndx = _idToNdx.get(id);
 		return (ndx == null) ? null : get(ndx);
 	}
-
 	@Override
 	public StringAttrib<Bus> mapStringAttrib(String attribname) { return null; }
 	@Override
