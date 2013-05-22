@@ -3,7 +3,6 @@ package com.powerdata.openpa.psse.csv;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -14,25 +13,6 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class NontransformerBranchList extends com.powerdata.openpa.psse.NontransformerBranchList<NontransformerBranch>
 {
-	static final int I = 0;
-	static final int J = 1;
-	static final int CKT = 2;
-	static final int R = 3;
-	static final int X = 4;
-	static final int B = 5;
-	static final int RATEA = 6;
-	static final int RATEB = 7;
-	static final int RATEC = 8;
-	static final int GI = 9;
-	static final int BI = 10;
-	static final int GJ = 11;
-	static final int BT = 12;
-	static final int ST = 13;
-	static final int LEN = 14;
-	static final int O1 = 15;
-	static final int F1 = 16;
-	static final int I1 = 17;
-	
 	PsseModel _eq;
 	BusList _buses;
 	HashMap<String,Integer> _objIDtoNdx = new HashMap<String,Integer>();
