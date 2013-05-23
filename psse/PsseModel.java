@@ -2,7 +2,8 @@ package com.powerdata.openpa.psse;
 
 public abstract class PsseModel
 {	
-	public float getSBASE() {return 100F;}
+	public abstract float getSBASE();
+	public float getDeftSBASE() {return 100F;}
 	
 	/** find a Bus by ID */ 
 	public Bus getBus(String id) throws PsseModelException
