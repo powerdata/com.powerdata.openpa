@@ -14,6 +14,12 @@ public class Generator extends BaseObject
 	}
 
 	@Override
+	public String getDebugName() throws PsseModelException
+	{
+		return String.format("%s %s", getBus().getNAME(), getID());
+	}
+
+	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 	
 	/* Convenience methods */
@@ -25,9 +31,6 @@ public class Generator extends BaseObject
 	/** get initial branch status (STAT) as a boolean.  Returns true if in service */
 	public boolean inService() {return _list.inService(_ndx);}
 	
-	@Override
-	public String toString() { return String.format("Gen[%d] %s",_ndx,getObjectID()); }
-
 	/* Raw PSS/e methods */
 	
 	/** bus number or name */

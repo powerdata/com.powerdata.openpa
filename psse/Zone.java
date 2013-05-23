@@ -12,6 +12,10 @@ public class Zone extends BaseObject
 		_list = list;
 	}
 
+	
+	@Override
+	public String getDebugName() throws PsseModelException {return getOWNAME();}
+
 	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 

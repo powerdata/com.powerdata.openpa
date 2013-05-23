@@ -13,6 +13,9 @@ public class Bus extends BaseObject
 	}
 
 	@Override
+	public String getDebugName() throws PsseModelException {return getNAME();}
+
+	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 	
 	/* Convenience methods */
@@ -26,8 +29,6 @@ public class Bus extends BaseObject
 	/** Owner */
 	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
 	
-	@Override
-	public String toString() { return String.format("Bus[%d](%s) %s",_ndx,getObjectID(),getNAME()); }
 	
 	/* Raw PSS/e methods */
 	
@@ -39,9 +40,9 @@ public class Bus extends BaseObject
 	public float getBASKV() {return _list.getBASKV(_ndx);}
 	/** Bus type code */
 	public int getIDE() {return _list.getIDE(_ndx);}
-	/** Active component of shunt admittance to ground */
+	/** Active component of shunt admittance to ground in MW at unity voltage*/
 	public float getGL() {return _list.getGL(_ndx);}
-	/** Reactive component of shunt admittance to ground */
+	/** Reactive component of shunt admittance to ground in MVAr at unity voltage*/
 	public float getBL() {return _list.getBL(_ndx);}
 	/** Area number */
 	public int getAREA() {return _list.getAREA(_ndx);}
