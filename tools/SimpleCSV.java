@@ -195,6 +195,7 @@ public class SimpleCSV
 	static public boolean IsNumber(String s)
 	{
 		int len = s.length();
+		if (len == 0) return false;
 		for(int i=0; i<len; i++)
 		{
 			char c = s.charAt(i);
