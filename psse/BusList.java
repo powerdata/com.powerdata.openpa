@@ -6,14 +6,28 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 
 	/* convenience methods */
 	
-	public BusTypeCode getBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}
-	public AreaInterchange getAreaObject(int ndx) throws PsseModelException
+	public abstract BusTypeCode getBusType(int ndx);
+	public abstract AreaInterchange getAreaObject(int ndx) throws PsseModelException;
+	public abstract Zone getZoneObject(int ndx) throws PsseModelException;
+	public abstract Owner getOwnerObject(int ndx) throws PsseModelException;
+	public abstract float getShuntG(int ndx);
+	public abstract float getShuntB(int ndx);
+	public abstract float getVaRad(int ndx);
+
+	/* convenience defaults */
+	
+	public BusTypeCode getDeftBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}
+	public AreaInterchange getDeftAreaObject(int ndx) throws PsseModelException
 	{
 		return _model.getAreas().get(getAREA(ndx));
 	}
-	public Zone getZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
-	public Owner getOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getAREA(ndx));}
+	public Zone getDeftZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
+	public Owner getDeftOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getAREA(ndx));}
+	public float getDeftShuntG(int ndx) {return getGL(ndx)/100F;}
+	public float getDeftShuntB(int ndx) {return getBL(ndx)/100F;}
+	public float getDeftVaRad(int ndx)  {return deg2rad(getVA(ndx));}
 
+	
 	/* raw methods */
 
 	public abstract int getI(int ndx);
@@ -41,5 +55,5 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	public float getDeftVA(int ndx) {return 0F;}
 	public int getDeftOWNER(int ndx) {return 1;}
 
-	
+
 }

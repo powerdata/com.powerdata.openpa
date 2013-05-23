@@ -28,6 +28,13 @@ public class Bus extends BaseObject
 	public Zone getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */
 	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
+	/** Active component of shunt admittance to ground (GL) p.u. */
+	public float getShuntG() {return _list.getShuntG(_ndx);}
+	/** Reactive component of shunt admittance to ground (BL) p.u. */
+	public float getShuntB() {return _list.getShuntB(_ndx);}
+	/** Bus voltage phase angle in radians */
+	public float getVaRad() {return _list.getVaRad(_ndx);}
+
 	
 	
 	/* Raw PSS/e methods */
