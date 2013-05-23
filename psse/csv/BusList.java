@@ -120,38 +120,20 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public int size() { return _size; }
 	@Override
-	public BusTypeCode getBusType(int ndx) {
-		// TODO Auto-generated method stub
-		return null;
+	public BusTypeCode getBusType(int ndx) { return getDeftBusType(ndx); }
+	@Override
+	public AreaInterchange getAreaObject(int ndx) throws PsseModelException
+	{
+		return getDeftAreaObject(ndx);
 	}
 	@Override
-	public AreaInterchange getAreaObject(int ndx) throws PsseModelException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Zone getZoneObject(int ndx) throws PsseModelException { return getDeftZoneObject(ndx); }
 	@Override
-	public Zone getZoneObject(int ndx) throws PsseModelException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Owner getOwnerObject(int ndx) throws PsseModelException { return getDeftOwnerObject(ndx); }
 	@Override
-	public Owner getOwnerObject(int ndx) throws PsseModelException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public float getShuntG(int ndx) { return getDeftShuntG(ndx); }
 	@Override
-	public float getShuntG(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getShuntB(int ndx) { return getDeftShuntB(ndx); }
 	@Override
-	public float getShuntB(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	@Override
-	public float getVaRad(int ndx) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public float getVaRad(int ndx) { return getDeftVaRad(ndx); }
 }
