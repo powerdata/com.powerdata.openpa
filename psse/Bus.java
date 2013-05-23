@@ -40,6 +40,7 @@ public class Bus extends BaseObject
 	/** complex bus voltage */
 	public Complex getVoltage() throws PsseModelException {return _list.getVoltage(_ndx);}
 
+
 	/* Raw PSS/e methods */
 	
 	/** Bus number */
