@@ -24,13 +24,33 @@ public class Generator extends BaseObject
 	
 	/* Convenience methods */
 
-	/** Generator bus */ 
+	/** Generator bus (I) */ 
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
-	/** remote regulated bus.  Null if local */
+	/** remote regulated bus.  (IREG) Null if local */
 	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
 	/** get initial branch status (STAT) as a boolean.  Returns true if in service */
-	public boolean inService() {return _list.inService(_ndx);}
-	
+	public boolean getInSvc() {return _list.getInSvc(_ndx);}
+	/** Generator active power (PG) output p.u. */
+	public float getActvPwr() {return _list.getActvPwr(_ndx);}
+	/** Generator reactive power (QG) output p.u. */
+	public float getReacPwr() {return _list.getReacPwr(_ndx);}
+	/** Maximum generator reactive power output (QT) p.u. */
+	public float getMaxReacPwr() {return _list.getMaxReacPwr(_ndx);}
+	/** Minimum generator reactive power output (QB) p.u. */
+	public float getMinReacPwr() {return _list.getMinReacPwr(_ndx);}
+	/** machine resistance (ZR) p.u. on 100 MVA base */
+	public float getMachR() {return _list.getMachR(_ndx);}
+	/** machine reactance (ZX) p.u. on 100 MVA base */
+	public float getMachX() {return _list.getMachX(_ndx);}
+	/** Step-up transformer resistance (RT) p.u. on 100MVA base*/
+	public float getTxfR()  {return _list.getTxfR(_ndx);}
+	/** Step-up transformer reactance (XT) p.u. on 100MVA base */
+	public float getTxfX() {return _list.getTxfX(_ndx);}
+	/** max active power (PT) p.u. */
+	public float getMaxActvPwr() {return _list.getMaxActvPwr(_ndx);}
+	/** min active power (PB) p.u. */
+	public float getMinActvPwr() {return _list.getMinActvPwr(_ndx);}
+
 	/* Raw PSS/e methods */
 	
 	/** bus number or name */

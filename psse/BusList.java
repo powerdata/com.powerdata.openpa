@@ -23,8 +23,8 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	}
 	public Zone getDeftZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
 	public Owner getDeftOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getAREA(ndx));}
-	public float getDeftShuntG(int ndx) {return getGL(ndx)/100F;}
-	public float getDeftShuntB(int ndx) {return getBL(ndx)/100F;}
+	public float getDeftShuntG(int ndx) {return mw2pu(getGL(ndx));}
+	public float getDeftShuntB(int ndx) {return mvar2pu(getBL(ndx));}
 	public float getDeftVaRad(int ndx)  {return deg2rad(getVA(ndx));}
 
 	

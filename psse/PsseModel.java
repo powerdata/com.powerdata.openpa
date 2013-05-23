@@ -1,8 +1,10 @@
 package com.powerdata.openpa.psse;
 
 public abstract class PsseModel
-{	
+{
+	/** get system base MVA */
 	public abstract float getSBASE();
+	/** default system base MVA */
 	public float getDeftSBASE() {return 100F;}
 	
 	/** find a Bus by ID */ 

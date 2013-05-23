@@ -14,8 +14,8 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}
-	public float getDeftIntExport(int ndx) throws PsseModelException {return getPDES(ndx)/100F;}
-	public float getDeftIntTol(int ndx) throws PsseModelException {return getPTOL(ndx)/100F;}
+	public float getDeftIntExport(int ndx) throws PsseModelException {return mw2pu(getPDES(ndx));}
+	public float getDeftIntTol(int ndx) throws PsseModelException {return mw2pu(getPTOL(ndx));}
 	
 	/* Raw values */
 	public abstract int getI(int ndx) throws PsseModelException;

@@ -5,10 +5,37 @@ public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 	public GeneratorList(PsseModel model) {super(model);}
 	
 	/* convenience methods */
+
+	public abstract Bus getBus(int ndx) throws PsseModelException;
+	public abstract Bus getRemoteRegBus(int ndx) throws PsseModelException;
+	public abstract boolean getInSvc(int ndx);
+	public abstract float getActvPwr(int ndx);
+	public abstract float getReacPwr(int ndx);
+	public abstract float getMaxReacPwr(int ndx);
+	public abstract float getMinReacPwr(int ndx);
+	public abstract float getMachR(int ndx);
+	public abstract float getTxfR(int ndx);
+	public abstract float getMachX(int ndx);
+	public abstract float getTxfX(int ndx);
+	public abstract float getMaxActvPwr(int ndx);
+	public abstract float getMinActvPwr(int ndx);
+
 	
-	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return _model.getBus(getIREG(ndx));}
-	public boolean inService(int ndx) {return getSTAT(ndx) == 1;}
+	/* convenience defaults */
+	
+	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getDeftRemoteRegBus(int ndx) throws PsseModelException {return _model.getBus(getIREG(ndx));}
+	public boolean getDeftInSvc(int ndx) {return getSTAT(ndx) == 1;}
+	public float getDeftActvPwr(int ndx) {return mw2pu(getPG(ndx));}
+	public float getDeftReacPwr(int ndx) {return mvar2pu(getQG(ndx));}
+	public float getDeftMaxReacPwr(int ndx) {return mvar2pu(getQT(ndx));}
+	public float getDeftMinReacPwr(int ndx) {return mvar2pu(getQB(ndx));}
+	public float getDeftMachR(int ndx) {return rebaseZ100(getZR(ndx), getMBASE(ndx));}
+	public float getDeftMachX(int ndx) {return rebaseZ100(getZX(ndx), getMBASE(ndx));}
+	public float getDeftTxfR(int ndx)  {return rebaseZ100(getRT(ndx), getMBASE(ndx));}
+	public float getDeftTxfX(int ndx)  {return rebaseZ100(getXT(ndx), getMBASE(ndx));}
+	public float getDeftMaxActvPwr(int ndx) {return mw2pu(getPT(ndx));}
+	public float getDeftMinActvPwr(int ndx) {return mw2pu(getPB(ndx));}
 
 	/* raw methods */
 
