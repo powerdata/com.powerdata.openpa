@@ -13,6 +13,15 @@ public class Transformer extends BaseObject
 	}
 
 	@Override
+	public String getDebugName() throws PsseModelException
+	{
+		String nm = getNAME().trim();
+		return nm.isEmpty() ? 
+			String.format("%s %s %s %s", getBus1().getNAME(), getBus2().getNAME(),
+				(getBus2() == null) ? "" : getBus2().getNAME(), getCKT()) : nm;
+		
+	}
+	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 	
 	/* Convenience methods */

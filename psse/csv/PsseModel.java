@@ -94,4 +94,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			System.out.println("ERROR: "+e);
 		}
 	}
+	
+	@Override
+	public float getSBASE() {return getDeftSBASE();}
 }

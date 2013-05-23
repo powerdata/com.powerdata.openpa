@@ -13,7 +13,12 @@ public class AreaInterchange extends BaseObject
 	}
 
 	@Override
+	public String getDebugName() throws PsseModelException {return getARNAME();}
+
+
+	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
+
 
 	
 	/* convenience methods */

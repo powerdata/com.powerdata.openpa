@@ -30,5 +30,6 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	public float getDeftPDES(int ndx) throws PsseModelException {return 0F;}
 	public float getDeftPTOL(int ndx) throws PsseModelException {return 10F;}
 
+	
 
 }

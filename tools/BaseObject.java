@@ -11,4 +11,20 @@ public abstract class BaseObject
 
 	public int getIndex() {return _ndx;}
 	public abstract String getObjectID();
+	
+
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder(String.format("%s[%d](%s) ",getClass().getSimpleName(),
+				_ndx,getObjectID()));
+		try
+		{
+			sb.append(getDebugName());
+		} catch (Exception e) {}
+		return sb.toString();
+	}
+	
+	public String getDebugName() throws Exception {return "";}
+
 }

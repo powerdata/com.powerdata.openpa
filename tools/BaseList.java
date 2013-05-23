@@ -4,6 +4,10 @@ import java.util.AbstractList;
 
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
 {
+	public static final float D2R = ((float)Math.PI)/180F;
+	public static float deg2rad(float deg) {return deg*D2R;}
+	public static float rad2deg(float rad) {return rad/D2R;}
+	
 	public abstract String getObjectID(int ndx);
 	/** Get an object by it's ID */
 	public abstract T get(String objectid);
