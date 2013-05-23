@@ -50,11 +50,8 @@ public class LinkNet implements Cloneable
 		}
 	}
 	
-	public int getBranchCount()
-	{
-		return _brcnt;
-	}
-
+	public int getBranchCount() { return _brcnt; }
+	public int getMaxNode() { return _maxnode; }
 	/**
 	 * Add a branch. Does not check if a branch already exists
 	 * 
