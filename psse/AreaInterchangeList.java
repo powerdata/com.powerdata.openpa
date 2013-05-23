@@ -6,12 +6,16 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 
 	/* Convenience methods */
 	public abstract Bus getSlackBus(int ndx) throws PsseModelException;
+	public abstract float getIntExport(int ndx) throws PsseModelException;
+	public abstract float getIntTol(int ndx) throws PsseModelException;
 	
 	/* Convenience defaults */
 	public Bus getDeftSlackBus(int ndx) throws PsseModelException
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}
+	public float getDeftIntExport(int ndx) throws PsseModelException {return getPDES(ndx)/100F;}
+	public float getDeftIntTol(int ndx) throws PsseModelException {return getPTOL(ndx)/100F;}
 	
 	/* Raw values */
 	public abstract int getI(int ndx) throws PsseModelException;
@@ -25,5 +29,6 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	public String getDeftARNAME(int ndx) throws PsseModelException {return "";}
 	public float getDeftPDES(int ndx) throws PsseModelException {return 0F;}
 	public float getDeftPTOL(int ndx) throws PsseModelException {return 10F;}
+
 
 }
