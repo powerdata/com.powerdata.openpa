@@ -6,6 +6,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
@@ -129,25 +130,31 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	@Override
 	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return getDeftRemoteRegBus(ndx);}
 	@Override
-	public boolean getInSvc(int ndx) { return getDeftInSvc(ndx); }
+	public boolean getInSvc(int ndx) throws PsseModelException { return getDeftInSvc(ndx); }
 	@Override
-	public float getActvPwr(int ndx) { return getDeftActvPwr(ndx); }
+	public float getActvPwr(int ndx) throws PsseModelException { return getDeftActvPwr(ndx); }
 	@Override
-	public float getReacPwr(int ndx) { return getDeftReacPwr(ndx); }
+	public float getReacPwr(int ndx) throws PsseModelException { return getDeftReacPwr(ndx); }
 	@Override
-	public float getMaxReacPwr(int ndx) { return getDeftMaxReacPwr(ndx); }
+	public float getMaxReacPwr(int ndx) throws PsseModelException { return getDeftMaxReacPwr(ndx); }
 	@Override
-	public float getMinReacPwr(int ndx) { return getDeftMinReacPwr(ndx); }
+	public float getMinReacPwr(int ndx) throws PsseModelException { return getDeftMinReacPwr(ndx); }
 	@Override
-	public float getMachR(int ndx) { return getDeftMachR(ndx); }
+	public float getMachR(int ndx) throws PsseModelException { return getDeftMachR(ndx); }
 	@Override
-	public float getTxfR(int ndx) { return getDeftTxfR(ndx); }
+	public float getTxfR(int ndx) throws PsseModelException { return getDeftTxfR(ndx); }
 	@Override
-	public float getMachX(int ndx) { return getDeftMachX(ndx); }
+	public float getMachX(int ndx) throws PsseModelException { return getDeftMachX(ndx); }
 	@Override
-	public float getTxfX(int ndx) { return getDeftTxfX(ndx); }
+	public float getTxfX(int ndx) throws PsseModelException { return getDeftTxfX(ndx); }
 	@Override
-	public float getMaxActvPwr(int ndx) { return getDeftMaxActvPwr(ndx); }
+	public float getMaxActvPwr(int ndx) throws PsseModelException { return getDeftMaxActvPwr(ndx); }
 	@Override
-	public float getMinActvPwr(int ndx) { return getDeftMinActvPwr(ndx); }
+	public float getMinActvPwr(int ndx) throws PsseModelException { return getDeftMinActvPwr(ndx); }
+	@Override
+	public Complex getPwr(int ndx) throws PsseModelException { return getDeftPwr(ndx); }
+	@Override
+	public Complex getMachZ(int ndx) throws PsseModelException { return getDeftMachZ(ndx); }
+	@Override
+	public Complex getTxZ(int ndx) throws PsseModelException { return getDeftTxZ(ndx); } 
 }
