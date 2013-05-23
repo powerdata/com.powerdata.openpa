@@ -76,14 +76,14 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			//{
 			//	System.out.println(b);
 			//}
-			for(Generator g : eq.getGenerators())
-			{
-				System.out.println(g);
-			}
-			//for(NontransformerBranch b : eq.getNontransformerBranches())
+			//for(Generator g : eq.getGenerators())
 			//{
-			//	System.out.println(b);
+			//	System.out.println(g);
 			//}
+			for(NontransformerBranch b : eq.getNontransformerBranches())
+			{
+				System.out.println(b);
+			}
 			//eq.getTransformerWindings().dumpHeaders();
 			//for(TransformerWinding w : eq.getTransformerWindings())
 			//{

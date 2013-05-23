@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import com.powerdata.openpa.psse.OwnershipList;
@@ -8,6 +7,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
+import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
@@ -34,57 +34,57 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 			_size	= branches.getRowCount();
 			_i		= branches.get("I");
 			_j		= branches.get("J");
-			_ckt	= branches.get("CKT");
+			_ckt	= LoadArray.String(branches,"CKT",this,"getDeftCKT");
 			_r		= branches.getFloats("R");
 			_x		= branches.getFloats("X");
-			_b		= branches.getFloats("B");
-			_ratea	= branches.getFloats("RATEA");
-			_rateb	= branches.getFloats("RATEB");
-			_ratec	= branches.getFloats("RATEC");
-			_gi		= branches.getFloats("GI");
-			_bi		= branches.getFloats("BI");
-			_gj		= branches.getFloats("GJ");
-			_bj		= branches.getFloats("BJ");
-			_st		= branches.getInts("ST");
-			_len	= branches.getFloats("LEN");
+			_b		= LoadArray.Float(branches,"B",this,"getDeftB");
+			_ratea	= LoadArray.Float(branches,"RATEA",this,"getDeftRATEA");
+			_rateb	= LoadArray.Float(branches,"RATEB",this,"getDeftRATEB");
+			_ratec	= LoadArray.Float(branches,"RATEC",this,"getDeftRATEC");
+			_gi		= LoadArray.Float(branches,"GI",this,"getDeftGI");
+			_bi		= LoadArray.Float(branches,"BI",this,"getDeftBI");
+			_gj		= LoadArray.Float(branches,"GJ",this,"getDeftGJ");
+			_bj		= LoadArray.Float(branches,"BJ",this,"getDeftBJ");
+			_st		= LoadArray.Int(branches,"ST",this,"getDeftST");
+			_len	= LoadArray.Float(branches,"LEN",this,"getDeftLEN");
 			for(int i=0; i<_size; i++) _objIDtoNdx.put(getObjectID(i),i);
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			throw new PsseModelException(getClass().getName()+": "+e);
 		}
 	}
 
 	@Override
-	public String getI(int ndx) { return (_i != null)?_i[ndx]:""; }
+	public String getI(int ndx) { return _i[ndx]; }
 	@Override
-	public String getJ(int ndx) { return (_j != null)?_j[ndx]:""; }
+	public String getJ(int ndx) { return _j[ndx]; }
 	@Override
-	public String getCKT(int ndx) { return (_ckt != null)?_ckt[ndx]:""; }
+	public String getCKT(int ndx) { return _ckt[ndx]; }
 	@Override
-	public float getR(int ndx) { return (_r != null)?_r[ndx]:0; }
+	public float getR(int ndx) { return _r[ndx]; }
 	@Override
-	public float getX(int ndx) { return (_x != null)?_x[ndx]:0; }
+	public float getX(int ndx) { return _x[ndx]; }
 	@Override
-	public float getB(int ndx) { return (_b != null)?_b[ndx]:0; }
+	public float getB(int ndx) { return _b[ndx]; }
 	@Override
-	public float getRATEA(int ndx) { return (_ratea != null)?_ratea[ndx]:0; }
+	public float getRATEA(int ndx) { return _ratea[ndx]; }
 	@Override
-	public float getRATEB(int ndx) { return (_rateb != null)?_rateb[ndx]:0; }
+	public float getRATEB(int ndx) { return _rateb[ndx]; }
 	@Override
-	public float getRATEC(int ndx) { return (_ratec != null)?_ratec[ndx]:0; }
+	public float getRATEC(int ndx) { return _ratec[ndx]; }
 	@Override
-	public float getGI(int ndx) { return (_gi != null)?_gi[ndx]:0; }
+	public float getGI(int ndx) { return _gi[ndx]; }
 	@Override
-	public float getBI(int ndx) { return (_bi != null)?_bi[ndx]:0; }
+	public float getBI(int ndx) { return _bi[ndx]; }
 	@Override
-	public float getGJ(int ndx) { return (_gj != null)?_gj[ndx]:0; }
+	public float getGJ(int ndx) { return _gj[ndx]; }
 	@Override
-	public float getBJ(int ndx) { return (_bj != null)?_bj[ndx]:0; }
+	public float getBJ(int ndx) { return _bj[ndx]; }
 	@Override
-	public int getST(int ndx) { return (_st != null)?_st[ndx]:0; }
+	public int getST(int ndx) { return _st[ndx]; }
 	@Override
-	public float getLEN(int ndx) { return (_len != null)?_len[ndx]:0; }
+	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
 	public OwnershipList<?> getOwnership(int ndx) { return null; }
 	@Override
