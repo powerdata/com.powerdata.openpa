@@ -126,4 +126,28 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Gener
 	public Generator get(int index) { return new Generator(index,this); }
 	@Override
 	public int size() { return _size; }
+	@Override
+	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return getDeftRemoteRegBus(ndx);}
+	@Override
+	public boolean getInSvc(int ndx) { return getDeftInSvc(ndx); }
+	@Override
+	public float getActvPwr(int ndx) { return getDeftActvPwr(ndx); }
+	@Override
+	public float getReacPwr(int ndx) { return getDeftReacPwr(ndx); }
+	@Override
+	public float getMaxReacPwr(int ndx) { return getDeftMaxReacPwr(ndx); }
+	@Override
+	public float getMinReacPwr(int ndx) { return getDeftMinReacPwr(ndx); }
+	@Override
+	public float getMachR(int ndx) { return getDeftMachR(ndx); }
+	@Override
+	public float getTxfR(int ndx) { return getDeftTxfR(ndx); }
+	@Override
+	public float getMachX(int ndx) { return getDeftMachX(ndx); }
+	@Override
+	public float getTxfX(int ndx) { return getDeftTxfX(ndx); }
+	@Override
+	public float getMaxActvPwr(int ndx) { return getDeftMaxActvPwr(ndx); }
+	@Override
+	public float getMinActvPwr(int ndx) { return getDeftMinActvPwr(ndx); }
 }
