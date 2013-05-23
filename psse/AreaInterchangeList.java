@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.PAMath;
+
 public abstract class AreaInterchangeList<T extends AreaInterchange> extends PsseBaseList<T>
 {
 	public AreaInterchangeList(PsseModel model) {super(model);}
@@ -14,8 +16,8 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}
-	public float getDeftIntExport(int ndx) throws PsseModelException {return mw2pu(getPDES(ndx));}
-	public float getDeftIntTol(int ndx) throws PsseModelException {return mw2pu(getPTOL(ndx));}
+	public float getDeftIntExport(int ndx) throws PsseModelException {return PAMath.mw2pu(getPDES(ndx));}
+	public float getDeftIntTol(int ndx) throws PsseModelException {return PAMath.mw2pu(getPTOL(ndx));}
 	
 	/* Raw values */
 	public abstract int getI(int ndx) throws PsseModelException;

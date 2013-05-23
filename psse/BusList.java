@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.PAMath;
+
 public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 {
 	public BusList(PsseModel model) {super(model);}
@@ -23,9 +25,9 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	}
 	public Zone getDeftZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
 	public Owner getDeftOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getAREA(ndx));}
-	public float getDeftShuntG(int ndx) {return mw2pu(getGL(ndx));}
-	public float getDeftShuntB(int ndx) {return mvar2pu(getBL(ndx));}
-	public float getDeftVaRad(int ndx)  {return deg2rad(getVA(ndx));}
+	public float getDeftShuntG(int ndx) {return PAMath.mw2pu(getGL(ndx));}
+	public float getDeftShuntB(int ndx) {return PAMath.mvar2pu(getBL(ndx));}
+	public float getDeftVaRad(int ndx)  {return PAMath.deg2rad(getVA(ndx));}
 
 	
 	/* raw methods */
