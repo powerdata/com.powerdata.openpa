@@ -9,6 +9,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Zone;
 //import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
@@ -120,7 +121,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public int size() { return _size; }
 	@Override
-	public BusTypeCode getBusType(int ndx) { return getDeftBusType(ndx); }
+	public BusTypeCode getBusType(int ndx) throws PsseModelException { return getDeftBusType(ndx); }
 	@Override
 	public AreaInterchange getAreaObject(int ndx) throws PsseModelException
 	{
@@ -131,9 +132,13 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public Owner getOwnerObject(int ndx) throws PsseModelException { return getDeftOwnerObject(ndx); }
 	@Override
-	public float getShuntG(int ndx) { return getDeftShuntG(ndx); }
+	public float getShuntG(int ndx) throws PsseModelException { return getDeftShuntG(ndx); }
 	@Override
-	public float getShuntB(int ndx) { return getDeftShuntB(ndx); }
+	public float getShuntB(int ndx) throws PsseModelException { return getDeftShuntB(ndx); }
 	@Override
-	public float getVaRad(int ndx) { return getDeftVaRad(ndx); }
+	public float getVaRad(int ndx) throws PsseModelException { return getDeftVaRad(ndx); }
+	@Override
+	public Complex getShuntY(int ndx) throws PsseModelException { return getDeftShuntY(ndx); }
+	@Override
+	public Complex getVoltage(int ndx) throws PsseModelException { return getDeftVoltage(ndx);}
 }

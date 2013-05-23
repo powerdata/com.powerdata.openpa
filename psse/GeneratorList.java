@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
 public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
@@ -10,57 +11,63 @@ public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 
 	public abstract Bus getBus(int ndx) throws PsseModelException;
 	public abstract Bus getRemoteRegBus(int ndx) throws PsseModelException;
-	public abstract boolean getInSvc(int ndx);
-	public abstract float getActvPwr(int ndx);
-	public abstract float getReacPwr(int ndx);
-	public abstract float getMaxReacPwr(int ndx);
-	public abstract float getMinReacPwr(int ndx);
-	public abstract float getMachR(int ndx);
-	public abstract float getTxfR(int ndx);
-	public abstract float getMachX(int ndx);
-	public abstract float getTxfX(int ndx);
-	public abstract float getMaxActvPwr(int ndx);
-	public abstract float getMinActvPwr(int ndx);
+	public abstract boolean getInSvc(int ndx) throws PsseModelException;
+	public abstract float getActvPwr(int ndx) throws PsseModelException;
+	public abstract float getReacPwr(int ndx) throws PsseModelException;
+	public abstract float getMaxReacPwr(int ndx) throws PsseModelException;
+	public abstract float getMinReacPwr(int ndx) throws PsseModelException;
+	public abstract float getMachR(int ndx) throws PsseModelException;
+	public abstract float getTxfR(int ndx) throws PsseModelException;
+	public abstract float getMachX(int ndx) throws PsseModelException;
+	public abstract float getTxfX(int ndx) throws PsseModelException;
+	public abstract float getMaxActvPwr(int ndx) throws PsseModelException;
+	public abstract float getMinActvPwr(int ndx) throws PsseModelException;
+	public abstract Complex getPwr(int ndx) throws PsseModelException;
+	public abstract Complex getMachZ(int ndx) throws PsseModelException;
+	public abstract Complex getTxZ(int ndx) throws PsseModelException;
 
 	
 	/* convenience defaults */
 	
-	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
 	public Bus getDeftRemoteRegBus(int ndx) throws PsseModelException {return _model.getBus(getIREG(ndx));}
-	public boolean getDeftInSvc(int ndx) {return getSTAT(ndx) == 1;}
-	public float getDeftActvPwr(int ndx) {return PAMath.mw2pu(getPG(ndx));}
-	public float getDeftReacPwr(int ndx) {return PAMath.mvar2pu(getQG(ndx));}
-	public float getDeftMaxReacPwr(int ndx) {return PAMath.mvar2pu(getQT(ndx));}
-	public float getDeftMinReacPwr(int ndx) {return PAMath.mvar2pu(getQB(ndx));}
-	public float getDeftMachR(int ndx) {return PAMath.rebaseZ100(getZR(ndx), getMBASE(ndx));}
-	public float getDeftMachX(int ndx) {return PAMath.rebaseZ100(getZX(ndx), getMBASE(ndx));}
-	public float getDeftTxfR(int ndx)  {return PAMath.rebaseZ100(getRT(ndx), getMBASE(ndx));}
-	public float getDeftTxfX(int ndx)  {return PAMath.rebaseZ100(getXT(ndx), getMBASE(ndx));}
-	public float getDeftMaxActvPwr(int ndx) {return PAMath.mw2pu(getPT(ndx));}
-	public float getDeftMinActvPwr(int ndx) {return PAMath.mw2pu(getPB(ndx));}
+	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}
+	public float getDeftActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPG(ndx));}
+	public float getDeftReacPwr(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQG(ndx));}
+	public float getDeftMaxReacPwr(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQT(ndx));}
+	public float getDeftMinReacPwr(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQB(ndx));}
+	public float getDeftMachR(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getZR(ndx), getMBASE(ndx));}
+	public float getDeftMachX(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getZX(ndx), getMBASE(ndx));}
+	public float getDeftTxfR(int ndx)  throws PsseModelException {return PAMath.rebaseZ100(getRT(ndx), getMBASE(ndx));}
+	public float getDeftTxfX(int ndx)  throws PsseModelException {return PAMath.rebaseZ100(getXT(ndx), getMBASE(ndx));}
+	public float getDeftMaxActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPT(ndx));}
+	public float getDeftMinActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPB(ndx));}
+	public Complex getDeftPwr(int ndx) throws PsseModelException {return new Complex(getActvPwr(ndx), getReacPwr(ndx));}
+	public Complex getDeftMachZ(int ndx) throws PsseModelException {return new Complex(getMachR(ndx), getMachX(ndx));} 
+	public Complex getDeftTxZ(int ndx) throws PsseModelException {return new Complex(getTxfR(ndx), getTxfX(ndx));}
 
 	/* raw methods */
 
-	public abstract String getI(int ndx);
-	public abstract String getID(int ndx);
-	public abstract float getPG(int ndx);
-	public abstract float getQG(int ndx);
-	public abstract float getQT(int ndx);
-	public abstract float getQB(int ndx);
-	public abstract float getVS(int ndx);
-	public abstract String getIREG(int ndx);
-	public abstract float getMBASE(int ndx);
-	public abstract float getZR(int ndx);
-	public abstract float getZX(int ndx);
-	public abstract float getRT(int ndx);
-	public abstract float getXT(int ndx);
-	public abstract float getGTAP(int ndx);
-	public abstract int getSTAT(int ndx);
-	public abstract float getRMPCT(int ndx);
-	public abstract float getPT(int ndx);
-	public abstract float getPB(int ndx);
+	public abstract String getI(int ndx) throws PsseModelException;
+	public abstract String getID(int ndx) throws PsseModelException;
+	public abstract float getPG(int ndx) throws PsseModelException;
+	public abstract float getQG(int ndx) throws PsseModelException;
+	public abstract float getQT(int ndx) throws PsseModelException;
+	public abstract float getQB(int ndx) throws PsseModelException;
+	public abstract float getVS(int ndx) throws PsseModelException;
+	public abstract String getIREG(int ndx) throws PsseModelException;
+	public abstract float getMBASE(int ndx) throws PsseModelException;
+	public abstract float getZR(int ndx) throws PsseModelException;
+	public abstract float getZX(int ndx) throws PsseModelException;
+	public abstract float getRT(int ndx) throws PsseModelException;
+	public abstract float getXT(int ndx) throws PsseModelException;
+	public abstract float getGTAP(int ndx) throws PsseModelException;
+	public abstract int getSTAT(int ndx) throws PsseModelException;
+	public abstract float getRMPCT(int ndx) throws PsseModelException;
+	public abstract float getPT(int ndx) throws PsseModelException;
+	public abstract float getPB(int ndx) throws PsseModelException;
 
-	public abstract OwnershipList<?> getOwnership(int ndx);
+	public abstract OwnershipList<?> getOwnership(int ndx) throws PsseModelException;
 	
 	
 	/* default methods */
