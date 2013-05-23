@@ -20,30 +20,10 @@ public class Generator extends BaseObject
 
 	/** Generator bus */ 
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
-	/** Generator active power output p.u. on 100 MVA base */
-	public float getActvPwr() {return _list.getActvPwr(_ndx);}
-	/** Generator reactive power output p.u. on 100 MVA base */
-	public float getReacPwr() {return _list.getReacPwr(_ndx);}
-	/** Maximum generator reactive power output (p.u. on 100MVA base) */
-	public float getMaxReacPwr() {return _list.getMaxReacPwr(_ndx);}
-	/** Minimum generator reactive power output (p.u. on 100 MVA base) */
-	public float getMinReacPwr() {return _list.getMinReacPwr(_ndx);}
 	/** remote regulated bus.  Null if local */
 	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
-	/** machine resistance p.u. on 100 MVA base */
-	public float getMachR() {return _list.getMachR(_ndx);}
-	/** machine reactance p.u. on 100 MVA base */
-	public float getMachX() {return _list.getMachX(_ndx);}
-	/** Step-up transformer resistance entered in p.u. on 100 MVA base */
-	public float getStepupR() {return _list.getStepupR(_ndx);}
-	/** Step-up transformer reactance entered in p.u. on 100 MVA base */
-	public float getStepupX() {return _list.getStepupX(_ndx);}
 	/** get initial branch status (STAT) as a boolean.  Returns true if in service */
 	public boolean inService() {return _list.inService(_ndx);}
-	/** max active power in MW */
-	public float getMaxActvPwr() {return _list.getMaxActvPwr(_ndx);}
-	/** min active power in MW */
-	public float getMinActvPwr() {return _list.getMinActvPwr(_ndx);}
 	
 	@Override
 	public String toString() { return String.format("Gen[%d] %s",_ndx,getObjectID()); }

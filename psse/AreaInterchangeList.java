@@ -5,23 +5,25 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	public AreaInterchangeList(PsseModel model) {super(model);}
 
 	/* Convenience methods */
+	public abstract Bus getSlackBus(int ndx) throws PsseModelException;
 	
-	public Bus getSlackBus(int ndx) throws PsseModelException
+	/* Convenience defaults */
+	public Bus getDeftSlackBus(int ndx) throws PsseModelException
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}
-
+	
 	/* Raw values */
-	public abstract int getI(int ndx);
-	public abstract String getISW(int ndx);
-	public abstract String getARNAME(int ndx);
-	public abstract float getPDES(int ndx);
-	public abstract float getPTOL(int ndx);
+	public abstract int getI(int ndx) throws PsseModelException;
+	public abstract String getISW(int ndx) throws PsseModelException;
+	public abstract String getARNAME(int ndx) throws PsseModelException;
+	public abstract float getPDES(int ndx) throws PsseModelException;
+	public abstract float getPTOL(int ndx) throws PsseModelException;
 
 	/* Default values */
-	protected String getDeftISW(int ndx) {return "0";}
-	protected String getDeftARNAME(int ndx) {return "";}
-	protected float getDeftPDES(int ndx) {return 0F;}
-	protected float getDeftPTOL(int ndx) {return 10F;}
+	public String getDeftISW(int ndx) throws PsseModelException {return "0";}
+	public String getDeftARNAME(int ndx) throws PsseModelException {return "";}
+	public float getDeftPDES(int ndx) throws PsseModelException {return 0F;}
+	public float getDeftPTOL(int ndx) throws PsseModelException {return 10F;}
 
 }

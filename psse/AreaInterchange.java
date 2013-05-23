@@ -15,6 +15,7 @@ public class AreaInterchange extends BaseObject
 	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 
+	
 	/* convenience methods */
 	
 	/** Area slack bus for area interchange control */ 
@@ -24,14 +25,14 @@ public class AreaInterchange extends BaseObject
 	/* raw PSS/e methods */
 	
 	/** Area number */
-	public int getI() {return _list.getI(_ndx);}
+	public int getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** Area slack bus for area interchange control */
-	public String getISW() {return _list.getISW(_ndx);}
+	public String getISW() throws PsseModelException {return _list.getISW(_ndx);}
 	/** Desired net interchange leaving the area entered in MW */
-	public float getPDES() {return _list.getPDES(_ndx);}
+	public float getPDES() throws PsseModelException {return _list.getPDES(_ndx);}
 	/** Interchange tolerance bandwidth entered in MW */
-	public float getPTOL() {return _list.getPTOL(_ndx);}
+	public float getPTOL() throws PsseModelException {return _list.getPTOL(_ndx);}
 	/** Alphanumeric identifier assigned to area */
-	public String getARNAME() {return _list.getARNAME(_ndx);}
+	public String getARNAME() throws PsseModelException {return _list.getARNAME(_ndx);}
 	
 }

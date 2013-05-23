@@ -25,10 +25,6 @@ public class Bus extends BaseObject
 	public Zone getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */
 	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
-	/** Active component of shunt admittance to ground (GL) per-unit on 100MVA base */
-	public float getShuntG() {return _list.getShuntG(_ndx);}
-	/** Reactive component of shunt admittance to ground (BL) per-unit on 100MVA base */
-	public float getShuntB() {return _list.getShuntB(_ndx);}
 	
 	@Override
 	public String toString() { return String.format("Bus[%d](%s) %s",_ndx,getObjectID(),getNAME()); }

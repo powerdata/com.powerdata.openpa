@@ -7,18 +7,8 @@ public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 	/* convenience methods */
 	
 	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public float getActvPwr(int ndx) {return 0F;}
-	public float getReacPwr(int ndx) {return 0F;}
-	public float getMaxReacPwr(int ndx) {return 0F;}
-	public float getMinReacPwr(int ndx) {return 0F;}
 	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return _model.getBus(getIREG(ndx));}
-	public float getMachR(int ndx)  {return 0F;}
-	public float getMachX(int ndx) {return 0F;}
-	public float getStepupR(int ndx) {return 0F;}
-	public float getStepupX(int ndx) {return 0F;}
 	public boolean inService(int ndx) {return getSTAT(ndx) == 1;}
-	public float getMaxActvPwr(int ndx) {return 0F;}
-	public float getMinActvPwr(int ndx) {return 0F;}
 
 	/* raw methods */
 

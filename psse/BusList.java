@@ -7,8 +7,6 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	/* convenience methods */
 	
 	public BusTypeCode getBusType(int ndx) {return BusTypeCode.fromCode(getIDE(ndx));}
-	public float getShuntG(int ndx) {return 0F;}
-	public float getShuntB(int ndx) {return 0F;}
 	public AreaInterchange getAreaObject(int ndx) throws PsseModelException
 	{
 		return _model.getAreas().get(getAREA(ndx));
