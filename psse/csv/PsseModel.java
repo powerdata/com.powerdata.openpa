@@ -72,18 +72,18 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		try
 		{
 			PsseModel eq = new PsseModel("testdata/db");
-			//for(Bus b : eq.getBuses())
-			//{
-			//	System.out.println(b);
-			//}
-			//for(Generator g : eq.getGenerators())
-			//{
-			//	System.out.println(g);
-			//}
-			//for(NontransformerBranch b : eq.getNontransformerBranches())
-			//{
-			//	System.out.println(b);
-			//}
+			for(Bus b : eq.getBuses())
+			{
+				System.out.println(b);
+			}
+			for(Generator g : eq.getGenerators())
+			{
+				System.out.println(g);
+			}
+			for(NontransformerBranch b : eq.getNontransformerBranches())
+			{
+				System.out.println(b);
+			}
 			for(Transformer t : eq.getTransformers())
 			{
 				System.out.println(t);

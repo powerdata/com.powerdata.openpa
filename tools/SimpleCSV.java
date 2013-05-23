@@ -149,7 +149,14 @@ public class SimpleCSV
 		{
 			ArrayList<String> col = new ArrayList<String>();
 			_cols.add(col);
-			_colsByName.put(_colNames[i], col);
+			if (!_colsByName.containsKey(_colNames[i]))
+			{
+				_colsByName.put(_colNames[i], col);
+			}
+			else if (_colNames[i].length() > 0)
+			{
+				System.out.println("Duplicate column name: "+_colNames[i]);
+			}
 		}
 	}
 	public int addRow() throws Exception
@@ -187,7 +194,7 @@ public class SimpleCSV
 			String vals[] = new StringParse(line,",").setQuoteChar('\'').getTokens();
 			for(int i=0; i<vals.length; i++)
 			{
-				if (i < _cols.size()) _cols.get(i).add(vals[i]);
+				if (i < _cols.size()) _cols.get(i).add(vals[i].trim());
 			}
 			++_rowCount;
 		}
