@@ -36,22 +36,22 @@ public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 	
 	/* default methods */
 
-	protected String getDeftID(int ndx) {return "1";}
-	protected float getDeftPG(int ndx) {return 0F;}
-	protected float getDeftQG(int ndx) {return 0F;}
-	protected float getDeftQT(int ndx) {return 9999F;}
-	protected float getDeftQB(int ndx)  {return -9999F;}
-	protected float getDeftVS(int ndx) {return 1F;}
-	protected String getDeftIREG(int ndx) {return "0";}
-	protected float getDeftMBASE(int ndx) {return _model.getSBASE();}
-	protected float getDeftZR(int ndx) {return 0F;}
-	protected float getDeftZX(int ndx) {return 1F;}
-	protected float getDeftRT(int ndx) {return 0F;}
-	protected float getDeftXT(int ndx) {return 0F;}
-	protected float getDeftGTAP(int ndx) {return 1F;}
-	protected int getDeftSTAT(int ndx) {return 1;}
-	protected float getDeftRMPCT(int ndx) {return 100F;}
-	protected float getDeftPT(int ndx) {return 9999F;}
-	protected float getDeftPB(int ndx) {return -9999F;}
+	public String getDeftID(int ndx) {return "1";}
+	public float getDeftPG(int ndx) {return 0F;}
+	public float getDeftQG(int ndx) {return 0F;}
+	public float getDeftQT(int ndx) {return 9999F;}
+	public float getDeftQB(int ndx)  {return -9999F;}
+	public float getDeftVS(int ndx) {return 1F;}
+	public String getDeftIREG(int ndx) {return "0";}
+	public float getDeftMBASE(int ndx) {return _model.getSBASE();}
+	public float getDeftZR(int ndx) {return 0F;}
+	public float getDeftZX(int ndx) {return 1F;}
+	public float getDeftRT(int ndx) {return 0F;}
+	public float getDeftXT(int ndx) {return 0F;}
+	public float getDeftGTAP(int ndx) {return 1F;}
+	public int getDeftSTAT(int ndx) {return 1;}
+	public float getDeftRMPCT(int ndx) {return 100F;}
+	public float getDeftPT(int ndx) {return 9999F;}
+	public float getDeftPB(int ndx) {return -9999F;}
 
 }

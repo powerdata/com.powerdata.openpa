@@ -30,16 +30,16 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 
 	/* defaults */
 
-	protected String getDeftNAME(int ndx) {return "";}
-	protected float getDeftBASKV(int ndx) {return 0F;}
-	protected int getDeftIDE(int ndx) {return 1;}
-	protected float getDeftGL(int ndx) {return 0F;}
-	protected float getDeftBL(int ndx) {return 0F;}
-	protected int getDeftAREA(int ndx) {return 1;}
-	protected int getDeftZONE(int ndx) {return 1;}
-	protected float getDeftVM(int ndx) {return 1F;}
-	protected float getDeftVA(int ndx) {return 0F;}
-	protected int getDeftOWNER(int ndx) {return 1;}
+	public String getDeftNAME(int ndx) {return "";}
+	public float getDeftBASKV(int ndx) {return 0F;}
+	public int getDeftIDE(int ndx) {return 1;}
+	public float getDeftGL(int ndx) {return 0F;}
+	public float getDeftBL(int ndx) {return 0F;}
+	public int getDeftAREA(int ndx) {return 1;}
+	public int getDeftZONE(int ndx) {return 1;}
+	public float getDeftVM(int ndx) {return 1F;}
+	public float getDeftVA(int ndx) {return 0F;}
+	public int getDeftOWNER(int ndx) {return 1;}
 
 	
 }

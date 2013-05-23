@@ -73,7 +73,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	@Override
 	public String getJ(int ndx) { return _j[ndx]; }
 	@Override
-	public String getK(int ndx) { return (_k != null)?_k[ndx]:super.getK(ndx); }
+	public String getK(int ndx) { return (_k != null)?_k[ndx]:getDeftK(ndx); }
 	@Override
 	public Bus getBus1(int ndx) { return _buses.get(getI(ndx)); }
 	@Override
@@ -81,46 +81,46 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	@Override
 	public Bus getBus3(int ndx) { return _buses.get(getK(ndx)); }
 	@Override
-	public String getCKT(int ndx) { return (_ckt != null)?_ckt[ndx]:super.getCKT(ndx); }
+	public String getCKT(int ndx) { return (_ckt != null)?_ckt[ndx]:getDeftCKT(ndx); }
 	@Override
-	public int getCW(int ndx) { return (_cw != null)?_cw[ndx]:super.getCW(ndx); }
+	public int getCW(int ndx) { return (_cw != null)?_cw[ndx]:getDeftCW(ndx); }
 	@Override
-	public int getCZ(int ndx) {	return (_cz != null)?_cz[ndx]:super.getCZ(ndx); }
+	public int getCZ(int ndx) {	return (_cz != null)?_cz[ndx]:getDeftCZ(ndx); }
 
 	@Override
 	public int getCM(int ndx) {
 		// TODO Auto-generated method stub
-		return super.getCM(ndx);
+		return getDeftCM(ndx);
 	}
 
 	@Override
 	public float getMAG1(int ndx) {
 		// TODO Auto-generated method stub
-		return super.getMAG1(ndx);
+		return getDeftMAG1(ndx);
 	}
 
 	@Override
 	public float getMAG2(int ndx) {
 		// TODO Auto-generated method stub
-		return super.getMAG2(ndx);
+		return getDeftMAG2(ndx);
 	}
 
 	@Override
 	public int getNMETR(int ndx) {
 		// TODO Auto-generated method stub
-		return super.getNMETR(ndx);
+		return getDeftNMETR(ndx);
 	}
 
 	@Override
 	public String getNAME(int ndx) {
 		// TODO Auto-generated method stub
-		return super.getNAME(ndx);
+		return getDeftNAME(ndx);
 	}
 
 	@Override
 	public int getSTAT(int ndx) {
 		// TODO Auto-generated method stub
-		return super.getSTAT(ndx);
+		return getDeftSTAT(ndx);
 	}
 
 	@Override
@@ -166,5 +166,305 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	public Transformer get(int index) { return new Transformer(index,this); }
 	@Override
 	public int size() { return _size; }
+
+	@Override
+	public float getVMSTAR(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getANSTAR(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getWINDV1(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getNOMV1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getANG1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATA1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATB1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATC1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getCOD1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getCONT1(int ndx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float getRMA1(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRMI1(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getVMA1(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getVMI1(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNTP1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTAB1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCR1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCX1(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getWINDV2(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getNOMV2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getANG2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATA2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATB2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATC2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getCOD2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getCONT2(int ndx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float getRMA2(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRMI2(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getVMA2(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getVMI2(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNTP2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTAB2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCR2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCX2(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getWINDV3(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getNOMV3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getANG3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATA3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATB3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRATC3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getCOD3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getCONT3(int ndx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float getRMA3(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRMI3(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getVMA3(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getVMI3(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNTP3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTAB3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCR3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCX3(int ndx) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 

@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.powerdata.openpa.psse.AreaInterchangeList;
 import com.powerdata.openpa.psse.ImpCorrTblList;
+import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.OwnerList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.ZoneList;
@@ -50,6 +51,17 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		return _transformerList;
 	}
 	@Override
+	public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public LoadList<?> getLoads() throws PsseModelException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
 	public OwnerList<?> getOwners() throws PsseModelException { return null; }
 	@Override
 	public AreaInterchangeList<?> getAreas() throws PsseModelException { return null; }
@@ -60,14 +72,14 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		try
 		{
 			PsseModel eq = new PsseModel("testdata/db");
-			for(Bus b : eq.getBuses())
-			{
-				System.out.println(b);
-			}
-			//for(Generator g : eq.getGenerators())
+			//for(Bus b : eq.getBuses())
 			//{
-			//	System.out.println(g);
+			//	System.out.println(b);
 			//}
+			for(Generator g : eq.getGenerators())
+			{
+				System.out.println(g);
+			}
 			//for(NontransformerBranch b : eq.getNontransformerBranches())
 			//{
 			//	System.out.println(b);
@@ -82,11 +94,5 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println("ERROR: "+e);
 		}
-	}
-	@Override
-	public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
