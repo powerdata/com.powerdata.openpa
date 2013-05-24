@@ -3,9 +3,13 @@ package com.powerdata.openpa.psse.csv;
 import java.util.HashMap;
 
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.ImpCorrTbl;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
+import com.powerdata.openpa.psse.TransformerStatus;
 import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
@@ -290,5 +294,137 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	public Transformer get(int ndx) { return new Transformer(ndx,this); }
 	@Override
 	public int size() { return _size; }
-}
 
+	@Override
+	public float getMagCondPerUnit(int ndx) throws PsseModelException {return getDeftMagCondPerUnit(ndx);}
+	@Override
+	public float getMagSuscPerUnit(int ndx) throws PsseModelException {return getDeftMagSuscPerUnit(ndx);}
+	@Override
+	public float getNoLoadLoss(int ndx) throws PsseModelException {return getDeftNoLoadLoss(ndx);}
+	@Override
+	public float getExcitingCurrent(int ndx) throws PsseModelException {return getDeftExcitingCurrent(ndx);}
+	@Override
+	public TransformerStatus getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
+	@Override
+	public float getR100_1_2(int ndx) throws PsseModelException {return getDeftResistance1_2(ndx);}
+	@Override
+	public float getX100_1_2(int ndx) throws PsseModelException {return getDeftReactance1_2(ndx);}
+	@Override
+	public float getR100_2_3(int ndx) throws PsseModelException {return getDeftResistance2_3(ndx);}
+	@Override
+	public float getX100_2_3(int ndx) throws PsseModelException {return getDeftReactance2_3(ndx);}
+	@Override
+	public float getR100_3_1(int ndx) throws PsseModelException {return getDeftResistance3_1(ndx);}
+	@Override
+	public float getX100_3_1(int ndx) throws PsseModelException {return getX100_3_1(ndx);}
+	@Override
+	public float getWnd1Ratio(int ndx) throws PsseModelException {return getDeftWnd1Ratio(ndx);}
+	@Override
+	public float getWnd1NomKV(int ndx) throws PsseModelException {return getDeftWnd1NomKV(ndx);}
+	@Override
+	public TransformerCtrlMode getCtrlMode1(int ndx) throws PsseModelException {return getDeftCtrlMode1(ndx);}
+	@Override
+	public boolean getAdjEnab1(int ndx) throws PsseModelException {return getDeftAdjEnab1(ndx);}
+	@Override
+	public Bus getRegBus1(int ndx) throws PsseModelException {return getDeftRegBus1(ndx);}
+	@Override
+	public boolean getCtrlTapSide1(int ndx) throws PsseModelException {return getDeftCtrlTapSide1(ndx);}
+	@Override
+	public float getMaxRatio1(int ndx) throws PsseModelException {return getDeftMaxRatio1(ndx);}
+	@Override
+	public float getMinRatio1(int ndx) throws PsseModelException {return getDeftMinRatio1(ndx);}
+	@Override
+	public float getMaxShift1(int ndx) throws PsseModelException {return getDeftMaxShift1(ndx);}
+	@Override
+	public float getMinShift1(int ndx) throws PsseModelException {return getDeftMinShift1(ndx);}
+
+	@Override
+	public float getMaxVolt1(int ndx) throws PsseModelException {return getDeftMaxVolt1(ndx);}
+	@Override
+	public float getMinVolt1(int ndx) throws PsseModelException {return getDeftMinVolt1(ndx);}
+	@Override
+	public float getMaxReacPwr1(int ndx) throws PsseModelException {return getDeftMaxReacPwr1(ndx);}
+	@Override
+	public float getMinReacPwr1(int ndx) throws PsseModelException {return getDeftMinReacPwr1(ndx);}
+	@Override
+	public float getMaxActvPwr1(int ndx) throws PsseModelException {return getDeftMaxActvPwr1(ndx);}
+	@Override
+	public float getMinActvPwr1(int ndx) throws PsseModelException {return getDeftMinActvPwr1(ndx);}
+	@Override
+	public ImpCorrTbl getImpCorrTbl1(int ndx) throws PsseModelException {return getDeftImpCorrTbl1(ndx);}
+	@Override
+	public float getWnd2Ratio(int ndx) throws PsseModelException {return getDeftWnd2Ratio(ndx);}
+	@Override
+	public float getWnd2NomKV(int ndx) throws PsseModelException {return getDeftWnd2NomKV(ndx);}
+	@Override
+	public TransformerCtrlMode getCtrlMode2(int ndx) throws PsseModelException {return getDeftCtrlMode2(ndx);}
+	@Override
+	public boolean getAdjEnab2(int ndx) throws PsseModelException {return getDeftAdjEnab2(ndx);}
+	@Override
+	public Bus getRegBus2(int ndx) throws PsseModelException {return getDeftRegBus2(ndx);}
+	@Override
+	public boolean getCtrlTapSide2(int ndx) throws PsseModelException {return getDeftCtrlTapSide2(ndx);}
+	@Override
+	public float getMaxRatio2(int ndx) throws PsseModelException {return getDeftMaxRatio2(ndx);}
+	@Override
+	public float getMinRatio2(int ndx) throws PsseModelException {return getDeftMinRatio2(ndx);}
+	@Override
+	public float getMaxShift2(int ndx) throws PsseModelException {return getDeftMaxShift2(ndx);}
+	@Override
+	public float getMinShift2(int ndx) throws PsseModelException {return getDeftMinShift2(ndx);}
+	@Override
+	public float getMaxVolt2(int ndx) throws PsseModelException {return getDeftMaxVolt2(ndx);}
+	@Override
+	public float getMinVolt2(int ndx) throws PsseModelException {return getDeftMinVolt2(ndx);}
+	@Override
+	public float getMaxReacPwr2(int ndx) throws PsseModelException {return getDeftMaxReacPwr2(ndx);}
+	@Override
+	public float getMinReacPwr2(int ndx) throws PsseModelException {return getDeftMinReacPwr2(ndx);}
+	@Override
+	public float getMaxActvPwr2(int ndx) throws PsseModelException {return getDeftMaxActvPwr2(ndx);}
+	@Override
+	public float getMinActvPwr2(int ndx) throws PsseModelException {return getDeftMinActvPwr2(ndx);}
+	@Override
+	public ImpCorrTbl getImpCorrTbl2(int ndx) throws PsseModelException {return getDeftImpCorrTbl2(ndx);}
+	@Override
+	public float getWnd3Ratio(int ndx) throws PsseModelException {return getDeftWnd3Ratio(ndx);}
+	@Override
+	public float getWnd3NomKV(int ndx) throws PsseModelException {return getDeftWnd3NomKV(ndx);}
+	@Override
+	public TransformerCtrlMode getCtrlMode3(int ndx) throws PsseModelException {return getDeftCtrlMode3(ndx);}
+	@Override
+	public boolean getAdjEnab3(int ndx) throws PsseModelException {return getDeftAdjEnab3(ndx);}
+	@Override
+	public Bus getRegBus3(int ndx) throws PsseModelException {return getDeftRegBus3(ndx);}
+	@Override
+	public boolean getCtrlTapSide3(int ndx) throws PsseModelException {return getDeftCtrlTapSide3(ndx);}
+	@Override
+	public float getMaxRatio3(int ndx) throws PsseModelException {return getDeftMaxRatio3(ndx);}
+	@Override
+	public float getMinRatio3(int ndx) throws PsseModelException {return getDeftMinRatio3(ndx);}
+	@Override
+	public float getMaxShift3(int ndx) throws PsseModelException {return getDeftMaxShift3(ndx);}
+	@Override
+	public float getMinShift3(int ndx) throws PsseModelException {return getDeftMinShift3(ndx);}
+	@Override
+	public float getMaxVolt3(int ndx) throws PsseModelException {return getDeftMaxVolt3(ndx);}
+	@Override
+	public float getMinVolt3(int ndx) throws PsseModelException {return getDeftMinVolt3(ndx);}
+	@Override
+	public float getMaxReacPwr3(int ndx) throws PsseModelException {return getDeftMaxReacPwr3(ndx);}
+	@Override
+	public float getMinReacPwr3(int ndx) throws PsseModelException {return getDeftMinReacPwr3(ndx);}
+	@Override
+	public float getMaxActvPwr3(int ndx) throws PsseModelException {return getDeftMaxActvPwr3(ndx);}
+	@Override
+	public float getMinActvPwr3(int ndx) throws PsseModelException {return getDeftMinActvPwr3(ndx);}
+	@Override
+	public ImpCorrTbl getImpCorrTbl3(int ndx) throws PsseModelException {return getDeftImpCorrTbl3(ndx);}
+
+	@Override
+	public Complex getZ100_1_2(int ndx) throws PsseModelException {return getDeftZ100_1_2(ndx);}
+	@Override
+	public Complex getZ100_2_3(int ndx) throws PsseModelException {return getDeftZ100_2_3(ndx);}
+	@Override
+	public Complex getZ100_3_1(int ndx) throws PsseModelException {return getDeftZ100_3_1(ndx);}
+}

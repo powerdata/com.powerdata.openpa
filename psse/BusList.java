@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
+import com.powerdata.openpa.tools.PComplex;
 
 public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 {
@@ -17,7 +18,7 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	public abstract float getShuntB(int ndx) throws PsseModelException;
 	public abstract float getVaRad(int ndx) throws PsseModelException;
 	public abstract Complex getShuntY(int ndx) throws PsseModelException;
-	public abstract Complex getVoltage(int ndx) throws PsseModelException;
+	public abstract PComplex getVoltage(int ndx) throws PsseModelException;
 
 
 	/* convenience defaults */
@@ -33,7 +34,7 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	public float getDeftShuntB(int ndx) throws PsseModelException {return PAMath.mvar2pu(getBL(ndx));}
 	public float getDeftVaRad(int ndx)  throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
 	public Complex getDeftShuntY(int ndx) throws PsseModelException {return new Complex(getShuntG(ndx), getShuntB(ndx));}
-	public Complex getDeftVoltage(int ndx) throws PsseModelException {return new Complex(getVM(ndx), getVaRad(ndx));}
+	public PComplex getDeftVoltage(int ndx) throws PsseModelException {return new PComplex(getVM(ndx), getVaRad(ndx));}
 
 	
 	/* raw methods */

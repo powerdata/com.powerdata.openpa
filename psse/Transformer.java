@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
+import com.powerdata.openpa.tools.Complex;
 
 public class Transformer extends BaseObject
 {
@@ -35,40 +36,46 @@ public class Transformer extends BaseObject
 
 	//TODO:  How to convert to per-unit when CM == 2
 	/** Magnetizing Conductance per-unit on 100 MVA Base */
-	public float getMagCondPerUnit() {return _list.getMagCondPerUnit(_ndx);}
+	public float getMagCondPerUnit() throws PsseModelException {return _list.getMagCondPerUnit(_ndx);}
 	/** Magnetizing Susceptance per-unit on 100 MVA Base */
-	public float getMagSuscPerUnit() {return _list.getMagSuscPerUnit(_ndx);}
+	public float getMagSuscPerUnit() throws PsseModelException {return _list.getMagSuscPerUnit(_ndx);}
 	/** No load loss in Watts (MAG1 when CM=2 */
-	public float getNoLoadLoss() {return _list.getNoLoadLoss(_ndx);}
+	public float getNoLoadLoss() throws PsseModelException {return _list.getNoLoadLoss(_ndx);}
 	/** Exciting current p.u. on 100 MVA base  and nominal voltage (NOMV1) when CM=2 */
-	public float getExcitingCurrent() {return _list.getExcitingCurrent(_ndx);}
-	/** Initial Transformer Status */
-	public TransformerStatus getInitTransformerStat() {return _list.getInitTransformerStat(_ndx);}
+	public float getExcitingCurrent() throws PsseModelException {return _list.getExcitingCurrent(_ndx);}
+	/** Transformer Status */
+	public TransformerStatus getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	// TODO:  How to convert to per-unit impedance on 100MVA base when CZ =2 or 3
 	/** get resistance between windings 1 and 2 on 100 MVA base */
-	public float getResistance1_2() {return _list.getResistance1_2(_ndx);}
+	public float getR100_1_2() throws PsseModelException {return _list.getR100_1_2(_ndx);}
 	/** get Reactance between windings 1 and 2 on 100 MVA base */
-	public float getReactance1_2() {return _list.getReactance1_2(_ndx);}
+	public float getX100_1_2() throws PsseModelException {return _list.getX100_1_2(_ndx);}
+	/** get complex impedance between windings 1 and 2 on 100 MVA base */
+	public Complex getZ100_1_2() throws PsseModelException {return _list.getZ100_1_2(_ndx);}
 	/** get resistance between windings 2 and 3 on 100 MVA base */
-	public float getResistance2_3() {return _list.getResistance2_3(_ndx);}
+	public float getR100_2_3() throws PsseModelException {return _list.getR100_2_3(_ndx);}
 	/** get Reactance between windings 2 and 3 on 100 MVA base */
-	public float getReactance2_3() {return _list.getReactance2_3(_ndx);}
+	public float getX100_2_3() throws PsseModelException {return _list.getX100_2_3(_ndx);}
+	/** get complex impedance between windings 2 and 3 on 100 MVA base */
+	public Complex getZ100_2_3() throws PsseModelException {return _list.getZ100_2_3(_ndx);}
 	/** get resistance between windings 3 and 1 on 100 MVA base */
-	public float getResistance3_1() {return _list.getResistance3_1(_ndx);}
+	public float getR100_3_1() throws PsseModelException {return _list.getR100_3_1(_ndx);}
 	/** get Reactance between windings 3 and 1 on 100 MVA base */
-	public float getReactance3_1() {return _list.getReactance3_1(_ndx);}
+	public float getX100_3_1() throws PsseModelException {return _list.getX100_3_1(_ndx);}
+	/** get complex impedance between windings 3 and 1 on 100 MVA base */
+	public Complex getZ100_3_1() throws PsseModelException {return _list.getZ100_3_1(_ndx);}
 	/** get winding 1 turns ratio p.u. on winding 1 bus base voltage*/
 	public float getWnd1Ratio() throws PsseModelException {return _list.getWnd1Ratio(_ndx);}
 	/** get winding 1 nominal KV */
 	public float getWnd1NomKV() throws PsseModelException {return _list.getWnd1NomKV(_ndx);}
 	/** Transformer Control Mode (COD1) */
-	public TransformerCtrlMode getCtrlMode1() {return _list.getCtrlMode1(_ndx);}
-	/** enable automatic control (COD1) */
-	public boolean enableAutoCtrl1() {return _list.enableAutoCtrl1(_ndx);}
+	public TransformerCtrlMode getCtrlMode1() throws PsseModelException {return _list.getCtrlMode1(_ndx);}
+	/** is automatic adjustment enabled? (COD1) */
+	public boolean getAdjEnab1() throws PsseModelException {return _list.getAdjEnab1(_ndx);}
 	/** get controlled bus 1 (CONT1) */ 
-	public Bus getCtrlBus1() throws PsseModelException {return _list.getCtrlBus1(_ndx);}
-	/** controlled bus on Winding 1 (CONT1) */
-	public boolean ctrlOnWnd1() {return _list.ctrlOnWnd1(_ndx);}
+	public Bus getRegBus1() throws PsseModelException {return _list.getRegBus1(_ndx);}
+	/** adjust reg bus as if on wnd 1 side (CONT1) */
+	public boolean getCtrlTapSide1() throws PsseModelException {return _list.getCtrlTapSide1(_ndx);}
 	/** max ratio limit (RMA) p.u. of bus 1 base voltage*/
 	public float getMaxRatio1() throws PsseModelException {return _list.getMaxRatio1(_ndx);}
 	/** min ratio limit (RMI) p.u. of bus 1 base voltage*/
@@ -96,13 +103,13 @@ public class Transformer extends BaseObject
 	/** get winding 2 nominal KV */
 	public float getWnd2NomKV() throws PsseModelException {return _list.getWnd2NomKV(_ndx);}
 	/** Transformer Control Mode (COD2) */
-	public TransformerCtrlMode getCtrlMode2() {return _list.getCtrlMode2(_ndx);}
-	/** enable automatic control (COD2) */
-	public boolean enableAutoCtrl2() {return _list.enableAutoCtrl2(_ndx);}
+	public TransformerCtrlMode getCtrlMode2() throws PsseModelException {return _list.getCtrlMode2(_ndx);}
+	/** is automatic adjustment enabled? (COD2) */
+	public boolean getAdjEnab2() throws PsseModelException {return _list.getAdjEnab2(_ndx);}
 	/** get controlled bus 2 (CONT2) */ 
-	public Bus getCtrlBus2() throws PsseModelException {return _list.getCtrlBus2(_ndx);}
-	/** controlled bus on Winding 2 (CONT2) */
-	public boolean ctrlOnWnd2() {return _list.ctrlOnWnd2(_ndx);}
+	public Bus getRegBus2() throws PsseModelException {return _list.getRegBus2(_ndx);}
+	/** adjust reg bus as if on wnd 2 side (CONT1) */
+	public boolean getCtrlTapSide2() throws PsseModelException {return _list.getCtrlTapSide2(_ndx);}
 	/** max ratio limit (RMA) p.u. of bus 2 base voltage*/
 	public float getMaxRatio2() throws PsseModelException {return _list.getMaxRatio2(_ndx);}
 	/** min ratio limit (RMI) p.u. of bus 2 base voltage*/
@@ -130,13 +137,13 @@ public class Transformer extends BaseObject
 	/** get winding 3 nominal KV */
 	public float getWnd3NomKV() throws PsseModelException {return _list.getWnd3NomKV(_ndx);}
 	/** Transformer Control Mode (COD3) */
-	public TransformerCtrlMode getCtrlMode3() {return _list.getCtrlMode3(_ndx);}
-	/** enable automatic control (COD3) */
-	public boolean enableAutoCtrl3() {return _list.enableAutoCtrl3(_ndx);}
+	public TransformerCtrlMode getCtrlMode3() throws PsseModelException {return _list.getCtrlMode3(_ndx);}
+	/** is automatic adjustment enabled? (COD3) */
+	public boolean getAdjEnab3() throws PsseModelException {return _list.getAdjEnab3(_ndx);}
 	/** get controlled bus 3 (CONT3) */ 
-	public Bus getCtrlBus3() throws PsseModelException {return _list.getCtrlBus3(_ndx);}
-	/** controlled bus on Winding 3 (CONT3) */
-	public boolean ctrlOnWnd3() {return _list.ctrlOnWnd3(_ndx);}
+	public Bus getRegBus3() throws PsseModelException {return _list.getRegBus3(_ndx);}
+	/** adjust reg bus as if on wnd 3 side (CONT1) */
+	public boolean getCtrlTapSide3() throws PsseModelException {return _list.getCtrlTapSide3(_ndx);}
 	/** max ratio limit (RMA) p.u. of bus 3 base voltage*/
 	public float getMaxRatio3() throws PsseModelException {return _list.getMaxRatio3(_ndx);}
 	/** min ratio limit (RMI) p.u. of bus 3 base voltage*/

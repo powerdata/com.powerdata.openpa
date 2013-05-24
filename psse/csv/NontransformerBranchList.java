@@ -2,9 +2,11 @@ package com.powerdata.openpa.psse.csv;
 
 import java.util.HashMap;
 
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
@@ -107,4 +109,35 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	public NontransformerBranch get(int index) { return new NontransformerBranch(index,this); }
 	@Override
 	public int size() { return _size; }
+
+	@Override
+	public Bus getFromBus(int ndx) throws PsseModelException {return getDeftFromBus(ndx);}
+	@Override
+	public Bus getToBus(int ndx) throws PsseModelException {return getDeftToBus(ndx);}
+	@Override
+	public com.powerdata.openpa.psse.NontransformerBranchList.MeteredEnd getMeteredEnd(
+			int ndx) throws PsseModelException
+	{
+		return getDeftMeteredEnd(ndx);
+	}
+	@Override
+	public boolean getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
+	@Override
+	public float getR100(int ndx) throws PsseModelException {return getDeftR100(ndx);}
+	@Override
+	public float getX100(int ndx) throws PsseModelException {return getDeftX100(ndx);}
+	@Override
+	public Complex getZ100(int ndx) throws PsseModelException {return getDeftZ100(ndx);}
+	@Override
+	public float getFromShuntG(int ndx) throws PsseModelException {return getDeftFromShuntG(ndx);}
+	@Override
+	public float getFromShuntB(int ndx) throws PsseModelException {return getDeftFromShuntB(ndx);}
+	@Override
+	public Complex getFromShuntY(int ndx) throws PsseModelException {return getDeftFromShuntY(ndx);}
+	@Override
+	public float getToShuntG(int ndx) throws PsseModelException {return getDeftToShuntG(ndx);}
+	@Override
+	public float getToShuntB(int ndx) throws PsseModelException {return getDeftToShuntB(ndx);}
+	@Override
+	public Complex getToShuntY(int ndx) throws PsseModelException {return getDeftToShuntY(ndx);}
 }

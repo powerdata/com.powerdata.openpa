@@ -4,6 +4,11 @@ public abstract class OwnerList<T extends Owner> extends PsseBaseList<T>
 {
 	public OwnerList(PsseModel model) {super(model);}
 
-	public abstract int getI(int ndx);
-	public abstract String getOWNAME(int ndx);
+	/* raw data methods */
+	public abstract int getI(int ndx) throws PsseModelException;
+	public abstract String getOWNAME(int ndx) throws PsseModelException;
+	
+	/* raw data defaults */
+	
+	public String getDeftOWNAME(int ndx) {return "";}
 }

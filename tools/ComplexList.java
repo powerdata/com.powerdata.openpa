@@ -1,91 +1,61 @@
 package com.powerdata.openpa.tools;
 
-public class ComplexList
+import java.util.Collection;
+
+/**
+ * Support Complex numbers in cartesian form.
+ * 
+ * @author chris@powerdata.com
+ *
+ */
+public class ComplexList extends ComplexListBase<Complex>
 {
-	protected float[] _re;
-	protected float[] _im;
-	
-	public ComplexList(int size)
-	{
-		_re = new float[size];
-		_im = new float[size];
-	}
+	public float[] re() {return _v1;}
+	public float[] im() {return _v2;}
 
-	public Complex get(int i)
-	{
-		return new Complex(_re[i], _im[i]);
-	}
+	public ComplexList() {super();}
 	
-	public float[] re() {return _re;}
-	public float[] im() {return _im;}
-
-	public void set(int i, Complex v)
+	public ComplexList(Collection<Complex> collection)
 	{
-		_re[i] = v.re();
-		_im[i] = v.im();
-	}
-	
-	public void set(int i, float re, float im)
-	{
-		_re[i] = re;
-		_im[i] = im;
-	}
-	
-	public float abs(int idx)
-	{
-		float re = _re[idx];
-		float im = _im[idx];
-		return (float) Math.sqrt(re*re+im*im);
-	}
-	
-	public void add(int idx, Complex v)
-	{
-		_re[idx] += v.re();
-		_im[idx] += v.im();
-	}
-
-	public void add(int idx, float re, float im)
-	{
-		_re[idx] += re;
-		_im[idx] += im;
-	}
-
-	public void sub(int idx, Complex v)
-	{
-		_re[idx] -= v.re();
-		_im[idx] -= v.im();
-	}
-
-	public void sub(int idx, float re, float im)
-	{
-		_re[idx] -= re;
-		_im[idx] -= im;
+		int csize = collection.size();
+		_v1 = new float[csize];
+		_v2 = new float[csize];
+		_size = csize;
+		int i=0;
+		for(Complex c : collection)
+		{
+			_v1[i] = c.re();
+			_v2[i++] = c.im();
+		}
 	}
 
 	@Override
-	public String toString()
+	public void add(int index, Complex element)
 	{
-		int n = (_re == null) ? 0 : _re.length;
-		String rv = null;
-		if (n > 0)
-		{
-			StringBuilder rvb = new StringBuilder(10*n);
-			rvb.append('[');
-			for(int i=0; i < n; ++i)
-			{
-				if (i > 0) rvb.append(", ");
-				rvb.append('(');
-				rvb.append(_re[i]);
-				rvb.append(',');
-				rvb.append(_im[i]);
-				rvb.append(')');
-			}
-			rvb.append(']');
-			rv = rvb.toString();
-		}
+		_add(index, element.re(), element.im());
+	}
+	
+	@Override
+	public Complex remove(int index)
+	{
+		Complex rv = new Complex(_v1[index], _v2[index]);
+		_remove(index);
 		return rv;
 	}
 
+	@Override
+	public Complex set(int index, Complex element)
+	{
+		Complex rv = new Complex(_v1[index], _v2[index]);
+		_v1[index] = element.re();
+		_v2[index] = element.im();
+		return rv;
+	}
 	
-	
+	@Override
+	public Complex get(int index)
+	{
+		return new Complex(_v1[index], _v2[index]);
+	}
+
 }

@@ -21,8 +21,8 @@ public class Owner extends BaseObject
 	/* raw PSS/e methods */
 	
 	/** Owner number */
-	public int getI() {return _list.getI(_ndx);}
+	public int getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** Alphanumeric identifier assigned to owner */
-	public String getOWNAME() {return _list.getOWNAME(_ndx);}
+	public String getOWNAME() throws PsseModelException {return _list.getOWNAME(_ndx);}
 	
 }

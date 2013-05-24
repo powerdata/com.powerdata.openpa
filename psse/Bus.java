@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PComplex;
 
 public class Bus extends BaseObject
 {
@@ -38,7 +39,7 @@ public class Bus extends BaseObject
 	/** Bus voltage phase angle in radians */
 	public float getVaRad() throws PsseModelException {return _list.getVaRad(_ndx);}
 	/** complex bus voltage */
-	public Complex getVoltage() throws PsseModelException {return _list.getVoltage(_ndx);}
+	public PComplex getVoltage() throws PsseModelException {return _list.getVoltage(_ndx);}
 
 
 	/* Raw PSS/e methods */

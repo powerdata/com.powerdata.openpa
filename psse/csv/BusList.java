@@ -13,6 +13,7 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
+import com.powerdata.openpa.tools.PComplex;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 /**
@@ -140,5 +141,5 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public Complex getShuntY(int ndx) throws PsseModelException { return getDeftShuntY(ndx); }
 	@Override
-	public Complex getVoltage(int ndx) throws PsseModelException { return getDeftVoltage(ndx);}
+	public PComplex getVoltage(int ndx) throws PsseModelException { return getDeftVoltage(ndx);}
 }

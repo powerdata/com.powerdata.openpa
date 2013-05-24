@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.Complex;
+
 public abstract class TransformerList<T extends Transformer> 
 	extends PsseBaseList<T>
 {
@@ -100,114 +102,191 @@ public abstract class TransformerList<T extends Transformer>
 		return val;
 	}	
 	
-	/* Convenience Methods */
+	/* convenience interface */
 	
-	public Bus getBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public Bus getBus2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
-	public Bus getBus3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
-	public float getMagCondPerUnit(int ndx) {return 0;}
-	public float getMagSuscPerUnit(int ndx) {return 0;}
-	public float getNoLoadLoss(int ndx) {return 0;}
-	public float getExcitingCurrent(int ndx) {return 0;}
-	public TransformerStatus getInitTransformerStat(int ndx)
+	public abstract Bus getBus1(int ndx) throws PsseModelException;
+	public abstract Bus getBus2(int ndx) throws PsseModelException;
+	public abstract Bus getBus3(int ndx) throws PsseModelException;
+	public abstract float getMagCondPerUnit(int ndx) throws PsseModelException;
+	public abstract float getMagSuscPerUnit(int ndx) throws PsseModelException;
+	public abstract float getNoLoadLoss(int ndx) throws PsseModelException;
+	public abstract float getExcitingCurrent(int ndx) throws PsseModelException;
+	public abstract TransformerStatus getInSvc(int ndx) throws PsseModelException;
+	public abstract float getR100_1_2(int ndx) throws PsseModelException;
+	public abstract float getX100_1_2(int ndx) throws PsseModelException;
+	public abstract Complex getZ100_1_2(int ndx) throws PsseModelException;
+	public abstract float getR100_2_3(int ndx) throws PsseModelException;
+	public abstract float getX100_2_3(int ndx) throws PsseModelException;
+	public abstract Complex getZ100_2_3(int ndx) throws PsseModelException;
+	public abstract float getR100_3_1(int ndx) throws PsseModelException;
+	public abstract float getX100_3_1(int ndx) throws PsseModelException;
+	public abstract Complex getZ100_3_1(int ndx) throws PsseModelException;
+	public abstract float getWnd1Ratio(int ndx) throws PsseModelException;
+	public abstract float getWnd1NomKV(int ndx) throws PsseModelException;
+	public abstract TransformerCtrlMode getCtrlMode1(int ndx) throws PsseModelException;
+	public abstract boolean getAdjEnab1(int ndx) throws PsseModelException;
+	public abstract Bus getRegBus1(int ndx) throws PsseModelException;
+	public abstract boolean getCtrlTapSide1(int ndx) throws PsseModelException;
+	public abstract float getMaxRatio1(int ndx) throws PsseModelException;
+	public abstract float getMinRatio1(int ndx) throws PsseModelException;
+	public abstract float getMaxShift1(int ndx) throws PsseModelException;
+	public abstract float getMinShift1(int ndx) throws PsseModelException;
+	public abstract float getMaxVolt1(int ndx) throws PsseModelException;   
+	public abstract float getMinVolt1(int ndx) throws PsseModelException;
+	public abstract float getMaxReacPwr1(int ndx) throws PsseModelException;
+	public abstract float getMinReacPwr1(int ndx) throws PsseModelException;
+	public abstract float getMaxActvPwr1(int ndx) throws PsseModelException;
+	public abstract float getMinActvPwr1(int ndx) throws PsseModelException;
+	public abstract ImpCorrTbl getImpCorrTbl1(int ndx) throws PsseModelException;
+
+	public abstract float getWnd2Ratio(int ndx) throws PsseModelException;
+	public abstract float getWnd2NomKV(int ndx) throws PsseModelException;
+	public abstract TransformerCtrlMode getCtrlMode2(int ndx) throws PsseModelException;
+	public abstract boolean getAdjEnab2(int ndx) throws PsseModelException;
+	public abstract Bus getRegBus2(int ndx) throws PsseModelException;
+	public abstract boolean getCtrlTapSide2(int ndx) throws PsseModelException;
+	public abstract float getMaxRatio2(int ndx) throws PsseModelException;
+	public abstract float getMinRatio2(int ndx) throws PsseModelException;
+	public abstract float getMaxShift2(int ndx) throws PsseModelException;
+	public abstract float getMinShift2(int ndx) throws PsseModelException;
+	public abstract float getMaxVolt2(int ndx) throws PsseModelException;   
+	public abstract float getMinVolt2(int ndx) throws PsseModelException;
+	public abstract float getMaxReacPwr2(int ndx) throws PsseModelException;
+	public abstract float getMinReacPwr2(int ndx) throws PsseModelException;
+	public abstract float getMaxActvPwr2(int ndx) throws PsseModelException;
+	public abstract float getMinActvPwr2(int ndx) throws PsseModelException;
+	public abstract ImpCorrTbl getImpCorrTbl2(int ndx) throws PsseModelException;
+	
+	public abstract float getWnd3Ratio(int ndx) throws PsseModelException;
+	public abstract float getWnd3NomKV(int ndx) throws PsseModelException;
+	public abstract TransformerCtrlMode getCtrlMode3(int ndx) throws PsseModelException;
+	public abstract boolean getAdjEnab3(int ndx) throws PsseModelException;
+	public abstract Bus getRegBus3(int ndx) throws PsseModelException;
+	public abstract boolean getCtrlTapSide3(int ndx) throws PsseModelException;
+	public abstract float getMaxRatio3(int ndx) throws PsseModelException;
+	public abstract float getMinRatio3(int ndx) throws PsseModelException;
+	public abstract float getMaxShift3(int ndx) throws PsseModelException;
+	public abstract float getMinShift3(int ndx) throws PsseModelException;
+	public abstract float getMaxVolt3(int ndx) throws PsseModelException;   
+	public abstract float getMinVolt3(int ndx) throws PsseModelException;
+	public abstract float getMaxReacPwr3(int ndx) throws PsseModelException;
+	public abstract float getMinReacPwr3(int ndx) throws PsseModelException;
+	public abstract float getMaxActvPwr3(int ndx) throws PsseModelException;
+	public abstract float getMinActvPwr3(int ndx) throws PsseModelException;
+	public abstract ImpCorrTbl getImpCorrTbl3(int ndx) throws PsseModelException;
+
+	
+	/* Convenience defaults */
+	
+	public Bus getDeftBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getDeftBus2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
+	public Bus getDeftBus3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
+	public float getDeftMagCondPerUnit(int ndx) {return 0;}
+	public float getDeftMagSuscPerUnit(int ndx) {return 0;}
+	public float getDeftNoLoadLoss(int ndx) {return 0;}
+	public float getDeftExcitingCurrent(int ndx) {return 0;}
+	public TransformerStatus getDeftInSvc(int ndx)
 	{
 		return TransformerStatus.fromCode(getSTAT(ndx));
 	}
-	public float getResistance1_2(int ndx) {return 0;}
-	public float getReactance1_2(int ndx)  {return 0;}
-	public float getResistance2_3(int ndx) {return 0;}
-	public float getReactance2_3(int ndx) {return 0;}
-	public float getResistance3_1(int ndx) {return 0;}
-	public float getReactance3_1(int ndx) {return 0;}
-	public float getWnd1Ratio(int ndx) throws PsseModelException
+	public float getDeftResistance1_2(int ndx) {return 0;}
+	public float getDeftReactance1_2(int ndx)  {return 0;}
+	public Complex getDeftZ100_1_2(int ndx) throws PsseModelException {return new Complex(getR100_1_2(ndx), getX100_1_2(ndx));}
+	public float getDeftResistance2_3(int ndx) {return 0;}
+	public float getDeftReactance2_3(int ndx) {return 0;}
+	public Complex getDeftZ100_2_3(int ndx) throws PsseModelException {return new Complex(getR100_2_3(ndx), getX100_2_3(ndx));}
+	public float getDeftResistance3_1(int ndx) {return 0;}
+	public float getDeftReactance3_1(int ndx) {return 0;}
+	public Complex getDeftZ100_3_1(int ndx) throws PsseModelException {return new Complex(getR100_3_1(ndx), getX100_3_1(ndx));}
+	public float getDeftWnd1Ratio(int ndx) throws PsseModelException
 	{
 		float wv1 = getWINDV1(ndx);
 		return (getCW(ndx)==2)?wv1/getBus1(ndx).getBASKV():wv1;
 	}
-	public float getWnd1NomKV(int ndx) throws PsseModelException
+	public float getDeftWnd1NomKV(int ndx) throws PsseModelException
 	{
 		float nv1 = getNOMV1(ndx);
 		return (nv1==0F)?getBus1(ndx).getBASKV():nv1;
 	}
-	public TransformerCtrlMode getCtrlMode1(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD1(ndx)));}
-	public boolean enableAutoCtrl1(int ndx) {return getCOD1(ndx) > 0;}
-	public Bus getCtrlBus1(int ndx) throws PsseModelException
+	public TransformerCtrlMode getDeftCtrlMode1(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD1(ndx)));}
+	public boolean getDeftAdjEnab1(int ndx) {return getCOD1(ndx) > 0;}
+	public Bus getDeftRegBus1(int ndx) throws PsseModelException
 	{
 		String cod = getCONT1(ndx);
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
 	}
-	public boolean ctrlOnWnd1(int ndx) {return getCONT1(ndx).charAt(0) == '-';}
-	public float getMaxRatio1(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD1(ndx), getBus1(ndx), getRMA1(ndx));}
-	public float getMinRatio1(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD1(ndx), getBus1(ndx), getRMI1(ndx));}
-	public float getMaxShift1(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD1(ndx), getRMA1(ndx));}
-	public float getMinShift1(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD1(ndx), getRMI1(ndx));}
-	public float getMaxVolt1(int ndx) throws PsseModelException {return voltLim(ndx, getCOD1(ndx), getVMA1(ndx));}   
-	public float getMinVolt1(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD1(ndx), getVMI1(ndx));}
-	public float getMaxReacPwr1(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
-	public float getMinReacPwr1(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD1(ndx), getVMI1(ndx));}
-	public float getMaxActvPwr1(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
-	public float getMinActvPwr1(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
-	public ImpCorrTbl getImpCorrTbl1(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB1(ndx)));}
+	public boolean getDeftCtrlTapSide1(int ndx) {return getCONT1(ndx).charAt(0) == '-';}
+	public float getDeftMaxRatio1(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD1(ndx), getBus1(ndx), getRMA1(ndx));}
+	public float getDeftMinRatio1(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD1(ndx), getBus1(ndx), getRMI1(ndx));}
+	public float getDeftMaxShift1(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD1(ndx), getRMA1(ndx));}
+	public float getDeftMinShift1(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD1(ndx), getRMI1(ndx));}
+	public float getDeftMaxVolt1(int ndx) throws PsseModelException {return voltLim(ndx, getCOD1(ndx), getVMA1(ndx));}   
+	public float getDeftMinVolt1(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD1(ndx), getVMI1(ndx));}
+	public float getDeftMaxReacPwr1(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
+	public float getDeftMinReacPwr1(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD1(ndx), getVMI1(ndx));}
+	public float getDeftMaxActvPwr1(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
+	public float getDeftMinActvPwr1(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
+	public ImpCorrTbl getDeftImpCorrTbl1(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB1(ndx)));}
 
-	public float getWnd2Ratio(int ndx) throws PsseModelException
+	public float getDeftWnd2Ratio(int ndx) throws PsseModelException
 	{
 		float wv2 = getWINDV2(ndx);
 		return (getCW(ndx)==2)?wv2/getBus2(ndx).getBASKV():wv2;
 	}
-	public float getWnd2NomKV(int ndx) throws PsseModelException
+	public float getDeftWnd2NomKV(int ndx) throws PsseModelException
 	{
 		float nv = getNOMV2(ndx);
 		return (nv==0F)?getBus2(ndx).getBASKV():nv;
 	}
-	public TransformerCtrlMode getCtrlMode2(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD2(ndx)));}
-	public boolean enableAutoCtrl2(int ndx) {return getCOD2(ndx) > 0;}
-	public Bus getCtrlBus2(int ndx) throws PsseModelException
+	public TransformerCtrlMode getDeftCtrlMode2(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD2(ndx)));}
+	public boolean getDeftAdjEnab2(int ndx) {return getCOD2(ndx) > 0;}
+	public Bus getDeftRegBus2(int ndx) throws PsseModelException
 	{
 		String cod = getCONT2(ndx);
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
 	}
-	public boolean ctrlOnWnd2(int ndx) {return getCONT2(ndx).charAt(0) == '-';}
-	public float getMaxRatio2(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD2(ndx), getBus2(ndx), getRMA2(ndx));}
-	public float getMinRatio2(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD2(ndx), getBus2(ndx), getRMI2(ndx));}
-	public float getMaxShift2(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD2(ndx), getRMA2(ndx));}
-	public float getMinShift2(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD2(ndx), getRMI2(ndx));}
-	public float getMaxVolt2(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD2(ndx), getVMA2(ndx));}   
-	public float getMinVolt2(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD2(ndx), getVMI2(ndx));}
-	public float getMaxReacPwr2(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
-	public float getMinReacPwr2(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD2(ndx), getVMI2(ndx));}
-	public float getMaxActvPwr2(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
-	public float getMinActvPwr2(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
-	public ImpCorrTbl getImpCorrTbl2(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB2(ndx)));}
+	public boolean getDeftCtrlTapSide2(int ndx) {return getCONT2(ndx).charAt(0) == '-';}
+	public float getDeftMaxRatio2(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD2(ndx), getBus2(ndx), getRMA2(ndx));}
+	public float getDeftMinRatio2(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD2(ndx), getBus2(ndx), getRMI2(ndx));}
+	public float getDeftMaxShift2(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD2(ndx), getRMA2(ndx));}
+	public float getDeftMinShift2(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD2(ndx), getRMI2(ndx));}
+	public float getDeftMaxVolt2(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD2(ndx), getVMA2(ndx));}   
+	public float getDeftMinVolt2(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD2(ndx), getVMI2(ndx));}
+	public float getDeftMaxReacPwr2(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
+	public float getDeftMinReacPwr2(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD2(ndx), getVMI2(ndx));}
+	public float getDeftMaxActvPwr2(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
+	public float getDeftMinActvPwr2(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
+	public ImpCorrTbl getDeftImpCorrTbl2(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB2(ndx)));}
 	
-	public float getWnd3Ratio(int ndx) throws PsseModelException
+	public float getDeftWnd3Ratio(int ndx) throws PsseModelException
 	{
 		float wv = getWINDV3(ndx);
 		return (getCW(ndx)==2)?wv/getBus3(ndx).getBASKV():wv;
 	}
-	public float getWnd3NomKV(int ndx) throws PsseModelException
+	public float getDeftWnd3NomKV(int ndx) throws PsseModelException
 	{
 		float nv = getNOMV3(ndx);
 		return (nv==0F)?getBus3(ndx).getBASKV():nv;
 	}
-	public TransformerCtrlMode getCtrlMode3(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD3(ndx)));}
-	public boolean enableAutoCtrl3(int ndx) {return getCOD3(ndx) > 0;}
-	public Bus getCtrlBus3(int ndx) throws PsseModelException
+	public TransformerCtrlMode getDeftCtrlMode3(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD3(ndx)));}
+	public boolean getDeftAdjEnab3(int ndx) {return getCOD3(ndx) > 0;}
+	public Bus getDeftRegBus3(int ndx) throws PsseModelException
 	{
 		String cod = getCONT3(ndx);
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
 	}
-	public boolean ctrlOnWnd3(int ndx) {return getCONT3(ndx).charAt(0) == '-';}
-	public float getMaxRatio3(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD3(ndx), getBus3(ndx), getRMA3(ndx));}
-	public float getMinRatio3(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD3(ndx), getBus3(ndx), getRMI3(ndx));}
-	public float getMaxShift3(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD3(ndx), getRMA3(ndx));}
-	public float getMinShift3(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD3(ndx), getRMI3(ndx));}
-	public float getMaxVolt3(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD3(ndx), getVMA3(ndx));}   
-	public float getMinVolt3(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD3(ndx), getVMI3(ndx));}
-	public float getMaxReacPwr3(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
-	public float getMinReacPwr3(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD3(ndx), getVMI3(ndx));}
-	public float getMaxActvPwr3(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
-	public float getMinActvPwr3(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
-	public ImpCorrTbl getImpCorrTbl3(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB3(ndx)));}
+	public boolean getDeftCtrlTapSide3(int ndx) {return getCONT3(ndx).charAt(0) == '-';}
+	public float getDeftMaxRatio3(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD3(ndx), getBus3(ndx), getRMA3(ndx));}
+	public float getDeftMinRatio3(int ndx) throws PsseModelException {return ratioLim(ndx, getCOD3(ndx), getBus3(ndx), getRMI3(ndx));}
+	public float getDeftMaxShift3(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD3(ndx), getRMA3(ndx));}
+	public float getDeftMinShift3(int ndx) throws PsseModelException {return shiftLim(ndx, getCOD3(ndx), getRMI3(ndx));}
+	public float getDeftMaxVolt3(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD3(ndx), getVMA3(ndx));}   
+	public float getDeftMinVolt3(int ndx) throws PsseModelException  {return voltLim(ndx, getCOD3(ndx), getVMI3(ndx));}
+	public float getDeftMaxReacPwr3(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
+	public float getDeftMinReacPwr3(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD3(ndx), getVMI3(ndx));}
+	public float getDeftMaxActvPwr3(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
+	public float getDeftMinActvPwr3(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
+	public ImpCorrTbl getDeftImpCorrTbl3(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB3(ndx)));}
 
 	
 	/* Raw methods */
@@ -290,7 +369,7 @@ public abstract class TransformerList<T extends Transformer>
 	public abstract OwnershipList<?> getOwnership(int ndx);
 
 
-	/* Default methods */
+	/* raw method defaults */
 	
 	public String getDeftK(int ndx) {return "0";}
 	public String getDeftCKT(int ndx) {return "1";}
