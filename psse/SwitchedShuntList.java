@@ -8,6 +8,12 @@ public abstract class SwitchedShuntList<T extends Bus> extends PsseBaseList<T>
 {
 	public SwitchedShuntList(PsseModel model) {super(model);}
 
+	public Bus getBus(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/* convenience methods */
 	
 
