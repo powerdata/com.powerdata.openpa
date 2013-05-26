@@ -23,21 +23,29 @@ public class SwitchedShunt extends BaseObject
 	/* Convenience methods */
 	/** Load bus (I) */ 
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	/** control mode */
+	public SwShuntCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}
+	
 	
 	/* Raw PSS/e methods */
 
 	/** bus number or name */
-//	public String getI() throws PsseModelException {return _list.getI(_ndx);}
-//	/** Control mode */
-//	public int getMODSW() throws PsseModelException {return _list.getMODSW(_ndx);}
-//	/** controlled upper limit either voltage or reactive power p.u. */
-//	public int getVSWHI() throws PsseModelException {return _list.getVSWHI(_ndx);}
-//	/** controlled lower limit either voltage or reactive power p.u. */
-//	public int getVSWLO() throws PsseModelException {return _list.getVSWLO(_ndx);}
-//	/** controlled bus */
-//	public String getSWREM() throws PsseModelException {return _list.getSWREM(_ndx);}
-//	/** percent of total MVAr required to hold bus voltage contributed by this shunt */
-//	public float getRMPCT()  throws PsseModelException {return _list.getRMPCT(_ndx);}
-//	public String getRMIDNT()  throws PsseModelException {return _list.getRMIDNT(_ndx);}
+	public String getI() throws PsseModelException {return _list.getI(_ndx);}
+	/** Control mode */
+	public int getMODSW() throws PsseModelException {return _list.getMODSW(_ndx);}
+	/** controlled upper limit either voltage or reactive power p.u. */
+	public int getVSWHI() throws PsseModelException {return _list.getVSWHI(_ndx);}
+	/** controlled lower limit either voltage or reactive power p.u. */
+	public int getVSWLO() throws PsseModelException {return _list.getVSWLO(_ndx);}
+	/** controlled bus */
+	public String getSWREM() throws PsseModelException {return _list.getSWREM(_ndx);}
+	/** percent of total MVAr required to hold bus voltage contributed by this shunt */
+	public float getRMPCT()  throws PsseModelException {return _list.getRMPCT(_ndx);}
+	/** Name of VSC dc line if bus is specified for control (MODSW = 4) */
+	public String getRMIDNT()  throws PsseModelException {return _list.getRMIDNT(_ndx);}
+	/** switched shunt admittance */
+	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
+	/** block information */
+	public SwitchedShuntBlockList<?> getBlocks() throws PsseModelException {return _list.getBlocks(_ndx);}
 	
 }
