@@ -8,6 +8,16 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 {
 	public BusList(PsseModel model) {super(model);}
 
+	/* Standard object retrieval */
+
+	/** Get a Bus by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new Bus(ndx,this); }
+	/** Get a Bus by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+	
 	/* convenience methods */
 	
 	public abstract BusTypeCode getBusType(int ndx) throws PsseModelException;

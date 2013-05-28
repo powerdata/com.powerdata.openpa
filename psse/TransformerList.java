@@ -102,6 +102,16 @@ public abstract class TransformerList<T extends Transformer>
 		return val;
 	}	
 	
+	/* Standard object retrieval */
+
+	/** Get a Transformer by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new Transformer(ndx,this); }
+	/** Get a Transformer by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+
 	/* convenience interface */
 	
 	public abstract Bus getBus1(int ndx) throws PsseModelException;

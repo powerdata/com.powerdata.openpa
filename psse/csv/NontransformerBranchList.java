@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.util.HashMap;
 
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.NontransformerBranch;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -17,7 +18,6 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 {
 	PsseModel _eq;
 	BusList _buses;
-	HashMap<String,Integer> _objIDtoNdx = new HashMap<String,Integer>();
 	int _size;
 	
 	String _i[],_j[],_ckt[];
@@ -49,7 +49,7 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 			_bj		= LoadArray.Float(branches,"BJ",this,"getDeftBJ");
 			_st		= LoadArray.Int(branches,"ST",this,"getDeftST");
 			_len	= LoadArray.Float(branches,"LEN",this,"getDeftLEN");
-			for(int i=0; i<_size; i++) _objIDtoNdx.put(getObjectID(i),i);
+			reindex();
 		}
 		catch(Exception e)
 		{
@@ -92,12 +92,6 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override
-	public NontransformerBranch get(String objectid)
-	{ 
-		Integer ndx = _objIDtoNdx.get(objectid);
-		return (ndx != null)?new NontransformerBranch(ndx,this):null;
-	}
-	@Override
 	public StringAttrib<NontransformerBranch> mapStringAttrib(String attribname) { return null; }
 	@Override
 	public FloatAttrib<NontransformerBranch> mapFloatAttrib(String attribname) { return null; }
@@ -105,8 +99,6 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	public IntAttrib<NontransformerBranch> mapIntAttrib(String attribname) { return null; }
 	@Override
 	public BooleanAttrib<NontransformerBranch> mapBooleanAttrib(String attribname) { return null; }
-	@Override
-	public NontransformerBranch get(int index) { return new NontransformerBranch(index,this); }
 	@Override
 	public int size() { return _size; }
 

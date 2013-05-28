@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 //TODO:  Implement class
-public abstract class ImpCorrTbl extends BaseObject
+public class ImpCorrTbl extends BaseObject
 {
 	protected ImpCorrTblList<?> _list;
 	
@@ -14,7 +14,4 @@ public abstract class ImpCorrTbl extends BaseObject
 
 	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
-
-	
-
 }

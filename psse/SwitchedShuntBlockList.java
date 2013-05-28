@@ -6,6 +6,16 @@ public abstract class SwitchedShuntBlockList<T extends SwitchedShuntBlock> exten
 {
 	public SwitchedShuntBlockList(PsseModel model) {super(model);}
 
+	/* Standard object retrieval */
+
+	/** Get a SwitchedShuntBlock by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new SwitchedShuntBlock(ndx,this); }
+	/** Get a SwitchedShuntBlock by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+
 	/* convenience methods */
 
 	public abstract float getShuntB(int ndx) throws PsseModelException;

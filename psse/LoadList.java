@@ -7,6 +7,16 @@ public abstract class LoadList<T extends Load> extends PsseBaseList<T>
 {
 	public LoadList(PsseModel model) {super(model);}
 
+	/* Standard object retrieval */
+
+	/** Get a Load by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new Load(ndx,this); }
+	/** Get a Load by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+
 	/* convenience methods */
 	
 	public abstract Bus getBus(int ndx) throws PsseModelException;

@@ -1,8 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.util.HashMap;
-
 import com.powerdata.openpa.psse.AreaInterchange;
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Owner;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -25,8 +24,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 {
 	/** parent container */
 	PsseModel _eq;
-	/** translate I to an offset */
-	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	/** number of items in the DB */
 	int _size;
 	/** object IDs (really just the bus number) */
@@ -56,8 +53,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 			_size	= buses.getRowCount();
 			_i		= buses.getInts("I");
 			_ids	= buses.get("I");
-			for(int i=0; i<_size; i++) _idToNdx.put(_ids[i], i);
-			this.getClass().getSuperclass();
 			_name	= LoadArray.String(buses,"NAME",this,"getDeftNAME");
 			_basekv	= LoadArray.Float(buses,"BASKV",this,"getDeftBASKV");
 			_ide	= LoadArray.Int(buses,"IDE",this,"getDeftIDE");
@@ -68,6 +63,8 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 			_va		= LoadArray.Float(buses,"VA",this,"getDeftVA");
 			_gl		= LoadArray.Float(buses,"GL",this,"getDeftGL");
 			_bl		= LoadArray.Float(buses,"BL",this,"getDeftBL");
+
+			reindex();
 			
 			if (_i == null)
 			{
@@ -104,12 +101,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
-	public Bus get(String id)
-	{
-		Integer ndx = _idToNdx.get(id);
-		return (ndx == null) ? null : get(ndx);
-	}
-	@Override
 	public StringAttrib<Bus> mapStringAttrib(String attribname) { return null; }
 	@Override
 	public FloatAttrib<Bus> mapFloatAttrib(String attribname) { return null; }
@@ -117,8 +108,6 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	public IntAttrib<Bus> mapIntAttrib(String attribname) { return null; }
 	@Override
 	public BooleanAttrib<Bus> mapBooleanAttrib(String attribname) { return null; }
-	@Override
-	public Bus get(int index) { return new Bus(index,this);	}
 	@Override
 	public int size() { return _size; }
 	@Override

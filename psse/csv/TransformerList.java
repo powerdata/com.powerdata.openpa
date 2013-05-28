@@ -6,6 +6,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.ImpCorrTbl;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerStatus;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -20,7 +21,6 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 {
 	PsseModel _eq;
 	BusList _buses;
-	HashMap<String,Integer> _objIDtoNdx = new HashMap<String,Integer>();
 	int _size;
 	
 	String _i[],_j[],_k[],_ckt[],_name[],_cont1[],_cont2[],_cont3[];
@@ -113,7 +113,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 			_cr3		= LoadArray.Float(xfr,"CR3",this,"getDeftCR3");
 			_cx3		= LoadArray.Float(xfr,"CX3",this,"getDeftCX3");
 			
-			for(int i=0; i<_size; i++) _objIDtoNdx.put(getObjectID(i),i);
+			reindex();
 		}
 		catch(Exception e)
 		{
@@ -277,12 +277,6 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 		return _i[ndx]+":"+_j[ndx]+":"+_k[ndx]+":"+_ckt[ndx];
 	}
 	@Override
-	public Transformer get(String objectid)
-	{
-		Integer ndx = _objIDtoNdx.get(objectid);
-		return (ndx != null)?new Transformer(ndx,this):null;
-	}
-	@Override
 	public StringAttrib<Transformer> mapStringAttrib(String attribname) { return null; }
 	@Override
 	public FloatAttrib<Transformer> mapFloatAttrib(String attribname) { return null; }
@@ -290,8 +284,6 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList<T
 	public IntAttrib<Transformer> mapIntAttrib(String attribname) { return null; }
 	@Override
 	public BooleanAttrib<Transformer> mapBooleanAttrib(String attribname) { return null; }
-	@Override
-	public Transformer get(int ndx) { return new Transformer(ndx,this); }
 	@Override
 	public int size() { return _size; }
 

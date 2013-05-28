@@ -13,6 +13,16 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 
 	public NontransformerBranchList(PsseModel model) {super(model);}
 
+	/* Standard object retrieval */
+
+	/** Get a NontransformerBranch by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new NontransformerBranch(ndx,this); }
+	/** Get a NontransformerBranch by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+
 	/* Convenience Methods */
 	
 	public abstract Bus getFromBus(int ndx) throws PsseModelException;

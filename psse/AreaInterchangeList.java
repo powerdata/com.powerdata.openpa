@@ -6,6 +6,15 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 {
 	public AreaInterchangeList(PsseModel model) {super(model);}
 
+	/* Standard object retrieval */
+	/** Get an AreaInterchange by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new AreaInterchange(ndx,this); }
+	/** Get an AreaInterchange by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+	
 	/* Convenience methods */
 	public abstract Bus getSlackBus(int ndx) throws PsseModelException;
 	public abstract float getIntExport(int ndx) throws PsseModelException;
@@ -31,7 +40,4 @@ public abstract class AreaInterchangeList<T extends AreaInterchange> extends Pss
 	public String getDeftARNAME(int ndx) throws PsseModelException {return "";}
 	public float getDeftPDES(int ndx) throws PsseModelException {return 0F;}
 	public float getDeftPTOL(int ndx) throws PsseModelException {return 10F;}
-
-	
-
 }

@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwitchedShuntList<T extends Bus> extends PsseBaseList<T>
+public abstract class SwitchedShuntList<T extends SwitchedShunt> extends PsseBaseList<T>
 {
 	public SwitchedShuntList(PsseModel model) {super(model);}
 
@@ -32,7 +32,16 @@ public abstract class SwitchedShuntList<T extends Bus> extends PsseBaseList<T>
 	}
 
 	
-	
+	/* Standard object retrieval */
+
+	/** Get a SwitchedShunt by it's index. */
+	@Override
+	@SuppressWarnings("unchecked")
+	public T get(int ndx) { return (T) new SwitchedShunt(ndx,this); }
+	/** Get a SwitchedShunt by it's ID. */
+	@Override
+	public T get(String id) { return super.get(id); }
+
 	/* convenience methods */
 	
 	public abstract Bus getBus(int ndx) throws PsseModelException;
