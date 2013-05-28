@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.util.HashMap;
-
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.NontransformerBranch;
 import com.powerdata.openpa.psse.OwnershipList;
