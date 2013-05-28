@@ -103,6 +103,25 @@ public class LinkNet implements Cloneable
 		return -1;
 	}
 	/**
+	 * Return all of the branches for a specific node.  This list
+	 * will be in the same order as the array of connected nodes
+	 * returned by findNodes().
+	 * @param node starting node.
+	 * @return array of branches.
+	 */
+	public int[] findBranches(int node)
+	{
+		int branches[] = new int[_cnt[node]];
+		int ndx = 0;
+		int end = _list[node];
+		while (end >= 0)
+		{
+			branches[ndx++] = end / 2;
+			end = _next[end];
+		}
+		return branches;
+	}
+	/**
 	 * Return an array of connected nodes.
 	 * @param node
 	 * @return
