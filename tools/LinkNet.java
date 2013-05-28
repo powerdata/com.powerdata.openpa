@@ -13,107 +13,124 @@ public class LinkNet implements Cloneable
 	protected int _list[] = new int[0];
 	/** next branch "end" */
 	protected int _next[] = new int[0];
-	/** Node index at far end of connection */
+	/** Bus index at far end of connection */
 	protected int _far[] = new int[0];
 	/** Number of branches so far */
 	protected int _brcnt = 0;
-	/** Number of connections for each node */
+	/** Number of connections for each bus */
 	protected int _cnt[] = new int[0];
-	protected int _maxnode = 0;
+	/** Maximum bus index plus 1 */
+	protected int _maxBusNdx = 0;
 	/**
-	 * Ensure that the arrays will accommodate the number of nodes and branches
+	 * Ensure there is enough storage for the number of buses and branches
 	 * specified.  The algorithm over sizes by a factor of 2 to reduce memory
-	 * allocation overhead.  This is something that could probably be tuned.
-	 * @param nodes
-	 * @param branches
+	 * allocation overhead.  This check will be performed automatically
+	 * as needed if the caller can not predict the sizes ahead of time.
+	 * 
+	 * @param maxBusNdx Maximum bus number to be used.
+	 * @param branchCount Maximum number of branches.
 	 */
-	public void ensureCapacity(int nodes, int branches)
+	public void ensureCapacity(int maxBusNdx, int branchCount)
 	{
-		if (nodes > _maxnode)
+		if (++maxBusNdx > _maxBusNdx)
 		{
-			_maxnode = nodes;
-			if (nodes >= _list.length)
+			_maxBusNdx = maxBusNdx;
+			if (maxBusNdx >= _list.length)
 			{
 				int l = _list.length;
-				_list = Arrays.copyOf(_list, nodes*2);
+				_list = Arrays.copyOf(_list, maxBusNdx*2);
 				Arrays.fill(_list, l, _list.length, Empty);
 				_cnt = Arrays.copyOf(_cnt, _list.length);
 			}
 		}
-		if (branches >= _next.length)
+		if (branchCount >= _next.length)
 		{
 			int l = _next.length;
-			_next = Arrays.copyOf(_next, branches*2);
+			_next = Arrays.copyOf(_next, branchCount*2);
 			Arrays.fill(_next, l, _next.length, Empty);
 			_far = Arrays.copyOf(_far, _next.length);
 			Arrays.fill(_far, l, _far.length, Empty);
 		}
 	}
-	
+	/**
+	 * Return the number of branches in the LinkNet.
+	 * @return Number of branches.
+	 */
 	public int getBranchCount() { return _brcnt; }
-	public int getMaxNode() { return _maxnode; }
+	/**
+	 * Return the maximum bus index used plus 1.
+	 * @return Maximum bus index number plus 1.
+	 */
+	public int getMaxBusNdx() { return _maxBusNdx; }
 	/**
 	 * Add a branch. Does not check if a branch already exists
 	 * 
-	 * @param pnode
-	 *            From node of branch
-	 * @param qnode
-	 *            To node of branch
+	 * @param fromBusNdx
+	 *            From bus index of branch
+	 * @param toBusNdx
+	 *            To bus index of branch
 	 * @return branch index
 	 */
-	public int addBranch(int pnode, int qnode)
+	public int addBranch(int fromBusNdx, int toBusNdx)
 	{
 		int endp = (_brcnt++) * 2;
 		int endq = endp + 1;
 
-		ensureCapacity(Math.max(pnode, qnode),endq);
+		ensureCapacity(Math.max(fromBusNdx, toBusNdx),endq);
 		
-		_next[endp] = _list[pnode];
-		_list[pnode] = endp;
+		_next[endp] = _list[fromBusNdx];
+		_list[fromBusNdx] = endp;
 
-		_next[endq] = _list[qnode];
-		_list[qnode] = endq;
+		_next[endq] = _list[toBusNdx];
+		_list[toBusNdx] = endq;
 		
-		_far[endp] = qnode;
-		_far[endq] = pnode;
+		_far[endp] = toBusNdx;
+		_far[endq] = fromBusNdx;
 		
-		++(_cnt[pnode]);
-		++(_cnt[qnode]);
+		++(_cnt[fromBusNdx]);
+		++(_cnt[toBusNdx]);
 
 		return endp / 2;
 	}
 
 	/**
-	 * Look for a branch between the two nodes. Will return the first found
+	 * Look for a branch between the two buses. Will return the first found
 	 * 
-	 * @param pnode
-	 * @param qnode
+	 * @param fromBusNdx From bus index
+	 * @param toBusNdx   To bus index
 	 * @return first branch found or -1 if not found. Does not indicate if more
 	 *         than one parallel branch exist
 	 */
-	public int findBranch(int pnode, int qnode)
+	public int findBranch(int fromBusNdx, int toBusNdx)
 	{
-		int end = _list[pnode];
+		int end = _list[fromBusNdx];
 		while (end >= 0)
 		{
 			int far = _far[end];
-			if (far == qnode) return end / 2;
+			if (far == toBusNdx) return end / 2;
 			end = _next[end];
 		}
 		return -1;
 	}
 	/**
-	 * Return all of the branches for a specific node.  This list
-	 * will be in the same order as the array of connected nodes
-	 * returned by findNodes().
-	 * @param node starting node.
-	 * @return array of branches.
+	 * Return the number of connections for a bus.
+	 * @param busNdx
+	 * @return Number of connections.
 	 */
-	public int[] findBranches(int node)
+	public int getConnectionCount(int busNdx) { return _cnt[busNdx]; }
+	/**
+	 * Return all of the branches for a specific bus.  This list
+	 * will be in the same order as the array of connected buses
+	 * returned by findBuses().
+	 * 
+	 * @param busNdx Starting bus.
+	 * @return Array of branches.
+	 */
+	public int[] findBranches(int busNdx)
 	{
-		int branches[] = new int[_cnt[node]];
+		int branches[] = new int[_cnt[busNdx]];
 		int ndx = 0;
-		int end = _list[node];
+		int end = _list[busNdx];
 		while (end >= 0)
 		{
 			branches[ndx++] = end / 2;
@@ -122,100 +139,92 @@ public class LinkNet implements Cloneable
 		return branches;
 	}
 	/**
-	 * Return an array of connected nodes.
-	 * @param node
-	 * @return
+	 * Return the buses connected to the specified bus.
+	 * @param busNdx Bus to find connections for.
+	 * @return Array of connected buses.
 	 */
-	public int[] findNodes(int node)
+	public int[] findBuses(int busNdx)
 	{
-		int nodes[] = new int[_cnt[node]];
+		int buses[] = new int[_cnt[busNdx]];
 		int ndx = 0;
-		int end = _list[node];
+		int end = _list[busNdx];
 		while (end >= 0)
 		{
 			int far = _far[end];
 			if (far >= 0)
 			{
-				nodes[ndx++] = far;
+				buses[ndx++] = far;
 			}
 			end = _next[end];
 		}
-		return nodes;
+		return buses;
 	}
 	/**
-	 * Return an array of all valid nodes.  This array will omit any
-	 * undefined nodes.
-	 * @return array of nodes
+	 * Return an array of all valid bus indexes.  This array will omit any
+	 * undefined bus indexes.
+	 * @return array of bus indexes.
 	 */
-	public int[] getNodes()
+	public int[] getAllBuses()
 	{
-		int nodes[] = new int[_maxnode+1];
-		int nofs = 0;
-		for(int i=0; i<nodes.length; i++)
+		int buses[] = new int[_maxBusNdx+1];
+		int bofs = 0;
+		for(int i=0; i<buses.length; i++)
 		{
-			if (_list[i] > -1) nodes[nofs++] = i;
+			if (_list[i] > -1) buses[bofs++] = i;
 		}
-		return Arrays.copyOf(nodes, nofs);
+		return Arrays.copyOf(buses, bofs);
 	}
 	/**
-	 * Return the nodes for a branch.
+	 * Return the buses for a branch.
 	 * @param br
-	 * @return array of two nodes
+	 * @return array of two buses
 	 */
-	public int[] getNodesForBranch(int br)
+	public int[] getBusesForBranch(int br)
 	{
 		int endq = br*2;
 		int endp = endq+1;
 		return new int[] {_far[endp],_far[endq]};
 	}
-	/**
-	 * Return an array of counts for every possible node.
-	 * @return
-	 */
-	public int[] getConnectionCounts()
-	{
-		return _cnt;
-	}
 
 	/**
-	 * Determine all connected groups of nodes.  
-	 * @return two dim array[group][nodes]
+	 * Determine all connected groups of buses.
+	 * @return two dimensional array[group][buses]
 	 */
 	public int[][] findGroups()
 	{
-		int ncnt = getNodeCapacity();
+		int bcnt = getMaxBusNdx();
 		/** create a very simple stack */
-		int stack[] = new int[ncnt];
+		int stack[] = new int[bcnt];
 		int stackptr = 0;
-		/** track how many nodes are remaining */
-		int nrem = ncnt;
-		/** mark each node that has been seen */
-		boolean used[] = new boolean[ncnt];
+		/** track how many buses are remaining */
+		int brem = bcnt;
+		/** mark each bus that has been seen */
+		boolean used[] = new boolean[bcnt];
 		int usedndx = 0;
-		/** map node to an island */
-		int nodeIslandMap[] = new int[ncnt];
-		Arrays.fill(nodeIslandMap, Empty);
-		/** track how many nodes are in each island */
-		int islandCounts[] = new int[ncnt];
+		/** map bus to an island */
+		int busIslandMap[] = new int[bcnt];
+		Arrays.fill(busIslandMap, Empty);
+		/** track how many buses are in each island */
+		int islandCounts[] = new int[bcnt];
 		/** number of islands found */
 		int nisland = 0;
 		
-		while (nrem > 0)
+		while (brem > 0)
 		{
 			// start out with a new island
-			while(used[usedndx] && usedndx < ncnt) ++usedndx;
-			int nextnode  = usedndx;
-			stack[stackptr++] = nextnode;
+			while(used[usedndx] && usedndx < bcnt) ++usedndx;
+			int nextbus  = usedndx;
+			stack[stackptr++] = nextbus;
 			used[usedndx] = true;
 			boolean valid = false;
 			while(stackptr > 0)
 			{
-				--nrem;
+				--brem;
 				int p = stack[--stackptr];
 				int end = _list[p];
 				if (end < 0) break;
 				valid = true;
-				nodeIslandMap[p] = nisland;
+				busIslandMap[p] = nisland;
 				islandCounts[nisland] += 1;
 				while (end >= 0)
 				{
@@ -235,24 +244,15 @@ public class LinkNet implements Cloneable
 		int iofs[] = new int[nisland];
 		int islands[][] = new int[nisland][];
 		for(int i=0; i<nisland; i++) islands[i] = new int[islandCounts[i]];
-		for(int i=0; i<ncnt; i++)
+		for(int i=0; i<bcnt; i++)
 		{
-			int indx = nodeIslandMap[i];
+			int indx = busIslandMap[i];
 			if (indx >= 0) islands[indx][iofs[indx]++] = i;
 		}
 		return islands;
 	}
 	/**
-	 * Return the maximum node number used.  The resulting system may
-	 * be sparse, so this may not be exactly the node count.
-	 * @return
-	 */
-	public int getNodeCapacity()
-	{
-		return _maxnode+1;
-	}
-	/**
-	 * Remove a node from service.
+	 * Remove a branch from service.
 	 * @param brofs
 	 * @param eliminate
 	 */
@@ -284,9 +284,11 @@ public class LinkNet implements Cloneable
 			}
 		}
 	}
-
+	/**
+	 * Creates and returns a copy of this object.
+	 */
 	@Override
-	public Object clone() throws CloneNotSupportedException
+	protected Object clone() throws CloneNotSupportedException
 	{
 		LinkNet rv = (LinkNet) super.clone();
 		rv._far = _far.clone();
@@ -295,12 +297,12 @@ public class LinkNet implements Cloneable
 		rv._cnt = _cnt.clone();
 		return rv;	
 	}
-
+	/*
 	public LinkNet copyOf()
 	{
 		LinkNet rv = new LinkNet();
 		rv._brcnt = _brcnt;
-		int nnode = getNodeCapacity();
+		int nnode = getMaxNode();
 		int nend = _brcnt*2;
 		rv.ensureCapacity(nnode,_brcnt);
 		
@@ -311,7 +313,7 @@ public class LinkNet implements Cloneable
 		
 		return rv;
 	}
-	
+	*/
 	/**
 	 * Just for unit testing.
 	 * @param args
@@ -321,39 +323,44 @@ public class LinkNet implements Cloneable
 		try
 		{			
 			LinkNet ln = new LinkNet();
+			ln.ensureCapacity(500000, 50000);
 			//ln.addBranch(1, 2);
 			//ln.addBranch(3, 4);
 			//ln.addBranch(3, 5);
 			// get some test data and load it in
-			SimpleCSV csv = new SimpleCSV("testdata/branches.csv");
+			SimpleCSV eqcsv = new SimpleCSV("testdata/db/Branches.csv");
 			
-			int eqa[] = new int[csv.getRowCount()];
-			int eqb[] = new int[csv.getRowCount()];
+			int eqa[] = eqcsv.getInts("I");
+			int eqb[] = eqcsv.getInts("J");
 			
-			for(int r=0; r<csv.getRowCount(); r++)
-			{
-				eqa[r] = Integer.parseInt(csv.get("EQA", r));
-				eqb[r] = Integer.parseInt(csv.get("EQB", r));
-			}
+			SimpleCSV xfrcsv = new SimpleCSV("testdata/db/Transformers.csv");
+			
+			int xfri[] = xfrcsv.getInts("I");
+			int xfrj[] = xfrcsv.getInts("J");
+			int xfrk[] = xfrcsv.getInts("K");
 			
 			long st = System.currentTimeMillis();
-			for(int r=0; r<csv.getRowCount(); r++)
+			int count = eqa.length;
+			for(int r=0; r<count; r++) { ln.addBranch(eqa[r], eqb[r]); }
+			count = xfri.length;
+			for(int r=0; r<count; r++)
 			{
-				ln.addBranch(eqa[r], eqb[r]);
+				ln.addBranch(xfri[r], xfrj[r]);
+				if (xfrk[r] != 0) ln.addBranch(xfri[r], xfrk[r]);
 			}
 			long ft = System.currentTimeMillis();
-			System.out.println("Time to load "+eqa.length+" branches: "+(ft-st)+"ms");
+			System.out.println("Time to load "+(eqa.length+xfri.length)+" branches: "+(ft-st)+"ms");
 			
 			st = System.currentTimeMillis();
-			int nodes[] = ln.getNodes();
+			int buses[] = ln.getAllBuses();
 			ft = System.currentTimeMillis();
-			System.out.println("Time to get all branches: "+(ft-st)+"ms");
+			System.out.println("Time to get all buses: "+(ft-st)+"ms");
 
-			for(int i=0; i<nodes.length; i++)
+			for(int i=0; i<buses.length; i++)
 			{
-				int node = nodes[i];
-				System.out.print("Node "+node+":");
-				for(int n : ln.findNodes(node)) System.out.print(" "+n);
+				int b = buses[i];
+				System.out.print("Bus "+b+":");
+				for(int n : ln.findBuses(b)) System.out.print(" "+n);
 				System.out.println("");
 			}
 			st = System.currentTimeMillis();
