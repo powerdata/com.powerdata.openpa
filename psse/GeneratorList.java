@@ -30,7 +30,12 @@ public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 	/* convenience defaults */
 	
 	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
-	public Bus getDeftRemoteRegBus(int ndx) throws PsseModelException {return _model.getBus(getIREG(ndx));}
+	public Bus getDeftRemoteRegBus(int ndx) throws PsseModelException
+	{
+		String ireg = getIREG(ndx);
+		return (ireg.equals("0")) ? getBus(ndx) : 
+			_model.getBus(ireg);
+	}
 	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}
 	public float getDeftActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPG(ndx));}
 	public float getDeftReacPwr(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQG(ndx));}

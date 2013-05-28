@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.PComplex;
 
 public class SwitchedShunt extends BaseObject
 {
@@ -25,6 +23,18 @@ public class SwitchedShunt extends BaseObject
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** control mode */
 	public SwShuntCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}
+	/** controlled voltage upper limit (VSWLO) */
+	public float getVoltHighLim() throws PsseModelException {return _list.getVoltHighLim(_ndx);}
+	/** controlled voltage lower limit (VSWHI) */
+	public float getVoltLowLim() throws PsseModelException {return _list.getVoltLowLim(_ndx);}
+	/** controlled reactive power upper limit (VSWLO) */
+	public float getQHighLim() throws PsseModelException {return _list.getQHighLim(_ndx);}
+	/** controlled reactive power lower limit (VSWHI) */
+	public float getQLowLim() throws PsseModelException {return _list.getQLowLim(_ndx);}
+	/** get regulated bus */
+	public Bus getRegBus() throws PsseModelException {return _list.getRegBus(_ndx);}
+	/** get initial susceptance per-unit */
+	public float getInitB() throws PsseModelException {return _list.getInitB(_ndx);}
 	
 	
 	/* Raw PSS/e methods */

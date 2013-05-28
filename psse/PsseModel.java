@@ -23,5 +23,6 @@ public abstract class PsseModel
 	abstract public ZoneList<?> getZones() throws PsseModelException;
 	abstract public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException;
 	abstract public LoadList<?> getLoads() throws PsseModelException;
+	abstract public SwitchedShuntList<?> getSwitchedShunts() throws PsseModelException;
 }
 
