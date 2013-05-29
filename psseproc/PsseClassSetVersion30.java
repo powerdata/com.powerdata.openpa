@@ -4,10 +4,8 @@ public class PsseClassSetVersion30 extends PsseClassSetVersion0
 {
 	private static final int		VersionMajor	= 30;
 	public static final PsseClass	Transformer30	= new PsseTransformerClass();
-	public static final PsseClass	SwitchedShunt30	= new PsseClass(
-															"SwitchedShunt");
-	public static final PsseClass	FACTSDevice30	= new PsseClass(
-															"FACTSDevice");
+	public static final PsseClass	SwitchedShunt30	= new PsseClass("SwitchedShunt");
+	public static final PsseClass	FACTSDevice30	= new PsseClass("FACTSDevice");
 
 	static
 	{
@@ -166,4 +164,11 @@ public class PsseClassSetVersion30 extends PsseClassSetVersion0
 		return VersionMajor;
 	}
 
+	@Override
+	public PsseClass getTransformer() {return Transformer30;}
+	@Override
+	public PsseClass getSwitchedShunt() {return SwitchedShunt30;}
+	@Override
+	public PsseClass getFACTSDevice() {return FACTSDevice30;}
+	
 }

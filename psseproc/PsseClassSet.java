@@ -31,4 +31,27 @@ public abstract class PsseClassSet
 	
 	public abstract PsseClass[] getPsseClasses();
 	public abstract int getVersionMajor();
+	
+	public abstract PsseClass getBus();
+	public abstract PsseClass getLoad();
+	public abstract PsseClass getGenerator();
+	public abstract PsseClass getNontransformerBranch();
+	public abstract PsseClass getTransformer();
+	public abstract PsseClass getAreaInterchange();
+	public abstract PsseClass getTwoTermDCLine();
+	public abstract PsseClass getVSC_DCLine();
+	public abstract PsseClass getSwitchedShunt();
+	public abstract PsseClass getTxImpedanceCorrection();
+	/** AC Converter Records - inner record for Multi Terminal DC Lines */
+	public abstract PsseClass getMultiTermDC_ACConv();
+	/** DC Bus Records - inner record for Multi Terminal DC Lines */
+	public abstract PsseClass getMultiTermDCBus();
+	/** DC Link Records - inner record for Multi Terminal DC Lines */
+	public abstract PsseClass getMultiTermDCLink();
+	public abstract PsseClass getMultiTermDCLine();
+	public abstract PsseClass getMultiSectionLine();
+	public abstract PsseClass getZone();
+	public abstract PsseClass getInterAreaTransfer();
+	public abstract PsseClass getOwner();
+	public abstract PsseClass getFACTSDevice();
 }

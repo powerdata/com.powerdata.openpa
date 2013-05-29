@@ -6,6 +6,8 @@ package com.powerdata.openpa.psseproc;
  */
 public interface PsseRecWriter
 {
-	public void writeRecord(PsseClass pclass, String[] record, PsseClassSet cset)
+	public void writeRecord(PsseClass pclass, String[] record)
 			throws PsseProcException;
+	
+	public abstract void cleanup();
 }

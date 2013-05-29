@@ -101,7 +101,10 @@ public class PsseClass
 //		return rv; 
 //	}
 
-	public String[] readRecord(LineNumberReader rdr) throws PsseProcException
+	protected String readLine(LineNumberReader r) throws IOException {return r.readLine().trim();}
+	
+	public void processRecords(LineNumberReader rdr, PsseRecWriter wrtr,
+			PsseClassSet cset) throws PsseProcException
 	{
 		List<PsseField[]> lines = getLines();
 		int nfld = 0;
@@ -111,29 +114,36 @@ public class PsseClass
 
 		try
 		{
-			String l = rdr.readLine().trim();
-			if (isRecord(l))
+			String l = readLine(rdr);
+			while(isRecord(l))
 			{
 				rv = new String[nfld];
 				int rvofs = 0;
 				int iline = 0;
-				while (hasMoreLines(iline, rv))
+				while (l != null)
 				{
 					PsseField[] pl = lines.get(iline++);
-					int endofs = rvofs + pl.length;
-					StringParse sp = parseLine(l);
-					while (sp.hasMoreTokens())
-						rv[rvofs++] = sp.nextToken().trim();
-					Arrays.fill(rv, rvofs, endofs, "");
-					rvofs = endofs;
-					l = rdr.readLine().trim();
+					rvofs = loadTokens(rv, pl, l, rvofs);
+					l = hasMoreLines(iline, rv) ? readLine(rdr) : null;
 				}
+				l = readLine(rdr);
 			}
 		} catch (IOException ex)
 		{
 			throw new PsseProcException(ex);
 		}
-		return rv;
+		wrtr.writeRecord(this, rv);
+	}
+	
+	protected int loadTokens(String[] rec, PsseField[] pl, String l, int rvofs)
+	{
+		int endofs = rvofs + pl.length;
+		StringParse sp = parseLine(l);
+		while (sp.hasMoreTokens())
+			rec[rvofs++] = sp.nextToken().trim();
+		Arrays.fill(rec, rvofs, endofs, "");
+		return endofs;
+		
 	}
 	
 	protected boolean hasMoreLines(int lineno, String[] vals) {return lineno < _lines.size();}

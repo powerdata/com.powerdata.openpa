@@ -11,27 +11,28 @@ package com.powerdata.openpa.psseproc;
 
 public class PsseClassSetVersion0 extends PsseClassSet
 {
-	public static final PsseClass		Bus									= new PsseClass("Bus");
-	public static final PsseClass		Load								= new PsseClass("Load");
-	public static final PsseClass		Generator							= new PsseClass("Generator");
-	public static final PsseClass		NontransformerBranch				= new PsseClass("NontransformerBranch");
-	public static final PsseClass		Transformer							= new PsseTransformerClass();
-	public static final PsseClass		AreaInterchange						= new PsseClass("AreaInterchange");
-	public static final PsseClass		TwoTerminalDCLine					= new PsseClass("TwoTerminalDCLine");
-	public static final PsseClass		VoltageSourceConverterDCLine		= new PsseClass(
-																			    "VoltageSourceConverterDCLine");
-	public static final PsseClass		SwitchedShunt						= new PsseClass("SwitchedShunt");
-	public static final PsseClass		TransformerImpedanceCorrectionTable	= new PsseClass(
-																				"TransformerImpedanceCorrectionTable");
-	public static final PsseClass		MultiTermACConv						= new PsseClass("MultiTermACConv");
-	public static final PsseClass		MultiTermDCBus						= new PsseClass("MultiTermDCBus");
-	public static final PsseClass		MultiTermDCLink						= new PsseClass("MultiTermDCLink");
-	public static final PsseClass		MultiTerminalDCLine					= new PsseClass("MultiTerminalDCLine");
-	public static final PsseClass		MultiSectionLine					= new PsseClass("MultiSectionLine");
-	public static final PsseClass		Zone								= new PsseClass("Zone");
-	public static final PsseClass		InterAreaTransfer					= new PsseClass("InterAreaTransfer");
-	public static final PsseClass		Owner								= new PsseClass("Owner");
-	public static final PsseClass		FACTSDevice							= new PsseClass("FACTSDevice");
+	public static final PsseClass		Bus						= new PsseClass("Bus");
+	public static final PsseClass		Load					= new PsseClass("Load");
+	public static final PsseClass		Generator				= new PsseClass("Generator");
+	public static final PsseClass		NontransformerBranch	= new PsseClass("NontransformerBranch");
+	public static final PsseClass		Transformer				= new PsseTransformerClass();
+	public static final PsseClass		AreaInterchange			= new PsseClass("AreaInterchange");
+	public static final PsseClass		TwoTerminalDCLine		= new PsseClass("TwoTerminalDCLine");
+	public static final PsseClass		VSC_DCLine				= new PsseClass("VSC_DCLine");
+	public static final PsseClass		SwitchedShunt			= new PsseClass("SwitchedShunt");
+	public static final PsseClass		TxImpedanceCorrection	= new PsseClass("TxImpedanceCorrection");
+	public static final PsseClass		MultiTermDCLine			= new PsseClass("MultiTermDCLine");
+	/** AC Converter Records - inner record for Multi Terminal DC Lines */
+	public static final PsseClass		MultiTermDC_ACConv		= new PsseClass("MultiTermDC_ACConv");
+	/** DC Bus Records - inner record for Multi Terminal DC Lines */
+	public static final PsseClass		MultiTermDCBus			= new PsseClass("MultiTermDCBus");
+	/** DC Link Records - inner record for Multi Terminal DC Lines */
+	public static final PsseClass		MultiTermDCLink			= new PsseClass("MultiTermDCLink");
+	public static final PsseClass		MultiSectionLine		= new PsseClass("MultiSectionLine");
+	public static final PsseClass		Zone					= new PsseClass("Zone");
+	public static final PsseClass		InterAreaTransfer		= new PsseClass("InterAreaTransfer");
+	public static final PsseClass		Owner					= new PsseClass("Owner");
+	public static final PsseClass		FACTSDevice				= new PsseClass("FACTSDevice");
 	
 	static
 	{
@@ -244,7 +245,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("XCAPI", PsseFieldType.Float) });
 
 		
-		VoltageSourceConverterDCLine.addLine(new PsseField[] {
+		VSC_DCLine.addLine(new PsseField[] {
 			new PsseField("NAME", PsseFieldType.String),
 			new PsseField("MDC", PsseFieldType.Integer),
 			new PsseField("RDC", PsseFieldType.Float),
@@ -257,7 +258,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("O4", PsseFieldType.Integer),
 			new PsseField("F4", PsseFieldType.Float) });
 
-		VoltageSourceConverterDCLine.addLine(new PsseField[] {
+		VSC_DCLine.addLine(new PsseField[] {
 			new PsseField("IBUS1", PsseFieldType.String),
 			new PsseField("TYPE1", PsseFieldType.Integer),
 			new PsseField("MODE1", PsseFieldType.Integer),
@@ -274,7 +275,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("REMOT1", PsseFieldType.String),
 			new PsseField("RMPCT1", PsseFieldType.Float) });
 
-		VoltageSourceConverterDCLine.addLine(new PsseField[] {
+		VSC_DCLine.addLine(new PsseField[] {
 			new PsseField("IBUS2", PsseFieldType.String),
 			new PsseField("TYPE2", PsseFieldType.Integer),
 			new PsseField("MODE2", PsseFieldType.Integer),
@@ -318,7 +319,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("B8", PsseFieldType.Float) });
 
 
-		TransformerImpedanceCorrectionTable.addLine(new PsseField[] {
+		TxImpedanceCorrection.addLine(new PsseField[] {
 			new PsseField("I", PsseFieldType.Integer),
 			new PsseField("T1", PsseFieldType.Float),
 			new PsseField("F1", PsseFieldType.Float),
@@ -343,7 +344,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("T11", PsseFieldType.Float),
 			new PsseField("F11", PsseFieldType.Float) });
 
-		MultiTermACConv.addLine(new PsseField[] {
+		MultiTermDC_ACConv.addLine(new PsseField[] {
 			new PsseField("IB", PsseFieldType.String),
 			new PsseField("N", PsseFieldType.Integer),
 			new PsseField("ANGMX", PsseFieldType.Float),
@@ -378,7 +379,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("RDC", PsseFieldType.Float),
 			new PsseField("LDC", PsseFieldType.Float) });
 	
-		MultiTerminalDCLine.addLine(new PsseField[] {
+		MultiTermDCLine.addLine(new PsseField[] {
 			new PsseField("I", PsseFieldType.Integer),
 			new PsseField("NCONV", PsseFieldType.Integer),
 			new PsseField("NDCBS", PsseFieldType.Integer),
@@ -440,23 +441,53 @@ public class PsseClassSetVersion0 extends PsseClassSet
 	private static final PsseClass[] ClassList = new PsseClass[]
 	{
 		Bus, Load, Generator, NontransformerBranch, Transformer, AreaInterchange,
-		TwoTerminalDCLine, VoltageSourceConverterDCLine, SwitchedShunt,
-		TransformerImpedanceCorrectionTable, MultiTerminalDCLine, MultiSectionLine,
+		TwoTerminalDCLine, VSC_DCLine, SwitchedShunt,
+		TxImpedanceCorrection, MultiTermDCLine, MultiSectionLine,
 		Zone, InterAreaTransfer, Owner, FACTSDevice
 	};
 	
 	private static final int VersionMajor = 0;
 	
 	@Override
-	public PsseClass[] getPsseClasses()
-	{
-		return ClassList.clone();
-	}
-
+	public PsseClass[] getPsseClasses() {return ClassList.clone();}
 	@Override
-	public int getVersionMajor()
-	{
-		return VersionMajor;
-	}
-
+	public int getVersionMajor() {return VersionMajor;}
+	@Override
+	public PsseClass getBus() {return Bus;}
+	@Override
+	public PsseClass getLoad() {return Load;}
+	@Override
+	public PsseClass getGenerator() {return Generator;}
+	@Override
+	public PsseClass getNontransformerBranch() {return NontransformerBranch;}
+	@Override
+	public PsseClass getTransformer() {return Transformer;}
+	@Override
+	public PsseClass getAreaInterchange() {return AreaInterchange;}
+	@Override
+	public PsseClass getTwoTermDCLine() {return TwoTerminalDCLine;}
+	@Override
+	public PsseClass getVSC_DCLine() {return VSC_DCLine;}
+	@Override
+	public PsseClass getSwitchedShunt() {return SwitchedShunt;}
+	@Override
+	public PsseClass getTxImpedanceCorrection() {return TxImpedanceCorrection;}
+	@Override
+	public PsseClass getMultiTermDC_ACConv() {return MultiTermDC_ACConv;}
+	@Override
+	public PsseClass getMultiTermDCBus() {return MultiTermDCBus;}
+	@Override
+	public PsseClass getMultiTermDCLink() {return MultiTermDCLink;}
+	@Override
+	public PsseClass getMultiTermDCLine() {return MultiTermDCLine;}
+	@Override
+	public PsseClass getMultiSectionLine() {return MultiSectionLine;}
+	@Override
+	public PsseClass getZone() {return Zone;}
+	@Override
+	public PsseClass getInterAreaTransfer() {return InterAreaTransfer;}
+	@Override
+	public PsseClass getOwner() {return Owner;}
+	@Override
+	public PsseClass getFACTSDevice() {return FACTSDevice;}
 }

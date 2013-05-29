@@ -7,8 +7,11 @@ public class PsseTransformerClass extends PsseClass
 	@Override
 	protected boolean hasMoreLines(int lineno, String[] vals)
 	{
+		if (lineno < 5) return true;
+		if (lineno > 5) return false;
 		String k = vals[2];
-		return (lineno < 4 || (!k.isEmpty() && !k.equals("0")));
+		boolean dammit = !k.isEmpty() && !k.equals("0");
+		return !k.isEmpty() && !k.equals("0");
 	}
 
 	
