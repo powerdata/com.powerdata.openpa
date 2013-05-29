@@ -155,7 +155,7 @@ public class SimpleCSV
 			}
 			else if (_colNames[i].length() > 0)
 			{
-				System.out.println("WARNING: Duplicate column name ignored: "+_colNames[i]);
+				//System.out.println("WARNING: Duplicate column name ignored: "+_colNames[i]);
 			}
 		}
 	}
