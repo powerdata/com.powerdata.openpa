@@ -5,12 +5,12 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 
 /**
- * Provide a starting point to process a pss/e file.
+ * Provide a starting point to process a pss/e file.  Subclass and provide appropriate writers for specific applications
  * 
  * @author chris@powerdata.com
  * 
  */
-public class PsseProcessor
+public abstract class PsseProcessor
 {
 	protected PsseHeader		_hdr;
 	protected LineNumberReader	_rdr;
@@ -37,13 +37,18 @@ public class PsseProcessor
 
 	public PsseHeader getHeader() {return _hdr;}
 	
-	public PsseClassSet getClassSet() {return _cset;}
+	public PsseClassSet getPsseClassSet() {return _cset;}
 	
-	public void process(PsseRecordProc p) throws PsseProcException, IOException
+	public void process() throws PsseProcException, IOException
 	{
-		for (PsseClass pc : _cset.getClasses())
+		for (PsseClass pc : getPsseClassSet().getPsseClasses())
 		{
-			pc.processRecords(_rdr, p, null, null);
+			PsseRecWriter w = getWriter(pc.getClassName());
+			w.writeRecord(pc, pc.readRecord(_rdr), _cset);
 		}
 	}
+
+	protected abstract PsseRecWriter getWriter(String psseClassName);
+
+	
 }

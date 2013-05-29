@@ -29,6 +29,6 @@ public abstract class PsseClassSet
 		return rv;
 	}
 	
-	public abstract PsseClass[] getClasses();
+	public abstract PsseClass[] getPsseClasses();
 	public abstract int getVersionMajor();
 }
