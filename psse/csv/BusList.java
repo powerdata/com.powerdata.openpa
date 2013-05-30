@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.AreaInterchange;
+import com.powerdata.openpa.psse.Area;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Owner;
@@ -20,7 +20,7 @@ import com.powerdata.openpa.tools.StringAttrib;
  * 
  * @author marck
  */
-public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
+public class BusList extends com.powerdata.openpa.psse.BusList
 {
 	/** parent container */
 	PsseModel _eq;
@@ -113,7 +113,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList<Bus>
 	@Override
 	public BusTypeCode getBusType(int ndx) throws PsseModelException { return getDeftBusType(ndx); }
 	@Override
-	public AreaInterchange getAreaObject(int ndx) throws PsseModelException
+	public Area getAreaObject(int ndx) throws PsseModelException
 	{
 		return getDeftAreaObject(ndx);
 	}

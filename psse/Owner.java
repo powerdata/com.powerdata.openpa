@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public class Owner extends BaseObject
 {
-	protected OwnerList<?> _list;
+	protected OwnerList _list;
 	
-	public Owner(int ndx, OwnerList<?> list)
+	public Owner(int ndx, OwnerList list)
 	{
 		super(ndx);
 		_list = list;

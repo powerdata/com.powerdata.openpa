@@ -6,9 +6,9 @@ import com.powerdata.openpa.tools.PComplex;
 
 public class Bus extends BaseObject
 {
-	protected BusList<?> _list;
+	protected BusList _list;
 	
-	public Bus(int ndx, BusList<?> list)
+	public Bus(int ndx, BusList list)
 	{
 		super(ndx);
 		_list = list;
@@ -25,7 +25,7 @@ public class Bus extends BaseObject
 	/** enumerated IDE code */
 	public BusTypeCode getBusType() throws PsseModelException {return _list.getBusType(_ndx);}
 	/** Area */
-	public AreaInterchange getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
+	public Area getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
 	/** Zone */
 	public Zone getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */

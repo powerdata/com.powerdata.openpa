@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class LoadList<T extends Load> extends PsseBaseList<T>
+public abstract class LoadList extends PsseBaseList<Load>
 {
 	public LoadList(PsseModel model) {super(model);}
 
@@ -11,17 +11,16 @@ public abstract class LoadList<T extends Load> extends PsseBaseList<T>
 
 	/** Get a Load by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new Load(ndx,this); }
+	public Load get(int ndx) { return new Load(ndx,this); }
 	/** Get a Load by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public Load get(String id) { return super.get(id); }
 
 	/* convenience methods */
 	
 	public abstract Bus getBus(int ndx) throws PsseModelException;
 	public abstract boolean getInSvc(int ndx) throws PsseModelException;
-	public abstract AreaInterchange getAreaObj(int ndx) throws PsseModelException;
+	public abstract Area getAreaObj(int ndx) throws PsseModelException;
 	public abstract Zone getZoneObj(int ndx) throws PsseModelException;
 	public abstract float getActvPwr(int ndx) throws PsseModelException;
 	public abstract float getReacPwr(int ndx) throws PsseModelException;
@@ -38,7 +37,7 @@ public abstract class LoadList<T extends Load> extends PsseBaseList<T>
 	
 	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
 	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
-	public AreaInterchange getDeftAreaObj(int ndx) throws PsseModelException {return _model.getAreas().get(String.valueOf(getAREA(ndx)));}
+	public Area getDeftAreaObj(int ndx) throws PsseModelException {return _model.getAreas().get(String.valueOf(getAREA(ndx)));}
 	public Zone getDeftZoneObj(int ndx) throws PsseModelException  {return _model.getZones().get(String.valueOf(getZONE(ndx)));}
 	public float getDeftActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPL(ndx));}
 	public float getDeftReacPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getQL(ndx));}

@@ -15,7 +15,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class TransformerList extends com.powerdata.openpa.psse.TransformerList<Transformer>
+public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 {
 	PsseModel _eq;
 	BusList _buses;

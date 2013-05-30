@@ -2,8 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
 
-public abstract class TransformerList<T extends Transformer> 
-	extends PsseBaseList<T>
+public abstract class TransformerList extends PsseBaseList<Transformer>
 {
 	public TransformerList(PsseModel model) {super(model);}
 
@@ -106,11 +105,10 @@ public abstract class TransformerList<T extends Transformer>
 
 	/** Get a Transformer by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new Transformer(ndx,this); }
+	public Transformer get(int ndx) { return new Transformer(ndx,this); }
 	/** Get a Transformer by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public Transformer get(String id) { return super.get(id); }
 
 	/* convenience interface */
 	

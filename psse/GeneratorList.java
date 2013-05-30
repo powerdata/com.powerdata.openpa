@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
+public abstract class GeneratorList extends PsseBaseList<Generator>
 {
 	public GeneratorList(PsseModel model) {super(model);}
 	
@@ -11,11 +11,10 @@ public abstract class GeneratorList<T extends Generator> extends PsseBaseList<T>
 
 	/** Get a Generator by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new Generator(ndx,this); }
+	public Generator get(int ndx) { return new Generator(ndx,this); }
 	/** Get a Generator by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public Generator get(String id) { return super.get(id); }
 
 	/* convenience methods */
 

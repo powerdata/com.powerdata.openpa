@@ -14,15 +14,15 @@ public abstract class PsseModel
 	}
 	
 	abstract public String getContainerName();
-	abstract public BusList<?> getBuses() throws PsseModelException;
-	abstract public GeneratorList<?> getGenerators() throws PsseModelException;
-	abstract public NontransformerBranchList<?> getNontransformerBranches() throws PsseModelException;
-	abstract public TransformerList<?> getTransformers() throws PsseModelException;
-	abstract public OwnerList<?> getOwners() throws PsseModelException;
-	abstract public AreaInterchangeList<?> getAreas() throws PsseModelException;
-	abstract public ZoneList<?> getZones() throws PsseModelException;
-	abstract public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException;
-	abstract public LoadList<?> getLoads() throws PsseModelException;
-	abstract public SwitchedShuntList<?> getSwitchedShunts() throws PsseModelException;
+	abstract public BusList getBuses() throws PsseModelException;
+	abstract public GeneratorList getGenerators() throws PsseModelException;
+	abstract public LineList getNontransformerBranches() throws PsseModelException;
+	abstract public TransformerList getTransformers() throws PsseModelException;
+	abstract public OwnerList getOwners() throws PsseModelException;
+	abstract public AreaList getAreas() throws PsseModelException;
+	abstract public ZoneList getZones() throws PsseModelException;
+	abstract public ImpCorrTblList getImpCorrTables() throws PsseModelException;
+	abstract public LoadList getLoads() throws PsseModelException;
+	abstract public SwitchedShuntList getSwitchedShunts() throws PsseModelException;
 }
 

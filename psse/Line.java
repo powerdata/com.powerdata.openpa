@@ -1,15 +1,14 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.psse.NontransformerBranchList.MeteredEnd;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class NontransformerBranch extends BaseObject
+public class Line extends BaseObject
 {
 
-	protected NontransformerBranchList<?> _list;
+	protected LineList _list;
 	
-	public NontransformerBranch(int ndx, NontransformerBranchList<?> list)
+	public Line(int ndx, LineList list)
 	{
 		super(ndx);
 		_list = list;
@@ -33,7 +32,7 @@ public class NontransformerBranch extends BaseObject
 	/** To-side bus */
 	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	/** Get "metered" end */
-	public MeteredEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
+	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** resistance in p.u. on 100MVA base */

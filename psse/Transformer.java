@@ -5,9 +5,9 @@ import com.powerdata.openpa.tools.Complex;
 
 public class Transformer extends BaseObject
 {
-	protected TransformerList<?> _list;
+	protected TransformerList _list;
 	
-	public Transformer(int ndx, TransformerList<?> list)
+	public Transformer(int ndx, TransformerList list)
 	{
 		super(ndx);
 		_list = list;

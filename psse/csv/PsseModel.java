@@ -2,12 +2,12 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 
-import com.powerdata.openpa.psse.AreaInterchangeList;
+import com.powerdata.openpa.psse.AreaList;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Generator;
 import com.powerdata.openpa.psse.ImpCorrTblList;
 import com.powerdata.openpa.psse.LoadList;
-import com.powerdata.openpa.psse.NontransformerBranch;
+import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.OwnerList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchedShuntList;
@@ -21,7 +21,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	
 	GeneratorList _generatorList;
 	BusList _buses;
-	NontransformerBranchList _branchList;
+	LineList _branchList;
 	TransformerList _transformerList;
 	
 	public PsseModel(String dirpath)
@@ -44,9 +44,9 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		return _generatorList;
 	}
 	@Override
-	public NontransformerBranchList getNontransformerBranches() throws PsseModelException
+	public LineList getNontransformerBranches() throws PsseModelException
 	{
-		if (_branchList == null) _branchList = new NontransformerBranchList(this);
+		if (_branchList == null) _branchList = new LineList(this);
 		return _branchList;
 	}
 	@Override
@@ -56,25 +56,25 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		return _transformerList;
 	}
 	@Override
-	public ImpCorrTblList<?> getImpCorrTables() throws PsseModelException
+	public ImpCorrTblList getImpCorrTables() throws PsseModelException
 	{
 		return null;
 	}
 	@Override
-	public LoadList<?> getLoads() throws PsseModelException
+	public LoadList getLoads() throws PsseModelException
 	{
 		return null;
 	}
 	@Override
-	public OwnerList<?> getOwners() throws PsseModelException { return null; }
+	public OwnerList getOwners() throws PsseModelException { return null; }
 	@Override
-	public AreaInterchangeList<?> getAreas() throws PsseModelException { return null; }
+	public AreaList getAreas() throws PsseModelException { return null; }
 	@Override
-	public ZoneList<?> getZones() throws PsseModelException { return null; }
+	public ZoneList getZones() throws PsseModelException { return null; }
 	@Override
 	public float getSBASE() {return getDeftSBASE();}
 	@Override
-	public SwitchedShuntList<?> getSwitchedShunts() throws PsseModelException
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
 	{
 		return null;
 	}
@@ -82,7 +82,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	{
 		try
 		{
-			PsseModel eq = new PsseModel("testdata/db");
+			PsseModel eq = new PsseModel("/tmp/caiso/");
 			for(Bus b : eq.getBuses())
 			{
 				System.out.println(b);
@@ -91,7 +91,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			{
 				System.out.println(g);
 			}
-			for(NontransformerBranch b : eq.getNontransformerBranches())
+			for(Line b : eq.getNontransformerBranches())
 			{
 				System.out.println(b);
 			}

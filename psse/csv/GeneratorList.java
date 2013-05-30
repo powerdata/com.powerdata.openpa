@@ -12,7 +12,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList<Generator>
+public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 {
 	PsseModel _eq;
 	BusList _buses;

@@ -3,31 +3,24 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class NontransformerBranchList<T extends NontransformerBranch> 
-	extends PsseBaseList<T>
+public abstract class LineList extends PsseBaseList<Line>
 {
-	public enum MeteredEnd
-	{
-		From, To;
-	}
-
-	public NontransformerBranchList(PsseModel model) {super(model);}
+	public LineList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a NontransformerBranch by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new NontransformerBranch(ndx,this); }
+	public Line get(int ndx) { return new Line(ndx,this); }
 	/** Get a NontransformerBranch by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public Line get(String id) { return super.get(id); }
 
 	/* Convenience Methods */
 	
 	public abstract Bus getFromBus(int ndx) throws PsseModelException;
 	public abstract Bus getToBus(int ndx)  throws PsseModelException;
-	public abstract MeteredEnd getMeteredEnd(int ndx) throws PsseModelException;
+	public abstract LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException;
 	public abstract boolean getInSvc(int ndx) throws PsseModelException;
 	public abstract float getR100(int ndx) throws PsseModelException;
 	public abstract float getX100(int ndx) throws PsseModelException;
@@ -49,11 +42,11 @@ public abstract class NontransformerBranchList<T extends NontransformerBranch>
 		return _model.getBus((!j.isEmpty()&&j.charAt(0)=='-')?
 			j.substring(1):j); 
 	}
-	public MeteredEnd getDeftMeteredEnd(int ndx) throws PsseModelException
+	public LineMeterEnd getDeftMeteredEnd(int ndx) throws PsseModelException
 	{
 		String j = getJ(ndx);
 		return (!j.isEmpty() && j.charAt(0) == '-') ? 
-			MeteredEnd.To : MeteredEnd.From;
+			LineMeterEnd.To : LineMeterEnd.From;
 	}
 	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
 	public float getDeftR100(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getR(ndx), _model.getSBASE());}

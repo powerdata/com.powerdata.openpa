@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public class Zone extends BaseObject
 {
-	protected ZoneList<?> _list;
+	protected ZoneList _list;
 	
-	public Zone(int ndx, ZoneList<?> list)
+	public Zone(int ndx, ZoneList list)
 	{
 		super(ndx);
 		_list = list;

@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public class SwitchedShunt extends BaseObject
 {
-	protected SwitchedShuntList<?> _list;
+	protected SwitchedShuntList _list;
 	
-	public SwitchedShunt(int ndx, SwitchedShuntList<?> list)
+	public SwitchedShunt(int ndx, SwitchedShuntList list)
 	{
 		super(ndx);
 		_list = list;

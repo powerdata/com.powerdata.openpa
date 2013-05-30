@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.NontransformerBranch;
+import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -12,7 +12,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class NontransformerBranchList extends com.powerdata.openpa.psse.NontransformerBranchList<NontransformerBranch>
+public class LineList extends com.powerdata.openpa.psse.LineList
 {
 	PsseModel _eq;
 	BusList _buses;
@@ -23,7 +23,7 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	int _st[];
 	float _len[];
 	
-	public NontransformerBranchList(PsseModel eq) throws PsseModelException
+	public LineList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -90,13 +90,13 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override
-	public StringAttrib<NontransformerBranch> mapStringAttrib(String attribname) { return null; }
+	public StringAttrib<Line> mapStringAttrib(String attribname) { return null; }
 	@Override
-	public FloatAttrib<NontransformerBranch> mapFloatAttrib(String attribname) { return null; }
+	public FloatAttrib<Line> mapFloatAttrib(String attribname) { return null; }
 	@Override
-	public IntAttrib<NontransformerBranch> mapIntAttrib(String attribname) { return null; }
+	public IntAttrib<Line> mapIntAttrib(String attribname) { return null; }
 	@Override
-	public BooleanAttrib<NontransformerBranch> mapBooleanAttrib(String attribname) { return null; }
+	public BooleanAttrib<Line> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 
@@ -105,7 +105,7 @@ public class NontransformerBranchList extends com.powerdata.openpa.psse.Nontrans
 	@Override
 	public Bus getToBus(int ndx) throws PsseModelException {return getDeftToBus(ndx);}
 	@Override
-	public com.powerdata.openpa.psse.NontransformerBranchList.MeteredEnd getMeteredEnd(
+	public com.powerdata.openpa.psse.LineMeterEnd getMeteredEnd(
 			int ndx) throws PsseModelException
 	{
 		return getDeftMeteredEnd(ndx);

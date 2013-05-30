@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.PComplex;
 
-public abstract class BusList<T extends Bus> extends PsseBaseList<T>
+public abstract class BusList extends PsseBaseList<Bus>
 {
 	public BusList(PsseModel model) {super(model);}
 
@@ -12,16 +12,15 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 
 	/** Get a Bus by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new Bus(ndx,this); }
+	public Bus get(int ndx) { return new Bus(ndx,this); }
 	/** Get a Bus by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public Bus get(String id) { return super.get(id); }
 	
 	/* convenience methods */
 	
 	public abstract BusTypeCode getBusType(int ndx) throws PsseModelException;
-	public abstract AreaInterchange getAreaObject(int ndx) throws PsseModelException;
+	public abstract Area getAreaObject(int ndx) throws PsseModelException;
 	public abstract Zone getZoneObject(int ndx) throws PsseModelException;
 	public abstract Owner getOwnerObject(int ndx) throws PsseModelException;
 	public abstract float getShuntG(int ndx) throws PsseModelException;
@@ -34,7 +33,7 @@ public abstract class BusList<T extends Bus> extends PsseBaseList<T>
 	/* convenience defaults */
 	
 	public BusTypeCode getDeftBusType(int ndx) throws PsseModelException {return BusTypeCode.fromCode(getIDE(ndx));}
-	public AreaInterchange getDeftAreaObject(int ndx) throws PsseModelException
+	public Area getDeftAreaObject(int ndx) throws PsseModelException
 	{
 		return _model.getAreas().get(getAREA(ndx));
 	}

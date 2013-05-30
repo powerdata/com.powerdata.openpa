@@ -99,8 +99,6 @@ public class Psse2CSV extends PsseProcessor
 		if (spsse != null)
 		{
 			psse = new File(spsse);
-			if (!psse.isAbsolute())
-				psse = new File(cwd, spsse);
 		}
 		else
 		{

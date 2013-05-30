@@ -6,9 +6,9 @@ import com.powerdata.openpa.tools.Complex;
 public class Generator extends BaseObject
 {
 
-	protected GeneratorList<?> _list;
+	protected GeneratorList _list;
 	
-	public Generator(int ndx, GeneratorList<?> list)
+	public Generator(int ndx, GeneratorList list)
 	{
 		super(ndx);
 		_list = list;

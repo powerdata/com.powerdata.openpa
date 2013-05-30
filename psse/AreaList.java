@@ -2,18 +2,17 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class AreaInterchangeList<T extends AreaInterchange> extends PsseBaseList<T>
+public abstract class AreaList extends PsseBaseList<Area>
 {
-	public AreaInterchangeList(PsseModel model) {super(model);}
+	public AreaList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 	/** Get an AreaInterchange by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new AreaInterchange(ndx,this); }
+	public Area get(int ndx) { return new Area(ndx,this); }
 	/** Get an AreaInterchange by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public Area get(String id) { return super.get(id); }
 	
 	/* Convenience methods */
 	public abstract Bus getSlackBus(int ndx) throws PsseModelException;

@@ -5,9 +5,9 @@ import com.powerdata.openpa.tools.Complex;
 
 public class Load extends BaseObject
 {
-	protected LoadList<?> _list;
+	protected LoadList _list;
 	
-	public Load(int ndx, LoadList<?> list)
+	public Load(int ndx, LoadList list)
 	{
 		super(ndx);
 		_list = list;
@@ -29,7 +29,7 @@ public class Load extends BaseObject
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** get Area Interchange record */
-	public AreaInterchange getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
+	public Area getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
 	/** get Zone record */
 	public Zone getZoneObj() throws PsseModelException {return _list.getZoneObj(_ndx);}
 	/** base active power of (PL) constant MVA load */
