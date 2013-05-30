@@ -1,4 +1,4 @@
-package com.powerdata.openpa.psseproc;
+package com.powerdata.openpa.pssecvt;
 
 public abstract class PsseClassSet
 {
