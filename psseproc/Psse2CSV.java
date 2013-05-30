@@ -78,6 +78,7 @@ public class Psse2CSV extends PsseProcessor
 		Psse2CSV p2c = new Psse2CSV(rpsse, sversion, outdir);
 		
 		PsseHeader hdr = p2c.getHeader();
+		System.out.println("Loading File: "+psse);
 		System.out.println("Change Code: "+hdr.getChangeCode());
 		System.out.println("System Base MVA: "+hdr.getSystemBaseMVA());
 		System.out.format("Case Time: %tc\n", hdr.getCaseTime());
@@ -155,6 +156,7 @@ class PsseCSVWriter implements PsseRecWriter
 					if (quote) out.print(_QuoteChar);
 				}
 			}
+			out.println();
 		} catch (IOException ioe)
 		{
 			throw new PsseProcException(ioe);
@@ -177,6 +179,19 @@ class PsseCSVWriter implements PsseRecWriter
 		{
 			File f = new File(_dir, clname+".csv");
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(f)));
+			int irec=0;
+			for (PsseField[] line : pc.getLines())
+			{
+				for (PsseField fld : line)
+				{
+					if (irec++ > 0) pw.print(_FldDelim);
+					pw.print(_QuoteChar);
+					pw.print(fld.getName());
+					pw.print(_QuoteChar);
+				}
+				
+			}
+			pw.println();
 			_fmap.put(clname, pw);
 		}
 		return pw;
