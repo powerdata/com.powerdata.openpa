@@ -21,7 +21,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 	public static final PsseClass		VSC_DCLine				= new PsseClass("VSC_DCLine");
 	public static final PsseClass		SwitchedShunt			= new PsseClass("SwitchedShunt");
 	public static final PsseClass		TxImpedanceCorrection	= new PsseClass("TxImpedanceCorrection");
-	public static final PsseClass		MultiTermDCLine			= new PsseClass("MultiTermDCLine");
+	public static final PsseClass		MultiTermDCLine			= new MultiTerminalDCLine();
 	/** AC Converter Records - inner record for Multi Terminal DC Lines */
 	public static final PsseClass		MultiTermDC_ACConv		= new PsseClass("MultiTermDC_ACConv");
 	/** DC Bus Records - inner record for Multi Terminal DC Lines */
@@ -345,6 +345,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("F11", PsseFieldType.Float) });
 
 		MultiTermDC_ACConv.addLine(new PsseField[] {
+			new PsseField("MTDCLNUM", PsseFieldType.Integer),
 			new PsseField("IB", PsseFieldType.String),
 			new PsseField("N", PsseFieldType.Integer),
 			new PsseField("ANGMX", PsseFieldType.Float),
@@ -363,6 +364,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("CNVCOD", PsseFieldType.Integer) });
 
 		MultiTermDCBus.addLine(new PsseField[] {
+			new PsseField("MTDCLNUM", PsseFieldType.Integer),
 			new PsseField("IDC", PsseFieldType.Integer),
 			new PsseField("IB", PsseFieldType.String),
 			new PsseField("IA", PsseFieldType.Integer),
@@ -373,6 +375,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 			new PsseField("OWNER", PsseFieldType.Integer) });
 	
 		MultiTermDCLink.addLine(new PsseField[] {
+			new PsseField("MTDCLNUM", PsseFieldType.Integer),
 			new PsseField("IDC", PsseFieldType.Integer),
 			new PsseField("JDC", PsseFieldType.Integer),
 			new PsseField("DCCKT", PsseFieldType.String),

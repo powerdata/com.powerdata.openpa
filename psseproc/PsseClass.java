@@ -63,7 +63,7 @@ public class PsseClass
 				while (l != null)
 				{
 					PsseField[] pl = lines.get(iline++);
-					rvofs = loadTokens(rv, pl, l, rvofs);
+					rvofs = loadTokens(rv, 0, pl, l, rvofs);
 					l = hasLine(iline, rv) ? readLine(rdr) : null;
 					Arrays.fill(rv, rvofs, rv.length, "");
 				}
@@ -76,8 +76,9 @@ public class PsseClass
 		}
 	}
 	
-	protected int loadTokens(String[] rec, PsseField[] pl, String l, int rvofs)
+	protected int loadTokens(String[] rec, int recstart, PsseField[] pl, String l, int rvofs)
 	{
+		rvofs += recstart;
 		int endofs = rvofs + pl.length;
 		StringParse sp = parseLine(l);
 		while (sp.hasMoreTokens())

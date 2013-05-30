@@ -17,7 +17,7 @@ public class PsseField
 	@Override
 	public String toString()
 	{
-		return _name;
+		return String.format("%s [%s]", getName(), getType());
 	}
 	
 	
