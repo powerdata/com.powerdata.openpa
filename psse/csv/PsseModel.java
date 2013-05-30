@@ -30,8 +30,6 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	}
 	public File getDir() { return _dir; }
 	@Override
-	public String getContainerName() { return "PsseEquipment"; }
-	@Override
 	public BusList getBuses() throws PsseModelException
 	{
 		if (_buses == null) _buses = new BusList(this);
@@ -104,5 +102,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println("ERROR: "+e);
 		}
+	}
+	@Override
+	public String getGroupName() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

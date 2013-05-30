@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse;
 
-public abstract class PsseModel
+public abstract class PsseModel implements Group
 {
 	/** get system base MVA */
 	public abstract float getSBASE();
@@ -13,16 +13,16 @@ public abstract class PsseModel
 		return getBuses().get(id);
 	}
 	
-	abstract public String getContainerName();
-	abstract public BusList getBuses() throws PsseModelException;
-	abstract public GeneratorList getGenerators() throws PsseModelException;
-	abstract public LineList getNontransformerBranches() throws PsseModelException;
-	abstract public TransformerList getTransformers() throws PsseModelException;
-	abstract public OwnerList getOwners() throws PsseModelException;
-	abstract public AreaList getAreas() throws PsseModelException;
-	abstract public ZoneList getZones() throws PsseModelException;
-	abstract public ImpCorrTblList getImpCorrTables() throws PsseModelException;
-	abstract public LoadList getLoads() throws PsseModelException;
-	abstract public SwitchedShuntList getSwitchedShunts() throws PsseModelException;
+//	abstract public String getContainerName();
+//	abstract public BusList getBuses() throws PsseModelException;
+//	abstract public GeneratorList getGenerators() throws PsseModelException;
+//	abstract public LineList getNontransformerBranches() throws PsseModelException;
+//	abstract public TransformerList getTransformers() throws PsseModelException;
+//	abstract public OwnerList getOwners() throws PsseModelException;
+//	abstract public AreaList getAreas() throws PsseModelException;
+//	abstract public ZoneList getZones() throws PsseModelException;
+//	abstract public ImpCorrTblList getImpCorrTables() throws PsseModelException;
+//	abstract public LoadList getLoads() throws PsseModelException;
+//	abstract public SwitchedShuntList getSwitchedShunts() throws PsseModelException;
 }
 

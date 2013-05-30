@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class Area extends BaseObject
+public class Area extends BaseObject implements Group
 {
 	protected AreaList _list;
 	
@@ -43,5 +43,29 @@ public class Area extends BaseObject
 	public float getPTOL() throws PsseModelException {return _list.getPTOL(_ndx);}
 	/** Alphanumeric identifier assigned to area */
 	public String getARNAME() throws PsseModelException {return _list.getARNAME(_ndx);}
+
+	/* Lists relevant to group */
 	
+	@Override
+	public String getGroupName() throws PsseModelException {return getARNAME();}
+	@Override
+	public BusList getBuses() throws PsseModelException {return _list.getBuses();}
+	@Override
+	public GeneratorList getGenerators() throws PsseModelException {return _list.getGenerators();}
+	@Override
+	public LineList getNontransformerBranches() throws PsseModelException {return _list.getLines();}
+	@Override
+	public TransformerList getTransformers() throws PsseModelException {return _list.getTransformers();}
+	@Override
+	public OwnerList getOwners() throws PsseModelException {return _list.getOwners();}
+	@Override
+	public AreaList getAreas() throws PsseModelException {return _list.getAreas();}
+	@Override
+	public ZoneList getZones() throws PsseModelException {return _list.getZones();}
+	@Override
+	public ImpCorrTblList getImpCorrTables() throws PsseModelException {return _list.getImpCorrTables();}
+	@Override
+	public LoadList getLoads() throws PsseModelException {return _list.getLoads();}
+	@Override
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return _list.getSwitchedShunts();}
 }
