@@ -2,7 +2,7 @@ package com.powerdata.openpa.psseproc;
 
 public abstract class PsseClassSet
 {
-	private static final int MaxConfigVerMajor = 30;
+	public static final int MaxConfigVerMajor = 30;
 	
 	public static PsseClassSet GetClassSetForVersion(String version) throws PsseProcException
 	{
