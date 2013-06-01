@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse;
 
-public abstract class PsseModel implements Group
+public abstract class PsseModel implements BaseGroup
 {
 	/** get system base MVA */
 	public abstract float getSBASE();
@@ -13,16 +13,27 @@ public abstract class PsseModel implements Group
 		return getBuses().get(id);
 	}
 	
-//	abstract public String getContainerName();
-//	abstract public BusList getBuses() throws PsseModelException;
-//	abstract public GeneratorList getGenerators() throws PsseModelException;
-//	abstract public LineList getNontransformerBranches() throws PsseModelException;
-//	abstract public TransformerList getTransformers() throws PsseModelException;
-//	abstract public OwnerList getOwners() throws PsseModelException;
-//	abstract public AreaList getAreas() throws PsseModelException;
-//	abstract public ZoneList getZones() throws PsseModelException;
-//	abstract public ImpCorrTblList getImpCorrTables() throws PsseModelException;
-//	abstract public LoadList getLoads() throws PsseModelException;
-//	abstract public SwitchedShuntList getSwitchedShunts() throws PsseModelException;
+	public abstract ImpCorrTblList getImpCorrTables() throws PsseModelException;
+	public abstract AreaList getAreas() throws PsseModelException;
+	public abstract OwnerList getOwners() throws PsseModelException;
+	public abstract ZoneList getZones() throws PsseModelException;
+	
+	
+	@Override
+	public IslandList getIslands() throws PsseModelException {return new IslandList(this);}
+	@Override
+	public GroupList getGroup(String type) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String[] getGroupTypes()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }
 

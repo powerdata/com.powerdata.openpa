@@ -1,16 +1,9 @@
 package com.powerdata.openpa.psse;
 
-public interface Group
+import com.powerdata.openpa.tools.BaseObject;
+
+public abstract class Group extends BaseObject implements BaseGroup
 {
-	public String getGroupName() throws PsseModelException;
-	public BusList getBuses() throws PsseModelException;
-	public GeneratorList getGenerators() throws PsseModelException;
-	public LineList getNontransformerBranches() throws PsseModelException;
-	public TransformerList getTransformers() throws PsseModelException;
-	public OwnerList getOwners() throws PsseModelException;
-	public AreaList getAreas() throws PsseModelException;
-	public ZoneList getZones() throws PsseModelException;
-	public ImpCorrTblList getImpCorrTables() throws PsseModelException;
-	public LoadList getLoads() throws PsseModelException;
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException;
+	public Group(int ndx) {super(ndx);}
+	
 }

@@ -76,7 +76,7 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public abstract float getRMPCT(int ndx)throws PsseModelException;
 	public abstract String getRMIDNT(int ndx)throws PsseModelException;
 	public abstract float getBINIT(int ndx)throws PsseModelException;
-	public abstract SwitchedShuntBlockList<?> getBlocks(int ndx)throws PsseModelException;
+	public abstract SwShuntBlkList<?> getBlocks(int ndx)throws PsseModelException;
 
 
 	/* defaults */

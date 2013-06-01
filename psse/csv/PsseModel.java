@@ -42,7 +42,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		return _generatorList;
 	}
 	@Override
-	public LineList getNontransformerBranches() throws PsseModelException
+	public LineList getLines() throws PsseModelException
 	{
 		if (_branchList == null) _branchList = new LineList(this);
 		return _branchList;
@@ -54,28 +54,20 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		return _transformerList;
 	}
 	@Override
-	public ImpCorrTblList getImpCorrTables() throws PsseModelException
-	{
-		return null;
-	}
+	public LoadList getLoads() throws PsseModelException {return null;} //TODO:
 	@Override
-	public LoadList getLoads() throws PsseModelException
-	{
-		return null;
-	}
+	public OwnerList getOwners() throws PsseModelException { return null; } //TODO:
 	@Override
-	public OwnerList getOwners() throws PsseModelException { return null; }
+	public AreaList getAreas() throws PsseModelException { return null; } //TODO:
 	@Override
-	public AreaList getAreas() throws PsseModelException { return null; }
-	@Override
-	public ZoneList getZones() throws PsseModelException { return null; }
+	public ZoneList getZones() throws PsseModelException { return null; } //TODO:
 	@Override
 	public float getSBASE() {return getDeftSBASE();}
 	@Override
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
-	{
-		return null;
-	}
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return null;} //TODO:
+	@Override
+	public ImpCorrTblList getImpCorrTables() throws PsseModelException {return null;} //TODO:
+	
 	static public void main(String args[])
 	{
 		try
@@ -89,7 +81,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			{
 				System.out.println(g);
 			}
-			for(Line b : eq.getNontransformerBranches())
+			for(Line b : eq.getLines())
 			{
 				System.out.println(b);
 			}
@@ -103,10 +95,4 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			System.out.println("ERROR: "+e);
 		}
 	}
-	@Override
-	public String getGroupName() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}	
 }

@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class SwitchedShuntBlock extends BaseObject
+public class SwShuntBlk extends BaseObject
 {
-	protected SwitchedShuntBlockList<?> _list;
+	protected SwShuntBlkList<?> _list;
 	
-	public SwitchedShuntBlock(int ndx, SwitchedShuntBlockList<?> list)
+	public SwShuntBlk(int ndx, SwShuntBlkList<?> list)
 	{
 		super(ndx);
 		_list = list;
@@ -17,7 +17,7 @@ public class SwitchedShuntBlock extends BaseObject
 	
 	/* convenience methods */
 	
-	/** per-unit admittance of each step (B) */
+	/** per-unit susceptance of each step (B) */
 	public float getShuntB() throws PsseModelException {return _list.getShuntB(_ndx);}
 	
 	
