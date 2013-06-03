@@ -24,16 +24,13 @@ public abstract class PsseModel implements BaseGroup
 	@Override
 	public GroupList getGroup(String type) throws PsseModelException
 	{
-		// TODO Auto-generated method stub
+		//TODO:
 		return null;
+		
 	}
 	@Override
-	public String[] getGroupTypes()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String[] getGroupTypes() {return GroupType.values();}
 	
-	
-}
+}	
+
 

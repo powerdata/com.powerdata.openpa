@@ -2,9 +2,16 @@ package com.powerdata.openpa.psse;
 
 public class GroupType
 {
-	public static final String	Area			= "AREA";
-	public static final String	Zone			= "ZONE";
-	public static final String	Owner			= "OWNER";
-	public static final String	Station			= "STATION";
-	public static final String	VoltageLevel	= "VOLTLEV";
+	protected static final String[] GrpType = new String[]
+			{"AREA", "ZONE", "OWNER", "STATION", "VOLTLEV"};
+
+	public static final String	Area			= GrpType[0];
+	public static final String	Zone			= GrpType[1];
+	public static final String	Owner			= GrpType[2];
+	public static final String	Station			= GrpType[3];
+	public static final String	VoltageLevel	= GrpType[4];
+	
+	public static String[] values() {return GrpType;}
+	
+	
 }
