@@ -7,44 +7,24 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class IslandList extends PsseBaseList<Island>
 {
-
-	public IslandList(PsseModel model) { super(model); }
-
-	@Override
-	public String getObjectID(int ndx)
+	public IslandList(PsseModel model)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		super(model);
+		
+		
 	}
 
 	@Override
-	public StringAttrib<Island> mapStringAttrib(String attribname)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public String getObjectID(int ndx) {return String.valueOf(ndx);}
 
 	@Override
-	public FloatAttrib<Island> mapFloatAttrib(String attribname)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public StringAttrib<Island> mapStringAttrib(String attribname) {return null;}
 	@Override
-	public IntAttrib<Island> mapIntAttrib(String attribname)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public FloatAttrib<Island> mapFloatAttrib(String attribname) {return null;}
 	@Override
-	public BooleanAttrib<Island> mapBooleanAttrib(String attribname)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public IntAttrib<Island> mapIntAttrib(String attribname) {return null;}
+	@Override
+	public BooleanAttrib<Island> mapBooleanAttrib(String attribname) {return null;}
 	@Override
 	public Island get(int arg0)
 	{
