@@ -187,14 +187,15 @@ public class SimpleCSV
 		// assume a header
 		String line = r.readLine();
 		setHeader(new StringParse(line,",").setQuoteChar('\'').getTokens());
+		int ccnt = _cols.size();
 		// load the data
 		while((line = r.readLine()) != null)
 		{
 			if (line.startsWith("#")) continue;
 			String vals[] = new StringParse(line,",").setQuoteChar('\'').getTokens();
-			for(int i=0; i<vals.length; i++)
+			for(int i=0; i<ccnt; i++)
 			{
-				if (i < _cols.size()) _cols.get(i).add(vals[i].trim());
+				_cols.get(i).add((i<vals.length)?vals[i].trim():"");
 			}
 			++_rowCount;
 		}
