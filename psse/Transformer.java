@@ -36,13 +36,9 @@ public class Transformer extends BaseObject
 
 	//TODO:  How to convert to per-unit when CM == 2
 	/** Magnetizing Conductance per-unit on 100 MVA Base */
-	public float getMagCondPerUnit() throws PsseModelException {return _list.getMagCondPerUnit(_ndx);}
+	public float getMagG() throws PsseModelException {return _list.getMagG(_ndx);}
 	/** Magnetizing Susceptance per-unit on 100 MVA Base */
-	public float getMagSuscPerUnit() throws PsseModelException {return _list.getMagSuscPerUnit(_ndx);}
-	/** No load loss in Watts (MAG1 when CM=2 */
-	public float getNoLoadLoss() throws PsseModelException {return _list.getNoLoadLoss(_ndx);}
-	/** Exciting current p.u. on 100 MVA base  and nominal voltage (NOMV1) when CM=2 */
-	public float getExcitingCurrent() throws PsseModelException {return _list.getExcitingCurrent(_ndx);}
+	public float getMagB() throws PsseModelException {return _list.getMagB(_ndx);}
 	/** Transformer Status */
 	public TransformerStatus getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	// TODO:  How to convert to per-unit impedance on 100MVA base when CZ =2 or 3
@@ -68,6 +64,8 @@ public class Transformer extends BaseObject
 	public float getWnd1Ratio() throws PsseModelException {return _list.getWnd1Ratio(_ndx);}
 	/** get winding 1 nominal KV */
 	public float getWnd1NomKV() throws PsseModelException {return _list.getWnd1NomKV(_ndx);}
+	/** get winding 1 phase shift in RAD */
+	public float getWnd1PhaseShift() throws PsseModelException {return _list.getWnd1PhaseShift(_ndx);}
 	/** Transformer Control Mode (COD1) */
 	public TransformerCtrlMode getCtrlMode1() throws PsseModelException {return _list.getCtrlMode1(_ndx);}
 	/** is automatic adjustment enabled? (COD1) */
@@ -102,6 +100,8 @@ public class Transformer extends BaseObject
 	public float getWnd2Ratio() throws PsseModelException {return _list.getWnd2Ratio(_ndx);}
 	/** get winding 2 nominal KV */
 	public float getWnd2NomKV() throws PsseModelException {return _list.getWnd2NomKV(_ndx);}
+	/** get winding 2 phase shift in RAD */
+	public float getWnd2PhaseShift() throws PsseModelException {return _list.getWnd2PhaseShift(_ndx);}
 	/** Transformer Control Mode (COD2) */
 	public TransformerCtrlMode getCtrlMode2() throws PsseModelException {return _list.getCtrlMode2(_ndx);}
 	/** is automatic adjustment enabled? (COD2) */
@@ -136,6 +136,8 @@ public class Transformer extends BaseObject
 	public float getWnd3Ratio() throws PsseModelException {return _list.getWnd3Ratio(_ndx);}
 	/** get winding 3 nominal KV */
 	public float getWnd3NomKV() throws PsseModelException {return _list.getWnd3NomKV(_ndx);}
+	/** get winding 3 phase shift in RAD */
+	public float getWnd3PhaseShift() throws PsseModelException {return _list.getWnd3PhaseShift(_ndx);}
 	/** Transformer Control Mode (COD3) */
 	public TransformerCtrlMode getCtrlMode3() throws PsseModelException {return _list.getCtrlMode3(_ndx);}
 	/** is automatic adjustment enabled? (COD3) */

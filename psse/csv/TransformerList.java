@@ -286,27 +286,23 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	public int size() { return _size; }
 
 	@Override
-	public float getMagCondPerUnit(int ndx) throws PsseModelException {return getDeftMagCondPerUnit(ndx);}
+	public float getMagG(int ndx) throws PsseModelException {return getDeftMagG(ndx);}
 	@Override
-	public float getMagSuscPerUnit(int ndx) throws PsseModelException {return getDeftMagSuscPerUnit(ndx);}
-	@Override
-	public float getNoLoadLoss(int ndx) throws PsseModelException {return getDeftNoLoadLoss(ndx);}
-	@Override
-	public float getExcitingCurrent(int ndx) throws PsseModelException {return getDeftExcitingCurrent(ndx);}
+	public float getMagB(int ndx) throws PsseModelException {return getDeftMagB(ndx);}
 	@Override
 	public TransformerStatus getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
 	@Override
-	public float getR100_1_2(int ndx) throws PsseModelException {return getDeftResistance1_2(ndx);}
+	public float getR100_1_2(int ndx) throws PsseModelException {return getDeftR100_1_2(ndx);}
 	@Override
-	public float getX100_1_2(int ndx) throws PsseModelException {return getDeftReactance1_2(ndx);}
+	public float getX100_1_2(int ndx) throws PsseModelException {return getDeftX100_1_2(ndx);}
 	@Override
-	public float getR100_2_3(int ndx) throws PsseModelException {return getDeftResistance2_3(ndx);}
+	public float getR100_2_3(int ndx) throws PsseModelException {return getDeftR100_2_3(ndx);}
 	@Override
-	public float getX100_2_3(int ndx) throws PsseModelException {return getDeftReactance2_3(ndx);}
+	public float getX100_2_3(int ndx) throws PsseModelException {return getDeftX100_2_3(ndx);}
 	@Override
-	public float getR100_3_1(int ndx) throws PsseModelException {return getDeftResistance3_1(ndx);}
+	public float getR100_3_1(int ndx) throws PsseModelException {return getDeftR100_3_1(ndx);}
 	@Override
-	public float getX100_3_1(int ndx) throws PsseModelException {return getX100_3_1(ndx);}
+	public float getX100_3_1(int ndx) throws PsseModelException {return getDeftX100_3_1(ndx);}
 	@Override
 	public float getWnd1Ratio(int ndx) throws PsseModelException {return getDeftWnd1Ratio(ndx);}
 	@Override
@@ -417,4 +413,11 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	public Complex getZ100_2_3(int ndx) throws PsseModelException {return getDeftZ100_2_3(ndx);}
 	@Override
 	public Complex getZ100_3_1(int ndx) throws PsseModelException {return getDeftZ100_3_1(ndx);}
+
+	@Override
+	public float getWnd1PhaseShift(int ndx) throws PsseModelException {return getDeftWnd1PhaseShift(ndx);}
+	@Override
+	public float getWnd2PhaseShift(int ndx) throws PsseModelException {return getDeftWnd2PhaseShift(ndx);}
+	@Override
+	public float getWnd3PhaseShift(int ndx) throws PsseModelException {return getDeftWnd3PhaseShift(ndx);}
 }

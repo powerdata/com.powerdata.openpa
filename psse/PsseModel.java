@@ -1,7 +1,25 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.BaseObject;
+
 public abstract class PsseModel implements BaseGroup
 {
+	protected PsseModelLog _log = new PsseModelLog()
+	{
+		@Override
+		public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
+		{
+			String objclass = obj.getClass().getSimpleName();
+			String objnm = obj.getDebugName();
+			String objid = obj.getObjectID();
+			((severity == LogSev.Error) ? System.err : System.out)
+				.format("%s %s %s[%s] %s\n", objclass, objnm, objid, msg);
+		}
+	};
+	
+	public PsseModel() {} 
+	public PsseModel(PsseModelLog log) {_log = log;} 
+	
 	/** get system base MVA */
 	public abstract float getSBASE();
 	/** default system base MVA */
@@ -30,6 +48,11 @@ public abstract class PsseModel implements BaseGroup
 	}
 	@Override
 	public String[] getGroupTypes() {return GroupType.values();}
+	
+	public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
+	{
+		_log.log(severity, obj, msg);
+	}
 	
 }	
 

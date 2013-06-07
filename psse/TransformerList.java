@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PAMath;
 
 public abstract class TransformerList extends PsseBaseList<Transformer>
 {
@@ -101,6 +102,33 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		return val;
 	}	
 	
+	protected float resolveBase(int ndx, float sbase) throws PsseModelException
+	{
+		switch(getCZ(ndx))
+		{
+			case 1: return _model.getSBASE();
+			case 2: return sbase;
+			case 3:
+				_model.log(LogSev.Error, get(ndx), "Winding impedance code (CZ) of 3 is not yet implemented.  " +
+						"Setting value to 0, which will mean this branch has X=0.");
+				sbase = 0F;
+		}
+		return sbase;
+	}
+
+	protected float checkCM(int ndx, float val) throws PsseModelException
+	{
+		if (getCM(ndx) == 2)
+		{
+			_model.log(LogSev.Error, get(ndx),
+					"Magnetizing Admittance when CM=2 not yet implemented.  Setting to 0");
+			val = 0F;
+		}
+
+		return val; 
+	}
+
+	
 	/* Standard object retrieval */
 
 	/** Get a Transformer by it's index. */
@@ -115,10 +143,8 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract Bus getBus1(int ndx) throws PsseModelException;
 	public abstract Bus getBus2(int ndx) throws PsseModelException;
 	public abstract Bus getBus3(int ndx) throws PsseModelException;
-	public abstract float getMagCondPerUnit(int ndx) throws PsseModelException;
-	public abstract float getMagSuscPerUnit(int ndx) throws PsseModelException;
-	public abstract float getNoLoadLoss(int ndx) throws PsseModelException;
-	public abstract float getExcitingCurrent(int ndx) throws PsseModelException;
+	public abstract float getMagG(int ndx) throws PsseModelException;
+	public abstract float getMagB(int ndx) throws PsseModelException;
 	public abstract TransformerStatus getInSvc(int ndx) throws PsseModelException;
 	public abstract float getR100_1_2(int ndx) throws PsseModelException;
 	public abstract float getX100_1_2(int ndx) throws PsseModelException;
@@ -129,8 +155,10 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract float getR100_3_1(int ndx) throws PsseModelException;
 	public abstract float getX100_3_1(int ndx) throws PsseModelException;
 	public abstract Complex getZ100_3_1(int ndx) throws PsseModelException;
+	
 	public abstract float getWnd1Ratio(int ndx) throws PsseModelException;
 	public abstract float getWnd1NomKV(int ndx) throws PsseModelException;
+	public abstract float getWnd1PhaseShift(int ndx) throws PsseModelException;
 	public abstract TransformerCtrlMode getCtrlMode1(int ndx) throws PsseModelException;
 	public abstract boolean getAdjEnab1(int ndx) throws PsseModelException;
 	public abstract Bus getRegBus1(int ndx) throws PsseModelException;
@@ -149,6 +177,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 
 	public abstract float getWnd2Ratio(int ndx) throws PsseModelException;
 	public abstract float getWnd2NomKV(int ndx) throws PsseModelException;
+	public abstract float getWnd2PhaseShift(int ndx) throws PsseModelException;
 	public abstract TransformerCtrlMode getCtrlMode2(int ndx) throws PsseModelException;
 	public abstract boolean getAdjEnab2(int ndx) throws PsseModelException;
 	public abstract Bus getRegBus2(int ndx) throws PsseModelException;
@@ -167,6 +196,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	
 	public abstract float getWnd3Ratio(int ndx) throws PsseModelException;
 	public abstract float getWnd3NomKV(int ndx) throws PsseModelException;
+	public abstract float getWnd3PhaseShift(int ndx) throws PsseModelException;
 	public abstract TransformerCtrlMode getCtrlMode3(int ndx) throws PsseModelException;
 	public abstract boolean getAdjEnab3(int ndx) throws PsseModelException;
 	public abstract Bus getRegBus3(int ndx) throws PsseModelException;
@@ -189,23 +219,34 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public Bus getDeftBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	public Bus getDeftBus2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
 	public Bus getDeftBus3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
-	public float getDeftMagCondPerUnit(int ndx) {return 0;} //TODO
-	public float getDeftMagSuscPerUnit(int ndx) {return 0;} //TODO
-	public float getDeftNoLoadLoss(int ndx) {return 0;} //TODO
-	public float getDeftExcitingCurrent(int ndx) {return 0;} //TODO
+	
+	public float getDeftMagG(int ndx) throws PsseModelException 
+		{return checkCM(ndx, PAMath.rebaseZ100(getMAG1(ndx), _model.getSBASE()));}
+	public float getDeftMagB(int ndx) throws PsseModelException
+		{return checkCM(ndx, PAMath.rebaseZ100(getMAG2(ndx), _model.getSBASE()));}
 	public TransformerStatus getDeftInSvc(int ndx)
-	{
-		return TransformerStatus.fromCode(getSTAT(ndx));
-	}
-	public float getDeftResistance1_2(int ndx) {return 0;}  //TODO
-	public float getDeftReactance1_2(int ndx)  {return 0;} //TODO
-	public Complex getDeftZ100_1_2(int ndx) throws PsseModelException {return new Complex(getR100_1_2(ndx), getX100_1_2(ndx));}
-	public float getDeftResistance2_3(int ndx) {return 0;} //TODO
-	public float getDeftReactance2_3(int ndx) {return 0;} //TODO
-	public Complex getDeftZ100_2_3(int ndx) throws PsseModelException {return new Complex(getR100_2_3(ndx), getX100_2_3(ndx));}
-	public float getDeftResistance3_1(int ndx) {return 0;} //TODO
-	public float getDeftReactance3_1(int ndx) {return 0;} //TODO
-	public Complex getDeftZ100_3_1(int ndx) throws PsseModelException {return new Complex(getR100_3_1(ndx), getX100_3_1(ndx));}
+		{return TransformerStatus.fromCode(getSTAT(ndx));}
+	
+	public float getDeftR100_1_2(int ndx) throws PsseModelException
+		{return PAMath.rebaseZ100(getR1_2(ndx), resolveBase(ndx, getSBASE1_2(ndx)));}
+	public float getDeftX100_1_2(int ndx) throws PsseModelException
+		{return PAMath.rebaseZ100(getX1_2(ndx), resolveBase(ndx, getSBASE1_2(ndx)));}
+	public Complex getDeftZ100_1_2(int ndx) throws PsseModelException
+		{return new Complex(getR100_1_2(ndx), getX100_1_2(ndx));}
+	public float getDeftR100_2_3(int ndx) throws PsseModelException
+		{return PAMath.rebaseZ100(getR2_3(ndx), resolveBase(ndx, getSBASE2_3(ndx)));}
+	public float getDeftX100_2_3(int ndx) throws PsseModelException
+		{return PAMath.rebaseZ100(getX2_3(ndx), resolveBase(ndx, getSBASE2_3(ndx)));}
+	public Complex getDeftZ100_2_3(int ndx) throws PsseModelException
+		{return new Complex(getR100_2_3(ndx), getX100_2_3(ndx));}
+	public float getDeftR100_3_1(int ndx) throws PsseModelException
+		{return PAMath.rebaseZ100(getR3_1(ndx), resolveBase(ndx, getSBASE3_1(ndx)));}
+	public float getDeftX100_3_1(int ndx) throws PsseModelException
+		{return PAMath.rebaseZ100(getX3_1(ndx), resolveBase(ndx, getSBASE3_1(ndx)));}
+	public Complex getDeftZ100_3_1(int ndx) throws PsseModelException
+		{return new Complex(getR100_3_1(ndx), getX100_3_1(ndx));}
+	
+	
 	public float getDeftWnd1Ratio(int ndx) throws PsseModelException
 	{
 		float wv1 = getWINDV1(ndx);
@@ -216,6 +257,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		float nv1 = getNOMV1(ndx);
 		return (nv1==0F)?getBus1(ndx).getBASKV():nv1;
 	}
+	public float getDeftWnd1PhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG1(ndx));}
 	public TransformerCtrlMode getDeftCtrlMode1(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD1(ndx)));}
 	public boolean getDeftAdjEnab1(int ndx) {return getCOD1(ndx) > 0;}
 	public Bus getDeftRegBus1(int ndx) throws PsseModelException
@@ -246,6 +288,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		float nv = getNOMV2(ndx);
 		return (nv==0F)?getBus2(ndx).getBASKV():nv;
 	}
+	public float getDeftWnd2PhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG2(ndx));}
 	public TransformerCtrlMode getDeftCtrlMode2(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD2(ndx)));}
 	public boolean getDeftAdjEnab2(int ndx) {return getCOD2(ndx) > 0;}
 	public Bus getDeftRegBus2(int ndx) throws PsseModelException
@@ -276,6 +319,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		float nv = getNOMV3(ndx);
 		return (nv==0F)?getBus3(ndx).getBASKV():nv;
 	}
+	public float getDeftWnd3PhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG3(ndx));}
 	public TransformerCtrlMode getDeftCtrlMode3(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD3(ndx)));}
 	public boolean getDeftAdjEnab3(int ndx) {return getCOD3(ndx) > 0;}
 	public Bus getDeftRegBus3(int ndx) throws PsseModelException
@@ -356,7 +400,6 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract float getCR2(int ndx);
 	public abstract float getCX2(int ndx);
 
-	// TODO:  Do we need any special checking if it's 2-winding(and hence none of these are valid...or line 4 for that matter)
 	public abstract float getWINDV3(int ndx) throws PsseModelException;
 	public abstract float getNOMV3(int ndx);
 	public abstract float getANG3(int ndx);

@@ -1,5 +1,7 @@
 package com.powerdata.openpa.tools;
 
+import com.powerdata.openpa.psse.PsseModelException;
+
 public abstract class BaseObject
 {
 	protected int _ndx;
@@ -25,6 +27,6 @@ public abstract class BaseObject
 		return sb.toString();
 	}
 	
-	public String getDebugName() throws Exception {return "";}
+	public String getDebugName() throws PsseModelException {return "";}
 
 }
