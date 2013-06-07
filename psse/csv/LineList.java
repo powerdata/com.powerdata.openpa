@@ -130,4 +130,9 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	public float getToShuntB(int ndx) throws PsseModelException {return getDeftToShuntB(ndx);}
 	@Override
 	public Complex getToShuntY(int ndx) throws PsseModelException {return getDeftToShuntY(ndx);}
+
+	@Override
+	public float getFromBch(int ndx) throws PsseModelException {return getDeftFromBch(ndx);}
+	@Override
+	public float getToBch(int ndx) throws PsseModelException {return getDeftToBch(ndx);}
 }
