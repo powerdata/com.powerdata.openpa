@@ -35,6 +35,10 @@ public class Line extends BaseObject
 	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
+	/** from-side charging susceptance, p.u. on 100MVA base at unity voltage */
+	public float getFromBch() throws PsseModelException {return _list.getFromBch(_ndx);}
+	/** to-side charging susceptance, p.u. on 100MVA base at unity voltage */
+	public float getToBch() throws PsseModelException {return _list.getToBch(_ndx);}
 	/** resistance in p.u. on 100MVA base */
 	public float getR100() throws PsseModelException {return _list.getR100(_ndx);}
 	/** reactance in p.u. on 100MVA base */

@@ -25,6 +25,8 @@ public abstract class LineList extends PsseBaseList<Line>
 	public abstract float getR100(int ndx) throws PsseModelException;
 	public abstract float getX100(int ndx) throws PsseModelException;
 	public abstract Complex getZ100(int ndx) throws PsseModelException;
+	public abstract float getFromBch(int ndx) throws PsseModelException;
+	public abstract float getToBch(int ndx) throws PsseModelException;
 	public abstract float getFromShuntG(int ndx) throws PsseModelException;
 	public abstract float getFromShuntB(int ndx) throws PsseModelException;
 	public abstract Complex getFromShuntY(int ndx) throws PsseModelException;
@@ -52,6 +54,8 @@ public abstract class LineList extends PsseBaseList<Line>
 	public float getDeftR100(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getR(ndx), _model.getSBASE());}
 	public float getDeftX100(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getX(ndx), _model.getSBASE());}
 	public Complex getDeftZ100(int ndx) throws PsseModelException {return new Complex(getR100(ndx), getX100(ndx));}
+	public float getDeftFromBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
+	public float getDeftToBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
 	public float getDeftFromShuntG(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getGI(ndx), _model.getSBASE());}
 	public float getDeftFromShuntB(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getBI(ndx), _model.getSBASE());}
 	public Complex getDeftFromShuntY(int ndx) throws PsseModelException {return new Complex(getFromShuntG(ndx), getFromShuntB(ndx));}
@@ -92,4 +96,5 @@ public abstract class LineList extends PsseBaseList<Line>
 	public float getDeftLEN(int ndx) {return 0F;}
 	
 	public OwnershipList<Ownership> getDeftOwnership(int ndx) {return null;}
+
 }	
