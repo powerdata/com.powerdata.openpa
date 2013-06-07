@@ -189,22 +189,22 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public Bus getDeftBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	public Bus getDeftBus2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
 	public Bus getDeftBus3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
-	public float getDeftMagCondPerUnit(int ndx) {return 0;}
-	public float getDeftMagSuscPerUnit(int ndx) {return 0;}
-	public float getDeftNoLoadLoss(int ndx) {return 0;}
-	public float getDeftExcitingCurrent(int ndx) {return 0;}
+	public float getDeftMagCondPerUnit(int ndx) {return 0;} //TODO
+	public float getDeftMagSuscPerUnit(int ndx) {return 0;} //TODO
+	public float getDeftNoLoadLoss(int ndx) {return 0;} //TODO
+	public float getDeftExcitingCurrent(int ndx) {return 0;} //TODO
 	public TransformerStatus getDeftInSvc(int ndx)
 	{
 		return TransformerStatus.fromCode(getSTAT(ndx));
 	}
-	public float getDeftResistance1_2(int ndx) {return 0;}
-	public float getDeftReactance1_2(int ndx)  {return 0;}
+	public float getDeftResistance1_2(int ndx) {return 0;}  //TODO
+	public float getDeftReactance1_2(int ndx)  {return 0;} //TODO
 	public Complex getDeftZ100_1_2(int ndx) throws PsseModelException {return new Complex(getR100_1_2(ndx), getX100_1_2(ndx));}
-	public float getDeftResistance2_3(int ndx) {return 0;}
-	public float getDeftReactance2_3(int ndx) {return 0;}
+	public float getDeftResistance2_3(int ndx) {return 0;} //TODO
+	public float getDeftReactance2_3(int ndx) {return 0;} //TODO
 	public Complex getDeftZ100_2_3(int ndx) throws PsseModelException {return new Complex(getR100_2_3(ndx), getX100_2_3(ndx));}
-	public float getDeftResistance3_1(int ndx) {return 0;}
-	public float getDeftReactance3_1(int ndx) {return 0;}
+	public float getDeftResistance3_1(int ndx) {return 0;} //TODO
+	public float getDeftReactance3_1(int ndx) {return 0;} //TODO
 	public Complex getDeftZ100_3_1(int ndx) throws PsseModelException {return new Complex(getR100_3_1(ndx), getX100_3_1(ndx));}
 	public float getDeftWnd1Ratio(int ndx) throws PsseModelException
 	{

@@ -188,19 +188,9 @@ class TransformerView2W extends BranchView
 	@Override
 	public float getX(int ndx) throws PsseModelException {return _txfrs.getX100_1_2(tfndx(ndx));}
 	@Override
-	public float getFrB(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public float getFrB(int ndx) throws PsseModelException {return _txfrs.getMagSuscPerUnit(tfndx(ndx));}
 	@Override
-	public float getToB(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public float getToB(int ndx) throws PsseModelException  {return _txfrs.getMagSuscPerUnit(tfndx(ndx));}
 	@Override
 	public float getFrTapRatio(int ndx) throws PsseModelException
 	{
