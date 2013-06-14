@@ -39,6 +39,8 @@ public class Transformer extends BaseObject
 	public float getMagG() throws PsseModelException {return _list.getMagG(_ndx);}
 	/** Magnetizing Susceptance per-unit on 100 MVA Base */
 	public float getMagB() throws PsseModelException {return _list.getMagB(_ndx);}
+	/** Magnetizing Admittance p.u. on 100MVA Base */
+	public Complex getMagY() throws PsseModelException {return _list.getMagY(_ndx);}
 	/** Transformer Status */
 	public TransformerStatus getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	// TODO:  How to convert to per-unit impedance on 100MVA base when CZ =2 or 3

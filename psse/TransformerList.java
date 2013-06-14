@@ -145,6 +145,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract Bus getBus3(int ndx) throws PsseModelException;
 	public abstract float getMagG(int ndx) throws PsseModelException;
 	public abstract float getMagB(int ndx) throws PsseModelException;
+	public abstract Complex getMagY(int ndx) throws PsseModelException;
 	public abstract TransformerStatus getInSvc(int ndx) throws PsseModelException;
 	public abstract float getR100_1_2(int ndx) throws PsseModelException;
 	public abstract float getX100_1_2(int ndx) throws PsseModelException;
@@ -224,6 +225,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		{return checkCM(ndx, PAMath.rebaseZ100(getMAG1(ndx), _model.getSBASE()));}
 	public float getDeftMagB(int ndx) throws PsseModelException
 		{return checkCM(ndx, PAMath.rebaseZ100(getMAG2(ndx), _model.getSBASE()));}
+	public Complex getDeftMagY(int ndx) throws PsseModelException
+		{return new Complex(getMagG(ndx), getMagB(ndx));}
+
 	public TransformerStatus getDeftInSvc(int ndx)
 		{return TransformerStatus.fromCode(getSTAT(ndx));}
 	

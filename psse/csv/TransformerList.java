@@ -290,6 +290,8 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public float getMagB(int ndx) throws PsseModelException {return getDeftMagB(ndx);}
 	@Override
+	public Complex getMagY(int ndx) throws PsseModelException {return getDeftMagY(ndx);}
+	@Override
 	public TransformerStatus getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
 	@Override
 	public float getR100_1_2(int ndx) throws PsseModelException {return getDeftR100_1_2(ndx);}
