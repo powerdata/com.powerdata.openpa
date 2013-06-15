@@ -14,4 +14,7 @@ public interface BaseGroup
 	
 	public IslandList getIslands() throws PsseModelException;
 	
+	
+	public OutBusList getOutBusses() throws PsseModelException;
+	
 }

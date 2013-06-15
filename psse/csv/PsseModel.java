@@ -8,6 +8,7 @@ import com.powerdata.openpa.psse.Generator;
 import com.powerdata.openpa.psse.ImpCorrTblList;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.Line;
+import com.powerdata.openpa.psse.OutBusList;
 import com.powerdata.openpa.psse.OwnerList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchedShuntList;
@@ -94,5 +95,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println("ERROR: "+e);
 		}
+	}
+	@Override
+	public OutBusList getOutBusses() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

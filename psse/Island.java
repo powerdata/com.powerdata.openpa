@@ -74,4 +74,11 @@ public class Island extends Group
 		return null;
 	}
 
+	@Override
+	public OutBusList getOutBusses() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
