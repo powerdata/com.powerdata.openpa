@@ -12,5 +12,6 @@ public abstract class OutBusList extends PsseBaseList<OutBus>
 	public abstract void updateVang(int _ndx, float va);
 	public abstract void updateVoltagte(int _ndx, Complex v);
 	
+	/** Get an "input" view that reflects any updates */
 	public BusList getInputList(){/*TODO:*/ return null;}
 }
