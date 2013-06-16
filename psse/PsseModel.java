@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public abstract class PsseModel
 {
-	public static PsseModel Open(String uri) throws PsseModelException
+	public static PsseModelIn OpenInput(String uri) throws PsseModelException
 	{
 		String[] tok = uri.split(":", 1);
 		switch(tok[0].toLowerCase())
@@ -12,6 +12,19 @@ public abstract class PsseModel
 			case "pssecsv": 
 				String dpath = tok[1].split("=")[1];
 				return new com.powerdata.openpa.psse.csv.PsseModelIn(dpath);
+			default:
+				throw new PsseModelException("URI not supported: "+uri);
+		}
+	}
+
+	public static PsseModelOut OpenOut(String uri) throws PsseModelException
+	{
+		String[] tok = uri.split(":", 1);
+		switch(tok[0].toLowerCase())
+		{
+//			case "pssecsv": 
+//				String dpath = tok[1].split("=")[1];
+//				return new com.powerdata.openpa.psse.csv.PsseModelOut(dpath);
 			default:
 				throw new PsseModelException("URI not supported: "+uri);
 		}
