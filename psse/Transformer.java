@@ -28,11 +28,11 @@ public class Transformer extends BaseObject
 	/* Convenience methods */
 
 	/** Winding 1 bus */ 
-	public Bus getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
+	public BusIn getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
 	/** Winding 2 bus */
-	public Bus getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
+	public BusIn getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
 	/** Winding 3 bus for 3 winding transformers*/
-	public Bus getBus3() throws PsseModelException {return _list.getBus3(_ndx);}
+	public BusIn getBus3() throws PsseModelException {return _list.getBus3(_ndx);}
 
 	//TODO:  How to convert to per-unit when CM == 2
 	/** Magnetizing Conductance per-unit on 100 MVA Base */
@@ -73,7 +73,7 @@ public class Transformer extends BaseObject
 	/** is automatic adjustment enabled? (COD1) */
 	public boolean getAdjEnab1() throws PsseModelException {return _list.getAdjEnab1(_ndx);}
 	/** get controlled bus 1 (CONT1) */ 
-	public Bus getRegBus1() throws PsseModelException {return _list.getRegBus1(_ndx);}
+	public BusIn getRegBus1() throws PsseModelException {return _list.getRegBus1(_ndx);}
 	/** adjust reg bus as if on wnd 1 side (CONT1) */
 	public boolean getCtrlTapSide1() throws PsseModelException {return _list.getCtrlTapSide1(_ndx);}
 	/** max ratio limit (RMA) p.u. of bus 1 base voltage*/
@@ -109,7 +109,7 @@ public class Transformer extends BaseObject
 	/** is automatic adjustment enabled? (COD2) */
 	public boolean getAdjEnab2() throws PsseModelException {return _list.getAdjEnab2(_ndx);}
 	/** get controlled bus 2 (CONT2) */ 
-	public Bus getRegBus2() throws PsseModelException {return _list.getRegBus2(_ndx);}
+	public BusIn getRegBus2() throws PsseModelException {return _list.getRegBus2(_ndx);}
 	/** adjust reg bus as if on wnd 2 side (CONT1) */
 	public boolean getCtrlTapSide2() throws PsseModelException {return _list.getCtrlTapSide2(_ndx);}
 	/** max ratio limit (RMA) p.u. of bus 2 base voltage*/
@@ -145,7 +145,7 @@ public class Transformer extends BaseObject
 	/** is automatic adjustment enabled? (COD3) */
 	public boolean getAdjEnab3() throws PsseModelException {return _list.getAdjEnab3(_ndx);}
 	/** get controlled bus 3 (CONT3) */ 
-	public Bus getRegBus3() throws PsseModelException {return _list.getRegBus3(_ndx);}
+	public BusIn getRegBus3() throws PsseModelException {return _list.getRegBus3(_ndx);}
 	/** adjust reg bus as if on wnd 3 side (CONT1) */
 	public boolean getCtrlTapSide3() throws PsseModelException {return _list.getCtrlTapSide3(_ndx);}
 	/** max ratio limit (RMA) p.u. of bus 3 base voltage*/

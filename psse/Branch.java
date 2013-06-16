@@ -15,8 +15,8 @@ public class Branch extends BaseObject
 	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 	
-	public Bus getFrBus() {return _list.getFrBus(_ndx);}
-	public Bus getToBus() {return _list.getToBus(_ndx);}
+	public BusIn getFrBus() {return _list.getFrBus(_ndx);}
+	public BusIn getToBus() {return _list.getToBus(_ndx);}
 	public float getR() {return _list.getR(_ndx);}
 	public float getX() {return _list.getX(_ndx);}
 	public float getFrB() {return _list.getFrB(_ndx);}

@@ -22,7 +22,7 @@ public class Area extends BaseObject
 	/* convenience methods */
 	
 	/** Area slack bus for area interchange control */ 
-	public Bus getSlackBus() throws PsseModelException {return _list.getSlackBus(_ndx);}
+	public BusIn getSlackBus() throws PsseModelException {return _list.getSlackBus(_ndx);}
 	/** Desired net interchange (PDES) leaving the area entered p.u. */
 	public float getIntExport()  throws PsseModelException {return _list.getIntExport(_ndx);}
 	/** Interchange tolerance bandwidth (PTOL) in p.u. */

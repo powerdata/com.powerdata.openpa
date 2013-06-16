@@ -12,7 +12,7 @@ public class Island extends Group
 	}
 
 	@Override
-	public BusList getBuses() throws PsseModelException
+	public BusInList getBuses() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -69,13 +69,6 @@ public class Island extends Group
 
 	@Override
 	public IslandList getIslands() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OutBusList getOutBusses() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -35,7 +35,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		return defval;
 	}
 
-	protected float ratioLim(int ndx, int abscod, Bus bus, float val)
+	protected float ratioLim(int ndx, int abscod, BusIn bus, float val)
 			throws PsseModelException
 	{
 		if (abscod == 1 || abscod == 2)
@@ -140,9 +140,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 
 	/* convenience interface */
 	
-	public abstract Bus getBus1(int ndx) throws PsseModelException;
-	public abstract Bus getBus2(int ndx) throws PsseModelException;
-	public abstract Bus getBus3(int ndx) throws PsseModelException;
+	public abstract BusIn getBus1(int ndx) throws PsseModelException;
+	public abstract BusIn getBus2(int ndx) throws PsseModelException;
+	public abstract BusIn getBus3(int ndx) throws PsseModelException;
 	public abstract float getMagG(int ndx) throws PsseModelException;
 	public abstract float getMagB(int ndx) throws PsseModelException;
 	public abstract Complex getMagY(int ndx) throws PsseModelException;
@@ -162,7 +162,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract float getWnd1PhaseShift(int ndx) throws PsseModelException;
 	public abstract TransformerCtrlMode getCtrlMode1(int ndx) throws PsseModelException;
 	public abstract boolean getAdjEnab1(int ndx) throws PsseModelException;
-	public abstract Bus getRegBus1(int ndx) throws PsseModelException;
+	public abstract BusIn getRegBus1(int ndx) throws PsseModelException;
 	public abstract boolean getCtrlTapSide1(int ndx) throws PsseModelException;
 	public abstract float getMaxRatio1(int ndx) throws PsseModelException;
 	public abstract float getMinRatio1(int ndx) throws PsseModelException;
@@ -181,7 +181,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract float getWnd2PhaseShift(int ndx) throws PsseModelException;
 	public abstract TransformerCtrlMode getCtrlMode2(int ndx) throws PsseModelException;
 	public abstract boolean getAdjEnab2(int ndx) throws PsseModelException;
-	public abstract Bus getRegBus2(int ndx) throws PsseModelException;
+	public abstract BusIn getRegBus2(int ndx) throws PsseModelException;
 	public abstract boolean getCtrlTapSide2(int ndx) throws PsseModelException;
 	public abstract float getMaxRatio2(int ndx) throws PsseModelException;
 	public abstract float getMinRatio2(int ndx) throws PsseModelException;
@@ -200,7 +200,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public abstract float getWnd3PhaseShift(int ndx) throws PsseModelException;
 	public abstract TransformerCtrlMode getCtrlMode3(int ndx) throws PsseModelException;
 	public abstract boolean getAdjEnab3(int ndx) throws PsseModelException;
-	public abstract Bus getRegBus3(int ndx) throws PsseModelException;
+	public abstract BusIn getRegBus3(int ndx) throws PsseModelException;
 	public abstract boolean getCtrlTapSide3(int ndx) throws PsseModelException;
 	public abstract float getMaxRatio3(int ndx) throws PsseModelException;
 	public abstract float getMinRatio3(int ndx) throws PsseModelException;
@@ -217,9 +217,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	
 	/* Convenience defaults */
 	
-	public Bus getDeftBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public Bus getDeftBus2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
-	public Bus getDeftBus3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
+	public BusIn getDeftBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public BusIn getDeftBus2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
+	public BusIn getDeftBus3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
 	
 	public float getDeftMagG(int ndx) throws PsseModelException 
 		{return checkCM(ndx, PAMath.rebaseZ100(getMAG1(ndx), _model.getSBASE()));}
@@ -264,7 +264,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public float getDeftWnd1PhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG1(ndx));}
 	public TransformerCtrlMode getDeftCtrlMode1(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD1(ndx)));}
 	public boolean getDeftAdjEnab1(int ndx) {return getCOD1(ndx) > 0;}
-	public Bus getDeftRegBus1(int ndx) throws PsseModelException
+	public BusIn getDeftRegBus1(int ndx) throws PsseModelException
 	{
 		String cod = getCONT1(ndx);
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
@@ -295,7 +295,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public float getDeftWnd2PhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG2(ndx));}
 	public TransformerCtrlMode getDeftCtrlMode2(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD2(ndx)));}
 	public boolean getDeftAdjEnab2(int ndx) {return getCOD2(ndx) > 0;}
-	public Bus getDeftRegBus2(int ndx) throws PsseModelException
+	public BusIn getDeftRegBus2(int ndx) throws PsseModelException
 	{
 		String cod = getCONT2(ndx);
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
@@ -326,7 +326,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public float getDeftWnd3PhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG3(ndx));}
 	public TransformerCtrlMode getDeftCtrlMode3(int ndx) {return TransformerCtrlMode.fromCode(Math.abs(getCOD3(ndx)));}
 	public boolean getDeftAdjEnab3(int ndx) {return getCOD3(ndx) > 0;}
-	public Bus getDeftRegBus3(int ndx) throws PsseModelException
+	public BusIn getDeftRegBus3(int ndx) throws PsseModelException
 	{
 		String cod = getCONT3(ndx);
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);

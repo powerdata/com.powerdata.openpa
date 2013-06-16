@@ -62,13 +62,13 @@ public class BranchList extends PsseBaseList<Branch>
 		return 0;
 	}
 
-	public Bus getFrBus(int ndx)
+	public BusIn getFrBus(int ndx)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Bus getToBus(int ndx)
+	public BusIn getToBus(int ndx)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -128,8 +128,8 @@ abstract class BranchView
 	
 	public int tfndx(int ndx) {return ndx-_ofs;}
 	
-	public abstract Bus getFrBus(int ndx) throws PsseModelException;
-	public abstract Bus getToBus(int ndx) throws PsseModelException;
+	public abstract BusIn getFrBus(int ndx) throws PsseModelException;
+	public abstract BusIn getToBus(int ndx) throws PsseModelException;
 	public abstract float getR(int ndx) throws PsseModelException;
 	public abstract float getX(int ndx) throws PsseModelException;
 	public abstract float getFrB(int ndx) throws PsseModelException;
@@ -150,9 +150,9 @@ class LineView extends BranchView
 	}
 
 	@Override
-	public Bus getFrBus(int ndx) throws PsseModelException {return _lines.getFromBus(tfndx(ndx));}
+	public BusIn getFrBus(int ndx) throws PsseModelException {return _lines.getFromBus(tfndx(ndx));}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException {return _lines.getToBus(tfndx(ndx));}
+	public BusIn getToBus(int ndx) throws PsseModelException {return _lines.getToBus(tfndx(ndx));}
 	@Override
 	public float getR(int ndx) throws PsseModelException {return _lines.getR(tfndx(ndx));}
 	@Override
@@ -180,9 +180,9 @@ class TransformerView2W extends BranchView
 	}
 
 	@Override
-	public Bus getFrBus(int ndx) throws PsseModelException {return _txfrs.getBus1(tfndx(ndx));}
+	public BusIn getFrBus(int ndx) throws PsseModelException {return _txfrs.getBus1(tfndx(ndx));}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException {return _txfrs.getBus2(tfndx(ndx));}
+	public BusIn getToBus(int ndx) throws PsseModelException {return _txfrs.getBus2(tfndx(ndx));}
 	@Override
 	public float getR(int ndx) throws PsseModelException {return _txfrs.getR100_1_2(tfndx(ndx));}
 	@Override

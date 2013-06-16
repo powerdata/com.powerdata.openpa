@@ -18,8 +18,8 @@ public abstract class LineList extends PsseBaseList<Line>
 
 	/* Convenience Methods */
 	
-	public abstract Bus getFromBus(int ndx) throws PsseModelException;
-	public abstract Bus getToBus(int ndx)  throws PsseModelException;
+	public abstract BusIn getFromBus(int ndx) throws PsseModelException;
+	public abstract BusIn getToBus(int ndx)  throws PsseModelException;
 	public abstract LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException;
 	public abstract boolean getInSvc(int ndx) throws PsseModelException;
 	public abstract float getR100(int ndx) throws PsseModelException;
@@ -37,8 +37,8 @@ public abstract class LineList extends PsseBaseList<Line>
 	
 	/* defaults for convenience methods */
 	
-	public Bus getDeftFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public Bus getDeftToBus(int ndx)  throws PsseModelException
+	public BusIn getDeftFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public BusIn getDeftToBus(int ndx)  throws PsseModelException
 	{
 		String j = getJ(ndx);
 		return _model.getBus((!j.isEmpty()&&j.charAt(0)=='-')?

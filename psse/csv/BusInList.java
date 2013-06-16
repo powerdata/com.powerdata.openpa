@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.Area;
-import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Owner;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -20,10 +20,10 @@ import com.powerdata.openpa.tools.StringAttrib;
  * 
  * @author marck
  */
-public class BusList extends com.powerdata.openpa.psse.BusList
+public class BusInList extends com.powerdata.openpa.psse.BusInList
 {
 	/** parent container */
-	PsseModel _eq;
+	PsseModelIn _eq;
 	/** number of items in the DB */
 	int _size;
 	/** object IDs (really just the bus number) */
@@ -42,7 +42,7 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 	float _gl[];
 	float _bl[];
 	
-	public BusList(PsseModel eq) throws PsseModelException
+	public BusInList(PsseModelIn eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -101,13 +101,13 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
-	public StringAttrib<Bus> mapStringAttrib(String attribname) { return null; }
+	public StringAttrib<BusIn> mapStringAttrib(String attribname) { return null; }
 	@Override
-	public FloatAttrib<Bus> mapFloatAttrib(String attribname) { return null; }
+	public FloatAttrib<BusIn> mapFloatAttrib(String attribname) { return null; }
 	@Override
-	public IntAttrib<Bus> mapIntAttrib(String attribname) { return null; }
+	public IntAttrib<BusIn> mapIntAttrib(String attribname) { return null; }
 	@Override
-	public BooleanAttrib<Bus> mapBooleanAttrib(String attribname) { return null; }
+	public BooleanAttrib<BusIn> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 	@Override

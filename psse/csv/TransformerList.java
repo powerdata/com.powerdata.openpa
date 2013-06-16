@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.ImpCorrTbl;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -17,8 +17,8 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 {
-	PsseModel _eq;
-	BusList _buses;
+	PsseModelIn _eq;
+	BusInList _buses;
 	int _size;
 	
 	String _i[],_j[],_k[],_ckt[],_name[],_cont1[],_cont2[],_cont3[];
@@ -33,7 +33,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	float _vma1[], _vma2[], _vma3[], _vmi1[], _vmi2[], _vmi3[], _vmstar[];
 	float _windv1[], _windv2[], _windv3[], _x1_2[], _x2_3[], _x3_1[];
 
-	public TransformerList(PsseModel eq) throws PsseModelException
+	public TransformerList(PsseModelIn eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -120,11 +120,11 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	}
 
 	@Override
-	public Bus getBus1(int ndx) { return _buses.get(getI(ndx)); }
+	public BusIn getBus1(int ndx) { return _buses.get(getI(ndx)); }
 	@Override
-	public Bus getBus2(int ndx) { return _buses.get(getJ(ndx)); }
+	public BusIn getBus2(int ndx) { return _buses.get(getJ(ndx)); }
 	@Override
-	public Bus getBus3(int ndx) { return _buses.get(getK(ndx)); }
+	public BusIn getBus3(int ndx) { return _buses.get(getK(ndx)); }
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
@@ -314,7 +314,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public boolean getAdjEnab1(int ndx) throws PsseModelException {return getDeftAdjEnab1(ndx);}
 	@Override
-	public Bus getRegBus1(int ndx) throws PsseModelException {return getDeftRegBus1(ndx);}
+	public BusIn getRegBus1(int ndx) throws PsseModelException {return getDeftRegBus1(ndx);}
 	@Override
 	public boolean getCtrlTapSide1(int ndx) throws PsseModelException {return getDeftCtrlTapSide1(ndx);}
 	@Override
@@ -349,7 +349,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public boolean getAdjEnab2(int ndx) throws PsseModelException {return getDeftAdjEnab2(ndx);}
 	@Override
-	public Bus getRegBus2(int ndx) throws PsseModelException {return getDeftRegBus2(ndx);}
+	public BusIn getRegBus2(int ndx) throws PsseModelException {return getDeftRegBus2(ndx);}
 	@Override
 	public boolean getCtrlTapSide2(int ndx) throws PsseModelException {return getDeftCtrlTapSide2(ndx);}
 	@Override
@@ -383,7 +383,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public boolean getAdjEnab3(int ndx) throws PsseModelException {return getDeftAdjEnab3(ndx);}
 	@Override
-	public Bus getRegBus3(int ndx) throws PsseModelException {return getDeftRegBus3(ndx);}
+	public BusIn getRegBus3(int ndx) throws PsseModelException {return getDeftRegBus3(ndx);}
 	@Override
 	public boolean getCtrlTapSide3(int ndx) throws PsseModelException {return getDeftCtrlTapSide3(ndx);}
 	@Override

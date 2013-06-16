@@ -3,11 +3,11 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class OutBus extends BaseObject
+public class BusOut extends BaseObject
 {
-	protected OutBusList _list;
+	protected BusOutList _list;
 	
-	public OutBus(int ndx, OutBusList list)
+	public BusOut(int ndx, BusOutList list)
 	{
 		super(ndx);
 		_list = list;

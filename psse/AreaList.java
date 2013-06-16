@@ -15,12 +15,12 @@ public abstract class AreaList extends PsseBaseList<Area>
 	public Area get(String id) { return super.get(id); }
 	
 	/* Convenience methods */
-	public abstract Bus getSlackBus(int ndx) throws PsseModelException;
+	public abstract BusIn getSlackBus(int ndx) throws PsseModelException;
 	public abstract float getIntExport(int ndx) throws PsseModelException;
 	public abstract float getIntTol(int ndx) throws PsseModelException;
 	
 	/* Convenience defaults */
-	public Bus getDeftSlackBus(int ndx) throws PsseModelException
+	public BusIn getDeftSlackBus(int ndx) throws PsseModelException
 	{
 		return _model.getBuses().get(getISW(ndx));
 	}

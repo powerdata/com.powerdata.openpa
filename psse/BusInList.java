@@ -4,18 +4,18 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.PComplex;
 
-public abstract class BusList extends PsseBaseList<Bus>
+public abstract class BusInList extends PsseBaseList<BusIn>
 {
-	public BusList(PsseModel model) {super(model);}
+	public BusInList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a Bus by it's index. */
 	@Override
-	public Bus get(int ndx) { return new Bus(ndx,this); }
+	public BusIn get(int ndx) { return new BusIn(ndx,this); }
 	/** Get a Bus by it's ID. */
 	@Override
-	public Bus get(String id) { return super.get(id); }
+	public BusIn get(String id) { return super.get(id); }
 	
 	/* convenience methods */
 	

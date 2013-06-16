@@ -4,11 +4,11 @@ import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PComplex;
 
-public class Bus extends BaseObject
+public class BusIn extends BaseObject
 {
-	protected BusList _list;
+	protected BusInList _list;
 	
-	public Bus(int ndx, BusList list)
+	public BusIn(int ndx, BusInList list)
 	{
 		super(ndx);
 		_list = list;

@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -14,8 +14,8 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class LineList extends com.powerdata.openpa.psse.LineList
 {
-	PsseModel _eq;
-	BusList _buses;
+	PsseModelIn _eq;
+	BusInList _buses;
 	int _size;
 	
 	String _i[],_j[],_ckt[];
@@ -23,7 +23,7 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	int _st[];
 	float _len[];
 	
-	public LineList(PsseModel eq) throws PsseModelException
+	public LineList(PsseModelIn eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -101,9 +101,9 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	public int size() { return _size; }
 
 	@Override
-	public Bus getFromBus(int ndx) throws PsseModelException {return getDeftFromBus(ndx);}
+	public BusIn getFromBus(int ndx) throws PsseModelException {return getDeftFromBus(ndx);}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException {return getDeftToBus(ndx);}
+	public BusIn getToBus(int ndx) throws PsseModelException {return getDeftToBus(ndx);}
 	@Override
 	public com.powerdata.openpa.psse.LineMeterEnd getMeteredEnd(
 			int ndx) throws PsseModelException

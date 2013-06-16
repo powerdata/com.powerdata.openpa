@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.Generator;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -14,8 +14,8 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 {
-	PsseModel _eq;
-	BusList _buses;
+	PsseModelIn _eq;
+	BusInList _buses;
 	int _size;
 	
 	String _i[];
@@ -26,7 +26,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 	int _stat[];
 	float _rmpct[],_pt[],_pb[];
 
-	public GeneratorList(PsseModel eq) throws PsseModelException
+	public GeneratorList(PsseModelIn eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -66,7 +66,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 		}
 	}
 	@Override
-	public Bus getBus(int ndx) { return _buses.get(_i[ndx]); }
+	public BusIn getBus(int ndx) { return _buses.get(_i[ndx]); }
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
@@ -118,7 +118,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 	@Override
 	public int size() { return _size; }
 	@Override
-	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return getDeftRemoteRegBus(ndx);}
+	public BusIn getRemoteRegBus(int ndx) throws PsseModelException {return getDeftRemoteRegBus(ndx);}
 	@Override
 	public boolean getInSvc(int ndx) throws PsseModelException { return getDeftInSvc(ndx); }
 	@Override

@@ -18,7 +18,7 @@ public abstract class LoadList extends PsseBaseList<Load>
 
 	/* convenience methods */
 	
-	public abstract Bus getBus(int ndx) throws PsseModelException;
+	public abstract BusIn getBus(int ndx) throws PsseModelException;
 	public abstract boolean getInSvc(int ndx) throws PsseModelException;
 	public abstract Area getAreaObj(int ndx) throws PsseModelException;
 	public abstract Zone getZoneObj(int ndx) throws PsseModelException;
@@ -35,7 +35,7 @@ public abstract class LoadList extends PsseBaseList<Load>
 
 	/* convenience defaults */
 	
-	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
+	public BusIn getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
 	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
 	public Area getDeftAreaObj(int ndx) throws PsseModelException {return _model.getAreas().get(String.valueOf(getAREA(ndx)));}
 	public Zone getDeftZoneObj(int ndx) throws PsseModelException  {return _model.getZones().get(String.valueOf(getZONE(ndx)));}

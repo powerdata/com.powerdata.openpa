@@ -18,8 +18,8 @@ public abstract class GeneratorList extends PsseBaseList<Generator>
 
 	/* convenience methods */
 
-	public abstract Bus getBus(int ndx) throws PsseModelException;
-	public abstract Bus getRemoteRegBus(int ndx) throws PsseModelException;
+	public abstract BusIn getBus(int ndx) throws PsseModelException;
+	public abstract BusIn getRemoteRegBus(int ndx) throws PsseModelException;
 	public abstract boolean getInSvc(int ndx) throws PsseModelException;
 	public abstract float getActvPwr(int ndx) throws PsseModelException;
 	public abstract float getReacPwr(int ndx) throws PsseModelException;
@@ -38,8 +38,8 @@ public abstract class GeneratorList extends PsseBaseList<Generator>
 	
 	/* convenience defaults */
 	
-	public Bus getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
-	public Bus getDeftRemoteRegBus(int ndx) throws PsseModelException
+	public BusIn getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
+	public BusIn getDeftRemoteRegBus(int ndx) throws PsseModelException
 	{
 		String ireg = getIREG(ndx);
 		return (ireg.equals("0")) ? getBus(ndx) : 

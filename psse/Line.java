@@ -28,9 +28,9 @@ public class Line extends BaseObject
 	/* Convenience methods */
 
 	/** From-side bus */
-	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
+	public BusIn getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
 	/** To-side bus */
-	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
+	public BusIn getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	/** Get "metered" end */
 	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */

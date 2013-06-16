@@ -25,7 +25,7 @@ public class Load extends BaseObject
 	/* convenience methods */
 	
 	/** Load bus (I) */ 
-	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** get Area Interchange record */

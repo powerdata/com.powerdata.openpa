@@ -26,9 +26,9 @@ public class Generator extends BaseObject
 	/* Convenience methods */
 
 	/** Generator bus (I) */ 
-	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** remote regulated bus.  (IREG) Null if local */
-	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
+	public BusIn getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
 	/** get initial generator status (STAT) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** Generator active power (PG) output p.u. */

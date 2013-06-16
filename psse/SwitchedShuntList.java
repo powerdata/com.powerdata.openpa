@@ -43,13 +43,13 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 
 	/* convenience methods */
 	
-	public abstract Bus getBus(int ndx) throws PsseModelException;
+	public abstract BusIn getBus(int ndx) throws PsseModelException;
 	public abstract SwShuntCtrlMode getCtrlMode(int ndx) throws PsseModelException;
 	public abstract float getVoltHighLim(int ndx) throws PsseModelException;
 	public abstract float getVoltLowLim(int ndx) throws PsseModelException;
 	public abstract float getQHighLim(int ndx) throws PsseModelException;
 	public abstract float getQLowLim(int ndx) throws PsseModelException;
-	public abstract Bus getRegBus(int ndx) throws PsseModelException;
+	public abstract BusIn getRegBus(int ndx) throws PsseModelException;
 	public abstract float getInitB(int ndx) throws PsseModelException;
 
 	/* convenience defaults */
@@ -58,7 +58,7 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public float getDeftVoltLowLim(int ndx) throws PsseModelException {return vsVoltDeft(ndx, false);}
 	public float getDeftQHighLim(int ndx) throws PsseModelException {return vsQDeft(ndx, true);}
 	public float getDeftQLowLim(int ndx) throws PsseModelException {return vsQDeft(ndx, false);}
-	public Bus getDeftRegBus(int ndx) throws PsseModelException
+	public BusIn getDeftRegBus(int ndx) throws PsseModelException
 	{
 		String swrem = getSWREM(ndx);
 		return (swrem.equals("0")) ? getBus(ndx) :

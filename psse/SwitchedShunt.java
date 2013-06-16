@@ -20,7 +20,7 @@ public class SwitchedShunt extends BaseObject
 	
 	/* Convenience methods */
 	/** Load bus (I) */ 
-	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** control mode */
 	public SwShuntCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}
 	/** controlled voltage upper limit (VSWLO) */
@@ -32,7 +32,7 @@ public class SwitchedShunt extends BaseObject
 	/** controlled reactive power lower limit (VSWHI) */
 	public float getQLowLim() throws PsseModelException {return _list.getQLowLim(_ndx);}
 	/** get regulated bus */
-	public Bus getRegBus() throws PsseModelException {return _list.getRegBus(_ndx);}
+	public BusIn getRegBus() throws PsseModelException {return _list.getRegBus(_ndx);}
 	/** get initial susceptance per-unit */
 	public float getInitB() throws PsseModelException {return _list.getInitB(_ndx);}
 	

@@ -3,37 +3,36 @@ package com.powerdata.openpa.psse.csv;
 import java.io.File;
 
 import com.powerdata.openpa.psse.AreaList;
-import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.Generator;
 import com.powerdata.openpa.psse.ImpCorrTblList;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.Line;
-import com.powerdata.openpa.psse.OutBusList;
 import com.powerdata.openpa.psse.OwnerList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchedShuntList;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.ZoneList;
 
-public class PsseModel extends com.powerdata.openpa.psse.PsseModel
+public class PsseModelIn extends com.powerdata.openpa.psse.PsseModelIn
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
 	
 	GeneratorList _generatorList;
-	BusList _buses;
+	BusInList _buses;
 	LineList _branchList;
 	TransformerList _transformerList;
 	
-	public PsseModel(String dirpath)
+	public PsseModelIn(String dirpath)
 	{
 		_dir = new File(dirpath);
 	}
 	public File getDir() { return _dir; }
 	@Override
-	public BusList getBuses() throws PsseModelException
+	public BusInList getBuses() throws PsseModelException
 	{
-		if (_buses == null) _buses = new BusList(this);
+		if (_buses == null) _buses = new BusInList(this);
 		return _buses;
 	}
 	@Override
@@ -73,8 +72,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	{
 		try
 		{
-			PsseModel eq = new PsseModel("/tmp/caiso/");
-			for(Bus b : eq.getBuses())
+			PsseModelIn eq = new PsseModelIn("/tmp/caiso/");
+			for(BusIn b : eq.getBuses())
 			{
 				System.out.println(b);
 			}
@@ -95,11 +94,5 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println("ERROR: "+e);
 		}
-	}
-	@Override
-	public OutBusList getOutBusses() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

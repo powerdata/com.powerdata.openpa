@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public interface BaseGroup
+public interface BaseInputGroup
 {
-	public BusList getBuses() throws PsseModelException;
+	public BusInList getBuses() throws PsseModelException;
 	public GeneratorList getGenerators() throws PsseModelException;
 	public LoadList getLoads() throws PsseModelException;
 	public LineList getLines() throws PsseModelException;
@@ -13,8 +13,4 @@ public interface BaseGroup
 	public String[] getGroupTypes();
 	
 	public IslandList getIslands() throws PsseModelException;
-	
-	
-	public OutBusList getOutBusses() throws PsseModelException;
-	
 }
