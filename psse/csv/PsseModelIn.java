@@ -14,7 +14,7 @@ import com.powerdata.openpa.psse.SwitchedShuntList;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.ZoneList;
 
-public class PsseModelIn extends com.powerdata.openpa.psse.PsseModelIn
+public class PsseModelIn extends com.powerdata.openpa.psse.PsseInputModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;

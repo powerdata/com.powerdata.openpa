@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse;
 
-public abstract class PsseModelIn extends PsseModel implements BaseInputGroup
+public abstract class PsseInputModel extends PsseModel implements BaseInputGroup
 {
 	/** get system base MVA */
 	public abstract float getSBASE();
@@ -21,6 +21,11 @@ public abstract class PsseModelIn extends PsseModel implements BaseInputGroup
 	}
 	@Override
 	public String[] getGroupTypes() {return GroupType.values();}
+	
+	public abstract ImpCorrTblList getImpCorrTables() throws PsseModelException;
+	public abstract AreaList getAreas() throws PsseModelException;
+	public abstract OwnerList getOwners() throws PsseModelException;
+	public abstract ZoneList getZones() throws PsseModelException;
 	
 
 	

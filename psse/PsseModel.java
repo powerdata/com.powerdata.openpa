@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public abstract class PsseModel
 {
-	public static PsseModelIn OpenInput(String uri) throws PsseModelException
+	public static PsseInputModel OpenInput(String uri) throws PsseModelException
 	{
 		String[] tok = uri.split(":", 1);
 		switch(tok[0].toLowerCase())
@@ -17,7 +17,7 @@ public abstract class PsseModel
 		}
 	}
 
-	public static PsseModelOut OpenOut(String uri) throws PsseModelException
+	public static PsseOutputModel OpenOutput(String uri) throws PsseModelException
 	{
 		String[] tok = uri.split(":", 1);
 		switch(tok[0].toLowerCase())
@@ -48,11 +48,6 @@ public abstract class PsseModel
 	
 //	/** find a Bus by ID (moved to InputList)*/ 
 //	public BusIn getBus(String id) throws PsseModelException {return getBuses().get(id);}
-	
-	public abstract ImpCorrTblList getImpCorrTables() throws PsseModelException;
-	public abstract AreaList getAreas() throws PsseModelException;
-	public abstract OwnerList getOwners() throws PsseModelException;
-	public abstract ZoneList getZones() throws PsseModelException;
 	
 	
 	public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
