@@ -5,7 +5,7 @@ import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class BranchList extends PsseBaseList<Branch>
+public class BranchList extends PsseBaseInputList<Branch>
 {
 	public BranchList(PsseModel model)
 	{

@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class GeneratorList extends PsseBaseList<Generator>
+public abstract class GeneratorList extends PsseBaseInputList<Generator>
 {
 	public GeneratorList(PsseModel model) {super(model);}
 	

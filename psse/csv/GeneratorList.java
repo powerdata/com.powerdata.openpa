@@ -14,7 +14,7 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 {
-	PsseModelIn _eq;
+	PsseInputModel _eq;
 	BusInList _buses;
 	int _size;
 	
@@ -26,7 +26,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 	int _stat[];
 	float _rmpct[],_pt[],_pb[];
 
-	public GeneratorList(PsseModelIn eq) throws PsseModelException
+	public GeneratorList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try

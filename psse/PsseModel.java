@@ -11,7 +11,7 @@ public abstract class PsseModel
 		{
 			case "pssecsv": 
 				String dpath = tok[1].split("=")[1];
-				return new com.powerdata.openpa.psse.csv.PsseModelIn(dpath);
+				return new com.powerdata.openpa.psse.csv.PsseInputModel(dpath);
 			default:
 				throw new PsseModelException("URI not supported: "+uri);
 		}

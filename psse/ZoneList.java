@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse;
 
-public abstract class ZoneList extends PsseBaseList<Zone>
+public abstract class ZoneList extends PsseBaseInputList<Zone>
 {
 	public ZoneList(PsseModel model) {super(model);}
 

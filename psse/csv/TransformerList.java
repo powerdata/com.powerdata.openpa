@@ -17,7 +17,7 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 {
-	PsseModelIn _eq;
+	PsseInputModel _eq;
 	BusInList _buses;
 	int _size;
 	
@@ -33,7 +33,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	float _vma1[], _vma2[], _vma3[], _vmi1[], _vmi2[], _vmi3[], _vmstar[];
 	float _windv1[], _windv2[], _windv3[], _x1_2[], _x2_3[], _x3_1[];
 
-	public TransformerList(PsseModelIn eq) throws PsseModelException
+	public TransformerList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try

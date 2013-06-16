@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
+public abstract class SwitchedShuntList extends PsseBaseInputList<SwitchedShunt>
 {
 	public SwitchedShuntList(PsseModel model) {super(model);}
 

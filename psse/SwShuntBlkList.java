@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwShuntBlkList<T extends SwShuntBlk> extends PsseBaseList<T>
+public abstract class SwShuntBlkList<T extends SwShuntBlk> extends PsseBaseInputList<T>
 {
 	public SwShuntBlkList(PsseModel model) {super(model);}
 

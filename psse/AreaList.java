@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class AreaList extends PsseBaseList<Area>
+public abstract class AreaList extends PsseBaseInputList<Area>
 {
 	public AreaList(PsseModel model) {super(model);}
 

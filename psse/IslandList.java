@@ -5,7 +5,7 @@ import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class IslandList extends PsseBaseList<Island>
+public class IslandList extends PsseBaseInputList<Island>
 {
 	public IslandList(PsseModel model)
 	{

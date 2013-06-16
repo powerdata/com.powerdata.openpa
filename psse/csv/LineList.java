@@ -14,7 +14,7 @@ import com.powerdata.openpa.tools.StringAttrib;
 
 public class LineList extends com.powerdata.openpa.psse.LineList
 {
-	PsseModelIn _eq;
+	PsseInputModel _eq;
 	BusInList _buses;
 	int _size;
 	
@@ -23,7 +23,7 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	int _st[];
 	float _len[];
 	
-	public LineList(PsseModelIn eq) throws PsseModelException
+	public LineList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try

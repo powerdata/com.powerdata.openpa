@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse;
 //TODO:  Implement class
 
-public abstract class ImpCorrTblList extends PsseBaseList<ImpCorrTbl>
+public abstract class ImpCorrTblList extends PsseBaseInputList<ImpCorrTbl>
 {
 	/* Standard object retrieval */
 

@@ -23,7 +23,7 @@ import com.powerdata.openpa.tools.StringAttrib;
 public class BusInList extends com.powerdata.openpa.psse.BusInList
 {
 	/** parent container */
-	PsseModelIn _eq;
+	PsseInputModel _eq;
 	/** number of items in the DB */
 	int _size;
 	/** object IDs (really just the bus number) */
@@ -42,7 +42,7 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	float _gl[];
 	float _bl[];
 	
-	public BusInList(PsseModelIn eq) throws PsseModelException
+	public BusInList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try

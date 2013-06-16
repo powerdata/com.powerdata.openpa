@@ -14,7 +14,7 @@ import com.powerdata.openpa.psse.SwitchedShuntList;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.ZoneList;
 
-public class PsseModelIn extends com.powerdata.openpa.psse.PsseInputModel
+public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
@@ -24,7 +24,7 @@ public class PsseModelIn extends com.powerdata.openpa.psse.PsseInputModel
 	LineList _branchList;
 	TransformerList _transformerList;
 	
-	public PsseModelIn(String dirpath)
+	public PsseInputModel(String dirpath)
 	{
 		_dir = new File(dirpath);
 	}
@@ -72,7 +72,7 @@ public class PsseModelIn extends com.powerdata.openpa.psse.PsseInputModel
 	{
 		try
 		{
-			PsseModelIn eq = new PsseModelIn("/tmp/caiso/");
+			PsseInputModel eq = new PsseInputModel("/tmp/caiso/");
 			for(BusIn b : eq.getBuses())
 			{
 				System.out.println(b);

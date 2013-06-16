@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.PComplex;
 
-public abstract class BusInList extends PsseBaseList<BusIn>
+public abstract class BusInList extends PsseBaseInputList<BusIn>
 {
-	public BusInList(PsseModel model) {super(model);}
+	public BusInList(PsseInputModel model) {super(model);}
 
 	/* Standard object retrieval */
 

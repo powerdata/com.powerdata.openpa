@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse;
 
-public abstract class OwnerList extends PsseBaseList<Owner>
+public abstract class OwnerList extends PsseBaseInputList<Owner>
 {
 	public OwnerList(PsseModel model) {super(model);}
 

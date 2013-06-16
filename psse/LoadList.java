@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class LoadList extends PsseBaseList<Load>
+public abstract class LoadList extends PsseBaseInputList<Load>
 {
 	public LoadList(PsseModel model) {super(model);}
 
