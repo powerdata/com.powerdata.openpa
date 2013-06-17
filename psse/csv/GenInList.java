@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.GenIn;
-import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
@@ -12,7 +12,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class GeneratorList extends com.powerdata.openpa.psse.GenInList
+public class GenInList extends com.powerdata.openpa.psse.GenInList
 {
 	PsseInputModel _eq;
 	BusInList _buses;
@@ -26,7 +26,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GenInList
 	int _stat[];
 	float _rmpct[],_pt[],_pb[];
 
-	public GeneratorList(PsseInputModel eq) throws PsseModelException
+	public GenInList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -104,7 +104,7 @@ public class GeneratorList extends com.powerdata.openpa.psse.GenInList
 	@Override
 	public float getPB(int ndx) { return _pb[ndx]; }
 	@Override
-	public OwnershipList<?> getOwnership(int ndx) { return null; }
+	public OwnershipInList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
 	@Override

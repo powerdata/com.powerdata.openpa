@@ -5,9 +5,9 @@ import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class BranchList extends PsseBaseInputList<Branch>
+public class BranchInList extends PsseBaseInputList<BranchIn>
 {
-	public BranchList(PsseModel model)
+	public BranchInList(PsseInputModel model)
 	{
 		super(model);
 		// TODO Auto-generated constructor stub
@@ -21,35 +21,35 @@ public class BranchList extends PsseBaseInputList<Branch>
 	}
 
 	@Override
-	public StringAttrib<Branch> mapStringAttrib(String attribname)
+	public StringAttrib<BranchIn> mapStringAttrib(String attribname)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public FloatAttrib<Branch> mapFloatAttrib(String attribname)
+	public FloatAttrib<BranchIn> mapFloatAttrib(String attribname)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IntAttrib<Branch> mapIntAttrib(String attribname)
+	public IntAttrib<BranchIn> mapIntAttrib(String attribname)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BooleanAttrib<Branch> mapBooleanAttrib(String attribname)
+	public BooleanAttrib<BranchIn> mapBooleanAttrib(String attribname)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Branch get(int arg0)
+	public BranchIn get(int arg0)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -141,9 +141,9 @@ abstract class BranchView
 
 class LineView extends BranchView
 {
-	protected LineList	_lines;
+	protected LineInList	_lines;
 	
-	public LineView(int offset, LineList lines)
+	public LineView(int offset, LineInList lines)
 	{
 		super(offset);
 		_lines = lines;
@@ -171,9 +171,9 @@ class LineView extends BranchView
 
 class TransformerView2W extends BranchView
 {
-	protected TransformerList _txfrs;
+	protected TransformerInList _txfrs;
 	
-	public TransformerView2W(int offset, TransformerList txfrs)
+	public TransformerView2W(int offset, TransformerInList txfrs)
 	{
 		super(offset);
 		_txfrs = txfrs;

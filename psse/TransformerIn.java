@@ -3,11 +3,11 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Transformer extends BaseObject
+public class TransformerIn extends BaseObject
 {
-	protected TransformerList _list;
+	protected TransformerInList _list;
 	
-	public Transformer(int ndx, TransformerList list)
+	public TransformerIn(int ndx, TransformerInList list)
 	{
 		super(ndx);
 		_list = list;
@@ -97,7 +97,7 @@ public class Transformer extends BaseObject
 	/** min active power limit into xfr at winding 1 bus end (VMA) in pu */
 	public float getMinActvPwr1() throws PsseModelException {return _list.getMinActvPwr1(_ndx);}
 	/** transformer impedance correction table for winding (TAB1) */
-	public ImpCorrTbl getImpCorrTbl1() throws PsseModelException {return _list.getImpCorrTbl1(_ndx);}
+	public ImpCorrTblIn getImpCorrTbl1() throws PsseModelException {return _list.getImpCorrTbl1(_ndx);}
 	/** get winding 2 turns ratio p.u. on winding 2 bus base voltage*/
 	public float getWnd2Ratio() throws PsseModelException {return _list.getWnd2Ratio(_ndx);}
 	/** get winding 2 nominal KV */
@@ -133,7 +133,7 @@ public class Transformer extends BaseObject
 	/** min active power limit into xfr at winding 2 bus end (VMA) in pu */
 	public float getMinActvPwr2() throws PsseModelException {return _list.getMinActvPwr2(_ndx);}
 	/** transformer impedance correction table for winding (TAB2) */
-	public ImpCorrTbl getImpCorrTbl2() throws PsseModelException {return _list.getImpCorrTbl2(_ndx);}
+	public ImpCorrTblIn getImpCorrTbl2() throws PsseModelException {return _list.getImpCorrTbl2(_ndx);}
 	/** get winding 3 turns ratio p.u. on winding 3 bus base voltage*/
 	public float getWnd3Ratio() throws PsseModelException {return _list.getWnd3Ratio(_ndx);}
 	/** get winding 3 nominal KV */
@@ -169,7 +169,7 @@ public class Transformer extends BaseObject
 	/** min active power limit into xfr at winding 3 bus end (VMA) in pu */
 	public float getMinActvPwr3() throws PsseModelException {return _list.getMinActvPwr3(_ndx);}
 	/** transformer impedance correction table for winding (TAB3) */
-	public ImpCorrTbl getImpCorrTbl3() throws PsseModelException {return _list.getImpCorrTbl3(_ndx);}
+	public ImpCorrTblIn getImpCorrTbl3() throws PsseModelException {return _list.getImpCorrTbl3(_ndx);}
 	
 	/* Raw PSS/e methods (line 1) */
 	
@@ -329,6 +329,6 @@ public class Transformer extends BaseObject
 	public float getCX3() throws PsseModelException {return _list.getCX3(_ndx);}
 
 	/** return Ownership as a list */
-	public OwnershipList<?> getOwnership() {return _list.getOwnership(_ndx);}
+	public OwnershipInList getOwnership() {return _list.getOwnership(_ndx);}
 
 }

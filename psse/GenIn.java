@@ -100,7 +100,7 @@ public class GenIn extends BaseObject
 	
 	
 	/** return Ownership as a list */
-	public OwnershipList<?> getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+	public OwnershipInList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 	
 	
 

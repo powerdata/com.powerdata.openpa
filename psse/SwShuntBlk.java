@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public class SwShuntBlk extends BaseObject
 {
-	protected SwShuntBlkList<?> _list;
+	protected SwShuntBlkList _list;
 	
-	public SwShuntBlk(int ndx, SwShuntBlkList<?> list)
+	public SwShuntBlk(int ndx, SwShuntBlkList list)
 	{
 		super(ndx);
 		_list = list;

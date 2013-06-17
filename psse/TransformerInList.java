@@ -3,9 +3,9 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class TransformerList extends PsseBaseInputList<Transformer>
+public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 {
-	public TransformerList(PsseModel model) {super(model);}
+	public TransformerInList(PsseInputModel model) {super(model);}
 
 	protected float rmDefault(int ndx, char mm, int wnd, float defval, int abscod)
 			throws PsseModelException
@@ -133,10 +133,10 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 
 	/** Get a Transformer by it's index. */
 	@Override
-	public Transformer get(int ndx) { return new Transformer(ndx,this); }
+	public TransformerIn get(int ndx) { return new TransformerIn(ndx,this); }
 	/** Get a Transformer by it's ID. */
 	@Override
-	public Transformer get(String id) { return super.get(id); }
+	public TransformerIn get(String id) { return super.get(id); }
 
 	/* convenience interface */
 	
@@ -174,7 +174,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public abstract float getMinReacPwr1(int ndx) throws PsseModelException;
 	public abstract float getMaxActvPwr1(int ndx) throws PsseModelException;
 	public abstract float getMinActvPwr1(int ndx) throws PsseModelException;
-	public abstract ImpCorrTbl getImpCorrTbl1(int ndx) throws PsseModelException;
+	public abstract ImpCorrTblIn getImpCorrTbl1(int ndx) throws PsseModelException;
 
 	public abstract float getWnd2Ratio(int ndx) throws PsseModelException;
 	public abstract float getWnd2NomKV(int ndx) throws PsseModelException;
@@ -193,7 +193,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public abstract float getMinReacPwr2(int ndx) throws PsseModelException;
 	public abstract float getMaxActvPwr2(int ndx) throws PsseModelException;
 	public abstract float getMinActvPwr2(int ndx) throws PsseModelException;
-	public abstract ImpCorrTbl getImpCorrTbl2(int ndx) throws PsseModelException;
+	public abstract ImpCorrTblIn getImpCorrTbl2(int ndx) throws PsseModelException;
 	
 	public abstract float getWnd3Ratio(int ndx) throws PsseModelException;
 	public abstract float getWnd3NomKV(int ndx) throws PsseModelException;
@@ -212,7 +212,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public abstract float getMinReacPwr3(int ndx) throws PsseModelException;
 	public abstract float getMaxActvPwr3(int ndx) throws PsseModelException;
 	public abstract float getMinActvPwr3(int ndx) throws PsseModelException;
-	public abstract ImpCorrTbl getImpCorrTbl3(int ndx) throws PsseModelException;
+	public abstract ImpCorrTblIn getImpCorrTbl3(int ndx) throws PsseModelException;
 
 	
 	/* Convenience defaults */
@@ -280,7 +280,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public float getDeftMinReacPwr1(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD1(ndx), getVMI1(ndx));}
 	public float getDeftMaxActvPwr1(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
 	public float getDeftMinActvPwr1(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD1(ndx), getVMA1(ndx));}
-	public ImpCorrTbl getDeftImpCorrTbl1(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB1(ndx)));}
+	public ImpCorrTblIn getDeftImpCorrTbl1(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB1(ndx)));}
 
 	public float getDeftWnd2Ratio(int ndx) throws PsseModelException
 	{
@@ -311,7 +311,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public float getDeftMinReacPwr2(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD2(ndx), getVMI2(ndx));}
 	public float getDeftMaxActvPwr2(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
 	public float getDeftMinActvPwr2(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD2(ndx), getVMA2(ndx));}
-	public ImpCorrTbl getDeftImpCorrTbl2(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB2(ndx)));}
+	public ImpCorrTblIn getDeftImpCorrTbl2(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB2(ndx)));}
 	
 	public float getDeftWnd3Ratio(int ndx) throws PsseModelException
 	{
@@ -342,7 +342,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public float getDeftMinReacPwr3(int ndx) throws PsseModelException {return reacPwrLim(ndx, getCOD3(ndx), getVMI3(ndx));}
 	public float getDeftMaxActvPwr3(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
 	public float getDeftMinActvPwr3(int ndx) throws PsseModelException {return actvPwrLim(ndx, getCOD3(ndx), getVMA3(ndx));}
-	public ImpCorrTbl getDeftImpCorrTbl3(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB3(ndx)));}
+	public ImpCorrTblIn getDeftImpCorrTbl3(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB3(ndx)));}
 
 	
 	/* Raw methods */
@@ -421,7 +421,7 @@ public abstract class TransformerList extends PsseBaseInputList<Transformer>
 	public abstract float getCR3(int ndx);
 	public abstract float getCX3(int ndx);
 
-	public abstract OwnershipList<?> getOwnership(int ndx);
+	public abstract OwnershipInList getOwnership(int ndx);
 
 
 	/* raw method defaults */

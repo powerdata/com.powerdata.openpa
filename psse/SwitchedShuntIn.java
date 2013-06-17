@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class SwitchedShunt extends BaseObject
+public class SwitchedShuntIn extends BaseObject
 {
-	protected SwitchedShuntList _list;
+	protected SwitchedShuntiNList _list;
 	
-	public SwitchedShunt(int ndx, SwitchedShuntList list)
+	public SwitchedShuntIn(int ndx, SwitchedShuntiNList list)
 	{
 		super(ndx);
 		_list = list;
@@ -56,6 +56,6 @@ public class SwitchedShunt extends BaseObject
 	/** switched shunt admittance */
 	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
 	/** block information */
-	public SwShuntBlkList<?> getBlocks() throws PsseModelException {return _list.getBlocks(_ndx);}
+	public SwShuntBlkList getBlocks() throws PsseModelException {return _list.getBlocks(_ndx);}
 	
 }

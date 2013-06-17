@@ -4,13 +4,13 @@ public interface BaseInputGroup
 {
 	public BusInList getBuses() throws PsseModelException;
 	public GenInList getGenerators() throws PsseModelException;
-	public LoadList getLoads() throws PsseModelException;
-	public LineList getLines() throws PsseModelException;
-	public TransformerList getTransformers() throws PsseModelException;
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException;
+	public LoadInList getLoads() throws PsseModelException;
+	public LineInList getLines() throws PsseModelException;
+	public TransformerInList getTransformers() throws PsseModelException;
+	public SwitchedShuntiNList getSwitchedShunts() throws PsseModelException;
 
-	public GroupList getGroup(String type) throws PsseModelException;
+	public GroupInList getGroup(String type) throws PsseModelException;
 	public String[] getGroupTypes();
 	
-	public IslandList getIslands() throws PsseModelException;
+	public IslandInList getIslands() throws PsseModelException;
 }

@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.Line;
-import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.LineIn;
+import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
@@ -12,7 +12,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class LineList extends com.powerdata.openpa.psse.LineList
+public class LineInList extends com.powerdata.openpa.psse.LineInList
 {
 	PsseInputModel _eq;
 	BusInList _buses;
@@ -23,7 +23,7 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	int _st[];
 	float _len[];
 	
-	public LineList(PsseInputModel eq) throws PsseModelException
+	public LineInList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -86,17 +86,17 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	@Override
 	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
-	public OwnershipList<?> getOwnership(int ndx) { return null; }
+	public OwnershipInList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override
-	public StringAttrib<Line> mapStringAttrib(String attribname) { return null; }
+	public StringAttrib<LineIn> mapStringAttrib(String attribname) { return null; }
 	@Override
-	public FloatAttrib<Line> mapFloatAttrib(String attribname) { return null; }
+	public FloatAttrib<LineIn> mapFloatAttrib(String attribname) { return null; }
 	@Override
-	public IntAttrib<Line> mapIntAttrib(String attribname) { return null; }
+	public IntAttrib<LineIn> mapIntAttrib(String attribname) { return null; }
 	@Override
-	public BooleanAttrib<Line> mapBooleanAttrib(String attribname) { return null; }
+	public BooleanAttrib<LineIn> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 

@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public class Island extends Group
+public class IslandIn extends GroupIn
 {
-	public Island(int ndx) { super(ndx); }
+	public IslandIn(int ndx) { super(ndx); }
 
 	@Override
 	public String getObjectID()
@@ -26,35 +26,35 @@ public class Island extends Group
 	}
 
 	@Override
-	public LoadList getLoads() throws PsseModelException
+	public LoadInList getLoads() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public LineList getLines() throws PsseModelException
+	public LineInList getLines() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TransformerList getTransformers() throws PsseModelException
+	public TransformerInList getTransformers() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
+	public SwitchedShuntiNList getSwitchedShunts() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GroupList getGroup(String type) throws PsseModelException
+	public GroupInList getGroup(String type) throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -68,7 +68,7 @@ public class Island extends Group
 	}
 
 	@Override
-	public IslandList getIslands() throws PsseModelException
+	public IslandInList getIslands() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;

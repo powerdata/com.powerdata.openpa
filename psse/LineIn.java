@@ -3,12 +3,12 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Line extends BaseObject
+public class LineIn extends BaseObject
 {
 
-	protected LineList _list;
+	protected LineInList _list;
 	
-	public Line(int ndx, LineList list)
+	public LineIn(int ndx, LineInList list)
 	{
 		super(ndx);
 		_list = list;
@@ -92,6 +92,6 @@ public class Line extends BaseObject
 	public float getLEN() throws PsseModelException {return _list.getLEN(_ndx);}
 	
 	/** return Ownership as a list */
-	public OwnershipList<?> getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+	public OwnershipInList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 	
 }

@@ -2,9 +2,9 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwitchedShuntList extends PsseBaseInputList<SwitchedShunt>
+public abstract class SwitchedShuntiNList extends PsseBaseInputList<SwitchedShuntIn>
 {
-	public SwitchedShuntList(PsseModel model) {super(model);}
+	public SwitchedShuntiNList(PsseInputModel model) {super(model);}
 
 	protected float vsVoltDeft(int ndx, boolean ishigh)
 			throws PsseModelException
@@ -36,10 +36,10 @@ public abstract class SwitchedShuntList extends PsseBaseInputList<SwitchedShunt>
 
 	/** Get a SwitchedShunt by it's index. */
 	@Override
-	public SwitchedShunt get(int ndx) { return new SwitchedShunt(ndx,this); }
+	public SwitchedShuntIn get(int ndx) { return new SwitchedShuntIn(ndx,this); }
 	/** Get a SwitchedShunt by it's ID. */
 	@Override
-	public SwitchedShunt get(String id) { return super.get(id); }
+	public SwitchedShuntIn get(String id) { return super.get(id); }
 
 	/* convenience methods */
 	
@@ -76,7 +76,7 @@ public abstract class SwitchedShuntList extends PsseBaseInputList<SwitchedShunt>
 	public abstract float getRMPCT(int ndx)throws PsseModelException;
 	public abstract String getRMIDNT(int ndx)throws PsseModelException;
 	public abstract float getBINIT(int ndx)throws PsseModelException;
-	public abstract SwShuntBlkList<?> getBlocks(int ndx)throws PsseModelException;
+	public abstract SwShuntBlkList getBlocks(int ndx)throws PsseModelException;
 
 
 	/* defaults */

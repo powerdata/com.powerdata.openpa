@@ -1,10 +1,10 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.ImpCorrTbl;
-import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.ImpCorrTblIn;
+import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.TransformerIn;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerStatus;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -15,7 +15,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class TransformerList extends com.powerdata.openpa.psse.TransformerList
+public class TransformerInList extends com.powerdata.openpa.psse.TransformerInList
 {
 	PsseInputModel _eq;
 	BusInList _buses;
@@ -33,7 +33,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	float _vma1[], _vma2[], _vma3[], _vmi1[], _vmi2[], _vmi3[], _vmstar[];
 	float _windv1[], _windv2[], _windv3[], _x1_2[], _x2_3[], _x3_1[];
 
-	public TransformerList(PsseInputModel eq) throws PsseModelException
+	public TransformerInList(PsseInputModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -268,20 +268,20 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public float getCX3(int ndx) { return _cx3[ndx]; }
 	@Override
-	public OwnershipList<?> getOwnership(int ndx) { return null; }
+	public OwnershipInList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx)
 	{ 
 		return _i[ndx]+":"+_j[ndx]+":"+_k[ndx]+":"+_ckt[ndx];
 	}
 	@Override
-	public StringAttrib<Transformer> mapStringAttrib(String attribname) { return null; }
+	public StringAttrib<TransformerIn> mapStringAttrib(String attribname) { return null; }
 	@Override
-	public FloatAttrib<Transformer> mapFloatAttrib(String attribname) { return null; }
+	public FloatAttrib<TransformerIn> mapFloatAttrib(String attribname) { return null; }
 	@Override
-	public IntAttrib<Transformer> mapIntAttrib(String attribname) { return null; }
+	public IntAttrib<TransformerIn> mapIntAttrib(String attribname) { return null; }
 	@Override
-	public BooleanAttrib<Transformer> mapBooleanAttrib(String attribname) { return null; }
+	public BooleanAttrib<TransformerIn> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 
@@ -339,7 +339,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public float getMinActvPwr1(int ndx) throws PsseModelException {return getDeftMinActvPwr1(ndx);}
 	@Override
-	public ImpCorrTbl getImpCorrTbl1(int ndx) throws PsseModelException {return getDeftImpCorrTbl1(ndx);}
+	public ImpCorrTblIn getImpCorrTbl1(int ndx) throws PsseModelException {return getDeftImpCorrTbl1(ndx);}
 	@Override
 	public float getWnd2Ratio(int ndx) throws PsseModelException {return getDeftWnd2Ratio(ndx);}
 	@Override
@@ -373,7 +373,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public float getMinActvPwr2(int ndx) throws PsseModelException {return getDeftMinActvPwr2(ndx);}
 	@Override
-	public ImpCorrTbl getImpCorrTbl2(int ndx) throws PsseModelException {return getDeftImpCorrTbl2(ndx);}
+	public ImpCorrTblIn getImpCorrTbl2(int ndx) throws PsseModelException {return getDeftImpCorrTbl2(ndx);}
 	@Override
 	public float getWnd3Ratio(int ndx) throws PsseModelException {return getDeftWnd3Ratio(ndx);}
 	@Override
@@ -407,7 +407,7 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public float getMinActvPwr3(int ndx) throws PsseModelException {return getDeftMinActvPwr3(ndx);}
 	@Override
-	public ImpCorrTbl getImpCorrTbl3(int ndx) throws PsseModelException {return getDeftImpCorrTbl3(ndx);}
+	public ImpCorrTblIn getImpCorrTbl3(int ndx) throws PsseModelException {return getDeftImpCorrTbl3(ndx);}
 
 	@Override
 	public Complex getZ100_1_2(int ndx) throws PsseModelException {return getDeftZ100_1_2(ndx);}

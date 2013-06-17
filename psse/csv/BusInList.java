@@ -1,11 +1,11 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.Area;
+import com.powerdata.openpa.psse.AreaIn;
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.BusTypeCode;
-import com.powerdata.openpa.psse.Owner;
+import com.powerdata.openpa.psse.OwnerIn;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.Zone;
+import com.powerdata.openpa.psse.ZoneIn;
 //import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
@@ -113,14 +113,14 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	@Override
 	public BusTypeCode getBusType(int ndx) throws PsseModelException { return getDeftBusType(ndx); }
 	@Override
-	public Area getAreaObject(int ndx) throws PsseModelException
+	public AreaIn getAreaObject(int ndx) throws PsseModelException
 	{
 		return getDeftAreaObject(ndx);
 	}
 	@Override
-	public Zone getZoneObject(int ndx) throws PsseModelException { return getDeftZoneObject(ndx); }
+	public ZoneIn getZoneObject(int ndx) throws PsseModelException { return getDeftZoneObject(ndx); }
 	@Override
-	public Owner getOwnerObject(int ndx) throws PsseModelException { return getDeftOwnerObject(ndx); }
+	public OwnerIn getOwnerObject(int ndx) throws PsseModelException { return getDeftOwnerObject(ndx); }
 	@Override
 	public float getShuntG(int ndx) throws PsseModelException { return getDeftShuntG(ndx); }
 	@Override

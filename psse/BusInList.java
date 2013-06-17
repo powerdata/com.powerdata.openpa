@@ -20,9 +20,9 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 	/* convenience methods */
 	
 	public abstract BusTypeCode getBusType(int ndx) throws PsseModelException;
-	public abstract Area getAreaObject(int ndx) throws PsseModelException;
-	public abstract Zone getZoneObject(int ndx) throws PsseModelException;
-	public abstract Owner getOwnerObject(int ndx) throws PsseModelException;
+	public abstract AreaIn getAreaObject(int ndx) throws PsseModelException;
+	public abstract ZoneIn getZoneObject(int ndx) throws PsseModelException;
+	public abstract OwnerIn getOwnerObject(int ndx) throws PsseModelException;
 	public abstract float getShuntG(int ndx) throws PsseModelException;
 	public abstract float getShuntB(int ndx) throws PsseModelException;
 	public abstract float getVaRad(int ndx) throws PsseModelException;
@@ -33,12 +33,12 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 	/* convenience defaults */
 	
 	public BusTypeCode getDeftBusType(int ndx) throws PsseModelException {return BusTypeCode.fromCode(getIDE(ndx));}
-	public Area getDeftAreaObject(int ndx) throws PsseModelException
+	public AreaIn getDeftAreaObject(int ndx) throws PsseModelException
 	{
 		return _model.getAreas().get(getAREA(ndx));
 	}
-	public Zone getDeftZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
-	public Owner getDeftOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getOWNER(ndx));}
+	public ZoneIn getDeftZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
+	public OwnerIn getDeftOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getOWNER(ndx));}
 	public float getDeftShuntG(int ndx) throws PsseModelException {return PAMath.mw2pu(getGL(ndx));}
 	public float getDeftShuntB(int ndx) throws PsseModelException {return PAMath.mvar2pu(getBL(ndx));}
 	public float getDeftVaRad(int ndx)  throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}

@@ -81,7 +81,7 @@ public abstract class GenInList extends PsseBaseInputList<GenIn>
 	public abstract float getPT(int ndx) throws PsseModelException;
 	public abstract float getPB(int ndx) throws PsseModelException;
 
-	public abstract OwnershipList<?> getOwnership(int ndx) throws PsseModelException;
+	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
 	
 	
 	/* default methods */

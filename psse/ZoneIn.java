@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class Zone extends BaseObject
+public class ZoneIn extends BaseObject
 {
-	protected ZoneList _list;
+	protected ZoneInList _list;
 	
-	public Zone(int ndx, ZoneList list)
+	public ZoneIn(int ndx, ZoneInList list)
 	{
 		super(ndx);
 		_list = list;

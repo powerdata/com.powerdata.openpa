@@ -3,18 +3,18 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class LineList extends PsseBaseInputList<Line>
+public abstract class LineInList extends PsseBaseInputList<LineIn>
 {
-	public LineList(PsseModel model) {super(model);}
+	public LineInList(PsseInputModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a NontransformerBranch by it's index. */
 	@Override
-	public Line get(int ndx) { return new Line(ndx,this); }
+	public LineIn get(int ndx) { return new LineIn(ndx,this); }
 	/** Get a NontransformerBranch by it's ID. */
 	@Override
-	public Line get(String id) { return super.get(id); }
+	public LineIn get(String id) { return super.get(id); }
 
 	/* Convenience Methods */
 	
@@ -80,7 +80,7 @@ public abstract class LineList extends PsseBaseInputList<Line>
 	public abstract int getST(int ndx) throws PsseModelException;
 	public abstract float getLEN(int ndx) throws PsseModelException;
 
-	public abstract OwnershipList<?> getOwnership(int ndx) throws PsseModelException;
+	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
 	
 	/* Defaults */
 	public String getDeftCKT(int ndx) {return "1";}
@@ -95,6 +95,6 @@ public abstract class LineList extends PsseBaseInputList<Line>
 	public int getDeftST(int ndx) {return 1;}
 	public float getDeftLEN(int ndx) {return 0F;}
 	
-	public OwnershipList<Ownership> getDeftOwnership(int ndx) {return null;}
+	public OwnershipInList getDeftOwnership(int ndx) {return null;}
 
 }	

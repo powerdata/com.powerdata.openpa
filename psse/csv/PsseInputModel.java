@@ -2,27 +2,27 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 
-import com.powerdata.openpa.psse.AreaList;
+import com.powerdata.openpa.psse.AreaInList;
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.GenIn;
-import com.powerdata.openpa.psse.ImpCorrTblList;
-import com.powerdata.openpa.psse.LoadList;
-import com.powerdata.openpa.psse.Line;
-import com.powerdata.openpa.psse.OwnerList;
+import com.powerdata.openpa.psse.ImpCorrTblInList;
+import com.powerdata.openpa.psse.LoadInList;
+import com.powerdata.openpa.psse.LineIn;
+import com.powerdata.openpa.psse.OwnerInList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.SwitchedShuntList;
-import com.powerdata.openpa.psse.Transformer;
-import com.powerdata.openpa.psse.ZoneList;
+import com.powerdata.openpa.psse.SwitchedShuntiNList;
+import com.powerdata.openpa.psse.TransformerIn;
+import com.powerdata.openpa.psse.ZoneInList;
 
 public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
 	
-	GeneratorList _generatorList;
+	GenInList _generatorList;
 	BusInList _buses;
-	LineList _branchList;
-	TransformerList _transformerList;
+	LineInList _branchList;
+	TransformerInList _transformerList;
 	
 	public PsseInputModel(String dirpath)
 	{
@@ -36,37 +36,37 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 		return _buses;
 	}
 	@Override
-	public GeneratorList getGenerators() throws PsseModelException
+	public GenInList getGenerators() throws PsseModelException
 	{
-		if (_generatorList == null) _generatorList = new GeneratorList(this);
+		if (_generatorList == null) _generatorList = new GenInList(this);
 		return _generatorList;
 	}
 	@Override
-	public LineList getLines() throws PsseModelException
+	public LineInList getLines() throws PsseModelException
 	{
-		if (_branchList == null) _branchList = new LineList(this);
+		if (_branchList == null) _branchList = new LineInList(this);
 		return _branchList;
 	}
 	@Override
-	public TransformerList getTransformers() throws PsseModelException
+	public TransformerInList getTransformers() throws PsseModelException
 	{
-		if (_transformerList == null) _transformerList = new TransformerList(this);
+		if (_transformerList == null) _transformerList = new TransformerInList(this);
 		return _transformerList;
 	}
 	@Override
-	public LoadList getLoads() throws PsseModelException {return null;} //TODO:
+	public LoadInList getLoads() throws PsseModelException {return null;} //TODO:
 	@Override
-	public OwnerList getOwners() throws PsseModelException { return null; } //TODO:
+	public OwnerInList getOwners() throws PsseModelException { return null; } //TODO:
 	@Override
-	public AreaList getAreas() throws PsseModelException { return null; } //TODO:
+	public AreaInList getAreas() throws PsseModelException { return null; } //TODO:
 	@Override
-	public ZoneList getZones() throws PsseModelException { return null; } //TODO:
+	public ZoneInList getZones() throws PsseModelException { return null; } //TODO:
 	@Override
 	public float getSBASE() {return getDeftSBASE();}
 	@Override
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return null;} //TODO:
+	public SwitchedShuntiNList getSwitchedShunts() throws PsseModelException {return null;} //TODO:
 	@Override
-	public ImpCorrTblList getImpCorrTables() throws PsseModelException {return null;} //TODO:
+	public ImpCorrTblInList getImpCorrTables() throws PsseModelException {return null;} //TODO:
 	
 	static public void main(String args[])
 	{
@@ -81,11 +81,11 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 			{
 				System.out.println(g);
 			}
-			for(Line b : eq.getLines())
+			for(LineIn b : eq.getLines())
 			{
 				System.out.println(b);
 			}
-			for(Transformer t : eq.getTransformers())
+			for(TransformerIn t : eq.getTransformers())
 			{
 				System.out.println(t);
 			}

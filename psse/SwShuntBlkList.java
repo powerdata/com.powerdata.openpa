@@ -2,19 +2,18 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwShuntBlkList<T extends SwShuntBlk> extends PsseBaseInputList<T>
+public abstract class SwShuntBlkList extends PsseBaseInputList<SwShuntBlk>
 {
-	public SwShuntBlkList(PsseModel model) {super(model);}
+	public SwShuntBlkList(PsseInputModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a SwitchedShuntBlock by it's index. */
 	@Override
-	@SuppressWarnings("unchecked")
-	public T get(int ndx) { return (T) new SwShuntBlk(ndx,this); }
+	public SwShuntBlk get(int ndx) { return new SwShuntBlk(ndx,this); }
 	/** Get a SwitchedShuntBlock by it's ID. */
 	@Override
-	public T get(String id) { return super.get(id); }
+	public SwShuntBlk get(String id) { return super.get(id); }
 
 	/* convenience methods */
 

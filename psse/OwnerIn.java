@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class Owner extends BaseObject
+public class OwnerIn extends BaseObject
 {
-	protected OwnerList _list;
+	protected OwnerInList _list;
 	
-	public Owner(int ndx, OwnerList list)
+	public OwnerIn(int ndx, OwnerInList list)
 	{
 		super(ndx);
 		_list = list;

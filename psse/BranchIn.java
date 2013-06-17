@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class Branch extends BaseObject
+public class BranchIn extends BaseObject
 {
-	protected BranchList _list;
+	protected BranchInList _list;
 	
-	public Branch(int ndx, BranchList list)
+	public BranchIn(int ndx, BranchInList list)
 	{
 		super(ndx);
 		_list = list;

@@ -25,11 +25,11 @@ public class BusIn extends BaseObject
 	/** enumerated IDE code */
 	public BusTypeCode getBusType() throws PsseModelException {return _list.getBusType(_ndx);}
 	/** Area */
-	public Area getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
+	public AreaIn getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
 	/** Zone */
-	public Zone getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
+	public ZoneIn getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */
-	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
+	public OwnerIn getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
 	/** Active component of shunt admittance to ground (GL) p.u. */
 	public float getShuntG() throws PsseModelException {return _list.getShuntG(_ndx);}
 	/** Reactive component of shunt admittance to ground (BL) p.u. */

@@ -3,25 +3,25 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class LoadList extends PsseBaseInputList<Load>
+public abstract class LoadInList extends PsseBaseInputList<LoadIn>
 {
-	public LoadList(PsseModel model) {super(model);}
+	public LoadInList(PsseInputModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a Load by it's index. */
 	@Override
-	public Load get(int ndx) { return new Load(ndx,this); }
+	public LoadIn get(int ndx) { return new LoadIn(ndx,this); }
 	/** Get a Load by it's ID. */
 	@Override
-	public Load get(String id) { return super.get(id); }
+	public LoadIn get(String id) { return super.get(id); }
 
 	/* convenience methods */
 	
 	public abstract BusIn getBus(int ndx) throws PsseModelException;
 	public abstract boolean getInSvc(int ndx) throws PsseModelException;
-	public abstract Area getAreaObj(int ndx) throws PsseModelException;
-	public abstract Zone getZoneObj(int ndx) throws PsseModelException;
+	public abstract AreaIn getAreaObj(int ndx) throws PsseModelException;
+	public abstract ZoneIn getZoneObj(int ndx) throws PsseModelException;
 	public abstract float getActvPwr(int ndx) throws PsseModelException;
 	public abstract float getReacPwr(int ndx) throws PsseModelException;
 	public abstract Complex getPwr(int ndx) throws PsseModelException;
@@ -31,14 +31,14 @@ public abstract class LoadList extends PsseBaseInputList<Load>
 	public abstract float getActvPwrY(int ndx) throws PsseModelException;
 	public abstract float getReacPwrY(int ndx) throws PsseModelException;
 	public abstract Complex getPwrY(int ndx) throws PsseModelException;
-	public abstract Owner getOwnerObj(int ndx) throws PsseModelException;
+	public abstract OwnerIn getOwnerObj(int ndx) throws PsseModelException;
 
 	/* convenience defaults */
 	
 	public BusIn getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
 	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
-	public Area getDeftAreaObj(int ndx) throws PsseModelException {return _model.getAreas().get(String.valueOf(getAREA(ndx)));}
-	public Zone getDeftZoneObj(int ndx) throws PsseModelException  {return _model.getZones().get(String.valueOf(getZONE(ndx)));}
+	public AreaIn getDeftAreaObj(int ndx) throws PsseModelException {return _model.getAreas().get(String.valueOf(getAREA(ndx)));}
+	public ZoneIn getDeftZoneObj(int ndx) throws PsseModelException  {return _model.getZones().get(String.valueOf(getZONE(ndx)));}
 	public float getDeftActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPL(ndx));}
 	public float getDeftReacPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getQL(ndx));}
 	public Complex getDeftPwr(int ndx) throws PsseModelException   {return new Complex(getActvPwr(ndx), getReacPwr(ndx));}
@@ -48,7 +48,7 @@ public abstract class LoadList extends PsseBaseInputList<Load>
 	public float getDeftActvPwrY(int ndx) throws PsseModelException {return PAMath.mw2pu(getYP(ndx));}
 	public float getDeftReacPwrY(int ndx) throws PsseModelException {return PAMath.mw2pu(getYQ(ndx));}
 	public Complex getDeftPwrY(int ndx) throws PsseModelException {return new Complex(getActvPwrY(ndx), getReacPwrY(ndx));}
-	public Owner getDeftOwnerObj(int ndx) throws PsseModelException {return _model.getOwners().get(String.valueOf(getOWNER(ndx)));}
+	public OwnerIn getDeftOwnerObj(int ndx) throws PsseModelException {return _model.getOwners().get(String.valueOf(getOWNER(ndx)));}
 
 	/* raw methods */
 

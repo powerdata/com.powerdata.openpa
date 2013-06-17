@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class Ownership extends BaseObject
+public class OwnershipIn extends BaseObject
 {
-	protected OwnershipList<?> _list;
+	protected OwnershipInList _list;
 
-	public Ownership(int ndx, OwnershipList<?> list)
+	public OwnershipIn(int ndx, OwnershipInList list)
 	{
 		super(ndx);
 		_list = list;
@@ -17,7 +17,7 @@ public class Ownership extends BaseObject
 
 	/* Convenience Methods */
 
-	public Owner getOwner() throws PsseModelException {return _list.getOwner(_ndx);}
+	public OwnerIn getOwner() throws PsseModelException {return _list.getOwner(_ndx);}
 	
 	/* raw psse methods */
 	
