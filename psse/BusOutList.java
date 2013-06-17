@@ -8,7 +8,7 @@ public abstract class BusOutList extends PsseBaseOutputList<BusOut>
 
 	public BusOutList(PsseOutputModel model) {super(model);}
 
-	public abstract void setVmag(int _ndx, float vm);
-	public abstract void setVang(int _ndx, float va);
-	public abstract void setVoltage(int _ndx, Complex v);
+	public abstract void setVmag(int ndx, float vm);
+	public abstract void setVang(int ndx, float va);
+	public abstract void setVoltage(int ndx, Complex v);
 }
