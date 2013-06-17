@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.Generator;
+import com.powerdata.openpa.psse.GenIn;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -12,7 +12,7 @@ import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.tools.StringAttrib;
 
-public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
+public class GeneratorList extends com.powerdata.openpa.psse.GenInList
 {
 	PsseInputModel _eq;
 	BusInList _buses;
@@ -108,13 +108,13 @@ public class GeneratorList extends com.powerdata.openpa.psse.GeneratorList
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
 	@Override
-	public StringAttrib<Generator> mapStringAttrib(String attribname) { return null; }
+	public StringAttrib<GenIn> mapStringAttrib(String attribname) { return null; }
 	@Override
-	public FloatAttrib<Generator> mapFloatAttrib(String attribname) { return null; }
+	public FloatAttrib<GenIn> mapFloatAttrib(String attribname) { return null; }
 	@Override
-	public IntAttrib<Generator> mapIntAttrib(String attribname) { return null; }
+	public IntAttrib<GenIn> mapIntAttrib(String attribname) { return null; }
 	@Override
-	public BooleanAttrib<Generator> mapBooleanAttrib(String attribname) { return null; }
+	public BooleanAttrib<GenIn> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 	@Override

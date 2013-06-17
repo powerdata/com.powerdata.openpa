@@ -3,18 +3,18 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class GeneratorList extends PsseBaseInputList<Generator>
+public abstract class GenInList extends PsseBaseInputList<GenIn>
 {
-	public GeneratorList(PsseModel model) {super(model);}
+	public GenInList(PsseInputModel model) {super(model);}
 	
 	/* Standard object retrieval */
 
 	/** Get a Generator by it's index. */
 	@Override
-	public Generator get(int ndx) { return new Generator(ndx,this); }
+	public GenIn get(int ndx) { return new GenIn(ndx,this); }
 	/** Get a Generator by it's ID. */
 	@Override
-	public Generator get(String id) { return super.get(id); }
+	public GenIn get(String id) { return super.get(id); }
 
 	/* convenience methods */
 

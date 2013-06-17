@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.powerdata.openpa.psse.AreaList;
 import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.Generator;
+import com.powerdata.openpa.psse.GenIn;
 import com.powerdata.openpa.psse.ImpCorrTblList;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.Line;
@@ -77,7 +77,7 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 			{
 				System.out.println(b);
 			}
-			for(Generator g : eq.getGenerators())
+			for(GenIn g : eq.getGenerators())
 			{
 				System.out.println(g);
 			}

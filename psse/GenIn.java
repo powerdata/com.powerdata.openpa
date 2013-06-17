@@ -3,12 +3,12 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Generator extends BaseObject
+public class GenIn extends BaseObject
 {
 
-	protected GeneratorList _list;
+	protected GenInList _list;
 	
-	public Generator(int ndx, GeneratorList list)
+	public GenIn(int ndx, GenInList list)
 	{
 		super(ndx);
 		_list = list;

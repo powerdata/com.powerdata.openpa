@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 public interface BaseInputGroup
 {
 	public BusInList getBuses() throws PsseModelException;
-	public GeneratorList getGenerators() throws PsseModelException;
+	public GenInList getGenerators() throws PsseModelException;
 	public LoadList getLoads() throws PsseModelException;
 	public LineList getLines() throws PsseModelException;
 	public TransformerList getTransformers() throws PsseModelException;
