@@ -6,7 +6,7 @@ public abstract class PsseModel
 {
 	public static PsseInputModel OpenInput(String uri) throws PsseModelException
 	{
-		String[] tok = uri.split(":", 1);
+		String[] tok = uri.split(":", 2);
 		switch(tok[0].toLowerCase())
 		{
 			case "pssecsv": 
