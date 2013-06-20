@@ -24,9 +24,19 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 	LineInList _branchList;
 	TransformerInList _transformerList;
 	
-	public PsseInputModel(String dirpath)
+	public PsseInputModel(String parms)
 	{
-		_dir = new File(dirpath);
+		for(String pair : parms.split("&"))
+		{
+			String v[] = pair.split("=",2);
+			switch(v[0])
+			{
+				case "path" :	_dir = new File(v[1]); break;
+				default:
+					System.out.println("com.powerdata.openpa.csv.PsseInputModel Unknown Attribute: "+v[0]);
+					break;
+			}
+		}
 	}
 	public File getDir() { return _dir; }
 	@Override
