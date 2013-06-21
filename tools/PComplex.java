@@ -28,7 +28,7 @@ public class PComplex
 	public PComplex mult(float scalar) {return new PComplex(_r * scalar, _theta);}
 
 	public PComplex div(PComplex v) {return new PComplex(_r/v.r(), _theta-v.theta());}
-	public PComplex div(float r, float theta) {return new PComplex(_r/r, _theta/theta);}
+	public PComplex div(float r, float theta) {return new PComplex(_r/r, _theta - theta);}
 	public PComplex div(float scalar) {return new PComplex(_r / scalar, _theta);}
 	
 	public PComplex inv() {return new PComplex(1F/_r, -_theta);}
@@ -38,6 +38,27 @@ public class PComplex
 		return new Complex((float) (_r * Math.cos(_theta)),
 				(float) (_r * Math.sin(_theta)));
 	}
+	
+	@Override
+	final public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append('(');
+		sb.append(_r);
+		sb.append(',');
+		sb.append(_theta);
+		sb.append(')');
+		return sb.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		PComplex o = (PComplex) obj;
+		return (_r == o._r && _theta == o._theta);
+	}
+	
+
 }
 
 
