@@ -13,6 +13,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchedShuntiNList;
 import com.powerdata.openpa.psse.TransformerIn;
 import com.powerdata.openpa.psse.ZoneInList;
+import com.powerdata.openpa.tools.QueryString;
 
 public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 {
@@ -24,19 +25,14 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 	LineInList _branchList;
 	TransformerInList _transformerList;
 	
-	public PsseInputModel(String parms)
+	public PsseInputModel(String parms) throws PsseModelException
 	{
-		for(String pair : parms.split("&"))
+		QueryString q = new QueryString(parms);
+		if (!q.containsKey("path"))
 		{
-			String v[] = pair.split("=",2);
-			switch(v[0])
-			{
-				case "path" :	_dir = new File(v[1]); break;
-				default:
-					System.out.println("com.powerdata.openpa.csv.PsseInputModel Unknown Attribute: "+v[0]);
-					break;
-			}
+			throw new PsseModelException("com.powerdata.openpa.psse.csv.PsseInputModel Missing path= in uri.");
 		}
+		_dir = new File(q.get("path")[0]);
 	}
 	public File getDir() { return _dir; }
 	@Override
