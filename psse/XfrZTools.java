@@ -14,6 +14,6 @@ import com.powerdata.openpa.tools.DeltaNetwork;
  */
 public interface XfrZTools
 {
-	public Complex convert2W(TransformerIn xfr);
-	public DeltaNetwork convert3W(TransformerIn xfr);
+	public Complex convert2W(TransformerInList list, int ndx) throws PsseModelException;
+	public DeltaNetwork convert3W(TransformerInList list, int ndx) throws PsseModelException;
 }

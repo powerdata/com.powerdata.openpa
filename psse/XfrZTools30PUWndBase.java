@@ -2,22 +2,25 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
+import com.powerdata.openpa.tools.PAMath;
 
 public class XfrZTools30PUWndBase implements XfrZTools
 {
 
 	@Override
-	public Complex convert2W(TransformerIn xfr)
+	public Complex convert2W(TransformerInList list, int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return PAMath.rebaseZ100(new Complex(list.getR1_2(ndx), list.getX1_2(ndx)),
+				list.getSBASE1_2(ndx));
 	}
 
 	@Override
-	public DeltaNetwork convert3W(TransformerIn xfr)
+	public DeltaNetwork convert3W(TransformerInList list, int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new DeltaNetwork(
+			PAMath.rebaseZ100(new Complex(list.getR1_2(ndx), list.getX1_2(ndx)), list.getSBASE1_2(ndx)),
+			PAMath.rebaseZ100(new Complex(list.getR2_3(ndx), list.getX2_3(ndx)), list.getSBASE2_3(ndx)),
+			PAMath.rebaseZ100(new Complex(list.getR3_1(ndx), list.getX3_1(ndx)), list.getSBASE3_1(ndx)));
 	}
 
 }

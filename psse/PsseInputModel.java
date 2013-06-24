@@ -26,7 +26,6 @@ public abstract class PsseInputModel extends PsseModel implements BaseInputGroup
 	public abstract AreaInList getAreas() throws PsseModelException;
 	public abstract OwnerInList getOwners() throws PsseModelException;
 	public abstract ZoneInList getZones() throws PsseModelException;
-	
-
+	public int getPsseVersion() {return 30;}
 	
 }

@@ -1,11 +1,19 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.DeltaNetwork;
 import com.powerdata.openpa.tools.PAMath;
+import com.powerdata.openpa.tools.StarNetwork;
 
 public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 {
-	public TransformerInList(PsseInputModel model) {super(model);}
+	protected XfrZToolFactory _ztf;
+	
+	public TransformerInList(PsseInputModel model) 
+	{
+		super(model);
+		_ztf = XfrZToolFactory.Open(_model.getPsseVersion());
+	}
 
 	protected float rmDefault(int ndx, char mm, int wnd, float defval, int abscod)
 			throws PsseModelException
@@ -143,9 +151,9 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract BusIn getBus1(int ndx) throws PsseModelException;
 	public abstract BusIn getBus2(int ndx) throws PsseModelException;
 	public abstract BusIn getBus3(int ndx) throws PsseModelException;
-	public abstract float getMagG(int ndx) throws PsseModelException;
-	public abstract float getMagB(int ndx) throws PsseModelException;
-	public abstract Complex getMagY(int ndx) throws PsseModelException;
+	public abstract float getGmag(int ndx) throws PsseModelException;
+	public abstract float getBmag(int ndx) throws PsseModelException;
+	public abstract Complex getYmag(int ndx) throws PsseModelException;
 	public abstract TransformerStatus getInSvc(int ndx) throws PsseModelException;
 	public abstract float getR100_1_2(int ndx) throws PsseModelException;
 	public abstract float getX100_1_2(int ndx) throws PsseModelException;
@@ -156,6 +164,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract float getR100_3_1(int ndx) throws PsseModelException;
 	public abstract float getX100_3_1(int ndx) throws PsseModelException;
 	public abstract Complex getZ100_3_1(int ndx) throws PsseModelException;
+	public abstract DeltaNetwork getZ(int ndx) throws PsseModelException;
+	public abstract StarNetwork getZstar(int ndx) throws PsseModelException;
 	
 	public abstract float getWnd1Ratio(int ndx) throws PsseModelException;
 	public abstract float getWnd1NomKV(int ndx) throws PsseModelException;
@@ -226,7 +236,7 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public float getDeftMagB(int ndx) throws PsseModelException
 		{return checkCM(ndx, PAMath.rebaseZ100(getMAG2(ndx), _model.getSBASE()));}
 	public Complex getDeftMagY(int ndx) throws PsseModelException
-		{return new Complex(getMagG(ndx), getMagB(ndx));}
+		{return new Complex(getGmag(ndx), getBmag(ndx));}
 
 	public TransformerStatus getDeftInSvc(int ndx)
 		{return TransformerStatus.fromCode(getSTAT(ndx));}
@@ -249,6 +259,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 		{return PAMath.rebaseZ100(getX3_1(ndx), resolveBase(ndx, getSBASE3_1(ndx)));}
 	public Complex getDeftZ100_3_1(int ndx) throws PsseModelException
 		{return new Complex(getR100_3_1(ndx), getX100_3_1(ndx));}
+	public DeltaNetwork getDeftZ(int ndx) throws PsseModelException {return _ztf.get(getCZ(ndx)).convert3W(this, ndx);}
+	public StarNetwork getDeftZstar(int ndx) throws PsseModelException {return getZ(ndx).star();}
 	
 	
 	public float getDeftWnd1Ratio(int ndx) throws PsseModelException

@@ -23,7 +23,10 @@ public class StarNetwork
 
 	public DeltaNetwork delta()
 	{
-		return new DeltaNetwork(_z1.add(_z2), _z2.add(_z3), _z3.add(_z1));
+		return new DeltaNetwork(
+			_z1.add(_z2),
+			_z2.add(_z3),
+			_z3.add(_z1));
 	}
 	
 	public Complex getZ1() {return _z1;}

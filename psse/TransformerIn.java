@@ -2,6 +2,8 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.DeltaNetwork;
+import com.powerdata.openpa.tools.StarNetwork;
 
 public class TransformerIn extends BaseObject
 {
@@ -34,16 +36,14 @@ public class TransformerIn extends BaseObject
 	/** Winding 3 bus for 3 winding transformers*/
 	public BusIn getBus3() throws PsseModelException {return _list.getBus3(_ndx);}
 
-	//TODO:  How to convert to per-unit when CM == 2
 	/** Magnetizing Conductance per-unit on 100 MVA Base */
-	public float getMagG() throws PsseModelException {return _list.getMagG(_ndx);}
+	public float getGmag() throws PsseModelException {return _list.getGmag(_ndx);}
 	/** Magnetizing Susceptance per-unit on 100 MVA Base */
-	public float getMagB() throws PsseModelException {return _list.getMagB(_ndx);}
+	public float getBmag() throws PsseModelException {return _list.getBmag(_ndx);}
 	/** Magnetizing Admittance p.u. on 100MVA Base */
-	public Complex getMagY() throws PsseModelException {return _list.getMagY(_ndx);}
+	public Complex getYmag() throws PsseModelException {return _list.getYmag(_ndx);}
 	/** Transformer Status */
 	public TransformerStatus getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
-	// TODO:  How to convert to per-unit impedance on 100MVA base when CZ =2 or 3
 	/** get resistance between windings 1 and 2 on 100 MVA base */
 	public float getR100_1_2() throws PsseModelException {return _list.getR100_1_2(_ndx);}
 	/** get Reactance between windings 1 and 2 on 100 MVA base */
@@ -62,6 +62,10 @@ public class TransformerIn extends BaseObject
 	public float getX100_3_1() throws PsseModelException {return _list.getX100_3_1(_ndx);}
 	/** get complex impedance between windings 3 and 1 on 100 MVA base */
 	public Complex getZ100_3_1() throws PsseModelException {return _list.getZ100_3_1(_ndx);}
+	/** get complex impedance in the delta configuration */
+	public DeltaNetwork getZ() throws PsseModelException {return _list.getZ(_ndx);}
+	/** get complex impedance in the star configuration */
+	public StarNetwork getZstar() throws PsseModelException {return _list.getZstar(_ndx);}
 	/** get winding 1 turns ratio p.u. on winding 1 bus base voltage*/
 	public float getWnd1Ratio() throws PsseModelException {return _list.getWnd1Ratio(_ndx);}
 	/** get winding 1 nominal KV */

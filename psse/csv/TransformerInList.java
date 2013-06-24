@@ -9,10 +9,12 @@ import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerStatus;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.DeltaNetwork;
 import com.powerdata.openpa.tools.FloatAttrib;
 import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
+import com.powerdata.openpa.tools.StarNetwork;
 import com.powerdata.openpa.tools.StringAttrib;
 
 public class TransformerInList extends com.powerdata.openpa.psse.TransformerInList
@@ -286,11 +288,11 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	public int size() { return _size; }
 
 	@Override
-	public float getMagG(int ndx) throws PsseModelException {return getDeftMagG(ndx);}
+	public float getGmag(int ndx) throws PsseModelException {return getDeftMagG(ndx);}
 	@Override
-	public float getMagB(int ndx) throws PsseModelException {return getDeftMagB(ndx);}
+	public float getBmag(int ndx) throws PsseModelException {return getDeftMagB(ndx);}
 	@Override
-	public Complex getMagY(int ndx) throws PsseModelException {return getDeftMagY(ndx);}
+	public Complex getYmag(int ndx) throws PsseModelException {return getDeftMagY(ndx);}
 	@Override
 	public TransformerStatus getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
 	@Override
@@ -422,4 +424,10 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	public float getWnd2PhaseShift(int ndx) throws PsseModelException {return getDeftWnd2PhaseShift(ndx);}
 	@Override
 	public float getWnd3PhaseShift(int ndx) throws PsseModelException {return getDeftWnd3PhaseShift(ndx);}
+
+	@Override
+	public DeltaNetwork getZ(int ndx) throws PsseModelException {return getDeftZ(ndx);}
+	@Override
+	public StarNetwork getZstar(int ndx) throws PsseModelException {return getDeftZstar(ndx);}
+
 }
