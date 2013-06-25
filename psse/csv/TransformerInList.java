@@ -3,12 +3,12 @@ package com.powerdata.openpa.psse.csv;
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.ImpCorrTblIn;
 import com.powerdata.openpa.psse.OwnershipInList;
+import com.powerdata.openpa.psse.PhaseShiftLimits;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.VoltageXfrLimits;
 import com.powerdata.openpa.psse.TransformerIn;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerStatus;
-import com.powerdata.openpa.psse.XfrPhaseShiftLimits;
-import com.powerdata.openpa.psse.XfrVoltLimits;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
@@ -351,15 +351,18 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	public StarNetwork get3wZstar(int ndx) throws PsseModelException {return getDeft3wZstar(ndx);}
 
 	@Override
-	public XfrVoltLimits getVoltageLimits1(int ndx) throws PsseModelException {return getDeftVoltageLimits1(ndx);}
+	public VoltageXfrLimits getRatioTapLimits1(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
-	public XfrPhaseShiftLimits getPhaseShiftLimits1(int ndx) throws PsseModelException {return getDeftPhaseShiftLimits1(ndx);}
-	@Override
-	public XfrVoltLimits getVoltageLimits2(int ndx) throws PsseModelException {return getDeftVoltageLimits2(ndx);}
-	@Override
-	public XfrPhaseShiftLimits getPhaseShiftLimits2(int ndx) throws PsseModelException {return getDeftPhaseShiftLimits2(ndx);}
-	@Override
-	public XfrVoltLimits getVoltageLimits3(int ndx) throws PsseModelException {return getDeftVoltageLimits3(ndx);}
-	@Override
-	public XfrPhaseShiftLimits getPhaseShiftLimits3(int ndx) throws PsseModelException {return getDeftPhaseShiftLimits3(ndx);}
+	public PhaseShiftLimits getPhaseShiftTapLimits1(int ndx)
+			throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

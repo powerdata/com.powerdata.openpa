@@ -61,9 +61,9 @@ public class TransformerIn extends BaseObject
 	/** adjust reg bus as if on wnd 1 side (CONT1) */
 	public boolean getCtrlTapSide1() throws PsseModelException {return _list.getCtrlTapSide1(_ndx);}
 	/** voltage limits (RM*, VM*) for voltage controlled transformers */
-	public XfrVoltLimits getVoltageLimits1() throws PsseModelException {return _list.getVoltageLimits1(_ndx);}
+	public VoltageXfrLimits getRatioTapLimits1() throws PsseModelException {return _list.getRatioTapLimits1(_ndx);}
 	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
-	public XfrPhaseShiftLimits getPhaseShiftLimits1() throws PsseModelException {return _list.getPhaseShiftLimits1(_ndx);}
+	public PhaseShiftLimits getPhaseShiftTapLimits1() throws PsseModelException {return _list.getPhaseShiftTapLimits1(_ndx);}
 	
 	/** transformer impedance correction table for winding (TAB1) */
 	public ImpCorrTblIn getImpCorrTbl1() throws PsseModelException {return _list.getImpCorrTbl1(_ndx);}
@@ -81,10 +81,8 @@ public class TransformerIn extends BaseObject
 	public BusIn getRegBus2() throws PsseModelException {return _list.getRegBus2(_ndx);}
 	/** adjust reg bus as if on wnd 2 side (CONT1) */
 	public boolean getCtrlTapSide2() throws PsseModelException {return _list.getCtrlTapSide2(_ndx);}
-	/** voltage limits (RM*, VM*) for voltage controlled transformers */
-	public XfrVoltLimits getVoltageLimits2() throws PsseModelException {return _list.getVoltageLimits2(_ndx);}
-	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
-	public XfrPhaseShiftLimits getPhaseShiftLimits2() throws PsseModelException {return _list.getPhaseShiftLimits2(_ndx);}
+	//TODO: implement tap ratio limits
+	//TODO: implement phase shift tap limits
 	/** transformer impedance correction table for winding (TAB2) */
 	public ImpCorrTblIn getImpCorrTbl2() throws PsseModelException {return _list.getImpCorrTbl2(_ndx);}
 	/** get winding 3 turns ratio p.u. on winding 3 bus base voltage*/
@@ -101,10 +99,8 @@ public class TransformerIn extends BaseObject
 	public BusIn getRegBus3() throws PsseModelException {return _list.getRegBus3(_ndx);}
 	/** adjust reg bus as if on wnd 3 side (CONT1) */
 	public boolean getCtrlTapSide3() throws PsseModelException {return _list.getCtrlTapSide3(_ndx);}
-	/** voltage limits (RM*, VM*) for voltage controlled transformers */
-	public XfrVoltLimits getVoltageLimits3() throws PsseModelException {return _list.getVoltageLimits3(_ndx);}
-	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
-	public XfrPhaseShiftLimits getPhaseShiftLimits3() throws PsseModelException {return _list.getPhaseShiftLimits3(_ndx);}
+	//TODO: implement tap ratio limits
+	//TODO: implement phase shift tap limits
 	/** transformer impedance correction table for winding (TAB3) */
 	public ImpCorrTblIn getImpCorrTbl3() throws PsseModelException {return _list.getImpCorrTbl3(_ndx);}
 	

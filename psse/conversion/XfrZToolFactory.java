@@ -1,8 +1,8 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.conversion;
 
 public abstract class XfrZToolFactory
 {
-	static XfrZToolFactory Open(int psseversion)
+	public static XfrZToolFactory Open(int psseversion)
 	{
 		XfrZToolFactory f = null;
 		if (psseversion <= 30)

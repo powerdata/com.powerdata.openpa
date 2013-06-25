@@ -1,5 +1,6 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.conversion;
 
+import com.powerdata.openpa.psse.TransformerInList;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 

@@ -1,4 +1,4 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.conversion;
 
 public class XfrZToolFact30 extends XfrZToolFactory
 {

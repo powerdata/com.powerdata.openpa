@@ -1,5 +1,8 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.conversion.XfrMagYTool;
+import com.powerdata.openpa.psse.conversion.XfrWndTool;
+import com.powerdata.openpa.psse.conversion.XfrZToolFactory;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 import com.powerdata.openpa.tools.PAMath;
@@ -164,8 +167,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract boolean getAdjEnab1(int ndx) throws PsseModelException;
 	public abstract BusIn getRegBus1(int ndx) throws PsseModelException;
 	public abstract boolean getCtrlTapSide1(int ndx) throws PsseModelException;
-	public abstract XfrVoltLimits getVoltageLimits1(int ndx) throws PsseModelException;
-	public abstract XfrPhaseShiftLimits getPhaseShiftLimits1(int ndx) throws PsseModelException;
+	public abstract VoltageXfrLimits getRatioTapLimits1(int ndx) throws PsseModelException;
+	public abstract PhaseShiftLimits getPhaseShiftTapLimits1(int ndx) throws PsseModelException;
 	public abstract ImpCorrTblIn getImpCorrTbl1(int ndx) throws PsseModelException;
 
 	public abstract float getWnd2Ratio(int ndx) throws PsseModelException;
@@ -175,8 +178,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract boolean getAdjEnab2(int ndx) throws PsseModelException;
 	public abstract BusIn getRegBus2(int ndx) throws PsseModelException;
 	public abstract boolean getCtrlTapSide2(int ndx) throws PsseModelException;
-	public abstract XfrVoltLimits getVoltageLimits2(int ndx) throws PsseModelException;
-	public abstract XfrPhaseShiftLimits getPhaseShiftLimits2(int ndx) throws PsseModelException;
+//	public abstract XfrVoltageLimits getVoltageLimits2(int ndx) throws PsseModelException;
+//	public abstract XfrPhaseShiftLimits getPhaseShiftLimits2(int ndx) throws PsseModelException;
 	public abstract ImpCorrTblIn getImpCorrTbl2(int ndx) throws PsseModelException;
 	
 	public abstract float getWnd3Ratio(int ndx) throws PsseModelException;
@@ -186,8 +189,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract boolean getAdjEnab3(int ndx) throws PsseModelException;
 	public abstract BusIn getRegBus3(int ndx) throws PsseModelException;
 	public abstract boolean getCtrlTapSide3(int ndx) throws PsseModelException;
-	public abstract XfrVoltLimits getVoltageLimits3(int ndx) throws PsseModelException;
-	public abstract XfrPhaseShiftLimits getPhaseShiftLimits3(int ndx) throws PsseModelException;
+//	public abstract XfrVoltageLimits getVoltageLimits3(int ndx) throws PsseModelException;
+//	public abstract XfrPhaseShiftLimits getPhaseShiftLimits3(int ndx) throws PsseModelException;
 	public abstract ImpCorrTblIn getImpCorrTbl3(int ndx) throws PsseModelException;
 
 	
@@ -222,8 +225,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
 	}
 	public boolean getDeftCtrlTapSide1(int ndx) {return getCONT1(ndx).charAt(0) == '-';}
-	public XfrVoltLimits getDeftVoltageLimits1(int ndx) {return XfrVoltLimits.get(this, ndx);}
-	public XfrPhaseShiftLimits getDeftPhaseShiftLimits1(int ndx) {return null; /* TODO: */}
+	public VoltageXfrLimits getDeftVoltageLimits1(int ndx) {return null; /* TODO: */}
+	public PhaseShiftLimits getDeftPhaseShiftLimits1(int ndx) {return null; /* TODO: */}
 	public ImpCorrTblIn getDeftImpCorrTbl1(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB1(ndx)));}
 
 	public float getDeftWnd2Ratio(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio2(this, ndx);}
@@ -241,8 +244,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
 	}
 	public boolean getDeftCtrlTapSide2(int ndx) {return getCONT2(ndx).charAt(0) == '-';}
-	public XfrVoltLimits getDeftVoltageLimits2(int ndx) {return null; /* TODO: */}
-	public XfrPhaseShiftLimits getDeftPhaseShiftLimits2(int ndx) {return null; /* TODO: */}
+//	public XfrVoltageLimits getDeftVoltageLimits2(int ndx) {return null; /* TODO: */}
+//	public XfrPhaseShiftLimits getDeftPhaseShiftLimits2(int ndx) {return null; /* TODO: */}
 	public ImpCorrTblIn getDeftImpCorrTbl2(int ndx) throws PsseModelException {return _model.getImpCorrTables().get(String.valueOf(getTAB2(ndx)));}
 	
 	public float getDeftWnd3Ratio(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio3(this, ndx);}
@@ -260,8 +263,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 		return _model.getBus((cod.charAt(0)=='-')?cod.substring(1):cod);
 	}
 	public boolean getDeftCtrlTapSide3(int ndx) {return getCONT3(ndx).charAt(0) == '-';}
-	public XfrVoltLimits getDeftVoltageLimits3(int ndx) {return null; /* TODO: */}
-	public XfrPhaseShiftLimits getDeftPhaseShiftLimits3(int ndx) {return null; /* TODO: */}
+//	public XfrVoltageLimits getDeftVoltageLimits3(int ndx) {return null; /* TODO: */}
+//	public XfrPhaseShiftLimits getDeftPhaseShiftLimits3(int ndx) {return null; /* TODO: */}
 	public ImpCorrTblIn getDeftImpCorrTbl3(int ndx) throws PsseModelException 
 		{return _model.getImpCorrTables().get(String.valueOf(getTAB3(ndx)));}
 
