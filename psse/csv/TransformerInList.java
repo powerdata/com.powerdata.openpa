@@ -7,6 +7,8 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TransformerIn;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerStatus;
+import com.powerdata.openpa.psse.XfrPhaseShiftLimits;
+import com.powerdata.openpa.psse.XfrVoltLimits;
 import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
@@ -288,25 +290,9 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	public int size() { return _size; }
 
 	@Override
-	public float getGmag(int ndx) throws PsseModelException {return getDeftMagG(ndx);}
-	@Override
-	public float getBmag(int ndx) throws PsseModelException {return getDeftMagB(ndx);}
-	@Override
 	public Complex getYmag(int ndx) throws PsseModelException {return getDeftMagY(ndx);}
 	@Override
 	public TransformerStatus getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
-	@Override
-	public float getR100_1_2(int ndx) throws PsseModelException {return getDeftR100_1_2(ndx);}
-	@Override
-	public float getX100_1_2(int ndx) throws PsseModelException {return getDeftX100_1_2(ndx);}
-	@Override
-	public float getR100_2_3(int ndx) throws PsseModelException {return getDeftR100_2_3(ndx);}
-	@Override
-	public float getX100_2_3(int ndx) throws PsseModelException {return getDeftX100_2_3(ndx);}
-	@Override
-	public float getR100_3_1(int ndx) throws PsseModelException {return getDeftR100_3_1(ndx);}
-	@Override
-	public float getX100_3_1(int ndx) throws PsseModelException {return getDeftX100_3_1(ndx);}
 	@Override
 	public float getWnd1Ratio(int ndx) throws PsseModelException {return getDeftWnd1Ratio(ndx);}
 	@Override
@@ -319,27 +305,6 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	public BusIn getRegBus1(int ndx) throws PsseModelException {return getDeftRegBus1(ndx);}
 	@Override
 	public boolean getCtrlTapSide1(int ndx) throws PsseModelException {return getDeftCtrlTapSide1(ndx);}
-	@Override
-	public float getMaxRatio1(int ndx) throws PsseModelException {return getDeftMaxRatio1(ndx);}
-	@Override
-	public float getMinRatio1(int ndx) throws PsseModelException {return getDeftMinRatio1(ndx);}
-	@Override
-	public float getMaxShift1(int ndx) throws PsseModelException {return getDeftMaxShift1(ndx);}
-	@Override
-	public float getMinShift1(int ndx) throws PsseModelException {return getDeftMinShift1(ndx);}
-
-	@Override
-	public float getMaxVolt1(int ndx) throws PsseModelException {return getDeftMaxVolt1(ndx);}
-	@Override
-	public float getMinVolt1(int ndx) throws PsseModelException {return getDeftMinVolt1(ndx);}
-	@Override
-	public float getMaxReacPwr1(int ndx) throws PsseModelException {return getDeftMaxReacPwr1(ndx);}
-	@Override
-	public float getMinReacPwr1(int ndx) throws PsseModelException {return getDeftMinReacPwr1(ndx);}
-	@Override
-	public float getMaxActvPwr1(int ndx) throws PsseModelException {return getDeftMaxActvPwr1(ndx);}
-	@Override
-	public float getMinActvPwr1(int ndx) throws PsseModelException {return getDeftMinActvPwr1(ndx);}
 	@Override
 	public ImpCorrTblIn getImpCorrTbl1(int ndx) throws PsseModelException {return getDeftImpCorrTbl1(ndx);}
 	@Override
@@ -355,26 +320,6 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	@Override
 	public boolean getCtrlTapSide2(int ndx) throws PsseModelException {return getDeftCtrlTapSide2(ndx);}
 	@Override
-	public float getMaxRatio2(int ndx) throws PsseModelException {return getDeftMaxRatio2(ndx);}
-	@Override
-	public float getMinRatio2(int ndx) throws PsseModelException {return getDeftMinRatio2(ndx);}
-	@Override
-	public float getMaxShift2(int ndx) throws PsseModelException {return getDeftMaxShift2(ndx);}
-	@Override
-	public float getMinShift2(int ndx) throws PsseModelException {return getDeftMinShift2(ndx);}
-	@Override
-	public float getMaxVolt2(int ndx) throws PsseModelException {return getDeftMaxVolt2(ndx);}
-	@Override
-	public float getMinVolt2(int ndx) throws PsseModelException {return getDeftMinVolt2(ndx);}
-	@Override
-	public float getMaxReacPwr2(int ndx) throws PsseModelException {return getDeftMaxReacPwr2(ndx);}
-	@Override
-	public float getMinReacPwr2(int ndx) throws PsseModelException {return getDeftMinReacPwr2(ndx);}
-	@Override
-	public float getMaxActvPwr2(int ndx) throws PsseModelException {return getDeftMaxActvPwr2(ndx);}
-	@Override
-	public float getMinActvPwr2(int ndx) throws PsseModelException {return getDeftMinActvPwr2(ndx);}
-	@Override
 	public ImpCorrTblIn getImpCorrTbl2(int ndx) throws PsseModelException {return getDeftImpCorrTbl2(ndx);}
 	@Override
 	public float getWnd3Ratio(int ndx) throws PsseModelException {return getDeftWnd3Ratio(ndx);}
@@ -389,35 +334,10 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	@Override
 	public boolean getCtrlTapSide3(int ndx) throws PsseModelException {return getDeftCtrlTapSide3(ndx);}
 	@Override
-	public float getMaxRatio3(int ndx) throws PsseModelException {return getDeftMaxRatio3(ndx);}
-	@Override
-	public float getMinRatio3(int ndx) throws PsseModelException {return getDeftMinRatio3(ndx);}
-	@Override
-	public float getMaxShift3(int ndx) throws PsseModelException {return getDeftMaxShift3(ndx);}
-	@Override
-	public float getMinShift3(int ndx) throws PsseModelException {return getDeftMinShift3(ndx);}
-	@Override
-	public float getMaxVolt3(int ndx) throws PsseModelException {return getDeftMaxVolt3(ndx);}
-	@Override
-	public float getMinVolt3(int ndx) throws PsseModelException {return getDeftMinVolt3(ndx);}
-	@Override
-	public float getMaxReacPwr3(int ndx) throws PsseModelException {return getDeftMaxReacPwr3(ndx);}
-	@Override
-	public float getMinReacPwr3(int ndx) throws PsseModelException {return getDeftMinReacPwr3(ndx);}
-	@Override
-	public float getMaxActvPwr3(int ndx) throws PsseModelException {return getDeftMaxActvPwr3(ndx);}
-	@Override
-	public float getMinActvPwr3(int ndx) throws PsseModelException {return getDeftMinActvPwr3(ndx);}
-	@Override
 	public ImpCorrTblIn getImpCorrTbl3(int ndx) throws PsseModelException {return getDeftImpCorrTbl3(ndx);}
 
 	@Override
-	public Complex getZ100_1_2(int ndx) throws PsseModelException {return getDeftZ100_1_2(ndx);}
-	@Override
-	public Complex getZ100_2_3(int ndx) throws PsseModelException {return getDeftZ100_2_3(ndx);}
-	@Override
-	public Complex getZ100_3_1(int ndx) throws PsseModelException {return getDeftZ100_3_1(ndx);}
-
+	public Complex get2wZ(int ndx) throws PsseModelException {return get2wZ(ndx);}
 	@Override
 	public float getWnd1PhaseShift(int ndx) throws PsseModelException {return getDeftWnd1PhaseShift(ndx);}
 	@Override
@@ -426,8 +346,20 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	public float getWnd3PhaseShift(int ndx) throws PsseModelException {return getDeftWnd3PhaseShift(ndx);}
 
 	@Override
-	public DeltaNetwork getZ(int ndx) throws PsseModelException {return getDeftZ(ndx);}
+	public DeltaNetwork get3wZ(int ndx) throws PsseModelException {return getDeft3wZ(ndx);}
 	@Override
-	public StarNetwork getZstar(int ndx) throws PsseModelException {return getDeftZstar(ndx);}
+	public StarNetwork get3wZstar(int ndx) throws PsseModelException {return getDeft3wZstar(ndx);}
 
+	@Override
+	public XfrVoltLimits getVoltageLimits1(int ndx) throws PsseModelException {return getDeftVoltageLimits1(ndx);}
+	@Override
+	public XfrPhaseShiftLimits getPhaseShiftLimits1(int ndx) throws PsseModelException {return getDeftPhaseShiftLimits1(ndx);}
+	@Override
+	public XfrVoltLimits getVoltageLimits2(int ndx) throws PsseModelException {return getDeftVoltageLimits2(ndx);}
+	@Override
+	public XfrPhaseShiftLimits getPhaseShiftLimits2(int ndx) throws PsseModelException {return getDeftPhaseShiftLimits2(ndx);}
+	@Override
+	public XfrVoltLimits getVoltageLimits3(int ndx) throws PsseModelException {return getDeftVoltageLimits3(ndx);}
+	@Override
+	public XfrPhaseShiftLimits getPhaseShiftLimits3(int ndx) throws PsseModelException {return getDeftPhaseShiftLimits3(ndx);}
 }

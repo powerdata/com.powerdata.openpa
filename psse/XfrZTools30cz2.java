@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 import com.powerdata.openpa.tools.PAMath;
 
-public class XfrZTools30PUWndBase implements XfrZTools
+public class XfrZTools30cz2 implements XfrZTools
 {
 
 	@Override

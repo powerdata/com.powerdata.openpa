@@ -12,5 +12,5 @@ public abstract class XfrZToolFactory
 		return f;
 	}
 	
-	public abstract XfrZTools get(int cod);
+	public abstract XfrZTools get(int cz);
 }

@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 
-public class XfrZTools30PUSysBase implements XfrZTools
+public class XfrZTools30cz1 implements XfrZTools
 {
 
 	@Override

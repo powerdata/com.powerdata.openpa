@@ -36,36 +36,16 @@ public class TransformerIn extends BaseObject
 	/** Winding 3 bus for 3 winding transformers*/
 	public BusIn getBus3() throws PsseModelException {return _list.getBus3(_ndx);}
 
-	/** Magnetizing Conductance per-unit on 100 MVA Base */
-	public float getGmag() throws PsseModelException {return _list.getGmag(_ndx);}
-	/** Magnetizing Susceptance per-unit on 100 MVA Base */
-	public float getBmag() throws PsseModelException {return _list.getBmag(_ndx);}
 	/** Magnetizing Admittance p.u. on 100MVA Base */
 	public Complex getYmag() throws PsseModelException {return _list.getYmag(_ndx);}
 	/** Transformer Status */
 	public TransformerStatus getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
-	/** get resistance between windings 1 and 2 on 100 MVA base */
-	public float getR100_1_2() throws PsseModelException {return _list.getR100_1_2(_ndx);}
-	/** get Reactance between windings 1 and 2 on 100 MVA base */
-	public float getX100_1_2() throws PsseModelException {return _list.getX100_1_2(_ndx);}
 	/** get complex impedance between windings 1 and 2 on 100 MVA base */
-	public Complex getZ100_1_2() throws PsseModelException {return _list.getZ100_1_2(_ndx);}
-	/** get resistance between windings 2 and 3 on 100 MVA base */
-	public float getR100_2_3() throws PsseModelException {return _list.getR100_2_3(_ndx);}
-	/** get Reactance between windings 2 and 3 on 100 MVA base */
-	public float getX100_2_3() throws PsseModelException {return _list.getX100_2_3(_ndx);}
-	/** get complex impedance between windings 2 and 3 on 100 MVA base */
-	public Complex getZ100_2_3() throws PsseModelException {return _list.getZ100_2_3(_ndx);}
-	/** get resistance between windings 3 and 1 on 100 MVA base */
-	public float getR100_3_1() throws PsseModelException {return _list.getR100_3_1(_ndx);}
-	/** get Reactance between windings 3 and 1 on 100 MVA base */
-	public float getX100_3_1() throws PsseModelException {return _list.getX100_3_1(_ndx);}
-	/** get complex impedance between windings 3 and 1 on 100 MVA base */
-	public Complex getZ100_3_1() throws PsseModelException {return _list.getZ100_3_1(_ndx);}
-	/** get complex impedance in the delta configuration */
-	public DeltaNetwork getZ() throws PsseModelException {return _list.getZ(_ndx);}
-	/** get complex impedance in the star configuration */
-	public StarNetwork getZstar() throws PsseModelException {return _list.getZstar(_ndx);}
+	public Complex get2wZ() throws PsseModelException {return _list.get2wZ(_ndx);}
+	/** get complex 3-winding impedance in the delta configuration */
+	public DeltaNetwork get3wZ() throws PsseModelException {return _list.get3wZ(_ndx);}
+	/** get complex 3-winding impedance in the star configuration */
+	public StarNetwork get3wZstar() throws PsseModelException {return _list.get3wZstar(_ndx);}
 	/** get winding 1 turns ratio p.u. on winding 1 bus base voltage*/
 	public float getWnd1Ratio() throws PsseModelException {return _list.getWnd1Ratio(_ndx);}
 	/** get winding 1 nominal KV */
@@ -80,26 +60,11 @@ public class TransformerIn extends BaseObject
 	public BusIn getRegBus1() throws PsseModelException {return _list.getRegBus1(_ndx);}
 	/** adjust reg bus as if on wnd 1 side (CONT1) */
 	public boolean getCtrlTapSide1() throws PsseModelException {return _list.getCtrlTapSide1(_ndx);}
-	/** max ratio limit (RMA) p.u. of bus 1 base voltage*/
-	public float getMaxRatio1() throws PsseModelException {return _list.getMaxRatio1(_ndx);}
-	/** min ratio limit (RMI) p.u. of bus 1 base voltage*/
-	public float getMinRatio1() throws PsseModelException {return _list.getMinRatio1(_ndx);}
-	/** max phase shift limit (RMA) in radians */
-	public float getMaxShift1() throws PsseModelException {return _list.getMaxShift1(_ndx);}
-	/** min phase shift limit (RMI) in radians */
-	public float getMinShift1() throws PsseModelException {return _list.getMinShift1(_ndx);}
-	/** max voltage limit at controlled bus (VMA) in pu */
-	public float getMaxVolt1() throws PsseModelException {return _list.getMaxVolt1(_ndx);}
-	/** min voltage limit at controlled bus (VMI) in pu */
-	public float getMinVolt1() throws PsseModelException {return _list.getMinVolt1(_ndx);}
-	/** max reactive power limit into xfr at winding 1 bus end (VMA) in pu */
-	public float getMaxReacPwr1() throws PsseModelException {return _list.getMaxReacPwr1(_ndx);}
-	/** min reactive power limit into xfr at winding 1 bus end (VMA) in pu */
-	public float getMinReacPwr1() throws PsseModelException {return _list.getMinReacPwr1(_ndx);}
-	/** max active power limit into xfr at winding 1 bus end (VMA) in pu */
-	public float getMaxActvPwr1() throws PsseModelException {return _list.getMaxActvPwr1(_ndx);}
-	/** min active power limit into xfr at winding 1 bus end (VMA) in pu */
-	public float getMinActvPwr1() throws PsseModelException {return _list.getMinActvPwr1(_ndx);}
+	/** voltage limits (RM*, VM*) for voltage controlled transformers */
+	public XfrVoltLimits getVoltageLimits1() throws PsseModelException {return _list.getVoltageLimits1(_ndx);}
+	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
+	public XfrPhaseShiftLimits getPhaseShiftLimits1() throws PsseModelException {return _list.getPhaseShiftLimits1(_ndx);}
+	
 	/** transformer impedance correction table for winding (TAB1) */
 	public ImpCorrTblIn getImpCorrTbl1() throws PsseModelException {return _list.getImpCorrTbl1(_ndx);}
 	/** get winding 2 turns ratio p.u. on winding 2 bus base voltage*/
@@ -116,26 +81,10 @@ public class TransformerIn extends BaseObject
 	public BusIn getRegBus2() throws PsseModelException {return _list.getRegBus2(_ndx);}
 	/** adjust reg bus as if on wnd 2 side (CONT1) */
 	public boolean getCtrlTapSide2() throws PsseModelException {return _list.getCtrlTapSide2(_ndx);}
-	/** max ratio limit (RMA) p.u. of bus 2 base voltage*/
-	public float getMaxRatio2() throws PsseModelException {return _list.getMaxRatio2(_ndx);}
-	/** min ratio limit (RMI) p.u. of bus 2 base voltage*/
-	public float getMinRatio2() throws PsseModelException {return _list.getMinRatio2(_ndx);}
-	/** max phase shift limit (RMA) in radians */
-	public float getMaxShift2() throws PsseModelException {return _list.getMaxShift2(_ndx);}
-	/** min phase shift limit (RMI) in radians */
-	public float getMinShift2() throws PsseModelException {return _list.getMinShift2(_ndx);}
-	/** max voltage limit at controlled bus (VMA) in pu */
-	public float getMaxVolt2() throws PsseModelException {return _list.getMaxVolt2(_ndx);}
-	/** min voltage limit at controlled bus (VMI) in pu */
-	public float getMinVolt2() throws PsseModelException {return _list.getMinVolt2(_ndx);}
-	/** max reactive power limit into xfr at winding 2 bus end (VMA) in pu */
-	public float getMaxReacPwr2() throws PsseModelException {return _list.getMaxReacPwr2(_ndx);}
-	/** min reactive power limit into xfr at winding 2 bus end (VMA) in pu */
-	public float getMinReacPwr2() throws PsseModelException {return _list.getMinReacPwr2(_ndx);}
-	/** max active power limit into xfr at winding 2 bus end (VMA) in pu */
-	public float getMaxActvPwr2() throws PsseModelException {return _list.getMaxActvPwr2(_ndx);}
-	/** min active power limit into xfr at winding 2 bus end (VMA) in pu */
-	public float getMinActvPwr2() throws PsseModelException {return _list.getMinActvPwr2(_ndx);}
+	/** voltage limits (RM*, VM*) for voltage controlled transformers */
+	public XfrVoltLimits getVoltageLimits2() throws PsseModelException {return _list.getVoltageLimits2(_ndx);}
+	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
+	public XfrPhaseShiftLimits getPhaseShiftLimits2() throws PsseModelException {return _list.getPhaseShiftLimits2(_ndx);}
 	/** transformer impedance correction table for winding (TAB2) */
 	public ImpCorrTblIn getImpCorrTbl2() throws PsseModelException {return _list.getImpCorrTbl2(_ndx);}
 	/** get winding 3 turns ratio p.u. on winding 3 bus base voltage*/
@@ -152,26 +101,10 @@ public class TransformerIn extends BaseObject
 	public BusIn getRegBus3() throws PsseModelException {return _list.getRegBus3(_ndx);}
 	/** adjust reg bus as if on wnd 3 side (CONT1) */
 	public boolean getCtrlTapSide3() throws PsseModelException {return _list.getCtrlTapSide3(_ndx);}
-	/** max ratio limit (RMA) p.u. of bus 3 base voltage*/
-	public float getMaxRatio3() throws PsseModelException {return _list.getMaxRatio3(_ndx);}
-	/** min ratio limit (RMI) p.u. of bus 3 base voltage*/
-	public float getMinRatio3() throws PsseModelException {return _list.getMinRatio3(_ndx);}
-	/** max phase shift limit (RMA) in radians */
-	public float getMaxShift3() throws PsseModelException {return _list.getMaxShift3(_ndx);}
-	/** min phase shift limit (RMI) in radians */
-	public float getMinShift3() throws PsseModelException {return _list.getMinShift3(_ndx);}
-	/** max voltage limit at controlled bus (VMA) in pu */
-	public float getMaxVolt3() throws PsseModelException {return _list.getMaxVolt3(_ndx);}
-	/** min voltage limit at controlled bus (VMI) in pu */
-	public float getMinVolt3() throws PsseModelException {return _list.getMinVolt3(_ndx);}
-	/** max reactive power limit into xfr at winding 3 bus end (VMA) in pu */
-	public float getMaxReacPwr3() throws PsseModelException {return _list.getMaxReacPwr3(_ndx);}
-	/** min reactive power limit into xfr at winding 3 bus end (VMA) in pu */
-	public float getMinReacPwr3() throws PsseModelException {return _list.getMinReacPwr3(_ndx);}
-	/** max active power limit into xfr at winding 3 bus end (VMA) in pu */
-	public float getMaxActvPwr3() throws PsseModelException {return _list.getMaxActvPwr3(_ndx);}
-	/** min active power limit into xfr at winding 3 bus end (VMA) in pu */
-	public float getMinActvPwr3() throws PsseModelException {return _list.getMinActvPwr3(_ndx);}
+	/** voltage limits (RM*, VM*) for voltage controlled transformers */
+	public XfrVoltLimits getVoltageLimits3() throws PsseModelException {return _list.getVoltageLimits3(_ndx);}
+	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
+	public XfrPhaseShiftLimits getPhaseShiftLimits3() throws PsseModelException {return _list.getPhaseShiftLimits3(_ndx);}
 	/** transformer impedance correction table for winding (TAB3) */
 	public ImpCorrTblIn getImpCorrTbl3() throws PsseModelException {return _list.getImpCorrTbl3(_ndx);}
 	
