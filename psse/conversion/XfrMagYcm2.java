@@ -1,14 +1,14 @@
 package com.powerdata.openpa.psse.conversion;
 
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerInList;
+import com.powerdata.openpa.psse.TransformerRawList;
 import com.powerdata.openpa.tools.Complex;
 
 public class XfrMagYcm2 extends XfrMagYTool
 {
 
 	@Override
-	public Complex getMagY(TransformerInList list, int ndx) throws PsseModelException
+	protected Complex _getYMag(TransformerRawList list, int ndx) throws PsseModelException
 	{
 		float vratio = list.getBus1(ndx).getBASKV() / list.getNOMV1(ndx); 
 		float vrsq = vratio * vratio;

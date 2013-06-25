@@ -10,7 +10,7 @@ import com.powerdata.openpa.psse.LoadInList;
 import com.powerdata.openpa.psse.LineIn;
 import com.powerdata.openpa.psse.OwnerInList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.SwitchedShuntiNList;
+import com.powerdata.openpa.psse.SwitchedShuntInList;
 import com.powerdata.openpa.psse.TransformerIn;
 import com.powerdata.openpa.psse.ZoneInList;
 import com.powerdata.openpa.tools.QueryString;
@@ -70,7 +70,7 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 	@Override
 	public float getSBASE() {return getDeftSBASE();}
 	@Override
-	public SwitchedShuntiNList getSwitchedShunts() throws PsseModelException {return null;} //TODO:
+	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException {return null;} //TODO:
 	@Override
 	public ImpCorrTblInList getImpCorrTables() throws PsseModelException {return null;} //TODO:
 	

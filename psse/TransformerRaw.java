@@ -1,15 +1,12 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.DeltaNetwork;
-import com.powerdata.openpa.tools.StarNetwork;
 
-public class TransformerIn extends BaseObject
+public class TransformerRaw extends BaseObject
 {
-	protected TransformerInList _list;
+	protected TransformerRawList _list;
 	
-	public TransformerIn(int ndx, TransformerInList list)
+	public TransformerRaw(int ndx, TransformerRawList list)
 	{
 		super(ndx);
 		_list = list;
@@ -36,74 +33,6 @@ public class TransformerIn extends BaseObject
 	/** Winding 3 bus for 3 winding transformers*/
 	public BusIn getBus3() throws PsseModelException {return _list.getBus3(_ndx);}
 
-	/** Magnetizing Admittance p.u. on 100MVA Base */
-	public Complex getYmag() throws PsseModelException {return _list.getYmag(_ndx);}
-	/** Transformer Status */
-	public TransformerStatus getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
-	/** get complex impedance between windings 1 and 2 on 100 MVA base */
-	public Complex get2wZ() throws PsseModelException {return _list.get2wZ(_ndx);}
-	/** get complex 3-winding impedance in the delta configuration */
-	public DeltaNetwork get3wZ() throws PsseModelException {return _list.get3wZ(_ndx);}
-	/** get complex 3-winding impedance in the star configuration */
-	public StarNetwork get3wZstar() throws PsseModelException {return _list.get3wZstar(_ndx);}
-	/** get winding 1 turns ratio p.u. on winding 1 bus base voltage*/
-	public float getWnd1Ratio() throws PsseModelException {return _list.getWnd1Ratio(_ndx);}
-	/** get winding 1 nominal KV */
-	public float getWnd1NomKV() throws PsseModelException {return _list.getWnd1NomKV(_ndx);}
-	/** get winding 1 phase shift in RAD */
-	public float getWnd1PhaseShift() throws PsseModelException {return _list.getWnd1PhaseShift(_ndx);}
-	/** Transformer Control Mode (COD1) */
-	public TransformerCtrlMode getCtrlMode1() throws PsseModelException {return _list.getCtrlMode1(_ndx);}
-	/** is automatic adjustment enabled? (COD1) */
-	public boolean getAdjEnab1() throws PsseModelException {return _list.getAdjEnab1(_ndx);}
-	/** get controlled bus 1 (CONT1) */ 
-	public BusIn getRegBus1() throws PsseModelException {return _list.getRegBus1(_ndx);}
-	/** adjust reg bus as if on wnd 1 side (CONT1) */
-	public boolean getCtrlTapSide1() throws PsseModelException {return _list.getCtrlTapSide1(_ndx);}
-	/** voltage limits (RM*, VM*) for voltage controlled transformers */
-	public VoltageXfrLimits getRatioTapLimits1() throws PsseModelException {return _list.getRatioTapLimits1(_ndx);}
-	/** phase shift limits (RM*, VM*) for phase-shifting transformers */
-	public PhaseShiftLimits getPhaseShiftTapLimits1() throws PsseModelException {return _list.getPhaseShiftTapLimits1(_ndx);}
-	
-	/** transformer impedance correction table for winding (TAB1) */
-	public ImpCorrTblIn getImpCorrTbl1() throws PsseModelException {return _list.getImpCorrTbl1(_ndx);}
-	/** get winding 2 turns ratio p.u. on winding 2 bus base voltage*/
-	public float getWnd2Ratio() throws PsseModelException {return _list.getWnd2Ratio(_ndx);}
-	/** get winding 2 nominal KV */
-	public float getWnd2NomKV() throws PsseModelException {return _list.getWnd2NomKV(_ndx);}
-	/** get winding 2 phase shift in RAD */
-	public float getWnd2PhaseShift() throws PsseModelException {return _list.getWnd2PhaseShift(_ndx);}
-	/** Transformer Control Mode (COD2) */
-	public TransformerCtrlMode getCtrlMode2() throws PsseModelException {return _list.getCtrlMode2(_ndx);}
-	/** is automatic adjustment enabled? (COD2) */
-	public boolean getAdjEnab2() throws PsseModelException {return _list.getAdjEnab2(_ndx);}
-	/** get controlled bus 2 (CONT2) */ 
-	public BusIn getRegBus2() throws PsseModelException {return _list.getRegBus2(_ndx);}
-	/** adjust reg bus as if on wnd 2 side (CONT1) */
-	public boolean getCtrlTapSide2() throws PsseModelException {return _list.getCtrlTapSide2(_ndx);}
-	//TODO: implement tap ratio limits
-	//TODO: implement phase shift tap limits
-	/** transformer impedance correction table for winding (TAB2) */
-	public ImpCorrTblIn getImpCorrTbl2() throws PsseModelException {return _list.getImpCorrTbl2(_ndx);}
-	/** get winding 3 turns ratio p.u. on winding 3 bus base voltage*/
-	public float getWnd3Ratio() throws PsseModelException {return _list.getWnd3Ratio(_ndx);}
-	/** get winding 3 nominal KV */
-	public float getWnd3NomKV() throws PsseModelException {return _list.getWnd3NomKV(_ndx);}
-	/** get winding 3 phase shift in RAD */
-	public float getWnd3PhaseShift() throws PsseModelException {return _list.getWnd3PhaseShift(_ndx);}
-	/** Transformer Control Mode (COD3) */
-	public TransformerCtrlMode getCtrlMode3() throws PsseModelException {return _list.getCtrlMode3(_ndx);}
-	/** is automatic adjustment enabled? (COD3) */
-	public boolean getAdjEnab3() throws PsseModelException {return _list.getAdjEnab3(_ndx);}
-	/** get controlled bus 3 (CONT3) */ 
-	public BusIn getRegBus3() throws PsseModelException {return _list.getRegBus3(_ndx);}
-	/** adjust reg bus as if on wnd 3 side (CONT1) */
-	public boolean getCtrlTapSide3() throws PsseModelException {return _list.getCtrlTapSide3(_ndx);}
-	//TODO: implement tap ratio limits
-	//TODO: implement phase shift tap limits
-	/** transformer impedance correction table for winding (TAB3) */
-	public ImpCorrTblIn getImpCorrTbl3() throws PsseModelException {return _list.getImpCorrTbl3(_ndx);}
-	
 	/* Raw PSS/e methods (line 1) */
 	
 	/** Winding 1 bus number or name */

@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse.conversion;
 
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerInList;
+import com.powerdata.openpa.psse.TransformerRawList;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 
@@ -16,6 +16,6 @@ import com.powerdata.openpa.tools.DeltaNetwork;
  */
 public interface XfrZTools
 {
-	public Complex convert2W(TransformerInList list, int ndx) throws PsseModelException;
-	public DeltaNetwork convert3W(TransformerInList list, int ndx) throws PsseModelException;
+	public Complex convert2W(TransformerRawList list, int ndx) throws PsseModelException;
+	public DeltaNetwork convert3W(TransformerRawList list, int ndx) throws PsseModelException;
 }

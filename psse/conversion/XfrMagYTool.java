@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse.conversion;
 
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerInList;
+import com.powerdata.openpa.psse.TransformerRawList;
 import com.powerdata.openpa.tools.Complex;
 
 public abstract class XfrMagYTool
@@ -20,7 +20,10 @@ public abstract class XfrMagYTool
 		
 	}
 	
-	public static XfrMagYTool get(int cm) {return _ToolSet[cm];}
+	public static Complex getYMag(TransformerRawList list, int ndx) throws PsseModelException
+	{
+		return _ToolSet[list.getCM(ndx)]._getYMag(list, ndx);
+	}
 
-	public abstract Complex getMagY(TransformerInList list, int ndx) throws PsseModelException;
+	protected abstract Complex _getYMag(TransformerRawList list, int ndx) throws PsseModelException;
 }

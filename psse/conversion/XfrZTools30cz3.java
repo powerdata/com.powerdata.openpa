@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.conversion;
 
-import com.powerdata.openpa.psse.TransformerInList;
+import com.powerdata.openpa.psse.TransformerRawList;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 
@@ -8,13 +8,13 @@ public class XfrZTools30cz3 implements XfrZTools
 {
 
 	@Override
-	public Complex convert2W(TransformerInList list, int ndx)
+	public Complex convert2W(TransformerRawList list, int ndx)
 	{
 		return cvt(list.getR1_2(ndx), list.getX1_2(ndx), list.getSBASE1_2(ndx));
 	}
 
 	@Override
-	public DeltaNetwork convert3W(TransformerInList list, int ndx)
+	public DeltaNetwork convert3W(TransformerRawList list, int ndx)
 	{
 		return new DeltaNetwork(
 			cvt(list.getR1_2(ndx), list.getX1_2(ndx), list.getSBASE1_2(ndx)),

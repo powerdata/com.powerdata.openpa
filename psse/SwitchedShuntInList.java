@@ -2,9 +2,9 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwitchedShuntiNList extends PsseBaseInputList<SwitchedShuntIn>
+public abstract class SwitchedShuntInList extends PsseBaseInputList<SwitchedShuntIn>
 {
-	public SwitchedShuntiNList(PsseInputModel model) {super(model);}
+	public SwitchedShuntInList(PsseInputModel model) {super(model);}
 
 	protected float vsVoltDeft(int ndx, boolean ishigh)
 			throws PsseModelException
