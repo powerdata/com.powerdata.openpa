@@ -21,8 +21,6 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract BusIn getBus1(int ndx) throws PsseModelException;
 	public abstract BusIn getBus2(int ndx) throws PsseModelException;
 
-	
-	
 	/* Raw methods */
 	
 	public abstract String getI(int ndx);
