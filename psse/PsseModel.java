@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse;
 
 import java.lang.reflect.Constructor;
-import java.util.Collections;
 import java.util.HashMap;
 import com.powerdata.openpa.tools.BaseObject;
 
@@ -99,10 +98,6 @@ public abstract class PsseModel
 	
 	public PsseModel() {} 
 	public PsseModel(PsseModelLog log) {_log = log;} 
-	
-//	/** find a Bus by ID (moved to InputList)*/ 
-//	public BusIn getBus(String id) throws PsseModelException {return getBuses().get(id);}
-	
 	
 	public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
 	{

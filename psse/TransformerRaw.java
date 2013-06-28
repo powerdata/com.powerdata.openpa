@@ -32,6 +32,8 @@ public class TransformerRaw extends BaseObject
 	public BusIn getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
 	/** Winding 3 bus for 3 winding transformers*/
 	public BusIn getBus3() throws PsseModelException {return _list.getBus3(_ndx);}
+	/** get star node */
+	public BusIn getStarBus() throws PsseModelException {return _list.getStarBus(_ndx);}
 
 	/* Raw PSS/e methods (line 1) */
 	

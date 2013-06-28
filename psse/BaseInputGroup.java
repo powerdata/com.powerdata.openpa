@@ -7,6 +7,7 @@ public interface BaseInputGroup
 	public LoadInList getLoads() throws PsseModelException;
 	public LineInList getLines() throws PsseModelException;
 	public TransformerInList getTransformers() throws PsseModelException;
+	public PhaseShifterInList getPhaseShifters() throws PsseModelException;
 	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException;
 
 	public GroupInList getGroup(String type) throws PsseModelException;

@@ -8,45 +8,22 @@ public abstract class TransformerRawList extends PsseBaseInputList<TransformerRa
 		super(model);
 	}
 
-	protected float rmDefault(int ndx, char mm, int wnd, float defval, int abscod)
-			throws PsseModelException
-	{
-		int cw = getCW(ndx);
-		if (cw == 2 && (abscod ==1 || abscod == 2))
-		{
-			throw new PsseModelException("No default allowed for RM"
-					+ mm + wnd + " when |COD| is 1 or 2 and CW is 2");
-		}
-		else if (abscod == 3)
-		{
-			throw new PsseModelException("No default allowed for RM" + mm
-					+ wnd + " when |COD| is 3");
-		}
-		return defval;
-	}		
-		
-	protected float vmDefault(int ndx, char mm, int wnd, float defval,
-			int abscod) throws PsseModelException
-	{
-		if (abscod == 2 || abscod == 3)
-		{
-			throw new PsseModelException("No default allowed for VM" + mm + wnd
-					+ " when |COD| is 2 or 3");
-		}
-		return defval;
-	}
-	
 	/** Get a Transformer by it's index. */
 	@Override
 	public TransformerRaw get(int ndx) { return new TransformerRaw(ndx,this); }
 	/** Get a Transformer by it's ID. */
 	@Override
 	public TransformerRaw get(String id) { return super.get(id); }
-	public BusIn getBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public BusIn getBus2(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public BusIn getBus3(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public abstract BusIn getBus1(int ndx) throws PsseModelException;
+	public abstract BusIn getBus2(int ndx) throws PsseModelException;
+	public abstract BusIn getBus3(int ndx) throws PsseModelException;
+	public abstract BusIn getStarBus(int ndx);
 
+	public BusIn getDeftBus1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public BusIn getDeftBus2(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public BusIn getDeftBus3(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 
+	
 	/** retrieve impedance corrections and transforms
 	
 	/* Raw methods */
@@ -161,10 +138,6 @@ public abstract class TransformerRawList extends PsseBaseInputList<TransformerRa
 	public float getDeftRATC1(int ndx) {return 0F;}
 	public int getDeftCOD1(int ndx) {return 0;}
 	public String getDeftCONT1(int ndx) {return "0";}
-	public float getDeftRMA1(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
-	public float getDeftRMI1(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
-	public float getDeftVMA1(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD1(ndx)));}
-	public float getDeftVMI1(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD1(ndx)));}
 	public int getDeftNTP1(int ndx) {return 33;}
 	public int getDeftTAB1(int ndx) {return 0;}
 	public float getDeftCR1(int ndx) {return 0F;}
@@ -182,10 +155,6 @@ public abstract class TransformerRawList extends PsseBaseInputList<TransformerRa
 	public float getDeftRATC2(int ndx) {return 0F;}
 	public int getDeftCOD2(int ndx) {return 0;}
 	public String getDeftCONT2(int ndx) {return "0";}
-	public float getDeftRMA2(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
-	public float getDeftRMI2(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
-	public float getDeftVMA2(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD2(ndx)));}
-	public float getDeftVMI2(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD2(ndx)));}
 	public int getDeftNTP2(int ndx) {return 33;}
 	public int getDeftTAB2(int ndx) {return 0;}
 	public float getDeftCR2(int ndx) {return 0F;}
@@ -211,10 +180,6 @@ public abstract class TransformerRawList extends PsseBaseInputList<TransformerRa
 	public float getDeftRATC3(int ndx) {return 0F;}
 	public int getDeftCOD3(int ndx) {return 0;}
 	public String getDeftCONT3(int ndx) {return "0";}
-	public float getDeftRMA3(int ndx) throws PsseModelException {return rmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
-	public float getDeftRMI3(int ndx) throws PsseModelException {return rmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
-	public float getDeftVMA3(int ndx) throws PsseModelException {return vmDefault(ndx, 'A', 1, 1.1F, Math.abs(getCOD3(ndx)));}
-	public float getDeftVMI3(int ndx) throws PsseModelException {return vmDefault(ndx, 'I', 1, 0.9F, Math.abs(getCOD3(ndx)));}
 	public int getDeftNTP3(int ndx) {return 33;}
 	public int getDeftTAB3(int ndx) {return 0;}
 	public float getDeftCR3(int ndx) {return 0F;}
