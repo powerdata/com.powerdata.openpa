@@ -10,6 +10,7 @@ import com.powerdata.openpa.psse.LoadInList;
 import com.powerdata.openpa.psse.LineIn;
 import com.powerdata.openpa.psse.OwnerInList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.SwitchInList;
 import com.powerdata.openpa.psse.SwitchedShuntiNList;
 import com.powerdata.openpa.psse.TransformerIn;
 import com.powerdata.openpa.psse.ZoneInList;
@@ -73,6 +74,8 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 	public SwitchedShuntiNList getSwitchedShunts() throws PsseModelException {return null;} //TODO:
 	@Override
 	public ImpCorrTblInList getImpCorrTables() throws PsseModelException {return null;} //TODO:
+	@Override
+	public SwitchInList getSwitches() throws PsseModelException {return null;} //TODO:
 	
 	static public void main(String args[])
 	{
