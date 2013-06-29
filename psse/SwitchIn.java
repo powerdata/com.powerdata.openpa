@@ -19,7 +19,8 @@ public class SwitchIn extends BaseObject
 	@Override
 	public String getObjectID() {return _list.getObjectID(_ndx);}
 
-	public BusIn getBus() {return _list.getBus(_ndx);}
+	public BusIn getBus1() {return _list.getBus1(_ndx);}
+	public BusIn getBus2() {return _list.getBus2(_ndx);}
 	public String getName() {return _list.getName(_ndx);}
 	public SwitchState getState() {return _list.getState(_ndx);}
 	
