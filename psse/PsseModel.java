@@ -108,6 +108,7 @@ public abstract class PsseModel
 	{
 		_log.log(severity, obj, msg);
 	}
+	public void refresh() throws PsseModelException {}
 	
 }	
 
