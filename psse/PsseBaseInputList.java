@@ -9,4 +9,5 @@ public abstract class PsseBaseInputList<T extends BaseObject> extends BaseList<T
 
 	public PsseBaseInputList(PsseInputModel model) {_model = model;}
 	public PsseInputModel getPsseModel() {return _model;}
+	public void commit() throws PsseModelException {}
 }

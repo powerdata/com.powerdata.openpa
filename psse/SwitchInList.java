@@ -12,9 +12,9 @@ public abstract class SwitchInList extends PsseBaseInputList<SwitchIn>
 	@Override
 	public SwitchIn get(String id) { return super.get(id); }
 
-	public abstract BusIn getBus1(int ndx);
-	public abstract BusIn getBus2(int ndx);
-	public abstract String getName(int ndx);
-	public abstract SwitchState getState(int ndx);
-
+	public abstract BusIn getBus1(int ndx) throws PsseModelException;
+	public abstract BusIn getBus2(int ndx) throws PsseModelException;
+	public abstract String getName(int ndx) throws PsseModelException;
+	public abstract SwitchState getState(int ndx) throws PsseModelException;
+	public abstract void setState(int ndx, SwitchState state) throws PsseModelException;
 }
