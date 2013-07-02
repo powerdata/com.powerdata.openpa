@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.GenIn;
+import com.powerdata.openpa.psse.GenMode;
 import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -120,7 +121,9 @@ public class GenInList extends com.powerdata.openpa.psse.GenInList
 	@Override
 	public BusIn getRemoteRegBus(int ndx) throws PsseModelException {return getDeftRemoteRegBus(ndx);}
 	@Override
-	public boolean getInSvc(int ndx) throws PsseModelException { return getDeftInSvc(ndx); }
+	public GenMode getMode(int ndx) throws PsseModelException { return null; }
+	@Override
+	public void setMode(int ndx, GenMode mode) throws PsseModelException { } 
 	@Override
 	public float getActvPwr(int ndx) throws PsseModelException { return getDeftActvPwr(ndx); }
 	@Override
@@ -146,5 +149,5 @@ public class GenInList extends com.powerdata.openpa.psse.GenInList
 	@Override
 	public Complex getMachZ(int ndx) throws PsseModelException { return getDeftMachZ(ndx); }
 	@Override
-	public Complex getTxZ(int ndx) throws PsseModelException { return getDeftTxZ(ndx); } 
+	public Complex getTxZ(int ndx) throws PsseModelException { return getDeftTxZ(ndx); }
 }

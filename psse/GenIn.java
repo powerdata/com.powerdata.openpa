@@ -29,8 +29,12 @@ public class GenIn extends BaseObject
 	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** remote regulated bus.  (IREG) Null if local */
 	public BusIn getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
-	/** get initial generator status (STAT) as a boolean.  Returns true if in service */
-	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
+	// /** get initial generator status (STAT) as a boolean.  Returns true if in service */
+	//public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
+	/** get the Generator mode */
+	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
+	/** set the generator mode */
+	public void setMode(GenMode mode) throws PsseModelException { _list.setMode(_ndx, mode); }
 	/** Generator active power (PG) output p.u. */
 	public float getActvPwr() throws PsseModelException {return _list.getActvPwr(_ndx);}
 	/** Generator reactive power (QG) output p.u. */

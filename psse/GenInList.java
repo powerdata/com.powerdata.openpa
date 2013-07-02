@@ -20,7 +20,8 @@ public abstract class GenInList extends PsseBaseInputList<GenIn>
 
 	public abstract BusIn getBus(int ndx) throws PsseModelException;
 	public abstract BusIn getRemoteRegBus(int ndx) throws PsseModelException;
-	public abstract boolean getInSvc(int ndx) throws PsseModelException;
+	//public abstract boolean getInSvc(int ndx) throws PsseModelException;
+	public abstract GenMode getMode(int ndx) throws PsseModelException;
 	public abstract float getActvPwr(int ndx) throws PsseModelException;
 	public abstract float getReacPwr(int ndx) throws PsseModelException;
 	public abstract float getMaxReacPwr(int ndx) throws PsseModelException;
@@ -35,7 +36,8 @@ public abstract class GenInList extends PsseBaseInputList<GenIn>
 	public abstract Complex getMachZ(int ndx) throws PsseModelException;
 	public abstract Complex getTxZ(int ndx) throws PsseModelException;
 
-	
+	public abstract void setMode(int ndx, GenMode mode) throws PsseModelException;
+
 	/* convenience defaults */
 	
 	public BusIn getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
