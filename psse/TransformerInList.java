@@ -23,49 +23,58 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 
 	/* Raw methods */
 	
-	public abstract String getI(int ndx);
-	public abstract String getJ(int ndx);
-	public abstract String getCKT(int ndx);
-	public abstract int getCW(int ndx);
-	public abstract int getCZ(int ndx);
-	public abstract int getCM(int ndx);
-	public abstract float getMAG1(int ndx);
-	public abstract float getMAG2(int ndx);
-	public abstract int getNMETR(int ndx);
-	public abstract String getNAME(int ndx);
-	public abstract int getSTAT(int ndx);
-	public abstract float getR1_2(int ndx);
-	public abstract float getX1_2(int ndx);
-	public abstract float getSBASE1_2(int ndx);
-	public abstract float getWINDV1(int ndx);
-	public abstract float getNOMV1(int ndx);
-	public abstract float getANG1(int ndx);
-	public abstract float getRATA1(int ndx);
-	public abstract float getRATB1(int ndx);
-	public abstract float getRATC1(int ndx);
-	public abstract int getCOD1(int ndx);
-	public abstract String getCONT1(int ndx);
-	public abstract float getRMA1(int ndx);
-	public abstract float getRMI1(int ndx);
-	public abstract float getVMA1(int ndx);
-	public abstract float getVMI1(int ndx);
-	public abstract int getNTP1(int ndx);
-	public abstract int getTAB1(int ndx);
-	public abstract float getCR1(int ndx);
-	public abstract float getCX1(int ndx);
-	public abstract OwnershipInList getOwnership(int ndx);
+	/** Winding 1 bus number or name */
+	public abstract String getI(int ndx) throws PsseModelException;
+	/** Winding 2 bus number or name */
+	public abstract String getJ(int ndx) throws PsseModelException;
+	/** circuit identifier */
+	public String getCKT(int ndx) throws PsseModelException {return "1";}
+	/** Winding data I/O code */
+	public int getCW(int ndx) throws PsseModelException {return 1;}
+	/** Impedance data I/O code */
+	public int getCZ(int ndx) throws PsseModelException {return 1;}
+	/** Magnetizing admittance I/O code */
+	public int getCM(int ndx) throws PsseModelException {return 1;}
+	/** Magnetizing conductance */
+	public float getMAG1(int ndx) throws PsseModelException {return 0F;}
+	/** Magnetizing susceptance */
+	public float getMAG2(int ndx) throws PsseModelException {return 0F;}
+	/** Nonmetered end code */
+	public int getNMETR(int ndx) throws PsseModelException {return 2;}
+	/** Name */
+	public String getNAME(int ndx) throws PsseModelException {return "";}
+	/** Initial Transformer status */
+	public int getSTAT(int ndx) throws PsseModelException {return 1;}
+	/** Measured resistance between winding 1 and winding 2 busses */
+	public float getR1_2(int ndx) throws PsseModelException {return 0F;}
+	/** Measured reactance between winding 1 and winding 2 busses */
+	public abstract float getX1_2(int ndx) throws PsseModelException;
+	/** get winding 1-2 base MVA */
+	public float getSBASE1_2(int ndx) throws PsseModelException {return _model.getSBASE();}
+	/** winding 1 off-nominal turns ratio */ 
+	public float getWINDV1(int ndx) throws PsseModelException
+	{
+		return (getCW(ndx)==2)?
+				_model.getBus(getI(ndx)).getBASKV() :
+				1F;
+	}
+	public abstract float getNOMV1(int ndx) throws PsseModelException;
+	public abstract float getANG1(int ndx) throws PsseModelException;
+	public abstract float getRATA1(int ndx) throws PsseModelException;
+	public abstract float getRATB1(int ndx) throws PsseModelException;
+	public abstract float getRATC1(int ndx) throws PsseModelException;
+	public abstract int getCOD1(int ndx) throws PsseModelException;
+	public abstract String getCONT1(int ndx) throws PsseModelException;
+	public abstract float getRMA1(int ndx) throws PsseModelException;
+	public abstract float getRMI1(int ndx) throws PsseModelException;
+	public abstract float getVMA1(int ndx) throws PsseModelException;
+	public abstract float getVMI1(int ndx) throws PsseModelException;
+	public abstract int getNTP1(int ndx) throws PsseModelException;
+	public abstract int getTAB1(int ndx) throws PsseModelException;
+	public abstract float getCR1(int ndx) throws PsseModelException;
+	public abstract float getCX1(int ndx) throws PsseModelException;
+	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
 
-	public String getDeftCKT(int ndx) {return "1";}
-	public int getDeftCW(int ndx) {return 1;}
-	public int getDeftCZ(int ndx) {return 1;}
-	public int getDeftCM(int ndx) {return 1;}
-	public float getDeftMAG1(int ndx) {return 0F;}
-	public float getDeftMAG2(int ndx) {return 0F;}
-	public int getDeftNMETR(int ndx) {return 2;}
-	public String getDeftNAME(int ndx) {return "";}
-	public int getDeftSTAT(int ndx) {return 1;}
-	public float getDeftR1_2(int ndx) {return 0F;}
-	public float getDeftSBASE1_2(int ndx) {return _model.getSBASE();}
 	public float getDeftWINDV1(int ndx) throws PsseModelException
 	{
 		return (getCW(ndx)==2)?

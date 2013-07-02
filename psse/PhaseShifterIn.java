@@ -71,8 +71,6 @@ public class PhaseShifterIn extends BaseObject
 	public float getRATC1() {return _list.getRATC1(_ndx);}
 	/** Transformer control mode */
 	public int getCOD1() {return _list.getCOD1(_ndx);}
-	/** controlled bus */
-	public String getCONT1() {return _list.getCONT1(_ndx);}
 	/** RMA upper limit (see PSS/e documentation) */
 	public float getRMA1() throws PsseModelException {return _list.getRMA1(_ndx);}
 	/** RMI lower limit (see PSS/e documentation) */
