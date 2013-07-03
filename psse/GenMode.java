@@ -2,5 +2,5 @@ package com.powerdata.openpa.psse;
 
 public enum GenMode
 {
-	OFF, MAN, AGC, EDC, LFC, RES, PMP;
+	OFF, MAN, LFC, AGC, EDC, PMP, CON, RES;
 }
