@@ -58,40 +58,47 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 				_model.getBus(getI(ndx)).getBASKV() :
 				1F;
 	}
-	public abstract float getNOMV1(int ndx) throws PsseModelException;
-	public abstract float getANG1(int ndx) throws PsseModelException;
-	public abstract float getRATA1(int ndx) throws PsseModelException;
-	public abstract float getRATB1(int ndx) throws PsseModelException;
-	public abstract float getRATC1(int ndx) throws PsseModelException;
-	public abstract int getCOD1(int ndx) throws PsseModelException;
-	public abstract String getCONT1(int ndx) throws PsseModelException;
-	public abstract float getRMA1(int ndx) throws PsseModelException;
-	public abstract float getRMI1(int ndx) throws PsseModelException;
-	public abstract float getVMA1(int ndx) throws PsseModelException;
-	public abstract float getVMI1(int ndx) throws PsseModelException;
-	public abstract int getNTP1(int ndx) throws PsseModelException;
-	public abstract int getTAB1(int ndx) throws PsseModelException;
-	public abstract float getCR1(int ndx) throws PsseModelException;
-	public abstract float getCX1(int ndx) throws PsseModelException;
+	/** nominal winding 1 voltage in kV */
+	public float getNOMV1(int ndx) throws PsseModelException {return 0F;}
+	/** winding 1 phase shift (DEG) */
+	public float getANG1(int ndx) throws PsseModelException {return 0F;}
+	/** winding 1 rating A in MVA */
+	public float getRATA1(int ndx) throws PsseModelException {return 0F;}
+	/** winding 1 rating B in MVA */
+	public float getRATB1(int ndx) throws PsseModelException {return 0F;}
+	/** winding 1 rating C in MVA */
+	public float getRATC1(int ndx) throws PsseModelException {return 0F;}
+	/** Transformer control mode */
+	public int getCOD1(int ndx) throws PsseModelException {return 0;}
+	/** controlled bus */
+	public String getCONT1(int ndx) throws PsseModelException {return "0";}
+	/** RMA upper limit (see PSS/e documentation) */
+	public float getRMA1(int ndx) throws PsseModelException {return 1.1F;}
+	/** RMI lower limit (see PSS/e documentation) */
+	public float getRMI1(int ndx) throws PsseModelException {return 0.9F;}
+	/** VMA upper limit (see PSS/e documentation) */
+	public float getVMA1(int ndx) throws PsseModelException
+	{
+		if (Math.abs(getCOD1(ndx)) == 2)
+			throw new PsseModelException("No default VMA1 when COD1 specifes reactive power band control");
+		return 1.1F;
+	}
+	/** VMI lower limit (see PSS/e documentation) */
+	public float getVMI1(int ndx) throws PsseModelException
+	{
+		if (Math.abs(getCOD1(ndx)) == 2)
+			throw new PsseModelException("No default VMI1 when COD1 specifes reactive power band control");
+		return 0.9F;
+	}
+	/** number of taps positions available */
+	public int getNTP1(int ndx) throws PsseModelException {return 33;}
+	/** transformer impedance correction table */
+	public  int getTAB1(int ndx) throws PsseModelException {return 0;}
+	/** load drop compensation resistance in pu on system base */
+	public float getCR1(int ndx) throws PsseModelException {return 0F;}
+	/** load drop compensation reactance in pu on system base */
+	public float getCX1(int ndx) throws PsseModelException {return 0F;}
+	/** return Ownership as a list */
 	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
 
-	public float getDeftWINDV1(int ndx) throws PsseModelException
-	{
-		return (getCW(ndx)==2)?
-				_model.getBus(getI(ndx)).getBASKV() :
-				1F;
-	}
-	public float getDeftNOMV1(int ndx) {return 0F;}
-	public float getDeftANG1(int ndx) {return 0F;}
-	public float getDeftRATA1(int ndx) {return 0F;}
-	public float getDeftRATB1(int ndx) {return 0F;}
-	public float getDeftRATC1(int ndx) {return 0F;}
-	public int getDeftCOD1(int ndx) {return 0;}
-	public String getDeftCONT1(int ndx) {return "0";}
-	public float getDeftRMA1(int ndx) {return 0.9F;}
-	public float getDeftRMI1(int ndx) {return 1.1F;}
-	public int getDeftNTP1(int ndx) {return 33;}
-	public int getDeftTAB1(int ndx) {return 0;}
-	public float getDeftCR1(int ndx) {return 0F;}
-	public float getDeftCX1(int ndx) {return 0F;}
 }	
