@@ -131,4 +131,6 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	public Complex getShuntY(int ndx) throws PsseModelException { return getDeftShuntY(ndx); }
 	@Override
 	public PComplex getVoltage(int ndx) throws PsseModelException { return getDeftVoltage(ndx);}
+	@Override
+	public boolean isEnergized(int ndx) throws PsseModelException {	return false; }
 }

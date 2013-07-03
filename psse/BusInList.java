@@ -28,6 +28,7 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 	public abstract float getVaRad(int ndx) throws PsseModelException;
 	public abstract Complex getShuntY(int ndx) throws PsseModelException;
 	public abstract PComplex getVoltage(int ndx) throws PsseModelException;
+	public abstract boolean isEnergized(int ndx) throws PsseModelException;
 
 
 	/* convenience defaults */
