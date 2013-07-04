@@ -7,7 +7,6 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	{
 		super(model);
 	}
-
 	
 	/** Get a Transformer by it's index. */
 	@Override
@@ -36,9 +35,9 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	/** Magnetizing admittance I/O code */
 	public int getCM(int ndx) throws PsseModelException {return 1;}
 	/** Magnetizing conductance */
-	public float getMAG1(int ndx) throws PsseModelException {return 0F;}
+	public float getMAG1(int ndx) throws PsseModelException {return 0f;}
 	/** Magnetizing susceptance */
-	public float getMAG2(int ndx) throws PsseModelException {return 0F;}
+	public float getMAG2(int ndx) throws PsseModelException {return 0f;}
 	/** Nonmetered end code */
 	public int getNMETR(int ndx) throws PsseModelException {return 2;}
 	/** Name */
@@ -46,7 +45,7 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	/** Initial Transformer status */
 	public int getSTAT(int ndx) throws PsseModelException {return 1;}
 	/** Measured resistance between winding 1 and winding 2 busses */
-	public float getR1_2(int ndx) throws PsseModelException {return 0F;}
+	public float getR1_2(int ndx) throws PsseModelException {return 0f;}
 	/** Measured reactance between winding 1 and winding 2 busses */
 	public abstract float getX1_2(int ndx) throws PsseModelException;
 	/** get winding 1-2 base MVA */
@@ -59,45 +58,63 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 				1F;
 	}
 	/** nominal winding 1 voltage in kV */
-	public float getNOMV1(int ndx) throws PsseModelException {return 0F;}
+	public float getNOMV1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 phase shift (DEG) */
-	public float getANG1(int ndx) throws PsseModelException {return 0F;}
+	public float getANG1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating A in MVA */
-	public float getRATA1(int ndx) throws PsseModelException {return 0F;}
+	public float getRATA1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating B in MVA */
-	public float getRATB1(int ndx) throws PsseModelException {return 0F;}
+	public float getRATB1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating C in MVA */
-	public float getRATC1(int ndx) throws PsseModelException {return 0F;}
+	public float getRATC1(int ndx) throws PsseModelException {return 0f;}
 	/** Transformer control mode */
 	public int getCOD1(int ndx) throws PsseModelException {return 0;}
 	/** controlled bus */
 	public String getCONT1(int ndx) throws PsseModelException {return "0";}
 	/** RMA upper limit (see PSS/e documentation) */
-	public float getRMA1(int ndx) throws PsseModelException {return 1.1F;}
+	public float getRMA1(int ndx) throws PsseModelException
+	{
+		if (getCW(ndx) == 2)
+		{
+			int cod = Math.abs(getCOD1(ndx));
+			if (cod == 1 || cod == 2)
+				throw new PsseModelException("No kV given for off-nominal turns ratio limits");
+		}
+		return 1.1f;
+	}
 	/** RMI lower limit (see PSS/e documentation) */
-	public float getRMI1(int ndx) throws PsseModelException {return 0.9F;}
+	public float getRMI1(int ndx) throws PsseModelException
+	{
+		if (getCW(ndx) == 2)
+		{
+			int cod = Math.abs(getCOD1(ndx));
+			if (cod == 1 || cod == 2)
+				throw new PsseModelException("No kV given for off-nominal turns ratio limits");
+		}
+		return 0.9f;
+	}
 	/** VMA upper limit (see PSS/e documentation) */
 	public float getVMA1(int ndx) throws PsseModelException
 	{
 		if (Math.abs(getCOD1(ndx)) == 2)
 			throw new PsseModelException("No default VMA1 when COD1 specifes reactive power band control");
-		return 1.1F;
+		return 1.1f;
 	}
 	/** VMI lower limit (see PSS/e documentation) */
 	public float getVMI1(int ndx) throws PsseModelException
 	{
 		if (Math.abs(getCOD1(ndx)) == 2)
 			throw new PsseModelException("No default VMI1 when COD1 specifes reactive power band control");
-		return 0.9F;
+		return 0.9f;
 	}
 	/** number of taps positions available */
 	public int getNTP1(int ndx) throws PsseModelException {return 33;}
 	/** transformer impedance correction table */
 	public  int getTAB1(int ndx) throws PsseModelException {return 0;}
 	/** load drop compensation resistance in pu on system base */
-	public float getCR1(int ndx) throws PsseModelException {return 0F;}
+	public float getCR1(int ndx) throws PsseModelException {return 0f;}
 	/** load drop compensation reactance in pu on system base */
-	public float getCX1(int ndx) throws PsseModelException {return 0F;}
+	public float getCX1(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
 	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
 

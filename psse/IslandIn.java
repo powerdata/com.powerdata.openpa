@@ -2,13 +2,12 @@ package com.powerdata.openpa.psse;
 
 public class IslandIn extends GroupIn
 {
-	public IslandIn(int ndx) { super(ndx); }
-
-	@Override
-	public String getObjectID()
+	protected IslandInList _list;
+	
+	public IslandIn(int ndx, IslandInList list)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		super(ndx);
+		_list = list;
 	}
 
 	@Override
@@ -47,6 +46,13 @@ public class IslandIn extends GroupIn
 	}
 
 	@Override
+	public PhaseShifterInList getPhaseShifters() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
@@ -69,6 +75,13 @@ public class IslandIn extends GroupIn
 
 	@Override
 	public IslandInList getIslands() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getObjectID()
 	{
 		// TODO Auto-generated method stub
 		return null;

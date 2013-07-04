@@ -43,7 +43,7 @@ class LogMsg extends VoltageControlBand
 
 interface VoltLimByWnd
 {
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx);
+	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException;
 }
 
 class VLimW1 implements VoltLimByWnd
@@ -56,7 +56,7 @@ class VLimW1 implements VoltLimByWnd
 		VLW1PassThru.Default
 	};
 	@Override
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx)
+	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException
 	{
 		return _Tools[Math.abs(list.getCOD1(ndx))];
 	}
@@ -83,7 +83,7 @@ class VLimW2 implements VoltLimByWnd
 			VLW2PassThru.Default						};
 
 	@Override
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx)
+	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException
 	{
 		return _Tools[Math.abs(list.getCOD2(ndx))];
 	}
@@ -110,7 +110,7 @@ class VLimW3 implements VoltLimByWnd
 			VLW3PassThru.Default						};
 
 	@Override
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx)
+	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException
 	{
 		return _Tools[Math.abs(list.getCOD3(ndx))];
 	}

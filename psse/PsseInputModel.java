@@ -11,7 +11,7 @@ public abstract class PsseInputModel extends PsseModel implements BaseInputGroup
 	public BusIn getBus(String id) throws PsseModelException {return getBuses().get(id);}
 
 	@Override
-	public IslandInList getIslands() throws PsseModelException {return new IslandInList(this);}
+	public abstract IslandInList getIslands() throws PsseModelException;
 	@Override
 	public GroupInList getGroup(String type) throws PsseModelException
 	{
@@ -26,7 +26,6 @@ public abstract class PsseInputModel extends PsseModel implements BaseInputGroup
 	public abstract AreaInList getAreas() throws PsseModelException;
 	public abstract OwnerInList getOwners() throws PsseModelException;
 	public abstract ZoneInList getZones() throws PsseModelException;
-	public abstract TransformerRawList getRawTransformers() throws PsseModelException;
 	public int getPsseVersion() {return 30;}
 	
 }

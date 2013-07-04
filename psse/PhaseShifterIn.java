@@ -71,9 +71,9 @@ public class PhaseShifterIn extends BaseObject
 	public float getRATC1() throws PsseModelException {return _list.getRATC1(_ndx);}
 	/** Transformer control mode */
 	public int getCOD1() throws PsseModelException {return _list.getCOD1(_ndx);}
-	/** RMA upper limit (see PSS/e documentation) */
+	/** phase shift angle max in degrees */
 	public float getRMA1() throws PsseModelException {return _list.getRMA1(_ndx);}
-	/** RMI lower limit (see PSS/e documentation) */
+	/** phase shift angle min in degrees */
 	public float getRMI1() throws PsseModelException {return _list.getRMI1(_ndx);}
 	/** VMA upper limit (see PSS/e documentation) */
 	public float getVMA1() throws PsseModelException {return _list.getVMA1(_ndx);}

@@ -6,9 +6,11 @@ import com.powerdata.openpa.psse.AreaInList;
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.GenIn;
 import com.powerdata.openpa.psse.ImpCorrTblInList;
+import com.powerdata.openpa.psse.IslandInList;
 import com.powerdata.openpa.psse.LoadInList;
 import com.powerdata.openpa.psse.LineIn;
 import com.powerdata.openpa.psse.OwnerInList;
+import com.powerdata.openpa.psse.PhaseShifterInList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchedShuntInList;
 import com.powerdata.openpa.psse.TransformerIn;
@@ -100,5 +102,17 @@ public class PsseInputModel extends com.powerdata.openpa.psse.PsseInputModel
 		{
 			System.out.println("ERROR: "+e);
 		}
+	}
+	@Override
+	public PhaseShifterInList getPhaseShifters() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public IslandInList getIslands() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

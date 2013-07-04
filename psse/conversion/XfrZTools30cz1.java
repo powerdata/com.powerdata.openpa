@@ -15,7 +15,7 @@ public class XfrZTools30cz1 implements XfrZTools
 	}
 
 	@Override
-	public DeltaNetwork convert3W(TransformerRawList list, int ndx)
+	public DeltaNetwork convert3W(TransformerRawList list, int ndx) throws PsseModelException
 	{
 		return new DeltaNetwork(
 			new Complex(list.getR1_2(ndx), list.getX1_2(ndx)),

@@ -36,9 +36,9 @@ public abstract class PhaseShifterInList extends PsseBaseInputList<PhaseShifterI
 	/** Magnetizing admittance I/O code */
 	public int getCM(int ndx) throws PsseModelException {return 1;}
 	/** Magnetizing conductance */
-	public float getMAG1(int ndx) throws PsseModelException {return 0F;}
+	public float getMAG1(int ndx) throws PsseModelException {return 0f;}
 	/** Magnetizing susceptance */
-	public float getMAG2(int ndx) throws PsseModelException {return 0F;}
+	public float getMAG2(int ndx) throws PsseModelException {return 0f;}
 	/** Nonmetered end code */
 	public int getNMETR(int ndx) throws PsseModelException {return 2;}
 	/** Name */
@@ -46,59 +46,48 @@ public abstract class PhaseShifterInList extends PsseBaseInputList<PhaseShifterI
 	/** Initial Transformer status */
 	public int getSTAT(int ndx) throws PsseModelException {return 1;}
 	/** Measured resistance between winding 1 and winding 2 busses */
-	public float getR1_2(int ndx) throws PsseModelException {return 0F;}
+	public float getR1_2(int ndx) throws PsseModelException {return 0f;}
 	/** Measured reactance between winding 1 and winding 2 busses */
 	public abstract float getX1_2(int ndx) throws PsseModelException;
 	/** get winding 1-2 base MVA */
 	public float getSBASE1_2(int ndx) throws PsseModelException {return _model.getSBASE();}
 	/** winding 1 off-nominal turns ratio */
-	public abstract float getWINDV1(int ndx) throws PsseModelException;
-	/** nominal winding 1 voltage in kV */
-	public abstract float getNOMV1(int ndx) throws PsseModelException;
-	/** winding 1 phase shift (DEG) */
-	public abstract float getANG1(int ndx) throws PsseModelException;
-	/** winding 1 rating A in MVA */
-	public abstract float getRATA1(int ndx) throws PsseModelException;
-	/** winding 1 rating B in MVA */
-	public abstract float getRATB1(int ndx) throws PsseModelException;
-	/** winding 1 rating C in MVA */
-	public abstract float getRATC1(int ndx) throws PsseModelException;
-	/** Transformer control mode */
-	public abstract int getCOD1(int ndx) throws PsseModelException;
-	/** RMA upper limit (see PSS/e documentation) */
-	public abstract float getRMA1(int ndx) throws PsseModelException;
-	/** RMI lower limit (see PSS/e documentation) */
-	public abstract float getRMI1(int ndx) throws PsseModelException;
-	/** VMA upper limit (see PSS/e documentation) */
-	public abstract float getVMA1(int ndx) throws PsseModelException;
-	/** VMI lower limit (see PSS/e documentation) */
-	public abstract float getVMI1(int ndx) throws PsseModelException;
-	/** number of taps positions available */
-	public abstract int getNTP1(int ndx) throws PsseModelException;
-	/** transformer impedance correction table */
-	public abstract int getTAB1(int ndx) throws PsseModelException;
-	/** load drop compensation resistance in pu on system base */
-	public abstract float getCR1(int ndx) throws PsseModelException;
-	/** load drop compensation reactance in pu on system base */
-	public abstract float getCX1(int ndx) throws PsseModelException;
-	/** return Ownership as a list */
-	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
-
-	public float getDeftWINDV1(int ndx) throws PsseModelException
+	public float getWINDV1(int ndx) throws PsseModelException
 	{
 		return (getCW(ndx)==2)?
 				_model.getBus(getI(ndx)).getBASKV() :
 				1F;
 	}
-	public float getDeftNOMV1(int ndx) {return 0F;}
-	public float getDeftANG1(int ndx) {return 0F;}
-	public float getDeftRATA1(int ndx) {return 0F;}
-	public float getDeftRATB1(int ndx) {return 0F;}
-	public float getDeftRATC1(int ndx) {return 0F;}
-	public int getDeftCOD1(int ndx) {return 3;}
-	public int getDeftNTP1(int ndx) {return 33;}
-	public int getDeftTAB1(int ndx) {return 0;}
-	public float getDeftCR1(int ndx) {return 0F;}
-	public float getDeftCX1(int ndx) {return 0F;}
+	/** nominal winding 1 voltage in kV */
+	public float getNOMV1(int ndx) throws PsseModelException {return 0f;}
+	/** winding 1 phase shift (DEG) */
+	public float getANG1(int ndx) throws PsseModelException {return 0f;}
+	/** winding 1 rating A in MVA */
+	public float getRATA1(int ndx) throws PsseModelException {return 0f;}
+	/** winding 1 rating B in MVA */
+	public float getRATB1(int ndx) throws PsseModelException {return 0f;}
+	/** winding 1 rating C in MVA */
+	public float getRATC1(int ndx) throws PsseModelException {return 0f;}
+	/** Transformer control mode */
+	public int getCOD1(int ndx) throws PsseModelException {return 0;}
+	/** phase shift angle max in degrees */
+	public float getRMA1(int ndx) throws PsseModelException {return 180;}
+	/** phase shift angle min in degrees */
+	public float getRMI1(int ndx) throws PsseModelException {return -180f;}
+	/** VMA upper limit (see PSS/e documentation) */
+	public float getVMA1(int ndx) throws PsseModelException {return 0f;}
+	/** VMI lower limit (see PSS/e documentation) */
+	public float getVMI1(int ndx) throws PsseModelException {return 0f;}
+	/** number of taps positions available */
+	public int getNTP1(int ndx) throws PsseModelException {return 33;}
+	/** transformer impedance correction table */
+	public int getTAB1(int ndx) throws PsseModelException {return 0;}
+	/** load drop compensation resistance in pu on system base */
+	public float getCR1(int ndx) throws PsseModelException {return 0f;}
+	/** load drop compensation reactance in pu on system base */
+	public float getCX1(int ndx) throws PsseModelException {return 0f;}
+	/** return Ownership as a list */
+	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
+
 }	
 
