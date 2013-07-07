@@ -3,8 +3,14 @@ package com.powerdata.openpa.psse.csv;
 import com.powerdata.openpa.psse.AreaIn;
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.BusTypeCode;
+import com.powerdata.openpa.psse.GenInList;
+import com.powerdata.openpa.psse.LineInList;
+import com.powerdata.openpa.psse.LoadInList;
 import com.powerdata.openpa.psse.OwnerIn;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.SwitchInList;
+import com.powerdata.openpa.psse.SwitchedShuntiNList;
+import com.powerdata.openpa.psse.TransformerInList;
 import com.powerdata.openpa.psse.ZoneIn;
 //import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.tools.BooleanAttrib;
@@ -133,4 +139,41 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	public PComplex getVoltage(int ndx) throws PsseModelException { return getDeftVoltage(ndx);}
 	@Override
 	public boolean isEnergized(int ndx) throws PsseModelException {	return false; }
+	@Override
+	public SwitchInList getSwitches(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public GenInList getGenerators(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public LoadInList getLoads(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public LineInList getLines(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public TransformerInList getTransformers(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public SwitchedShuntiNList getSwitchedShunts(int ndx)
+			throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
