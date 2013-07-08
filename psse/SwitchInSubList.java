@@ -38,7 +38,7 @@ public class SwitchInSubList extends SwitchInList
 	@Override
 	public void setState(int ndx, SwitchState state) throws PsseModelException
 	{
-		setState(_ndxs[ndx],state);
+		_switches.setState(_ndxs[ndx],state);
 	}
 	@Override
 	public String getObjectID(int ndx)
