@@ -145,7 +145,7 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	@Override
 	public String getObjectID(int ndx)
 	{ 
-		return _i[ndx]+":"+_j[ndx]+":"+_k[ndx]+":"+_ckt[ndx];
+		return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx];
 	}
 	@Override
 	public int size() { return _size; }
