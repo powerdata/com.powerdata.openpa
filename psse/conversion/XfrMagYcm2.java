@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.conversion;
 
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerRawList;
 import com.powerdata.openpa.tools.Complex;
 
 public class XfrMagYcm2 extends XfrMagYTool

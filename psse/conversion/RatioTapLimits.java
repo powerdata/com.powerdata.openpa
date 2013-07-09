@@ -3,7 +3,6 @@ package com.powerdata.openpa.psse.conversion;
 import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Limits;
-import com.powerdata.openpa.psse.TransformerRawList;
 
 public abstract class RatioTapLimits
 {
