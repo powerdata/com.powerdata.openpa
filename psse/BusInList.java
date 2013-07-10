@@ -37,6 +37,7 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 	public abstract Complex getShuntY(int ndx) throws PsseModelException;
 	public abstract PComplex getVoltage(int ndx) throws PsseModelException;
 	public abstract boolean isEnergized(int ndx) throws PsseModelException;
+	public abstract int getIsland(int ndx) throws PsseModelException;
 
 
 	/* convenience defaults */

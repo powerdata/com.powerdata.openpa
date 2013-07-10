@@ -176,4 +176,9 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int getIsland(int ndx) throws PsseModelException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
