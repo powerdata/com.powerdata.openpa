@@ -132,9 +132,9 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	{
 		if (Math.abs(getCOD2(ndx)) < 3 && getCW(ndx) == 2)
 		{
-			return 1.1f * _busses.get(getJ(ndx)).getBASKV();
+			return 0.9f * _busses.get(getJ(ndx)).getBASKV();
 		}
-		return 1.1f;
+		return 0.9f;
 	}
 	/**
 	 * Allow a number of positions to be specified on winding 2.
