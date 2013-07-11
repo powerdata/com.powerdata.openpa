@@ -50,7 +50,7 @@ public abstract class TransformerRawList extends PsseBaseInputList<TransformerRa
 	/** Initial transformer status */
 	public int getSTAT(int ndx) throws PsseModelException {return 1;}
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership(int ndx) throws PsseModelException {return null;} // TODO: Implement this
+	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
 	
 	/* line 2 */
 	
