@@ -128,7 +128,7 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	/**
 	 * Allow a tap range to be specified on winding 2.
 	 */
-	public float getRMI2(int ndx) throws PsseModelException {return 0.9f;}
+	public float getRMI2(int ndx) throws PsseModelException
 	{
 		if (Math.abs(getCOD2(ndx)) < 3 && getCW(ndx) == 2)
 		{
