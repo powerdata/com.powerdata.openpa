@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public class SwitchedShuntIn extends BaseObject
 {
-	protected SwitchedShuntiNList _list;
+	protected SwitchedShuntInList _list;
 	
-	public SwitchedShuntIn(int ndx, SwitchedShuntiNList list)
+	public SwitchedShuntIn(int ndx, SwitchedShuntInList list)
 	{
 		super(ndx);
 		_list = list;
@@ -16,7 +16,7 @@ public class SwitchedShuntIn extends BaseObject
 	public String getDebugName() throws PsseModelException {return "";}
 
 	@Override
-	public String getObjectID() {return _list.getObjectID(_ndx);}
+	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	/* Convenience methods */
 	/** Load bus (I) */ 

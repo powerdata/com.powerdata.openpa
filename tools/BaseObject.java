@@ -12,19 +12,19 @@ public abstract class BaseObject
 	}
 
 	public int getIndex() {return _ndx;}
-	public abstract String getObjectID();
+	public abstract String getObjectID() throws PsseModelException;
 	
 
 	@Override
 	public String toString()
 	{
-		StringBuilder sb = new StringBuilder(String.format("%s[%d](%s) ",getClass().getSimpleName(),
-				_ndx,getObjectID()));
 		try
 		{
+		StringBuilder sb = new StringBuilder(String.format("%s[%d](%s) ",getClass().getSimpleName(),
+				_ndx,getObjectID()));
 			sb.append(getDebugName());
-		} catch (Exception e) {}
-		return sb.toString();
+			return sb.toString();
+		} catch (Exception e) {return "err";}
 	}
 	
 	public String getDebugName() throws PsseModelException {return "";}

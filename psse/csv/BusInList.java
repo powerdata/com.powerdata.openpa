@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.AreaIn;
-import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.GenInList;
 import com.powerdata.openpa.psse.LineInList;
@@ -9,18 +8,13 @@ import com.powerdata.openpa.psse.LoadInList;
 import com.powerdata.openpa.psse.OwnerIn;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchInList;
-import com.powerdata.openpa.psse.SwitchedShuntiNList;
+import com.powerdata.openpa.psse.SwitchedShuntInList;
 import com.powerdata.openpa.psse.TransformerInList;
 import com.powerdata.openpa.psse.ZoneIn;
-//import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.FloatAttrib;
-import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.PComplex;
 import com.powerdata.openpa.tools.SimpleCSV;
-import com.powerdata.openpa.tools.StringAttrib;
 /**
  * Implement bus for CSV.  Currently based on Robin's version.
  * 
@@ -107,14 +101,6 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
-	public StringAttrib<BusIn> mapStringAttrib(String attribname) { return null; }
-	@Override
-	public FloatAttrib<BusIn> mapFloatAttrib(String attribname) { return null; }
-	@Override
-	public IntAttrib<BusIn> mapIntAttrib(String attribname) { return null; }
-	@Override
-	public BooleanAttrib<BusIn> mapBooleanAttrib(String attribname) { return null; }
-	@Override
 	public int size() { return _size; }
 	@Override
 	public BusTypeCode getBusType(int ndx) throws PsseModelException { return getDeftBusType(ndx); }
@@ -170,7 +156,7 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 		return null;
 	}
 	@Override
-	public SwitchedShuntiNList getSwitchedShunts(int ndx)
+	public SwitchedShuntInList getSwitchedShunts(int ndx)
 			throws PsseModelException
 	{
 		// TODO Auto-generated method stub

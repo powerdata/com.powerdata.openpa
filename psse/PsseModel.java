@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse;
 
 import java.lang.reflect.Constructor;
-import java.util.Collections;
 import java.util.HashMap;
 import com.powerdata.openpa.tools.BaseObject;
 
@@ -44,6 +43,7 @@ public abstract class PsseModel
 	 */
 	public static PsseInputModel OpenInput(String uri) throws PsseModelException
 	{
+		System.out.println("uri: "+uri);
 		String[] tok = uri.split(":", 2);
 		String clsnm = _SchemeToInputClass.get(tok[0]);
 		if (clsnm == null) throw new PsseModelException("Scheme not defined for Input: "+tok[0]);
@@ -56,7 +56,7 @@ public abstract class PsseModel
 		}
 		catch (Exception e)
 		{
-			throw new PsseModelException("Scheme "+tok[0]+" "+e);
+			throw new PsseModelException("Scheme "+tok[0]+" "+e, e);
 		}
 	}
 	/**
@@ -99,10 +99,6 @@ public abstract class PsseModel
 	
 	public PsseModel() {} 
 	public PsseModel(PsseModelLog log) {_log = log;} 
-	
-//	/** find a Bus by ID (moved to InputList)*/ 
-//	public BusIn getBus(String id) throws PsseModelException {return getBuses().get(id);}
-	
 	
 	public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
 	{

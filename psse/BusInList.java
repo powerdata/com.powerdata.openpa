@@ -23,7 +23,7 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 	public abstract LoadInList getLoads(int ndx) throws PsseModelException;
 	public abstract LineInList getLines(int ndx) throws PsseModelException;
 	public abstract TransformerInList getTransformers(int ndx) throws PsseModelException;
-	public abstract SwitchedShuntiNList getSwitchedShunts(int ndx) throws PsseModelException;
+	public abstract SwitchedShuntInList getSwitchedShunts(int ndx) throws PsseModelException;
 	
 	/* convenience methods */
 	

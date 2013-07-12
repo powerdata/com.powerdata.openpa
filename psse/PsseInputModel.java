@@ -11,7 +11,7 @@ public abstract class PsseInputModel extends PsseModel implements BaseInputGroup
 	public BusIn getBus(String id) throws PsseModelException {return getBuses().get(id);}
 
 	@Override
-	public IslandInList getIslands() throws PsseModelException {return new IslandInList(this);}
+	public abstract IslandInList getIslands() throws PsseModelException;
 	@Override
 	public GroupInList getGroup(String type) throws PsseModelException
 	{

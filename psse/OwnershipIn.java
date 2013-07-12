@@ -13,7 +13,7 @@ public class OwnershipIn extends BaseObject
 	}
 
 	@Override
-	public String getObjectID() {return _list.getObjectID(_ndx);}
+	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	/* Convenience Methods */
 

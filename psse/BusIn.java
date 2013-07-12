@@ -18,7 +18,7 @@ public class BusIn extends BaseObject
 	public String getDebugName() throws PsseModelException {return getNAME();}
 
 	@Override
-	public String getObjectID() {return _list.getObjectID(_ndx);}
+	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	/* Groups */
 	
@@ -27,7 +27,7 @@ public class BusIn extends BaseObject
 	public LoadInList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
 	public LineInList getLines() throws PsseModelException { return _list.getLines(_ndx); }
 	public TransformerInList getTransformers() throws PsseModelException { return _list.getTransformers(_ndx); }
-	public SwitchedShuntiNList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
+	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
 	
 	/* Convenience methods */
 	

@@ -10,9 +10,9 @@ package com.powerdata.openpa.tools;
 
 public class StarNetwork
 {
-	protected Complex	_z1;
-	protected Complex	_z2;
-	protected Complex	_z3;
+	private Complex	_z1;
+	private Complex	_z2;
+	private Complex	_z3;
 
 	public StarNetwork(Complex z1, Complex z2, Complex z3)
 	{

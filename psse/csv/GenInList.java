@@ -5,13 +5,9 @@ import com.powerdata.openpa.psse.GenIn;
 import com.powerdata.openpa.psse.GenMode;
 import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.FloatAttrib;
-import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
-import com.powerdata.openpa.tools.StringAttrib;
 
 public class GenInList extends com.powerdata.openpa.psse.GenInList
 {
@@ -108,14 +104,6 @@ public class GenInList extends com.powerdata.openpa.psse.GenInList
 	public OwnershipInList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
-	@Override
-	public StringAttrib<GenIn> mapStringAttrib(String attribname) { return null; }
-	@Override
-	public FloatAttrib<GenIn> mapFloatAttrib(String attribname) { return null; }
-	@Override
-	public IntAttrib<GenIn> mapIntAttrib(String attribname) { return null; }
-	@Override
-	public BooleanAttrib<GenIn> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 	@Override

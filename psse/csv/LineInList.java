@@ -4,13 +4,9 @@ import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.LineIn;
 import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.BooleanAttrib;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.FloatAttrib;
-import com.powerdata.openpa.tools.IntAttrib;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
-import com.powerdata.openpa.tools.StringAttrib;
 
 public class LineInList extends com.powerdata.openpa.psse.LineInList
 {
@@ -89,14 +85,6 @@ public class LineInList extends com.powerdata.openpa.psse.LineInList
 	public OwnershipInList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
-	@Override
-	public StringAttrib<LineIn> mapStringAttrib(String attribname) { return null; }
-	@Override
-	public FloatAttrib<LineIn> mapFloatAttrib(String attribname) { return null; }
-	@Override
-	public IntAttrib<LineIn> mapIntAttrib(String attribname) { return null; }
-	@Override
-	public BooleanAttrib<LineIn> mapBooleanAttrib(String attribname) { return null; }
 	@Override
 	public int size() { return _size; }
 

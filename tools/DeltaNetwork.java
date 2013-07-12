@@ -10,9 +10,9 @@ package com.powerdata.openpa.tools;
 
 public class DeltaNetwork
 {
-	protected Complex	_z12;
-	protected Complex	_z23;
-	protected Complex	_z31;
+	private Complex	_z12;
+	private Complex	_z23;
+	private Complex	_z31;
 
 	public DeltaNetwork(Complex z12, Complex z23, Complex z31)
 	{

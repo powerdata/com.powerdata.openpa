@@ -17,7 +17,7 @@ public class ZoneIn extends BaseObject
 	public String getDebugName() throws PsseModelException {return getOWNAME();}
 
 	@Override
-	public String getObjectID() {return _list.getObjectID(_ndx);}
+	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	/* raw PSS/e methods */
 	

@@ -14,7 +14,7 @@ public class BusOut extends BaseObject
 	}
 
 	@Override
-	public String getObjectID() {return _list.getObjectID(_ndx);}
+	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	public void setVmag(float vm) {_list.setVmag(_ndx, vm);}
 	public void setVang(float va) {_list.setVang(_ndx, va);}
