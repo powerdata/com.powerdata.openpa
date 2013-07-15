@@ -59,30 +59,6 @@ public abstract class PsseModel
 			throw new PsseModelException("Scheme "+tok[0]+" "+e, e);
 		}
 	}
-	/**
-	 * Create a new output class using a uri.  The scheme needs to have been
-	 * mapped in the scheme to output class translations.
-	 * @param uri
-	 * @return
-	 * @throws PsseModelException
-	 */
-	public static PsseOutputModel OpenOutput(String uri) throws PsseModelException
-	{
-		String[] tok = uri.split(":", 2);
-		String clsnm = _SchemeToOutputClass.get(tok[0]);
-		if (clsnm == null) throw new PsseModelException("Scheme not defined for Output: "+tok[0]);
-		
-		try
-		{
-			Class<?> cls = Class.forName(clsnm);
-			Constructor<?> con = cls.getConstructor(new Class[] {String.class});
-			return (PsseOutputModel) con.newInstance(new Object[]{tok[1]});
-		}
-		catch (Exception e)
-		{
-			throw new PsseModelException("Scheme "+tok[0]+" "+e);
-		}
-	}
 	
 	protected PsseModelLog _log = new PsseModelLog()
 	{

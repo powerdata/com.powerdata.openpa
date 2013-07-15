@@ -7,7 +7,7 @@ import com.powerdata.openpa.psse.LineInList;
 import com.powerdata.openpa.psse.LoadInList;
 import com.powerdata.openpa.psse.OwnerIn;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.SwitchInList;
+import com.powerdata.openpa.psse.SwitchPsseList;
 import com.powerdata.openpa.psse.SwitchedShuntInList;
 import com.powerdata.openpa.psse.TransformerInList;
 import com.powerdata.openpa.psse.ZoneIn;
@@ -126,7 +126,7 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	@Override
 	public boolean isEnergized(int ndx) throws PsseModelException {	return false; }
 	@Override
-	public SwitchInList getSwitches(int ndx) throws PsseModelException
+	public SwitchPsseList getSwitches(int ndx) throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -81,7 +81,7 @@ public class IslandIn extends GroupIn
 	}
 
 	@Override
-	public SwitchInList getSwitches() throws PsseModelException
+	public SwitchPsseList getSwitches() throws PsseModelException
 	{
 		// TODO Auto-generated method stub
 		return null;
