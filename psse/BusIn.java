@@ -22,7 +22,7 @@ public class BusIn extends BaseObject
 	
 	/* Groups */
 	
-	public SwitchPsseList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
+	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
 	public GenInList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }
 	public LoadInList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
 	public LineInList getLines() throws PsseModelException { return _list.getLines(_ndx); }

@@ -18,7 +18,7 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 	public BusIn get(String id) { return super.get(id); }
 	
 	/* groups */
-	public abstract SwitchPsseList getSwitches(int ndx) throws PsseModelException;
+	public abstract SwitchList getSwitches(int ndx) throws PsseModelException;
 	public abstract GenInList getGenerators(int ndx) throws PsseModelException;
 	public abstract LoadInList getLoads(int ndx) throws PsseModelException;
 	public abstract LineInList getLines(int ndx) throws PsseModelException;

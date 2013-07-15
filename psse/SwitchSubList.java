@@ -1,10 +1,10 @@
 package com.powerdata.openpa.psse;
 
-public class SwitchInSubList extends SwitchPsseList
+public class SwitchSubList extends SwitchList
 {
-	SwitchPsseList _switches;
+	SwitchList _switches;
 	int _ndxs[];
-	public SwitchInSubList(SwitchPsseList switches, int ndxs[])
+	public SwitchSubList(SwitchList switches, int ndxs[])
 	{
 		super(switches._model);
 		_switches = switches;

@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.GenIn;
 import com.powerdata.openpa.psse.GenMode;
 import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;

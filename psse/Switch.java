@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class SwitchPsse extends BaseObject
+public class Switch extends BaseObject
 {
-	protected SwitchPsseList _list;
+	protected SwitchList _list;
 	
-	public SwitchPsse(int ndx, SwitchPsseList list)
+	public Switch(int ndx, SwitchList list)
 	{
 		super(ndx);
 		_list = list;
