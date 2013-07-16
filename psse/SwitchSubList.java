@@ -11,6 +11,11 @@ public class SwitchSubList extends SwitchList
 		_ndxs = ndxs;
 	}
 	@Override
+	public void commit() throws PsseModelException
+	{
+		_switches.commit();
+	}
+	@Override
 	public BusIn getBus1(int ndx) throws PsseModelException
 	{
 		return _switches.getBus1(_ndxs[ndx]);
