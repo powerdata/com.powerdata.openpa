@@ -91,4 +91,13 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/** index of related OWNER record.  Defaults to same owner as bus I */
 	public int getOWNER(int ndx) throws PsseModelException {return getBus(ndx).getOWNER();}
 	
+	/* Real-Time Methods */
+	/** get the load MW */
+	public float getRTMW(int ndx) throws PsseModelException { return 0f; }
+	/** get the load MVar */
+	public float getRTMVar(int ndx) throws PsseModelException { return 0f; }
+	/** get the cold load MW */
+	public float getRTColdMW(int ndx) throws PsseModelException { return 0f; }
+	/** get the cold load MVar */
+	public float getRTColdMVar(int ndx) throws PsseModelException { return 0f; }
 }

@@ -70,4 +70,14 @@ public class Load extends BaseObject implements OneTermDev
 	public float getYQ() throws PsseModelException {return _list.getYQ(_ndx);}
 	/** index of related OWNER record.  Defaults to same owner as bus I */
 	public int getOWNER() throws PsseModelException {return _list.getOWNER(_ndx);}
+	
+	/* Real-Time Methods */
+	/** get the load MW */
+	public float getRTMW() throws PsseModelException { return _list.getRTMW(_ndx); }
+	/** get the load MVar */
+	public float getRTMVar() throws PsseModelException { return _list.getRTMVar(_ndx); }
+	/** get the cold load MW */
+	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
+	/** get the cold load MVar */
+	public float getRTColdMVar() throws PsseModelException { return _list.getRTColdMVar(_ndx); }
 }

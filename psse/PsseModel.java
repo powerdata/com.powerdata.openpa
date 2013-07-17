@@ -11,8 +11,8 @@ public class PsseModel
 	/** seed the class translations with some defaults */
 	static
 	{
-		SetSchemeInputClass("pssecsv", "com.powerdata.openpa.psse.csv.PsseInputModel");
-		SetSchemeInputClass("pd2cim", "com.powerdata.pa.psse.pd2cim.PsseInputModel");
+		SetSchemeInputClass("pssecsv", "com.powerdata.openpa.psse.csv.PsseModel");
+		SetSchemeInputClass("pd2cim", "com.powerdata.pa.psse.pd2cim.PsseModel");
 	}
 	/**
 	 * Set a scheme to input class name translation.
