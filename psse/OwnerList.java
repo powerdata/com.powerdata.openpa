@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public abstract class OwnerInList extends PsseBaseInputList<OwnerIn>
+public abstract class OwnerList extends PsseBaseList<Owner>
 {
-	public static final OwnerInList Empty = new OwnerInList()
+	public static final OwnerList Empty = new OwnerList()
 	{
 		@Override
 		public int getI(int ndx) throws PsseModelException {return 0;}
@@ -11,15 +11,15 @@ public abstract class OwnerInList extends PsseBaseInputList<OwnerIn>
 		@Override
 		public int size() {return 0;}
 	};
-	protected OwnerInList() {super();}
-	public OwnerInList(PsseModel model) {super(model);}
+	protected OwnerList() {super();}
+	public OwnerList(PsseModel model) {super(model);}
 
 	/** Get an Owner by it's index. */
 	@Override
-	public OwnerIn get(int ndx) { return new OwnerIn(ndx,this); }
+	public Owner get(int ndx) { return new Owner(ndx,this); }
 	/** Get an Owner by it's ID. */
 	@Override
-	public OwnerIn get(String id) { return super.get(id); }
+	public Owner get(String id) { return super.get(id); }
 
 	/* raw data methods */
 	public abstract int getI(int ndx) throws PsseModelException;

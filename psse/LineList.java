@@ -3,9 +3,9 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class LineInList extends PsseBaseInputList<LineIn>
+public abstract class LineList extends PsseBaseList<Line>
 {
-	public static final LineInList Empty = new LineInList()
+	public static final LineList Empty = new LineList()
 	{
 		@Override
 		public String getI(int ndx) throws PsseModelException {return null;}
@@ -19,23 +19,23 @@ public abstract class LineInList extends PsseBaseInputList<LineIn>
 		public int size() {return 0;}
 	};
 	
-	protected LineInList() {super();}
-	public LineInList(PsseModel model) {super(model);}
+	protected LineList() {super();}
+	public LineList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a NontransformerBranch by it's index. */
 	@Override
-	public LineIn get(int ndx) { return new LineIn(ndx,this); }
+	public Line get(int ndx) { return new Line(ndx,this); }
 	/** Get a NontransformerBranch by it's ID. */
 	@Override
-	public LineIn get(String id) { return super.get(id); }
+	public Line get(String id) { return super.get(id); }
 
 	
 	/** From-side bus */
-	public BusIn getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	/** To-side bus */
-	public BusIn getToBus(int ndx)  throws PsseModelException
+	public Bus getToBus(int ndx)  throws PsseModelException
 	{
 		String j = getJ(ndx);
 		return _model.getBus((!j.isEmpty()&&j.charAt(0)=='-')?
@@ -105,6 +105,6 @@ public abstract class LineInList extends PsseBaseInputList<LineIn>
 	/** Line length  entered in user-selected units */
 	public float getLEN(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership(int ndx) throws PsseModelException {return OwnershipInList.Empty;} //TODO: implement
+	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;} //TODO: implement
 
 }	

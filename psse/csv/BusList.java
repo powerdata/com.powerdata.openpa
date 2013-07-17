@@ -8,7 +8,7 @@ import com.powerdata.openpa.tools.SimpleCSV;
  * 
  * @author marck
  */
-public class BusInList extends com.powerdata.openpa.psse.BusInList
+public class BusList extends com.powerdata.openpa.psse.BusList
 {
 	/** parent container */
 	PsseModel _eq;
@@ -30,7 +30,7 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	float _gl[];
 	float _bl[];
 	
-	public BusInList(PsseModel eq) throws PsseModelException
+	public BusList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try

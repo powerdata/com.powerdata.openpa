@@ -2,9 +2,9 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwShuntBlkList extends PsseBaseInputList<SwShuntBlk>
+public abstract class SwShuntBlkList extends PsseBaseList<SwShuntBlk>
 {
-	protected SwitchedShuntIn _sh;
+	protected SwitchedShunt _sh;
 
 	public static final SwShuntBlkList Empty = new SwShuntBlkList()
 	{
@@ -13,7 +13,7 @@ public abstract class SwShuntBlkList extends PsseBaseInputList<SwShuntBlk>
 	};
 	
 	protected SwShuntBlkList() {super();}
-	public SwShuntBlkList(PsseModel model, SwitchedShuntIn sh)
+	public SwShuntBlkList(PsseModel model, SwitchedShunt sh)
 	{
 		super(model);
 		_sh = sh;

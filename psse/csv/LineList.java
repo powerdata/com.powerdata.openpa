@@ -1,14 +1,14 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.OwnershipInList;
+import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class LineInList extends com.powerdata.openpa.psse.LineInList
+public class LineList extends com.powerdata.openpa.psse.LineList
 {
 	PsseModel _eq;
-	BusInList _buses;
+	BusList _buses;
 	int _size;
 	
 	String _i[],_j[],_ckt[];
@@ -16,7 +16,7 @@ public class LineInList extends com.powerdata.openpa.psse.LineInList
 	int _st[];
 	float _len[];
 	
-	public LineInList(PsseModel eq) throws PsseModelException
+	public LineList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -79,7 +79,7 @@ public class LineInList extends com.powerdata.openpa.psse.LineInList
 	@Override
 	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
-	public OwnershipInList getOwnership(int ndx) { return null; }
+	public OwnershipList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override

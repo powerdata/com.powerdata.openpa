@@ -2,9 +2,9 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class SwitchedShuntInList extends PsseBaseInputList<SwitchedShuntIn>
+public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 {
-	public static final SwitchedShuntInList Empty = new SwitchedShuntInList()
+	public static final SwitchedShuntList Empty = new SwitchedShuntList()
 	{
 		@Override
 		public String getI(int ndx) throws PsseModelException {return null;}
@@ -14,22 +14,22 @@ public abstract class SwitchedShuntInList extends PsseBaseInputList<SwitchedShun
 		public int size() {return 0;}
 	};
 	
-	protected SwitchedShuntInList() {super();}
-	public SwitchedShuntInList(PsseModel model) {super(model);}
+	protected SwitchedShuntList() {super();}
+	public SwitchedShuntList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a SwitchedShunt by it's index. */
 	@Override
-	public SwitchedShuntIn get(int ndx) { return new SwitchedShuntIn(ndx,this); }
+	public SwitchedShunt get(int ndx) { return new SwitchedShunt(ndx,this); }
 	/** Get a SwitchedShunt by it's ID. */
 	@Override
-	public SwitchedShuntIn get(String id) { return super.get(id); }
+	public SwitchedShunt get(String id) { return super.get(id); }
 
 	/* convenience methods */
 	
 	/** Load bus */ 
-	public BusIn getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	/** control mode */
 	public SwShuntCtrlMode getCtrlMode(int ndx) throws PsseModelException 
 	{
@@ -59,7 +59,7 @@ public abstract class SwitchedShuntInList extends PsseBaseInputList<SwitchedShun
 				PAMath.mvar2pu(getVSWHI(ndx)));
 	}
 	/** get controlled bus */
-	public BusIn getCtrlBus(int ndx) throws PsseModelException
+	public Bus getCtrlBus(int ndx) throws PsseModelException
 	{
 		return _model.getBus(getSWREM(ndx));
 	}

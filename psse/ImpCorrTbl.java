@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 //TODO:  Implement class
-public class ImpCorrTblIn extends BaseObject
+public class ImpCorrTbl extends BaseObject
 {
-	protected ImpCorrTblInList _list;
+	protected ImpCorrTblList _list;
 	
-	public ImpCorrTblIn(int ndx, ImpCorrTblInList list)
+	public ImpCorrTbl(int ndx, ImpCorrTblList list)
 	{
 		super(ndx);
 		_list = list;

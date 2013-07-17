@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class AreaList extends PsseBaseInputList<Area>
+public abstract class AreaList extends PsseBaseList<Area>
 {
 	public static final AreaList Empty = new AreaList()
 	{
@@ -28,7 +28,7 @@ public abstract class AreaList extends PsseBaseInputList<Area>
 	
 	/* Convenience methods */
 	/** Area slack bus for area interchange control */ 
-	public BusIn getSlackBus(int ndx) throws PsseModelException
+	public Bus getSlackBus(int ndx) throws PsseModelException
 	{
 		return _model.getBus(getISW(ndx));
 	}

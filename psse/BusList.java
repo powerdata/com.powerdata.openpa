@@ -4,9 +4,9 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.PComplex;
 
-public abstract class BusInList extends PsseBaseInputList<BusIn>
+public abstract class BusList extends PsseBaseList<Bus>
 {
-	public static final BusInList Empty = new BusInList()
+	public static final BusList Empty = new BusList()
 	{
 		@Override
 		public int getI(int ndx) throws PsseModelException {return 0;}
@@ -16,23 +16,23 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 		public int size() {return 0;}
 	};
 	
-	protected BusInList() {super();}
-	public BusInList(PsseModel model) {super(model);}
+	protected BusList() {super();}
+	public BusList(PsseModel model) {super(model);}
 
 	/** Get a Bus by it's index. */
 	@Override
-	public BusIn get(int ndx) { return new BusIn(ndx,this); }
+	public Bus get(int ndx) { return new Bus(ndx,this); }
 	/** Get a Bus by it's ID. */
 	@Override
-	public BusIn get(String id) { return super.get(id); }
+	public Bus get(String id) { return super.get(id); }
 	
 	/* groups */
-	public GenInList getGenerators(int ndx) throws PsseModelException {return GenInList.Empty;}
-	public LoadInList getLoads(int ndx) throws PsseModelException {return LoadInList.Empty;}
-	public LineInList getLines(int ndx) throws PsseModelException {return LineInList.Empty;}
-	public TransformerInList getTransformers(int ndx) throws PsseModelException {return TransformerInList.Empty;}
-	public SwitchedShuntInList getSwitchedShunts(int ndx) throws PsseModelException {return SwitchedShuntInList.Empty;}
-	public PhaseShifterInList getPhaseShifters(int ndx) throws PsseModelException {return PhaseShifterInList.Empty;}
+	public GenList getGenerators(int ndx) throws PsseModelException {return GenList.Empty;}
+	public LoadList getLoads(int ndx) throws PsseModelException {return LoadList.Empty;}
+	public LineList getLines(int ndx) throws PsseModelException {return LineList.Empty;}
+	public TransformerList getTransformers(int ndx) throws PsseModelException {return TransformerList.Empty;}
+	public SwitchedShuntList getSwitchedShunts(int ndx) throws PsseModelException {return SwitchedShuntList.Empty;}
+	public PhaseShifterList getPhaseShifters(int ndx) throws PsseModelException {return PhaseShifterList.Empty;}
 	public SwitchList getSwitches(int ndx) throws PsseModelException {return SwitchList.Empty;}
 
 	/* convenience methods */
@@ -50,9 +50,9 @@ public abstract class BusInList extends PsseBaseInputList<BusIn>
 		return _model.getAreas().get(getAREA(ndx));
 	}
 	/** Zone */
-	public ZoneIn getZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
+	public Zone getZoneObject(int ndx) throws PsseModelException {return _model.getZones().get(getZONE(ndx));}
 	/** Owner */
-	public OwnerIn getOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getOWNER(ndx));}
+	public Owner getOwnerObject(int ndx) throws PsseModelException {return _model.getOwners().get(getOWNER(ndx));}
 	/** get complex shunt admittance to ground */
 	public Complex getShuntY(int ndx) throws PsseModelException
 	{

@@ -1,18 +1,18 @@
 package com.powerdata.openpa.psse;
 
-public abstract class OwnershipInList extends PsseBaseInputList<OwnershipIn>
+public abstract class OwnershipList extends PsseBaseList<Ownership>
 {
 	protected OwnedEquip _eq;
 	
-	public static final OwnershipInList Empty = new OwnershipInList()
+	public static final OwnershipList Empty = new OwnershipList()
 	{
 		@Override
 		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
 		public int size() {return 0;}
 	};
-	protected OwnershipInList() {super();}
-	public OwnershipInList(PsseModel model, OwnedEquip eq)
+	protected OwnershipList() {super();}
+	public OwnershipList(PsseModel model, OwnedEquip eq)
 	{
 		super(model);
 		_eq = eq;
@@ -22,13 +22,13 @@ public abstract class OwnershipInList extends PsseBaseInputList<OwnershipIn>
 
 	/** Get an Ownership by it's index. */
 	@Override
-	public OwnershipIn get(int ndx) { return new OwnershipIn(ndx,this); }
+	public Ownership get(int ndx) { return new Ownership(ndx,this); }
 	/** Get an Ownership by it's ID. */
 	@Override
-	public OwnershipIn get(String id) { return super.get(id); }
+	public Ownership get(String id) { return super.get(id); }
 
 	/* convenience methods */
-	public OwnerIn getOwner(int ndx) throws PsseModelException {return _model.getOwners().get(getO(ndx));}
+	public Owner getOwner(int ndx) throws PsseModelException {return _model.getOwners().get(getO(ndx));}
 
 	/* raw PSS/e methods */
 	public int getO(int ndx) throws PsseModelException {return _eq.getBus().getOWNER();}

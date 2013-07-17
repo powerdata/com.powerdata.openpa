@@ -1,13 +1,13 @@
 package com.powerdata.openpa.psse;
 
-public abstract class SwitchList extends PsseBaseInputList<Switch>
+public abstract class SwitchList extends PsseBaseList<Switch>
 {
 	public static final SwitchList Empty = new SwitchList()
 	{
 		@Override
-		public BusIn getBus1(int ndx) throws PsseModelException {return null;}
+		public Bus getBus1(int ndx) throws PsseModelException {return null;}
 		@Override
-		public BusIn getBus2(int ndx) throws PsseModelException {return null;}
+		public Bus getBus2(int ndx) throws PsseModelException {return null;}
 		@Override
 		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
@@ -23,8 +23,8 @@ public abstract class SwitchList extends PsseBaseInputList<Switch>
 	@Override
 	public Switch get(String id) { return super.get(id); }
 
-	public abstract BusIn getBus1(int ndx) throws PsseModelException;
-	public abstract BusIn getBus2(int ndx) throws PsseModelException;
+	public abstract Bus getBus1(int ndx) throws PsseModelException;
+	public abstract Bus getBus2(int ndx) throws PsseModelException;
 	public String getName(int ndx) throws PsseModelException {return "";}
 	public SwitchState getState(int ndx) throws PsseModelException {return SwitchState.Closed;}
 	public void setState(int ndx, SwitchState state) throws PsseModelException {}

@@ -1,10 +1,10 @@
 package com.powerdata.openpa.psse;
 
-public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
+public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 {
-	protected BusInList _busses;
+	protected BusList _buses;
 	
-	public static final TransformerInList Empty = new TransformerInList()
+	public static final PhaseShifterList Empty = new PhaseShifterList()
 	{
 		@Override
 		public String getI(int ndx) throws PsseModelException {return null;}
@@ -18,24 +18,25 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 		public int size() {return 0;}
 	};
 	
-	protected TransformerInList() {super();}
-	public TransformerInList(PsseModel model) throws PsseModelException 
+	protected PhaseShifterList() {super();}
+	public PhaseShifterList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
-		_busses = model.getBuses();
+		_buses = model.getBuses();
 	}
+
 	
 	/** Get a Transformer by it's index. */
 	@Override
-	public TransformerIn get(int ndx) { return new TransformerIn(ndx,this); }
+	public PhaseShifter get(int ndx) { return new PhaseShifter(ndx,this); }
 	/** Get a Transformer by it's ID. */
 	@Override
-	public TransformerIn get(String id) { return super.get(id); }
+	public PhaseShifter get(String id) { return super.get(id); }
 	
 	/* Convenience methods */
 	
-	public BusIn getBus1(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
-	public BusIn getBus2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
+	public Bus getBus1(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public Bus getBus2(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
 
 	/* Raw methods */
 	
@@ -67,10 +68,15 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public abstract float getX1_2(int ndx) throws PsseModelException;
 	/** get winding 1-2 base MVA */
 	public float getSBASE1_2(int ndx) throws PsseModelException {return _model.getSBASE();}
-	/** winding 1 off-nominal turns ratio */ 
-	public float getWINDV1(int ndx) throws PsseModelException {return (getCW(ndx)==2)?_busses.get(getI(ndx)).getBASKV():1f;}
+	/** winding 1 off-nominal turns ratio */
+	public float getWINDV1(int ndx) throws PsseModelException
+	{
+		return (getCW(ndx)==2)?
+				_model.getBus(getI(ndx)).getBASKV() :
+				1f;
+	}
 	/** nominal winding 1 voltage in kV */
-	public float getNOMV1(int ndx) throws PsseModelException {return _busses.get(getI(ndx)).getBASKV();}
+	public float getNOMV1(int ndx) throws PsseModelException {return getBus1(ndx).getBASKV();}
 	/** winding 1 phase shift (DEG) */
 	public float getANG1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating A in MVA */
@@ -81,81 +87,28 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	public float getRATC1(int ndx) throws PsseModelException {return 0f;}
 	/** Transformer control mode */
 	public int getCOD1(int ndx) throws PsseModelException {return 0;}
-	/** controlled bus */
-	public String getCONT1(int ndx) throws PsseModelException {return "0";}
-	/** RMA upper limit (see PSS/e documentation) */
-	public float getRMA1(int ndx) throws PsseModelException
-	{
-		if (Math.abs(getCOD1(ndx)) < 3 && getCW(ndx) == 2)
-		{
-			return 1.1f * _busses.get(getI(ndx)).getBASKV();
-		}
-		return 1.1f;
-	}
-	/** RMI lower limit (see PSS/e documentation) */
-	public float getRMI1(int ndx) throws PsseModelException
-	{
-		if (Math.abs(getCOD1(ndx)) < 3 && getCW(ndx) == 2)
-		{
-			return 0.9f * _busses.get(getI(ndx)).getBASKV();
-		}
-		return 0.9f;
-	}
+	/** phase shift angle max in degrees */
+	public float getRMA1(int ndx) throws PsseModelException {return 180;}
+	/** phase shift angle min in degrees */
+	public float getRMI1(int ndx) throws PsseModelException {return -180f;}
 	/** VMA upper limit (see PSS/e documentation) */
-	public float getVMA1(int ndx) throws PsseModelException
-	{
-		return (Math.abs(getCOD1(ndx)) == 2) ? 99999f : 1.1f;
-	}
+	public float getVMA1(int ndx) throws PsseModelException {return 0f;}
 	/** VMI lower limit (see PSS/e documentation) */
-	public float getVMI1(int ndx) throws PsseModelException
-	{
-		return (Math.abs(getCOD1(ndx)) == 2) ? -99999f : 0.9f;
-	}
+	public float getVMI1(int ndx) throws PsseModelException {return 0f;}
 	/** number of taps positions available */
 	public int getNTP1(int ndx) throws PsseModelException {return 33;}
 	/** transformer impedance correction table */
-	public  int getTAB1(int ndx) throws PsseModelException {return 0;}
+	public int getTAB1(int ndx) throws PsseModelException {return 0;}
 	/** load drop compensation resistance in pu on system base */
 	public float getCR1(int ndx) throws PsseModelException {return 0f;}
 	/** load drop compensation reactance in pu on system base */
 	public float getCX1(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership(int ndx) throws PsseModelException
+	public OwnershipList getOwnership(int ndx) throws PsseModelException
 	{
-		return OwnershipInList.Empty;
-	}
-	
-	/** Winding 2 off-nominal turns ratio */
-	public float getWINDV2(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_busses.get(getJ(ndx)).getBASKV():1f);}
-	/** Winding 2 nominal voltage */
-	public float getNOMV2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx)).getBASKV();}
-	/** Allow control mode to be specified on winding 2 in order to understand tap limits. */
-	public int getCOD2(int ndx) throws PsseModelException {return 0;}
-	/**
-	 * Allow a tap range to be specified on winding 2.
-	 */
-	public float getRMA2(int ndx) throws PsseModelException
-	{
-		if (Math.abs(getCOD2(ndx)) < 3 && getCW(ndx) == 2)
-		{
-			return 1.1f * _busses.get(getJ(ndx)).getBASKV();
-		}
-		return 1.1f;
+		return OwnershipList.Empty;
+		//TODO: implement
 	}
 
-	/**
-	 * Allow a tap range to be specified on winding 2.
-	 */
-	public float getRMI2(int ndx) throws PsseModelException
-	{
-		if (Math.abs(getCOD2(ndx)) < 3 && getCW(ndx) == 2)
-		{
-			return 0.9f * _busses.get(getJ(ndx)).getBASKV();
-		}
-		return 0.9f;
-	}
-	/**
-	 * Allow a number of positions to be specified on winding 2.
-	 */
-	public float getNTP2(int ndx) throws PsseModelException {return 33;}
 }	
+

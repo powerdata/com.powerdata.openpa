@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 
-import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.GenIn;
-import com.powerdata.openpa.psse.LineIn;
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.Gen;
+import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerIn;
+import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.tools.QueryString;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
@@ -14,10 +14,10 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	/** root of the directory where the csv files are stored */
 	File _dir;
 	
-	GenInList _generatorList;
-	BusInList _buses;
-	LineInList _branchList;
-	TransformerInList _transformerList;
+	GenList _generatorList;
+	BusList _buses;
+	LineList _branchList;
+	TransformerList _transformerList;
 	
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -30,27 +30,27 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	}
 	public File getDir() { return _dir; }
 	@Override
-	public BusInList getBuses() throws PsseModelException
+	public BusList getBuses() throws PsseModelException
 	{
-		if (_buses == null) _buses = new BusInList(this);
+		if (_buses == null) _buses = new BusList(this);
 		return _buses;
 	}
 	@Override
-	public GenInList getGenerators() throws PsseModelException
+	public GenList getGenerators() throws PsseModelException
 	{
-		if (_generatorList == null) _generatorList = new GenInList(this);
+		if (_generatorList == null) _generatorList = new GenList(this);
 		return _generatorList;
 	}
 	@Override
-	public LineInList getLines() throws PsseModelException
+	public LineList getLines() throws PsseModelException
 	{
-		if (_branchList == null) _branchList = new LineInList(this);
+		if (_branchList == null) _branchList = new LineList(this);
 		return _branchList;
 	}
 	@Override
-	public TransformerInList getTransformers() throws PsseModelException
+	public TransformerList getTransformers() throws PsseModelException
 	{
-		if (_transformerList == null) _transformerList = new TransformerInList(this);
+		if (_transformerList == null) _transformerList = new TransformerList(this);
 		return _transformerList;
 	}
 	
@@ -59,19 +59,19 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		try
 		{
 			PsseModel eq = new PsseModel("/tmp/caiso/");
-			for(BusIn b : eq.getBuses())
+			for(Bus b : eq.getBuses())
 			{
 				System.out.println(b);
 			}
-			for(GenIn g : eq.getGenerators())
+			for(Gen g : eq.getGenerators())
 			{
 				System.out.println(g);
 			}
-			for(LineIn b : eq.getLines())
+			for(Line b : eq.getLines())
 			{
 				System.out.println(b);
 			}
-			for(TransformerIn t : eq.getTransformers())
+			for(Transformer t : eq.getTransformers())
 			{
 				System.out.println(t);
 			}

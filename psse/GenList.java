@@ -3,25 +3,25 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class GenInList extends PsseBaseInputList<GenIn>
+public abstract class GenList extends PsseBaseList<Gen>
 {
-	public static final GenInList Empty = new GenInList()
+	public static final GenList Empty = new GenList()
 	{
 		@Override
 		public String getI(int ndx) throws PsseModelException {return null;}
 		@Override
-		public OwnershipInList getOwnership(int ndx) throws PsseModelException {return null;}
+		public OwnershipList getOwnership(int ndx) throws PsseModelException {return null;}
 		@Override
 		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
 		public int size() {return 0;}
 	};
 	
-	protected BusInList _buses;
+	protected BusList _buses;
 	
-	protected GenInList() {super();}
+	protected GenList() {super();}
 	
-	public GenInList(PsseModel model) throws PsseModelException 
+	public GenList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
 		_buses = model.getBuses();
@@ -31,17 +31,17 @@ public abstract class GenInList extends PsseBaseInputList<GenIn>
 
 	/** Get a Generator by it's index. */
 	@Override
-	public GenIn get(int ndx) { return new GenIn(ndx,this); }
+	public Gen get(int ndx) { return new Gen(ndx,this); }
 	/** Get a Generator by it's ID. */
 	@Override
-	public GenIn get(String id) { return super.get(id); }
+	public Gen get(String id) { return super.get(id); }
 
 	/* convenience methods */
 
 	/** Generator bus (I) */ 
-	public BusIn getBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public Bus getBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
 	/** remote regulated bus.  (IREG) Null if local */
-	public BusIn getRemoteRegBus(int ndx) throws PsseModelException {return _buses.get(getIREG(ndx));}
+	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return _buses.get(getIREG(ndx));}
 	/** get the Generator mode */
 	public GenMode getMode(int ndx) throws PsseModelException
 	{
@@ -107,7 +107,7 @@ public abstract class GenInList extends PsseBaseInputList<GenIn>
 	public float getPT(int ndx) throws PsseModelException {return 9999F;}
 	public float getPB(int ndx) throws PsseModelException {return -9999F;}
 
-	public OwnershipInList getOwnership(int ndx) throws PsseModelException {return OwnershipInList.Empty;}//TODO: implement
+	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}//TODO: implement
 	
 	
 

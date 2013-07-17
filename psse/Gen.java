@@ -3,12 +3,12 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class GenIn extends BaseObject
+public class Gen extends BaseObject
 {
 
-	protected GenInList _list;
+	protected GenList _list;
 	
-	public GenIn(int ndx, GenInList list)
+	public Gen(int ndx, GenList list)
 	{
 		super(ndx);
 		_list = list;
@@ -26,9 +26,9 @@ public class GenIn extends BaseObject
 	/* Convenience methods */
 
 	/** Generator bus (I) */ 
-	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** remote regulated bus.  (IREG) Null if local */
-	public BusIn getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
+	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
 	/** get the Generator mode */
 	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
 	/** set the generator mode */
@@ -90,7 +90,7 @@ public class GenIn extends BaseObject
 	
 	
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 	
 	
 

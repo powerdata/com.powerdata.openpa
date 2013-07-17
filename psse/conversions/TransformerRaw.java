@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.conversions;
 
-import com.powerdata.openpa.psse.OwnershipInList;
+import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.BaseObject;
 
@@ -42,7 +42,7 @@ public class TransformerRaw extends BaseObject
 	/** Initial transformer status */
 	public int getSTAT() throws PsseModelException {return _list.getSTAT(_ndx);}
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 	
 	/* line 2 */
 	

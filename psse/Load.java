@@ -3,11 +3,11 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class LoadIn extends BaseObject
+public class Load extends BaseObject
 {
-	protected LoadInList _list;
+	protected LoadList _list;
 	
-	public LoadIn(int ndx, LoadInList list)
+	public Load(int ndx, LoadList list)
 	{
 		super(ndx);
 		_list = list;
@@ -25,13 +25,13 @@ public class LoadIn extends BaseObject
 	/* convenience methods */
 	
 	/** Load bus (I) */ 
-	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** get Area Interchange record */
 	public Area getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
 	/** get Zone record */
-	public ZoneIn getZoneObj() throws PsseModelException {return _list.getZoneObj(_ndx);}
+	public Zone getZoneObj() throws PsseModelException {return _list.getZoneObj(_ndx);}
 	/** get complex power (PL) */
 	public Complex getPwr() throws PsseModelException {return _list.getPwr(_ndx);}
 	/** Complex constant current load at 1pu voltage */
@@ -39,7 +39,7 @@ public class LoadIn extends BaseObject
 	/** Complex constant admittance load at 1pu voltage */
 	public Complex getPwrY() throws PsseModelException  {return _list.getPwrY(_ndx);}
 	/** return Owner */
-	public OwnerIn getOwnerObj() throws PsseModelException {return _list.getOwnerObj(_ndx);}
+	public Owner getOwnerObj() throws PsseModelException {return _list.getOwnerObj(_ndx);}
 	
 
 	

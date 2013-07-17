@@ -3,12 +3,12 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class LineIn extends BaseObject
+public class Line extends BaseObject
 {
 
-	protected LineInList _list;
+	protected LineList _list;
 	
-	public LineIn(int ndx, LineInList list)
+	public Line(int ndx, LineList list)
 	{
 		super(ndx);
 		_list = list;
@@ -28,9 +28,9 @@ public class LineIn extends BaseObject
 	/* Convenience methods */
 
 	/** From-side bus */
-	public BusIn getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
+	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
 	/** To-side bus */
-	public BusIn getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
+	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	/** Get "metered" end */
 	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
@@ -80,6 +80,6 @@ public class LineIn extends BaseObject
 	public float getLEN() throws PsseModelException {return _list.getLEN(_ndx);}
 	
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 	
 }

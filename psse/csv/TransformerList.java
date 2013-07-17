@@ -1,14 +1,14 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.OwnershipInList;
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class TransformerInList extends com.powerdata.openpa.psse.TransformerInList
+public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 {
 	PsseModel _eq;
-	BusInList _buses;
+	BusList _buses;
 	int _size;
 	
 	String _i[],_j[],_ckt[],_name[],_cont1[];
@@ -23,7 +23,7 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	float _vma1[], _vmi1[];
 	float _windv1[], _x1_2[];
 
-	public TransformerInList(PsseModel eq) throws PsseModelException
+	public TransformerList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -71,9 +71,9 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	}
 
 	@Override
-	public BusIn getBus1(int ndx) { return _buses.get(getI(ndx)); }
+	public Bus getBus1(int ndx) { return _buses.get(getI(ndx)); }
 	@Override
-	public BusIn getBus2(int ndx) { return _buses.get(getJ(ndx)); }
+	public Bus getBus2(int ndx) { return _buses.get(getJ(ndx)); }
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
@@ -135,7 +135,7 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	@Override
 	public float getCX1(int ndx) { return _cx1[ndx]; }
 	@Override
-	public OwnershipInList getOwnership(int ndx) { return null; }
+	public OwnershipList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx)
 	{ 

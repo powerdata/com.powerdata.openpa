@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public abstract class ZoneInList extends PsseBaseInputList<ZoneIn>
+public abstract class ZoneList extends PsseBaseList<Zone>
 {
-	public static final ZoneInList Empty = new ZoneInList()
+	public static final ZoneList Empty = new ZoneList()
 	{
 		@Override
 		public int getI(int ndx) throws PsseModelException {return 0;}
@@ -11,17 +11,17 @@ public abstract class ZoneInList extends PsseBaseInputList<ZoneIn>
 		@Override
 		public int size() {return 0;}
 	};
-	protected ZoneInList() {super();}
-	public ZoneInList(PsseModel model) {super(model);}
+	protected ZoneList() {super();}
+	public ZoneList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a Zone by it's index. */
 	@Override
-	public ZoneIn get(int ndx) { return new ZoneIn(ndx,this); }
+	public Zone get(int ndx) { return new Zone(ndx,this); }
 	/** Get a Zone by it's ID. */
 	@Override
-	public ZoneIn get(String id) { return super.get(id); }
+	public Zone get(String id) { return super.get(id); }
 
 	public abstract int getI(int ndx) throws PsseModelException;
 	public String getZONAME(int ndx)throws PsseModelException {return "";}

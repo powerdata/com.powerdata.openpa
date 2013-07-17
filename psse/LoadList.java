@@ -3,9 +3,9 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
-public abstract class LoadInList extends PsseBaseInputList<LoadIn>
+public abstract class LoadList extends PsseBaseList<Load>
 {
-	public static final LoadInList Empty = new LoadInList()
+	public static final LoadList Empty = new LoadList()
 	{
 		@Override
 		public String getI(int ndx) throws PsseModelException {return null;}
@@ -15,22 +15,22 @@ public abstract class LoadInList extends PsseBaseInputList<LoadIn>
 		public int size() {return 0;}
 	};
 	
-	protected LoadInList() {super();}
-	public LoadInList(PsseModel model) {super(model);}
+	protected LoadList() {super();}
+	public LoadList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
 	/** Get a Load by it's index. */
 	@Override
-	public LoadIn get(int ndx) { return new LoadIn(ndx,this); }
+	public Load get(int ndx) { return new Load(ndx,this); }
 	/** Get a Load by it's ID. */
 	@Override
-	public LoadIn get(String id) { return super.get(id); }
+	public Load get(String id) { return super.get(id); }
 
 	/* convenience methods */
 	
 	/** Load bus (I) */ 
-	public BusIn getBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
+	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean getInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
 	/** get Area Interchange record */
@@ -39,7 +39,7 @@ public abstract class LoadInList extends PsseBaseInputList<LoadIn>
 		return _model.getAreas().get(String.valueOf(getAREA(ndx)));
 	}
 	/** get Zone record */
-	public ZoneIn getZoneObj(int ndx) throws PsseModelException
+	public Zone getZoneObj(int ndx) throws PsseModelException
 	{
 		return _model.getZones().get(String.valueOf(getZONE(ndx)));
 	}
@@ -59,7 +59,7 @@ public abstract class LoadInList extends PsseBaseInputList<LoadIn>
 		return new Complex(PAMath.mw2pu(getYP(ndx)), PAMath.mvar2pu(getYQ(ndx)));
 	}
 	/** return Owner */
-	public OwnerIn getOwnerObj(int ndx) throws PsseModelException
+	public Owner getOwnerObj(int ndx) throws PsseModelException
 	{
 		return _model.getOwners().get(String.valueOf(getOWNER(ndx)));
 	}

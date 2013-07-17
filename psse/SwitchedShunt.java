@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class SwitchedShuntIn extends BaseObject
+public class SwitchedShunt extends BaseObject
 {
-	protected SwitchedShuntInList _list;
+	protected SwitchedShuntList _list;
 	
-	public SwitchedShuntIn(int ndx, SwitchedShuntInList list)
+	public SwitchedShunt(int ndx, SwitchedShuntList list)
 	{
 		super(ndx);
 		_list = list;
@@ -20,7 +20,7 @@ public class SwitchedShuntIn extends BaseObject
 	
 	/* Convenience methods */
 	/** Load bus (I) */ 
-	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** control mode */
 	public SwShuntCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}
 	/** get voltage limits for controlled bus */
@@ -28,7 +28,7 @@ public class SwitchedShuntIn extends BaseObject
 	/** get reactive power limits for controlled bus */
 	public Limits getReacPwrLimits() throws PsseModelException {return _list.getVoltageLimits(_ndx);}
 	/** get controlled bus */
-	public BusIn getCtrlBus() throws PsseModelException {return _list.getCtrlBus(_ndx);}
+	public Bus getCtrlBus() throws PsseModelException {return _list.getCtrlBus(_ndx);}
 	/** get case shunt susceptance */
 	public float getCaseB() throws PsseModelException {return _list.getCaseB(_ndx);}
 	

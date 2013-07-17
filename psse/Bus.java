@@ -4,11 +4,11 @@ import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PComplex;
 
-public class BusIn extends BaseObject
+public class Bus extends BaseObject
 {
-	protected BusInList _list;
+	protected BusList _list;
 	
-	public BusIn(int ndx, BusInList list)
+	public Bus(int ndx, BusList list)
 	{
 		super(ndx);
 		_list = list;
@@ -22,12 +22,12 @@ public class BusIn extends BaseObject
 	
 	/* Groups */
 	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
-	public GenInList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }
-	public LoadInList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
-	public LineInList getLines() throws PsseModelException { return _list.getLines(_ndx); }
-	public TransformerInList getTransformers() throws PsseModelException { return _list.getTransformers(_ndx); }
-	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
-	public PhaseShifterInList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
+	public GenList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }
+	public LoadList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
+	public LineList getLines() throws PsseModelException { return _list.getLines(_ndx); }
+	public TransformerList getTransformers() throws PsseModelException { return _list.getTransformers(_ndx); }
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
+	public PhaseShifterList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
 
 	/* Convenience methods */
 	
@@ -36,9 +36,9 @@ public class BusIn extends BaseObject
 	/** Area */
 	public Area getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
 	/** Zone */
-	public ZoneIn getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
+	public Zone getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */
-	public OwnerIn getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
+	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
 	/** get complex shunt admittance to ground */
 	public Complex getShuntY() throws PsseModelException {return _list.getShuntY(_ndx);}
 	/** complex bus voltage */

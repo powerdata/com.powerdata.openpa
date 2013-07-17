@@ -2,11 +2,17 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class PhaseShifterIn extends BaseObject
+/**
+ * View all transformers as 2-winding.
+ * 
+ * @author chris@powerdata.com
+ *
+ */
+public class Transformer extends BaseObject
 {
-	protected PhaseShifterInList _list;
+	protected TransformerList _list;
 	
-	public PhaseShifterIn(int ndx, PhaseShifterInList list)
+	public Transformer(int ndx, TransformerList list)
 	{
 		super(ndx);
 		_list = list;
@@ -18,18 +24,19 @@ public class PhaseShifterIn extends BaseObject
 	/* Convenience methods */
 
 	/** Winding 1 bus */ 
-	public BusIn getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
+	public Bus getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
 	/** Winding 2 bus */
-	public BusIn getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
+	public Bus getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
 
+	
 	/* RAW methods */
-	/** Winding 1 bus number or name */
+	/** Winding 1 bus number or name */ 
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}
-	/** Winding 2 bus number or name */
+	/** Winding 2 bus number or name */ 
 	public String getJ() throws PsseModelException {return _list.getJ(_ndx);}
-	/** circuit identifier */
+	/** circuit identifier */ 
 	public String getCKT() throws PsseModelException {return _list.getCKT(_ndx);}
-	/** Winding data I/O code */
+	/** Winding data I/O code */ 
 	public int getCW() throws PsseModelException {return _list.getCW(_ndx);}
 	/** Impedance data I/O code */
 	public int getCZ() throws PsseModelException {return _list.getCZ(_ndx);}
@@ -65,9 +72,11 @@ public class PhaseShifterIn extends BaseObject
 	public float getRATC1() throws PsseModelException {return _list.getRATC1(_ndx);}
 	/** Transformer control mode */
 	public int getCOD1() throws PsseModelException {return _list.getCOD1(_ndx);}
-	/** phase shift angle max in degrees */
+	/** controlled bus */
+	public String getCONT1() throws PsseModelException {return _list.getCONT1(_ndx);}
+	/** RMA upper limit (see PSS/e documentation) */
 	public float getRMA1() throws PsseModelException {return _list.getRMA1(_ndx);}
-	/** phase shift angle min in degrees */
+	/** RMI lower limit (see PSS/e documentation) */
 	public float getRMI1() throws PsseModelException {return _list.getRMI1(_ndx);}
 	/** VMA upper limit (see PSS/e documentation) */
 	public float getVMA1() throws PsseModelException {return _list.getVMA1(_ndx);}
@@ -82,5 +91,7 @@ public class PhaseShifterIn extends BaseObject
 	/** load drop compensation reactance in pu on system base */
 	public float getCX1() throws PsseModelException {return _list.getCX1(_ndx);}
 	/** return Ownership as a list */
-	public OwnershipInList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+
+	
 }

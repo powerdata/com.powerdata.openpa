@@ -77,31 +77,31 @@ public class PsseModel
 	public int getPsseVersion() {return 30;}
 
 	/** find a Bus by ID */ 
-	public BusIn getBus(String id) throws PsseModelException {return getBuses().get(id);}
+	public Bus getBus(String id) throws PsseModelException {return getBuses().get(id);}
 	
 	/* Model-specific lists */
-	public ImpCorrTblInList getImpCorrTables() throws PsseModelException {return ImpCorrTblInList.Empty;}
+	public ImpCorrTblList getImpCorrTables() throws PsseModelException {return ImpCorrTblList.Empty;}
 	public AreaList getAreas() throws PsseModelException {return AreaList.Empty;}
-	public OwnerInList getOwners() throws PsseModelException {return OwnerInList.Empty;}
-	public ZoneInList getZones() throws PsseModelException {return ZoneInList.Empty;}
-	public IslandInList getIslands() throws PsseModelException {return IslandInList.Empty;}
+	public OwnerList getOwners() throws PsseModelException {return OwnerList.Empty;}
+	public ZoneList getZones() throws PsseModelException {return ZoneList.Empty;}
+	public IslandList getIslands() throws PsseModelException {return IslandList.Empty;}
 
 	/* equipment group lists */
-	public BusInList getBuses() throws PsseModelException {return BusInList.Empty;}
-	public GenInList getGenerators() throws PsseModelException {return GenInList.Empty;}
-	public LoadInList getLoads() throws PsseModelException {return LoadInList.Empty;}
-	public LineInList getLines() throws PsseModelException {return LineInList.Empty;}
-	public TransformerInList getTransformers() throws PsseModelException
+	public BusList getBuses() throws PsseModelException {return BusList.Empty;}
+	public GenList getGenerators() throws PsseModelException {return GenList.Empty;}
+	public LoadList getLoads() throws PsseModelException {return LoadList.Empty;}
+	public LineList getLines() throws PsseModelException {return LineList.Empty;}
+	public TransformerList getTransformers() throws PsseModelException
 	{
-		return TransformerInList.Empty;
+		return TransformerList.Empty;
 	}
-	public PhaseShifterInList getPhaseShifters() throws PsseModelException
+	public PhaseShifterList getPhaseShifters() throws PsseModelException
 	{
-		return PhaseShifterInList.Empty;
+		return PhaseShifterList.Empty;
 	}
-	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
 	{
-		return SwitchedShuntInList.Empty;
+		return SwitchedShuntList.Empty;
 	}
 	public SwitchList getSwitches() throws PsseModelException {return null;}
 }	

@@ -1,15 +1,15 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.OwnershipInList;
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class GenInList extends com.powerdata.openpa.psse.GenInList
+public class GenList extends com.powerdata.openpa.psse.GenList
 {
 	PsseModel _eq;
-	BusInList _buses;
+	BusList _buses;
 	int _size;
 	
 	String _i[];
@@ -20,7 +20,7 @@ public class GenInList extends com.powerdata.openpa.psse.GenInList
 	int _stat[];
 	float _rmpct[],_pt[],_pb[];
 
-	public GenInList(PsseModel eq) throws PsseModelException
+	public GenList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -60,7 +60,7 @@ public class GenInList extends com.powerdata.openpa.psse.GenInList
 		}
 	}
 	@Override
-	public BusIn getBus(int ndx) { return _buses.get(_i[ndx]); }
+	public Bus getBus(int ndx) { return _buses.get(_i[ndx]); }
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
@@ -98,7 +98,7 @@ public class GenInList extends com.powerdata.openpa.psse.GenInList
 	@Override
 	public float getPB(int ndx) { return _pb[ndx]; }
 	@Override
-	public OwnershipInList getOwnership(int ndx) { return null; }
+	public OwnershipList getOwnership(int ndx) { return null; }
 	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
 	@Override
