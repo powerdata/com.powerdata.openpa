@@ -47,4 +47,9 @@ public class SwitchSubList extends SwitchList
 	}
 	@Override
 	public int size() { return _ndxs.length; }
+	@Override
+	public boolean canOperateUnderLoad(int ndx) throws PsseModelException
+	{
+		return _switches.canOperateUnderLoad(_ndxs[ndx]);
+	}
 }

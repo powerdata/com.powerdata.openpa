@@ -17,4 +17,5 @@ public abstract class SwitchList extends PsseBaseInputList<Switch>
 	public abstract String getName(int ndx) throws PsseModelException;
 	public abstract SwitchState getState(int ndx) throws PsseModelException;
 	public abstract void setState(int ndx, SwitchState state) throws PsseModelException;
+	public abstract boolean canOperateUnderLoad(int ndx) throws PsseModelException;
 }
