@@ -5,7 +5,18 @@ import com.powerdata.openpa.tools.PAMath;
 
 public abstract class LoadInList extends PsseBaseInputList<LoadIn>
 {
-	public LoadInList(PsseInputModel model) {super(model);}
+	public static final LoadInList Empty = new LoadInList()
+	{
+		@Override
+		public String getI(int ndx) throws PsseModelException {return null;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+	
+	protected LoadInList() {super();}
+	public LoadInList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
@@ -18,66 +29,66 @@ public abstract class LoadInList extends PsseBaseInputList<LoadIn>
 
 	/* convenience methods */
 	
-	public abstract BusIn getBus(int ndx) throws PsseModelException;
-	public abstract boolean getInSvc(int ndx) throws PsseModelException;
-	public abstract AreaIn getAreaObj(int ndx) throws PsseModelException;
-	public abstract ZoneIn getZoneObj(int ndx) throws PsseModelException;
-	public abstract float getActvPwr(int ndx) throws PsseModelException;
-	public abstract float getReacPwr(int ndx) throws PsseModelException;
-	public abstract Complex getPwr(int ndx) throws PsseModelException;
-	public abstract float getActvPwrI(int ndx) throws PsseModelException;
-	public abstract float getReacPwrI(int ndx) throws PsseModelException;
-	public abstract Complex getPwrI(int ndx) throws PsseModelException;
-	public abstract float getActvPwrY(int ndx) throws PsseModelException;
-	public abstract float getReacPwrY(int ndx) throws PsseModelException;
-	public abstract Complex getPwrY(int ndx) throws PsseModelException;
-	public abstract OwnerIn getOwnerObj(int ndx) throws PsseModelException;
-
-	/* convenience defaults */
-	
-	public BusIn getDeftBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
-	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
-	public AreaIn getDeftAreaObj(int ndx) throws PsseModelException {return _model.getAreas().get(String.valueOf(getAREA(ndx)));}
-	public ZoneIn getDeftZoneObj(int ndx) throws PsseModelException  {return _model.getZones().get(String.valueOf(getZONE(ndx)));}
-	public float getDeftActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPL(ndx));}
-	public float getDeftReacPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getQL(ndx));}
-	public Complex getDeftPwr(int ndx) throws PsseModelException   {return new Complex(getActvPwr(ndx), getReacPwr(ndx));}
-	public float getDeftActvPwrI(int ndx) throws PsseModelException {return PAMath.mw2pu(getIP(ndx));}
-	public float getDeftReacPwrI(int ndx) throws PsseModelException {return PAMath.mw2pu(getIQ(ndx));}
-	public Complex getDeftPwrI(int ndx) throws PsseModelException {return new Complex(getActvPwrI(ndx), getReacPwrI(ndx));}
-	public float getDeftActvPwrY(int ndx) throws PsseModelException {return PAMath.mw2pu(getYP(ndx));}
-	public float getDeftReacPwrY(int ndx) throws PsseModelException {return PAMath.mw2pu(getYQ(ndx));}
-	public Complex getDeftPwrY(int ndx) throws PsseModelException {return new Complex(getActvPwrY(ndx), getReacPwrY(ndx));}
-	public OwnerIn getDeftOwnerObj(int ndx) throws PsseModelException {return _model.getOwners().get(String.valueOf(getOWNER(ndx)));}
+	/** Load bus (I) */ 
+	public BusIn getBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
+	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
+	public boolean getInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
+	/** get Area Interchange record */
+	public Area getAreaObj(int ndx) throws PsseModelException
+	{
+		return _model.getAreas().get(String.valueOf(getAREA(ndx)));
+	}
+	/** get Zone record */
+	public ZoneIn getZoneObj(int ndx) throws PsseModelException
+	{
+		return _model.getZones().get(String.valueOf(getZONE(ndx)));
+	}
+	/** get complex power (PL) */
+	public Complex getPwr(int ndx) throws PsseModelException
+	{
+		return new Complex(PAMath.mw2pu(getPL(ndx)), PAMath.mvar2pu(getQL(ndx)));
+	}
+	/** Complex constant current load at 1pu voltage */
+	public Complex getPwrI(int ndx) throws PsseModelException
+	{
+		return new Complex(PAMath.mw2pu(getIP(ndx)), PAMath.mvar2pu(getIQ(ndx)));
+	}
+	/** Complex constant admittance load at 1pu voltage */
+	public Complex getPwrY(int ndx) throws PsseModelException
+	{
+		return new Complex(PAMath.mw2pu(getYP(ndx)), PAMath.mvar2pu(getYQ(ndx)));
+	}
+	/** return Owner */
+	public OwnerIn getOwnerObj(int ndx) throws PsseModelException
+	{
+		return _model.getOwners().get(String.valueOf(getOWNER(ndx)));
+	}
 
 	/* raw methods */
 
+	/** bus number or name */
 	public abstract String getI(int ndx) throws PsseModelException;
-	public abstract String getID(int ndx) throws PsseModelException;
-	public abstract int getSTATUS(int ndx) throws PsseModelException;
-	public abstract int getAREA(int ndx) throws PsseModelException;
-	public abstract int getZONE(int ndx) throws PsseModelException;
-	public abstract float getPL(int ndx) throws PsseModelException;
-	public abstract float getQL(int ndx) throws PsseModelException;
-	public abstract float getIP(int ndx) throws PsseModelException;
-	public abstract float getIQ(int ndx) throws PsseModelException;
-	public abstract float getYP(int ndx) throws PsseModelException;
-	public abstract float getYQ(int ndx) throws PsseModelException;
-	public abstract int getOWNER(int ndx) throws PsseModelException;
-
-
-	/* raw defaults */
-	
-	public String getDeftID(int ndx) throws PsseModelException {return "1";}
-	public int getDeftSTATUS(int ndx) throws PsseModelException {return 1;}
-	public int getDeftAREA(int ndx) throws PsseModelException {return getBus(ndx).getAREA();}
-	public int getDeftZONE(int ndx) throws PsseModelException {return getBus(ndx).getZONE();}
-	public float getDeftPL(int ndx) throws PsseModelException {return 0F;}
-	public float getDeftQL(int ndx) throws PsseModelException {return 0F;}
-	public float getDeftIP(int ndx) throws PsseModelException {return 0F;}
-	public float getDeftIQ(int ndx) throws PsseModelException {return 0F;}
-	public float getDeftYP(int ndx) throws PsseModelException {return 0F;}
-	public float getDeftYQ(int ndx) throws PsseModelException {return 0F;}
-	public int getDeftOWNER(int ndx) throws PsseModelException {return getBus(ndx).getOWNER();}
+	/** load identifies used to differentiate multiple loads at the same bus */
+	public String getID(int ndx) throws PsseModelException {return "1";}
+	/** in-service status of load (1 for in-service, 0 for out-of-service) */
+	public int getSTATUS(int ndx) throws PsseModelException {return 1;}
+	/** index of related area record.  Defaults to same area as bus I */
+	public int getAREA(int ndx) throws PsseModelException {return getBus(ndx).getAREA();}
+	/** index of related zone record.  Defaults to same zone as bus I */
+	public int getZONE(int ndx) throws PsseModelException {return getBus(ndx).getZONE();}
+	/** active power of constant MVA load in MW */
+	public float getPL(int ndx) throws PsseModelException {return 0f;}
+	/** reactive power of constant MVA load in MVAr */
+	public float getQL(int ndx) throws PsseModelException {return 0f;}
+	/** active power of constant current load MW at 1pu voltage */
+	public float getIP(int ndx) throws PsseModelException {return 0f;}
+	/** reactive power of constant current load MVAr at 1pu voltage */
+	public float getIQ(int ndx) throws PsseModelException {return 0f;}
+	/** active power of constant admittance load MW at 1pu voltage*/
+	public float getYP(int ndx) throws PsseModelException {return 0f;}
+	/** reactive power of constant admittance load MW at 1pu voltage*/
+	public float getYQ(int ndx) throws PsseModelException {return 0f;}
+	/** index of related OWNER record.  Defaults to same owner as bus I */
+	public int getOWNER(int ndx) throws PsseModelException {return getBus(ndx).getOWNER();}
 	
 }

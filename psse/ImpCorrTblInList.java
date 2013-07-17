@@ -3,6 +3,18 @@ package com.powerdata.openpa.psse;
 
 public abstract class ImpCorrTblInList extends PsseBaseInputList<ImpCorrTblIn>
 {
+	public static final ImpCorrTblInList Empty = new ImpCorrTblInList()
+	{
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+
+	protected ImpCorrTblInList() {super(null);}
+	public ImpCorrTblInList(PsseModel model) {super(model);}
+	
+	
 	/* Standard object retrieval */
 
 	/** Get a ImpCorrTbl by it's index. */
@@ -12,5 +24,4 @@ public abstract class ImpCorrTblInList extends PsseBaseInputList<ImpCorrTblIn>
 	@Override
 	public ImpCorrTblIn get(String id) { return super.get(id); }
 
-	public ImpCorrTblInList(PsseInputModel model) {super(model);}
 }

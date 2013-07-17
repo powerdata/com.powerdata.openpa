@@ -2,10 +2,27 @@ package com.powerdata.openpa.psse;
 
 public abstract class PhaseShifterInList extends PsseBaseInputList<PhaseShifterIn>
 {
+	protected BusInList _buses;
 	
-	public PhaseShifterInList(PsseInputModel model) 
+	public static final PhaseShifterInList Empty = new PhaseShifterInList()
+	{
+		@Override
+		public String getI(int ndx) throws PsseModelException {return null;}
+		@Override
+		public String getJ(int ndx) throws PsseModelException {return null;}
+		@Override
+		public float getX1_2(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+	
+	protected PhaseShifterInList() {super();}
+	public PhaseShifterInList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
+		_buses = model.getBuses();
 	}
 
 	
@@ -18,8 +35,8 @@ public abstract class PhaseShifterInList extends PsseBaseInputList<PhaseShifterI
 	
 	/* Convenience methods */
 	
-	public abstract BusIn getBus1(int ndx) throws PsseModelException;
-	public abstract BusIn getBus2(int ndx) throws PsseModelException;
+	public BusIn getBus1(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public BusIn getBus2(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
 
 	/* Raw methods */
 	
@@ -56,10 +73,10 @@ public abstract class PhaseShifterInList extends PsseBaseInputList<PhaseShifterI
 	{
 		return (getCW(ndx)==2)?
 				_model.getBus(getI(ndx)).getBASKV() :
-				1F;
+				1f;
 	}
 	/** nominal winding 1 voltage in kV */
-	public float getNOMV1(int ndx) throws PsseModelException {return 0f;}
+	public float getNOMV1(int ndx) throws PsseModelException {return getBus1(ndx).getBASKV();}
 	/** winding 1 phase shift (DEG) */
 	public float getANG1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating A in MVA */
@@ -87,7 +104,11 @@ public abstract class PhaseShifterInList extends PsseBaseInputList<PhaseShifterI
 	/** load drop compensation reactance in pu on system base */
 	public float getCX1(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
-	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
+	public OwnershipInList getOwnership(int ndx) throws PsseModelException
+	{
+		return OwnershipInList.Empty;
+		//TODO: implement
+	}
 
 }	
 

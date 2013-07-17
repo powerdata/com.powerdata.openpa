@@ -7,7 +7,7 @@ import com.powerdata.openpa.tools.SimpleCSV;
 
 public class TransformerInList extends com.powerdata.openpa.psse.TransformerInList
 {
-	PsseInputModel _eq;
+	PsseModel _eq;
 	BusInList _buses;
 	int _size;
 	
@@ -23,7 +23,7 @@ public class TransformerInList extends com.powerdata.openpa.psse.TransformerInLi
 	float _vma1[], _vmi1[];
 	float _windv1[], _x1_2[];
 
-	public TransformerInList(PsseInputModel eq) throws PsseModelException
+	public TransformerInList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try

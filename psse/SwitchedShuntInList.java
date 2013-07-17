@@ -4,34 +4,19 @@ import com.powerdata.openpa.tools.PAMath;
 
 public abstract class SwitchedShuntInList extends PsseBaseInputList<SwitchedShuntIn>
 {
-	public SwitchedShuntInList(PsseInputModel model) {super(model);}
-
-	protected float vsVoltDeft(int ndx, boolean ishigh)
-			throws PsseModelException
+	public static final SwitchedShuntInList Empty = new SwitchedShuntInList()
 	{
-		int modsw = getMODSW(ndx);
-		if (modsw != 1 || modsw != 2)
-		{
-			throw new PsseModelException("VSWHI and VSWLO are not coded for voltage limits,"
-				+"MODSW must either be 1 or 2");
-		}
-
-		return ishigh ? getVSWHI(ndx) : getVSWLO(ndx);
-	}
-
-	protected float vsQDeft(int ndx, boolean ishigh)
-			throws PsseModelException
-	{
-		int modsw = getMODSW(ndx);
-		if (modsw != 3 || modsw != 4 || modsw != 5)
-		{
-			throw new PsseModelException("VSWHI and VSWLO are not coded for reactive limits,"
-				+"MODSW must either be 3, 4, or 5");
-		}
-		return ishigh ? getVSWHI(ndx) : getVSWLO(ndx);
-	}
-
+		@Override
+		public String getI(int ndx) throws PsseModelException {return null;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
 	
+	protected SwitchedShuntInList() {super();}
+	public SwitchedShuntInList(PsseModel model) {super(model);}
+
 	/* Standard object retrieval */
 
 	/** Get a SwitchedShunt by it's index. */
@@ -43,50 +28,62 @@ public abstract class SwitchedShuntInList extends PsseBaseInputList<SwitchedShun
 
 	/* convenience methods */
 	
-	public abstract BusIn getBus(int ndx) throws PsseModelException;
-	public abstract SwShuntCtrlMode getCtrlMode(int ndx) throws PsseModelException;
-	public abstract float getVoltHighLim(int ndx) throws PsseModelException;
-	public abstract float getVoltLowLim(int ndx) throws PsseModelException;
-	public abstract float getQHighLim(int ndx) throws PsseModelException;
-	public abstract float getQLowLim(int ndx) throws PsseModelException;
-	public abstract BusIn getRegBus(int ndx) throws PsseModelException;
-	public abstract float getInitB(int ndx) throws PsseModelException;
-
-	/* convenience defaults */
-	public SwShuntCtrlMode getDeftCtrlMode(int ndx) throws PsseModelException {return SwShuntCtrlMode.fromCode(getMODSW(ndx));}
-	public float getDeftVoltHighLim(int ndx) throws PsseModelException {return vsVoltDeft(ndx, true);}
-	public float getDeftVoltLowLim(int ndx) throws PsseModelException {return vsVoltDeft(ndx, false);}
-	public float getDeftQHighLim(int ndx) throws PsseModelException {return vsQDeft(ndx, true);}
-	public float getDeftQLowLim(int ndx) throws PsseModelException {return vsQDeft(ndx, false);}
-	public BusIn getDeftRegBus(int ndx) throws PsseModelException
+	/** Load bus */ 
+	public BusIn getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	/** control mode */
+	public SwShuntCtrlMode getCtrlMode(int ndx) throws PsseModelException 
 	{
-		String swrem = getSWREM(ndx);
-		return (swrem.equals("0")) ? getBus(ndx) :
-			_model.getBus(swrem);
+		return SwShuntCtrlMode.fromCode(getMODSW(ndx));
 	}
-	public float getDeftInitB(int ndx) throws PsseModelException {return PAMath.mvar2pu(getBINIT(ndx));}
+	/** get voltage limits for controlled bus */
+	public Limits getVoltageLimits(int ndx) throws PsseModelException
+	{
+		if (getMODSW(ndx) > 2)
+		{
+			_model.log(LogSev.Error, get(ndx),
+				"Asking for voltage limits when bus controlled using reactive power");
+			return new Limits(-999.99f, 999.99f);
+		}
+		return new Limits(getVSWLO(ndx), getVSWHI(ndx));
+	}
+	/** get reactive power limits for controlled bus */
+	public Limits getReacPwrLimits(int ndx) throws PsseModelException
+	{
+		if (getMODSW(ndx) < 3)
+		{
+			_model.log(LogSev.Error, get(ndx),
+				"Asking for reactive power limits when bus controlled by voltage");
+			return new Limits(0.9f, 1.1f);
+		}
+		return new Limits(PAMath.mvar2pu(getVSWLO(ndx)),
+				PAMath.mvar2pu(getVSWHI(ndx)));
+	}
+	/** get controlled bus */
+	public BusIn getCtrlBus(int ndx) throws PsseModelException
+	{
+		return _model.getBus(getSWREM(ndx));
+	}
+	/** get case shunt susceptance */
+	public float getCaseB(int ndx) throws PsseModelException {return PAMath.mvar2pu(getBINIT(ndx));}
 	
 	/* raw methods */
 
+	/** bus number or name */
 	public abstract String getI(int ndx)throws PsseModelException;
-	public abstract int getMODSW(int ndx)throws PsseModelException;
-	public abstract int getVSWHI(int ndx)throws PsseModelException;
-	public abstract int getVSWLO(int ndx)throws PsseModelException;
-	public abstract String getSWREM(int ndx)throws PsseModelException;
-	public abstract float getRMPCT(int ndx)throws PsseModelException;
-	public abstract String getRMIDNT(int ndx)throws PsseModelException;
-	public abstract float getBINIT(int ndx)throws PsseModelException;
-	public abstract SwShuntBlkList getBlocks(int ndx)throws PsseModelException;
-
-
-	/* defaults */
-
-	public int getDeftMODSW(int ndx) {return 1;}
-	public float getDeftVSWHI(int ndx) {return 1F;}
-	public float getDeftVSWLO(int ndx) {return 1F;}
-	public String getDeftSWREM(int ndx) {return "0";}
-	public float getDeftRMPCT(int ndx) {return 100F;}
-	public String getDeftRMIDNT(int ndx) {return "";}
-	public float getDeftBINIT(int ndx) {return 0F;}
-
+	/** Control mode */
+	public int getMODSW(int ndx) throws PsseModelException {return 1;}
+	/** controlled upper limit either voltage or reactive power p.u. */
+	public float getVSWHI(int ndx) throws PsseModelException {return (getMODSW(ndx) <= 2) ? 1f : 99999f;}
+	/** controlled lower limit either voltage or reactive power p.u. */
+	public float getVSWLO(int ndx) throws PsseModelException {return (getMODSW(ndx) <= 2) ? 1f : -99999f;}
+	/** controlled bus */
+	public String getSWREM(int ndx) throws PsseModelException {return getI(ndx);}
+	/** percent of total MVAr required to hold bus voltage contributed by this shunt */
+	public float getRMPCT(int ndx) throws PsseModelException {return 100f;}
+	/** Name of VSC dc line if bus is specified for control (MODSW = 4) */
+	public String getRMIDNT(int ndx) throws PsseModelException {return "";}
+	/** switched shunt admittance */
+	public float getBINIT(int ndx) throws PsseModelException {return 0f;}
+	/** block information */
+	public SwShuntBlkList getBlocks(int ndx)throws PsseModelException {return SwShuntBlkList.Empty;}
 }

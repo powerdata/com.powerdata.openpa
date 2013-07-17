@@ -5,7 +5,22 @@ import com.powerdata.openpa.tools.PAMath;
 
 public abstract class LineInList extends PsseBaseInputList<LineIn>
 {
-	public LineInList(PsseInputModel model) {super(model);}
+	public static final LineInList Empty = new LineInList()
+	{
+		@Override
+		public String getI(int ndx) throws PsseModelException {return null;}
+		@Override
+		public String getJ(int ndx) throws PsseModelException {return null;}
+		@Override
+		public float getX(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+	
+	protected LineInList() {super();}
+	public LineInList(PsseModel model) {super(model);}
 
 	/* Standard object retrieval */
 
@@ -16,85 +31,80 @@ public abstract class LineInList extends PsseBaseInputList<LineIn>
 	@Override
 	public LineIn get(String id) { return super.get(id); }
 
-	/* Convenience Methods */
 	
-	public abstract BusIn getFromBus(int ndx) throws PsseModelException;
-	public abstract BusIn getToBus(int ndx)  throws PsseModelException;
-	public abstract LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException;
-	public abstract boolean getInSvc(int ndx) throws PsseModelException;
-	public abstract float getR100(int ndx) throws PsseModelException;
-	public abstract float getX100(int ndx) throws PsseModelException;
-	public abstract Complex getZ100(int ndx) throws PsseModelException;
-	public abstract float getFromBch(int ndx) throws PsseModelException;
-	public abstract float getToBch(int ndx) throws PsseModelException;
-	public abstract float getFromShuntG(int ndx) throws PsseModelException;
-	public abstract float getFromShuntB(int ndx) throws PsseModelException;
-	public abstract Complex getFromShuntY(int ndx) throws PsseModelException;
-	public abstract float getToShuntG(int ndx) throws PsseModelException;
-	public abstract float getToShuntB(int ndx) throws PsseModelException;
-	public abstract Complex getToShuntY(int ndx) throws PsseModelException;
-
-	
-	/* defaults for convenience methods */
-	
-	public BusIn getDeftFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public BusIn getDeftToBus(int ndx)  throws PsseModelException
+	/** From-side bus */
+	public BusIn getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	/** To-side bus */
+	public BusIn getToBus(int ndx)  throws PsseModelException
 	{
 		String j = getJ(ndx);
 		return _model.getBus((!j.isEmpty()&&j.charAt(0)=='-')?
 			j.substring(1):j); 
 	}
-	public LineMeterEnd getDeftMeteredEnd(int ndx) throws PsseModelException
+	/** Get "metered" end */
+	public LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException
 	{
 		String j = getJ(ndx);
 		return (!j.isEmpty() && j.charAt(0) == '-') ? 
 			LineMeterEnd.To : LineMeterEnd.From;
 	}
-	public boolean getDeftInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
-	public float getDeftR100(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getR(ndx), _model.getSBASE());}
-	public float getDeftX100(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getX(ndx), _model.getSBASE());}
-	public Complex getDeftZ100(int ndx) throws PsseModelException {return new Complex(getR100(ndx), getX100(ndx));}
-	public float getDeftFromBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
-	public float getDeftToBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
-	public float getDeftFromShuntG(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getGI(ndx), _model.getSBASE());}
-	public float getDeftFromShuntB(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getBI(ndx), _model.getSBASE());}
-	public Complex getDeftFromShuntY(int ndx) throws PsseModelException {return new Complex(getFromShuntG(ndx), getFromShuntB(ndx));}
-	public float getDeftToShuntG(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getGJ(ndx), _model.getSBASE());}
-	public float getDeftToShuntB(int ndx) throws PsseModelException {return PAMath.rebaseZ100(getBJ(ndx), _model.getSBASE());}
-	public Complex getDeftToShuntY(int ndx) throws PsseModelException {return new Complex(getToShuntG(ndx), getToShuntB(ndx));}
+	/** get initial branch status (ST) as a boolean.  Returns true if in service */
+	public boolean getInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
+	/** get complex impedance */
+	public Complex getZ(int ndx) throws PsseModelException
+	{
+		return PAMath.rebaseZ100(new Complex(getR(ndx), getX(ndx)),
+				_model.getSBASE());
+	}
+	/** from-side charging susceptance, p.u. on 100MVA base at unity voltage */
+	public float getFromBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
+	/** to-side charging susceptance, p.u. on 100MVA base at unity voltage */
+	public float getToBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
+	/** conductance of line shunt at from-side bus on 100 MVA base */ 
+	public Complex getFromShuntY(int ndx) throws PsseModelException
+	{
+		return PAMath.rebaseZ100(new Complex(getGI(ndx), getBI(ndx)),
+				_model.getSBASE());
+	}
+	/** complex admittance of line shunt at to-side bus on 100 MVA base */
+	public Complex getToShuntY(int ndx) throws PsseModelException
+	{
+		return PAMath.rebaseZ100(new Complex(getGJ(ndx), getBJ(ndx)),
+				_model.getSBASE());
+	}
 
 	/* raw PSS/e methods */
+	/** From-side bus number or name */
 	public abstract String getI(int ndx) throws PsseModelException;
+	/** To-side bus number or name */
 	public abstract String getJ(int ndx) throws PsseModelException;
-	public abstract String getCKT(int ndx) throws PsseModelException;
-	public abstract float getR(int ndx) throws PsseModelException;
+	/** circuit identifier */
+	public String getCKT(int ndx) throws PsseModelException {return "1";}
+	/** Branch resistance entered in p.u. */
+	public float getR(int ndx) throws PsseModelException {return 0f;}
+	/** Branch reactance entered in p.u. */
 	public abstract float getX(int ndx) throws PsseModelException;
-	public abstract float getB(int ndx) throws PsseModelException;
-	public abstract float getRATEA(int ndx) throws PsseModelException;
-	public abstract float getRATEB(int ndx) throws PsseModelException;
-	public abstract float getRATEC(int ndx) throws PsseModelException;
-	public abstract float getGI(int ndx) throws PsseModelException;
-	public abstract float getBI(int ndx) throws PsseModelException;
-	public abstract float getGJ(int ndx) throws PsseModelException;
-	public abstract float getBJ(int ndx) throws PsseModelException;
-	public abstract int getST(int ndx) throws PsseModelException;
-	public abstract float getLEN(int ndx) throws PsseModelException;
-
-	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
-	
-	/* Defaults */
-	public String getDeftCKT(int ndx) {return "1";}
-	public float getDeftB(int ndx) {return 0F;}
-	public float getDeftRATEA(int ndx) {return 0F;}
-	public float getDeftRATEB(int ndx) {return 0F;}
-	public float getDeftRATEC(int ndx) {return 0F;}
-	public float getDeftGI(int ndx) {return 0F;}
-	public float getDeftBI(int ndx) {return 0F;}
-	public float getDeftGJ(int ndx) {return 0F;}
-	public float getDeftBJ(int ndx) {return 0F;}
-	public int getDeftST(int ndx) {return 1;}
-	public float getDeftLEN(int ndx) {return 0F;}
-	
-	public OwnershipInList getDeftOwnership(int ndx) {return null;}
+	/** Branch charging susceptance entered in p.u. */
+	public float getB(int ndx) throws PsseModelException {return 0f;}
+	/** First loading rating entered in MVA */
+	public float getRATEA(int ndx) throws PsseModelException {return 0f;}
+	/** Second loading rating entered in MVA */
+	public float getRATEB(int ndx) throws PsseModelException {return 0f;}
+	/** Third loading rating entered in MVA */
+	public float getRATEC(int ndx) throws PsseModelException {return 0f;}
+	/** conductance of line shunt at bus "I" */ 
+	public float getGI(int ndx) throws PsseModelException {return 0f;}
+	/** susceptance of line shunt at bus "I" */ 
+	public float getBI(int ndx) throws PsseModelException {return 0f;}
+	/** conductance of line shunt at bus "J" */ 
+	public float getGJ(int ndx) throws PsseModelException {return 0f;}
+	/** susceptance of line shunt at bus "J" */ 
+	public float getBJ(int ndx) throws PsseModelException {return 0f;}
+	/** Initial branch status (1 is in-service, 0 means out of service) */
+	public int getST(int ndx) throws PsseModelException {return 1;}
+	/** Line length  entered in user-selected units */
+	public float getLEN(int ndx) throws PsseModelException {return 0f;}
+	/** return Ownership as a list */
+	public OwnershipInList getOwnership(int ndx) throws PsseModelException {return OwnershipInList.Empty;} //TODO: implement
 
 }	

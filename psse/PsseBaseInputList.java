@@ -5,9 +5,10 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public abstract class PsseBaseInputList<T extends BaseObject> extends BaseList<T>
 {
-	protected PsseInputModel _model;
+	protected PsseModel _model;
 
-	public PsseBaseInputList(PsseInputModel model) {_model = model;}
-	public PsseInputModel getPsseModel() {return _model;}
+	protected PsseBaseInputList() {}
+	public PsseBaseInputList(PsseModel model) {_model = model;}
+	public PsseModel getPsseModel() {return _model;}
 	public void commit() throws PsseModelException {}
 }

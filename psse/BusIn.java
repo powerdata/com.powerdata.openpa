@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PComplex;
 
-public class BusIn extends BaseObject
+public class BusIn extends BaseObject implements EquipGroup
 {
 	protected BusInList _list;
 	
@@ -21,32 +21,33 @@ public class BusIn extends BaseObject
 	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	/* Groups */
-	
+	@Override
 	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
+	@Override
 	public GenInList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }
+	@Override
 	public LoadInList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
+	@Override
 	public LineInList getLines() throws PsseModelException { return _list.getLines(_ndx); }
+	@Override
 	public TransformerInList getTransformers() throws PsseModelException { return _list.getTransformers(_ndx); }
+	@Override
 	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
-	
+	@Override
+	public PhaseShifterInList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
+
 	/* Convenience methods */
 	
 	/** enumerated IDE code */
 	public BusTypeCode getBusType() throws PsseModelException {return _list.getBusType(_ndx);}
 	/** Area */
-	public AreaIn getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
+	public Area getAreaObject() throws PsseModelException {return _list.getAreaObject(_ndx);}
 	/** Zone */
 	public ZoneIn getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */
 	public OwnerIn getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
-	/** Active component of shunt admittance to ground (GL) p.u. */
-	public float getShuntG() throws PsseModelException {return _list.getShuntG(_ndx);}
-	/** Reactive component of shunt admittance to ground (BL) p.u. */
-	public float getShuntB() throws PsseModelException {return _list.getShuntB(_ndx);}
 	/** get complex shunt admittance to ground */
 	public Complex getShuntY() throws PsseModelException {return _list.getShuntY(_ndx);}
-	/** Bus voltage phase angle in radians */
-	public float getVaRad() throws PsseModelException {return _list.getVaRad(_ndx);}
 	/** complex bus voltage */
 	public PComplex getVoltage() throws PsseModelException {return _list.getVoltage(_ndx);}
 	/** test if the bus is energized */
@@ -78,5 +79,6 @@ public class BusIn extends BaseObject
 	public float getVA() throws PsseModelException {return _list.getVA(_ndx);}
 	/** Owner number */
 	public int getOWNER() throws PsseModelException {return _list.getOWNER(_ndx);}
+
 	
 }

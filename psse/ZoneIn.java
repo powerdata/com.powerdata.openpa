@@ -21,9 +21,9 @@ public class ZoneIn extends BaseObject
 
 	/* raw PSS/e methods */
 	
-	/** Zone number */
-	public int getI() {return _list.getI(_ndx);}
+	/** Zone number */ 
+	public int getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** Alphanumeric identifier assigned to zone */
-	public String getOWNAME() {return _list.getZONAME(_ndx);}
+	public String getOWNAME() throws PsseModelException {return _list.getZONAME(_ndx);}
 	
 }

@@ -21,8 +21,10 @@ public class OwnershipIn extends BaseObject
 	
 	/* raw psse methods */
 	
-	/** Owner number */
-	public int getO() {return _list.getO(_ndx);}
-	/** Fraction of total ownership assigned to owner */
-	public float getF() {return _list.getF(_ndx);}
+	/** Owner number 
+	 * @throws PsseModelException */
+	public int getO() throws PsseModelException {return _list.getO(_ndx);}
+	/** Fraction of total ownership assigned to owner 
+	 * @throws PsseModelException */
+	public float getF() throws PsseModelException {return _list.getF(_ndx);}
 }

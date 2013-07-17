@@ -15,7 +15,6 @@ public class Switch extends BaseObject
 	@Override
 	public String getDebugName() throws PsseModelException {return "Switch "+getName();}
 
-
 	@Override
 	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 

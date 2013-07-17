@@ -29,25 +29,13 @@ public class LoadIn extends BaseObject
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** get Area Interchange record */
-	public AreaIn getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
+	public Area getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
 	/** get Zone record */
 	public ZoneIn getZoneObj() throws PsseModelException {return _list.getZoneObj(_ndx);}
-	/** base active power of (PL) constant MVA load */
-	public float getActvPwr() throws PsseModelException {return _list.getActvPwr(_ndx);}
-	/** base reactive power of (QL) constant MVA load */
-	public float getReacPwr() throws PsseModelException {return _list.getReacPwr(_ndx);}
 	/** get complex power (PL) */
 	public Complex getPwr() throws PsseModelException {return _list.getPwr(_ndx);}
-	/** active power of constant current load (IP) at 1pu voltage */
-	public float getActvPwrI() throws PsseModelException {return _list.getActvPwrI(_ndx);}
-	/** reactive power of constant current load (IQ) MVAr at 1pu voltage */
-	public float getReacPwrI() throws PsseModelException {return _list.getReacPwrI(_ndx);}
 	/** Complex constant current load at 1pu voltage */
 	public Complex getPwrI() throws PsseModelException {return _list.getPwrI(_ndx);}
-	/** active power of constant admittance load at 1pu voltage*/
-	public float getActvPwrY() throws PsseModelException {return _list.getActvPwrY(_ndx);}
-	/** reactive power of constant admittance load at 1pu voltage*/
-	public float getReacPwrY() throws PsseModelException {return _list.getReacPwrY(_ndx);}
 	/** Complex constant admittance load at 1pu voltage */
 	public Complex getPwrY() throws PsseModelException  {return _list.getPwrY(_ndx);}
 	/** return Owner */

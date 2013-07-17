@@ -4,14 +4,14 @@ import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.BusInList;
 import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseBaseInputList;
-import com.powerdata.openpa.psse.PsseInputModel;
+import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 
 public abstract class TransformerRawList extends PsseBaseInputList<TransformerRaw>
 {
 	protected BusInList _busses;
 	
-	public TransformerRawList(PsseInputModel model) throws PsseModelException
+	public TransformerRawList(PsseModel model) throws PsseModelException
 	{
 		super(model);
 		_busses = model.getBuses();

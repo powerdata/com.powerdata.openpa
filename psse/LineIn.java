@@ -39,22 +39,10 @@ public class LineIn extends BaseObject
 	public float getFromBch() throws PsseModelException {return _list.getFromBch(_ndx);}
 	/** to-side charging susceptance, p.u. on 100MVA base at unity voltage */
 	public float getToBch() throws PsseModelException {return _list.getToBch(_ndx);}
-	/** resistance in p.u. on 100MVA base */
-	public float getR100() throws PsseModelException {return _list.getR100(_ndx);}
-	/** reactance in p.u. on 100MVA base */
-	public float getX100() throws PsseModelException {return _list.getX100(_ndx);}
 	/** get complex impedance */
-	public Complex getZ100() throws PsseModelException {return _list.getZ100(_ndx);}
+	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
 	/** conductance of line shunt at from-side bus on 100 MVA base */ 
-	public float getFromShuntG() throws PsseModelException {return _list.getFromShuntG(_ndx);}
-	/** susceptance of line shunt at from-side bus */ 
-	public float getFromShuntB() throws PsseModelException {return _list.getFromShuntB(_ndx);}
-	/** complex admittance of line shunt at from-side bus on 100 MVA base */
 	public Complex getFromShuntY() throws PsseModelException {return _list.getFromShuntY(_ndx);}
-	/** conductance of line shunt at to-side bus */ 
-	public float getToShuntG() throws PsseModelException {return _list.getToShuntG(_ndx);}
-	/** susceptance of line shunt at to-side bus */ 
-	public float getToShuntB() throws PsseModelException {return _list.getToShuntB(_ndx);}
 	/** complex admittance of line shunt at to-side bus on 100 MVA base */
 	public Complex getToShuntY() throws PsseModelException {return _list.getToShuntY(_ndx);}
 

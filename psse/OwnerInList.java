@@ -2,9 +2,17 @@ package com.powerdata.openpa.psse;
 
 public abstract class OwnerInList extends PsseBaseInputList<OwnerIn>
 {
-	public OwnerInList(PsseInputModel model) {super(model);}
-
-	/* Standard object retrieval */
+	public static final OwnerInList Empty = new OwnerInList()
+	{
+		@Override
+		public int getI(int ndx) throws PsseModelException {return 0;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+	protected OwnerInList() {super();}
+	public OwnerInList(PsseModel model) {super(model);}
 
 	/** Get an Owner by it's index. */
 	@Override
@@ -15,9 +23,6 @@ public abstract class OwnerInList extends PsseBaseInputList<OwnerIn>
 
 	/* raw data methods */
 	public abstract int getI(int ndx) throws PsseModelException;
-	public abstract String getOWNAME(int ndx) throws PsseModelException;
+	public String getOWNAME(int ndx) {return "";}
 	
-	/* raw data defaults */
-	
-	public String getDeftOWNAME(int ndx) {return "";}
 }

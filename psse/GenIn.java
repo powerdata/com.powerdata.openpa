@@ -29,32 +29,18 @@ public class GenIn extends BaseObject
 	public BusIn getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** remote regulated bus.  (IREG) Null if local */
 	public BusIn getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
-	// /** get initial generator status (STAT) as a boolean.  Returns true if in service */
-	//public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	/** get the Generator mode */
 	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
 	/** set the generator mode */
 	public void setMode(GenMode mode) throws PsseModelException { _list.setMode(_ndx, mode); }
-	/** Generator active power (PG) output p.u. */
-	public float getActvPwr() throws PsseModelException {return _list.getActvPwr(_ndx);}
-	/** Generator reactive power (QG) output p.u. */
-	public float getReacPwr() throws PsseModelException {return _list.getReacPwr(_ndx);}
 	/** get case complex power */
 	public Complex getPwr() throws PsseModelException {return _list.getPwr(_ndx);}
 	/** Maximum generator reactive power output (QT) p.u. */
 	public float getMaxReacPwr() throws PsseModelException {return _list.getMaxReacPwr(_ndx);}
 	/** Minimum generator reactive power output (QB) p.u. */
 	public float getMinReacPwr() throws PsseModelException {return _list.getMinReacPwr(_ndx);}
-	/** machine resistance (ZR) p.u. on 100 MVA base */
-	public float getMachR() throws PsseModelException {return _list.getMachR(_ndx);}
-	/** machine reactance (ZX) p.u. on 100 MVA base */
-	public float getMachX() throws PsseModelException {return _list.getMachX(_ndx);}
 	/** machine complex impedance */
 	public Complex getMachZ() throws PsseModelException {return _list.getMachZ(_ndx);}
-	/** Step-up transformer resistance (RT) p.u. on 100MVA base*/
-	public float getTxfR()  throws PsseModelException {return _list.getTxfR(_ndx);}
-	/** Step-up transformer reactance (XT) p.u. on 100MVA base */
-	public float getTxfX() throws PsseModelException {return _list.getTxfX(_ndx);}
 	/** Step-up transformer impedance */
 	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
 	/** max active power (PT) p.u. */

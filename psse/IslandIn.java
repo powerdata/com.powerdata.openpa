@@ -1,6 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public class IslandIn extends GroupIn
+import com.powerdata.openpa.tools.BaseObject;
+
+public class IslandIn extends BaseObject implements EquipGroup
 {
 	protected IslandInList _list;
 	
@@ -11,87 +13,21 @@ public class IslandIn extends GroupIn
 	}
 
 	@Override
-	public BusInList getBuses() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
+	public BusInList getBuses() throws PsseModelException {return _list.getBuses(_ndx);}
 	@Override
-	public GenInList getGenerators() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public GenInList getGenerators() throws PsseModelException {return _list.getGenerators(_ndx);}
 	@Override
-	public LoadInList getLoads() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public LoadInList getLoads() throws PsseModelException {return _list.getLoads(_ndx);}
 	@Override
-	public LineInList getLines() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public LineInList getLines() throws PsseModelException {return _list.getLines(_ndx);}
 	@Override
-	public TransformerInList getTransformers() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public TransformerInList getTransformers() throws PsseModelException {return _list.getTransformers(_ndx);}
 	@Override
-	public PhaseShifterInList getPhaseShifters() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public PhaseShifterInList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
 	@Override
-	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException {return _list.getSwitchedShunts(_ndx);}
 	@Override
-	public GroupInList getGroup(String type) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getGroupTypes()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IslandInList getIslands() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SwitchList getSwitches() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getObjectID() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public SwitchList getSwitches() throws PsseModelException {return _list.getSwitches(_ndx);}
 
 }

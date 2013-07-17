@@ -1,19 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.AreaIn;
-import com.powerdata.openpa.psse.BusTypeCode;
-import com.powerdata.openpa.psse.GenInList;
-import com.powerdata.openpa.psse.LineInList;
-import com.powerdata.openpa.psse.LoadInList;
-import com.powerdata.openpa.psse.OwnerIn;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.SwitchList;
-import com.powerdata.openpa.psse.SwitchedShuntInList;
-import com.powerdata.openpa.psse.TransformerInList;
-import com.powerdata.openpa.psse.ZoneIn;
-import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.LoadArray;
-import com.powerdata.openpa.tools.PComplex;
 import com.powerdata.openpa.tools.SimpleCSV;
 /**
  * Implement bus for CSV.  Currently based on Robin's version.
@@ -23,7 +11,7 @@ import com.powerdata.openpa.tools.SimpleCSV;
 public class BusInList extends com.powerdata.openpa.psse.BusInList
 {
 	/** parent container */
-	PsseInputModel _eq;
+	PsseModel _eq;
 	/** number of items in the DB */
 	int _size;
 	/** object IDs (really just the bus number) */
@@ -42,7 +30,7 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	float _gl[];
 	float _bl[];
 	
-	public BusInList(PsseInputModel eq) throws PsseModelException
+	public BusInList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -102,69 +90,4 @@ public class BusInList extends com.powerdata.openpa.psse.BusInList
 	public String getObjectID(int ndx) { return _ids[ndx];	}
 	@Override
 	public int size() { return _size; }
-	@Override
-	public BusTypeCode getBusType(int ndx) throws PsseModelException { return getDeftBusType(ndx); }
-	@Override
-	public AreaIn getAreaObject(int ndx) throws PsseModelException
-	{
-		return getDeftAreaObject(ndx);
-	}
-	@Override
-	public ZoneIn getZoneObject(int ndx) throws PsseModelException { return getDeftZoneObject(ndx); }
-	@Override
-	public OwnerIn getOwnerObject(int ndx) throws PsseModelException { return getDeftOwnerObject(ndx); }
-	@Override
-	public float getShuntG(int ndx) throws PsseModelException { return getDeftShuntG(ndx); }
-	@Override
-	public float getShuntB(int ndx) throws PsseModelException { return getDeftShuntB(ndx); }
-	@Override
-	public float getVaRad(int ndx) throws PsseModelException { return getDeftVaRad(ndx); }
-	@Override
-	public Complex getShuntY(int ndx) throws PsseModelException { return getDeftShuntY(ndx); }
-	@Override
-	public PComplex getVoltage(int ndx) throws PsseModelException { return getDeftVoltage(ndx);}
-	@Override
-	public boolean isEnergized(int ndx) throws PsseModelException {	return false; }
-	@Override
-	public SwitchList getSwitches(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public GenInList getGenerators(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public LoadInList getLoads(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public LineInList getLines(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public TransformerInList getTransformers(int ndx) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public SwitchedShuntInList getSwitchedShunts(int ndx)
-			throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public int getIsland(int ndx) throws PsseModelException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

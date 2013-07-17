@@ -4,7 +4,22 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 {
 	protected BusInList _busses;
 	
-	public TransformerInList(PsseInputModel model) throws PsseModelException 
+	public static final TransformerInList Empty = new TransformerInList()
+	{
+		@Override
+		public String getI(int ndx) throws PsseModelException {return null;}
+		@Override
+		public String getJ(int ndx) throws PsseModelException {return null;}
+		@Override
+		public float getX1_2(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+	
+	protected TransformerInList() {super();}
+	public TransformerInList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
 		_busses = model.getBuses();
@@ -19,8 +34,8 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	
 	/* Convenience methods */
 	
-	public abstract BusIn getBus1(int ndx) throws PsseModelException;
-	public abstract BusIn getBus2(int ndx) throws PsseModelException;
+	public BusIn getBus1(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
+	public BusIn getBus2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
 
 	/* Raw methods */
 	
@@ -105,7 +120,10 @@ public abstract class TransformerInList extends PsseBaseInputList<TransformerIn>
 	/** load drop compensation reactance in pu on system base */
 	public float getCX1(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
-	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
+	public OwnershipInList getOwnership(int ndx) throws PsseModelException
+	{
+		return OwnershipInList.Empty;
+	}
 	
 	/** Winding 2 off-nominal turns ratio */
 	public float getWINDV2(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_busses.get(getJ(ndx)).getBASKV():1f);}

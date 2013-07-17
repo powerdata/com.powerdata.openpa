@@ -13,12 +13,6 @@ public class PhaseShifterIn extends BaseObject
 	}
 
 	@Override
-	public String getDebugName() throws PsseModelException
-	{
-		//TODO: implement this
-		return null;
-	}
-	@Override
 	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	/* Convenience methods */

@@ -1,15 +1,13 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.BusIn;
 import com.powerdata.openpa.psse.OwnershipInList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
 public class LineInList extends com.powerdata.openpa.psse.LineInList
 {
-	PsseInputModel _eq;
+	PsseModel _eq;
 	BusInList _buses;
 	int _size;
 	
@@ -18,7 +16,7 @@ public class LineInList extends com.powerdata.openpa.psse.LineInList
 	int _st[];
 	float _len[];
 	
-	public LineInList(PsseInputModel eq) throws PsseModelException
+	public LineInList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
@@ -86,40 +84,4 @@ public class LineInList extends com.powerdata.openpa.psse.LineInList
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override
 	public int size() { return _size; }
-
-	@Override
-	public BusIn getFromBus(int ndx) throws PsseModelException {return getDeftFromBus(ndx);}
-	@Override
-	public BusIn getToBus(int ndx) throws PsseModelException {return getDeftToBus(ndx);}
-	@Override
-	public com.powerdata.openpa.psse.LineMeterEnd getMeteredEnd(
-			int ndx) throws PsseModelException
-	{
-		return getDeftMeteredEnd(ndx);
-	}
-	@Override
-	public boolean getInSvc(int ndx) throws PsseModelException {return getDeftInSvc(ndx);}
-	@Override
-	public float getR100(int ndx) throws PsseModelException {return getDeftR100(ndx);}
-	@Override
-	public float getX100(int ndx) throws PsseModelException {return getDeftX100(ndx);}
-	@Override
-	public Complex getZ100(int ndx) throws PsseModelException {return getDeftZ100(ndx);}
-	@Override
-	public float getFromShuntG(int ndx) throws PsseModelException {return getDeftFromShuntG(ndx);}
-	@Override
-	public float getFromShuntB(int ndx) throws PsseModelException {return getDeftFromShuntB(ndx);}
-	@Override
-	public Complex getFromShuntY(int ndx) throws PsseModelException {return getDeftFromShuntY(ndx);}
-	@Override
-	public float getToShuntG(int ndx) throws PsseModelException {return getDeftToShuntG(ndx);}
-	@Override
-	public float getToShuntB(int ndx) throws PsseModelException {return getDeftToShuntB(ndx);}
-	@Override
-	public Complex getToShuntY(int ndx) throws PsseModelException {return getDeftToShuntY(ndx);}
-
-	@Override
-	public float getFromBch(int ndx) throws PsseModelException {return getDeftFromBch(ndx);}
-	@Override
-	public float getToBch(int ndx) throws PsseModelException {return getDeftToBch(ndx);}
 }
