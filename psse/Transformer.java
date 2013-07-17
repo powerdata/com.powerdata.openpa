@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
+import com.powerdata.openpa.tools.Complex;
 
 /**
  * View all transformers as 2-winding.
@@ -8,7 +9,7 @@ import com.powerdata.openpa.tools.BaseObject;
  * @author chris@powerdata.com
  *
  */
-public class Transformer extends BaseObject
+public class Transformer extends BaseObject implements ACBranch
 {
 	protected TransformerList _list;
 	
@@ -24,10 +25,11 @@ public class Transformer extends BaseObject
 	/* Convenience methods */
 
 	/** Winding 1 bus */ 
-	public Bus getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
+	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
 	/** Winding 2 bus */
-	public Bus getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
-
+	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
+	@Override
+	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
 	
 	/* RAW methods */
 	/** Winding 1 bus number or name */ 
@@ -93,5 +95,4 @@ public class Transformer extends BaseObject
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 
-	
 }

@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class SwitchedShunt extends BaseObject
+public class SwitchedShunt extends BaseObject implements OneTermDev
 {
 	protected SwitchedShuntList _list;
 	
@@ -20,6 +20,7 @@ public class SwitchedShunt extends BaseObject
 	
 	/* Convenience methods */
 	/** Load bus (I) */ 
+	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** control mode */
 	public SwShuntCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}

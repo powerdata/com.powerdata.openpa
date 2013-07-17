@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
-public class Switch extends BaseObject
+public class Switch extends BaseObject implements TwoTermDev
 {
 	protected SwitchList _list;
 	
@@ -18,8 +18,10 @@ public class Switch extends BaseObject
 	@Override
 	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
-	public Bus getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
-	public Bus getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
+	@Override
+	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
+	@Override
+	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	public String getName() throws PsseModelException {return _list.getName(_ndx);}
 	public SwitchState getState() throws PsseModelException {return _list.getState(_ndx);}
 	public void setState(SwitchState state) throws PsseModelException { _list.setState(_ndx,state); }

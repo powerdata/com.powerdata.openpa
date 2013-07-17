@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Gen extends BaseObject
+public class Gen extends BaseObject implements OneTermDev
 {
 
 	protected GenList _list;
@@ -26,6 +26,7 @@ public class Gen extends BaseObject
 	/* Convenience methods */
 
 	/** Generator bus (I) */ 
+	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** remote regulated bus.  (IREG) Null if local */
 	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}

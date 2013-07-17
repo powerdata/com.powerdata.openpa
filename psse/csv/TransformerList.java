@@ -71,9 +71,9 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	}
 
 	@Override
-	public Bus getBus1(int ndx) { return _buses.get(getI(ndx)); }
+	public Bus getFromBus(int ndx) { return _buses.get(getI(ndx)); }
 	@Override
-	public Bus getBus2(int ndx) { return _buses.get(getJ(ndx)); }
+	public Bus getToBus(int ndx) { return _buses.get(getJ(ndx)); }
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override

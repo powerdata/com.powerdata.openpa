@@ -1,4 +1,4 @@
-package com.powerdata.openpa.psse;
+ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
 
@@ -27,7 +27,6 @@ public class Area extends BaseObject
 	public float getIntExport()  throws PsseModelException {return _list.getIntExport(_ndx);}
 	/** Interchange tolerance bandwidth (PTOL) in p.u. */
 	public float getIntTol() throws PsseModelException {return _list.getIntTol(_ndx);}
-
 
 	/* raw PSS/e methods */
 	

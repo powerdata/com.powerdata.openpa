@@ -1,8 +1,9 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.BaseObject;
+import com.powerdata.openpa.tools.Complex;
 
-public class PhaseShifter extends BaseObject
+public class PhaseShifter extends BaseObject implements ACBranch
 {
 	protected PhaseShifterList _list;
 	
@@ -18,9 +19,11 @@ public class PhaseShifter extends BaseObject
 	/* Convenience methods */
 
 	/** Winding 1 bus */ 
-	public Bus getBus1() throws PsseModelException {return _list.getBus1(_ndx);}
+	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
 	/** Winding 2 bus */
-	public Bus getBus2() throws PsseModelException {return _list.getBus2(_ndx);}
+	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
+	@Override
+	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
 
 	/* RAW methods */
 	/** Winding 1 bus number or name */
@@ -83,4 +86,5 @@ public class PhaseShifter extends BaseObject
 	public float getCX1() throws PsseModelException {return _list.getCX1(_ndx);}
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+
 }

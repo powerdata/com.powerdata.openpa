@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Load extends BaseObject
+public class Load extends BaseObject implements OneTermDev
 {
 	protected LoadList _list;
 	
@@ -25,6 +25,7 @@ public class Load extends BaseObject
 	/* convenience methods */
 	
 	/** Load bus (I) */ 
+	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}

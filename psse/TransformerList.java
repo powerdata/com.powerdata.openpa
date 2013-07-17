@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.Complex;
+
 public abstract class TransformerList extends PsseBaseList<Transformer>
 {
 	protected BusList _busses;
@@ -34,8 +36,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	
 	/* Convenience methods */
 	
-	public Bus getBus1(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
-	public Bus getBus2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
+	public Bus getFromBus(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
+	public Bus getToBus(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
+	public Complex getZ(int _ndx) throws PsseModelException {return Complex.Zero;} //TODO: Implements
 
 	/* Raw methods */
 	

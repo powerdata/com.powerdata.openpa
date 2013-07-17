@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse;
 import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Line extends BaseObject
+public class Line extends BaseObject implements ACBranch
 {
 
 	protected LineList _list;
@@ -28,8 +28,10 @@ public class Line extends BaseObject
 	/* Convenience methods */
 
 	/** From-side bus */
+	@Override
 	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
 	/** To-side bus */
+	@Override
 	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	/** Get "metered" end */
 	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
@@ -40,6 +42,7 @@ public class Line extends BaseObject
 	/** to-side charging susceptance, p.u. on 100MVA base at unity voltage */
 	public float getToBch() throws PsseModelException {return _list.getToBch(_ndx);}
 	/** get complex impedance */
+	@Override
 	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
 	/** conductance of line shunt at from-side bus on 100 MVA base */ 
 	public Complex getFromShuntY() throws PsseModelException {return _list.getFromShuntY(_ndx);}

@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.tools.Complex;
+
 public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 {
 	protected BusList _buses;
@@ -35,8 +37,10 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	
 	/* Convenience methods */
 	
-	public Bus getBus1(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
-	public Bus getBus2(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
+	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
+	public Complex getZ(int ndx) throws PsseModelException {return Complex.Zero;} //TODO: implement
+
 
 	/* Raw methods */
 	
@@ -76,7 +80,7 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 				1f;
 	}
 	/** nominal winding 1 voltage in kV */
-	public float getNOMV1(int ndx) throws PsseModelException {return getBus1(ndx).getBASKV();}
+	public float getNOMV1(int ndx) throws PsseModelException {return getFromBus(ndx).getBASKV();}
 	/** winding 1 phase shift (DEG) */
 	public float getANG1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating A in MVA */
@@ -109,6 +113,5 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 		return OwnershipList.Empty;
 		//TODO: implement
 	}
-
 }	
 
