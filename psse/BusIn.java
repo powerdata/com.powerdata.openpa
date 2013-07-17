@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PComplex;
 
-public class BusIn extends BaseObject implements EquipGroup
+public class BusIn extends BaseObject
 {
 	protected BusInList _list;
 	
@@ -21,19 +21,12 @@ public class BusIn extends BaseObject implements EquipGroup
 	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	/* Groups */
-	@Override
 	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
-	@Override
 	public GenInList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }
-	@Override
 	public LoadInList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
-	@Override
 	public LineInList getLines() throws PsseModelException { return _list.getLines(_ndx); }
-	@Override
 	public TransformerInList getTransformers() throws PsseModelException { return _list.getTransformers(_ndx); }
-	@Override
 	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
-	@Override
 	public PhaseShifterInList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
 
 	/* Convenience methods */

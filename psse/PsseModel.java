@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import com.powerdata.openpa.tools.BaseObject;
 
-public class PsseModel implements EquipGroup
+public class PsseModel
 {
 	/** static translations of scheme to input class */
 	static HashMap<String,String> _SchemeToInputClass = new HashMap<String,String>();
@@ -88,28 +88,21 @@ public class PsseModel implements EquipGroup
 
 	/* equipment group lists */
 	public BusInList getBuses() throws PsseModelException {return BusInList.Empty;}
-	@Override
 	public GenInList getGenerators() throws PsseModelException {return GenInList.Empty;}
-	@Override
 	public LoadInList getLoads() throws PsseModelException {return LoadInList.Empty;}
-	@Override
 	public LineInList getLines() throws PsseModelException {return LineInList.Empty;}
-	@Override
 	public TransformerInList getTransformers() throws PsseModelException
 	{
 		return TransformerInList.Empty;
 	}
-	@Override
 	public PhaseShifterInList getPhaseShifters() throws PsseModelException
 	{
 		return PhaseShifterInList.Empty;
 	}
-	@Override
 	public SwitchedShuntInList getSwitchedShunts() throws PsseModelException
 	{
 		return SwitchedShuntInList.Empty;
 	}
-	@Override
 	public SwitchList getSwitches() throws PsseModelException {return null;}
 }	
 
