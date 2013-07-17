@@ -33,7 +33,7 @@ public class PComplex
 	
 	public PComplex inv() {return new PComplex(1F/_r, -_theta);}
 	public float abs() {return _r;}
-	public PComplex conj() {return new PComplex(_r, -_theta);}
+	public PComplex conjg() {return new PComplex(_r, -_theta);}
 	
 	public Complex cartesian()
 	{

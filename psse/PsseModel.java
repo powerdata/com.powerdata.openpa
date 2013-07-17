@@ -4,12 +4,10 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import com.powerdata.openpa.tools.BaseObject;
 
-public abstract class PsseModel
+public class PsseModel
 {
 	/** static translations of scheme to input class */
 	static HashMap<String,String> _SchemeToInputClass = new HashMap<String,String>();
-	/** static translations of scheme to output class */
-	static HashMap<String,String> _SchemeToOutputClass = new HashMap<String,String>();
 	/** seed the class translations with some defaults */
 	static
 	{
@@ -26,22 +24,13 @@ public abstract class PsseModel
 		_SchemeToInputClass.put(scheme, pkg);
 	}
 	/**
-	 * Set a scheme to output class name translation.
-	 * @param scheme
-	 * @param pkg
-	 */
-	public static void SetSchemeOutputClass(String scheme, String pkg)
-	{
-		_SchemeToOutputClass.put(scheme, pkg);
-	}
-	/**
 	 * Create a new input class using a uri.  The scheme needs to have been
 	 * mapped in the scheme to input class translations.
 	 * @param uri
 	 * @return
 	 * @throws PsseModelException
 	 */
-	public static PsseInputModel OpenInput(String uri) throws PsseModelException
+	public static PsseModel OpenInput(String uri) throws PsseModelException
 	{
 		System.out.println("uri: "+uri);
 		String[] tok = uri.split(":", 2);
@@ -52,7 +41,7 @@ public abstract class PsseModel
 		{
 			Class<?> cls = Class.forName(clsnm);
 			Constructor<?> con = cls.getConstructor(new Class[] {String.class});
-			return (PsseInputModel) con.newInstance(new Object[]{tok[1]});
+			return (PsseModel) con.newInstance(new Object[]{tok[1]});
 		}
 		catch (Exception e)
 		{
@@ -82,6 +71,39 @@ public abstract class PsseModel
 	}
 	public long refresh() throws PsseModelException { return 0; }
 	
+	/** get system base MVA */
+	public float getSBASE() {return 100f;}
+	/** get psse version */
+	public int getPsseVersion() {return 30;}
+
+	/** find a Bus by ID */ 
+	public Bus getBus(String id) throws PsseModelException {return getBuses().get(id);}
+	
+	/* Model-specific lists */
+	public ImpCorrTblList getImpCorrTables() throws PsseModelException {return ImpCorrTblList.Empty;}
+	public AreaList getAreas() throws PsseModelException {return AreaList.Empty;}
+	public OwnerList getOwners() throws PsseModelException {return OwnerList.Empty;}
+	public ZoneList getZones() throws PsseModelException {return ZoneList.Empty;}
+	public IslandList getIslands() throws PsseModelException {return IslandList.Empty;}
+
+	/* equipment group lists */
+	public BusList getBuses() throws PsseModelException {return BusList.Empty;}
+	public GenList getGenerators() throws PsseModelException {return GenList.Empty;}
+	public LoadList getLoads() throws PsseModelException {return LoadList.Empty;}
+	public LineList getLines() throws PsseModelException {return LineList.Empty;}
+	public TransformerList getTransformers() throws PsseModelException
+	{
+		return TransformerList.Empty;
+	}
+	public PhaseShifterList getPhaseShifters() throws PsseModelException
+	{
+		return PhaseShifterList.Empty;
+	}
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
+	{
+		return SwitchedShuntList.Empty;
+	}
+	public SwitchList getSwitches() throws PsseModelException {return null;}
 }	
 
 

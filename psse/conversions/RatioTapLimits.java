@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.conversions;
 
-import com.powerdata.openpa.psse.BusIn;
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Limits;
 
@@ -217,13 +217,13 @@ class Cw2Wnd3ToFact implements CwWndToFact
 
 class CwCvt
 {
-	static Limits cw2(float rmi, float rma, BusIn bus) throws PsseModelException
+	static Limits cw2(float rmi, float rma, Bus bus) throws PsseModelException
 	{
 		float kv = bus.getBASKV();
 		return new Limits(rmi/kv, rma/kv);
 	}
 
-	static Limits cw3(float rmi, float rma, float nomv, BusIn bus) throws PsseModelException
+	static Limits cw3(float rmi, float rma, float nomv, Bus bus) throws PsseModelException
 	{
 		float cwratio = nomv / bus.getBASKV();
 		return new Limits(rmi/cwratio, rma/cwratio);

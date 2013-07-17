@@ -16,14 +16,14 @@ public class SwitchSubList extends SwitchList
 		_switches.commit();
 	}
 	@Override
-	public BusIn getBus1(int ndx) throws PsseModelException
+	public Bus getFromBus(int ndx) throws PsseModelException
 	{
-		return _switches.getBus1(_ndxs[ndx]);
+		return _switches.getFromBus(_ndxs[ndx]);
 	}
 	@Override
-	public BusIn getBus2(int ndx) throws PsseModelException
+	public Bus getToBus(int ndx) throws PsseModelException
 	{
-		return _switches.getBus2(_ndxs[ndx]);
+		return _switches.getToBus(_ndxs[ndx]);
 	}
 	@Override
 	public String getName(int ndx) throws PsseModelException

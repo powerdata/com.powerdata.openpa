@@ -1,25 +1,25 @@
 package com.powerdata.openpa.psse.conversions;
 
-import com.powerdata.openpa.psse.BusIn;
-import com.powerdata.openpa.psse.BusInList;
-import com.powerdata.openpa.psse.OwnershipInList;
-import com.powerdata.openpa.psse.PsseBaseInputList;
-import com.powerdata.openpa.psse.PsseInputModel;
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PsseBaseList;
+import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 
-public abstract class TransformerRawList extends PsseBaseInputList<TransformerRaw>
+public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 {
-	protected BusInList _busses;
+	protected BusList _busses;
 	
-	public TransformerRawList(PsseInputModel model) throws PsseModelException
+	public TransformerRawList(PsseModel model) throws PsseModelException
 	{
 		super(model);
 		_busses = model.getBuses();
 	}
 	
-	public BusIn getBus1(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
-	public BusIn getBus2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
-	public BusIn getBus3(int ndx) throws PsseModelException {return _busses.get(getK(ndx));}
+	public Bus getBus1(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
+	public Bus getBus2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
+	public Bus getBus3(int ndx) throws PsseModelException {return _busses.get(getK(ndx));}
 
 	
 
@@ -50,7 +50,7 @@ public abstract class TransformerRawList extends PsseBaseInputList<TransformerRa
 	/** Initial transformer status */
 	public int getSTAT(int ndx) throws PsseModelException {return 1;}
 	/** return Ownership as a list */
-	public abstract OwnershipInList getOwnership(int ndx) throws PsseModelException;
+	public abstract OwnershipList getOwnership(int ndx) throws PsseModelException;
 	
 	/* line 2 */
 	
