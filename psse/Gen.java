@@ -42,13 +42,13 @@ public class Gen extends BaseObject implements OneTermDev
 	public float getMinReacPwr() throws PsseModelException {return _list.getMinReacPwr(_ndx);}
 	/** machine complex impedance */
 	public Complex getMachZ() throws PsseModelException {return _list.getMachZ(_ndx);}
-	/** Step-up transformer impedance */
-	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
+//	/** Step-up transformer impedance */
+//	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
 	/** max active power (PT) p.u. */
 	public float getMaxActvPwr() throws PsseModelException {return _list.getMaxActvPwr(_ndx);}
 	/** min active power (PB) p.u. */
 	public float getMinActvPwr() throws PsseModelException {return _list.getMinActvPwr(_ndx);}
-
+	
 	/* Raw PSS/e methods */
 	
 	/** bus number or name */

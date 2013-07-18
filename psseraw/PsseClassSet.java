@@ -15,7 +15,7 @@ public abstract class PsseClassSet
 		
 		if (vmaj <= 29)
 		{
-			rv = new PsseClassSetVersion0();
+			rv = new PsseClassSetVersion29();
 		}
 		else if (vmaj <= MaxConfigVerMajor)
 		{

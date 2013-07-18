@@ -17,7 +17,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	GenList _generatorList;
 	BusList _buses;
 	LineList _branchList;
-	TransformerList _transformerList;
+//	TransformerList _transformerList;
 	
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -47,18 +47,18 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		if (_branchList == null) _branchList = new LineList(this);
 		return _branchList;
 	}
-	@Override
-	public TransformerList getTransformers() throws PsseModelException
-	{
-		if (_transformerList == null) _transformerList = new TransformerList(this);
-		return _transformerList;
-	}
+//	@Override
+//	public TransformerList getTransformers() throws PsseModelException
+//	{
+//		if (_transformerList == null) _transformerList = new TransformerList(this);
+//		return _transformerList;
+//	}
 	
 	static public void main(String args[])
 	{
 		try
 		{
-			PsseModel eq = new PsseModel("/tmp/caiso/");
+			PsseModel eq = new PsseModel("path=/tmp/frcc/");
 			for(Bus b : eq.getBuses())
 			{
 				System.out.println(b);
@@ -71,10 +71,10 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			{
 				System.out.println(b);
 			}
-			for(Transformer t : eq.getTransformers())
-			{
-				System.out.println(t);
-			}
+//			for(Transformer t : eq.getTransformers())
+//			{
+//				System.out.println(t);
+//			}
 		}
 		catch (Exception e)
 		{

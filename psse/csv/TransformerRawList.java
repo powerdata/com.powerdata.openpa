@@ -5,7 +5,7 @@ import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class TransformerList extends com.powerdata.openpa.psse.TransformerList
+public abstract class TransformerRawList extends com.powerdata.openpa.psse.conversions.TransformerRawList
 {
 	PsseModel _eq;
 	BusList _buses;
@@ -23,17 +23,17 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	float _vma1[], _vmi1[];
 	float _windv1[], _x1_2[];
 
-	public TransformerList(PsseModel eq) throws PsseModelException
+	public TransformerRawList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		try
 		{
 			_eq = eq;
 			_buses = _eq.getBuses();
-			SimpleCSV xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformers.csv");
-//			_size 		= xfr.getRowCount();
-//			_i			= xfr.get("I");
-//			_j			= xfr.get("J");
+			SimpleCSV xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformer.csv");
+			_size 		= xfr.getRowCount();
+			_i			= xfr.get("I");
+			_j			= xfr.get("J");
 //			_ckt		= LoadArray.String(xfr,"CKT",this,"getCKT");
 //			_cw			= LoadArray.Int(xfr,"CW",this,"getCW");
 //			_cz			= LoadArray.Int(xfr,"CZ",this,"getCZ");
@@ -70,10 +70,6 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 		}
 	}
 
-	@Override
-	public Bus getFromBus(int ndx) { return _buses.get(getI(ndx)); }
-	@Override
-	public Bus getToBus(int ndx) { return _buses.get(getJ(ndx)); }
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override

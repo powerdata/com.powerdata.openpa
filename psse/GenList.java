@@ -74,11 +74,6 @@ public abstract class GenList extends PsseBaseList<Gen>
 	{
 		return PAMath.rebaseZ100(new Complex(getZR(ndx), getZX(ndx)), getMBASE(ndx));
 	}
-	/** Step-up transformer impedance */
-	public Complex getTxZ(int ndx) throws PsseModelException
-	{
-		return PAMath.rebaseZ100(new Complex(getRT(ndx), getXT(ndx)), getMBASE(ndx));
-	}
 	/** max active power (PT) p.u. */
 	public float getMaxActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPT(ndx));}
 	/** min active power (PB) p.u. */
@@ -88,26 +83,46 @@ public abstract class GenList extends PsseBaseList<Gen>
 
 	/* raw methods */
 
+	/** bus number or name */
 	public abstract String getI(int ndx) throws PsseModelException;
+	/** Machine identifier */
 	public String getID(int ndx) throws PsseModelException {return "1";}
-	public float getPG(int ndx) throws PsseModelException {return 0F;}
-	public float getQG(int ndx) throws PsseModelException {return 0F;}
-	public float getQT(int ndx) throws PsseModelException {return 9999F;}
-	public float getQB(int ndx) throws PsseModelException  {return -9999F;}
-	public float getVS(int ndx) throws PsseModelException {return 1F;}
+	/** Generator active power output in MW */
+	public float getPG(int ndx) throws PsseModelException {return 0f;}
+	/** Generator reactive power output in MVAr */
+	public float getQG(int ndx) throws PsseModelException {return 0f;}
+	/** Maximum generator reactive power output (MVAr) */
+	public float getQT(int ndx) throws PsseModelException {return 9999f;}
+	/** Minimum generator reactive power output (MVAr) */
+	public float getQB(int ndx) throws PsseModelException  {return -9999f;}
+	/** Regulated voltage setpoint entered in p.u. */
+	public float getVS(int ndx) throws PsseModelException {return 1f;}
+	/** remote regulated bus number or name.  Set to 0 if regulating local bus */
 	public String getIREG(int ndx) throws PsseModelException {return getI(ndx);}
+	/** total MVA base of units represented in this machine */
 	public float getMBASE(int ndx) throws PsseModelException {return _model.getSBASE();}
-	public float getZR(int ndx) throws PsseModelException {return 0F;}
-	public float getZX(int ndx) throws PsseModelException {return 1F;}
-	public float getRT(int ndx) throws PsseModelException {return 0F;}
-	public float getXT(int ndx) throws PsseModelException {return 0F;}
-	public float getGTAP(int ndx) throws PsseModelException {return 1F;}
+	/** machine resistance p.u. on MBASE base */
+	public float getZR(int ndx) throws PsseModelException {return 0f;}
+	/** machine reactance p.u. on MBASE base */
+	public float getZX(int ndx) throws PsseModelException {return 1f;}
+	/** Step-up transformer resistance entered in p.u. on MBASE base */
+	public float getRT(int ndx) throws PsseModelException {return 0f;}
+	/** Step-up transformer reactance entered in p.u. on MBASE base */
+	public float getXT(int ndx) throws PsseModelException {return 0f;}
+	/** Step-up transformer off-nominal turns ratio entered in p.u. */
+	public float getGTAP(int ndx) throws PsseModelException {return 1f;}
+	/** Initial machine status (1 is in-service, 0 means out of service) */
 	public int getSTAT(int ndx) throws PsseModelException {return 1;}
-	public float getRMPCT(int ndx) throws PsseModelException {return 100F;}
-	public float getPT(int ndx) throws PsseModelException {return 9999F;}
-	public float getPB(int ndx) throws PsseModelException {return -9999F;}
+	/** Percent of the total Mvar required to hold the voltage at the bus controlled by this
+    bus "I" that are to be contributed by the generation at bus "I" */
+	public float getRMPCT(int ndx) throws PsseModelException {return 100f;}
+	/** max active power in MW */
+	public float getPT(int ndx) throws PsseModelException {return 9999f;}
+	/** min active power in MW */
+	public float getPB(int ndx) throws PsseModelException {return -9999f;}
 
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}//TODO: implement
+
 	
 	
 

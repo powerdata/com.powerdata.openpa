@@ -1,15 +1,11 @@
 package com.powerdata.openpa.psseraw;
 
 /**
- * We have some documentation from some point before version 30. It has been
- * used to import Version 29 files, but nothing else earlier was tested. The raw
- * file documentation we have does not specify the version.
- * 
  * @author chris@powerdata.com
  * 
  */
 
-public class PsseClassSetVersion0 extends PsseClassSet
+public class PsseClassSetVersion29 extends PsseClassSet
 {
 	public static final PsseClass		Bus						= new PsseClass("Bus");
 	public static final PsseClass		Load					= new PsseClass("Load");
@@ -449,7 +445,7 @@ public class PsseClassSetVersion0 extends PsseClassSet
 		Zone, InterAreaTransfer, Owner, FACTSDevice
 	};
 	
-	private static final int VersionMajor = 0;
+	private static final int VersionMajor = 29;
 	
 	@Override
 	public PsseClass[] getPsseClasses() {return ClassList.clone();}

@@ -36,21 +36,21 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 		try
 		{
 			_eq 	= eq;
-			String dbfile = _eq.getDir().getPath()+"/Buses.csv";
+			String dbfile = _eq.getDir().getPath()+"/Bus.csv";
 			SimpleCSV buses = new SimpleCSV(dbfile);
 			_size	= buses.getRowCount();
 			_i		= buses.getInts("I");
 			_ids	= buses.get("I");
-			_name	= LoadArray.String(buses,"NAME",this,"getDeftNAME");
-			_basekv	= LoadArray.Float(buses,"BASKV",this,"getDeftBASKV");
-			_ide	= LoadArray.Int(buses,"IDE",this,"getDeftIDE");
-			_area	= LoadArray.Int(buses,"AREA",this,"getDeftAREA");
-			_zone	= LoadArray.Int(buses,"ZONE",this,"getDeftZONE");
-			_owner	= LoadArray.Int(buses,"OWNER",this,"getDeftOWNER");
-			_vm		= LoadArray.Float(buses,"VM",this,"getDeftVM");
-			_va		= LoadArray.Float(buses,"VA",this,"getDeftVA");
-			_gl		= LoadArray.Float(buses,"GL",this,"getDeftGL");
-			_bl		= LoadArray.Float(buses,"BL",this,"getDeftBL");
+			_name	= LoadArray.String(buses,"NAME",this,"getNAME");
+			_basekv	= LoadArray.Float(buses,"BASKV",this,"getBASKV");
+			_ide	= LoadArray.Int(buses,"IDE",this,"getIDE");
+			_area	= LoadArray.Int(buses,"AREA",this,"getAREA");
+			_zone	= LoadArray.Int(buses,"ZONE",this,"getZONE");
+			_owner	= LoadArray.Int(buses,"OWNER",this,"getOWNER");
+			_vm		= LoadArray.Float(buses,"VM",this,"getVM");
+			_va		= LoadArray.Float(buses,"VA",this,"getVA");
+			_gl		= LoadArray.Float(buses,"GL",this,"getGL");
+			_bl		= LoadArray.Float(buses,"BL",this,"getBL");
 
 			reindex();
 			

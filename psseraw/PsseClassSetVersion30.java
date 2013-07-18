@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psseraw;
 
-public class PsseClassSetVersion30 extends PsseClassSetVersion0
+public class PsseClassSetVersion30 extends PsseClassSetVersion29
 {
 	private static final int		VersionMajor	= 30;
 	public static final PsseClass	Transformer30	= new PsseTransformerClass();

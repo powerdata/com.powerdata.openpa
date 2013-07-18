@@ -23,23 +23,23 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 		{
 			_eq = eq;
 			_buses = _eq.getBuses();
-			SimpleCSV branches = new SimpleCSV(_eq.getDir().getPath()+"/Branches.csv");
+			SimpleCSV branches = new SimpleCSV(_eq.getDir().getPath()+"/NontransformerBranch.csv");
 			_size	= branches.getRowCount();
 			_i		= branches.get("I");
 			_j		= branches.get("J");
-			_ckt	= LoadArray.String(branches,"CKT",this,"getDeftCKT");
-			_r		= branches.getFloats("R");
+			_ckt	= LoadArray.String(branches,"CKT",this,"getCKT");
+			_r		= LoadArray.Float(branches,"R",this,"getR");
 			_x		= branches.getFloats("X");
-			_b		= LoadArray.Float(branches,"B",this,"getDeftB");
-			_ratea	= LoadArray.Float(branches,"RATEA",this,"getDeftRATEA");
-			_rateb	= LoadArray.Float(branches,"RATEB",this,"getDeftRATEB");
-			_ratec	= LoadArray.Float(branches,"RATEC",this,"getDeftRATEC");
-			_gi		= LoadArray.Float(branches,"GI",this,"getDeftGI");
-			_bi		= LoadArray.Float(branches,"BI",this,"getDeftBI");
-			_gj		= LoadArray.Float(branches,"GJ",this,"getDeftGJ");
-			_bj		= LoadArray.Float(branches,"BJ",this,"getDeftBJ");
-			_st		= LoadArray.Int(branches,"ST",this,"getDeftST");
-			_len	= LoadArray.Float(branches,"LEN",this,"getDeftLEN");
+			_b		= LoadArray.Float(branches,"B",this,"getB");
+			_ratea	= LoadArray.Float(branches,"RATEA",this,"getRATEA");
+			_rateb	= LoadArray.Float(branches,"RATEB",this,"getRATEB");
+			_ratec	= LoadArray.Float(branches,"RATEC",this,"getRATEC");
+			_gi		= LoadArray.Float(branches,"GI",this,"getGI");
+			_bi		= LoadArray.Float(branches,"BI",this,"getBI");
+			_gj		= LoadArray.Float(branches,"GJ",this,"getGJ");
+			_bj		= LoadArray.Float(branches,"BJ",this,"getBJ");
+			_st		= LoadArray.Int(branches,"ST",this,"getST");
+			_len	= LoadArray.Float(branches,"LEN",this,"getLEN");
 			reindex();
 		}
 		catch(Exception e)
