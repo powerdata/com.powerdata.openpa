@@ -27,6 +27,6 @@ public abstract class BaseObject
 		} catch (Exception e) {return "err";}
 	}
 	
-	public String getDebugName() throws PsseModelException {return toString();}
+	public String getDebugName() throws PsseModelException {return getObjectID();}
 
 }

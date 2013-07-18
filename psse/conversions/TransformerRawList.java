@@ -17,6 +17,14 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		_busses = model.getBuses();
 	}
 	
+	/** Get a Bus by it's index. */
+	@Override
+	public TransformerRaw get(int ndx) { return new TransformerRaw(ndx,this); }
+	/** Get a Bus by it's ID. */
+	@Override
+	public TransformerRaw get(String id) { return super.get(id); }
+
+	
 	public Bus getBus1(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
 	public Bus getBus2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
 	public Bus getBus3(int ndx) throws PsseModelException {return _busses.get(getK(ndx));}
@@ -50,7 +58,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	/** Initial transformer status */
 	public int getSTAT(int ndx) throws PsseModelException {return 1;}
 	/** return Ownership as a list */
-	public abstract OwnershipList getOwnership(int ndx) throws PsseModelException;
+	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}
 	
 	/* line 2 */
 	

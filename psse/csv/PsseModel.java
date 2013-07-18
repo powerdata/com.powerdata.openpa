@@ -6,7 +6,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.conversions.TransformerRaw;
 import com.powerdata.openpa.tools.QueryString;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
@@ -17,7 +17,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	GenList _generatorList;
 	BusList _buses;
 	LineList _branchList;
-//	TransformerList _transformerList;
+	TransformerRawList _rawtxList;
 	
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -53,32 +53,30 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 //		if (_transformerList == null) _transformerList = new TransformerList(this);
 //		return _transformerList;
 //	}
-	
-	static public void main(String args[])
+	public TransformerRawList getRawTransformers() throws PsseModelException
 	{
-		try
+		if (_rawtxList == null) _rawtxList = new TransformerRawList(this);
+		return _rawtxList;
+	}
+	
+	static public void main(String args[]) throws PsseModelException
+	{
+		PsseModel eq = new PsseModel("path=/tmp/frcc/");
+		for (Bus b : eq.getBuses())
 		{
-			PsseModel eq = new PsseModel("path=/tmp/frcc/");
-			for(Bus b : eq.getBuses())
-			{
-				System.out.println(b);
-			}
-			for(Gen g : eq.getGenerators())
-			{
-				System.out.println(g);
-			}
-			for(Line b : eq.getLines())
-			{
-				System.out.println(b);
-			}
-//			for(Transformer t : eq.getTransformers())
-//			{
-//				System.out.println(t);
-//			}
+			System.out.println(b);
 		}
-		catch (Exception e)
+		for (Gen g : eq.getGenerators())
 		{
-			System.out.println("ERROR: "+e);
+			System.out.println(g);
+		}
+		for (Line b : eq.getLines())
+		{
+			System.out.println(b);
+		}
+		for (TransformerRaw t : eq.getRawTransformers())
+		{
+			System.out.println(t);
 		}
 	}
 }

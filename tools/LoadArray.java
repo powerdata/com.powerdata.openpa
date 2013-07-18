@@ -11,7 +11,7 @@ public class LoadArray
 		int size = csv.getRowCount();
 		int array[] = new int[size];
 
-		Method getDef = def.getClass().getSuperclass().getMethod(fn, int.class);
+		Method getDef = def.getClass().getMethod(fn, int.class);
 		String vals[] = csv.get(prop);
 		// if no vals were provided use all defaults
 		if (vals == null)
@@ -38,7 +38,7 @@ public class LoadArray
 		int size = csv.getRowCount();
 		float array[] = new float[size];
 
-		Method getDef = def.getClass().getSuperclass().getMethod(fn, int.class);
+		Method getDef = def.getClass().getMethod(fn, int.class);
 		String vals[] = csv.get(prop);
 
 		// if no vals were provided use all defaults
@@ -66,7 +66,9 @@ public class LoadArray
 		int size = csv.getRowCount();
 		String array[] = new String[size];
 
-		Method getDef = def.getClass().getSuperclass().getMethod(fn, int.class);
+
+		
+		Method getDef = def.getClass().getMethod(fn, int.class);
 		String vals[] = csv.get(prop);
 		
 		// if no vals were provided use all defaults
