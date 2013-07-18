@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -60,8 +58,6 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 		}
 	}
 	@Override
-	public Bus getBus(int ndx) { return _buses.get(_i[ndx]); }
-	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
 	public String getID(int ndx) { return _id[ndx]; }
@@ -98,9 +94,26 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	@Override
 	public float getPB(int ndx) { return _pb[ndx]; }
 	@Override
-	public OwnershipList getOwnership(int ndx) { return null; }
-	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
 	@Override
 	public int size() { return _size; }
+	
+	public String getDeftID(int ndx) throws PsseModelException {return super.getID(ndx);}
+	public float getDeftPG(int ndx) throws PsseModelException {return super.getPG(ndx);}
+	public float getDeftQG(int ndx) throws PsseModelException {return super.getQG(ndx);}
+	public float getDeftQT(int ndx) throws PsseModelException {return super.getQT(ndx);}
+	public float getDeftQB(int ndx) throws PsseModelException {return super.getQB(ndx);}
+	public float getDeftVS(int ndx) throws PsseModelException {return super.getVS(ndx);}
+	public String getDeftIREG(int ndx) throws PsseModelException {return super.getIREG(ndx);}
+	public float getDeftMBASE(int ndx) throws PsseModelException {return super.getMBASE(ndx);}
+	public float getDeftZR(int ndx) throws PsseModelException {return super.getZR(ndx);}
+	public float getDeftZX(int ndx) throws PsseModelException {return super.getZX(ndx);}
+	public float getDeftRT(int ndx) throws PsseModelException {return super.getRT(ndx);}
+	public float getDeftXT(int ndx) throws PsseModelException {return super.getXT(ndx);}
+	public float getDeftGTAP(int ndx) throws PsseModelException {return super.getGTAP(ndx);}
+	public int getDeftSTAT(int ndx) throws PsseModelException {return super.getSTAT(ndx);}
+	public float getDeftRMPCT(int ndx) throws PsseModelException {return super.getRMPCT(ndx);}
+	public float getDeftPT(int ndx) throws PsseModelException {return super.getPT(ndx);}
+	public float getDeftPB(int ndx) throws PsseModelException {return super.getPB(ndx);}
+
 }

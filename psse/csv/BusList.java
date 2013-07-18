@@ -41,16 +41,16 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 			_size	= buses.getRowCount();
 			_i		= buses.getInts("I");
 			_ids	= buses.get("I");
-			_name	= LoadArray.String(buses,"NAME",this,"getNAME");
-			_basekv	= LoadArray.Float(buses,"BASKV",this,"getBASKV");
-			_ide	= LoadArray.Int(buses,"IDE",this,"getIDE");
-			_area	= LoadArray.Int(buses,"AREA",this,"getAREA");
-			_zone	= LoadArray.Int(buses,"ZONE",this,"getZONE");
-			_owner	= LoadArray.Int(buses,"OWNER",this,"getOWNER");
-			_vm		= LoadArray.Float(buses,"VM",this,"getVM");
-			_va		= LoadArray.Float(buses,"VA",this,"getVA");
-			_gl		= LoadArray.Float(buses,"GL",this,"getGL");
-			_bl		= LoadArray.Float(buses,"BL",this,"getBL");
+			_name	= LoadArray.String(buses,"NAME",this,"getDeftNAME");
+			_basekv	= LoadArray.Float(buses,"BASKV",this,"getDeftBASKV");
+			_ide	= LoadArray.Int(buses,"IDE",this,"getDeftIDE");
+			_area	= LoadArray.Int(buses,"AREA",this,"getDeftAREA");
+			_zone	= LoadArray.Int(buses,"ZONE",this,"getDeftZONE");
+			_owner	= LoadArray.Int(buses,"OWNER",this,"getDeftOWNER");
+			_vm		= LoadArray.Float(buses,"VM",this,"getDeftVM");
+			_va		= LoadArray.Float(buses,"VA",this,"getDeftVA");
+			_gl		= LoadArray.Float(buses,"GL",this,"getDeftGL");
+			_bl		= LoadArray.Float(buses,"BL",this,"getDeftBL");
 
 			reindex();
 			
@@ -88,6 +88,17 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 	public int getOWNER(int ndx) { return _owner[ndx]; }
 	@Override
 	public String getObjectID(int ndx) { return _ids[ndx];	}
-	@Override
+	
+	public String getDeftNAME(int ndx) throws PsseModelException {return super.getNAME(ndx);}
+	public float getDeftBASKV(int ndx) throws PsseModelException {return super.getBASKV(ndx);}
+	public int getDeftIDE(int ndx) throws PsseModelException {return super.getIDE(ndx);}
+	public float getDeftGL(int ndx) throws PsseModelException {return super.getGL(ndx);}
+	public float getDeftBL(int ndx) throws PsseModelException {return super.getBL(ndx);}
+	public int getDeftAREA(int ndx) throws PsseModelException {return super.getAREA(ndx);}
+	public int getDeftZONE(int ndx) throws PsseModelException {return super.getZONE(ndx);}
+	public float getDeftVM(int ndx) throws PsseModelException {return super.getVM(ndx);}
+	public float getDeftVA(int ndx) throws PsseModelException {return super.getVA(ndx);}
+	public int getDeftOWNER(int ndx) throws PsseModelException {return super.getOWNER(ndx);}
+	
 	public int size() { return _size; }
 }

@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse.csv;
 
-import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -79,9 +78,21 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	@Override
 	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
-	public OwnershipList getOwnership(int ndx) { return null; }
-	@Override
 	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override
 	public int size() { return _size; }
+	
+	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}
+	public float getDeftR(int ndx) throws PsseModelException {return super.getR(ndx);}
+	public float getDeftB(int ndx) throws PsseModelException {return super.getB(ndx);}
+	public float getDeftRATEA(int ndx) throws PsseModelException {return super.getRATEA(ndx);}
+	public float getDeftRATEB(int ndx) throws PsseModelException {return super.getRATEB(ndx);}
+	public float getDeftRATEC(int ndx) throws PsseModelException {return super.getRATEC(ndx);}
+	public float getDeftGI(int ndx) throws PsseModelException {return super.getGI(ndx);}
+	public float getDeftBI(int ndx) throws PsseModelException {return super.getBI(ndx);}
+	public float getDeftGJ(int ndx) throws PsseModelException {return super.getGJ(ndx);}
+	public float getDeftBJ(int ndx) throws PsseModelException {return super.getBJ(ndx);}
+	public int getDeftST(int ndx) throws PsseModelException {return super.getST(ndx);}
+	public float getDeftLEN(int ndx) throws PsseModelException {return super.getLEN(ndx);}
+
 }
