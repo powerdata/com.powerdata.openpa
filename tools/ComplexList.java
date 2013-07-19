@@ -13,6 +13,9 @@ public class ComplexList extends ComplexListBase<Complex>
 {
 	public float[] re() {return _v1;}
 	public float[] im() {return _v2;}
+	
+	public float re(int ndx) {return _v1[ndx];}
+	public float im(int ndx) {return _v2[ndx];}
 
 	public ComplexList() {super();}
 	

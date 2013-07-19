@@ -26,8 +26,8 @@ public class TransformerPrep
 	public int size() {return xf.size();}
 	public int[] getXfRaw() {return makeIntArray(xf);}
 	public int[] getWndx() {return makeIntArray(wndx);}
-	public int[] getBus1() {return makeIntArray(bus1);}
-	public int[] getBus2() {return makeIntArray(bus2);}
+	public int[] getBusI() {return makeIntArray(bus1);}
+	public int[] getBusJ() {return makeIntArray(bus2);}
 	public ComplexList getZ() {return new ComplexList(zr, zx);}
 	
 	int[] makeIntArray(ArrayList<Integer> list)

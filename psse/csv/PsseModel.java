@@ -6,6 +6,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.conversions.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
@@ -76,7 +77,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		TransformerRawList rlist = new TransformerRawList(this);
 		TransformerPrep psprep = new TransformerPrep(),
 				xfprep = new TransformerPrep();
-		ResolvePrep rp = new ResolvePrep(psprep, xfprep);
+		ResolvePrep rp = new ResolvePrep(xfprep, psprep);
 		
 		
 		for (TransformerRaw xf : rlist)
@@ -88,16 +89,16 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			
 			if (k.equals("0"))
 			{
-				rp.getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
+				rp.get(xf.getCtrlMode1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
 			}
 			else
 			{
 				int bus3 = xf.getBusK().getIndex();
 				int newstar = starnode++;
 				StarNetwork z = zt.convert3W(xf).star();
-				rp.getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
-				rp.getXfList(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
-				rp.getXfList(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
+				rp.get(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
+				rp.get(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
+				rp.get(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
 			}
 		}
 		_xfrList = new TransformerList(this, rlist, xfprep);
@@ -121,10 +122,10 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println(b);
 		}
-//		for (TransformerRaw t : eq.getRawTransformers())
-//		{
-//			System.out.println(t);
-//		}
+		for (Transformer t : eq.getTransformers())
+		{
+			System.out.println(t);
+		}
 	}
 }
 
@@ -138,7 +139,7 @@ class ResolvePrep
 		this.ps = ps;
 	}
 
-	TransformerPrep getXfList(TransformerCtrlMode mode)
+	TransformerPrep get(TransformerCtrlMode mode)
 	{
 		return (mode == TransformerCtrlMode.ActivePowerFlow) ? ps : xf;
 	}

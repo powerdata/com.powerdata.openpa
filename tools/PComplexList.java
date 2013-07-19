@@ -1,6 +1,7 @@
 package com.powerdata.openpa.tools;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 
@@ -11,8 +12,11 @@ import java.util.Collection;
  */
 public class PComplexList extends ComplexListBase<PComplex>
 {
-	public float[] re() {return _v1;}
-	public float[] im() {return _v2;}
+	public float[] r() {return _v1;}
+	public float[] theta() {return _v2;}
+	public float r(int ndx) {return _v1[ndx];}
+	public float theta(int ndx) {return _v2[ndx];}
+
 
 	public PComplexList() {super();}
 	
@@ -30,6 +34,18 @@ public class PComplexList extends ComplexListBase<PComplex>
 		}
 	}
 
+	public PComplexList(List<Float> r, List<Float> theta)
+	{
+		int n = r.size();
+		_v1 = new float[n];
+		_v2 = new float[n];
+		_size = n;
+		for(int i=0; i < n; ++i)
+		{
+			_v1[i] = r.get(i);
+			_v2[i] = theta.get(i);
+		}
+	}
 	@Override
 	public void add(int index, PComplex element)
 	{
