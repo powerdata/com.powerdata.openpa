@@ -30,7 +30,7 @@ public abstract class ComplexListBase<T> extends AbstractList<T>
 		int ccap = _v1.length;
 		if (ccap >= descap)
 		{
-			int ncap = (ccap < 10000) ? ccap*2 : (int)(ccap * 1.5F);
+			int ncap = (ccap < 10000) ? ccap*2 : (int)(ccap * 1.25F);
 			_v1 = Arrays.copyOf(_v1, ncap);
 			_v2 = Arrays.copyOf(_v2, ncap);
 		}

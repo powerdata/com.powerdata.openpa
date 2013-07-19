@@ -1,5 +1,11 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -133,13 +139,14 @@ public class TransformerRawList extends com.powerdata.openpa.psse.conversions.Tr
 			_cx3		= LoadArray.Float(xfr,"CX3",this,"getDeftCX3");
 			
 			reindex();
+			
 		}
 		catch(Exception e)
 		{
 			throw new PsseModelException(getClass().getName()+": "+e, e);
 		}
 	}
-
+	
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
@@ -373,5 +380,99 @@ public class TransformerRawList extends com.powerdata.openpa.psse.conversions.Tr
 	}
 	@Override
 	public int size() { return _size; }
+	
+	static final protected List<Map<String, Method>>	_Methods;
+	static
+	{
+		_Methods = new ArrayList<Map<String, Method>>(4);
+		try
+		{
+			Map<String, Method> zm = new HashMap<>(9);
+			mapZMethod(zm, "R", 1, 2);
+			mapZMethod(zm, "X", 1, 2);
+			mapZMethod(zm, "SBASE", 1, 2);
+			mapZMethod(zm, "R", 2, 3);
+			mapZMethod(zm, "X", 2, 3);
+			mapZMethod(zm, "SBASE", 2, 3);
+			mapZMethod(zm, "R", 3, 1);
+			mapZMethod(zm, "X", 3, 1);
+			mapZMethod(zm, "SBASE", 3, 1);
+
+			for (int i = 0; i < 3; ++i)
+			{
+				Map<String, Method> m = new HashMap<>(16);
+				mapMethod(m, "WINDV", i);
+				mapMethod(m, "NOMV", i);
+				mapMethod(m, "ANG", i);
+				mapMethod(m, "RATA", i);
+				mapMethod(m, "RATB", i);
+				mapMethod(m, "RATC", i);
+				mapMethod(m, "COD", i);
+				mapMethod(m, "CONT", i);
+				mapMethod(m, "RMA", i);
+				mapMethod(m, "RMI", i);
+				mapMethod(m, "VMA", i);
+				mapMethod(m, "VMI", i);
+				mapMethod(m, "NTP", i);
+				mapMethod(m, "TAB", i);
+				mapMethod(m, "CR", i);
+				mapMethod(m, "CX", i);
+				_Methods.add(m);
+			}
+		} catch (NoSuchMethodException | SecurityException e)
+		{
+			System.err.println(e);
+			e.printStackTrace();
+		}
+
+	}
+
+	static void mapMethod(Map<String, Method> map, String methprefix, int i)
+			throws NoSuchMethodException, SecurityException
+	{
+		map.put(methprefix,
+				TransformerRawList.class.getMethod(methprefix + i, int.class));
+	}
+
+	static void mapZMethod(Map<String, Method> map, String field, int i,
+			int j) throws NoSuchMethodException, SecurityException
+	{
+		String nm = zkey(field, i, j);
+		map.put(nm, TransformerRawList.class.getMethod(nm, int.class));
+	}
+
+	static String zkey(String name, int fwnd, int twnd)
+	{
+		StringBuilder sb = new StringBuilder(name);
+		sb.append(fwnd);
+		sb.append('_');
+		sb.append(twnd);
+		return sb.toString();
+	}
+	
+	public float getZval(String name, int fwnd, int townd, int ndx)
+			throws IllegalArgumentException, ReflectiveOperationException
+	{
+		return (float) _Methods.get(0).get(zkey(name, fwnd, townd))
+				.invoke(this, ndx);
+	}
+	
+	public String getStringVal(String name, int wnd, int ndx)
+			throws IllegalArgumentException, ReflectiveOperationException
+	{
+		return (String) _Methods.get(wnd).get(name).invoke(this, ndx);
+	}
+
+	public int getIntVal(String name, int wnd, int ndx)
+			throws IllegalArgumentException, ReflectiveOperationException
+	{
+		return (int) _Methods.get(wnd).get(name).invoke(this, ndx);
+	}
+
+	public float getFloatVal(String name, int wnd, int ndx)
+			throws IllegalArgumentException, ReflectiveOperationException
+	{
+		return (float) _Methods.get(wnd).get(name).invoke(this, ndx);
+	}
 
 }

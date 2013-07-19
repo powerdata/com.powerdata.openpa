@@ -6,9 +6,10 @@ public enum TransformerCtrlMode
 	ActivePowerFlow, DCLine;
 	private static final TransformerCtrlMode[] _Codes = new TransformerCtrlMode[]
 			{None, Voltage, ReactivePowerFlow, ActivePowerFlow, DCLine};
-	public static TransformerCtrlMode fromCode(int code)
+	public static TransformerCtrlMode fromCode(int cod)
 	{
-		if (code < 0 || code >= _Codes.length)
+		int code = Math.abs(cod);
+		if (code >= _Codes.length)
 			return Unknown;
 		else
 			return _Codes[code];

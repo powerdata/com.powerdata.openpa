@@ -1,10 +1,12 @@
 package com.powerdata.openpa.psse.conversions;
 
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.tools.BaseObject;
 
-public class TransformerRaw extends BaseObject
+public class TransformerRaw extends BaseObject 
 {
 	protected TransformerRawList _list;
 	
@@ -17,6 +19,14 @@ public class TransformerRaw extends BaseObject
 	@Override
 	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
+	public Bus getBusI() throws PsseModelException {return _list.getBusI(_ndx);}
+	public Bus getBusJ() throws PsseModelException {return _list.getBusJ(_ndx);}
+	public Bus getBusK() throws PsseModelException {return _list.getBusK(_ndx);}
+
+	public TransformerCtrlMode getCtrlMode1()  throws PsseModelException {return _list.getCtrlMode1(_ndx);}
+	public TransformerCtrlMode getCtrlMode2()  throws PsseModelException {return _list.getCtrlMode2(_ndx);}
+	public TransformerCtrlMode getCtrlMode3()  throws PsseModelException {return _list.getCtrlMode3(_ndx);}
+	
 	/** Get number or name of bus connected to first winding */
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** Get number or name of bus connected to second winding */
@@ -173,4 +183,5 @@ public class TransformerRaw extends BaseObject
 	public float getCR3() throws PsseModelException {return _list.getCR3(_ndx);}
 	/** Load drop compensation reactance */
 	public float getCX3() throws PsseModelException {return _list.getCX3(_ndx);}
+
 }

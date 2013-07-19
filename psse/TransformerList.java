@@ -4,7 +4,7 @@ import com.powerdata.openpa.tools.Complex;
 
 public abstract class TransformerList extends PsseBaseList<Transformer>
 {
-	protected BusList _busses;
+	protected BusList _buses;
 	
 	public static final TransformerList Empty = new TransformerList()
 	{
@@ -24,7 +24,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public TransformerList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
-		_busses = model.getBuses();
+		_buses = model.getBuses();
 	}
 	
 	/** Get a Transformer by it's index. */
@@ -36,8 +36,8 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	
 	/* Convenience methods */
 	
-	public Bus getFromBus(int ndx) throws PsseModelException {return _busses.get(getI(ndx));}
-	public Bus getToBus(int ndx) throws PsseModelException {return _busses.get(getJ(ndx));}
+	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
 	public Complex getZ(int _ndx) throws PsseModelException {return Complex.Zero;} //TODO: Implements
 
 	/* Raw methods */
@@ -71,9 +71,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	/** get winding 1-2 base MVA */
 	public float getSBASE1_2(int ndx) throws PsseModelException {return _model.getSBASE();}
 	/** winding 1 off-nominal turns ratio */ 
-	public float getWINDV1(int ndx) throws PsseModelException {return (getCW(ndx)==2)?_busses.get(getI(ndx)).getBASKV():1f;}
+	public float getWINDV1(int ndx) throws PsseModelException {return (getCW(ndx)==2)?_buses.get(getI(ndx)).getBASKV():1f;}
 	/** nominal winding 1 voltage in kV */
-	public float getNOMV1(int ndx) throws PsseModelException {return _busses.get(getI(ndx)).getBASKV();}
+	public float getNOMV1(int ndx) throws PsseModelException {return _buses.get(getI(ndx)).getBASKV();}
 	/** winding 1 phase shift (DEG) */
 	public float getANG1(int ndx) throws PsseModelException {return 0f;}
 	/** winding 1 rating A in MVA */
@@ -91,7 +91,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	{
 		if (Math.abs(getCOD1(ndx)) < 3 && getCW(ndx) == 2)
 		{
-			return 1.1f * _busses.get(getI(ndx)).getBASKV();
+			return 1.1f * _buses.get(getI(ndx)).getBASKV();
 		}
 		return 1.1f;
 	}
@@ -100,7 +100,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	{
 		if (Math.abs(getCOD1(ndx)) < 3 && getCW(ndx) == 2)
 		{
-			return 0.9f * _busses.get(getI(ndx)).getBASKV();
+			return 0.9f * _buses.get(getI(ndx)).getBASKV();
 		}
 		return 0.9f;
 	}
@@ -129,9 +129,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	}
 	
 	/** Winding 2 off-nominal turns ratio */
-	public float getWINDV2(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_busses.get(getJ(ndx)).getBASKV():1f);}
+	public float getWINDV2(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_buses.get(getJ(ndx)).getBASKV():1f);}
 	/** Winding 2 nominal voltage */
-	public float getNOMV2(int ndx) throws PsseModelException {return _busses.get(getJ(ndx)).getBASKV();}
+	public float getNOMV2(int ndx) throws PsseModelException {return _buses.get(getJ(ndx)).getBASKV();}
 	/** Allow control mode to be specified on winding 2 in order to understand tap limits. */
 	public int getCOD2(int ndx) throws PsseModelException {return 0;}
 	/**
@@ -141,7 +141,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	{
 		if (Math.abs(getCOD2(ndx)) < 3 && getCW(ndx) == 2)
 		{
-			return 1.1f * _busses.get(getJ(ndx)).getBASKV();
+			return 1.1f * _buses.get(getJ(ndx)).getBASKV();
 		}
 		return 1.1f;
 	}
@@ -153,7 +153,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	{
 		if (Math.abs(getCOD2(ndx)) < 3 && getCW(ndx) == 2)
 		{
-			return 0.9f * _busses.get(getJ(ndx)).getBASKV();
+			return 0.9f * _buses.get(getJ(ndx)).getBASKV();
 		}
 		return 0.9f;
 	}

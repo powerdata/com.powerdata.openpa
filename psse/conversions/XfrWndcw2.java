@@ -9,21 +9,21 @@ public class XfrWndcw2 extends XfrWndTool
 	public float getRatio1(TransformerRawList list, int ndx)
 			throws PsseModelException
 	{
-		return list.getWINDV1(ndx) / list.getBus1(ndx).getBASKV();
+		return list.getWINDV1(ndx) / list.getBusI(ndx).getBASKV();
 	}
 
 	@Override
 	public float getRatio2(TransformerRawList list, int ndx)
 			throws PsseModelException
 	{
-		return list.getWINDV2(ndx) / list.getBus2(ndx).getBASKV();
+		return list.getWINDV2(ndx) / list.getBusJ(ndx).getBASKV();
 	}
 
 	@Override
 	public float getRatio3(TransformerRawList list, int ndx)
 			throws PsseModelException
 	{
-		return list.getWINDV3(ndx) / list.getBus3(ndx).getBASKV();
+		return list.getWINDV3(ndx) / list.getBusK(ndx).getBASKV();
 	}
 
 }

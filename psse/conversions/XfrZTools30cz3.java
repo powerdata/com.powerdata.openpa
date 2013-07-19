@@ -8,18 +8,18 @@ public class XfrZTools30cz3 implements XfrZTools
 {
 
 	@Override
-	public Complex convert2W(TransformerRawList list, int ndx) throws PsseModelException
+	public Complex convert2W(TransformerRaw xf) throws PsseModelException
 	{
-		return cvt(list.getR1_2(ndx), list.getX1_2(ndx), list.getSBASE1_2(ndx));
+		return cvt(xf.getR1_2(), xf.getX1_2(), xf.getSBASE1_2());
 	}
 
 	@Override
-	public DeltaNetwork convert3W(TransformerRawList list, int ndx) throws PsseModelException
+	public DeltaNetwork convert3W(TransformerRaw xf) throws PsseModelException
 	{
 		return new DeltaNetwork(
-			cvt(list.getR1_2(ndx), list.getX1_2(ndx), list.getSBASE1_2(ndx)),
-			cvt(list.getR2_3(ndx), list.getX2_3(ndx), list.getSBASE2_3(ndx)),
-			cvt(list.getR3_1(ndx), list.getX3_1(ndx), list.getSBASE3_1(ndx)));
+			cvt(xf.getR1_2(), xf.getX1_2(), xf.getSBASE1_2()),
+			cvt(xf.getR2_3(), xf.getX2_3(), xf.getSBASE2_3()),
+			cvt(xf.getR3_1(), xf.getX3_1(), xf.getSBASE3_1()));
 	}
 
 	protected Complex cvt(float r, float x, float sbase)

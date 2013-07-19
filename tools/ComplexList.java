@@ -1,6 +1,7 @@
 package com.powerdata.openpa.tools;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Support Complex numbers in cartesian form.
@@ -29,6 +30,19 @@ public class ComplexList extends ComplexListBase<Complex>
 		}
 	}
 
+	public ComplexList(List<Float> re, List<Float> im)
+	{
+		int n = re.size();
+		_v1 = new float[n];
+		_v2 = new float[n];
+		_size = n;
+		for(int i=0; i < n; ++i)
+		{
+			_v1[i] = re.get(i);
+			_v2[i] = im.get(i);
+		}
+	}
+	
 	@Override
 	public void add(int index, Complex element)
 	{

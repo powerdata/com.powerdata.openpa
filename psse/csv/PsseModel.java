@@ -7,17 +7,22 @@ import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.conversions.TransformerRaw;
+import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
+import com.powerdata.openpa.psse.conversions.XfrZTools;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.tools.QueryString;
+import com.powerdata.openpa.tools.StarNetwork;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
 	
-	GenList _generatorList;
-	BusList _buses;
-	LineList _branchList;
-	TransformerRawList _rawtxList;
+	GenList				_generatorList;
+	BusList				_buses;
+	LineList			_branchList;
+	TransformerList		_xfrList;
+	PhaseShifterList	_psList;
 	
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -47,16 +52,57 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		if (_branchList == null) _branchList = new LineList(this);
 		return _branchList;
 	}
-//	@Override
-//	public TransformerList getTransformers() throws PsseModelException
-//	{
-//		if (_transformerList == null) _transformerList = new TransformerList(this);
-//		return _transformerList;
-//	}
-	public TransformerRawList getRawTransformers() throws PsseModelException
+	@Override
+	public TransformerList getTransformers() throws PsseModelException
 	{
-		if (_rawtxList == null) _rawtxList = new TransformerRawList(this);
-		return _rawtxList;
+		if (_xfrList == null) analyzeRawTransformers();
+		return _xfrList;
+	}
+	@Override
+	public PhaseShifterList getPhaseShifters() throws PsseModelException
+	{
+		if (_psList == null) analyzeRawTransformers();
+		return _psList;
+	}
+	
+	/** convert 3-winding to 2-winding and detect phase shifters */
+	protected void analyzeRawTransformers() throws PsseModelException
+	{
+		_xfrList = new TransformerList(this);
+		_psList = new PhaseShifterList(this);
+		BusList buses = getBuses();
+		int starnode = buses.size();
+
+		XfrZToolFactory ztf = XfrZToolFactory.Open(getPsseVersion());
+		
+		for (TransformerRaw xf : new TransformerRawList(this))
+		{
+			String k = xf.getK();
+			int bus1 = xf.getBusI().getIndex();
+			int bus2 = xf.getBusJ().getIndex();
+			XfrZTools zt = ztf.get(xf.getCZ());
+			if (k.equals("0"))
+			{
+				getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
+			}
+			else
+			{
+				int bus3 = xf.getBusK().getIndex();
+				int newstar = starnode++;
+				StarNetwork z = zt.convert3W(xf).star();
+				getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
+				getXfList(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
+				getXfList(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
+			}
+		}
+		_xfrList.completePrep();
+		_psList.completePrep();
+		buses.addStarNodes(starnode);
+	}
+
+	DerivedList getXfList(TransformerCtrlMode mode)
+	{
+		return (mode == TransformerCtrlMode.ActivePowerFlow) ? _psList : _xfrList;
 	}
 	
 	static public void main(String args[]) throws PsseModelException
@@ -74,9 +120,9 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			System.out.println(b);
 		}
-		for (TransformerRaw t : eq.getRawTransformers())
-		{
-			System.out.println(t);
-		}
+//		for (TransformerRaw t : eq.getRawTransformers())
+//		{
+//			System.out.println(t);
+//		}
 	}
 }

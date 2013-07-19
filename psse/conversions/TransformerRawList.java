@@ -6,6 +6,7 @@ import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseBaseList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
 
 public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 {
@@ -25,11 +26,10 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	public TransformerRaw get(String id) { return super.get(id); }
 
 	
-	public Bus getBus1(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
-	public Bus getBus2(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
-	public Bus getBus3(int ndx) throws PsseModelException {return _buses.get(getK(ndx));}
+	public Bus getBusI(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public Bus getBusJ(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
+	public Bus getBusK(int ndx) throws PsseModelException {return _buses.get(getK(ndx));}
 
-	
 
 	/* Line 1 */
 	
@@ -305,4 +305,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	/** Load drop compensation reactance */
 	public float getCX3(int ndx) throws PsseModelException {return 0f;}
 
+	public TransformerCtrlMode getCtrlMode1(int ndx) throws PsseModelException {return TransformerCtrlMode.fromCode(getCOD1(ndx));}
+	public TransformerCtrlMode getCtrlMode2(int ndx) throws PsseModelException {return TransformerCtrlMode.fromCode(getCOD2(ndx));}
+	public TransformerCtrlMode getCtrlMode3(int ndx) throws PsseModelException {return TransformerCtrlMode.fromCode(getCOD3(ndx));}
 }

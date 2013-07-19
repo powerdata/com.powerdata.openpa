@@ -101,4 +101,9 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 	public int getDeftOWNER(int ndx) throws PsseModelException {return super.getOWNER(ndx);}
 	
 	public int size() { return _size; }
+	public void addStarNodes(int starnode)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

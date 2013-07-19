@@ -9,19 +9,19 @@ public class XfrZTools30cz2 implements XfrZTools
 {
 
 	@Override
-	public Complex convert2W(TransformerRawList list, int ndx) throws PsseModelException
+	public Complex convert2W(TransformerRaw xf) throws PsseModelException
 	{
-		return PAMath.rebaseZ100(new Complex(list.getR1_2(ndx), list.getX1_2(ndx)),
-				list.getSBASE1_2(ndx));
+		return PAMath.rebaseZ100(new Complex(xf.getR1_2(), xf.getX1_2()),
+				xf.getSBASE1_2());
 	}
 
 	@Override
-	public DeltaNetwork convert3W(TransformerRawList list, int ndx) throws PsseModelException
+	public DeltaNetwork convert3W(TransformerRaw xf) throws PsseModelException
 	{
 		return new DeltaNetwork(
-			PAMath.rebaseZ100(new Complex(list.getR1_2(ndx), list.getX1_2(ndx)), list.getSBASE1_2(ndx)),
-			PAMath.rebaseZ100(new Complex(list.getR2_3(ndx), list.getX2_3(ndx)), list.getSBASE2_3(ndx)),
-			PAMath.rebaseZ100(new Complex(list.getR3_1(ndx), list.getX3_1(ndx)), list.getSBASE3_1(ndx)));
+			PAMath.rebaseZ100(new Complex(xf.getR1_2(), xf.getX1_2()), xf.getSBASE1_2()),
+			PAMath.rebaseZ100(new Complex(xf.getR2_3(), xf.getX2_3()), xf.getSBASE2_3()),
+			PAMath.rebaseZ100(new Complex(xf.getR3_1(), xf.getX3_1()), xf.getSBASE3_1()));
 	}
 
 }
