@@ -68,42 +68,43 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	/** convert 3-winding to 2-winding and detect phase shifters */
 	protected void analyzeRawTransformers() throws PsseModelException
 	{
-		_xfrList = new TransformerList(this);
-		_psList = new PhaseShifterList(this);
 		BusList buses = getBuses();
 		int starnode = buses.size();
 
 		XfrZToolFactory ztf = XfrZToolFactory.Open(getPsseVersion());
 		
-		for (TransformerRaw xf : new TransformerRawList(this))
+		TransformerRawList rlist = new TransformerRawList(this);
+		TransformerPrep psprep = new TransformerPrep(),
+				xfprep = new TransformerPrep();
+		ResolvePrep rp = new ResolvePrep(psprep, xfprep);
+		
+		
+		for (TransformerRaw xf : rlist)
 		{
 			String k = xf.getK();
 			int bus1 = xf.getBusI().getIndex();
 			int bus2 = xf.getBusJ().getIndex();
 			XfrZTools zt = ztf.get(xf.getCZ());
+			
 			if (k.equals("0"))
 			{
-				getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
+				rp.getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
 			}
 			else
 			{
 				int bus3 = xf.getBusK().getIndex();
 				int newstar = starnode++;
 				StarNetwork z = zt.convert3W(xf).star();
-				getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
-				getXfList(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
-				getXfList(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
+				rp.getXfList(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
+				rp.getXfList(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
+				rp.getXfList(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
 			}
 		}
-		_xfrList.completePrep();
-		_psList.completePrep();
+		_xfrList = new TransformerList(this, rlist, xfprep);
+		_psList = new PhaseShifterList(this, rlist, psprep);
 		buses.addStarNodes(starnode);
 	}
 
-	DerivedList getXfList(TransformerCtrlMode mode)
-	{
-		return (mode == TransformerCtrlMode.ActivePowerFlow) ? _psList : _xfrList;
-	}
 	
 	static public void main(String args[]) throws PsseModelException
 	{
@@ -125,4 +126,21 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 //			System.out.println(t);
 //		}
 	}
+}
+
+class ResolvePrep
+{
+	TransformerPrep xf, ps;
+	
+	public ResolvePrep(TransformerPrep xf, TransformerPrep ps)
+	{
+		this.xf = xf;
+		this.ps = ps;
+	}
+
+	TransformerPrep getXfList(TransformerCtrlMode mode)
+	{
+		return (mode == TransformerCtrlMode.ActivePowerFlow) ? ps : xf;
+	}
+
 }
