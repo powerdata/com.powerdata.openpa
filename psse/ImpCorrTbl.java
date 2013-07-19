@@ -8,10 +8,7 @@ public class ImpCorrTbl extends BaseObject
 	
 	public ImpCorrTbl(int ndx, ImpCorrTblList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 }

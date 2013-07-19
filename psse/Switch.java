@@ -8,15 +8,12 @@ public class Switch extends BaseObject implements TwoTermDev
 	
 	public Switch(int ndx, SwitchList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
 	@Override
 	public String getDebugName() throws PsseModelException {return "Switch "+getName();}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	@Override
 	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}

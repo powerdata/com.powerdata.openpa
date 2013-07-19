@@ -9,7 +9,7 @@ public class Load extends BaseObject implements OneTermDev
 	
 	public Load(int ndx, LoadList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
@@ -18,9 +18,6 @@ public class Load extends BaseObject implements OneTermDev
 	{
 		return String.format("%s %s", getBus().getNAME(), getID());
 	}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	/* convenience methods */
 	

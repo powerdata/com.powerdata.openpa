@@ -10,12 +10,9 @@ public class TransformerRaw extends BaseObject
 	
 	public TransformerRaw(int ndx, TransformerRawList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	/** Get number or name of bus connected to first winding */
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}

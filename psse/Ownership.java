@@ -8,12 +8,9 @@ public class Ownership extends BaseObject
 
 	public Ownership(int ndx, OwnershipList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	/* Convenience Methods */
 

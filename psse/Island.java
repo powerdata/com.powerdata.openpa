@@ -8,12 +8,10 @@ public class Island extends BaseObject
 	
 	public Island(int ndx, IslandList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	public BusList getBuses() throws PsseModelException {return _list.getBuses(_ndx);}
 	public GenList getGenerators() throws PsseModelException {return _list.getGenerators(_ndx);}
 	public LoadList getLoads() throws PsseModelException {return _list.getLoads(_ndx);}

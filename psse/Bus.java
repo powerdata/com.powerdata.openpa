@@ -10,15 +10,12 @@ public class Bus extends BaseObject
 	
 	public Bus(int ndx, BusList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
 	@Override
 	public String getDebugName() throws PsseModelException {return getNAME();}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 	
 	/* Groups */
 	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }

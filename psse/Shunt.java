@@ -9,12 +9,9 @@ public class Shunt extends BaseObject implements OneTermDev
 
 	public Shunt(int ndx, ShuntList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
 
 	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}

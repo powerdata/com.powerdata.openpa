@@ -9,13 +9,10 @@ public class PhaseShifter extends BaseObject implements ACBranch
 	
 	public PhaseShifter(int ndx, PhaseShifterList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* Convenience methods */
 
 	/** Winding 1 bus */ 

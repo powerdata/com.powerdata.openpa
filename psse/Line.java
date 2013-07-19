@@ -10,7 +10,7 @@ public class Line extends BaseObject implements ACBranch
 	
 	public Line(int ndx, LineList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
@@ -22,9 +22,6 @@ public class Line extends BaseObject implements ACBranch
 				getToBus().getNAME(), getCKT());
 	}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* Convenience methods */
 
 	/** From-side bus */
