@@ -103,7 +103,7 @@ public class PsseModel
 	{
 		return SwitchedShuntList.Empty;
 	}
-	public SwitchList getSwitches() throws PsseModelException {return null;}
+	public SwitchList getSwitches() throws PsseModelException {return SwitchList.Empty;}
 }	
 
 

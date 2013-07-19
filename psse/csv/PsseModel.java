@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Gen;
@@ -75,10 +76,19 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		XfrZToolFactory ztf = XfrZToolFactory.Open(getPsseVersion());
 		
 		TransformerRawList rlist = new TransformerRawList(this);
-		TransformerPrep psprep = new TransformerPrep(),
+		final TransformerPrep psprep = new TransformerPrep(),
 				xfprep = new TransformerPrep();
-		ResolvePrep rp = new ResolvePrep(xfprep, psprep);
 		
+		class ResolveXfrPrep
+		{
+			TransformerPrep get(TransformerCtrlMode mode)
+			{
+				return (mode == TransformerCtrlMode.ActivePowerFlow) ? psprep : xfprep;
+			}
+		}
+
+		ResolveXfrPrep rp = new ResolveXfrPrep();
+		ArrayList<Integer> ndx3w = new ArrayList<>();
 		
 		for (TransformerRaw xf : rlist)
 		{
@@ -95,6 +105,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			{
 				int bus3 = xf.getBusK().getIndex();
 				int newstar = starnode++;
+				ndx3w.add(xf.getIndex());
 				StarNetwork z = zt.convert3W(xf).star();
 				rp.get(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
 				rp.get(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
@@ -103,11 +114,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		}
 		_xfrList = new TransformerList(this, rlist, xfprep);
 		_psList = new PhaseShifterList(this, rlist, psprep);
-		buses.addStarNodes(starnode);
+		buses.addStarNodes(rlist, ndx3w);
 	}
 
 	
-	static public void main(String args[]) throws PsseModelException
+	static public void main(String args[]) throws Exception
 	{
 		PsseModel eq = new PsseModel("path=/tmp/frcc/");
 		for (Bus b : eq.getBuses())
@@ -127,21 +138,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			System.out.println(t);
 		}
 	}
-}
-
-class ResolvePrep
-{
-	TransformerPrep xf, ps;
 	
-	public ResolvePrep(TransformerPrep xf, TransformerPrep ps)
-	{
-		this.xf = xf;
-		this.ps = ps;
-	}
-
-	TransformerPrep get(TransformerCtrlMode mode)
-	{
-		return (mode == TransformerCtrlMode.ActivePowerFlow) ? ps : xf;
-	}
-
+	
 }
+

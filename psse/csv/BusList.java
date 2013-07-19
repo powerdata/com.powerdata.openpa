@@ -1,6 +1,10 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.conversions.TransformerRaw;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 /**
@@ -101,9 +105,62 @@ public class BusList extends com.powerdata.openpa.psse.BusList
 	public int getDeftOWNER(int ndx) throws PsseModelException {return super.getOWNER(ndx);}
 	
 	public int size() { return _size; }
-	public void addStarNodes(int starnode)
+
+	public void addStarNodes(TransformerRawList txraw, List<Integer> ndx3w)
+			throws PsseModelException
 	{
-		// TODO Auto-generated method stub
-		
+		int nxfr = ndx3w.size();
+		int newsz = _size + nxfr;
+
+		/* find the largest node number and generate new node numbers */
+		int maxndnum = -1;
+		for (int i = 0; i < _size; ++i)
+		{
+			int n = _i[i];
+			if (n > maxndnum) maxndnum = n;
+		}
+		_i = Arrays.copyOf(_i, newsz);
+		_ids = Arrays.copyOf(_ids, newsz);
+		for (int i = _size; i < newsz; ++i)
+		{
+			int newi = ++maxndnum; 
+			_i[i] = newi;
+			_ids[i] = String.valueOf(newi);
+		}
+
+		/* Get info from transformer */
+		_name = Arrays.copyOf(_name, newsz);
+		_area = Arrays.copyOf(_area, newsz);
+		_zone = Arrays.copyOf(_zone, newsz);
+		_owner = Arrays.copyOf(_owner, newsz);
+		_vm = Arrays.copyOf(_vm, newsz);
+		_va = Arrays.copyOf(_va, newsz);
+
+		for (int i = 0, bi = _size; i < nxfr; ++i, ++bi)
+		{
+			TransformerRaw t = txraw.get(ndx3w.get(i));
+			_name[bi] = t.getNAME();
+			int busindx = t.getBusI().getIndex();
+			_area[bi] = _area[busindx];
+			_zone[bi] = _zone[busindx];
+			_owner[bi] = _owner[busindx];
+			_vm[bi] = t.getVMSTAR();
+			_va[bi] = t.getANSTAR();
+		}
+
+		/* set all base kv to 1 KV */
+		_basekv = Arrays.copyOf(_basekv, newsz);
+		Arrays.fill(_basekv, _size, newsz, 1f);
+
+		/* set all bus type codes for load type */
+		_ide = Arrays.copyOf(_ide, newsz);
+		Arrays.fill(_ide, _size, newsz, 1);
+
+		/* size gl and bl correctly, but leave them at 0 */
+		_gl = Arrays.copyOf(_gl, newsz);
+		_bl = Arrays.copyOf(_bl, newsz);
+
+		_size = newsz;
+		reindex();
 	}
 }
