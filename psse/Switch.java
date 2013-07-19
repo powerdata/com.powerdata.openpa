@@ -22,4 +22,4 @@ public class Switch extends BaseObject implements TwoTermDev
 	public String getName() throws PsseModelException {return _list.getName(_ndx);}
 	public SwitchState getState() throws PsseModelException {return _list.getState(_ndx);}
 	public void setState(SwitchState state) throws PsseModelException { _list.setState(_ndx,state); }
-}
+	public boolean canOperateUnderLoad() throws PsseModelException {return _list.canOperateUnderLoad(_ndx); }}

@@ -27,7 +27,8 @@ public class Bus extends BaseObject
 	public PhaseShifterList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
 
 	/* Convenience methods */
-	
+	/** request that this node be islolated */
+	public SwitchList isolate() throws PsseModelException { return _list.isolate(_ndx); }
 	/** enumerated IDE code */
 	public BusTypeCode getBusType() throws PsseModelException {return _list.getBusType(_ndx);}
 	/** Area */
