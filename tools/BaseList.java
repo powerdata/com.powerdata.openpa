@@ -11,6 +11,10 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	
 	/** Get a unique identifier for the object */
 	public abstract String getObjectID(int ndx) throws PsseModelException;
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		return getObjectID(ndx);
+	}
 	
 	/** Get an object by it's ID */
 	public T get(String objectid)

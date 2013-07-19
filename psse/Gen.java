@@ -10,7 +10,7 @@ public class Gen extends BaseObject implements OneTermDev
 	
 	public Gen(int ndx, GenList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
@@ -20,9 +20,6 @@ public class Gen extends BaseObject implements OneTermDev
 		return String.format("%s %s", getBus().getNAME(), getID());
 	}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* Convenience methods */
 
 	/** Generator bus (I) */ 

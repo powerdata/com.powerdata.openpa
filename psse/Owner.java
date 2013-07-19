@@ -8,16 +8,13 @@ public class Owner extends BaseObject
 	
 	public Owner(int ndx, OwnerList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
 
 	@Override
 	public String getDebugName() throws PsseModelException {return getOWNAME();}
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-
 	/* Groups */
 	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
 	public GenList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }

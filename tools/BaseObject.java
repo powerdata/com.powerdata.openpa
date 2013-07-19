@@ -5,15 +5,23 @@ import com.powerdata.openpa.psse.PsseModelException;
 public abstract class BaseObject
 {
 	protected int _ndx;
+	protected BaseList<?> _list;
 	
-	public BaseObject(int ndx)
+	public BaseObject(BaseList<?> list, int ndx)
 	{
+		_list = list;
 		_ndx = ndx;
 	}
 
 	public int getIndex() {return _ndx;}
-	public abstract String getObjectID() throws PsseModelException;
-	
+	public String getObjectID() throws PsseModelException
+	{
+		return _list.getObjectID(_ndx);
+	}
+	public String getObjectName() throws PsseModelException
+	{
+		return _list.getObjectName(_ndx);
+	}
 
 	@Override
 	public String toString()

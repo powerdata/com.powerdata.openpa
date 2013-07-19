@@ -10,16 +10,13 @@ public class SwitchedShunt extends BaseObject implements OneTermDev
 	
 	public SwitchedShunt(int ndx, SwitchedShuntList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
 	@Override
 	public String getDebugName() throws PsseModelException {return "";}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* Convenience methods */
 	/** Load bus (I) */ 
 	@Override

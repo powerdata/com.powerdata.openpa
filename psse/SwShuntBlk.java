@@ -8,13 +8,10 @@ public class SwShuntBlk extends BaseObject
 	
 	public SwShuntBlk(int ndx, SwShuntBlkList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* convenience methods */
 	
 	/** per-unit susceptance of each step (B) */

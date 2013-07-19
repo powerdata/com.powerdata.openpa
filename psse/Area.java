@@ -8,17 +8,13 @@ public class Area extends BaseObject
 	
 	public Area(int ndx, AreaList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
 	@Override
 	public String getDebugName() throws PsseModelException {return getARNAME();}
 
-
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* convenience methods */
 	
 	/** Area slack bus for area interchange control */ 

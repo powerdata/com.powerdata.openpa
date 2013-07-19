@@ -15,13 +15,10 @@ public class Transformer extends BaseObject implements ACBranch
 	
 	public Transformer(int ndx, TransformerList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
-	@Override
-	public String getObjectID() throws PsseModelException {return _list.getObjectID(_ndx);}
-	
 	/* Convenience methods */
 
 	/** Winding 1 bus */ 

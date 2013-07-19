@@ -12,7 +12,7 @@ public class TransformerRaw extends BaseObject
 	
 	public TransformerRaw(int ndx, TransformerRawList list)
 	{
-		super(ndx);
+		super(list,ndx);
 		_list = list;
 	}
 
