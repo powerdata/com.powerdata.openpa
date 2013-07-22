@@ -1,8 +1,6 @@
  package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class Area extends BaseObject
+public class Area extends PsseBaseObject
 {
 	protected AreaList _list;
 	

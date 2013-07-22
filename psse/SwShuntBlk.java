@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class SwShuntBlk extends BaseObject
+public class SwShuntBlk extends PsseBaseObject
 {
 	protected SwShuntBlkList _list;
 	

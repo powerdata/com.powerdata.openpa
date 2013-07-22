@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 
@@ -23,8 +24,13 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	private float[] _sbase;
 	
 	/* line 3 */
-	private float[] _windv1, _nomv1, _ang1, _rata1, _ratb1, _ratc1, _rma1, _rmi1, _vma1, _vmi1, _cr1, _cx1;
-	private int[] _cod1, _ntp1, _tab1;
+	private float[]		_windv1, _nomv1, _ang1, _rata1, _ratb1, _ratc1, _rma1,
+			_rmi1, _vma1, _vmi1, _cr1, _cx1;
+	private int[]		_cod1, _ntp1, _tab1;
+	
+	/* line 4 */
+	private float[] _windv2, _nomv2, _rma2, _rmi2;
+	private int[] _ntp2;
 	
 	public TransformerList(PsseModel model, TransformerRawList rlist,
 			TransformerPrep prep) throws PsseModelException 
@@ -65,8 +71,43 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 		_tab1 = (int[]) new WndLoader("TAB").load(rlist, xfndx, wndx, int.class);
 		_cr1 = (float[]) new WndLoader("CR").load(rlist, xfndx, wndx, float.class);
 		_cx1 = (float[]) new WndLoader("CX").load(rlist, xfndx, wndx, float.class);
+		
+		loadLine4(rlist, xfndx, wndx);
 	}	
 	
+	private void loadLine4(TransformerRawList rlist, int[] xfndx, int[] wndx) throws PsseModelException
+	{
+		int n = xfndx.length;
+		_windv2 = new float[n];
+		_nomv2 = new float[n];
+		_rma2 = new float[n];
+		_rmi2 = new float[n];
+		_ntp2 = new int[n];
+		
+		for(int i=0; i < n; ++i)
+		{
+			TransformerRaw xf = rlist.get(xfndx[i]);
+			String k = xf.getK();
+			boolean is3w = !(k.isEmpty() || k.equals("0"));
+			if (is3w)
+			{
+				_windv2[i] = 1f; 
+				_nomv2[i] = 1f;
+				_rma2[i] = 1.1f;
+				_rmi2[i] = 0.9f;
+				_ntp2[i] = 33;
+			}
+			else
+			{
+				_windv2[i] = xf.getWINDV2();
+				_nomv2[i] = xf.getNOMV2();
+				_rma2[i] = xf.getRMA2();
+				_rmi2[i] = xf.getRMI2();
+				_ntp2[i] = xf.getNTP2();
+			}
+		}
+	}
+
 	private void loadSbase(TransformerRawList rlist, int[] xfndx, int[] wndx)
 	{
 		int n = xfndx.length;
@@ -216,6 +257,16 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	public float getCR1(int ndx) throws PsseModelException {return _cr1[ndx];}
 	@Override
 	public float getCX1(int ndx) throws PsseModelException {return _cx1[ndx];}
+	@Override
+	public float getWINDV2(int ndx) throws PsseModelException {return _windv2[ndx];}
+	@Override
+	public float getNOMV2(int ndx) throws PsseModelException {return _nomv2[ndx];}
+	@Override
+	public float getRMA2(int ndx) throws PsseModelException {return _rma2[ndx];}
+	@Override
+	public float getRMI2(int ndx) throws PsseModelException {return _rmi2[ndx];}
+	@Override
+	public int getNTP2(int ndx) throws PsseModelException {return _ntp2[ndx];}
 
 	@Override
 	public Complex getZ(int ndx) throws PsseModelException {return _z.get(ndx);}
@@ -223,12 +274,17 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sb = new StringBuilder(getI(ndx));
+		sb.append('-');
+		sb.append(getJ(ndx));
+		sb.append('-');
+		sb.append(getCKT(ndx));
+		return sb.toString();
 	}
 
 	@Override
 	public int size() {return _size;}
+	
 }
 
 class WndLoader

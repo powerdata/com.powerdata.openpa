@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class Owner extends BaseObject
+public class Owner extends PsseBaseObject
 {
 	protected OwnerList _list;
 	

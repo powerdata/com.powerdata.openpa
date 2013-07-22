@@ -1,9 +1,8 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class PhaseShifter extends BaseObject implements ACBranch
+public class PhaseShifter extends PsseBaseObject implements ACBranch
 {
 	protected PhaseShifterList _list;
 	

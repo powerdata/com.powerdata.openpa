@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class Shunt extends BaseObject implements OneTermDev
+public class Shunt extends PsseBaseObject implements OneTermDev
 {
 
 	protected ShuntList	_list;

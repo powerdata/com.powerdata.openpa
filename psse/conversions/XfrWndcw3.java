@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse.conversions;
 
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TransformerRawList;
 
 public class XfrWndcw3 extends XfrWndTool
 {

@@ -1,9 +1,8 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Load extends BaseObject implements OneTermDev
+public class Load extends PsseBaseObject implements OneTermDev
 {
 	protected LoadList _list;
 	

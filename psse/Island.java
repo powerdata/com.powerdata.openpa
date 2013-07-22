@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class Island extends BaseObject
+public class Island extends PsseBaseObject
 {
 	protected IslandList _list;
 	

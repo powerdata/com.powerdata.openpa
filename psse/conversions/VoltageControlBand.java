@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.conversions;
 import com.powerdata.openpa.psse.Limits;
 import com.powerdata.openpa.psse.LogSev;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
 
 public abstract class VoltageControlBand
 {
@@ -13,13 +14,13 @@ public abstract class VoltageControlBand
 		new VLimW3()
 	};
 	
-	public static Limits getLimits(TransformerRawList list, int ndx, int winding)
+	public static Limits getLimits(Transformer xf, int winding)
 			throws PsseModelException
 	{
-		return _Tools[winding].getFactory(list, ndx).getLimits(list, ndx);
+		return _Tools[winding].getFactory(xf).getLimits(xf);
 	}
 	
-	public abstract Limits getLimits(TransformerRawList list, int ndx)
+	public abstract Limits getLimits(Transformer xf)
 			throws PsseModelException;
 
 }
@@ -30,10 +31,10 @@ class LogMsg extends VoltageControlBand
 	public static final Limits				DeftLimit	= new Limits(0.9F, 1.1F);
 
 	@Override
-	public Limits getLimits(TransformerRawList list, int ndx)
+	public Limits getLimits(Transformer xf)
 			throws PsseModelException
 	{
-		list.getPsseModel().log(LogSev.Warn,list.get(ndx),
+		xf.getPsseModel().log(LogSev.Warn,xf,
 			"Attempting to retrieve MVAr voltage band limits when Transformer is controlling bus voltage");
 		return DeftLimit;
 	}
@@ -42,7 +43,7 @@ class LogMsg extends VoltageControlBand
 
 interface VoltLimByWnd
 {
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException;
+	public VoltageControlBand getFactory(Transformer xf) throws PsseModelException;
 }
 
 class VLimW1 implements VoltLimByWnd
@@ -55,22 +56,20 @@ class VLimW1 implements VoltLimByWnd
 		VLW1PassThru.Default
 	};
 	@Override
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException
+	public VoltageControlBand getFactory(Transformer xf) throws PsseModelException
 	{
-		return _Tools[Math.abs(list.getCOD1(ndx))];
+		return _Tools[Math.abs(xf.getCOD1())];
 	}
-	
 }
 
 class VLW1PassThru extends VoltageControlBand
 {
 	public static final VoltageControlBand	Default	= new VLW1PassThru();
-
 	@Override
-	public Limits getLimits(TransformerRawList list, int ndx)
+	public Limits getLimits(Transformer xf)
 			throws PsseModelException
 	{
-		return new Limits(list.getVMI1(ndx), list.getVMA1(ndx));
+		return new Limits(xf.getVMI1(), xf.getVMA1());
 	}
 }
 
@@ -82,9 +81,9 @@ class VLimW2 implements VoltLimByWnd
 			VLW2PassThru.Default						};
 
 	@Override
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException
+	public VoltageControlBand getFactory(Transformer xf) throws PsseModelException
 	{
-		return _Tools[Math.abs(list.getCOD2(ndx))];
+		return _Tools[0];
 	}
 
 }
@@ -94,10 +93,10 @@ class VLW2PassThru extends VoltageControlBand
 	public static final VoltageControlBand	Default	= new VLW2PassThru();
 
 	@Override
-	public Limits getLimits(TransformerRawList list, int ndx)
+	public Limits getLimits(Transformer xf)
 			throws PsseModelException
 	{
-		return new Limits(list.getVMI2(ndx), list.getVMA2(ndx));
+		return new Limits(0.9f, 1.1f);
 	}
 }
 
@@ -109,9 +108,9 @@ class VLimW3 implements VoltLimByWnd
 			VLW3PassThru.Default						};
 
 	@Override
-	public VoltageControlBand getFactory(TransformerRawList list, int ndx) throws PsseModelException
+	public VoltageControlBand getFactory(Transformer xf) throws PsseModelException
 	{
-		return _Tools[Math.abs(list.getCOD3(ndx))];
+		return _Tools[0];
 	}
 
 }
@@ -121,9 +120,9 @@ class VLW3PassThru extends VoltageControlBand
 	public static final VoltageControlBand	Default	= new VLW3PassThru();
 
 	@Override
-	public Limits getLimits(TransformerRawList list, int ndx)
+	public Limits getLimits(Transformer xf)
 			throws PsseModelException
 	{
-		return new Limits(list.getVMI3(ndx), list.getVMA3(ndx));
+		return new Limits(0.9f, 1.1f);
 	}
 }

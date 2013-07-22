@@ -1,10 +1,8 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
 /* TODO:  Not fully implemented.  Shunts are broken out into separate lists */
 
-public class SwitchedShunt extends BaseObject implements OneTermDev
+public class SwitchedShunt extends PsseBaseObject implements OneTermDev
 {
 	protected SwitchedShuntList _list;
 	

@@ -8,7 +8,7 @@ import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Transformer;
-import com.powerdata.openpa.psse.conversions.TransformerRaw;
+import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
 import com.powerdata.openpa.psse.TransformerCtrlMode;

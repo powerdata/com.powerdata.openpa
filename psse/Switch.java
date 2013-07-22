@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class Switch extends BaseObject implements TwoTermDev
+public class Switch extends PsseBaseObject implements TwoTermDev
 {
 	protected SwitchList _list;
 	

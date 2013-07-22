@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
-
-import com.powerdata.openpa.tools.BaseObject;
 //TODO:  Implement class
-public class ImpCorrTbl extends BaseObject
+public class ImpCorrTbl extends PsseBaseObject
 {
 	protected ImpCorrTblList _list;
 	

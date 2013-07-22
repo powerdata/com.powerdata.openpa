@@ -1,10 +1,9 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PComplex;
 
-public class Bus extends BaseObject
+public class Bus extends PsseBaseObject
 {
 	protected BusList _list;
 	

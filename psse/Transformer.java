@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
 /**
@@ -9,7 +8,7 @@ import com.powerdata.openpa.tools.Complex;
  * @author chris@powerdata.com
  *
  */
-public class Transformer extends BaseObject implements ACBranch
+public class Transformer extends PsseBaseObject implements ACBranch
 {
 	protected TransformerList _list;
 	

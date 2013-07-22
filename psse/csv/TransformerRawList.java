@@ -1,16 +1,10 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class TransformerRawList extends com.powerdata.openpa.psse.conversions.TransformerRawList
+public class TransformerRawList extends com.powerdata.openpa.psse.TransformerRawList
 {
 	PsseModel _eq;
 	BusList _buses;
@@ -138,6 +132,9 @@ public class TransformerRawList extends com.powerdata.openpa.psse.conversions.Tr
 			_cr3		= LoadArray.Float(xfr,"CR3",this,"getDeftCR3");
 			_cx3		= LoadArray.Float(xfr,"CX3",this,"getDeftCX3");
 			
+			/* A default of 0 for NOMV* means to really use the bus base KV.  */
+			fixNomKV();
+			
 			reindex();
 			
 		}
@@ -147,6 +144,23 @@ public class TransformerRawList extends com.powerdata.openpa.psse.conversions.Tr
 		}
 	}
 	
+	private void fixNomKV() throws PsseModelException
+	{
+		for (int i=0; i < _size; ++i)
+		{
+			if (_nomv1[i] == 0f) _nomv1[i] = _buses.get(getI(i)).getBASKV();
+			if (_nomv2[i] == 0f) _nomv2[i] = _buses.get(getJ(i)).getBASKV();
+			if (_nomv3[i] == 0f)
+			{
+				String k = getK(i);
+				if (!k.isEmpty() && !k.equals("0"))
+				{
+					_nomv3[i] = _buses.get(k).getBASKV();
+				}
+			}
+		}
+	}
+
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override

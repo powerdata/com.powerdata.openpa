@@ -1,9 +1,8 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Line extends BaseObject implements ACBranch
+public class Line extends PsseBaseObject implements ACBranch
 {
 
 	protected LineList _list;

@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
-
-public class SVC extends BaseObject implements OneTermDev
+public class SVC extends PsseBaseObject implements OneTermDev
 {
 
 	protected SvcList	_list;

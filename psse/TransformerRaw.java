@@ -1,12 +1,7 @@
-package com.powerdata.openpa.psse.conversions;
+package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.OwnershipList;
-import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerCtrlMode;
-import com.powerdata.openpa.tools.BaseObject;
 
-public class TransformerRaw extends BaseObject 
+public class TransformerRaw extends PsseBaseObject 
 {
 	protected TransformerRawList _list;
 	

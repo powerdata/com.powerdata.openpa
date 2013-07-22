@@ -1,9 +1,8 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.tools.Complex;
 
-public class Gen extends BaseObject implements OneTermDev
+public class Gen extends PsseBaseObject implements OneTermDev
 {
 
 	protected GenList _list;
