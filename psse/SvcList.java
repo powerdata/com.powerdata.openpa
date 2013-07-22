@@ -2,6 +2,13 @@ package com.powerdata.openpa.psse;
 
 public abstract class SvcList extends PsseBaseList<SVC>
 {
+	public static final SvcList Empty = new SvcList()
+	{
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
 	protected SvcList(){super();}
 	public SvcList(PsseModel model) {super(model);}
 

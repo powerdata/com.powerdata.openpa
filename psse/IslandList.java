@@ -33,9 +33,7 @@ public abstract class IslandList extends PsseBaseList<Island>
 	{
 		return PhaseShifterList.Empty;
 	}
-	public SwitchedShuntList getSwitchedShunts(int ndx)
-	{
-		return SwitchedShuntList.Empty;
-	}
+	public ShuntList getShunts(int ndx) throws PsseModelException {return ShuntList.Empty;}
+	public SvcList getSvcs(int ndx) throws PsseModelException {return SvcList.Empty;}
 	public SwitchList getSwitches(int ndx) {return SwitchList.Empty;}
 }

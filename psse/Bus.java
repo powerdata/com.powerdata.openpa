@@ -22,7 +22,8 @@ public class Bus extends PsseBaseObject
 	public LoadList getLoads() throws PsseModelException { return _list.getLoads(_ndx); }
 	public LineList getLines() throws PsseModelException { return _list.getLines(_ndx); }
 	public TransformerList getTransformers() throws PsseModelException { return _list.getTransformers(_ndx); }
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException { return _list.getSwitchedShunts(_ndx); }
+	public ShuntList getShunts() throws PsseModelException { return _list.getShunts(_ndx); }
+	public SvcList getSvcs() throws PsseModelException { return _list.getSvcs(_ndx); }
 	public PhaseShifterList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
 
 	/* Convenience methods */

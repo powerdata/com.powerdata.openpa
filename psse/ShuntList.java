@@ -2,6 +2,14 @@ package com.powerdata.openpa.psse;
 
 public abstract class ShuntList extends PsseBaseList<Shunt>
 {
+	public static final ShuntList Empty = new ShuntList()
+	{
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public int size() {return 0;}
+	};
+	
 	protected ShuntList(){super();}
 	public ShuntList(PsseModel model) {super(model);}
 

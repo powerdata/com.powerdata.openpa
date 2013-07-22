@@ -99,11 +99,10 @@ public class PsseModel
 	{
 		return PhaseShifterList.Empty;
 	}
-	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
-	{
-		return SwitchedShuntList.Empty;
-	}
 	public SwitchList getSwitches() throws PsseModelException {return SwitchList.Empty;}
+	public ShuntList getShunts() throws PsseModelException {return ShuntList.Empty;}
+	public SvcList getSvcs() throws PsseModelException {return SvcList.Empty;}
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return SwitchedShuntList.Empty;}
 }	
 
 

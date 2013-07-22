@@ -31,7 +31,9 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public LoadList getLoads(int ndx) throws PsseModelException {return LoadList.Empty;}
 	public LineList getLines(int ndx) throws PsseModelException {return LineList.Empty;}
 	public TransformerList getTransformers(int ndx) throws PsseModelException {return TransformerList.Empty;}
-	public SwitchedShuntList getSwitchedShunts(int ndx) throws PsseModelException {return SwitchedShuntList.Empty;}
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return SwitchedShuntList.Empty;}
+	public ShuntList getShunts(int ndx) throws PsseModelException {return ShuntList.Empty;}
+	public SvcList getSvcs(int ndx) throws PsseModelException {return SvcList.Empty;}
 	public PhaseShifterList getPhaseShifters(int ndx) throws PsseModelException {return PhaseShifterList.Empty;}
 	public SwitchList getSwitches(int ndx) throws PsseModelException {return SwitchList.Empty;}
 
@@ -89,5 +91,4 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public float getVA(int ndx) throws PsseModelException {return 0F;}
 	/** Owner number */
 	public int getOWNER(int ndx) throws PsseModelException {return 1;}
-
 }
