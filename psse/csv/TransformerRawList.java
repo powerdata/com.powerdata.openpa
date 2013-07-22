@@ -1,5 +1,8 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -395,98 +398,94 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerRaw
 	@Override
 	public int size() { return _size; }
 	
-//	static final protected List<Map<String, Method>>	_Methods;
-//	static
-//	{
-//		_Methods = new ArrayList<Map<String, Method>>(4);
-//		try
-//		{
-//			Map<String, Method> zm = new HashMap<>(9);
-//			mapZMethod(zm, "R", 1, 2);
-//			mapZMethod(zm, "X", 1, 2);
-//			mapZMethod(zm, "SBASE", 1, 2);
-//			mapZMethod(zm, "R", 2, 3);
-//			mapZMethod(zm, "X", 2, 3);
-//			mapZMethod(zm, "SBASE", 2, 3);
-//			mapZMethod(zm, "R", 3, 1);
-//			mapZMethod(zm, "X", 3, 1);
-//			mapZMethod(zm, "SBASE", 3, 1);
-//
-//			for (int i = 0; i < 3; ++i)
-//			{
-//				Map<String, Method> m = new HashMap<>(16);
-//				mapMethod(m, "WINDV", i);
-//				mapMethod(m, "NOMV", i);
-//				mapMethod(m, "ANG", i);
-//				mapMethod(m, "RATA", i);
-//				mapMethod(m, "RATB", i);
-//				mapMethod(m, "RATC", i);
-//				mapMethod(m, "COD", i);
-//				mapMethod(m, "CONT", i);
-//				mapMethod(m, "RMA", i);
-//				mapMethod(m, "RMI", i);
-//				mapMethod(m, "VMA", i);
-//				mapMethod(m, "VMI", i);
-//				mapMethod(m, "NTP", i);
-//				mapMethod(m, "TAB", i);
-//				mapMethod(m, "CR", i);
-//				mapMethod(m, "CX", i);
-//				_Methods.add(m);
-//			}
-//		} catch (NoSuchMethodException | SecurityException e)
-//		{
-//			System.err.println(e);
-//			e.printStackTrace();
-//		}
-//
-//	}
-//
-//	static void mapMethod(Map<String, Method> map, String methprefix, int i)
-//			throws NoSuchMethodException, SecurityException
-//	{
-//		map.put(methprefix,
-//				TransformerRawList.class.getMethod(methprefix + i, int.class));
-//	}
-//
-//	static void mapZMethod(Map<String, Method> map, String field, int i,
-//			int j) throws NoSuchMethodException, SecurityException
-//	{
-//		String nm = zkey(field, i, j);
-//		map.put(nm, TransformerRawList.class.getMethod(nm, int.class));
-//	}
-//
-//	static String zkey(String name, int fwnd, int twnd)
-//	{
-//		StringBuilder sb = new StringBuilder(name);
-//		sb.append(fwnd);
-//		sb.append('_');
-//		sb.append(twnd);
-//		return sb.toString();
-//	}
-//	
-//	public float getZval(String name, int fwnd, int townd, int ndx)
-//			throws IllegalArgumentException, ReflectiveOperationException
-//	{
-//		return (float) _Methods.get(0).get(zkey(name, fwnd, townd))
-//				.invoke(this, ndx);
-//	}
-//	
-//	public String getStringVal(String name, int wnd, int ndx)
-//			throws IllegalArgumentException, ReflectiveOperationException
-//	{
-//		return (String) _Methods.get(wnd).get(name).invoke(this, ndx);
-//	}
-//
-//	public int getIntVal(String name, int wnd, int ndx)
-//			throws IllegalArgumentException, ReflectiveOperationException
-//	{
-//		return (int) _Methods.get(wnd).get(name).invoke(this, ndx);
-//	}
-//
-//	public float getFloatVal(String name, int wnd, int ndx)
-//			throws IllegalArgumentException, ReflectiveOperationException
-//	{
-//		return (float) _Methods.get(wnd).get(name).invoke(this, ndx);
-//	}
+	static Object loadArray(TransformerRawList rlist, int[] xfndx,
+			String prop, Class<?> type) throws PsseModelException
+	{
+		int n = xfndx.length;
+		Object rv = Array.newInstance(type, n);
+		try
+		{
+			Method m = TransformerRawList.class.getMethod("get" + prop,
+					int.class);
+			for (int i = 0; i < n; ++i)
+			{
+				Array.set(rv, i, m.invoke(rlist, xfndx[i]));
+			}
+
+		} catch (SecurityException | ReflectiveOperationException e)
+		{
+			throw new PsseModelException(e);
+		}
+
+		return rv;
+	}
+	
+	static int[] loadNmetr(TransformerRawList rlist, int[] xfndx, int[] wndx)
+	{
+		int n = xfndx.length;
+		int[] nmetr = new int[n];
+		for(int i=0; i < n; ++i)
+		{
+			int nm = rlist.getNMETR(xfndx[i]);
+			int w = wndx[i];
+			nmetr[i] = (w == nm) ? 1 : 2;
+		}
+		return nmetr;
+	}
+
+	static int[] loadStat(TransformerRawList rlist, int[] xfndx, int[] wndx)
+	{
+		int n = xfndx.length;
+		int[] stat = new int[n];
+		for(int i=0; i < n; ++i)
+		{
+			int s = rlist.getSTAT(xfndx[i]);
+			int w = wndx[i];
+			switch(s)
+			{
+				case 0:
+				case 1: stat[i] = s; break;
+				case 4: stat[i] = (w == 1) ? 0 : 1; break; 
+				default: stat[i] = (w == s) ? 0 : 1;
+			}
+		}
+		return stat;
+	}
+	
+	static float[][] loadMag(TransformerRawList rlist, int[] xfndx, int[] wndx)
+	{
+		int n = xfndx.length;
+		float[] _mag1 = new float[n];
+		float[] _mag2 = new float[n];
+		for(int i=0; i < n; ++i)
+		{
+			if (wndx[i] == 1)
+			{
+				int tx = xfndx[i];
+				_mag1[i] = rlist.getMAG1(tx);
+				_mag2[i] = rlist.getMAG2(tx);
+			}
+		}
+		
+		return new float[][] {_mag1, _mag2};
+	}
+
+	static float[] loadSbase(TransformerRawList rlist, int[] xfndx, int[] wndx)
+	{
+		int n = xfndx.length;
+		float[] sbase = new float[n];
+		for(int i=0; i < n; ++i)
+		{
+			int x = xfndx[i];
+			switch(wndx[i])
+			{
+				case 1: sbase[i] = rlist.getSBASE1_2(x); break;
+				case 2: sbase[i] = rlist.getSBASE2_3(x); break;
+				case 3: sbase[i] = rlist.getSBASE3_1(x); break;
+			}
+		}
+		return sbase;
+	}
+
 
 }

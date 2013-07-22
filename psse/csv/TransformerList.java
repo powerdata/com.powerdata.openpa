@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -43,18 +41,20 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 		_j = prep.getBusJ();
 		_z = prep.getZ();
 		
-		_ckt = (String[]) loadSimpleArray(rlist, xfndx, "CKT", String.class);
-		_name = (String[]) loadSimpleArray(rlist, xfndx, "NAME", String.class);
+		_ckt = (String[]) TransformerRawList.loadArray(rlist, xfndx, "CKT", String.class);
+		_name = (String[]) TransformerRawList.loadArray(rlist, xfndx, "NAME", String.class);
 		/*
 		 * This class always converts CZ to 1, so do not override and let
 		 * default handle it
 		 */
-		_cw = (int[]) loadSimpleArray(rlist, xfndx, "CW", int.class);
-		_cm = (int[]) loadSimpleArray(rlist, xfndx, "CM", int.class);
-		loadNmetr(rlist, xfndx, wndx);
-		loadStat(rlist, xfndx, wndx);
-		loadMag(rlist, xfndx, wndx);
-		loadSbase(rlist, xfndx, wndx);
+		_cw = (int[]) TransformerRawList.loadArray(rlist, xfndx, "CW", int.class);
+		_cm = (int[]) TransformerRawList.loadArray(rlist, xfndx, "CM", int.class);
+		_nmetr = TransformerRawList.loadNmetr(rlist, xfndx, wndx);
+		_stat = TransformerRawList.loadStat(rlist, xfndx, wndx);
+		float[][] tmag = TransformerRawList.loadMag(rlist, xfndx, wndx);
+		_mag1 = tmag[0];
+		_mag2 = tmag[1];
+		_sbase = TransformerRawList.loadSbase(rlist, xfndx, wndx);
 		_windv1 = (float[]) new WndLoader("WINDV").load(rlist, xfndx, wndx, float.class);
 		_nomv1 = (float[]) new WndLoader("NOMV").load(rlist, xfndx, wndx, float.class);
 		_ang1 = (float[]) new WndLoader("ANG").load(rlist, xfndx, wndx, float.class);
@@ -108,90 +108,6 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 		}
 	}
 
-	private void loadSbase(TransformerRawList rlist, int[] xfndx, int[] wndx)
-	{
-		int n = xfndx.length;
-		_sbase = new float[n];
-		for(int i=0; i < n; ++i)
-		{
-			int x = xfndx[i];
-			switch(wndx[i])
-			{
-				case 1: _sbase[i] = rlist.getSBASE1_2(x); break;
-				case 2: _sbase[i] = rlist.getSBASE2_3(x); break;
-				case 3: _sbase[i] = rlist.getSBASE3_1(x); break;
-			}
-		}
-	}
-
-	private void loadMag(TransformerRawList rlist, int[] xfndx, int[] wndx)
-	{
-		int n = xfndx.length;
-		_mag1 = new float[n];
-		_mag2 = new float[n];
-		for(int i=0; i < n; ++i)
-		{
-			if (wndx[i] == 1)
-			{
-				int tx = xfndx[i];
-				_mag1[i] = rlist.getMAG1(tx);
-				_mag2[i] = rlist.getMAG2(tx);
-			}
-		}
-	}
-
-	private void loadStat(TransformerRawList rlist, int[] xfndx, int[] wndx)
-	{
-		int n = xfndx.length;
-		_stat = new int[n];
-		for(int i=0; i < n; ++i)
-		{
-			int s = rlist.getSTAT(xfndx[i]);
-			int w = wndx[i];
-			switch(s)
-			{
-				case 0:
-				case 1: _stat[i] = s; break;
-				case 4: _stat[i] = (w == 1) ? 0 : 1; break; 
-				default: _stat[i] = (w == s) ? 0 : 1;
-			}
-		}
-	}
-	
-	private void loadNmetr(TransformerRawList rlist, int[] xfndx, int[] wndx)
-	{
-		int n = xfndx.length;
-		_nmetr = new int[n];
-		for(int i=0; i < n; ++i)
-		{
-			int nm = rlist.getNMETR(xfndx[i]);
-			int w = wndx[i];
-			_nmetr[i] = (w == nm) ? 1 : 2;
-		}
-	}
-
-	private Object loadSimpleArray(TransformerRawList rlist, int[] xfndx,
-			String prop, Class<?> type) throws PsseModelException
-	{
-		int n = xfndx.length;
-		Object rv = Array.newInstance(type, n);
-		try
-		{
-			Method m = TransformerRawList.class.getMethod("get" + prop,
-					int.class);
-			for (int i = 0; i < n; ++i)
-			{
-				Array.set(rv, i, m.invoke(rlist, xfndx[i]));
-			}
-
-		} catch (SecurityException | ReflectiveOperationException e)
-		{
-			throw new PsseModelException(e);
-		}
-
-		return rv;
-	}
-	
 	@Override
 	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(_i[ndx]);}
 	@Override
@@ -285,45 +201,5 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public int size() {return _size;}
 	
-}
-
-class WndLoader
-{
-	static final Class<TransformerRawList> _class = TransformerRawList.class;
-	
-	Method[] _methods;
-	public WndLoader(String prop) throws PsseModelException
-	{
-		try
-		{
-			String pn = "get"+prop;
-			_methods = new Method[] {null,
-					_class.getMethod(pn+"1", int.class),
-					_class.getMethod(pn+"2", int.class),
-					_class.getMethod(pn+"3", int.class)};
-		} catch (ReflectiveOperationException | SecurityException e)
-		{
-			throw new PsseModelException(e);
-		}
-	}
-	
-	public Object load(TransformerRawList rlist, int[] ndx,
-			int[] wnd, Class<?> type) throws PsseModelException
-	{
-		int n = ndx.length;
-		Object rv = Array.newInstance(type, n);
-		try
-		{
-			for (int i = 0; i < n; ++i)
-			{
-				Array.set(rv, i, _methods[wnd[i]].invoke(rlist, ndx[i]));
-
-			}
-		} catch (ArrayIndexOutOfBoundsException | ReflectiveOperationException e)
-		{
-			throw new PsseModelException(e);
-		}
-		return rv;
-	}
 }
 
