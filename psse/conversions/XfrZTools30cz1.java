@@ -1,11 +1,17 @@
 package com.powerdata.openpa.psse.conversions;
 
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 
 public class XfrZTools30cz1 implements XfrZTools
 {
+	@Override
+	public Complex convert2W(Transformer xf) throws PsseModelException
+	{
+		return new Complex(xf.getR1_2(), xf.getX1_2());
+	}
 
 	@Override
 	public Complex convert2W(TransformerRaw xf) throws PsseModelException

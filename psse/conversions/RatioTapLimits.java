@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.conversions;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Limits;
+import com.powerdata.openpa.psse.Transformer;
 
 public abstract class RatioTapLimits
 {
@@ -30,11 +31,21 @@ public abstract class RatioTapLimits
 	public abstract Limits getLimits(TransformerRaw xf)
 			throws PsseModelException;
 	
+	/** Call here to get the appropriate limits */
+	public static Limits getLimits(Transformer xf, int winding) throws PsseModelException
+	{
+		return _ctf[xf.getCW()][winding].getFactory(xf).getLimits(xf);
+	}
+
+	public abstract Limits getLimits(Transformer xf)
+			throws PsseModelException;
+	
 }
 
 interface CwWndToFact
 {
 	public RatioTapLimits getFactory(TransformerRaw xf) throws PsseModelException;
+	public RatioTapLimits getFactory(Transformer xf) throws PsseModelException;
 }
 
 /* Converters for Code CW 1 */
@@ -55,6 +66,12 @@ class Cw1Wnd1ToFact implements CwWndToFact
 	}
 	@Override
 	public RatioTapLimits getFactory(TransformerRaw xf)
+			throws PsseModelException
+	{
+		return _Facts[Math.abs(xf.getCOD1())];
+	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
 			throws PsseModelException
 	{
 		return _Facts[Math.abs(xf.getCOD1())];
@@ -82,6 +99,12 @@ class Cw1Wnd2ToFact implements CwWndToFact
 	{
 		return _Facts[Math.abs(xf.getCOD2())];
 	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[0];
+	}
 }
 
 class Cw1Wnd3ToFact implements CwWndToFact
@@ -105,6 +128,12 @@ class Cw1Wnd3ToFact implements CwWndToFact
 	{
 		return _Facts[Math.abs(xf.getCOD3())];
 	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[0];
+	}
 }
 
 class W1PassThru extends RatioTapLimits
@@ -113,6 +142,12 @@ class W1PassThru extends RatioTapLimits
 
 	@Override
 	public Limits getLimits(TransformerRaw xf)
+			throws PsseModelException
+	{
+		return new Limits(xf.getRMI1(), xf.getRMA1());
+	}
+	@Override
+	public Limits getLimits(Transformer xf)
 			throws PsseModelException
 	{
 		return new Limits(xf.getRMI1(), xf.getRMA1());
@@ -129,6 +164,12 @@ class W2PassThru extends RatioTapLimits
 	{
 		return new Limits(xf.getRMI2(), xf.getRMA2());
 	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return new Limits(xf.getRMI2(), xf.getRMA2());
+	}
 }
 
 class W3PassThru extends RatioTapLimits
@@ -140,6 +181,12 @@ class W3PassThru extends RatioTapLimits
 			throws PsseModelException
 	{
 		return new Limits(xf.getRMI3(), xf.getRMA3());
+	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return new Limits(0.9f, 1.1f);
 	}
 }
 
@@ -162,6 +209,12 @@ class Cw2Wnd1ToFact implements CwWndToFact
 	}
 	@Override
 	public RatioTapLimits getFactory(TransformerRaw xf)
+			throws PsseModelException
+	{
+		return _Facts[Math.abs(xf.getCOD1())];
+	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
 			throws PsseModelException
 	{
 		return _Facts[Math.abs(xf.getCOD1())];
@@ -189,6 +242,12 @@ class Cw2Wnd2ToFact implements CwWndToFact
 	{
 		return _Facts[Math.abs(xf.getCOD2())];
 	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[0];
+	}
 }
 
 class Cw2Wnd3ToFact implements CwWndToFact
@@ -211,6 +270,12 @@ class Cw2Wnd3ToFact implements CwWndToFact
 			throws PsseModelException
 	{
 		return _Facts[Math.abs(xf.getCOD3())];
+	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[0];
 	}
 }
 
@@ -240,6 +305,13 @@ class Cw2W1 extends RatioTapLimits
 		
 		return CwCvt.cw2(xf.getRMI1(), xf.getRMA1(), xf.getBusI());
 	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		
+		return CwCvt.cw2(xf.getRMI1(), xf.getRMA1(), xf.getFromBus());
+	}
 }
 
 class Cw2W2 extends RatioTapLimits
@@ -252,6 +324,12 @@ class Cw2W2 extends RatioTapLimits
 	{
 		return CwCvt.cw2(xf.getRMI2(), xf.getRMA2(), xf.getBusJ());
 	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return CwCvt.cw2(xf.getRMI2(), xf.getRMA2(), xf.getToBus());
+	}
 }
 
 class Cw2W3 extends RatioTapLimits
@@ -263,6 +341,12 @@ class Cw2W3 extends RatioTapLimits
 			throws PsseModelException
 	{
 		return CwCvt.cw2(xf.getRMI3(), xf.getRMA3(), xf.getBusK());
+	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return new Limits(0.9f, 1.1f);
 	}
 }
 
@@ -293,6 +377,12 @@ class Cw3Wnd1ToFact implements CwWndToFact
 	{
 		return _Facts[Math.abs(xf.getCOD1())];
 	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[Math.abs(xf.getCOD1())];
+	}
 }
 
 class Cw3Wnd2ToFact implements CwWndToFact
@@ -315,6 +405,12 @@ class Cw3Wnd2ToFact implements CwWndToFact
 			throws PsseModelException
 	{
 		return _Facts[Math.abs(xf.getCOD2())];
+	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[0];
 	}
 }
 
@@ -339,6 +435,12 @@ class Cw3Wnd3ToFact implements CwWndToFact
 	{
 		return _Facts[Math.abs(xf.getCOD3())];
 	}
+	@Override
+	public RatioTapLimits getFactory(Transformer xf)
+			throws PsseModelException
+	{
+		return _Facts[0];
+	}
 }
 
 class Cw3W1 extends RatioTapLimits
@@ -351,6 +453,14 @@ class Cw3W1 extends RatioTapLimits
 	{
 		return CwCvt.cw3(xf.getRMI1(), xf.getRMA1(),
 				xf.getNOMV1(), xf.getBusI());
+	}
+
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return CwCvt.cw3(xf.getRMI1(), xf.getRMA1(),
+				xf.getNOMV1(), xf.getFromBus());
 	}
 }
 
@@ -365,6 +475,13 @@ class Cw3W2 extends RatioTapLimits
 		return CwCvt.cw3(xf.getRMI2(), xf.getRMA2(),
 				xf.getNOMV2(), xf.getBusJ());
 	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return CwCvt.cw3(xf.getRMI2(), xf.getRMA2(),
+				xf.getNOMV2(), xf.getToBus());
+	}
 }
 
 class Cw3W3 extends RatioTapLimits
@@ -377,6 +494,12 @@ class Cw3W3 extends RatioTapLimits
 	{
 		return CwCvt.cw3(xf.getRMI3(), xf.getRMA3(),
 				xf.getNOMV3(), xf.getBusK());
+	}
+	@Override
+	public Limits getLimits(Transformer xf)
+			throws PsseModelException
+	{
+		return new Limits(0.9f, 1.1f);
 	}
 }
 

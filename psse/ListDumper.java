@@ -22,10 +22,6 @@ public class ListDumper
 	static final Set<String> ListFilter = 
 		new HashSet<>(Arrays.asList(new String[] {"getBus", "getClass"}));
 	
-	static final Set<Class<?>> ReturnTypeFilter =
-		new HashSet<>(Arrays.asList(new Class<?>[] {
-			int.class, float.class, String.class}));
-	
 	public void dump(PsseModel model, File outdir) throws IOException,
 			ReflectiveOperationException, RuntimeException
 	{
@@ -55,7 +51,7 @@ public class ListDumper
 			String nm = m.getName();
 			if (nm.startsWith("get") && nm.length() > 3
 					&& !MethodFilter.contains(nm)
-					&& ReturnTypeFilter.contains(m.getReturnType()))
+					/*&& ReturnTypeFilter.contains(m.getReturnType())*/)
 			{
 				ometh.add(m);
 				mname.add(nm.substring(3));
@@ -78,11 +74,15 @@ public class ListDumper
 			/* output data for each row */
 			for (int i = 0; i < n; ++i)
 			{
-				pw.print(ometh.get(0).invoke(list, i));
-				for (int j = 1; j < ometh.size(); ++j)
+				for (int j = 0; j < ometh.size(); ++j)
 				{
-					pw.print(Dlm);
-					pw.print(ometh.get(j).invoke(list, i));
+					/* output cell */
+					if (j>0) pw.print(Dlm);
+					Object v = ometh.get(j).invoke(list, i);
+					boolean isstr = !Number.class.isInstance(v);
+					if (isstr) pw.print('"');
+					pw.print(v);
+					if (isstr) pw.print('"');
 				}
 				pw.println();
 			}

@@ -73,13 +73,13 @@ public class Transformer extends BaseObject implements ACBranch
 	public int getCOD1() throws PsseModelException {return _list.getCOD1(_ndx);}
 	/** controlled bus */
 	public String getCONT1() throws PsseModelException {return _list.getCONT1(_ndx);}
-	/** RMA upper limit (see PSS/e documentation) */
+	/** RMA upper limit*/
 	public float getRMA1() throws PsseModelException {return _list.getRMA1(_ndx);}
-	/** RMI lower limit (see PSS/e documentation) */
+	/** RMI lower limit */
 	public float getRMI1() throws PsseModelException {return _list.getRMI1(_ndx);}
-	/** VMA upper limit (see PSS/e documentation) */
+	/** VMA upper limit */
 	public float getVMA1() throws PsseModelException {return _list.getVMA1(_ndx);}
-	/** VMI lower limit (see PSS/e documentation) */
+	/** VMI lower limit */
 	public float getVMI1() throws PsseModelException {return _list.getVMI1(_ndx);}
 	/** number of taps positions available */
 	public int getNTP1() throws PsseModelException {return _list.getNTP1(_ndx);}
@@ -91,5 +91,16 @@ public class Transformer extends BaseObject implements ACBranch
 	public float getCX1() throws PsseModelException {return _list.getCX1(_ndx);}
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
+
+	/** winding 2 off-nominal turns ratio */
+	public float getWINDV2() throws PsseModelException {return _list.getWINDV2(_ndx);}
+	/** nominal winding 2 voltage in kV */
+	public float getNOMV2() throws PsseModelException {return _list.getNOMV2(_ndx);}
+	/** RMA upper limit*/
+	public float getRMA2() throws PsseModelException {return _list.getRMA2(_ndx);}
+	/** RMI lower limit */
+	public float getRMI2() throws PsseModelException {return _list.getRMI2(_ndx);}
+	/** number of taps positions available */
+	public int getNTP2() throws PsseModelException {return _list.getNTP2(_ndx);}
 
 }

@@ -2,11 +2,11 @@ package com.powerdata.openpa.psse.csv;
 
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 
 public class TransformerList extends com.powerdata.openpa.psse.TransformerList
@@ -216,6 +216,9 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	public float getCR1(int ndx) throws PsseModelException {return _cr1[ndx];}
 	@Override
 	public float getCX1(int ndx) throws PsseModelException {return _cx1[ndx];}
+
+	@Override
+	public Complex getZ(int ndx) throws PsseModelException {return _z.get(ndx);}
 
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException
