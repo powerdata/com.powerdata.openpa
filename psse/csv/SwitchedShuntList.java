@@ -83,6 +83,4 @@ public class SwitchedShuntList extends com.powerdata.openpa.psse.SwitchedShuntLi
 	public String getDeftRMIDNT(int ndx) throws PsseModelException {return super.getRMIDNT(ndx);}
 	public float getDeftBINIT(int ndx) throws PsseModelException {return super.getBINIT(ndx);}
 
-	public int getDeftN(int ndx) {return 0;}
-	public float getDeftB(int ndx) {return 0f;}
 }

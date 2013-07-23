@@ -84,6 +84,6 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public String getRMIDNT(int ndx) throws PsseModelException {return "";}
 	/** switched shunt admittance */
 	public float getBINIT(int ndx) throws PsseModelException {return 0f;}
-	/** Get list of shunts for this switched group */
-	public SwShuntBlkList getBlocks(int ndx)throws PsseModelException {return SwShuntBlkList.Empty;}
+	
+	public ShuntList getShunts(int _ndx) throws PsseModelException {return ShuntList.Empty;}
 }

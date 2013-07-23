@@ -48,7 +48,7 @@ public class SwitchedShunt extends PsseBaseObject implements OneTermDev
 	public String getRMIDNT()  throws PsseModelException {return _list.getRMIDNT(_ndx);}
 	/** switched shunt susceptance */
 	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
-	/** block information */
-	public SwShuntBlkList getBlocks() throws PsseModelException {return _list.getBlocks(_ndx);}
+	
+	ShuntList getShunts() throws PsseModelException {return _list.getShunts(_ndx);}
 	
 }
