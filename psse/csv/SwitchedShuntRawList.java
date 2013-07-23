@@ -5,7 +5,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class SwitchedShuntList extends com.powerdata.openpa.psse.SwitchedShuntList
+public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShuntList
 {
 	/** parent container */
 	PsseModel _eq;
@@ -18,8 +18,11 @@ public class SwitchedShuntList extends com.powerdata.openpa.psse.SwitchedShuntLi
 	String[] _i, _swrem, _rmidnt;
 	int[] _modsw;
 	float[] _vswhi, _vswlo, _rmpct, _binit;
-	
-	public SwitchedShuntList(PsseModel eq) throws PsseModelException
+
+	int[][] _n = new int[8][];
+	float[][] _b = new float[8][];
+
+	public SwitchedShuntRawList(PsseModel eq) throws PsseModelException
 	{
 		super(eq);
 		_eq = eq;
@@ -37,14 +40,13 @@ public class SwitchedShuntList extends com.powerdata.openpa.psse.SwitchedShuntLi
 			_rmidnt = LoadArray.String(swsh, "RMIDNT", this, "getDeftRMIDNT");
 			_binit = LoadArray.Float(swsh, "BINIT", this, "getDeftBINIT");
 			
-			int[][] n = new int[8][];
-			float[][] b = new float[8][];
 			
 			for (int i=0; i < 8; ++i)
 			{
-				n[i] = LoadArray.Int(swsh, "N"+i, this, "getDeftN");
-				b[i] = LoadArray.Float(swsh, "B"+i, this, "getDeftB");
+				_n[i] = LoadArray.Int(swsh, "N"+i, this, "getDeftN");
+				_b[i] = LoadArray.Float(swsh, "B"+i, this, "getDeftB");
 			}
+
 			
 		
 		} catch (IOException | ReflectiveOperationException | RuntimeException e)
@@ -82,5 +84,10 @@ public class SwitchedShuntList extends com.powerdata.openpa.psse.SwitchedShuntLi
 	public float getDeftRMPCT(int ndx) throws PsseModelException {return super.getRMPCT(ndx);}
 	public String getDeftRMIDNT(int ndx) throws PsseModelException {return super.getRMIDNT(ndx);}
 	public float getDeftBINIT(int ndx) throws PsseModelException {return super.getBINIT(ndx);}
-
+	
+	public int getDeftN(int ndx) throws PsseModelException {return 0;}
+	public float getDeftB(int ndx) throws PsseModelException {return 0f;}
+	
+	public int[] getN(int ndx) {return _n[ndx];}
+	public float[] getB(int ndx) {return _b[ndx];}
 }

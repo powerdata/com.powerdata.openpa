@@ -7,6 +7,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.SwitchedShunt;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
@@ -25,6 +26,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	LineList			_branchList;
 	TransformerList		_xfrList;
 	PhaseShifterList	_psList;
+	ShuntList			_shList;
+	SvcList				_svcList;
 	
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -65,6 +68,35 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	{
 		if (_psList == null) analyzeRawTransformers();
 		return _psList;
+	}
+	
+	@Override
+	public ShuntList getShunts() throws PsseModelException
+	{
+		if (_shList == null) analyzeRawShunts();
+		return _shList;
+	}
+	@Override
+	public SvcList getSvcs() throws PsseModelException
+	{
+		if (_svcList == null) analyzeRawShunts();
+		return _svcList;
+	}
+	
+	protected void analyzeRawShunts() throws PsseModelException
+	{
+		SwitchedShuntRawList rsh = new SwitchedShuntRawList(this);
+		
+		ArrayList<Integer> shndx = new ArrayList<>();
+		ArrayList<Integer> svcndx = new ArrayList<>();
+		
+		for (SwitchedShunt s : rsh)
+		{
+			((s.getMODSW()==2)?svcndx:shndx).add(s.getIndex());
+		}
+		
+		_shList = new ShuntList(this, rsh, shndx);
+		_svcList = new SvcList(this, rsh, shndx);
 	}
 	
 	/** convert 3-winding to 2-winding and detect phase shifters */
