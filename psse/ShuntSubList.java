@@ -4,7 +4,7 @@ public class ShuntSubList extends ShuntList
 {
 	ShuntList _shunts;
 	int _ndxs[];
-	public ShuntSubList(ShuntList switches, int ndxs[])
+	public ShuntSubList(ShuntList switches, int ndxs[]) throws PsseModelException
 	{
 		super(switches._model);
 		_shunts = switches;
@@ -28,6 +28,12 @@ public class ShuntSubList extends ShuntList
 	{
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public String getI(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
