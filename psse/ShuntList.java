@@ -41,5 +41,7 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	public abstract String getI(int ndx) throws PsseModelException;
 	/** shunt nominal B in MVAr at unity bus voltage */
 	public float getB(int ndx) throws PsseModelException {return 0f;}
+	/** get G, MVAr at unity voltage */
+	public float getG(int ndx) throws PsseModelException {return 0f;}
 
 }

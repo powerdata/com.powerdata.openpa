@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 
@@ -14,11 +15,12 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	int[] _i;
 	boolean[] _swon;
 	float[] _b;
+	float[] _g;
 	String[] _id;
 	
 	ArrayList<Integer> _il = new ArrayList<>();
 	ArrayList<Boolean> _swonl = new ArrayList<>();
-	ArrayList<Float> _bl = new ArrayList<>();
+	ArrayList<Float> _bl = new ArrayList<>(), _gl = new ArrayList<>();
 	ArrayList<String> _idl = new ArrayList<>();
 	
 	public ShuntList() {super();}
@@ -55,7 +57,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 							swon = true;
 							binit += bshblk;
 						}
-						mkShunt(bshblk, bus, rawid, swon, posinswsh++);
+						mkShunt(bshblk, 0f, bus, rawid+"-"+(posinswsh++), swon);
 						--nshblk;
 					}
 					if (bshblk > 0f && nshblk > 0)
@@ -66,37 +68,70 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 							swon = true;
 							binit -= bshblk;
 						}
-						mkShunt(bshblk, bus, rawid, swon, posinswsh++);
+						mkShunt(bshblk, 0f, bus, rawid+"-"+(posinswsh++), swon);
 						--nshblk;
 					}
 				}
 			}
-			_size = _il.size();
-			_i = new int[_size];
-			_swon = new boolean[_size];
-			_b = new float[_size];
-			_id = new String[_size];
 			
-			for (int i=0; i < _size; ++i)
+			
+		}
+		
+		scanBuses();
+		scanLines();
+		
+		_size = _il.size();
+		_i = new int[_size];
+		_swon = new boolean[_size];
+		_b = new float[_size];
+		_g = new float[_size];
+		_id = new String[_size];
+
+		for (int i=0; i < _size; ++i)
+		{
+			_i[i] = _il.get(i);
+			_swon[i] = _swonl.get(i);
+			_b[i] = _bl.get(i);
+			_id[i] = _idl.get(i);
+		}
+	
+	}
+
+	void scanBuses() throws PsseModelException
+	{
+		for (Bus b : _model.getBuses())
+		{
+			float gl = b.getGL();
+			float bl = b.getBL();
+			if (gl != 0f || bl != 0f)
 			{
-				_i[i] = _il.get(i);
-				_swon[i] = _swonl.get(i);
-				_b[i] = _bl.get(i);
-				_id[i] = _idl.get(i);
+				mkShunt(bl, gl, b.getIndex(), b.getObjectID()+"BSH", true);
 			}
-			
+		}
+	}
+	
+	void scanLines() throws PsseModelException
+	{
+		for (Line l : _model.getLines())
+		{
+			float gi = l.getGI();
+			float bi = l.getBI();
+			float gj = l.getGJ();
+			float bj = l.getBJ();
+			if (gi != 0f || bi != 0f)
+				mkShunt(gi, bi, l.getFromBus().getIndex(), l.getObjectID()+"FSH", true);
+			if (gj != 0f || bj != 0f)
+				mkShunt(gj, bj, l.getToBus().getIndex(), l.getObjectID()+"TSH", true);
 		}
 	}
 
-	void mkShunt(float bshblk, int bus, String rawid, boolean swon, int posinswsh)
+	void mkShunt(float b, float g, int bus, String id, boolean swon)
 	{
 		_il.add(bus);
-		_bl.add(bshblk);
+		_bl.add(b);
+		_gl.add(g);
 		_swonl.add(swon);
-		StringBuilder sb = new StringBuilder(rawid);
-		sb.append('-');
-		sb.append(posinswsh);
-		_idl.add(sb.toString());
+		_idl.add(id);
 	}
 
 	@Override
