@@ -96,7 +96,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		}
 		
 		_shList = new ShuntList(this, rsh, shndx);
-		_svcList = new SvcList(this, rsh, shndx);
+		_svcList = new SvcList(this, rsh, svcndx);
 	}
 	
 	/** convert 3-winding to 2-winding and detect phase shifters */

@@ -13,4 +13,17 @@ public class Limits
 
 	public float getMin() {return _min;}
 	public float getMax() {return _max;}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder("[ ");
+		sb.append(_min);
+		sb.append(", ");
+		sb.append(_max);
+		sb.append(" ]");
+		return sb.toString();
+	}
+	
+	
 }

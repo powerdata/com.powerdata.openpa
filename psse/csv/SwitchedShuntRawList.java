@@ -19,8 +19,8 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	int[] _modsw;
 	float[] _vswhi, _vswlo, _rmpct, _binit;
 
-	int[][] _n = new int[8][];
-	float[][] _b = new float[8][];
+	int[][] _n;
+	float[][] _b;
 
 	public SwitchedShuntRawList(PsseModel eq) throws PsseModelException
 	{
@@ -32,7 +32,7 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 			SimpleCSV swsh = new SimpleCSV(dbfile);
 			_size = swsh.getRowCount();
 			_i = swsh.get("I");
-			_modsw = LoadArray.Int(swsh,"IDE", this, "getDeftMODSW");
+			_modsw = LoadArray.Int(swsh,"MODSW", this, "getDeftMODSW");
 			_vswhi = LoadArray.Float(swsh, "VSWHI", this, "getDeftVSWHI");
 			_vswlo = LoadArray.Float(swsh, "VSWLO", this, "getDeftVSWLO");
 			_swrem = LoadArray.String(swsh, "SWREM", this, "getDeftSWREM");
@@ -40,15 +40,22 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 			_rmidnt = LoadArray.String(swsh, "RMIDNT", this, "getDeftRMIDNT");
 			_binit = LoadArray.Float(swsh, "BINIT", this, "getDeftBINIT");
 			
+			_n = new int[_size][8];
+			_b = new float[_size][8];
 			
-			for (int i=0; i < 8; ++i)
+			
+			
+			for (int i=0, j=1; i < 8; ++i, ++j)
 			{
-				_n[i] = LoadArray.Int(swsh, "N"+i, this, "getDeftN");
-				_b[i] = LoadArray.Float(swsh, "B"+i, this, "getDeftB");
+				int[] tn = LoadArray.Int(swsh, "N"+j, this, "getDeftN");
+				float[] tb = LoadArray.Float(swsh, "B"+j, this, "getDeftB");
+				for(int k=0; k < _size; ++k)
+				{
+					_n[k][i] = tn[k];
+					_b[k][i] = tb[k];
+				}
 			}
 
-			
-		
 		} catch (IOException | ReflectiveOperationException | RuntimeException e)
 		{
 			throw new PsseModelException(e);
@@ -90,4 +97,6 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	
 	public int[] getN(int ndx) {return _n[ndx];}
 	public float[] getB(int ndx) {return _b[ndx];}
+	
+	
 }

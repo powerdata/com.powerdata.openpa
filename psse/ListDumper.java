@@ -17,7 +17,7 @@ public class ListDumper
 {
 	static final char Dlm = ',';
 	static final Set<String> MethodFilter = 
-		new HashSet<>(Arrays.asList(new String[] {"getPsseModel", "getClass"}));
+		new HashSet<>(Arrays.asList(new String[] {"getPsseModel", "getClass", "isEmpty"}));
 		
 	static final Set<String> ListFilter = 
 		new HashSet<>(Arrays.asList(new String[] {"getBus", "getClass"}));
@@ -49,15 +49,15 @@ public class ListDumper
 		for (Method m : methods)
 		{
 			String nm = m.getName();
-			if (nm.startsWith("get") && nm.length() > 3
-					&& !MethodFilter.contains(nm)
-					/*&& ReturnTypeFilter.contains(m.getReturnType())*/)
+			boolean yget = nm.startsWith("get");
+			boolean yis = nm.startsWith("is");
+			if ((yget || yis) && nm.length() > 3
+					&& !MethodFilter.contains(nm))
 			{
 				ometh.add(m);
-				mname.add(nm.substring(3));
+				mname.add(nm.substring(yget?3:2));
 			}
 		}
-
 		int n = list.size();
 		if (!ometh.isEmpty() && n > 0)
 		{
