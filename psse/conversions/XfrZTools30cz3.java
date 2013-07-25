@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse.conversions;
 
+import com.powerdata.openpa.psse.PhaseShifter;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerRaw;
@@ -12,6 +13,12 @@ public class XfrZTools30cz3 implements XfrZTools
 	public Complex convert2W(Transformer xf) throws PsseModelException
 	{
 		return cvt(xf.getR1_2(), xf.getX1_2(), xf.getSBASE1_2());
+	}
+
+	@Override
+	public Complex convert2W(PhaseShifter ps) throws PsseModelException
+	{
+		return cvt(ps.getR1_2(), ps.getX1_2(), ps.getSBASE1_2());
 	}
 
 	@Override
@@ -34,4 +41,5 @@ public class XfrZTools30cz3 implements XfrZTools
 		r /= (1e+6F * sbase);
 		return new Complex(r, (float) Math.sqrt(x * x - r * r));
 	}
+
 }

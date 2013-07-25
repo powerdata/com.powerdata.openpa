@@ -56,22 +56,8 @@ public abstract class LineList extends PsseBaseList<Line>
 		return PAMath.rebaseZ100(new Complex(getR(ndx), getX(ndx)),
 				_model.getSBASE());
 	}
-	/** from-side charging susceptance, p.u. on 100MVA base at unity voltage */
-	public float getFromBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
-	/** to-side charging susceptance, p.u. on 100MVA base at unity voltage */
-	public float getToBch(int ndx) throws PsseModelException {return getB(ndx)/2F;}
-	/** conductance of line shunt at from-side bus on 100 MVA base */ 
-	public Complex getFromShuntY(int ndx) throws PsseModelException
-	{
-		return PAMath.rebaseZ100(new Complex(getGI(ndx), getBI(ndx)),
-				_model.getSBASE());
-	}
-	/** complex admittance of line shunt at to-side bus on 100 MVA base */
-	public Complex getToShuntY(int ndx) throws PsseModelException
-	{
-		return PAMath.rebaseZ100(new Complex(getGJ(ndx), getBJ(ndx)),
-				_model.getSBASE());
-	}
+	public Complex getFromY(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
+	public Complex getToY(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 
 	/* raw PSS/e methods */
 	/** From-side bus number or name */
@@ -106,5 +92,4 @@ public abstract class LineList extends PsseBaseList<Line>
 	public float getLEN(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;} //TODO: implement
-
 }	

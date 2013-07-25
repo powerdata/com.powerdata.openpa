@@ -78,7 +78,7 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	@Override
 	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
-	public String getObjectID(int ndx) { return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
+	public String getObjectID(int ndx) { return "LN-"+_i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
 	@Override
 	public int size() { return _size; }
 	

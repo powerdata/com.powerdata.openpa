@@ -1,6 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public interface OneTermDev
+import com.powerdata.openpa.tools.BaseObject;
+
+public interface OneTermDev extends BaseObject
 {
 	public Bus getBus() throws PsseModelException;
 }

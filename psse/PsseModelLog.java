@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.BaseObject;
+import com.powerdata.openpa.tools.AbstractBaseObject;
 
 public interface PsseModelLog
 {
-	public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException;
+	public void log(LogSev severity, AbstractBaseObject obj, String msg) throws PsseModelException;
 }

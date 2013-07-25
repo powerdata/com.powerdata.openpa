@@ -33,17 +33,8 @@ public class Line extends PsseBaseObject implements ACBranch
 	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
-	/** from-side charging susceptance, p.u. on 100MVA base at unity voltage */
-	public float getFromBch() throws PsseModelException {return _list.getFromBch(_ndx);}
-	/** to-side charging susceptance, p.u. on 100MVA base at unity voltage */
-	public float getToBch() throws PsseModelException {return _list.getToBch(_ndx);}
-	/** get complex impedance */
 	@Override
 	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
-	/** conductance of line shunt at from-side bus on 100 MVA base */ 
-	public Complex getFromShuntY() throws PsseModelException {return _list.getFromShuntY(_ndx);}
-	/** complex admittance of line shunt at to-side bus on 100 MVA base */
-	public Complex getToShuntY() throws PsseModelException {return _list.getToShuntY(_ndx);}
 
 	/* Raw PSS/e methods */
 	
@@ -80,5 +71,16 @@ public class Line extends PsseBaseObject implements ACBranch
 	
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
-	
+
+
+	@Override
+	public Complex getFromY() throws PsseModelException {return _list.getFromY(_ndx);}
+	@Override
+	public Complex getToY() throws PsseModelException {return _list.getToY(_ndx);}
+	@Override
+	public float getFromTap() throws PsseModelException {return 1f;}
+	@Override
+	public float getToTap() throws PsseModelException {return 1f;}
+	@Override
+	public float getPhaseShift() throws PsseModelException {return 0f;}
 }

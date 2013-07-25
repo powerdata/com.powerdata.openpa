@@ -1,10 +1,15 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.conversions.XfrMagYTool;
+import com.powerdata.openpa.psse.conversions.XfrWndTool;
+import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PAMath;
 
 public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 {
 	protected BusList _buses;
+	protected XfrZToolFactory _ztool;
 	
 	public static final PhaseShifterList Empty = new PhaseShifterList()
 	{
@@ -25,6 +30,7 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	{
 		super(model);
 		_buses = model.getBuses();
+		_ztool = XfrZToolFactory.Open(_model.getPsseVersion());
 	}
 
 	
@@ -39,7 +45,16 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	
 	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
 	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
-	public Complex getZ(int ndx) throws PsseModelException {return Complex.Zero;} //TODO: implement
+	public Complex getZ(int ndx) throws PsseModelException
+	{
+		return _ztool.get(getCZ(ndx)).convert2W(get(ndx));
+	}
+
+	public Complex getFromY(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
+	public Complex getToY(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
+	public float getFromTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio1(get(ndx));}
+	public float getToTap(int ndx) throws PsseModelException {return 1f;}
+	public float getPhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG1(ndx));}
 
 
 	/* Raw methods */
@@ -111,7 +126,6 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	public OwnershipList getOwnership(int ndx) throws PsseModelException
 	{
 		return OwnershipList.Empty;
-		//TODO: implement
 	}
 }	
 

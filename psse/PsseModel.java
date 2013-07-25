@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
-import com.powerdata.openpa.tools.BaseObject;
+import com.powerdata.openpa.tools.AbstractBaseObject;
 
 public class PsseModel
 {
@@ -52,7 +52,7 @@ public class PsseModel
 	protected PsseModelLog _log = new PsseModelLog()
 	{
 		@Override
-		public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
+		public void log(LogSev severity, AbstractBaseObject obj, String msg) throws PsseModelException
 		{
 			String objclass = obj.getClass().getSimpleName();
 			String objnm = obj.getDebugName();
@@ -65,7 +65,7 @@ public class PsseModel
 	public PsseModel() {} 
 	public PsseModel(PsseModelLog log) {_log = log;} 
 	
-	public void log(LogSev severity, BaseObject obj, String msg) throws PsseModelException
+	public void log(LogSev severity, AbstractBaseObject obj, String msg) throws PsseModelException
 	{
 		_log.log(severity, obj, msg);
 	}
@@ -103,6 +103,12 @@ public class PsseModel
 	public ShuntList getShunts() throws PsseModelException {return ShuntList.Empty;}
 	public SvcList getSvcs() throws PsseModelException {return SvcList.Empty;}
 	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return SwitchedShuntList.Empty;}
+	
+	/** for convience, get a list of all ac branches */
+	public ACBranchList getBranches() throws PsseModelException
+	{
+		return new ACBranchList(getLines(), getTransformers(), getPhaseShifters());
+	}
 }	
 
 

@@ -1,7 +1,9 @@
 package com.powerdata.openpa.psse.conversions;
 
+import com.powerdata.openpa.psse.PhaseShifter;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerRawList;
+import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.TransformerRaw;
 
 public abstract class XfrWndTool
 {
@@ -21,8 +23,11 @@ public abstract class XfrWndTool
 	
 	public static XfrWndTool get(int cw) {return _ToolSet[cw];}
 
-	public abstract float getRatio1(TransformerRawList list, int ndx) throws PsseModelException;
-	public abstract float getRatio2(TransformerRawList list, int ndx) throws PsseModelException;
-	public abstract float getRatio3(TransformerRawList list, int ndx) throws PsseModelException;
+	public abstract float getRatio1(TransformerRaw xf) throws PsseModelException;
+	public abstract float getRatio2(TransformerRaw xf) throws PsseModelException;
+	public abstract float getRatio3(TransformerRaw xf) throws PsseModelException;
+	public abstract float getRatio1(Transformer xf) throws PsseModelException;
+	public abstract float getRatio2(Transformer xf) throws PsseModelException;
+	public abstract float getRatio1(PhaseShifter ps) throws PsseModelException;
 	
 }

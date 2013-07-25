@@ -26,7 +26,17 @@ public class Transformer extends PsseBaseObject implements ACBranch
 	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	@Override
 	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
-	
+	@Override
+	public Complex getFromY() throws PsseModelException {return _list.getFromY(_ndx);}
+	@Override
+	public Complex getToY() throws PsseModelException {return _list.getToY(_ndx);}
+	@Override
+	public float getFromTap() throws PsseModelException {return _list.getFromTap(_ndx);}
+	@Override
+	public float getToTap() throws PsseModelException {return _list.getToTap(_ndx);}
+	@Override
+	public float getPhaseShift() throws PsseModelException {return _list.getPhaseShift(_ndx);}
+
 	/* RAW methods */
 	/** Winding 1 bus number or name */ 
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}

@@ -132,7 +132,8 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException
 	{
-		StringBuilder sb = new StringBuilder(getI(ndx));
+		StringBuilder sb = new StringBuilder("PS-");
+		sb.append(getI(ndx));
 		sb.append('-');
 		sb.append(getJ(ndx));
 		sb.append('-');
