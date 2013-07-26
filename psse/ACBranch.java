@@ -18,4 +18,12 @@ public interface ACBranch extends TwoTermDev
 	public float getToTap() throws PsseModelException;
 	/** get phase shift through branch (in RAD)*/
 	public float getPhaseShift() throws PsseModelException;
+	/** update from-side realtime complex power */
+	public void setRTFromS(Complex s) throws PsseModelException;
+	/** update to-side realtime complex power */
+	public void setRTToS(Complex s) throws PsseModelException;
+	/** get from-side realtime complex power */
+	public Complex getRTFromS() throws PsseModelException;
+	/** get to-side realtime complex power */
+	public Complex getRTToS() throws PsseModelException;
 }

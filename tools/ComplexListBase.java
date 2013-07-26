@@ -18,11 +18,11 @@ public abstract class ComplexListBase<T> extends AbstractList<T>
 		_size = 0;
 	}
 	
-	public ComplexListBase(int descap)
+	public ComplexListBase(int descap, boolean setsize)
 	{
 		_v1 = new float[descap];
 		_v2 = new float[descap];
-		_size = 0;
+		_size = setsize ? descap : 0;
 	}
 	
 	public void ensureCapacity(int descap)

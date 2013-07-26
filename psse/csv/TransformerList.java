@@ -13,23 +13,25 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	int _size;
 
 	/* line 1 */
-	private String[] _ckt, _name, _cont1;
-	private int[] _i, _j, _cw, _cm, _nmetr, _stat;
-	private float[] _mag1, _mag2;
+	String[] _ckt, _name, _cont1;
+	int[] _i, _j, _cw, _cm, _nmetr, _stat;
+	float[] _mag1, _mag2;
 	
 	/* line 2 */
-	private ComplexList _z;
-	private float[] _sbase;
+	ComplexList _z;
+	float[] _sbase;
 	
 	/* line 3 */
-	private float[]		_windv1, _nomv1, _ang1, _rata1, _ratb1, _ratc1, _rma1,
+	float[]		_windv1, _nomv1, _ang1, _rata1, _ratb1, _ratc1, _rma1,
 			_rmi1, _vma1, _vmi1, _cr1, _cx1;
-	private int[]		_cod1, _ntp1, _tab1;
+	int[]		_cod1, _ntp1, _tab1;
 	
 	/* line 4 */
-	private float[] _windv2, _nomv2, _rma2, _rmi2;
-	private int[] _ntp2;
+	float[] _windv2, _nomv2, _rma2, _rmi2;
+	int[] _ntp2;
 	
+	ComplexList _fs, _ts;
+
 	public TransformerList(PsseModel model, TransformerRawList rlist,
 			TransformerPrep prep) throws PsseModelException 
 	{
@@ -73,6 +75,9 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 		_cx1 = (float[]) new WndLoader("CX").load(rlist, xfndx, wndx, float.class);
 		
 		loadLine4(rlist, xfndx, wndx);
+		
+		_fs = new ComplexList(_size, true);
+		_ts = new ComplexList(_size, true);
 	}	
 	
 	private void loadLine4(TransformerRawList rlist, int[] xfndx, int[] wndx) throws PsseModelException
@@ -202,5 +207,15 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	@Override
 	public int size() {return _size;}
 	
+	/* Realtime fields */
+
+	@Override
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_fs.set(ndx, s);}
+	@Override
+	public void setRTToS(int ndx, Complex s) throws PsseModelException {_ts.set(ndx, s);}
+	@Override
+	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
+	@Override
+	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
 }
 

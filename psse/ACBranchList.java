@@ -35,6 +35,14 @@ public class ACBranchList extends BaseList<ACBranch>
 		public float getToTap() throws PsseModelException {return ACBranchList.this.getToTap(_ndx);}
 		@Override
 		public float getPhaseShift() throws PsseModelException {return ACBranchList.this.getPhaseShift(_ndx);}
+		@Override
+		public void setRTFromS(Complex s) throws PsseModelException {ACBranchList.this.setRTFromS(_ndx, s);}
+		@Override
+		public void setRTToS(Complex s) throws PsseModelException {ACBranchList.this.setRTToS(_ndx, s);}
+		@Override
+		public Complex getRTFromS() throws PsseModelException {return ACBranchList.this.getRTFromS(_ndx);}
+		@Override
+		public Complex getRTToS() throws PsseModelException {return ACBranchList.this.getRTToS(_ndx);}
 	}
 	
 	int _nlines;
@@ -74,6 +82,10 @@ public class ACBranchList extends BaseList<ACBranch>
 	public float getFromTap(int ndx) throws PsseModelException {return findBranch(ndx).getFromTap();}
 	public Complex getToYcm(int ndx) throws PsseModelException {return findBranch(ndx).getToYcm();}
 	public Complex getFromYcm(int ndx) throws PsseModelException {return findBranch(ndx).getFromYcm();}
+	public Complex getRTToS(int ndx) throws PsseModelException { return findBranch(ndx).getRTToS(); }
+	public Complex getRTFromS(int ndx) throws PsseModelException {return findBranch(ndx).getRTFromS();}
+	public void setRTToS(int ndx, Complex s) throws PsseModelException {findBranch(ndx).setRTToS(s);}
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException {findBranch(ndx).setRTFromS(s);}
 
 	ACBranch findBranch(int ndx)
 	{

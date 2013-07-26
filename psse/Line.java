@@ -37,6 +37,16 @@ public class Line extends PsseBaseObject implements ACBranch
 	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
 	@Override
 	public Complex getY() throws PsseModelException {return _list.getY(_ndx);} 
+	@Override
+	public Complex getFromYcm() throws PsseModelException {return _list.getFromYchg(_ndx);}
+	@Override
+	public Complex getToYcm() throws PsseModelException {return _list.getToYchg(_ndx);}
+	@Override
+	public float getFromTap() throws PsseModelException {return 1f;}
+	@Override
+	public float getToTap() throws PsseModelException {return 1f;}
+	@Override
+	public float getPhaseShift() throws PsseModelException {return 0f;}
 
 	/* Raw PSS/e methods */
 	
@@ -74,15 +84,14 @@ public class Line extends PsseBaseObject implements ACBranch
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 
-
+	/* real time fields */
+	
 	@Override
-	public Complex getFromYcm() throws PsseModelException {return _list.getFromYchg(_ndx);}
+	public void setRTFromS(Complex s) throws PsseModelException {_list.setRTFromS(_ndx, s);}
 	@Override
-	public Complex getToYcm() throws PsseModelException {return _list.getToYchg(_ndx);}
+	public void setRTToS(Complex s) throws PsseModelException {_list.setRTToS(_ndx, s);}
 	@Override
-	public float getFromTap() throws PsseModelException {return 1f;}
+	public Complex getRTFromS() throws PsseModelException {return _list.getRTFromS(_ndx);}
 	@Override
-	public float getToTap() throws PsseModelException {return 1f;}
-	@Override
-	public float getPhaseShift() throws PsseModelException {return 0f;}
+	public Complex getRTToS() throws PsseModelException {return _list.getRTToS(_ndx);}
 }

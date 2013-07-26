@@ -19,6 +19,8 @@ public class ComplexList extends ComplexListBase<Complex>
 
 	public ComplexList() {super();}
 	
+	public ComplexList(int descap, boolean setsize) {super(descap, setsize);}
+	
 	public ComplexList(Collection<Complex> collection)
 	{
 		int csize = collection.size();

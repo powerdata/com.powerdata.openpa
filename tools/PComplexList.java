@@ -19,6 +19,9 @@ public class PComplexList extends ComplexListBase<PComplex>
 
 
 	public PComplexList() {super();}
+
+	public PComplexList(int descap, boolean setsize) {super(descap, setsize);}
+
 	
 	public PComplexList(Collection<PComplex> collection)
 	{

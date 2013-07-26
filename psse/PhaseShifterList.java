@@ -128,5 +128,12 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	{
 		return OwnershipList.Empty;
 	}
+
+	/* realtime fields */
+
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
+	public void setRTToS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
+	public Complex getRTFromS(int ndx) throws PsseModelException { return Complex.Zero;}
+	public Complex getRTToS(int ndx) throws PsseModelException {return Complex.Zero;}
 }	
 

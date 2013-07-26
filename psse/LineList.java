@@ -60,6 +60,7 @@ public abstract class LineList extends PsseBaseList<Line>
 	public Complex getFromYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 	public Complex getToYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 
+	
 	/* raw PSS/e methods */
 	/** From-side bus number or name */
 	public abstract String getI(int ndx) throws PsseModelException;
@@ -93,4 +94,13 @@ public abstract class LineList extends PsseBaseList<Line>
 	public float getLEN(int ndx) throws PsseModelException {return 0f;}
 	/** return Ownership as a list */
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;} //TODO: implement
+
+	/* realtime fields */
+
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
+	public void setRTToS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
+	public Complex getRTFromS(int ndx) throws PsseModelException { return Complex.Zero;}
+	public Complex getRTToS(int ndx) throws PsseModelException {return Complex.Zero;}
+
+
 }	

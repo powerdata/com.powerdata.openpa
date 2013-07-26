@@ -159,4 +159,11 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	 * Allow a number of positions to be specified on winding 2.
 	 */
 	public int getNTP2(int ndx) throws PsseModelException {return 33;}
+
+	/* realtime fields */
+
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
+	public void setRTToS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
+	public Complex getRTFromS(int ndx) throws PsseModelException { return Complex.Zero;}
+	public Complex getRTToS(int ndx) throws PsseModelException {return Complex.Zero;}
 }	

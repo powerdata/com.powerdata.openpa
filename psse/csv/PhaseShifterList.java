@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 
 public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
@@ -21,6 +22,8 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	private float[]		_windv1, _nomv1, _ang1, _rata1, _ratb1, _ratc1, _rma1,
 			_rmi1, _vma1, _vmi1, _cr1, _cx1;
 	private int[]		_cod1, _ntp1, _tab1;
+	
+	ComplexList _fs, _ts;
 	
 	public PhaseShifterList(PsseModel model, TransformerRawList rlist,
 			TransformerPrep prep) throws PsseModelException
@@ -61,6 +64,8 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 		_cr1 = (float[]) new WndLoader("CR").load(rlist, xfndx, wndx, float.class);
 		_cx1 = (float[]) new WndLoader("CX").load(rlist, xfndx, wndx, float.class);
 		
+		_fs = new ComplexList(_size, true);
+		_ts = new ComplexList(_size, true);
 	}
 
 	@Override
@@ -141,11 +146,17 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 		return sb.toString();
 	}
 
+	@Override
+	public int size() {return _size;}
+	
+	/* Realtime fields */
 
 	@Override
-	public int size()
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_fs.set(ndx, s);}
+	@Override
+	public void setRTToS(int ndx, Complex s) throws PsseModelException {_ts.set(ndx, s);}
+	@Override
+	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
+	@Override
+	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
 }
