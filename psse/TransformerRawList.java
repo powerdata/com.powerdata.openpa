@@ -228,7 +228,12 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	/* line 5 */
 	
 	/** Winding 3 off-nominal turns ratio */
-	public float getWINDV3(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_buses.get(getK(ndx)).getBASKV():1f);}
+	public float getWINDV3(int ndx) throws PsseModelException
+	{
+		String k = getK(ndx);
+		return ((getCW(ndx) == 2 && !k.isEmpty() && !k.equals("0")) ? _buses.get(getK(ndx)).getBASKV() : 1f);
+	}
+
 	/** Winding 3 nominal voltage */
 	public float getNOMV3(int ndx) throws PsseModelException {return _buses.get(getK(ndx)).getBASKV();}
 	/** Winding 3 phase shift angle (degrees) */
@@ -248,11 +253,12 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	{
 		int cod = Math.abs(getCOD3(ndx));
 		int cw = getCW(ndx);
+		String k = getK(ndx);
 		if (cod == 3)
 		{
 			return 180f;
 		}
-		else if (cod < 3 && cw == 2)
+		else if (cod < 3 && cw == 2 && !k.isEmpty() && !k.equals("0"))
 		{
 			return 1.1f * _buses.get(getK(ndx)).getBASKV();
 		}
@@ -263,11 +269,12 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	{
 		int cod = Math.abs(getCOD3(ndx));
 		int cw = getCW(ndx);
+		String k = getK(ndx);
 		if (cod == 3)
 		{
 			return -180f;
 		}
-		else if (cod < 3 && cw == 2)
+		else if (cod < 3 && cw == 2 && !k.isEmpty() && !k.equals("0"))
 		{
 			return 0.9f * _buses.get(getK(ndx)).getBASKV();
 		}

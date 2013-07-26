@@ -31,19 +31,16 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	/** set the generator mode */
 	public void setMode(GenMode mode) throws PsseModelException { _list.setMode(_ndx, mode); }
 	/** get case complex power */
-	public Complex getPwr() throws PsseModelException {return _list.getPwr(_ndx);}
-	/** Maximum generator reactive power output (QT) p.u. */
-	public float getMaxReacPwr() throws PsseModelException {return _list.getMaxReacPwr(_ndx);}
-	/** Minimum generator reactive power output (QB) p.u. */
-	public float getMinReacPwr() throws PsseModelException {return _list.getMinReacPwr(_ndx);}
+	public Complex getCaseS() throws PsseModelException {return _list.getCaseS(_ndx);}
+	/** generator reactive limits */
+	public Limits getReactiveLimits() throws PsseModelException {return _list.getReactiveLimits(_ndx);}
 	/** machine complex impedance */
 	public Complex getMachZ() throws PsseModelException {return _list.getMachZ(_ndx);}
 //	/** Step-up transformer impedance */
 //	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
-	/** max active power (PT) p.u. */
-	public float getMaxActvPwr() throws PsseModelException {return _list.getMaxActvPwr(_ndx);}
-	/** min active power (PB) p.u. */
-	public float getMinActvPwr() throws PsseModelException {return _list.getMinActvPwr(_ndx);}
+
+	/** generator active power limits p.u. on 100MVA base */
+	public Limits getActiveLimits() throws PsseModelException {return _list.getActiveLimits(_ndx);}
 	
 	/* Raw PSS/e methods */
 	
@@ -88,7 +85,9 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
-	
-	
 
+	@Override
+	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
+	@Override
+	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
 }

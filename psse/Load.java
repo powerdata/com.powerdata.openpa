@@ -30,7 +30,7 @@ public class Load extends PsseBaseObject implements OneTermDev
 	/** get Zone record */
 	public Zone getZoneObj() throws PsseModelException {return _list.getZoneObj(_ndx);}
 	/** get complex power (PL) */
-	public Complex getPwr() throws PsseModelException {return _list.getPwr(_ndx);}
+	public Complex getCaseS() throws PsseModelException {return _list.getPwr(_ndx);}
 	/** Complex constant current load at 1pu voltage */
 	public Complex getPwrI() throws PsseModelException {return _list.getPwrI(_ndx);}
 	/** Complex constant admittance load at 1pu voltage */
@@ -76,4 +76,18 @@ public class Load extends PsseBaseObject implements OneTermDev
 	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
 	/** get the cold load MVar */
 	public float getRTColdMVar() throws PsseModelException { return _list.getRTColdMVar(_ndx); }
+
+	@Override
+	public void setRTS(Complex s) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Complex getRTS() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

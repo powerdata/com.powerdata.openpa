@@ -60,24 +60,25 @@ public abstract class GenList extends PsseBaseList<Gen>
 		}
 	}
 	/** get case complex power */
-	public Complex getPwr(int ndx) throws PsseModelException
+	public Complex getCaseS(int ndx) throws PsseModelException
 	{
 		return new Complex(PAMath.mw2pu(getPG(ndx)),
 				PAMath.mvar2pu(getQG(ndx)));
 	}
-	/** Maximum generator reactive power output (QT) p.u. */
-	public float getMaxReacPwr(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQT(ndx));}
-	/** Minimum generator reactive power output (QB) p.u. */
-	public float getMinReacPwr(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQB(ndx));}
+
+	/** reactive power limits */
+	public Limits getReactiveLimits(int ndx) throws PsseModelException {return new Limits(PAMath.mvar2pu(getQB(ndx)), PAMath.mvar2pu(getQT(ndx)));}
 	/** machine impedance on 100 MVA base */
 	public Complex getMachZ(int ndx) throws PsseModelException 
 	{
 		return PAMath.rebaseZ100(new Complex(getZR(ndx), getZX(ndx)), getMBASE(ndx));
 	}
-	/** max active power (PT) p.u. */
-	public float getMaxActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPT(ndx));}
-	/** min active power (PB) p.u. */
-	public float getMinActvPwr(int ndx) throws PsseModelException {return PAMath.mw2pu(getPB(ndx));}
+
+	/** active power limits */
+	public Limits getActiveLimits(int ndx) throws PsseModelException
+	{
+		return new Limits(PAMath.mw2pu(getPB(ndx)), PAMath.mw2pu(getPT(ndx)));
+	}
 
 	public void setMode(int ndx, GenMode mode) throws PsseModelException {};
 
@@ -123,7 +124,6 @@ public abstract class GenList extends PsseBaseList<Gen>
 
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}//TODO: implement
 
-	
-	
-
+	public Complex getRTS(int ndx) throws PsseModelException {return getCaseS(ndx);}
+	public void setRTS(int ndx, Complex s) {/* do nothing */}
 }

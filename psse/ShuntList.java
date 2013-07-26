@@ -1,5 +1,8 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.busmismatch.PowerCalculator;
+import com.powerdata.openpa.tools.Complex;
+
 public abstract class ShuntList extends PsseBaseList<Shunt>
 {
 	public static final ShuntList Empty = new ShuntList()
@@ -13,6 +16,7 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	};
 	
 	protected BusList _buses;
+	Complex _tmps;
 	
 	protected ShuntList(){super();}
 
@@ -32,7 +36,7 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	/* convenience methods */
 	
 	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public float getNomB(int ndx) throws PsseModelException {return getB(ndx)/100f;}
+	public Complex getCaseY(int ndx) throws PsseModelException {return new Complex(getG(ndx), getB(ndx)).div(100f);}
 	public boolean isSwitchedOn(int ndx) throws PsseModelException {return false;}
 
 	/* raw methods */
@@ -43,5 +47,15 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	public float getB(int ndx) throws PsseModelException {return 0f;}
 	/** get G, MVAr at unity voltage */
 	public float getG(int ndx) throws PsseModelException {return 0f;}
+
+	/* RT fields */
+	
+	public void setRTS(int ndx, Complex s) {_tmps = s;}
+
+	public Complex getRTS(int ndx) throws PsseModelException
+	{
+		PowerCalculator.calcShunt(get(ndx));
+		return _tmps;
+	}
 
 }

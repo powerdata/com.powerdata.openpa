@@ -5,6 +5,8 @@ import java.util.List;
 import com.powerdata.openpa.psse.Limits;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.ComplexList;
 
 public class SvcList extends com.powerdata.openpa.psse.SvcList
 {
@@ -14,6 +16,8 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 	float[] _rmpct, _binit, _minB, _maxB, _vsp;
 	String[] _id;
 	
+	ComplexList _rts;
+
 	
 	public SvcList() {super();}
 	public SvcList(PsseModel model, SwitchedShuntRawList raw,
@@ -30,6 +34,8 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 		_maxB = new float[_size];
 		_id = new String[_size];
 		_vsp = new float[_size];
+		_rts = new ComplexList(_size, true);
+
 		
 		for (int i=0; i < _size; ++i)
 		{
@@ -76,4 +82,10 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 	public float getRMPCT(int ndx) throws PsseModelException {return _rmpct[ndx];}
 	@Override
 	public float getBINIT(int ndx) throws PsseModelException {return _binit[ndx];}
+
+	@Override
+	public void setRTS(int ndx, Complex s) {_rts.set(ndx, s);}
+	@Override
+	public Complex getRTS(int ndx) {return _rts.get(ndx);}
+
 }

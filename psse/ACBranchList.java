@@ -4,6 +4,8 @@ import com.powerdata.openpa.tools.AbstractBaseObject;
 import com.powerdata.openpa.tools.BaseList;
 import com.powerdata.openpa.tools.Complex;
 
+/** Representation of in-service branches */
+
 public class ACBranchList extends BaseList<ACBranch>
 {
 	public static final ACBranchList Empty = new ACBranchList() 
