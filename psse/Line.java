@@ -35,6 +35,8 @@ public class Line extends PsseBaseObject implements ACBranch
 	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	@Override
 	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
+	@Override
+	public Complex getY() throws PsseModelException {return _list.getY(_ndx);} 
 
 	/* Raw PSS/e methods */
 	
@@ -74,9 +76,9 @@ public class Line extends PsseBaseObject implements ACBranch
 
 
 	@Override
-	public Complex getFromY() throws PsseModelException {return _list.getFromY(_ndx);}
+	public Complex getFromYcm() throws PsseModelException {return _list.getFromYchg(_ndx);}
 	@Override
-	public Complex getToY() throws PsseModelException {return _list.getToY(_ndx);}
+	public Complex getToYcm() throws PsseModelException {return _list.getToYchg(_ndx);}
 	@Override
 	public float getFromTap() throws PsseModelException {return 1f;}
 	@Override

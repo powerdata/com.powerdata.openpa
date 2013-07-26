@@ -56,8 +56,9 @@ public abstract class LineList extends PsseBaseList<Line>
 		return PAMath.rebaseZ100(new Complex(getR(ndx), getX(ndx)),
 				_model.getSBASE());
 	}
-	public Complex getFromY(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
-	public Complex getToY(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
+	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
+	public Complex getFromYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
+	public Complex getToYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 
 	/* raw PSS/e methods */
 	/** From-side bus number or name */

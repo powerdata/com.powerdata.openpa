@@ -24,9 +24,11 @@ public class ACBranchList extends BaseList<ACBranch>
 		@Override
 		public Complex getZ() throws PsseModelException {return ACBranchList.this.getZ(_ndx);}
 		@Override
-		public Complex getFromY() throws PsseModelException {return ACBranchList.this.getFromY(_ndx);}
+		public Complex getY() throws PsseModelException {return ACBranchList.this.getY(_ndx);}
 		@Override
-		public Complex getToY() throws PsseModelException {return ACBranchList.this.getToY(_ndx);}
+		public Complex getFromYcm() throws PsseModelException {return ACBranchList.this.getFromYcm(_ndx);}
+		@Override
+		public Complex getToYcm() throws PsseModelException {return ACBranchList.this.getToYcm(_ndx);}
 		@Override
 		public float getFromTap() throws PsseModelException {return ACBranchList.this.getFromTap(_ndx);}
 		@Override
@@ -64,13 +66,14 @@ public class ACBranchList extends BaseList<ACBranch>
 	public ACBranch get(String id) { return super.get(id); }
 
 	public Complex getZ(int ndx) throws PsseModelException {return findBranch(ndx).getZ();}
+	public Complex getY(int ndx) throws PsseModelException {return findBranch(ndx).getY();}
 	public Bus getToBus(int ndx) throws PsseModelException {return findBranch(ndx).getToBus();}
 	public Bus getFromBus(int ndx) throws PsseModelException {return findBranch(ndx).getFromBus();}
 	public float getPhaseShift(int ndx) throws PsseModelException {return findBranch(ndx).getPhaseShift();}
 	public float getToTap(int ndx) throws PsseModelException {return findBranch(ndx).getToTap();}
 	public float getFromTap(int ndx) throws PsseModelException {return findBranch(ndx).getFromTap();}
-	public Complex getToY(int ndx) throws PsseModelException {return findBranch(ndx).getToY();}
-	public Complex getFromY(int ndx) throws PsseModelException {return findBranch(ndx).getFromY();}
+	public Complex getToYcm(int ndx) throws PsseModelException {return findBranch(ndx).getToYcm();}
+	public Complex getFromYcm(int ndx) throws PsseModelException {return findBranch(ndx).getFromYcm();}
 
 	ACBranch findBranch(int ndx)
 	{
