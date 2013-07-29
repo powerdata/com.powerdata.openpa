@@ -90,4 +90,10 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public float getVA(int ndx) throws PsseModelException {return 0F;}
 	/** Owner number */
 	public int getOWNER(int ndx) throws PsseModelException {return 1;}
+
+
+	/* realtime methods */
+
+	public void setRTMismatch(int ndx, Complex mismatch)throws PsseModelException {/* do nothing */}
+	public Complex getRTMismatch(int ndx)throws PsseModelException {return Complex.Zero;}
 }

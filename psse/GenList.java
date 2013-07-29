@@ -60,7 +60,7 @@ public abstract class GenList extends PsseBaseList<Gen>
 		}
 	}
 	/** get case complex power */
-	public Complex getCaseS(int ndx) throws PsseModelException
+	public Complex getS(int ndx) throws PsseModelException
 	{
 		return new Complex(PAMath.mw2pu(getPG(ndx)),
 				PAMath.mvar2pu(getQG(ndx)));
@@ -80,7 +80,7 @@ public abstract class GenList extends PsseBaseList<Gen>
 		return new Limits(PAMath.mw2pu(getPB(ndx)), PAMath.mw2pu(getPT(ndx)));
 	}
 
-	public void setMode(int ndx, GenMode mode) throws PsseModelException {};
+	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {};
 
 	/* raw methods */
 
@@ -124,6 +124,8 @@ public abstract class GenList extends PsseBaseList<Gen>
 
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}//TODO: implement
 
-	public Complex getRTS(int ndx) throws PsseModelException {return getCaseS(ndx);}
+	public Complex getRTS(int ndx) throws PsseModelException {return getS(ndx);}
 	public void setRTS(int ndx, Complex s) {/* do nothing */}
+
+	public GenMode getRTMode(int ndx) throws PsseModelException {return getMode(ndx);}
 }

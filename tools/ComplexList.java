@@ -76,5 +76,9 @@ public class ComplexList extends ComplexListBase<Complex>
 	{
 		return new Complex(_v1[index], _v2[index]);
 	}
-
+	
+	public void assignadd(int index, Complex val)
+	{
+		set(index, get(index).add(val));
+	}
 }

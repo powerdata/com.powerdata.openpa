@@ -28,10 +28,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
 	/** get the Generator mode */
 	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
-	/** set the generator mode */
-	public void setMode(GenMode mode) throws PsseModelException { _list.setMode(_ndx, mode); }
 	/** get case complex power */
-	public Complex getCaseS() throws PsseModelException {return _list.getCaseS(_ndx);}
+	public Complex getS() throws PsseModelException {return _list.getS(_ndx);}
 	/** generator reactive limits */
 	public Limits getReactiveLimits() throws PsseModelException {return _list.getReactiveLimits(_ndx);}
 	/** machine complex impedance */
@@ -90,4 +88,10 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
 	@Override
 	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
+	/** getg the realtime generator mode */
+	public GenMode getRTMode() throws PsseModelException { return _list.getRTMode(_ndx);}
+	/** set the realtime generator mode */
+	public void setRTMode(GenMode mode) throws PsseModelException { _list.setRTMode(_ndx, mode); }
+
+	
 }

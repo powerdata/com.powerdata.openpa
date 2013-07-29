@@ -39,7 +39,7 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	public Bus getRegBus(int ndx) throws PsseModelException { return getBus(ndx);}
 	
 	public float getVoltageSetpoint(int ndx) throws PsseModelException {return 1f;}
-	public Complex getCaseY(int ndx) throws PsseModelException {return new Complex(0, getBINIT(ndx)/100f);}
+	public Complex getY(int ndx) throws PsseModelException {return new Complex(0, getBINIT(ndx)/100f);}
 
 	public abstract String getI(int ndx) throws PsseModelException;
 	public String getSWREM(int ndx) throws PsseModelException {return getI(ndx);}
@@ -54,7 +54,7 @@ public abstract class SvcList extends PsseBaseList<SVC>
 
 	public void setRTS(int ndx, Complex s) throws PsseModelException {_tmps = s;}
 	public Complex getRTS(int ndx) throws PsseModelException {PowerCalculator.calcSVC(get(ndx)); return _tmps;}
-	public Complex getRTY(int ndx) throws PsseModelException {return getCaseY(ndx);}
+	public Complex getRTY(int ndx) throws PsseModelException {return getY(ndx);}
 	public void setRTY(int ndx, Complex y) throws PsseModelException {/* do nothing */}
 
 }

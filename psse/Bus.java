@@ -71,5 +71,7 @@ public class Bus extends PsseBaseObject
 	/** Owner number */
 	public int getOWNER() throws PsseModelException {return _list.getOWNER(_ndx);}
 
+	public void setRTMismatch(Complex mismatch) throws PsseModelException {_list.setRTMismatch(_ndx, mismatch);}
+	public Complex getRTMismatch() throws PsseModelException {return _list.getRTMismatch(_ndx);}
 	
 }
