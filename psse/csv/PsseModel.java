@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
+import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SwitchedShunt;
 import com.powerdata.openpa.psse.Transformer;
@@ -13,6 +14,8 @@ import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
+import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.QueryString;
 import com.powerdata.openpa.tools.StarNetwork;
 
@@ -20,7 +23,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
-	
+	float				_lowxthr = 0.0001f;
 	GenList				_generatorList;
 	BusList				_buses;
 	LineList			_branchList;
@@ -38,12 +41,57 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			throw new PsseModelException("com.powerdata.openpa.psse.csv.PsseInputModel Missing path= in uri.");
 		}
 		_dir = new File(q.get("path")[0]);
+		
+		eliminateLowZLines();
+		
 	}
+	
+	void eliminateLowZLines() throws PsseModelException
+	{
+		BusListRaw rbuses = new BusListRaw(_dir, this);
+		LineListRaw rlines = new LineListRaw(_dir, rbuses, this);
+		int nbr = rlines.size();
+		LinkNet lnet = new LinkNet();
+		lnet.ensureCapacity(rbuses.size(), nbr);
+		ArrayList<Integer> keep = new ArrayList<>(nbr);
+		for(int i=0; i < nbr; ++i)
+		{
+			Line l = rlines.get(i);
+			Complex z = l.getZ();
+			String j = l.getJ();
+			if (j.charAt(0)=='-') j = j.substring(1);
+			int fbus = rbuses.get(l.getI()).getIndex();
+			int tbus = rbuses.get(j).getIndex();
+			if (z.re() == 0f && Math.abs(z.im()) <= _lowxthr)
+			{
+				lnet.addBranch(fbus, tbus);
+			}
+			else
+			{
+				keep.add(i);
+			}
+		}
+		if (lnet.getBranchCount() > 0)
+		{
+			System.out.format("Keeping %d of %d Lines\n", keep.size(), nbr);
+			_buses = new BusListElim(rbuses, lnet, this);
+			int nkeep = keep.size();
+			int[] ndxs = new int[nkeep];
+			for(int i=0; i < nkeep; ++i)
+				ndxs[i] = keep.get(i);
+			_branchList = new LineSubList(rlines, ndxs);
+		}
+		else
+		{
+			_buses = rbuses;
+			_branchList = rlines;
+		}
+	}
+	
 	public File getDir() { return _dir; }
 	@Override
 	public BusList getBuses() throws PsseModelException
 	{
-		if (_buses == null) _buses = new BusList(this);
 		return _buses;
 	}
 	@Override
@@ -55,7 +103,6 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	@Override
 	public LineList getLines() throws PsseModelException
 	{
-		if (_branchList == null) _branchList = new LineList(this);
 		return _branchList;
 	}
 	@Override

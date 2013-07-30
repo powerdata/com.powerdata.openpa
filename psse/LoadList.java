@@ -94,7 +94,7 @@ public abstract class LoadList extends PsseBaseList<Load>
 
 	public Complex getRTS(int ndx) throws PsseModelException
 	{
-		return new Complex(PAMath.mw2pu(getPL(ndx)), PAMath.mvar2pu(getQL(ndx)));
+		return new Complex(PAMath.mw2pu(getPL(ndx))*-1f, PAMath.mvar2pu(getQL(ndx))*-1f);
 	}
 
 	public void setRTS(int ndx, Complex s) throws PsseModelException { /* do nothing */}

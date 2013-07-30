@@ -59,8 +59,8 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 		float[] sre = new float[_size], sim = new float[_size];
 		for(int i=0; i < _size; ++i)
 		{
-			sre[i] = PAMath.mw2pu(_pl[i]);
-			sim[i] = PAMath.mvar2pu(_ql[i]);
+			sre[i] = PAMath.mw2pu(_pl[i])*-1f;
+			sim[i] = PAMath.mvar2pu(_ql[i])*-1f;
 		}
 		_rts = new ComplexList(sre, sim);
 	}

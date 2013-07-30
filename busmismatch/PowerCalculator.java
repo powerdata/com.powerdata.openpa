@@ -3,7 +3,6 @@ package com.powerdata.openpa.busmismatch;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.powerdata.openpa.busmismatch.MismatchReport.MismatchReporter;
@@ -39,28 +38,36 @@ public class PowerCalculator
 
 	public static void calcACBranchFlow(ACBranch br) throws PsseModelException
 	{
-		Complex y = br.getY();
-		PComplex fv = br.getFromBus().getVoltage();
-		PComplex tv = br.getToBus().getVoltage();
+		if (br.isInSvc())
+		{
+			Complex y = br.getY();
+			PComplex fv = br.getFromBus().getVoltage();
+			PComplex tv = br.getToBus().getVoltage();
 
-		float shift = fv.theta() - tv.theta() - br.getPhaseShift();
+			float shift = fv.theta() - tv.theta() - br.getPhaseShift();
 
-		float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
-		float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
-		float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
+			float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
+			float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
+			float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
 
-		float ctvmpq = tvmpq * (float) Math.cos(shift);
-		float stvmpq = tvmpq * (float) Math.sin(shift);
+			float ctvmpq = tvmpq * (float) Math.cos(shift);
+			float stvmpq = tvmpq * (float) Math.sin(shift);
 
-		float gcos = ctvmpq * y.re();
-		float bcos = ctvmpq * y.im();
-		float gsin = stvmpq * y.re();
-		float bsin = stvmpq * y.im();
+			float gcos = ctvmpq * y.re();
+			float bcos = ctvmpq * y.im();
+			float gsin = stvmpq * y.re();
+			float bsin = stvmpq * y.im();
 
-		br.setRTFromS(new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin + bcos
-				- tvmp2 * (y.im() + br.getFromYcm().im())));
-		br.setRTToS(new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
-				- tvmq2 * (y.im() + br.getToYcm().im())));
+			br.setRTFromS(new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
+					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f));
+			br.setRTToS(new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
+					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f));
+		}
+		else
+		{
+			br.setRTFromS(Complex.Zero);
+			br.setRTToS(Complex.Zero);
+		}
 	}
 	
 	public static void calculateMismatches(PsseModel model) throws PsseModelException
@@ -87,9 +94,8 @@ public class PowerCalculator
 			{
 				int fb = br.getFromBus().getIndex(), tb = br.getToBus()
 						.getIndex();
-				Complex tf = mm.get(fb), tt = mm.get(tb);
-				mm.assignadd(fb, tf);
-				mm.assignadd(tb, tt);
+				mm.assignadd(fb, br.getRTFromS());
+				mm.assignadd(tb, br.getRTToS());
 			}
 		}
 		
@@ -98,7 +104,7 @@ public class PowerCalculator
 			Load l = ldlist.get(i);
 			Bus b = l.getBus();
 			if (l.isInSvc())
-				mm.assignadd(l.getBus().getIndex(), l.getRTS().mult(-1f));
+				mm.assignadd(l.getBus().getIndex(), l.getRTS());
 		}
 		for(int i=0; i < ngen; ++i)
 		{

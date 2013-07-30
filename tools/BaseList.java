@@ -7,7 +7,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
 {
-	HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
+	protected HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	
 	/** Get a unique identifier for the object */
 	public abstract String getObjectID(int ndx) throws PsseModelException;

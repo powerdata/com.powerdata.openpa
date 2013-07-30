@@ -1,9 +1,8 @@
 package com.powerdata.openpa.busmismatch;
 
-import java.util.List;
-
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.OneTermDev;
+import com.powerdata.openpa.psse.OneTermDevList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LinkNet;
@@ -23,28 +22,22 @@ public class MismatchReport
 	public MismatchReport(PsseModel model) throws PsseModelException
 	{
 		_model = model;
-		List<?>[] otdevs = new List<?>[] { model.getGenerators(),
-				model.getLoads(), model.getShunts(), model.getSvcs() };
-		int numotdev = 0;
-		for(List<?> list : otdevs)
-			numotdev += list.size();
 		_nbus = model.getBuses().size();
+		
+		OneTermDevList otdevs = model.getOneTermDevs();
 		
 		_brnet.ensureCapacity(_nbus, model.getBranches()
 				.size());
-		_otnet.ensureCapacity(_nbus+1, numotdev+1);
+		_otnet.ensureCapacity(_nbus+1, otdevs.size());
 
 		for(ACBranch branch : model.getBranches())
 		{
 			_brnet.addBranch(branch.getFromBus().getIndex(), branch.getToBus()
 					.getIndex());
 		}
-		for(List<?> list : otdevs)
+		for(OneTermDev odev : otdevs)
 		{
-			for (Object obj : list)
-			{
-				_otnet.addBranch(((OneTermDev) obj).getBus().getIndex(), _nbus);
-			}
+			_otnet.addBranch(odev.getBus().getIndex(), _nbus);
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.powerdata.openpa.tools;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,6 +44,10 @@ public class SimpleCSV
 	public SimpleCSV(String filename) throws IOException
 	{
 		load(filename);
+	}
+	public SimpleCSV(File file) throws IOException
+	{
+		load(file);
 	}
 	public String[] getColumnNames() { return _colNames; }
 	public int getRowCount() { return _rowCount; }
@@ -177,6 +182,12 @@ public class SimpleCSV
 	public void load(String filename) throws IOException
 	{
 		FileInputStream in = new FileInputStream(filename);
+		load(in);
+		in.close();
+	}
+	public void load(File file) throws IOException
+	{
+		FileInputStream in = new FileInputStream(file);
 		load(in);
 		in.close();
 	}

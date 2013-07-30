@@ -1,32 +1,33 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.io.File;
+
+import com.powerdata.openpa.psse.LineList;
+import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class LineList extends com.powerdata.openpa.psse.LineList
+public class LineListRaw extends LineList
 {
-	PsseModel _eq;
-	BusList _buses;
-	int _size;
+	BusListRaw _buses;
+	protected String _i[],_j[],_ckt[];
+	protected float _r[],_x[],_b[],_ratea[],_rateb[],_ratec[],_gi[],_bi[],_gj[],_bj[];
+	protected int _st[];
+	protected float _len[];
+	protected ComplexList _fs, _ts;
+	protected int _size;
 	
-	String _i[],_j[],_ckt[];
-	float _r[],_x[],_b[],_ratea[],_rateb[],_ratec[],_gi[],_bi[],_gj[],_bj[];
-	int _st[];
-	float _len[];
-	
-	ComplexList _fs, _ts;
-	
-	public LineList(PsseModel eq) throws PsseModelException
+	public LineListRaw(File dir, BusListRaw buses, PsseModel model) throws PsseModelException
 	{
-		super(eq);
+		super(model);
 		try
 		{
-			_eq = eq;
-			_buses = _eq.getBuses();
-			SimpleCSV branches = new SimpleCSV(_eq.getDir().getPath()+"/NontransformerBranch.csv");
+			File dbfile = new File(dir, "NontransformerBranch.csv");
+			_buses = buses;
+			SimpleCSV branches = new SimpleCSV(dbfile);
 			_size	= branches.getRowCount();
 			_i		= branches.get("I");
 			_j		= branches.get("J");
@@ -53,6 +54,10 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 			throw new PsseModelException(getClass().getName()+": "+e);
 		}
 	}
+	
+	@Override
+	public int size() { return _size; }
+
 
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
@@ -86,9 +91,7 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
 	public String getObjectID(int ndx) { return "LN-"+_i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
-	@Override
-	public int size() { return _size; }
-	
+
 	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}
 	public float getDeftR(int ndx) throws PsseModelException {return super.getR(ndx);}
 	public float getDeftB(int ndx) throws PsseModelException {return super.getB(ndx);}
@@ -112,4 +115,6 @@ public class LineList extends com.powerdata.openpa.psse.LineList
 	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
 	@Override
 	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
+
+
 }
