@@ -109,6 +109,10 @@ public class PsseModel
 	{
 		return new ACBranchList(getLines(), getTransformers(), getPhaseShifters());
 	}
+	public OneTermDevList getOneTermDevs() throws PsseModelException
+	{
+		return new OneTermDevList(getLoads(), getGenerators(), getShunts(), getSvcs());
+	}
 }	
 
 

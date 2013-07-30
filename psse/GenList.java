@@ -67,11 +67,17 @@ public abstract class GenList extends PsseBaseList<Gen>
 	}
 
 	/** reactive power limits */
-	public Limits getReactiveLimits(int ndx) throws PsseModelException {return new Limits(PAMath.mvar2pu(getQB(ndx)), PAMath.mvar2pu(getQT(ndx)));}
-	/** machine impedance on 100 MVA base */
-	public Complex getMachZ(int ndx) throws PsseModelException 
+	public Limits getReactiveLimits(int ndx) throws PsseModelException
 	{
-		return PAMath.rebaseZ100(new Complex(getZR(ndx), getZX(ndx)), getMBASE(ndx));
+		return new Limits(PAMath.mvar2pu(getQB(ndx)),
+				PAMath.mvar2pu(getQT(ndx)));
+	}
+
+	/** machine impedance on 100 MVA base */
+	public Complex getMachZ(int ndx) throws PsseModelException
+	{
+		return PAMath.rebaseZ100(new Complex(getZR(ndx), getZX(ndx)),
+				getMBASE(ndx));
 	}
 
 	/** active power limits */
@@ -79,8 +85,12 @@ public abstract class GenList extends PsseBaseList<Gen>
 	{
 		return new Limits(PAMath.mw2pu(getPB(ndx)), PAMath.mw2pu(getPT(ndx)));
 	}
-
-	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {};
+	public boolean isInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		return getBus(ndx).getObjectName()+":"+getID(ndx);
+	}
 
 	/* raw methods */
 
@@ -128,4 +138,7 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public void setRTS(int ndx, Complex s) {/* do nothing */}
 
 	public GenMode getRTMode(int ndx) throws PsseModelException {return getMode(ndx);}
+	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {};
+
+
 }

@@ -31,4 +31,31 @@ public class Shunt extends PsseBaseObject implements OneTermDev
 	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
 	@Override
 	public void setRTS(Complex s) {_list.setRTS(_ndx, s);}
+
+	@Override
+	public float getRTMW() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRTMVar() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setRTMW(float mw) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRTMVar(float mvar) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+	}
 }

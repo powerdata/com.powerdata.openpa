@@ -30,9 +30,9 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/* convenience methods */
 	
 	/** Load bus (I) */ 
-	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getObjectID(ndx));}
+	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
-	public boolean getInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
+	public boolean isInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
 	/** get Area Interchange record */
 	public Area getAreaObj(int ndx) throws PsseModelException
 	{
@@ -43,25 +43,15 @@ public abstract class LoadList extends PsseBaseList<Load>
 	{
 		return _model.getZones().get(String.valueOf(getZONE(ndx)));
 	}
-	/** get complex power (PL) */
-	public Complex getPwr(int ndx) throws PsseModelException
-	{
-		return new Complex(PAMath.mw2pu(getPL(ndx)), PAMath.mvar2pu(getQL(ndx)));
-	}
-	/** Complex constant current load at 1pu voltage */
-	public Complex getPwrI(int ndx) throws PsseModelException
-	{
-		return new Complex(PAMath.mw2pu(getIP(ndx)), PAMath.mvar2pu(getIQ(ndx)));
-	}
-	/** Complex constant admittance load at 1pu voltage */
-	public Complex getPwrY(int ndx) throws PsseModelException
-	{
-		return new Complex(PAMath.mw2pu(getYP(ndx)), PAMath.mvar2pu(getYQ(ndx)));
-	}
 	/** return Owner */
 	public Owner getOwnerObj(int ndx) throws PsseModelException
 	{
 		return _model.getOwners().get(String.valueOf(getOWNER(ndx)));
+	}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		return getBus(ndx).getNAME()+":"+getID(ndx);
 	}
 
 	/* raw methods */
@@ -93,11 +83,19 @@ public abstract class LoadList extends PsseBaseList<Load>
 	
 	/* Real-Time Methods */
 	/** get the load MW */
-	public float getRTMW(int ndx) throws PsseModelException { return 0f; }
+	public float getRTMW(int ndx) throws PsseModelException { return getPL(ndx); }
 	/** get the load MVar */
-	public float getRTMVar(int ndx) throws PsseModelException { return 0f; }
+	public float getRTMVar(int ndx) throws PsseModelException { return getQL(ndx); }
 	/** get the cold load MW */
 	public float getRTColdMW(int ndx) throws PsseModelException { return 0f; }
 	/** get the cold load MVar */
 	public float getRTColdMVar(int ndx) throws PsseModelException { return 0f; }
+	public void setRTMW(int ndx, float mw) throws PsseModelException { /* do nothing */ }
+
+	public Complex getRTS(int ndx) throws PsseModelException
+	{
+		return new Complex(PAMath.mw2pu(getPL(ndx)), PAMath.mvar2pu(getQL(ndx)));
+	}
+
+	public void setRTS(int ndx, Complex s) throws PsseModelException { /* do nothing */}
 }

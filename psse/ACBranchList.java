@@ -8,10 +8,8 @@ import com.powerdata.openpa.tools.Complex;
 
 public class ACBranchList extends BaseList<ACBranch>
 {
-	public static final ACBranchList Empty = new ACBranchList() 
+	public static final ACBranchList Empty = new ACBranchList()
 	{
-		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
 		public int size() {return 0;}
 	};
@@ -45,6 +43,8 @@ public class ACBranchList extends BaseList<ACBranch>
 		public Complex getRTFromS() throws PsseModelException {return ACBranchList.this.getRTFromS(_ndx);}
 		@Override
 		public Complex getRTToS() throws PsseModelException {return ACBranchList.this.getRTToS(_ndx);}
+		@Override
+		public boolean isInSvc() throws PsseModelException {return ACBranchList.this.isInSvc(_ndx);}
 	}
 	
 	int _nlines;
@@ -68,10 +68,8 @@ public class ACBranchList extends BaseList<ACBranch>
 	}
 
 	/* Standard object retrieval */
-	/** Get an AreaInterchange by it's index. */
 	@Override
 	public ACBranch get(int ndx) { return new ACBranchObj(ndx); }
-	/** Get an AreaInterchange by it's ID. */
 	@Override
 	public ACBranch get(String id) { return super.get(id); }
 
@@ -88,6 +86,7 @@ public class ACBranchList extends BaseList<ACBranch>
 	public Complex getRTFromS(int ndx) throws PsseModelException {return findBranch(ndx).getRTFromS();}
 	public void setRTToS(int ndx, Complex s) throws PsseModelException {findBranch(ndx).setRTToS(s);}
 	public void setRTFromS(int ndx, Complex s) throws PsseModelException {findBranch(ndx).setRTFromS(s);}
+	public boolean isInSvc(int ndx) throws PsseModelException {return findBranch(ndx).isInSvc();}
 
 	ACBranch findBranch(int ndx)
 	{

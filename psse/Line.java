@@ -31,8 +31,6 @@ public class Line extends PsseBaseObject implements ACBranch
 	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
 	/** Get "metered" end */
 	public LineMeterEnd getMeteredEnd() throws PsseModelException {return _list.getMeteredEnd(_ndx);}
-	/** get initial branch status (ST) as a boolean.  Returns true if in service */
-	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
 	@Override
 	public Complex getZ() throws PsseModelException {return _list.getZ(_ndx);}
 	@Override
@@ -47,6 +45,8 @@ public class Line extends PsseBaseObject implements ACBranch
 	public float getToTap() throws PsseModelException {return 1f;}
 	@Override
 	public float getPhaseShift() throws PsseModelException {return 0f;}
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 
 	/* Raw PSS/e methods */
 	
@@ -94,4 +94,5 @@ public class Line extends PsseBaseObject implements ACBranch
 	public Complex getRTFromS() throws PsseModelException {return _list.getRTFromS(_ndx);}
 	@Override
 	public Complex getRTToS() throws PsseModelException {return _list.getRTToS(_ndx);}
+
 }

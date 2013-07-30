@@ -32,4 +32,32 @@ public class SVC extends PsseBaseObject implements OneTermDev
 	public Complex getRTY() throws PsseModelException {return _list.getRTY(_ndx);}
 	public void setRTY(Complex y) throws PsseModelException {_list.setRTY(_ndx, y);}
 
+	@Override
+	public float getRTMW() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRTMVar() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setRTMW(float mw) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRTMVar(float mvar) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

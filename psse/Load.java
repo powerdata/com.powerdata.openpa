@@ -24,17 +24,11 @@ public class Load extends PsseBaseObject implements OneTermDev
 	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
-	public boolean getInSvc() throws PsseModelException {return _list.getInSvc(_ndx);}
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	/** get Area Interchange record */
 	public Area getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
 	/** get Zone record */
 	public Zone getZoneObj() throws PsseModelException {return _list.getZoneObj(_ndx);}
-	/** get complex power (PL) */
-	public Complex getCaseS() throws PsseModelException {return _list.getPwr(_ndx);}
-	/** Complex constant current load at 1pu voltage */
-	public Complex getPwrI() throws PsseModelException {return _list.getPwrI(_ndx);}
-	/** Complex constant admittance load at 1pu voltage */
-	public Complex getPwrY() throws PsseModelException  {return _list.getPwrY(_ndx);}
 	/** return Owner */
 	public Owner getOwnerObj() throws PsseModelException {return _list.getOwnerObj(_ndx);}
 	
@@ -69,25 +63,23 @@ public class Load extends PsseBaseObject implements OneTermDev
 	
 	/* Real-Time Methods */
 	/** get the load MW */
+	@Override
 	public float getRTMW() throws PsseModelException { return _list.getRTMW(_ndx); }
 	/** get the load MVar */
+	@Override
 	public float getRTMVar() throws PsseModelException { return _list.getRTMVar(_ndx); }
+	@Override
+	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
+	@Override
+	public void setRTMVar(float mvar) throws PsseModelException {_list.setRTMW(_ndx, mvar);}
 	/** get the cold load MW */
 	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
 	/** get the cold load MVar */
 	public float getRTColdMVar() throws PsseModelException { return _list.getRTColdMVar(_ndx); }
 
 	@Override
-	public void setRTS(Complex s) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
+	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
 	@Override
-	public Complex getRTS() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
+
 }

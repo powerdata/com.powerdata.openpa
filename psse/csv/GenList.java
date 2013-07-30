@@ -94,7 +94,7 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	@Override
 	public float getPB(int ndx) { return _pb[ndx]; }
 	@Override
-	public String getObjectID(int ndx) { return _i[ndx]+":"+_id[ndx]; }
+	public String getObjectID(int ndx) { return "GEN-"+_i[ndx]+":"+_id[ndx]; }
 	@Override
 	public int size() { return _size; }
 	

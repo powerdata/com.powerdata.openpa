@@ -1,9 +1,12 @@
 package com.powerdata.openpa.busmismatch;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
+import com.powerdata.openpa.busmismatch.MismatchReport.MismatchReporter;
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.Bus;
@@ -14,6 +17,7 @@ import com.powerdata.openpa.psse.ListDumper;
 import com.powerdata.openpa.psse.Load;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.OneTermDev;
+import com.powerdata.openpa.psse.OneTermDevList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SVC;
@@ -72,35 +76,47 @@ public class PowerCalculator
 		int nbus = blist.size();
 		int nacbranch = brlist.size();
 		int nload = ldlist.size();
-		
+		int ngen = genlist.size();
+		int nshunt = shuntlist.size();
+		int nsvc = svclist.size();
 		
 		for (int i=0; i < nacbranch; ++i)
 		{
 			ACBranch br = brlist.get(i);
-			int fb = br.getFromBus().getIndex(), tb = br.getToBus().getIndex();
-			Complex tf = mm.get(fb), tt = mm.get(tb);
-			mm.assignadd(fb, tf);
-			mm.assignadd(tb, tt);
+			if (br.isInSvc())
+			{
+				int fb = br.getFromBus().getIndex(), tb = br.getToBus()
+						.getIndex();
+				Complex tf = mm.get(fb), tt = mm.get(tb);
+				mm.assignadd(fb, tf);
+				mm.assignadd(tb, tt);
+			}
 		}
 		
 		for(int i=0; i < nload; ++i)
 		{
 			Load l = ldlist.get(i);
-			mm.assignadd(l.getBus().getIndex(), l.getRTS().mult(-1f));
+			Bus b = l.getBus();
+			if (l.isInSvc())
+				mm.assignadd(l.getBus().getIndex(), l.getRTS().mult(-1f));
+		}
+		for(int i=0; i < ngen; ++i)
+		{
+			Gen g = genlist.get(i);
+			if (g.isInSvc())
+				mm.assignadd(g.getBus().getIndex(), g.getRTS());
+		}
+		for(int i=0; i < nshunt; ++i)
+		{
+			Shunt s = shuntlist.get(i);
+			if (s.isSwitchedOn())
+				mm.assignadd(s.getBus().getIndex(), s.getRTS());
 		}
 		
-		List<?>[] devlist = new List<?>[] {model.getGenerators(), model.getShunts(), model.getSvcs()};
-		int ndevs = devlist.length;
-		
-		for(int i=0; i < ndevs; ++i)
+		for(int i=0; i < nsvc; ++i)
 		{
-			List<?> list = devlist[i];
-			int n = list.size();
-			for(int j=0; j < n; ++j)
-			{
-				OneTermDev od = (OneTermDev) list.get(j);
-				mm.assignadd(od.getBus().getIndex(), od.getRTS());
-			}
+			SVC s = svclist.get(i);
+			mm.assignadd(s.getBus().getIndex(), s.getRTS());
 		}
 		
 		for(int i=0; i < nbus; ++i)
@@ -167,6 +183,55 @@ public class PowerCalculator
 		calcSVCs(model.getSvcs());
 		calculateMismatches(model);
 		new ListDumper().dump(model, outdir);
+		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
+		new MismatchReport(model).report(new CsvMismatchReporter(mmout, model));
+		mmout.close();
 	}
+	
+}
 
+class CsvMismatchReporter implements MismatchReporter
+{
+	PrintWriter _out;
+	BusList _buses;
+	OneTermDevList _otdevs;
+	ACBranchList _acbr;
+	
+	public CsvMismatchReporter(PrintWriter out, PsseModel model) throws PsseModelException
+	{
+		_buses = model.getBuses();
+		_otdevs = model.getOneTermDevs();
+		_acbr = model.getBranches();
+		_out = out;
+		out.println("BusID,BusName,Pmm,Qmm,DevID,DevName,Pdev,Qdev");
+	}
+	@Override
+	public void report(int bus, int[] acbranches, int[] onetermdevs) throws PsseModelException
+	{
+		Bus b = _buses.get(bus);
+		Complex mm = b.getRTMismatch();
+		
+		String btmp = String.format("\"%s\",\"%s\",%f,%f,",
+				b.getObjectID(), b.getObjectName(), mm.re(), mm.im());
+				
+		for(int acbranch : acbranches)
+		{
+			ACBranch acb = _acbr.get(acbranch);
+			int fbus = acb.getFromBus().getIndex();
+			Complex s = (fbus == bus) ? acb.getRTFromS() : acb.getRTToS();
+			_out.print(btmp);
+			_out.format("\"%s\",\"%s\",%f,%f\n",
+					acb.getObjectID(), acb.getObjectName(), s.re(), s.im());
+		}
+		
+		for(int otdx : onetermdevs)
+		{
+			OneTermDev otd = _otdevs.get(otdx);
+			Complex s = otd.getRTS();
+			_out.print(btmp);
+			_out.format("\"%s\",\"%s\",%f,%f\n",
+					otd.getObjectID(), otd.getObjectName(), s.re(), s.im());
+		}
+	}
+	
 }

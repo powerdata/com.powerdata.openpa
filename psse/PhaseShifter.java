@@ -105,4 +105,7 @@ public class PhaseShifter extends PsseBaseObject implements ACBranch
 	public Complex getRTFromS() throws PsseModelException {return _list.getRTFromS(_ndx);}
 	@Override
 	public Complex getRTToS() throws PsseModelException {return _list.getRTToS(_ndx);}
+
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 }

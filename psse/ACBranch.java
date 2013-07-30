@@ -26,4 +26,6 @@ public interface ACBranch extends TwoTermDev
 	public Complex getRTFromS() throws PsseModelException;
 	/** get to-side realtime complex power */
 	public Complex getRTToS() throws PsseModelException;
+	/** get in service flag */
+	public boolean isInSvc() throws PsseModelException; 
 }

@@ -49,7 +49,7 @@ public abstract class LineList extends PsseBaseList<Line>
 			LineMeterEnd.To : LineMeterEnd.From;
 	}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
-	public boolean getInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
+	public boolean isInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
 	/** get complex impedance */
 	public Complex getZ(int ndx) throws PsseModelException
 	{
@@ -59,8 +59,12 @@ public abstract class LineList extends PsseBaseList<Line>
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
 	public Complex getFromYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 	public Complex getToYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		return getFromBus(ndx).getObjectName()+"-"+getToBus(ndx).getObjectName()+":"+getCKT(ndx);
+	}
 
-	
 	/* raw PSS/e methods */
 	/** From-side bus number or name */
 	public abstract String getI(int ndx) throws PsseModelException;
@@ -101,6 +105,4 @@ public abstract class LineList extends PsseBaseList<Line>
 	public void setRTToS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
 	public Complex getRTFromS(int ndx) throws PsseModelException { return Complex.Zero;}
 	public Complex getRTToS(int ndx) throws PsseModelException {return Complex.Zero;}
-
-
 }	

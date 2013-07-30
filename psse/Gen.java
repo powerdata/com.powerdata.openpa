@@ -39,7 +39,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 
 	/** generator active power limits p.u. on 100MVA base */
 	public Limits getActiveLimits() throws PsseModelException {return _list.getActiveLimits(_ndx);}
-	
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+
 	/* Raw PSS/e methods */
 	
 	/** bus number or name */
@@ -93,5 +94,32 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	/** set the realtime generator mode */
 	public void setRTMode(GenMode mode) throws PsseModelException { _list.setRTMode(_ndx, mode); }
 
-	
+	@Override
+	public float getRTMW() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getRTMVar() throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setRTMW(float mw) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRTMVar(float mvar) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

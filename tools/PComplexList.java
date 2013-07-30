@@ -49,6 +49,12 @@ public class PComplexList extends ComplexListBase<PComplex>
 			_v2[i] = theta.get(i);
 		}
 	}
+	public PComplexList(float[] r, float[] theta)
+	{
+		_v1 = r.clone();
+		_v2 = theta.clone();
+		_size = r.length;
+	}
 	@Override
 	public void add(int index, PComplex element)
 	{

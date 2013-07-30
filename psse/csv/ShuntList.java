@@ -18,12 +18,12 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	boolean[] _swon;
 	float[] _b;
 	float[] _g;
-	String[] _id;
+	String[] _id, _name;
 	
 	ArrayList<Integer> _il = new ArrayList<>();
 	ArrayList<Boolean> _swonl = new ArrayList<>();
 	ArrayList<Float> _bl = new ArrayList<>(), _gl = new ArrayList<>();
-	ArrayList<String> _idl = new ArrayList<>();
+	ArrayList<String> _idl = new ArrayList<>(), _namel = new ArrayList<>();
 	
 	ComplexList _rts;
 	
@@ -40,7 +40,9 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 		{
 			int ndx = shndx.get(iraw);
 			String rawid = raw.getObjectID(ndx);
-			int bus = raw.getBus(ndx).getIndex();
+			Bus obus = raw.getBus(ndx);
+			int bus = obus.getIndex();
+			String rawname = obus.getObjectName();
 			int[] nblk = raw.getN(ndx);
 			float[] bblk = raw.getB(ndx);
 			float binit = raw.getBINIT(ndx);
@@ -61,7 +63,8 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 							swon = true;
 							binit += bshblk;
 						}
-						mkShunt(bshblk, 0f, bus, rawid+"-"+(posinswsh++), swon);
+						mkShunt(bshblk, 0f, bus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
+						++posinswsh;
 						--nshblk;
 					}
 					if (bshblk > 0f && nshblk > 0)
@@ -72,7 +75,8 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 							swon = true;
 							binit -= bshblk;
 						}
-						mkShunt(bshblk, 0f, bus, rawid+"-"+(posinswsh++), swon);
+						mkShunt(bshblk, 0f, bus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
+						++posinswsh;
 						--nshblk;
 					}
 				}
@@ -90,6 +94,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 		_b = new float[_size];
 		_g = new float[_size];
 		_id = new String[_size];
+		_name = new String[_size];
 
 		for (int i=0; i < _size; ++i)
 		{
@@ -97,6 +102,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 			_swon[i] = _swonl.get(i);
 			_b[i] = _bl.get(i);
 			_id[i] = _idl.get(i);
+			_name[i] = _namel.get(i);
 		}
 	
 		_rts = new ComplexList(_size, true);
@@ -110,7 +116,8 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 			float bl = b.getBL();
 			if (gl != 0f || bl != 0f)
 			{
-				mkShunt(bl, gl, b.getIndex(), b.getObjectID()+"BSH", true);
+				mkShunt(bl, gl, b.getIndex(), b.getObjectID() + "BSH",
+						b.getObjectName() + "-BSH", true);
 			}
 		}
 	}
@@ -124,23 +131,32 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 			float gj = l.getGJ();
 			float bj = l.getBJ();
 			if (gi != 0f || bi != 0f)
-				mkShunt(gi, bi, l.getFromBus().getIndex(), l.getObjectID()+"FSH", true);
+			{
+				mkShunt(gi, bi, l.getFromBus().getIndex(), l.getObjectID()
+						+ "FSH", l.getObjectName() + "-FSH", true);
+			}
 			if (gj != 0f || bj != 0f)
-				mkShunt(gj, bj, l.getToBus().getIndex(), l.getObjectID()+"TSH", true);
+			{
+				mkShunt(gj, bj, l.getToBus().getIndex(), l.getObjectID()
+						+ "TSH", l.getObjectName() + "-TSH", true);
+			}
 		}
 	}
 
-	void mkShunt(float b, float g, int bus, String id, boolean swon)
+	void mkShunt(float b, float g, int bus, String id, String name, boolean swon)
 	{
 		_il.add(bus);
 		_bl.add(b);
 		_gl.add(g);
 		_swonl.add(swon);
-		_idl.add(id);
+		_namel.add(name);
+		_idl.add("SH-"+id);
 	}
 
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _id[ndx];}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException {return _name[ndx];}
 	@Override
 	public int size() {return _size;}
 

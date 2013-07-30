@@ -65,9 +65,14 @@ public abstract class BusList extends PsseBaseList<Bus>
 	{
 		return new PComplex(getVM(ndx), PAMath.deg2rad(getVA(ndx)));
 	}
+
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		return getNAME(ndx);
+	}
 	
 	/* raw methods */
-
 	/** Bus number */
 	public abstract int getI(int ndx) throws PsseModelException;
 	/** Alphanumeric identifier */

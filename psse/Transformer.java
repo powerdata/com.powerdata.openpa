@@ -38,6 +38,8 @@ public class Transformer extends PsseBaseObject implements ACBranch
 	public float getToTap() throws PsseModelException {return _list.getToTap(_ndx);}
 	@Override
 	public float getPhaseShift() throws PsseModelException {return _list.getPhaseShift(_ndx);}
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 
 	/* RAW methods */
 	/** Winding 1 bus number or name */ 

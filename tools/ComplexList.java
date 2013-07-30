@@ -48,6 +48,13 @@ public class ComplexList extends ComplexListBase<Complex>
 		}
 	}
 	
+	public ComplexList(float[] re, float[] im)
+	{
+		_v1 = re.clone();
+		_v2 = im.clone();
+		_size = re.length;
+	}
+
 	@Override
 	public void add(int index, Complex element)
 	{

@@ -28,6 +28,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	PhaseShifterList	_psList;
 	ShuntList			_shList;
 	SvcList				_svcList;
+	LoadList			_loads;
 	
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -148,8 +149,13 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		_psList = new PhaseShifterList(this, rlist, psprep);
 		buses.addStarNodes(rlist, ndx3w);
 	}
-
 	
+	@Override
+	public LoadList getLoads() throws PsseModelException
+	{
+		if (_loads == null) _loads = new LoadList(this);
+		return _loads;
+	}
 	static public void main(String args[]) throws Exception
 	{
 		PsseModel eq = new PsseModel("path=/tmp/frcc/");
