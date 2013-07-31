@@ -15,7 +15,6 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 		public int size() {return 0;}
 	};
 	
-	protected BusList _buses;
 	Complex _tmps;
 	
 	protected ShuntList(){super();}
@@ -23,7 +22,6 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	public ShuntList(PsseModel model) throws PsseModelException
 	{
 		super(model);
-		_buses = model.getBuses();
 	}
 
 	/** Get a Switch by it's index. */

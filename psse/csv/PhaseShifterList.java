@@ -10,8 +10,8 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	int _size;
 
 	/* line 1 */
-	private String[] _ckt, _name;
-	private int[] _i, _j, _cw, _cm, _nmetr, _stat;
+	private String[] _ckt, _name, _i, _j;
+	private int[] _cw, _cm, _nmetr, _stat;
 	private float[] _mag1, _mag2;
 	
 	/* line 2 */
@@ -32,7 +32,7 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 
 		_size = prep.size();
 		
-		int[] xfndx = prep.getXfRaw(), wndx = prep.getWndx(); 
+		int[] xfndx = prep.getXfRaw(), wndx = prep.getWndx();
 		_i = prep.getBusI();
 		_j = prep.getBusJ();
 		_z = prep.getZ();
@@ -69,14 +69,9 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	}
 
 	@Override
-	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(_i[ndx]);}
+	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(_j[ndx]);}
-
-	@Override
-	public String getI(int ndx) throws PsseModelException {return _buses.get(_i[ndx]).getObjectID();}
-	@Override
-	public String getJ(int ndx) throws PsseModelException {return _buses.get(_j[ndx]).getObjectID();}
+	public String getJ(int ndx) throws PsseModelException {return _j[ndx];}
 
 	@Override
 	public String getCKT(int ndx) throws PsseModelException {return _ckt[ndx];}

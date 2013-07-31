@@ -13,8 +13,8 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	int _size;
 
 	/* line 1 */
-	String[] _ckt, _name, _cont1;
-	int[] _i, _j, _cw, _cm, _nmetr, _stat;
+	String[] _ckt, _name, _cont1, _i, _j;
+	int[] _cw, _cm, _nmetr, _stat;
 	float[] _mag1, _mag2;
 	
 	/* line 2 */
@@ -114,14 +114,9 @@ public class TransformerList extends com.powerdata.openpa.psse.TransformerList
 	}
 
 	@Override
-	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(_i[ndx]);}
+	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(_j[ndx]);}
-
-	@Override
-	public String getI(int ndx) throws PsseModelException {return _buses.get(_i[ndx]).getObjectID();}
-	@Override
-	public String getJ(int ndx) throws PsseModelException {return _buses.get(_j[ndx]).getObjectID();}
+	public String getJ(int ndx) throws PsseModelException {return _j[ndx];}
 	@Override
 	public String getCKT(int ndx) throws PsseModelException {return _ckt[ndx];}
 	@Override

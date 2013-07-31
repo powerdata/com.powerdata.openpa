@@ -41,6 +41,13 @@ public class PowerCalculator
 		if (br.isInSvc())
 		{
 			Complex y = br.getY();
+			Bus fbus = br.getFromBus();
+			Bus tbus = br.getToBus();
+			String objid = br.getObjectName();
+			if (objid.equals("XF-11008-TXSTAR-11008:11010:1-1"))
+			{
+				int xxx = 5;
+			}
 			PComplex fv = br.getFromBus().getVoltage();
 			PComplex tv = br.getToBus().getVoltage();
 

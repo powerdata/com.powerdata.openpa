@@ -100,6 +100,7 @@ public abstract class BusList extends com.powerdata.openpa.psse.BusList
 			_vm[bi] = t.getVMSTAR();
 			_va[bi] = t.getANSTAR();
 			_ids[bi] = "TXSTAR-"+t.getObjectID();
+			_idToNdx.put(_ids[bi], bi);
 		}
 
 		/* set all base kv to 1 KV */
@@ -117,7 +118,6 @@ public abstract class BusList extends com.powerdata.openpa.psse.BusList
 		_mm.ensureCapacity(newsz);
 		_mm.setSize(newsz);
 
-		
 		_size = newsz;
 	}
 	

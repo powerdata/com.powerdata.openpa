@@ -14,13 +14,13 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 {
 	int _size;
 	
-	int[] _i;
+	String[] _i;
 	boolean[] _swon;
 	float[] _b;
 	float[] _g;
 	String[] _id, _name;
 	
-	ArrayList<Integer> _il = new ArrayList<>();
+	ArrayList<String> _il = new ArrayList<>();
 	ArrayList<Boolean> _swonl = new ArrayList<>();
 	ArrayList<Float> _bl = new ArrayList<>(), _gl = new ArrayList<>();
 	ArrayList<String> _idl = new ArrayList<>(), _namel = new ArrayList<>();
@@ -29,7 +29,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	
 	public ShuntList() {super();}
 
-	public ShuntList(PsseModel model, SwitchedShuntRawList raw,
+	public ShuntList(PsseModel model, SwitchedShuntRawList raw, BusListRaw rawbus, LineListRaw rawline,
 			List<Integer> shndx) throws PsseModelException
 	{
 		super(model);
@@ -40,8 +40,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 		{
 			int ndx = shndx.get(iraw);
 			String rawid = raw.getObjectID(ndx);
-			Bus obus = raw.getBus(ndx);
-			int bus = obus.getIndex();
+			Bus obus = rawbus.get(raw.getI(ndx));
 			String rawname = obus.getObjectName();
 			int[] nblk = raw.getN(ndx);
 			float[] bblk = raw.getB(ndx);
@@ -63,7 +62,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 							swon = true;
 							binit += bshblk;
 						}
-						mkShunt(bshblk, 0f, bus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
+						mkShunt(bshblk, 0f, obus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
 						++posinswsh;
 						--nshblk;
 					}
@@ -75,21 +74,19 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 							swon = true;
 							binit -= bshblk;
 						}
-						mkShunt(bshblk, 0f, bus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
+						mkShunt(bshblk, 0f, obus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
 						++posinswsh;
 						--nshblk;
 					}
 				}
 			}
-			
-			
 		}
 		
-		scanBuses();
-		scanLines();
+		scanBuses(rawbus);
+		scanLines(rawline, rawbus);
 		
 		_size = _il.size();
-		_i = new int[_size];
+		_i = new String[_size];
 		_swon = new boolean[_size];
 		_b = new float[_size];
 		_g = new float[_size];
@@ -108,44 +105,53 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 		_rts = new ComplexList(_size, true);
 	}
 
-	void scanBuses() throws PsseModelException
+	void scanBuses(BusListRaw rawbus) throws PsseModelException
 	{
-		for (Bus b : _model.getBuses())
+		for (Bus b : rawbus)
 		{
 			float gl = b.getGL();
 			float bl = b.getBL();
 			if (gl != 0f || bl != 0f)
 			{
-				mkShunt(bl, gl, b.getIndex(), b.getObjectID() + "BSH",
+				mkShunt(bl, gl, b, b.getObjectID() + "BSH",
 						b.getObjectName() + "-BSH", true);
 			}
 		}
 	}
 	
-	void scanLines() throws PsseModelException
+	void scanLines(LineListRaw rawline, BusListRaw rawbus) throws PsseModelException
 	{
-		for (Line l : _model.getLines())
+		for (Line l : rawline)
 		{
-			float gi = l.getGI();
-			float bi = l.getBI();
-			float gj = l.getGJ();
-			float bj = l.getBJ();
-			if (gi != 0f || bi != 0f)
+			if (l.isInSvc())
 			{
-				mkShunt(gi, bi, l.getFromBus().getIndex(), l.getObjectID()
-						+ "FSH", l.getObjectName() + "-FSH", true);
-			}
-			if (gj != 0f || bj != 0f)
-			{
-				mkShunt(gj, bj, l.getToBus().getIndex(), l.getObjectID()
-						+ "TSH", l.getObjectName() + "-TSH", true);
+				float gi = l.getGI();
+				float bi = l.getBI();
+				float gj = l.getGJ();
+				float bj = l.getBJ();
+				Bus fb = rawbus.get(l.getI());
+				String j = l.getJ();
+				if (j.charAt(0) == '-')
+					j = j.substring(1);
+				Bus tb = rawbus.get(j);
+				String objname = String.format("%s-%s:%s", fb.getObjectName(), tb.getObjectName(), l.getCKT());
+				if (gi != 0f || bi != 0f)
+				{
+					mkShunt(gi, bi, fb, l.getObjectID() + "FSH",
+							objname + "-FSH", true);
+				}
+				if (gj != 0f || bj != 0f)
+				{
+					mkShunt(gj, bj, tb, l.getObjectID()
+							+ "TSH", objname + "-TSH", true);
+				}
 			}
 		}
 	}
 
-	void mkShunt(float b, float g, int bus, String id, String name, boolean swon)
+	void mkShunt(float b, float g, Bus bus, String id, String name, boolean swon) throws PsseModelException
 	{
-		_il.add(bus);
+		_il.add(bus.getObjectID());
 		_bl.add(b);
 		_gl.add(g);
 		_swonl.add(swon);
@@ -161,10 +167,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	public int size() {return _size;}
 
 	@Override
-	public Bus getBus(int ndx) throws PsseModelException  {return _buses.get(_i[ndx]);}
-
-	@Override
-	public String getI(int ndx) throws PsseModelException {return _buses.get(_i[ndx]).getObjectID();}
+	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
 	@Override
 	public float getB(int ndx) throws PsseModelException {return _b[ndx];}
 

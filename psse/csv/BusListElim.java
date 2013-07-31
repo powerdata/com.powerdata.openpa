@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import java.util.HashMap;
 
+import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.LinkNet;
 
@@ -9,20 +10,22 @@ public class BusListElim extends BusList
 {
 
 	public BusListElim() {super();}
+
 	public BusListElim(BusListRaw rbuses, LinkNet lnet, PsseModel model)
+			throws PsseModelException
 	{
 		super(model);
 		int[][] groups = lnet.findGroups();
 
-		HashMap<Integer,Integer> elim = new HashMap<>();
+		HashMap<String, String> elim = new HashMap<>();
 		int nelim = 0;
-		for(int[] grp : groups)
+		for (int[] grp : groups)
 		{
 			int ngrp = grp.length;
-			int targ = grp[0];
-			for(int i=1; i < ngrp; ++i)
+			String targ = rbuses.get(grp[0]).getObjectID();
+			for (int i = 1; i < ngrp; ++i)
 			{
-				elim.put(grp[i], targ);
+				elim.put(rbuses.get(grp[i]).getObjectID(), targ);
 				++nelim;
 			}
 		}
@@ -48,8 +51,8 @@ public class BusListElim extends BusList
 		int nbus = 0;
 		for(int i=0; i < nrbus; ++i)
 		{
-			Integer elimto = elim.get(i);
 			String objid = rbuses.getObjectID(i);
+			String elimto = elim.get(objid);
 			if (objid.equals("22938"))
 			{
 				int xxx = 5;
@@ -72,7 +75,7 @@ public class BusListElim extends BusList
 			}
 			else
 			{
-				id2ndx.put(objid, elimto);
+				id2ndx.put(objid, id2ndx.get(elimto));
 			}
 		}
 		_idToNdx = id2ndx;

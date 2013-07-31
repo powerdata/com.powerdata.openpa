@@ -8,7 +8,6 @@ import com.powerdata.openpa.tools.PAMath;
 
 public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 {
-	protected BusList _buses;
 	protected XfrZToolFactory _ztool;
 	
 	public static final PhaseShifterList Empty = new PhaseShifterList()
@@ -29,7 +28,6 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	public PhaseShifterList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
-		_buses = model.getBuses();
 		_ztool = XfrZToolFactory.Open(_model.getPsseVersion());
 	}
 
@@ -43,8 +41,8 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	
 	/* Convenience methods */
 	
-	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
-	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
+	public Bus getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getToBus(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
 	public Complex getZ(int ndx) throws PsseModelException
 	{
 		return _ztool.get(getCZ(ndx)).convert2W(get(ndx));

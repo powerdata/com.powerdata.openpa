@@ -1,5 +1,11 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -11,6 +17,16 @@ public class LineSubList extends com.powerdata.openpa.psse.LineSubList
 	public LineSubList(LineList lines, int[] ndxs) throws PsseModelException
 	{
 		super(lines, ndxs);
+		try
+		{
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("/tmp/ndxs.csv")));
+			pw.println(Arrays.toString(ndxs));
+			pw.close();
+		}
+		catch(IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
 	}
 	@Override
 	public Bus getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}

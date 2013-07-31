@@ -17,7 +17,6 @@ public abstract class SvcList extends PsseBaseList<SVC>
 		public Limits getBLimits(int ndx) throws PsseModelException {return null;}
 	};
 	
-	protected BusList _buses;
 	Complex _tmps;
 	
 	protected SvcList(){super();}
@@ -25,7 +24,6 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	public SvcList(PsseModel model) throws PsseModelException
 	{
 		super(model);
-		_buses = model.getBuses();
 	}
 
 	/** Get a SVC by it's index. */
@@ -35,7 +33,7 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	@Override
 	public SVC get(String id) { return super.get(id); }
 	
-	public Bus getBus(int ndx) throws PsseModelException { return _buses.get(getI(ndx));}
+	public Bus getBus(int ndx) throws PsseModelException { return _model.getBus(getI(ndx));}
 	public Bus getRegBus(int ndx) throws PsseModelException { return getBus(ndx);}
 	
 	public float getVoltageSetpoint(int ndx) throws PsseModelException {return 1f;}

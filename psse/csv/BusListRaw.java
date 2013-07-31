@@ -15,13 +15,13 @@ public class BusListRaw extends com.powerdata.openpa.psse.csv.BusList
 {
 	PsseModel _eq;
 	
-	public BusListRaw(File dir, PsseModel model) throws PsseModelException
+	public BusListRaw(PsseModel model) throws PsseModelException
 	{
 		super(model);
 		_eq = model;
 		try
 		{
-			File dbfile = new File(dir, "Bus.csv");
+			File dbfile = new File(model.getDir(), "Bus.csv");
 			SimpleCSV buses = new SimpleCSV(dbfile);
 			_size	= buses.getRowCount();
 			_i		= buses.getInts("I");

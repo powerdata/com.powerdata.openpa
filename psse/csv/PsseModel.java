@@ -48,33 +48,42 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	
 	void eliminateLowZLines() throws PsseModelException
 	{
-		BusListRaw rbuses = new BusListRaw(_dir, this);
-		LineListRaw rlines = new LineListRaw(_dir, rbuses, this);
+		BusListRaw rbuses = new BusListRaw(this);
+		LineListRaw rlines = new LineListRaw(rbuses, this);
+		
+		analyzeRawShunts(rbuses, rlines);
+		
 		int nbr = rlines.size();
-		LinkNet lnet = new LinkNet();
-		lnet.ensureCapacity(rbuses.size(), nbr);
+		LinkNet elimlnet = new LinkNet();
+		elimlnet.ensureCapacity(rbuses.size(), nbr);
+//		linenet.ensureCapacity(rbuses.size(), nbr);
 		ArrayList<Integer> keep = new ArrayList<>(nbr);
-		for(int i=0; i < nbr; ++i)
+		for (int i = 0; i < nbr; ++i)
 		{
 			Line l = rlines.get(i);
-			Complex z = l.getZ();
-			String j = l.getJ();
-			if (j.charAt(0)=='-') j = j.substring(1);
-			int fbus = rbuses.get(l.getI()).getIndex();
-			int tbus = rbuses.get(j).getIndex();
-			if (z.re() == 0f && Math.abs(z.im()) <= _lowxthr)
+			if (l.isInSvc())
 			{
-				lnet.addBranch(fbus, tbus);
-			}
-			else
-			{
-				keep.add(i);
+				Complex z = l.getZ();
+				String j = l.getJ();
+				if (j.charAt(0) == '-')
+					j = j.substring(1);
+				int fbus = rbuses.get(l.getI()).getIndex();
+				int tbus = rbuses.get(j).getIndex();
+				if (z.re() == 0f && Math.abs(z.im()) <= _lowxthr)
+				{
+					elimlnet.addBranch(fbus, tbus);
+				}
+				else
+				{
+					keep.add(i);
+				}
 			}
 		}
-		if (lnet.getBranchCount() > 0)
+		if (elimlnet.getBranchCount() > 0)
 		{
 			System.out.format("Keeping %d of %d Lines\n", keep.size(), nbr);
-			_buses = new BusListElim(rbuses, lnet, this);
+			
+			_buses = new BusListElim(rbuses, elimlnet, this);
 			int nkeep = keep.size();
 			int[] ndxs = new int[nkeep];
 			for(int i=0; i < nkeep; ++i)
@@ -121,17 +130,17 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	@Override
 	public ShuntList getShunts() throws PsseModelException
 	{
-		if (_shList == null) analyzeRawShunts();
+//		if (_shList == null) analyzeRawShunts();
 		return _shList;
 	}
 	@Override
 	public SvcList getSvcs() throws PsseModelException
 	{
-		if (_svcList == null) analyzeRawShunts();
+//		if (_svcList == null) analyzeRawShunts();
 		return _svcList;
 	}
 	
-	protected void analyzeRawShunts() throws PsseModelException
+	protected void analyzeRawShunts(BusListRaw rawbus, LineListRaw rawline) throws PsseModelException
 	{
 		SwitchedShuntRawList rsh = new SwitchedShuntRawList(this);
 		
@@ -143,15 +152,15 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			((s.getMODSW()==2)?svcndx:shndx).add(s.getIndex());
 		}
 		
-		_shList = new ShuntList(this, rsh, shndx);
-		_svcList = new SvcList(this, rsh, svcndx);
+		_shList = new ShuntList(this, rsh, rawbus, rawline, shndx);
+		_svcList = new SvcList(this, rsh, rawbus, svcndx);
 	}
 	
 	/** convert 3-winding to 2-winding and detect phase shifters */
 	protected void analyzeRawTransformers() throws PsseModelException
 	{
 		BusList buses = getBuses();
-		int starnode = buses.size();
+//		int starnode = buses.size();
 
 		XfrZToolFactory ztf = XfrZToolFactory.Open(getPsseVersion());
 		
@@ -173,8 +182,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		for (TransformerRaw xf : rlist)
 		{
 			String k = xf.getK();
-			int bus1 = xf.getBusI().getIndex();
-			int bus2 = xf.getBusJ().getIndex();
+			String bus1 = xf.getBusI().getObjectID();
+			String bus2 = xf.getBusJ().getObjectID();
 			XfrZTools zt = ztf.get(xf.getCZ());
 			
 			if (k.equals("0"))
@@ -183,9 +192,9 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			}
 			else
 			{
-				int bus3 = xf.getBusK().getIndex();
-				int newstar = starnode++;
+				String bus3 = xf.getBusK().getObjectID();
 				ndx3w.add(xf.getIndex());
+				String newstar = "TXSTAR-"+xf.getObjectID();
 				StarNetwork z = zt.convert3W(xf).star();
 				rp.get(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
 				rp.get(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());

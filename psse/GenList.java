@@ -17,14 +17,11 @@ public abstract class GenList extends PsseBaseList<Gen>
 		public int size() {return 0;}
 	};
 	
-	protected BusList _buses;
-	
 	protected GenList() {super();}
 	
 	public GenList(PsseModel model) throws PsseModelException 
 	{
 		super(model);
-		_buses = model.getBuses();
 	}
 	
 	/* Standard object retrieval */
@@ -39,9 +36,9 @@ public abstract class GenList extends PsseBaseList<Gen>
 	/* convenience methods */
 
 	/** Generator bus (I) */ 
-	public Bus getBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
+	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	/** remote regulated bus.  (IREG) Null if local */
-	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return _buses.get(getIREG(ndx));}
+	public Bus getRemoteRegBus(int ndx) throws PsseModelException {return _model.getBus(getIREG(ndx));}
 	/** get the Generator mode */
 	public GenMode getMode(int ndx) throws PsseModelException
 	{

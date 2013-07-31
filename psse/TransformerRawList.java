@@ -3,12 +3,9 @@ package com.powerdata.openpa.psse;
 
 public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 {
-	protected BusList _buses;
-	
 	public TransformerRawList(PsseModel model) throws PsseModelException
 	{
 		super(model);
-		_buses = model.getBuses();
 	}
 	
 	/** Get a Bus by it's index. */
@@ -19,9 +16,9 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	public TransformerRaw get(String id) { return super.get(id); }
 
 	
-	public Bus getBusI(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
-	public Bus getBusJ(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
-	public Bus getBusK(int ndx) throws PsseModelException {return _buses.get(getK(ndx));}
+	public Bus getBusI(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
+	public Bus getBusJ(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
+	public Bus getBusK(int ndx) throws PsseModelException {return _model.getBus(getK(ndx));}
 
 
 	/* Line 1 */
@@ -81,9 +78,9 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	/* line 3 */
 	
 	/** Winding 1 off-nominal turns ratio */
-	public float getWINDV1(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_buses.get(getI(ndx)).getBASKV():1f);}
+	public float getWINDV1(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_model.getBus(getI(ndx)).getBASKV():1f);}
 	/** Winding 1 nominal voltage */
-	public float getNOMV1(int ndx) throws PsseModelException {return _buses.get(getI(ndx)).getBASKV();}
+	public float getNOMV1(int ndx) throws PsseModelException {return _model.getBus(getI(ndx)).getBASKV();}
 	/** Winding 1 phase shift angle (degrees) */
 	public float getANG1(int ndx) throws PsseModelException {return 0f;}
 	/** Winding 1 first rating */
@@ -107,7 +104,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		}
 		else if (cod < 3 && cw == 2)
 		{
-			return 1.1f * _buses.get(getI(ndx)).getBASKV();
+			return 1.1f * _model.getBus(getI(ndx)).getBASKV();
 		}
 		return 1.1f;
 	}
@@ -122,7 +119,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		}
 		else if (cod < 3 && cw == 2)
 		{
-			return 0.9f * _buses.get(getI(ndx)).getBASKV();
+			return 0.9f * _model.getBus(getI(ndx)).getBASKV();
 		}
 		return 0.9f;
 	}
@@ -154,9 +151,9 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	/* line 4 */
 	
 	/** Winding 2 off-nominal turns ratio */
-	public float getWINDV2(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_buses.get(getJ(ndx)).getBASKV():1f);}
+	public float getWINDV2(int ndx) throws PsseModelException {return ((getCW(ndx)==2)?_model.getBus(getJ(ndx)).getBASKV():1f);}
 	/** Winding 2 nominal voltage */
-	public float getNOMV2(int ndx) throws PsseModelException {return _buses.get(getJ(ndx)).getBASKV();}
+	public float getNOMV2(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx)).getBASKV();}
 	/** Winding 2 phase shift angle (degrees) */
 	public float getANG2(int ndx) throws PsseModelException {return 0f;}
 	/** Winding 2 first rating */
@@ -180,7 +177,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		}
 		else if (cod < 3 && cw == 2)
 		{
-			return 1.1f * _buses.get(getJ(ndx)).getBASKV();
+			return 1.1f * _model.getBus(getJ(ndx)).getBASKV();
 		}
 		return 1.1f;
 	}
@@ -195,7 +192,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		}
 		else if (cod < 3 && cw == 2)
 		{
-			return 0.9f * _buses.get(getJ(ndx)).getBASKV();
+			return 0.9f * _model.getBus(getJ(ndx)).getBASKV();
 		}
 		return 0.9f;
 	}
@@ -231,11 +228,11 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 	public float getWINDV3(int ndx) throws PsseModelException
 	{
 		String k = getK(ndx);
-		return ((getCW(ndx) == 2 && !k.isEmpty() && !k.equals("0")) ? _buses.get(getK(ndx)).getBASKV() : 1f);
+		return ((getCW(ndx) == 2 && !k.isEmpty() && !k.equals("0")) ? _model.getBus(getK(ndx)).getBASKV() : 1f);
 	}
 
 	/** Winding 3 nominal voltage */
-	public float getNOMV3(int ndx) throws PsseModelException {return _buses.get(getK(ndx)).getBASKV();}
+	public float getNOMV3(int ndx) throws PsseModelException {return _model.getBus(getK(ndx)).getBASKV();}
 	/** Winding 3 phase shift angle (degrees) */
 	public float getANG3(int ndx) throws PsseModelException {return 0f;}
 	/** Winding 3 first rating */
@@ -260,7 +257,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		}
 		else if (cod < 3 && cw == 2 && !k.isEmpty() && !k.equals("0"))
 		{
-			return 1.1f * _buses.get(getK(ndx)).getBASKV();
+			return 1.1f * _model.getBus(getK(ndx)).getBASKV();
 		}
 		return 1.1f;
 	}
@@ -276,7 +273,7 @@ public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>
 		}
 		else if (cod < 3 && cw == 2 && !k.isEmpty() && !k.equals("0"))
 		{
-			return 0.9f * _buses.get(getK(ndx)).getBASKV();
+			return 0.9f * _model.getBus(getK(ndx)).getBASKV();
 		}
 		return 0.9f;
 	}

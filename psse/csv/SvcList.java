@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import java.util.List;
 
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Limits;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -12,7 +13,7 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 {
 	int _size;
 	
-	int[] _i, _swrem;
+	String[] _i, _swrem;
 	float[] _rmpct, _binit, _minB, _maxB, _vsp;
 	String[] _id;
 	
@@ -20,14 +21,14 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 
 	
 	public SvcList() {super();}
-	public SvcList(PsseModel model, SwitchedShuntRawList raw,
+	public SvcList(PsseModel model, SwitchedShuntRawList raw, BusListRaw rawbus,
 			List<Integer> svcndx) throws PsseModelException
 	{
 		super(model);
 		_size = svcndx.size();
 		
-		_i = new int[_size];
-		_swrem = new int[_size];
+		_i = new String[_size];
+		_swrem = new String[_size];
 		_rmpct = new float[_size];
 		_binit = new float[_size];
 		_minB = new float[_size];
@@ -40,10 +41,10 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 		for (int i=0; i < _size; ++i)
 		{
 			int ndx = svcndx.get(i);
-			_i[i] = raw.getBus(ndx).getIndex();
+			Bus bus = rawbus.get(raw.getI(ndx));
+			_i[i] = bus.getObjectID();
 			String swrem = raw.getSWREM(ndx);
-			_swrem[i] = (swrem.isEmpty() || swrem.equals("0")) ? _i[i] : _buses
-					.get(swrem).getIndex();
+			_swrem[i] = (swrem.isEmpty() || swrem.equals("0")) ? _i[i] : swrem;
 			_rmpct[i] = raw.getRMPCT(ndx);
 			_binit[i] = raw.getBINIT(ndx);
 			_vsp[i] = (raw.getVSWHI(ndx)+raw.getVSWLO(ndx))/2f;
@@ -70,13 +71,13 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 	@Override
 	public int size() {return _size;}
 	@Override
-	public String getI(int ndx) throws PsseModelException {return _buses.get(_i[ndx]).getObjectID();}
+	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
 	@Override
 	public Limits getBLimits(int ndx) throws PsseModelException {return new Limits(_minB[ndx], _maxB[ndx]);}
 	@Override
 	public float getVoltageSetpoint(int ndx) throws PsseModelException {return _vsp[ndx];}
 	@Override
-	public String getSWREM(int ndx) throws PsseModelException {return _buses.get(_swrem[ndx]).getObjectID();}
+	public String getSWREM(int ndx) throws PsseModelException {return _swrem[ndx];}
 
 	@Override
 	public float getRMPCT(int ndx) throws PsseModelException {return _rmpct[ndx];}
