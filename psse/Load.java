@@ -23,6 +23,7 @@ public class Load extends PsseBaseObject implements OneTermDev
 	/** Load bus (I) */ 
 	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
+	@Override
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	/** get Area Interchange record */

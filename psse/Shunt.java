@@ -21,7 +21,8 @@ public class Shunt extends PsseBaseObject implements OneTermDev
 
 	/** is Switched on */
 	public boolean isSwitchedOn() throws PsseModelException {return _list.isSwitchedOn(_ndx);}
-
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	/** get connected bus */
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** shunt nominal B in MVAr at unity bus voltage */

@@ -100,7 +100,8 @@ public abstract class BusList extends com.powerdata.openpa.psse.BusList
 			_vm[bi] = t.getVMSTAR();
 			_va[bi] = t.getANSTAR();
 			_ids[bi] = "TXSTAR-"+t.getObjectID();
-			_idToNdx.put(_ids[bi], bi);
+			if (_idToNdx.put(_ids[bi], bi)!= null)
+				System.err.format("Duplicate bus ID: %s", _ids[bi]);
 		}
 
 		/* set all base kv to 1 KV */

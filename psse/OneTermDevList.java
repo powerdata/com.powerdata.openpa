@@ -50,6 +50,11 @@ public class OneTermDevList extends BaseList<OneTermDev>
 		{
 			OneTermDevList.this.setRTS(_ndx, s);
 		}
+		@Override
+		public boolean isInSvc() throws PsseModelException
+		{
+			return OneTermDevList.this.isInSvc(_ndx);
+		}
 	}
 	
 	int _nload, _ngen, _nsh, _nsvc, _size;
@@ -136,6 +141,10 @@ public class OneTermDevList extends BaseList<OneTermDev>
 	public Bus getBus(int ndx) throws PsseModelException
 	{
 		return findDev(ndx).getBus();
+	}
+	public boolean isInSvc(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).isInSvc();
 	}
 
 	@Override

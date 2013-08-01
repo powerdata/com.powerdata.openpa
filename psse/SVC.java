@@ -24,7 +24,8 @@ public class SVC extends PsseBaseObject implements OneTermDev
 	public String getSWREM() throws PsseModelException {return _list.getSWREM(_ndx);}
 	public float getRMPCT() throws PsseModelException {return _list.getRMPCT(_ndx);}
 	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
-
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	@Override
 	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
 	@Override
@@ -59,5 +60,4 @@ public class SVC extends PsseBaseObject implements OneTermDev
 		// TODO Auto-generated method stub
 		
 	}
-
 }

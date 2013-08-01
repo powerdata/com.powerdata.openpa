@@ -3,6 +3,7 @@ package com.powerdata.openpa.busmismatch;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.powerdata.openpa.busmismatch.MismatchReport.MismatchReporter;
@@ -44,7 +45,7 @@ public class PowerCalculator
 			Bus fbus = br.getFromBus();
 			Bus tbus = br.getToBus();
 			String objid = br.getObjectName();
-			if (objid.equals("XF-11008-TXSTAR-11008:11010:1-1"))
+			if (objid.equals("XF-1802-TXSTAR-5900:1801:1-1"))
 			{
 				int xxx = 5;
 			}
@@ -65,16 +66,56 @@ public class PowerCalculator
 			float gsin = stvmpq * y.re();
 			float bsin = stvmpq * y.im();
 
-			br.setRTFromS(new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
-					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f));
-			br.setRTToS(new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
-					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f));
+			float fycm = br.getFromYcm().im();
+			float tycm = br.getToYcm().im();
+			
+			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
+					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
+			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
+					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
+			br.setRTFromS(froms);
+			br.setRTToS(tos);
 		}
 		else
 		{
 			br.setRTFromS(Complex.Zero);
 			br.setRTToS(Complex.Zero);
 		}
+	}
+	
+	public static void dumpBranchesToCSV(File csv, ACBranchList branches) throws IOException, PsseModelException
+	{
+		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(csv)));
+		pw.println("I,J,ObjectID,ObjectName,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
+		for(ACBranch branch: branches)
+		{
+			if (branch.isInSvc())
+			{
+				Bus frbus = branch.getFromBus();
+				Bus tobus = branch.getToBus();
+				Complex y = branch.getY();
+				Complex ycm = branch.getFromYcm().add(branch.getToYcm());
+				PComplex frv = frbus.getVoltage(),
+						 tov = tobus.getVoltage();
+				Complex frs = branch.getRTFromS(),
+						tos = branch.getRTToS();
+				
+				pw.format("\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+						frbus.getObjectID(),
+						tobus.getObjectID(),
+						branch.getObjectID(),
+						branch.getObjectName(),
+						y.re(),y.im(), ycm.im(),
+						frv.r(), frv.theta(),
+						tov.r(), tov.theta(),
+						branch.getPhaseShift(),
+						branch.getFromTap(),
+						frs.re(), frs.im(),
+						tos.re(), tos.im());
+			}
+		}
+		
+		pw.close();
 	}
 	
 	public static void calculateMismatches(PsseModel model) throws PsseModelException
@@ -109,7 +150,6 @@ public class PowerCalculator
 		for(int i=0; i < nload; ++i)
 		{
 			Load l = ldlist.get(i);
-			Bus b = l.getBus();
 			if (l.isInSvc())
 				mm.assignadd(l.getBus().getIndex(), l.getRTS());
 		}
@@ -189,8 +229,8 @@ public class PowerCalculator
 
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/frcc");
-		File outdir = new File("/tmp/frccout");
+		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/railbelt");
+		File outdir = new File("/tmp/railbeltout");
 		calcACBranchFlows(model.getBranches());
 		calcShunts(model.getShunts());
 		calcSVCs(model.getSvcs());
@@ -199,6 +239,7 @@ public class PowerCalculator
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
 		new MismatchReport(model).report(new CsvMismatchReporter(mmout, model));
 		mmout.close();
+		dumpBranchesToCSV(new File(outdir, "brdbg.csv"), model.getBranches());
 	}
 	
 }
@@ -216,16 +257,18 @@ class CsvMismatchReporter implements MismatchReporter
 		_otdevs = model.getOneTermDevs();
 		_acbr = model.getBranches();
 		_out = out;
-		out.println("BusID,BusName,Pmm,Qmm,DevID,DevName,Pdev,Qdev");
+		out.println("BusID,BusName,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
 	}
 	@Override
 	public void report(int bus, int[] acbranches, int[] onetermdevs) throws PsseModelException
 	{
 		Bus b = _buses.get(bus);
+		if (!b.isEnergized()) return;
 		Complex mm = b.getRTMismatch();
+		float mmm = Math.max(Math.abs(mm.re()), Math.abs(mm.im()));
 		
-		String btmp = String.format("\"%s\",\"%s\",%f,%f,",
-				b.getObjectID(), b.getObjectName(), mm.re(), mm.im());
+		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,",
+				b.getObjectID(), b.getObjectName(), mm.re(), mm.im(), mmm);
 				
 		for(int acbranch : acbranches)
 		{

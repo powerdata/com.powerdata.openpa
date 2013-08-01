@@ -56,4 +56,5 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 		return _tmps;
 	}
 
+	public boolean isInSvc(int ndx) throws PsseModelException {return isSwitchedOn(ndx);}
 }

@@ -39,6 +39,7 @@ public class Gen extends PsseBaseObject implements OneTermDev
 
 	/** generator active power limits p.u. on 100MVA base */
 	public Limits getActiveLimits() throws PsseModelException {return _list.getActiveLimits(_ndx);}
+	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 
 	/* Raw PSS/e methods */

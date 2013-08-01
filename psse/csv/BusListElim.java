@@ -53,10 +53,6 @@ public class BusListElim extends BusList
 		{
 			String objid = rbuses.getObjectID(i);
 			String elimto = elim.get(objid);
-			if (objid.equals("22938"))
-			{
-				int xxx = 5;
-			}
 			if (elimto == null)
 			{
 				_i[nbus] = rbuses.getI(i);
@@ -70,6 +66,7 @@ public class BusListElim extends BusList
 				_va[nbus] = rbuses.getVA(i);
 				_gl[nbus] = rbuses.getGL(i);
 				_bl[nbus] = rbuses.getBL(i);
+				_basekv[nbus] = rbuses.getBASKV(i);
 				id2ndx.put(objid, nbus);
 				++nbus;
 			}

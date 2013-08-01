@@ -18,4 +18,5 @@ public interface OneTermDev extends BaseObject
 	public Complex getRTS() throws PsseModelException;
 	/** set complex power p.u. on 100MVA base */
 	public void setRTS(Complex s) throws PsseModelException;
+	public boolean isInSvc() throws PsseModelException;
 }

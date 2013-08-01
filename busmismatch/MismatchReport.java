@@ -1,11 +1,17 @@
 package com.powerdata.openpa.busmismatch;
 
 import com.powerdata.openpa.psse.ACBranch;
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.Gen;
+import com.powerdata.openpa.psse.Load;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.OneTermDevList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.SVC;
+import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.tools.LinkNet;
+import com.powerdata.tools.utils.SmoothSort;
 
 public class MismatchReport
 {
@@ -26,18 +32,26 @@ public class MismatchReport
 		
 		OneTermDevList otdevs = model.getOneTermDevs();
 		
-		_brnet.ensureCapacity(_nbus, model.getBranches()
+		_brnet.ensureCapacity(_nbus+1, model.getBranches()
 				.size());
 		_otnet.ensureCapacity(_nbus+1, otdevs.size());
 
 		for(ACBranch branch : model.getBranches())
 		{
-			_brnet.addBranch(branch.getFromBus().getIndex(), branch.getToBus()
-					.getIndex());
+			int fndx = _nbus;
+			int tndx = _nbus;
+			
+			if (branch.isInSvc())
+			{
+				fndx = branch.getFromBus().getIndex();
+				tndx = branch.getToBus().getIndex();
+			}
+			_brnet.addBranch(fndx, tndx);
 		}
-		for(OneTermDev odev : otdevs)
+		for(OneTermDev otd : model.getOneTermDevs())
 		{
-			_otnet.addBranch(odev.getBus().getIndex(), _nbus);
+			int bndx = (otd.isInSvc()) ? otd.getBus().getIndex() : _nbus;
+			_otnet.addBranch(bndx, _nbus);
 		}
 	}
 	

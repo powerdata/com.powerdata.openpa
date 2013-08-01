@@ -392,8 +392,18 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerRaw
 	
 	@Override
 	public String getObjectID(int ndx)
-	{ 
-		return _i[ndx]+":"+_j[ndx]+":"+_ckt[ndx];
+	{
+		StringBuilder sb = new StringBuilder(_i[ndx]);
+		sb.append(':');
+		sb.append(_j[ndx]);
+		sb.append(':');
+		if (!_k[ndx].equals("0"))
+		{
+			sb.append(_k[ndx]);
+			sb.append(':');
+		}
+		sb.append(_ckt[ndx]);
+		return sb.toString();
 	}
 	@Override
 	public int size() { return _size; }

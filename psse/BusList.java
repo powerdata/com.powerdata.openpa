@@ -40,7 +40,7 @@ public abstract class BusList extends PsseBaseList<Bus>
 	/** request that this node be isloated */
 	public SwitchList isolate(int ndx) throws PsseModelException { return SwitchList.Empty; }
 	/** test if the bus is energized */
-	public boolean isEnergized(int ndx) throws PsseModelException {return false;}
+	public boolean isEnergized(int ndx) throws PsseModelException {return getIDE(ndx) != 4;}
 	/** get the island number */
 	public int getIsland(int ndx) throws PsseModelException {return 0;}
 

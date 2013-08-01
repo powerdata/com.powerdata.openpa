@@ -55,4 +55,5 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	public Complex getRTY(int ndx) throws PsseModelException {return getY(ndx);}
 	public void setRTY(int ndx, Complex y) throws PsseModelException {/* do nothing */}
 
+	public boolean isInSvc(int ndx) throws PsseModelException {return getBINIT(ndx) != 0f;}
 }
