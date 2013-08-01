@@ -17,7 +17,7 @@ public class Shunt extends PsseBaseObject implements OneTermDev
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 
 	/** shunt nominal susceptance, p.u. at nominal bus kv */
-	public Complex getCaseY() throws PsseModelException {return _list.getCaseY(_ndx);}
+	public Complex getY() throws PsseModelException {return _list.getY(_ndx);}
 
 	/** is Switched on */
 	public boolean isSwitchedOn() throws PsseModelException {return _list.isSwitchedOn(_ndx);}

@@ -125,10 +125,10 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 		{
 			if (l.isInSvc())
 			{
-				float gi = l.getGI();
-				float bi = l.getBI();
-				float gj = l.getGJ();
-				float bj = l.getBJ();
+				float gi = l.getGI()*100f;
+				float bi = l.getBI()*100f;
+				float gj = l.getGJ()*100f;
+				float bj = l.getBJ()*100f;
 				Bus fb = rawbus.get(l.getI());
 				String j = l.getJ();
 				if (j.charAt(0) == '-')
@@ -137,12 +137,12 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 				String objname = String.format("%s-%s:%s", fb.getObjectName(), tb.getObjectName(), l.getCKT());
 				if (gi != 0f || bi != 0f)
 				{
-					mkShunt(gi, bi, fb, l.getObjectID() + "FSH",
+					mkShunt(bi, gi, fb, l.getObjectID() + "FSH",
 							objname + "-FSH", true);
 				}
 				if (gj != 0f || bj != 0f)
 				{
-					mkShunt(gj, bj, tb, l.getObjectID()
+					mkShunt(bj, gj, tb, l.getObjectID()
 							+ "TSH", objname + "-TSH", true);
 				}
 			}

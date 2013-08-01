@@ -34,7 +34,10 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	/* convenience methods */
 	
 	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public Complex getCaseY(int ndx) throws PsseModelException {return new Complex(getG(ndx), getB(ndx)).div(100f);}
+	public Complex getY(int ndx) throws PsseModelException
+	{
+		return isSwitchedOn(ndx) ? new Complex(getG(ndx), getB(ndx)).div(100f) : Complex.Zero;
+	}
 	public boolean isSwitchedOn(int ndx) throws PsseModelException {return false;}
 
 	/* raw methods */

@@ -42,13 +42,9 @@ public class PowerCalculator
 		if (br.isInSvc())
 		{
 			Complex y = br.getY();
-			Bus fbus = br.getFromBus();
-			Bus tbus = br.getToBus();
-			String objid = br.getObjectName();
-			if (objid.equals("XF-1802-TXSTAR-5900:1801:1-1"))
-			{
-				int xxx = 5;
-			}
+//			Bus fbus = br.getFromBus();
+//			Bus tbus = br.getToBus();
+//			String objid = br.getObjectName();
 			PComplex fv = br.getFromBus().getVoltage();
 			PComplex tv = br.getToBus().getVoltage();
 
@@ -66,8 +62,8 @@ public class PowerCalculator
 			float gsin = stvmpq * y.re();
 			float bsin = stvmpq * y.im();
 
-			float fycm = br.getFromYcm().im();
-			float tycm = br.getToYcm().im();
+//			float fycm = br.getFromYcm().im();
+//			float tycm = br.getToYcm().im();
 			
 			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
 					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
@@ -187,7 +183,7 @@ public class PowerCalculator
 	public static void calcShunt(Shunt shunt) throws PsseModelException
 	{
 		float vm = shunt.getBus().getVoltage().r();
-		shunt.setRTS(new Complex(0f, shunt.getCaseY().im()*vm*vm));
+		shunt.setRTS(new Complex(0f, shunt.getY().im()*vm*vm));
 	}
 
 	public static void calcSVC(SVC svc) throws PsseModelException
@@ -229,8 +225,8 @@ public class PowerCalculator
 
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/railbelt");
-		File outdir = new File("/tmp/railbeltout");
+		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/caiso");
+		File outdir = new File("/tmp/caisoout");
 		calcACBranchFlows(model.getBranches());
 		calcShunts(model.getShunts());
 		calcSVCs(model.getSvcs());
@@ -264,7 +260,7 @@ class CsvMismatchReporter implements MismatchReporter
 	{
 		Bus b = _buses.get(bus);
 		if (!b.isEnergized()) return;
-		Complex mm = b.getRTMismatch();
+		Complex mm = b.getRTMismatch().mult(100f);
 		float mmm = Math.max(Math.abs(mm.re()), Math.abs(mm.im()));
 		
 		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,",
@@ -274,7 +270,7 @@ class CsvMismatchReporter implements MismatchReporter
 		{
 			ACBranch acb = _acbr.get(acbranch);
 			int fbus = acb.getFromBus().getIndex();
-			Complex s = (fbus == bus) ? acb.getRTFromS() : acb.getRTToS();
+			Complex s = ((fbus == bus) ? acb.getRTFromS() : acb.getRTToS()).mult(100f);
 			_out.print(btmp);
 			_out.format("\"%s\",\"%s\",%f,%f\n",
 					acb.getObjectID(), acb.getObjectName(), s.re(), s.im());
@@ -283,7 +279,7 @@ class CsvMismatchReporter implements MismatchReporter
 		for(int otdx : onetermdevs)
 		{
 			OneTermDev otd = _otdevs.get(otdx);
-			Complex s = otd.getRTS();
+			Complex s = otd.getRTS().mult(100f);
 			_out.print(btmp);
 			_out.format("\"%s\",\"%s\",%f,%f\n",
 					otd.getObjectID(), otd.getObjectName(), s.re(), s.im());
