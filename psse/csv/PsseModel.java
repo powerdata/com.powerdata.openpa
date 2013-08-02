@@ -2,7 +2,9 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Line;
@@ -23,7 +25,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
-	float				_lowxthr = 0.0001f;
+	float				_lowxthr = 0.001f;
+	float				_lowrthr = 0.0001f;
 	GenList				_generatorList;
 	BusList				_buses;
 	LineList			_branchList;
@@ -52,42 +55,24 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		LineListRaw rlines = new LineListRaw(rbuses, this);
 		
 		analyzeRawShunts(rbuses, rlines);
+		analyzeRawTransformers(rbuses);
 		
-		int nbr = rlines.size();
+		int nbr = rlines.size()+_xfrList.size()+_psList.size();
 		LinkNet elimlnet = new LinkNet();
 		elimlnet.ensureCapacity(rbuses.size(), nbr);
 //		linenet.ensureCapacity(rbuses.size(), nbr);
-		ArrayList<Integer> keep = new ArrayList<>(nbr);
-		for (int i = 0; i < nbr; ++i)
-		{
-			Line l = rlines.get(i);
-			if (l.isInSvc())
-			{
-				Complex z = l.getZ();
-				String j = l.getJ();
-				if (j.charAt(0) == '-')
-					j = j.substring(1);
-				int fbus = rbuses.get(l.getI()).getIndex();
-				int tbus = rbuses.get(j).getIndex();
-				if (z.re() == 0f && Math.abs(z.im()) <= _lowxthr)
-				{
-					elimlnet.addBranch(fbus, tbus);
-				}
-				else
-				{
-					keep.add(i);
-				}
-			}
-		}
+		ArrayList<Integer> keepln = new ArrayList<>(nbr);
+		ArrayList<Integer> keeptx = new ArrayList<>(nbr);
+		eliminate(rlines, )
 		if (elimlnet.getBranchCount() > 0)
 		{
-			System.out.format("Keeping %d of %d Lines\n", keep.size(), nbr);
+			System.out.format("Keeping %d of %d Lines\n", keepln.size(), nbr);
 			
 			_buses = new BusListElim(rbuses, elimlnet, this);
-			int nkeep = keep.size();
+			int nkeep = keepln.size();
 			int[] ndxs = new int[nkeep];
 			for(int i=0; i < nkeep; ++i)
-				ndxs[i] = keep.get(i);
+				ndxs[i] = keepln.get(i);
 			_branchList = new LineSubList(rlines, ndxs);
 		}
 		else
@@ -95,6 +80,28 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			_buses = rbuses;
 			_branchList = rlines;
 		}
+	}
+	
+	void eliminate(Complex z, Bus fbus, Bus tbus, LinkNet elimlnet, List<Integer> keep)
+	{
+			if (br.isInSvc())
+			{
+				Complex z = br.getZ();
+				Bus fbus = br.get
+				int fbusx = fbus.getIndex();
+				int tbusx = tbus.getIndex();
+//				if (z.re() <= _lowrthr && Math.abs(z.im()) <= _lowxthr)
+				if (fbus.getVoltage().equals(tbus.getVoltage()))
+				{
+					elimlnet.addBranch(fbusx, tbusx);
+				}
+				else
+				{
+					keep.add(i);
+				}
+			}
+		}
+		
 	}
 	
 	public File getDir() { return _dir; }
@@ -117,13 +124,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	@Override
 	public TransformerList getTransformers() throws PsseModelException
 	{
-		if (_xfrList == null) analyzeRawTransformers();
 		return _xfrList;
 	}
 	@Override
 	public PhaseShifterList getPhaseShifters() throws PsseModelException
 	{
-		if (_psList == null) analyzeRawTransformers();
 		return _psList;
 	}
 	
@@ -157,7 +162,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	}
 	
 	/** convert 3-winding to 2-winding and detect phase shifters */
-	protected void analyzeRawTransformers() throws PsseModelException
+	protected void analyzeRawTransformers(BusListRaw rbus) throws PsseModelException
 	{
 		BusList buses = getBuses();
 //		int starnode = buses.size();
@@ -182,8 +187,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		for (TransformerRaw xf : rlist)
 		{
 			String k = xf.getK();
-			String bus1 = xf.getBusI().getObjectID();
-			String bus2 = xf.getBusJ().getObjectID();
+			String bus1 = rbus.get(xf.getI()).getObjectID();
+			String bus2 = rbus.get(xf.getJ()).getObjectID();
 			XfrZTools zt = ztf.get(xf.getCZ());
 			
 			if (k.equals("0"))
@@ -192,7 +197,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			}
 			else
 			{
-				String bus3 = xf.getBusK().getObjectID();
+				String bus3 = rbus.get(xf.getK()).getObjectID();
 				ndx3w.add(xf.getIndex());
 				String newstar = "TXSTAR-"+xf.getObjectID();
 				StarNetwork z = zt.convert3W(xf).star();

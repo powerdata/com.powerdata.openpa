@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -10,7 +11,7 @@ import com.powerdata.openpa.tools.SimpleCSV;
 public class TransformerRawList extends com.powerdata.openpa.psse.TransformerRawList
 {
 	PsseModel _eq;
-	BusList _buses;
+	BusListRaw _buses;
 	int _size;
 
 	/* line 1 */
@@ -40,13 +41,13 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerRaw
 	int[] _cod3, _ntp3, _tab3;
 	String[] _cont3;
 	
-	public TransformerRawList(PsseModel eq) throws PsseModelException
+	public TransformerRawList(PsseModel eq, BusListRaw buses) throws PsseModelException
 	{
 		super(eq);
 		try
 		{
 			_eq = eq;
-			_buses = _eq.getBuses();
+			_buses = buses;
 			SimpleCSV xfr = new SimpleCSV(_eq.getDir().getPath()+"/Transformer.csv");
 			_size 		= xfr.getRowCount();
 
@@ -390,6 +391,26 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerRaw
 	public float getDeftCR3(int ndx) throws PsseModelException  {return super.getCR3(ndx);}
 	public float getDeftCX3(int ndx) throws PsseModelException  {return super.getCX3(ndx);}
 	
+	
+	@Override
+	public Bus getBusI(int ndx) throws PsseModelException
+	{
+		return _buses.get(getI(ndx));
+	}
+
+	@Override
+	public Bus getBusJ(int ndx) throws PsseModelException
+	{
+		return _buses.get(getK(ndx));
+	}
+
+	@Override
+	public Bus getBusK(int ndx) throws PsseModelException
+	{
+		String k = getK(ndx);
+		return (k==null||k.equals("0")) ? null : _buses.get(k);
+	}
+
 	@Override
 	public String getObjectID(int ndx)
 	{

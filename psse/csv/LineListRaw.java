@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
@@ -57,6 +58,20 @@ public class LineListRaw extends LineList
 	@Override
 	public int size() { return _size; }
 
+	
+	@Override
+	public Bus getFromBus(int ndx) throws PsseModelException
+	{
+		return _buses.get(getI(ndx));
+	}
+
+	@Override
+	public Bus getToBus(int ndx) throws PsseModelException
+	{
+		String j = getJ(ndx);
+		if (j.charAt(0)=='-') j = j.substring(1);
+		return _buses.get(j);
+	}
 
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }

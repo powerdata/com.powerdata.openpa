@@ -35,15 +35,7 @@ public class LineSubList extends com.powerdata.openpa.psse.LineSubList
 	{
 		String j = getJ(ndx);
 		if (j.charAt(0)=='-') j = j.substring(1);
-		if (j.equals("22938"))
-		{
-			int xxx = 5;
-		}
 		Bus rv = _model.getBus(j);
-		if (rv.getIndex() == 8696)
-		{
-			int xxx = 5;
-		}
 		return rv;
 	}
 	

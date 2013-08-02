@@ -42,6 +42,10 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 			String rawid = raw.getObjectID(ndx);
 			Bus obus = rawbus.get(raw.getI(ndx));
 			String rawname = obus.getObjectName();
+			if (obus.getObjectID().equals("463"))
+			{
+				int xxx = 5;
+			}
 			int[] nblk = raw.getN(ndx);
 			float[] bblk = raw.getB(ndx);
 			float binit = raw.getBINIT(ndx);
@@ -60,7 +64,7 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 						if (binit < -0.0001f)
 						{
 							swon = true;
-							binit += bshblk;
+							binit -= bshblk;
 						}
 						mkShunt(bshblk, 0f, obus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
 						++posinswsh;

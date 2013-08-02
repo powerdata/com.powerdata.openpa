@@ -79,7 +79,8 @@ public class PowerCalculator
 		}
 	}
 	
-	public static void dumpBranchesToCSV(File csv, ACBranchList branches) throws IOException, PsseModelException
+	public static void dumpBranchesToCSV(File csv, ACBranchList branches)
+			throws IOException, PsseModelException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(csv)));
 		pw.println("I,J,ObjectID,ObjectName,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
@@ -225,8 +226,8 @@ public class PowerCalculator
 
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/caiso");
-		File outdir = new File("/tmp/caisoout");
+		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/rb");
+		File outdir = new File("/tmp/rb/out");
 		calcACBranchFlows(model.getBranches());
 		calcShunts(model.getShunts());
 		calcSVCs(model.getSvcs());
