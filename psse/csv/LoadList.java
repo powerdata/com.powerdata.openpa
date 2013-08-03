@@ -1,7 +1,10 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.io.File;
 import java.io.IOException;
 
+import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
@@ -24,7 +27,7 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 	ComplexList _rts;
 	
 	public LoadList() {super();}
-	public LoadList(PsseModel eq) throws PsseModelException
+	public LoadList(PsseModel eq, File dir) throws PsseModelException
 	{
 		super(eq);
 		_eq = eq;
@@ -33,8 +36,7 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 		{
 			_eq = eq;
 			_buses = _eq.getBuses();
-			String dbfile = _eq.getDir().getPath()+"/Load.csv";
-			SimpleCSV loads = new SimpleCSV(dbfile);
+			SimpleCSV loads = new SimpleCSV(new File(dir, "Load.csv"));
 			_size = loads.getRowCount();
 			_i		= loads.get("I");
 			_id		= LoadArray.String(loads,"ID",this,"getID");

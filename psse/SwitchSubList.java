@@ -9,6 +9,7 @@ public class SwitchSubList extends SwitchList
 		super(switches._model);
 		_switches = switches;
 		_ndxs = ndxs;
+		_idToNdx = switches.idmap();
 	}
 	@Override
 	public void commit() throws PsseModelException
@@ -52,4 +53,9 @@ public class SwitchSubList extends SwitchList
 	{
 		return _switches.canOperateUnderLoad(_ndxs[ndx]);
 	}
+	@Override
+	public Switch get(String id) {return new Switch(_ndxs[_idToNdx.get(id)], this);}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException {return _switches.getObjectName(_ndxs[ndx]);}
+	
 }

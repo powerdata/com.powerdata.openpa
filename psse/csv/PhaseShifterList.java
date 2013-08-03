@@ -1,157 +1,118 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PhaseShifter;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 
 public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 {
-	int _size;
-
-	/* line 1 */
-	private String[] _ckt, _name, _i, _j;
-	private int[] _cw, _cm, _nmetr, _stat;
-	private float[] _mag1, _mag2;
+	BusList _buses;
+	PhaseShifterRawList _base;
 	
-	/* line 2 */
-	private ComplexList _z;
-	private float[] _sbase;
-
-	/* line 3 */
-	private float[]		_windv1, _nomv1, _ang1, _rata1, _ratb1, _ratc1, _rma1,
-			_rmi1, _vma1, _vmi1, _cr1, _cx1;
-	private int[]		_cod1, _ntp1, _tab1;
-	
-	ComplexList _fs, _ts;
-	
-	public PhaseShifterList(PsseModel model, TransformerRawList rlist,
-			TransformerPrep prep) throws PsseModelException
+	public PhaseShifterList(BusList buses, PhaseShifterRawList pslist)
 	{
-		super(model);
-
-		_size = prep.size();
-		
-		int[] xfndx = prep.getXfRaw(), wndx = prep.getWndx();
-		_i = prep.getBusI();
-		_j = prep.getBusJ();
-		_z = prep.getZ();
-		
-		_ckt = (String[]) TransformerRawList.loadArray(rlist, xfndx, "CKT", String.class);
-		_name = (String[]) TransformerRawList.loadArray(rlist, xfndx, "NAME", String.class);
-		_cw = (int[]) TransformerRawList.loadArray(rlist, xfndx, "CW", int.class);
-		_cm = (int[]) TransformerRawList.loadArray(rlist, xfndx, "CM", int.class);
-		_nmetr = TransformerRawList.loadNmetr(rlist, xfndx, wndx);
-		_stat = TransformerRawList.loadStat(rlist, xfndx, wndx);
-		float[][] tmag = TransformerRawList.loadMag(rlist, xfndx, wndx);
-		_mag1 = tmag[0];
-		_mag2 = tmag[1];
-		_sbase = TransformerRawList.loadSbase(rlist, xfndx, wndx);
-
-		_windv1 = (float[]) new WndLoader("WINDV").load(rlist, xfndx, wndx, float.class);
-		_nomv1 = (float[]) new WndLoader("NOMV").load(rlist, xfndx, wndx, float.class);
-		_ang1 = (float[]) new WndLoader("ANG").load(rlist, xfndx, wndx, float.class);
-		_rata1 = (float[]) new WndLoader("RATA").load(rlist, xfndx, wndx, float.class);
-		_ratb1 = (float[]) new WndLoader("RATB").load(rlist, xfndx, wndx, float.class);
-		_ratc1 = (float[]) new WndLoader("RATC").load(rlist, xfndx, wndx, float.class);
-		_cod1 = (int[]) new WndLoader("COD").load(rlist, xfndx, wndx, int.class);
-		_rma1 = (float[]) new WndLoader("RMA").load(rlist, xfndx, wndx, float.class);
-		_rmi1 = (float[]) new WndLoader("RMI").load(rlist, xfndx, wndx, float.class);
-		_vma1 = (float[]) new WndLoader("VMA").load(rlist, xfndx, wndx, float.class);
-		_vmi1 = (float[]) new WndLoader("VMI").load(rlist, xfndx, wndx, float.class);
-		_ntp1 = (int[]) new WndLoader("NTP").load(rlist, xfndx, wndx, int.class);
-		_tab1 = (int[]) new WndLoader("TAB").load(rlist, xfndx, wndx, int.class);
-		_cr1 = (float[]) new WndLoader("CR").load(rlist, xfndx, wndx, float.class);
-		_cx1 = (float[]) new WndLoader("CX").load(rlist, xfndx, wndx, float.class);
-		
-		_fs = new ComplexList(_size, true);
-		_ts = new ComplexList(_size, true);
+		_buses = buses;
+		_base = pslist;
 	}
 
 	@Override
-	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
+	public PhaseShifter get(String id) { return _base.get(id); }
 	@Override
-	public String getJ(int ndx) throws PsseModelException {return _j[ndx];}
+	public Bus getFromBus(int ndx) throws PsseModelException { return _buses.get(getI(ndx)); }
+	@Override
+	public Bus getToBus(int ndx) throws PsseModelException { return _buses.get(getJ(ndx)); }
+	@Override
+	public Complex getZ(int ndx) throws PsseModelException { return _base.getZ(ndx); }
+	@Override
+	public Complex getY(int ndx) throws PsseModelException { return _base.getY(ndx); }
+	@Override
+	public Complex getFromYmag(int ndx) throws PsseModelException { return _base.getFromYmag(ndx); }
+	@Override
+	public Complex getToYmag(int ndx) throws PsseModelException { return _base.getToYmag(ndx); }
+	@Override
+	public float getFromTap(int ndx) throws PsseModelException { return _base.getFromTap(ndx); }
+	@Override
+	public float getToTap(int ndx) throws PsseModelException { return _base.getToTap(ndx); }
+	@Override
+	public float getPhaseShift(int ndx) throws PsseModelException { return _base.getPhaseShift(ndx); }
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException { return _base.isInSvc(ndx); }
+	@Override
+	public String getI(int ndx) throws PsseModelException  {return _base.getI(ndx);}
+	@Override
+	public String getJ(int ndx) throws PsseModelException {return _base.getJ(ndx);}
+	@Override
+	public String getCKT(int ndx) throws PsseModelException { return _base.getCKT(ndx); }
+	@Override
+	public int getCW(int ndx) throws PsseModelException { return _base.getCW(ndx); }
+	@Override
+	public int getCZ(int ndx) throws PsseModelException { return _base.getCZ(ndx); }
+	@Override
+	public int getCM(int ndx) throws PsseModelException { return _base.getCM(ndx); }
+	@Override
+	public float getMAG1(int ndx) throws PsseModelException { return _base.getMAG1(ndx); }
+	@Override
+	public float getMAG2(int ndx) throws PsseModelException { return _base.getMAG2(ndx); }
+	@Override
+	public int getNMETR(int ndx) throws PsseModelException { return _base.getNMETR(ndx); }
+	@Override
+	public String getNAME(int ndx) throws PsseModelException { return _base.getNAME(ndx); }
+	@Override
+	public int getSTAT(int ndx) throws PsseModelException { return _base.getSTAT(ndx); }
+	@Override
+	public float getR1_2(int ndx) throws PsseModelException { return _base.getR1_2(ndx); }
+	@Override
+	public float getX1_2(int ndx) throws PsseModelException {return _base.getX1_2(ndx);}
+	@Override
+	public float getSBASE1_2(int ndx) throws PsseModelException { return _base.getSBASE1_2(ndx); }
+	@Override
+	public float getWINDV1(int ndx) throws PsseModelException { return _base.getWINDV1(ndx); }
+	@Override
+	public float getNOMV1(int ndx) throws PsseModelException { return _base.getNOMV1(ndx); }
+	@Override
+	public float getANG1(int ndx) throws PsseModelException { return _base.getANG1(ndx); }
+	@Override
+	public float getRATA1(int ndx) throws PsseModelException { return _base.getRATA1(ndx); }
+	@Override
+	public float getRATB1(int ndx) throws PsseModelException { return _base.getRATB1(ndx); }
+	@Override
+	public float getRATC1(int ndx) throws PsseModelException { return _base.getRATC1(ndx); }
+	@Override
+	public int getCOD1(int ndx) throws PsseModelException { return _base.getCOD1(ndx); }
+	@Override
+	public float getRMA1(int ndx) throws PsseModelException { return _base.getRMA1(ndx); }
+	@Override
+	public float getRMI1(int ndx) throws PsseModelException { return _base.getRMI1(ndx); }
+	@Override
+	public float getVMA1(int ndx) throws PsseModelException { return _base.getVMA1(ndx); }
+	@Override
+	public float getVMI1(int ndx) throws PsseModelException { return _base.getVMI1(ndx); }
+	@Override
+	public int getNTP1(int ndx) throws PsseModelException { return _base.getNTP1(ndx); }
+	@Override
+	public int getTAB1(int ndx) throws PsseModelException { return _base.getTAB1(ndx); }
+	@Override
+	public float getCR1(int ndx) throws PsseModelException { return _base.getCR1(ndx); }
+	@Override
+	public float getCX1(int ndx) throws PsseModelException { return _base.getCX1(ndx); }
+	@Override
+	public OwnershipList getOwnership(int ndx) throws PsseModelException { return _base.getOwnership(ndx); }
+	@Override
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException { _base.setRTFromS(ndx, s); }
+	@Override
+	public void setRTToS(int ndx, Complex s) throws PsseModelException { _base.setRTToS(ndx, s); }
+	@Override
+	public Complex getRTFromS(int ndx) throws PsseModelException { return _base.getRTFromS(ndx); }
+	@Override
+	public Complex getRTToS(int ndx) throws PsseModelException { return _base.getRTToS(ndx); }
+	@Override
+	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(ndx);}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(ndx); }
 
 	@Override
-	public String getCKT(int ndx) throws PsseModelException {return _ckt[ndx];}
-	@Override
-	public int getCW(int ndx) throws PsseModelException {return _cw[ndx];}
-	@Override
-	public int getCM(int ndx) throws PsseModelException {return _cm[ndx];}
-	@Override
-	public float getMAG1(int ndx) throws PsseModelException {return _mag1[ndx];}
-	@Override
-	public float getMAG2(int ndx) throws PsseModelException {return _mag2[ndx];}
-	@Override
-	public int getNMETR(int ndx) throws PsseModelException {return _nmetr[ndx];}
-	@Override
-	public String getNAME(int ndx) throws PsseModelException {return _name[ndx];}
-	@Override
-	public int getSTAT(int ndx) throws PsseModelException {return _stat[ndx];}
-
-	@Override
-	public float getR1_2(int ndx) throws PsseModelException {return _z.re(ndx);}
-	@Override
-	public float getX1_2(int ndx) throws PsseModelException {return _z.im(ndx);}
-	@Override
-	public float getSBASE1_2(int ndx) throws PsseModelException {return _sbase[ndx];}
-
-	@Override
-	public float getWINDV1(int ndx) throws PsseModelException {return _windv1[ndx];}
-	@Override
-	public float getNOMV1(int ndx) throws PsseModelException {return _nomv1[ndx];}
-	@Override
-	public float getANG1(int ndx) throws PsseModelException {return _ang1[ndx];}
-	@Override
-	public float getRATA1(int ndx) throws PsseModelException {return _rata1[ndx];}
-	@Override
-	public float getRATB1(int ndx) throws PsseModelException {return _ratb1[ndx];}
-	@Override
-	public float getRATC1(int ndx) throws PsseModelException {return _ratc1[ndx];}
-	@Override
-	public int getCOD1(int ndx) throws PsseModelException {return _cod1[ndx];}
-	@Override
-	public float getRMA1(int ndx) throws PsseModelException {return _rma1[ndx];}
-	@Override
-	public float getRMI1(int ndx) throws PsseModelException {return _rmi1[ndx];}
-	@Override
-	public float getVMA1(int ndx) throws PsseModelException {return _vma1[ndx];}
-	@Override
-	public float getVMI1(int ndx) throws PsseModelException {return _vmi1[ndx];}
-	@Override
-	public int getNTP1(int ndx) throws PsseModelException {return _ntp1[ndx];}
-	@Override
-	public int getTAB1(int ndx) throws PsseModelException {return _tab1[ndx];}
-	@Override
-	public float getCR1(int ndx) throws PsseModelException {return _cr1[ndx];}
-	@Override
-	public float getCX1(int ndx) throws PsseModelException {return _cx1[ndx];}
-	
-	
-	@Override
-	public String getObjectID(int ndx) throws PsseModelException
-	{
-		StringBuilder sb = new StringBuilder("PS-");
-		sb.append(getI(ndx));
-		sb.append('-');
-		sb.append(getJ(ndx));
-		sb.append('-');
-		sb.append(getCKT(ndx));
-		return sb.toString();
-	}
-
-	@Override
-	public int size() {return _size;}
-	
-	/* Realtime fields */
-
-	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_fs.set(ndx, s);}
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {_ts.set(ndx, s);}
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
+	public int size() {return _base.size();}
 }

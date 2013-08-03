@@ -191,6 +191,7 @@ public class SimpleCSV
 		load(in);
 		in.close();
 	}
+
 	public void load(InputStream in) throws IOException
 	{
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));

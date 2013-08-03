@@ -1,189 +1,46 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.Line;
-import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 
 public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 {
-	int _size;
+	ShuntRawList _base;
+	BusList _buses;
 	
-	String[] _i;
-	boolean[] _swon;
-	float[] _b;
-	float[] _g;
-	String[] _id, _name;
-	
-	ArrayList<String> _il = new ArrayList<>();
-	ArrayList<Boolean> _swonl = new ArrayList<>();
-	ArrayList<Float> _bl = new ArrayList<>(), _gl = new ArrayList<>();
-	ArrayList<String> _idl = new ArrayList<>(), _namel = new ArrayList<>();
-	
-	ComplexList _rts;
-	
-	public ShuntList() {super();}
-
-	public ShuntList(PsseModel model, SwitchedShuntRawList raw, BusListRaw rawbus, LineListRaw rawline,
-			List<Integer> shndx) throws PsseModelException
+	public ShuntList(BusList buses, ShuntRawList shunts)
 	{
-		super(model);
-
-		int nraw = shndx.size();
-		
-		for(int iraw=0; iraw < nraw; ++iraw)
-		{
-			int ndx = shndx.get(iraw);
-			String rawid = raw.getObjectID(ndx);
-			Bus obus = rawbus.get(raw.getI(ndx));
-			String rawname = obus.getObjectName();
-			if (obus.getObjectID().equals("463"))
-			{
-				int xxx = 5;
-			}
-			int[] nblk = raw.getN(ndx);
-			float[] bblk = raw.getB(ndx);
-			float binit = raw.getBINIT(ndx);
-			int nblocks = nblk.length;
-			int posinswsh = 0;
-			for (int iblk = 0; iblk < nblocks; ++iblk)
-			{
-				int nshblk = nblk[iblk];
-				while (nshblk > 0)
-				{
-					float bshblk = bblk[iblk];
-					/* figure out if any are energized */
-					if (bshblk < 0f && nshblk > 0)
-					{
-						boolean swon = false;
-						if (binit < -0.0001f)
-						{
-							swon = true;
-							binit -= bshblk;
-						}
-						mkShunt(bshblk, 0f, obus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
-						++posinswsh;
-						--nshblk;
-					}
-					if (bshblk > 0f && nshblk > 0)
-					{
-						boolean swon = false;
-						if (binit > 0.0001f)
-						{
-							swon = true;
-							binit -= bshblk;
-						}
-						mkShunt(bshblk, 0f, obus, rawid+"-"+posinswsh, rawname+"-"+posinswsh,swon);
-						++posinswsh;
-						--nshblk;
-					}
-				}
-			}
-		}
-		
-		scanBuses(rawbus);
-		scanLines(rawline, rawbus);
-		
-		_size = _il.size();
-		_i = new String[_size];
-		_swon = new boolean[_size];
-		_b = new float[_size];
-		_g = new float[_size];
-		_id = new String[_size];
-		_name = new String[_size];
-
-		for (int i=0; i < _size; ++i)
-		{
-			_i[i] = _il.get(i);
-			_swon[i] = _swonl.get(i);
-			_b[i] = _bl.get(i);
-			_id[i] = _idl.get(i);
-			_name[i] = _namel.get(i);
-		}
-	
-		_rts = new ComplexList(_size, true);
+		_base = shunts;
+		_buses = buses;
 	}
+	@Override
+	public Shunt get(String id) { return _base.get(id); }
+	@Override
+	public Bus getBus(int ndx) throws PsseModelException { return _buses.get(getI(ndx)); }
+	@Override
+	public Complex getY(int ndx) throws PsseModelException { return _base.getY(ndx); }
+	@Override
+	public boolean isSwitchedOn(int ndx) throws PsseModelException { return _base.isSwitchedOn(ndx); }
+	@Override
+	public String getI(int ndx) throws PsseModelException {return _base.getI(ndx);}
+	@Override
+	public float getB(int ndx) throws PsseModelException { return _base.getB(ndx); }
+	@Override
+	public float getG(int ndx) throws PsseModelException { return _base.getG(ndx); }
+	@Override
+	public void setRTS(int ndx, Complex s) { _base.setRTS(ndx, s); }
+	@Override
+	public Complex getRTS(int ndx) throws PsseModelException { return _base.getRTS(ndx); }
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException { return _base.isInSvc(ndx); }
+	@Override
+	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(ndx);}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(ndx); }
+	@Override
+	public int size() {return _base.size();}
 
-	void scanBuses(BusListRaw rawbus) throws PsseModelException
-	{
-		for (Bus b : rawbus)
-		{
-			float gl = b.getGL();
-			float bl = b.getBL();
-			if (gl != 0f || bl != 0f)
-			{
-				mkShunt(bl, gl, b, b.getObjectID() + "BSH",
-						b.getObjectName() + "-BSH", true);
-			}
-		}
-	}
-	
-	void scanLines(LineListRaw rawline, BusListRaw rawbus) throws PsseModelException
-	{
-		for (Line l : rawline)
-		{
-			if (l.isInSvc())
-			{
-				float gi = l.getGI()*100f;
-				float bi = l.getBI()*100f;
-				float gj = l.getGJ()*100f;
-				float bj = l.getBJ()*100f;
-				Bus fb = rawbus.get(l.getI());
-				String j = l.getJ();
-				if (j.charAt(0) == '-')
-					j = j.substring(1);
-				Bus tb = rawbus.get(j);
-				String objname = String.format("%s-%s:%s", fb.getObjectName(), tb.getObjectName(), l.getCKT());
-				if (gi != 0f || bi != 0f)
-				{
-					mkShunt(bi, gi, fb, l.getObjectID() + "FSH",
-							objname + "-FSH", true);
-				}
-				if (gj != 0f || bj != 0f)
-				{
-					mkShunt(bj, gj, tb, l.getObjectID()
-							+ "TSH", objname + "-TSH", true);
-				}
-			}
-		}
-	}
-
-	void mkShunt(float b, float g, Bus bus, String id, String name, boolean swon) throws PsseModelException
-	{
-		_il.add(bus.getObjectID());
-		_bl.add(b);
-		_gl.add(g);
-		_swonl.add(swon);
-		_namel.add(name);
-		_idl.add("SH-"+id);
-	}
-
-	@Override
-	public String getObjectID(int ndx) throws PsseModelException {return _id[ndx];}
-	@Override
-	public String getObjectName(int ndx) throws PsseModelException {return _name[ndx];}
-	@Override
-	public int size() {return _size;}
-
-	@Override
-	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
-	@Override
-	public float getB(int ndx) throws PsseModelException {return _b[ndx];}
-
-	@Override
-	public boolean isSwitchedOn(int ndx) throws PsseModelException
-	{
-		return _swon[ndx];
-	}
-
-	@Override
-	public void setRTS(int ndx, Complex s) {_rts.set(ndx, s);}
-	@Override
-	public Complex getRTS(int ndx) {return _rts.get(ndx);}
-	
 }

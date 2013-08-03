@@ -8,7 +8,7 @@ import com.powerdata.openpa.tools.SimpleCSV;
 public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShuntList
 {
 	/** parent container */
-	PsseModel _eq;
+	PsseRawModel _eq;
 	/** number of items in the DB */
 	int _size;
 	/** object IDs (really just the bus number) */
@@ -22,7 +22,7 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	int[][] _n;
 	float[][] _b;
 
-	public SwitchedShuntRawList(PsseModel eq) throws PsseModelException
+	public SwitchedShuntRawList(PsseRawModel eq) throws PsseModelException
 	{
 		super(eq);
 		_eq = eq;

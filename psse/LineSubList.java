@@ -13,9 +13,11 @@ public class LineSubList extends LineList
 		super(lines.getPsseModel());
 		_lines = lines;
 		_ndxs = ndxs;
-		reindex();
+		_idToNdx = lines.idmap();
 	}
 
+	@Override
+	public Line get(String id) {return new Line(_ndxs[_idToNdx.get(id)], this);}
 	@Override
 	public String getI(int ndx) throws PsseModelException {return _lines.getI(_ndxs[ndx]);}
 	@Override

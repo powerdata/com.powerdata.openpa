@@ -1,92 +1,59 @@
 package com.powerdata.openpa.psse.csv;
 
-import java.util.List;
-
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.Limits;
-import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 
 public class SvcList extends com.powerdata.openpa.psse.SvcList
 {
-	int _size;
+	SvcRawList _base;
+	BusList _buses;
 	
-	String[] _i, _swrem;
-	float[] _rmpct, _binit, _minB, _maxB, _vsp;
-	String[] _id;
-	
-	ComplexList _rts;
-
-	
-	public SvcList() {super();}
-	public SvcList(PsseModel model, SwitchedShuntRawList raw, BusListRaw rawbus,
-			List<Integer> svcndx) throws PsseModelException
+	public SvcList(BusList buses, SvcRawList svcs)
 	{
-		super(model);
-		_size = svcndx.size();
-		
-		_i = new String[_size];
-		_swrem = new String[_size];
-		_rmpct = new float[_size];
-		_binit = new float[_size];
-		_minB = new float[_size];
-		_maxB = new float[_size];
-		_id = new String[_size];
-		_vsp = new float[_size];
-		_rts = new ComplexList(_size, true);
-
-		
-		for (int i=0; i < _size; ++i)
-		{
-			int ndx = svcndx.get(i);
-			Bus bus = rawbus.get(raw.getI(ndx));
-			_i[i] = bus.getObjectID();
-			String swrem = raw.getSWREM(ndx);
-			_swrem[i] = (swrem.isEmpty() || swrem.equals("0")) ? _i[i] : swrem;
-			_rmpct[i] = raw.getRMPCT(ndx);
-			_binit[i] = raw.getBINIT(ndx);
-			_vsp[i] = (raw.getVSWHI(ndx)+raw.getVSWLO(ndx))/2f;
-			
-			int[] n = raw.getN(ndx);
-			float[] b = raw.getB(ndx);
-			for (int iblk=0; iblk < n.length; ++iblk)
-			{
-				float bblk = b[iblk];
-				if (bblk < 0f)
-				{
-					_minB[i] += bblk * n[iblk];
-				}
-				else if (bblk > 0f)
-				{
-					_maxB[i] += bblk * n[iblk];
-				}
-			}
-		}
+		_base = svcs;
+		_buses = buses;
 	}
-
 	@Override
-	public String getObjectID(int ndx) throws PsseModelException {return _id[ndx];}
+	public SVC get(String id) { return _base.get(id); }
 	@Override
-	public int size() {return _size;}
+	public Bus getBus(int ndx) throws PsseModelException { return _base.getBus(ndx); }
 	@Override
-	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
+	public Bus getRegBus(int ndx) throws PsseModelException { return _base.getRegBus(ndx); }
 	@Override
-	public Limits getBLimits(int ndx) throws PsseModelException {return new Limits(_minB[ndx], _maxB[ndx]);}
+	public float getVoltageSetpoint(int ndx) throws PsseModelException { return _base.getVoltageSetpoint(ndx); }
 	@Override
-	public float getVoltageSetpoint(int ndx) throws PsseModelException {return _vsp[ndx];}
+	public Complex getY(int ndx) throws PsseModelException { return _base.getY(ndx); }
 	@Override
-	public String getSWREM(int ndx) throws PsseModelException {return _swrem[ndx];}
-
+	public String getI(int ndx) throws PsseModelException {return _base.getI(ndx);}
 	@Override
-	public float getRMPCT(int ndx) throws PsseModelException {return _rmpct[ndx];}
+	public String getSWREM(int ndx) throws PsseModelException { return _base.getSWREM(ndx); }
 	@Override
-	public float getBINIT(int ndx) throws PsseModelException {return _binit[ndx];}
-
+	public float getRMPCT(int ndx) throws PsseModelException { return _base.getRMPCT(ndx); }
 	@Override
-	public void setRTS(int ndx, Complex s) {_rts.set(ndx, s);}
+	public float getBINIT(int ndx) throws PsseModelException { return _base.getBINIT(ndx); }
 	@Override
-	public Complex getRTS(int ndx) {return _rts.get(ndx);}
-
+	public Limits getBLimitsPU(int ndx) throws PsseModelException { return _base.getBLimitsPU(ndx); }
+	@Override
+	public Limits getBLimits(int ndx) throws PsseModelException {return _base.getBLimits(ndx);}
+	@Override
+	public void setRTS(int ndx, Complex s) throws PsseModelException { _base.setRTS(ndx, s); }
+	@Override
+	public Complex getRTS(int ndx) throws PsseModelException { return _base.getRTS(ndx); }
+	@Override
+	public Complex getRTY(int ndx) throws PsseModelException { return _base.getRTY(ndx); }
+	@Override
+	public void setRTY(int ndx, Complex y) throws PsseModelException { _base.setRTY(ndx, y); }
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException { return _base.isInSvc(ndx); }
+	@Override
+	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(ndx);}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(ndx); }
+	@Override
+	public int size() {return _base.size();}
+	
 }

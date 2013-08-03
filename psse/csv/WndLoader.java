@@ -7,7 +7,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 
 class WndLoader
 {
-	static final Class<TransformerRawList> _class = TransformerRawList.class;
+	static final Class<Transformer3RawList> _class = Transformer3RawList.class;
 	
 	Method[] _methods;
 	public WndLoader(String prop) throws PsseModelException
@@ -25,7 +25,7 @@ class WndLoader
 		}
 	}
 	
-	public Object load(TransformerRawList rlist, int[] ndx,
+	public Object load(Transformer3RawList rlist, int[] ndx,
 			int[] wnd, Class<?> type) throws PsseModelException
 	{
 		int n = ndx.length;

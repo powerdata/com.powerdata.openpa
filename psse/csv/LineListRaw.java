@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.csv;
 import java.io.File;
 
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
@@ -12,7 +13,8 @@ import com.powerdata.openpa.tools.SimpleCSV;
 
 public class LineListRaw extends LineList
 {
-	BusListRaw _buses;
+	PsseRawModel _eq;
+	BusList _buses;
 	protected String _i[],_j[],_ckt[];
 	protected float _r[],_x[],_b[],_ratea[],_rateb[],_ratec[],_gi[],_bi[],_gj[],_bj[];
 	protected int _st[];
@@ -20,13 +22,13 @@ public class LineListRaw extends LineList
 	protected ComplexList _fs, _ts;
 	protected int _size;
 	
-	public LineListRaw(BusListRaw buses, PsseModel model) throws PsseModelException
+	public LineListRaw(PsseRawModel model) throws PsseModelException
 	{
 		super(model);
 		try
 		{
 			File dbfile = new File(model.getDir(), "NontransformerBranch.csv");
-			_buses = buses;
+			_buses = model.getBuses();
 			SimpleCSV branches = new SimpleCSV(dbfile);
 			_size	= branches.getRowCount();
 			_i		= branches.get("I");

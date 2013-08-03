@@ -153,6 +153,11 @@ public class PowerCalculator
 		for(int i=0; i < ngen; ++i)
 		{
 			Gen g = genlist.get(i);
+			String oid = g.getBus().getObjectID(); 
+			if (oid.equals("500") || oid.equals("5002"))
+			{
+				int xxx = 5;
+			}
 			if (g.isInSvc())
 				mm.assignadd(g.getBus().getIndex(), g.getRTS());
 		}

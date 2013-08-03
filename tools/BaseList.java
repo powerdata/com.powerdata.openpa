@@ -2,7 +2,6 @@ package com.powerdata.openpa.tools;
 
 import java.util.AbstractList;
 import java.util.HashMap;
-
 import com.powerdata.openpa.psse.PsseModelException;
 
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
@@ -15,6 +14,8 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	{
 		return getObjectID(ndx);
 	}
+	
+	public HashMap<String,Integer> idmap() {return _idToNdx;}
 	
 	/** Get an object by it's ID */
 	public T get(String objectid)

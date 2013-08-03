@@ -1,5 +1,9 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.io.File;
+
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -18,14 +22,14 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	int _stat[];
 	float _rmpct[],_pt[],_pb[];
 
-	public GenList(PsseModel eq) throws PsseModelException
+	public GenList(PsseModel eq, File dir) throws PsseModelException
 	{
 		super(eq);
 		try
 		{
 			_eq = eq;
 			_buses = _eq.getBuses();
-			String dbfile = _eq.getDir().getPath()+"/Generator.csv";
+			File dbfile = new File(dir, "Generator.csv");
 			SimpleCSV gens = new SimpleCSV(dbfile);
 			_size	= gens.getRowCount();
 			_i		= gens.get("I");
@@ -72,7 +76,12 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	@Override
 	public float getVS(int ndx) { return _vs[ndx]; }
 	@Override
-	public String getIREG(int ndx) { return _ireg[ndx];	}
+	public String getIREG(int ndx)
+	{
+		String i = _ireg[ndx];
+		return (i.equals("0")) ? getI(ndx) : _ireg[ndx];
+	}
+
 	@Override
 	public float getMBASE(int ndx) { return _mbase[ndx]; }
 	@Override
