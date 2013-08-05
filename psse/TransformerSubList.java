@@ -111,9 +111,9 @@ public class TransformerSubList extends TransformerList
 	@Override
 	public int getNTP2(int ndx) throws PsseModelException { return _base.getNTP2(_ndxs[ndx]); }
 	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException { _base.setRTFromS(ndx, s); }
+	public void setRTFromS(int ndx, Complex s) throws PsseModelException { _base.setRTFromS(_ndxs[ndx], s); }
 	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException { _base.setRTToS(ndx, s); }
+	public void setRTToS(int ndx, Complex s) throws PsseModelException { _base.setRTToS(_ndxs[ndx], s); }
 	@Override
 	public Complex getRTFromS(int ndx) throws PsseModelException { return _base.getRTFromS(_ndxs[ndx]); }
 	@Override

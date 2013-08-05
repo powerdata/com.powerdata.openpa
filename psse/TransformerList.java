@@ -49,8 +49,7 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	}
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
 	public Complex getFromYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
-	public Complex getToYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
-	public float getFromTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio1(get(ndx));}
+	public Complex getToYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}	public float getFromTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio1(get(ndx));}
 	public float getToTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio2(get(ndx));}
 	public float getPhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG1(ndx));}
 	public boolean isInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}

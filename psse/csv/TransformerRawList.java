@@ -3,7 +3,9 @@ package com.powerdata.openpa.psse.csv;
 
 
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerRaw;
+import com.powerdata.openpa.psse.conversions.XfrWndTool;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 
@@ -74,11 +76,33 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 		_cx1 = (float[]) new WndLoader("CX").load(rlist, xfndx, wndx, float.class);
 		
 		loadLine4(rlist, xfndx, wndx);
+
+		adjustImpedances();
 		
 		_fs = new ComplexList(_size, true);
 		_ts = new ComplexList(_size, true);
 	}	
 	
+	void adjustImpedances() throws PsseModelException
+	{
+		float[] zr = _z.re();
+		float[] zx = _z.im();
+		
+		for(int i=0; i < _size; ++i)
+		{
+			XfrWndTool t = XfrWndTool.get(_cw[i]);
+			Transformer xf = get(i);
+			_windv1[i] = t.getRatio1(xf);
+			float wv2 = t.getRatio2(xf);
+			float wv22 = wv2*wv2;
+			_windv2[i] = wv2;
+			_cw[i] = 1;
+			
+			zr[i] *= wv22;
+			zx[i] *= wv22;
+		}
+	}
+
 	private void loadLine4(Transformer3RawList rlist, int[] xfndx, int[] wndx) throws PsseModelException
 	{
 		int n = xfndx.length;
@@ -193,6 +217,17 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 		sb.append(getI(ndx));
 		sb.append('-');
 		sb.append(getJ(ndx));
+		sb.append('-');
+		sb.append(getCKT(ndx));
+		return sb.toString();
+	}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		StringBuilder sb = new StringBuilder("XF-");
+		sb.append(getFromBus(ndx).getObjectName());
+		sb.append('-');
+		sb.append(getToBus(ndx).getObjectName());
 		sb.append('-');
 		sb.append(getCKT(ndx));
 		return sb.toString();

@@ -123,9 +123,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 				rp.get(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
 			}
 		}
+		_buses.addStarNodes(rlist, ndx3w);
 		_xfrList = new TransformerRawList(this, rlist, xfprep);
 		_psList = new PhaseShifterRawList(this, rlist, psprep);
-		_buses.addStarNodes(rlist, ndx3w);
 	}
 
 	protected void analyzeRawShunts() throws PsseModelException
@@ -135,9 +135,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		ArrayList<Integer> shndx = new ArrayList<>();
 		ArrayList<Integer> svcndx = new ArrayList<>();
 		
-		for (SwitchedShunt s : rsh)
+		for (int i=0; i < rsh.size(); ++i)
 		{
-			((s.getMODSW()==2)?svcndx:shndx).add(s.getIndex());
+			((testForSvc(rsh.getMODSW(i), rsh.getBINIT(i), rsh.getN(i), rsh.getB(i)))?svcndx:shndx).add(i);
 		}
 		
 		_shList = new ShuntRawList(this, rsh, shndx);
@@ -145,6 +145,18 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	}
 	
 	
+	boolean testForSvc(int modsw, float binit, int[] n, float[] b) throws PsseModelException
+	{
+		if (modsw == 2) return true;
+		if (modsw == 0 && n[0] == 1)
+		{
+			if (n[1] == 0 && 0f < binit && binit < b[0]) return true;
+			if (n[2] == 0 && b[0] < binit && binit < b[1]) return true;
+		}
+		return false;
+	}
+
+
 	@Override
 	public LoadList getLoads() throws PsseModelException
 	{

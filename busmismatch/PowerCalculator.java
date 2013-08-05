@@ -26,6 +26,7 @@ import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
+import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.PComplex;
 
 public class PowerCalculator
@@ -36,39 +37,126 @@ public class PowerCalculator
 		for (ACBranch br : branches)
 			calcACBranchFlow(br);
 	}
-
-	public static void calcACBranchFlow(ACBranch br) throws PsseModelException
+	public static void calcACBranchFlow2(ACBranch br) throws PsseModelException
 	{
 		if (br.isInSvc())
 		{
+			if (br.getObjectID().equals("PS-18002-18001-1"))
+			{
+				int xxx = 5;
+			}
+			Bus fbus = br.getFromBus(), tbus = br.getToBus();
+			PComplex fv = fbus.getVoltage(), tv = tbus.getVoltage();
+			float fvm2 = fv.r() * fv.r(), tvm2 = tv.r() * tv.r(), ftvm = fv.r() * tv.r();
 			Complex y = br.getY();
+			float falph = fv.theta() - tv.theta() - br.getPhaseShift();
+			float talph = tv.theta() - fv.theta() + br.getPhaseShift();
+			float fcalph = (float) Math.cos(falph);
+			float tcalph = (float) Math.cos(talph);
+			float fsalph = (float) Math.sin(falph);
+			float tsalph = (float) Math.sin(talph);
+			float g = y.re(), b = y.im();
+			
+			float fgcs = g * fcalph;
+			float fbcs = b * fcalph;
+			float fgsn = g * fsalph;
+			float fbsn = b * fsalph;
+			float tgcs = g * tcalph;
+			float tbcs = b * tcalph;
+			float tgsn = g * tsalph;
+			float tbsn = b * tsalph;
+			
+			float faij = fgsn - fbcs;
+			float fbij = fgcs + fbsn;
+			float taij = tgsn - tbcs;
+			float tbij = tgcs + tbsn;
+			
+			float fs = br.getFromYcm().im();
+			float ts = br.getToYcm().im();
+			
+			float pp = (g * fvm2) - (fbij * ftvm);
+			float qp = (-(fs+b) * fvm2) - (faij * ftvm);
+			
+			float pq = (g * tvm2) - (tbij * ftvm);
+			float qq = (-(ts+b) * tvm2) - (taij * ftvm);
+			
+			br.setRTFromS(new Complex(pp, qp));
+			br.setRTToS(new Complex(pq, qq));
+			
+		}
+	}
+	public static void calcACBranchFlow(ACBranch br) throws PsseModelException
+	{
+//		float xc = 0.00005f;
+//		float rc = 0.00001f;
+		if (br.isInSvc())
+		{
+//			Complex z = br.getZ();
+//			float x = z.im(), r = z.re();
+//			if (Math.abs(x) < xc) x = Math.signum(x) * xc;
+//			if (r < rc) r = rc;
+//			Complex y = new Complex(r, x).inv();
+			
 //			Bus fbus = br.getFromBus();
 //			Bus tbus = br.getToBus();
 //			String objid = br.getObjectName();
+//			
+//			
 			PComplex fv = br.getFromBus().getVoltage();
 			PComplex tv = br.getToBus().getVoltage();
-
-			float shift = fv.theta() - tv.theta() - br.getPhaseShift();
-
-			float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
-			float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
-			float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
-
-			float ctvmpq = tvmpq * (float) Math.cos(shift);
-			float stvmpq = tvmpq * (float) Math.sin(shift);
-
-			float gcos = ctvmpq * y.re();
-			float bcos = ctvmpq * y.im();
-			float gsin = stvmpq * y.re();
-			float bsin = stvmpq * y.im();
-
-//			float fycm = br.getFromYcm().im();
-//			float tycm = br.getToYcm().im();
+//
+//			float shift = fv.theta() - tv.theta() - br.getPhaseShift();
+//
+//			float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
+//			float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
+//			float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
+//
+//			float ctvmpq = tvmpq * (float) Math.cos(shift);
+//			float stvmpq = tvmpq * (float) Math.sin(shift);
+//
+//			Complex y = br.getY();
+//			float gcos = ctvmpq * y.re();
+//			float bcos = ctvmpq * y.im();
+//			float gsin = stvmpq * y.re();
+//			float bsin = stvmpq * y.im();
+//
+//			
+//			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
+//					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
+//			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
+//					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
 			
-			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
-					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
-			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
-					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
+			
+			float fvt = fv.theta(), tvt = tv.theta();
+			float phase = br.getPhaseShift();
+			float pqshift = fvt - tvt - phase;
+			float qpshift = tvt - fvt + phase;
+			
+			float vmpq = fv.r() * tv.r();
+			float vmp2 = fv.r() * fv.r();
+			float vmq2 = tv.r() * tv.r();
+			
+			float a = br.getFromTap() / br.getToTap();
+			
+			float pqcos = (vmp2/a - vmpq * (float) Math.cos(pqshift))/a;
+			float qpcos = (vmq2*a - vmpq * (float) Math.cos(qpshift))/a;
+			float tsin = vmpq/a;
+			float pqsin = tsin * (float) Math.sin(pqshift);
+			float qpsin = tsin * (float) Math.sin(qpshift);
+
+//			_ppresult[i] = pqcos * gg - pqsin * bb;
+//			_pqresult[i] = qpcos * gg - qpsin * bb;
+//			_qpresult[i] = -1F * pqsin * gg - pqcos * bb - _bpch[i] * vmp2;
+//			_qqresult[i] = -1F * qpsin * gg - qpcos * bb - _bqch[i] * vmq2;
+	
+			Complex y = br.getY();
+			float g = y.re(), b = y.im();
+			float fbcm = br.getFromYcm().im();
+			float tbcm = br.getToYcm().im();
+			
+			Complex froms = new Complex(pqcos * g - pqsin * b, -pqsin * g - pqcos * b - fbcm * vmp2).mult(-1f);
+			Complex tos = new Complex(qpcos * g - qpsin * b, -qpsin * g - qpcos * b - tbcm * vmq2).mult(-1f);
+			
 			br.setRTFromS(froms);
 			br.setRTToS(tos);
 		}
@@ -83,13 +171,14 @@ public class PowerCalculator
 			throws IOException, PsseModelException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(csv)));
-		pw.println("I,J,ObjectID,ObjectName,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
+		pw.println("I,J,ObjectID,ObjectName,R,X,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
 		for(ACBranch branch: branches)
 		{
 			if (branch.isInSvc())
 			{
 				Bus frbus = branch.getFromBus();
 				Bus tobus = branch.getToBus();
+				Complex z = branch.getZ();
 				Complex y = branch.getY();
 				Complex ycm = branch.getFromYcm().add(branch.getToYcm());
 				PComplex frv = frbus.getVoltage(),
@@ -97,14 +186,15 @@ public class PowerCalculator
 				Complex frs = branch.getRTFromS(),
 						tos = branch.getRTToS();
 				
-				pw.format("\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+				pw.format("\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
 						frbus.getObjectID(),
 						tobus.getObjectID(),
 						branch.getObjectID(),
 						branch.getObjectName(),
+						z.re(), z.im(),
 						y.re(),y.im(), ycm.im(),
-						frv.r(), frv.theta(),
-						tov.r(), tov.theta(),
+						frv.r(), PAMath.rad2deg(frv.theta()),
+						tov.r(), PAMath.rad2deg(tov.theta()),
 						branch.getPhaseShift(),
 						branch.getFromTap(),
 						frs.re(), frs.im(),
@@ -154,10 +244,6 @@ public class PowerCalculator
 		{
 			Gen g = genlist.get(i);
 			String oid = g.getBus().getObjectID(); 
-			if (oid.equals("500") || oid.equals("5002"))
-			{
-				int xxx = 5;
-			}
 			if (g.isInSvc())
 				mm.assignadd(g.getBus().getIndex(), g.getRTS());
 		}
@@ -197,7 +283,7 @@ public class PowerCalculator
 		float vm = svc.getBus().getVoltage().r();
 		svc.setRTS(new Complex(0f, svc.getRTY().im()*vm*vm));
 	}
-
+	
 	public static void calcSVCs(SvcList svcs) throws PsseModelException
 	{
 		for(SVC s : svcs) calcSVC(s);
@@ -231,8 +317,8 @@ public class PowerCalculator
 
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/rb");
-		File outdir = new File("/tmp/rb/out");
+		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/caiso");
+		File outdir = new File("/tmp/caiso/out");
 		calcACBranchFlows(model.getBranches());
 		calcShunts(model.getShunts());
 		calcSVCs(model.getSvcs());

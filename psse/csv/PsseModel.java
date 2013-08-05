@@ -11,7 +11,9 @@ import com.powerdata.openpa.psse.BusSubList;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TransformerList;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.LinkNet;
+import com.powerdata.openpa.tools.PComplex;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
@@ -128,13 +130,22 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			ACBranch br = (ACBranch) branchList.get(i);
 			if (br.isInSvc())
 			{
-//				Complex z = br.getZ();
+				Complex z = br.getZ();
 				Bus fbus = br.getFromBus();
 				Bus tbus = br.getToBus();
 				int fbusx = fbus.getIndex();
 				int tbusx = tbus.getIndex();
-//				if (z.re() <= _lowrthr && Math.abs(z.im()) <= _lowxthr)
-				if (fbus.getVoltage().equals(tbus.getVoltage()))
+				PComplex vf = fbus.getVoltage();
+				PComplex vt = tbus.getVoltage();
+				
+				
+//				if ((Math.round(vf.r()*cutoff) == Math.round(vt.r()*cutoff) &&
+//						Math.round(vf.theta()*cutoff) == Math.round(vt.theta()*cutoff)))
+//					Math.round(vf.theta()*cutoff) == Math.round(vt.theta()*cutoff)) ||
+//					(z.re() <= _lowrthr && Math.abs(z.im()) <= _lowxthr))
+
+				if (Math.abs(vf.r()-vt.r()) < 0.00003 &&
+					Math.abs(vf.theta()-vt.theta()) < 0.00003)
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}
@@ -145,6 +156,13 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			}
 		}
 		
+	}
+
+	boolean isCloseWithSmallX(PComplex vf, PComplex vt, Complex z)
+	{
+//		return (Math.abs(vf.r() - vt.r()) <= .0001f && Math.abs(z.im()) < .0001f);
+//		return z.re() <= 0.001f && Math.abs(z.im()) <= 0.001f;
+		return false;
 	}
 
 

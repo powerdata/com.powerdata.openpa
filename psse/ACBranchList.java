@@ -98,7 +98,7 @@ public class ACBranchList extends BaseList<ACBranch>
 		{
 			return _transformers.get(ndx);
 		}
-		else return _transformers.get(ndx-_ntransformers);
+		else return _phaseshifters.get(ndx-_ntransformers);
 	}
 
 	@Override
