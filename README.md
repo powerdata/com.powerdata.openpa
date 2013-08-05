@@ -8,13 +8,8 @@ For details please check the [Javadoc](http://powerdata.github.io/com.powerdata.
 Usage
 -----
 To open a model use the *PsseModel.OpenInput()* function.  The parameter to this function is a URI that
-describes the back-end storage where the data will come from.  For example:
-```java
-PsseModel eq = PsseModel.OpenInput("pd2cim:db=/tmp/wecc.pddb&inputctx=Ots");
-```
-This opens the model using the PD2 CIM database named */tmp/wecc.pddb*.
-
-To use a PSSE file named */tmp/WECC.raw* directly:
+describes the back-end storage where the data will come from.  For example, to use a PSSE file named
+*/tmp/WECC.raw* directly:
 ```java
 PsseModel eq = PsseModel.OpenInput("psseraw:file=/tmp/WECC.raw");
 ```
@@ -22,6 +17,12 @@ or to use a directory of CSV files named */tmp/testdata/db*:
 ```java
 PsseModel eq = PsseModel.OpenInput("pssecsv:path=/tmp/testdata/db");
 ```
+This can even be extended to proprietary databases, for example:
+```java
+PsseModel eq = PsseModel.OpenInput("pd2cim:db=/tmp/wecc.pddb&inputctx=Ots");
+```
+opens the model using the PD2 CIM database named */tmp/wecc.pddb*.
+
 The main point is that the code doesn't need to change, only the URI string.
 
 Once we have the *PsseModel* object, *eq* in our examples, we can access lists of equipment.  For example,
