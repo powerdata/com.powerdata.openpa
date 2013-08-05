@@ -104,58 +104,58 @@ public class PowerCalculator
 //			
 			PComplex fv = br.getFromBus().getVoltage();
 			PComplex tv = br.getToBus().getVoltage();
-//
-//			float shift = fv.theta() - tv.theta() - br.getPhaseShift();
-//
-//			float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
-//			float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
-//			float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
-//
-//			float ctvmpq = tvmpq * (float) Math.cos(shift);
-//			float stvmpq = tvmpq * (float) Math.sin(shift);
-//
-//			Complex y = br.getY();
-//			float gcos = ctvmpq * y.re();
-//			float bcos = ctvmpq * y.im();
-//			float gsin = stvmpq * y.re();
-//			float bsin = stvmpq * y.im();
-//
+
+			float shift = fv.theta() - tv.theta() - br.getPhaseShift();
+
+			float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
+			float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
+			float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
+
+			float ctvmpq = tvmpq * (float) Math.cos(shift);
+			float stvmpq = tvmpq * (float) Math.sin(shift);
+
+			Complex y = br.getY();
+			float gcos = ctvmpq * y.re();
+			float bcos = ctvmpq * y.im();
+			float gsin = stvmpq * y.re();
+			float bsin = stvmpq * y.im();
+
+			
+			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
+					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
+			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
+					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
+			
+			
+//			float fvt = fv.theta(), tvt = tv.theta();
+//			float phase = br.getPhaseShift();
+//			float pqshift = fvt - tvt - phase;
+//			float qpshift = tvt - fvt + phase;
 //			
-//			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
-//					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
-//			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
-//					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
-			
-			
-			float fvt = fv.theta(), tvt = tv.theta();
-			float phase = br.getPhaseShift();
-			float pqshift = fvt - tvt - phase;
-			float qpshift = tvt - fvt + phase;
-			
-			float vmpq = fv.r() * tv.r();
-			float vmp2 = fv.r() * fv.r();
-			float vmq2 = tv.r() * tv.r();
-			
-			float a = br.getFromTap() / br.getToTap();
-			
-			float pqcos = (vmp2/a - vmpq * (float) Math.cos(pqshift))/a;
-			float qpcos = (vmq2*a - vmpq * (float) Math.cos(qpshift))/a;
-			float tsin = vmpq/a;
-			float pqsin = tsin * (float) Math.sin(pqshift);
-			float qpsin = tsin * (float) Math.sin(qpshift);
+//			float vmpq = fv.r() * tv.r();
+//			float vmp2 = fv.r() * fv.r();
+//			float vmq2 = tv.r() * tv.r();
+//			
+//			float a = br.getFromTap() / br.getToTap();
+//			
+//			float pqcos = (vmp2/a - vmpq * (float) Math.cos(pqshift))/a;
+//			float qpcos = (vmq2*a - vmpq * (float) Math.cos(qpshift))/a;
+//			float tsin = vmpq/a;
+//			float pqsin = tsin * (float) Math.sin(pqshift);
+//			float qpsin = tsin * (float) Math.sin(qpshift);
 
 //			_ppresult[i] = pqcos * gg - pqsin * bb;
 //			_pqresult[i] = qpcos * gg - qpsin * bb;
 //			_qpresult[i] = -1F * pqsin * gg - pqcos * bb - _bpch[i] * vmp2;
 //			_qqresult[i] = -1F * qpsin * gg - qpcos * bb - _bqch[i] * vmq2;
 	
-			Complex y = br.getY();
-			float g = y.re(), b = y.im();
-			float fbcm = br.getFromYcm().im();
-			float tbcm = br.getToYcm().im();
-			
-			Complex froms = new Complex(pqcos * g - pqsin * b, -pqsin * g - pqcos * b - fbcm * vmp2).mult(-1f);
-			Complex tos = new Complex(qpcos * g - qpsin * b, -qpsin * g - qpcos * b - tbcm * vmq2).mult(-1f);
+//			Complex y = br.getY();
+//			float g = y.re(), b = y.im();
+//			float fbcm = br.getFromYcm().im();
+//			float tbcm = br.getToYcm().im();
+//			
+//			Complex froms = new Complex(pqcos * g - pqsin * b, -pqsin * g - pqcos * b - fbcm * vmp2).mult(-1f);
+//			Complex tos = new Complex(qpcos * g - qpsin * b, -qpsin * g - qpcos * b - tbcm * vmq2).mult(-1f);
 			
 			br.setRTFromS(froms);
 			br.setRTToS(tos);
