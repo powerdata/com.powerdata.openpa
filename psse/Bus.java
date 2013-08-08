@@ -73,5 +73,6 @@ public class Bus extends PsseBaseObject
 
 	public void setRTMismatch(Complex mismatch) throws PsseModelException {_list.setRTMismatch(_ndx, mismatch);}
 	public Complex getRTMismatch() throws PsseModelException {return _list.getRTMismatch(_ndx);}
-	
+
+	public float getRTFrequency() throws PsseModelException {return _list.getRTFrequency(_ndx);}
 }

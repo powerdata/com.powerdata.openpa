@@ -135,7 +135,10 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public void setRTS(int ndx, Complex s) {/* do nothing */}
 
 	public GenMode getRTMode(int ndx) throws PsseModelException {return getMode(ndx);}
-	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {};
+	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {}
 
+	public float getRTMW(int ndx) throws PsseModelException {return getPG(ndx);}
+	public float getRTMVAr(int ndx) throws PsseModelException {return getQG(ndx);}
 
+	public void setRTMW(int ndx, float mw) throws PsseModelException {}
 }

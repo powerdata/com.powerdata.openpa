@@ -96,26 +96,11 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public void setRTMode(GenMode mode) throws PsseModelException { _list.setRTMode(_ndx, mode); }
 
 	@Override
-	public float getRTMW() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public float getRTMW() throws PsseModelException {return _list.getRTMW(_ndx);}
 	@Override
-	public float getRTMVar() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public float getRTMVar() throws PsseModelException {return _list.getRTMVAr(_ndx);}
 	@Override
-	public void setRTMW(float mw) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
 	@Override
 	public void setRTMVar(float mvar) throws PsseModelException
 	{

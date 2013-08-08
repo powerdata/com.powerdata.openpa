@@ -91,6 +91,7 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/** get the cold load MVar */
 	public float getRTColdMVar(int ndx) throws PsseModelException { return 0f; }
 	public void setRTMW(int ndx, float mw) throws PsseModelException { /* do nothing */ }
+	public void setRTMVar(int _ndx, float mvar) throws PsseModelException { /* do nothing */ }
 
 	public Complex getRTS(int ndx) throws PsseModelException
 	{

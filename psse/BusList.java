@@ -100,5 +100,6 @@ public abstract class BusList extends PsseBaseList<Bus>
 	/* realtime methods */
 
 	public void setRTMismatch(int ndx, Complex mismatch)throws PsseModelException {/* do nothing */}
-	public Complex getRTMismatch(int ndx)throws PsseModelException {return Complex.Zero;}
+	public Complex getRTMismatch(int ndx) throws PsseModelException {return Complex.Zero;}
+	public float getRTFrequency(int ndx) throws PsseModelException {return 0f;}
 }

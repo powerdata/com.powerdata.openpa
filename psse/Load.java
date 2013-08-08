@@ -72,7 +72,7 @@ public class Load extends PsseBaseObject implements OneTermDev
 	@Override
 	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
 	@Override
-	public void setRTMVar(float mvar) throws PsseModelException {_list.setRTMW(_ndx, mvar);}
+	public void setRTMVar(float mvar) throws PsseModelException {_list.setRTMVar(_ndx, mvar);}
 	/** get the cold load MW */
 	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
 	/** get the cold load MVar */
