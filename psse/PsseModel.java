@@ -41,7 +41,9 @@ public class PsseModel
 		{
 			Class<?> cls = Class.forName(clsnm);
 			Constructor<?> con = cls.getConstructor(new Class[] {String.class});
-			return (PsseModel) con.newInstance(new Object[]{tok[1]});
+			PsseModel rv = (PsseModel) con.newInstance(new Object[]{tok[1]});
+			rv.setURI(uri);
+			return rv;
 		}
 		catch (Exception e)
 		{
@@ -61,6 +63,8 @@ public class PsseModel
 				.format("%s %s %s[%s] %s\n", objclass, objnm, objid, msg);
 		}
 	};
+	
+	String _uri;
 	
 	public PsseModel() {} 
 	public PsseModel(PsseModelLog log) {_log = log;} 
@@ -113,6 +117,8 @@ public class PsseModel
 	{
 		return new OneTermDevList(getLoads(), getGenerators(), getShunts(), getSvcs());
 	}
+	public String getURI() {return _uri;}
+	public void setURI(String uri) {_uri = uri;}
 }	
 
 
