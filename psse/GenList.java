@@ -141,4 +141,7 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public float getRTMVAr(int ndx) throws PsseModelException {return getQG(ndx);}
 
 	public void setRTMW(int ndx, float mw) throws PsseModelException {}
+
+	public float getRTMWSetPoint(int ndx) throws PsseModelException {return getRTMW(ndx);}
+	public void setRTMWSetPoint(int ndx, float mw) throws PsseModelException {/* do nothing */ }
 }

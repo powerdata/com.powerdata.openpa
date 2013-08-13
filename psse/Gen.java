@@ -105,7 +105,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public void setRTMVar(float mvar) throws PsseModelException
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
+	public float getRTMWSetPoint()  throws PsseModelException {return _list.getRTMWSetPoint(_ndx);}
+	public void setRTMWSetPoint(float mw) throws PsseModelException {_list.setRTMWSetPoint(_ndx, mw);}
 }
