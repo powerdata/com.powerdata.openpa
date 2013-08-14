@@ -43,6 +43,8 @@ public class Bus extends PsseBaseObject
 	public PComplex getVoltage() throws PsseModelException {return _list.getVoltage(_ndx);}
 	/** test if the bus is energized */
 	public boolean isEnergized() throws PsseModelException { return _list.isEnergized(_ndx); }
+	/** get frequency source priority */
+	public int getFrequencySourcePriority() throws PsseModelException {return _list.getFrequencySourcePriority(_ndx);}
 	/** get the island number */
 	public int getIsland() throws PsseModelException { return _list.getIsland(_ndx); }
 
