@@ -1,12 +1,15 @@
-package com.powerdata.openpa.busmismatch;
+package com.powerdata.openpa.tools;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 
-import com.powerdata.openpa.busmismatch.MismatchReport.MismatchReporter;
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.Bus;
@@ -24,10 +27,9 @@ import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
-import com.powerdata.openpa.tools.PAMath;
-import com.powerdata.openpa.tools.PComplex;
+import com.powerdata.openpa.psseraw.Psse2CSV;
+import com.powerdata.openpa.psseraw.PsseHeader;
+import com.powerdata.openpa.tools.MismatchReport.MismatchReporter;
 
 public class PowerCalculator
 {
@@ -37,71 +39,10 @@ public class PowerCalculator
 		for (ACBranch br : branches)
 			calcACBranchFlow(br);
 	}
-	public static void calcACBranchFlow2(ACBranch br) throws PsseModelException
-	{
-		if (br.isInSvc())
-		{
-			if (br.getObjectID().equals("PS-18002-18001-1"))
-			{
-				int xxx = 5;
-			}
-			Bus fbus = br.getFromBus(), tbus = br.getToBus();
-			PComplex fv = fbus.getVoltage(), tv = tbus.getVoltage();
-			float fvm2 = fv.r() * fv.r(), tvm2 = tv.r() * tv.r(), ftvm = fv.r() * tv.r();
-			Complex y = br.getY();
-			float falph = fv.theta() - tv.theta() - br.getPhaseShift();
-			float talph = tv.theta() - fv.theta() + br.getPhaseShift();
-			float fcalph = (float) Math.cos(falph);
-			float tcalph = (float) Math.cos(talph);
-			float fsalph = (float) Math.sin(falph);
-			float tsalph = (float) Math.sin(talph);
-			float g = y.re(), b = y.im();
-			
-			float fgcs = g * fcalph;
-			float fbcs = b * fcalph;
-			float fgsn = g * fsalph;
-			float fbsn = b * fsalph;
-			float tgcs = g * tcalph;
-			float tbcs = b * tcalph;
-			float tgsn = g * tsalph;
-			float tbsn = b * tsalph;
-			
-			float faij = fgsn - fbcs;
-			float fbij = fgcs + fbsn;
-			float taij = tgsn - tbcs;
-			float tbij = tgcs + tbsn;
-			
-			float fs = br.getFromYcm().im();
-			float ts = br.getToYcm().im();
-			
-			float pp = (g * fvm2) - (fbij * ftvm);
-			float qp = (-(fs+b) * fvm2) - (faij * ftvm);
-			
-			float pq = (g * tvm2) - (tbij * ftvm);
-			float qq = (-(ts+b) * tvm2) - (taij * ftvm);
-			
-			br.setRTFromS(new Complex(pp, qp));
-			br.setRTToS(new Complex(pq, qq));
-			
-		}
-	}
 	public static void calcACBranchFlow(ACBranch br) throws PsseModelException
 	{
-//		float xc = 0.00005f;
-//		float rc = 0.00001f;
 		if (br.isInSvc())
 		{
-//			Complex z = br.getZ();
-//			float x = z.im(), r = z.re();
-//			if (Math.abs(x) < xc) x = Math.signum(x) * xc;
-//			if (r < rc) r = rc;
-//			Complex y = new Complex(r, x).inv();
-			
-//			Bus fbus = br.getFromBus();
-//			Bus tbus = br.getToBus();
-//			String objid = br.getObjectName();
-//			
-//			
 			PComplex fv = br.getFromBus().getVoltage();
 			PComplex tv = br.getToBus().getVoltage();
 
@@ -125,37 +66,6 @@ public class PowerCalculator
 					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
 			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
 					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
-			
-			
-//			float fvt = fv.theta(), tvt = tv.theta();
-//			float phase = br.getPhaseShift();
-//			float pqshift = fvt - tvt - phase;
-//			float qpshift = tvt - fvt + phase;
-//			
-//			float vmpq = fv.r() * tv.r();
-//			float vmp2 = fv.r() * fv.r();
-//			float vmq2 = tv.r() * tv.r();
-//			
-//			float a = br.getFromTap() / br.getToTap();
-//			
-//			float pqcos = (vmp2/a - vmpq * (float) Math.cos(pqshift))/a;
-//			float qpcos = (vmq2*a - vmpq * (float) Math.cos(qpshift))/a;
-//			float tsin = vmpq/a;
-//			float pqsin = tsin * (float) Math.sin(pqshift);
-//			float qpsin = tsin * (float) Math.sin(qpshift);
-
-//			_ppresult[i] = pqcos * gg - pqsin * bb;
-//			_pqresult[i] = qpcos * gg - qpsin * bb;
-//			_qpresult[i] = -1F * pqsin * gg - pqcos * bb - _bpch[i] * vmp2;
-//			_qqresult[i] = -1F * qpsin * gg - qpcos * bb - _bqch[i] * vmq2;
-	
-//			Complex y = br.getY();
-//			float g = y.re(), b = y.im();
-//			float fbcm = br.getFromYcm().im();
-//			float tbcm = br.getToYcm().im();
-//			
-//			Complex froms = new Complex(pqcos * g - pqsin * b, -pqsin * g - pqcos * b - fbcm * vmp2).mult(-1f);
-//			Complex tos = new Complex(qpcos * g - qpsin * b, -qpsin * g - qpcos * b - tbcm * vmq2).mult(-1f);
 			
 			br.setRTFromS(froms);
 			br.setRTToS(tos);
@@ -299,26 +209,68 @@ public class PowerCalculator
 		return tdiff;
 	}
 	
-	public static void main2(String[] args) throws Exception
-	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/caiso");
-		File outdir = new File("/tmp/caisoout");
-//		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/frcc");
-//		File outdir = new File("/tmp/frccout");
-		PowerCalculator pc = new PowerCalculator();
-		long tsum = 0;
-		int count = 1000;
-		for (int i=0; i < 100; ++i) pc.test(model);
-		for(int i=100; i < count; ++i) tsum += pc.test(model);
-		System.out.format("Count: %d Average: %f ms\n", model.getBranches().size(), tsum / 900.0);
-		new ListDumper().dump(model, outdir);
-	}
-
-
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/caiso");
-		File outdir = new File("/tmp/caiso/out");
+		File cwd = new File(System.getProperty("user.dir"));
+		File csvdir = null;
+		File pssefile = null;
+		File outdir = cwd;
+		int narg = args.length;
+		for (int i = 0; i < narg;)
+		{
+			String a = args[i++];
+			if (a.startsWith("-"))
+			{
+				int idx = (a.charAt(1) == '-') ? 2 : 1;
+				switch (a.substring(idx))
+				{
+					case "psse": pssefile = new File(args[i++]); break;
+					case "csvdir": csvdir = new File(args[i++]); break;
+					case "outdir": outdir = new File(args[i++]); break;
+				}
+			}
+		}
+
+		File tmpdir = new File(System.getProperty("java.io.tmpdir"));
+
+		if (csvdir == null)
+		{
+			if (pssefile==null)
+			{
+				pssefile = cwd.listFiles(new FilenameFilter()
+				{
+					@Override
+					public boolean accept(File arg0, String arg1)
+					{
+						return arg1.endsWith(".raw");
+					}
+				})[0];
+			}
+		
+			String pssefn = pssefile.getName();
+			File tmpsub = new File(tmpdir, pssefn.substring(0, pssefn.length()-4));
+			if (!tmpsub.exists()) tmpsub.mkdirs();
+			
+			Reader rpsse = new BufferedReader(new FileReader(pssefile));
+			Psse2CSV p2c = new Psse2CSV(rpsse, null, tmpsub);
+			
+			PsseHeader hdr = p2c.getHeader();
+			System.out.println("Loading File: "+pssefile);
+			System.out.println("Change Code: "+hdr.getChangeCode());
+			System.out.println("System Base MVA: "+hdr.getSystemBaseMVA());
+			System.out.format("Case Time: %tc\n", hdr.getCaseTime());
+			System.out.format("Import Time: %tc\n", hdr.getImportTime());
+			System.out.println("Heading 1: "+hdr.getHeading1());
+			System.out.println("Heading 2: "+hdr.getHeading2());
+			System.out.println("Version: "+hdr.getVersion());
+			
+			p2c.process();
+			rpsse.close();
+			p2c.cleanup();
+			csvdir = tmpsub;
+		}
+		
+		PsseModel model = PsseModel.OpenInput("pssecsv:path="+csvdir);
 		calcACBranchFlows(model.getBranches());
 		calcShunts(model.getShunts());
 		calcSVCs(model.getSvcs());
@@ -327,7 +279,7 @@ public class PowerCalculator
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
 		new MismatchReport(model).report(new CsvMismatchReporter(mmout, model));
 		mmout.close();
-		dumpBranchesToCSV(new File(outdir, "brdbg.csv"), model.getBranches());
+//		dumpBranchesToCSV(new File(outdir, "brdbg.csv"), model.getBranches());
 	}
 	
 }

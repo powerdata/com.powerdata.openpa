@@ -1,4 +1,4 @@
-package com.powerdata.openpa.busmismatch;
+package com.powerdata.openpa.tools;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.Bus;
@@ -10,7 +10,6 @@ import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.psse.Shunt;
-import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.tools.utils.SmoothSort;
 
 public class MismatchReport

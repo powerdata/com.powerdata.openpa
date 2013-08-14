@@ -1,7 +1,7 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.busmismatch.PowerCalculator;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PowerCalculator;
 
 public abstract class SvcList extends PsseBaseList<SVC>
 {
