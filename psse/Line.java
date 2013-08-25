@@ -95,4 +95,6 @@ public class Line extends PsseBaseObject implements ACBranch
 	@Override
 	public Complex getRTToS() throws PsseModelException {return _list.getRTToS(_ndx);}
 
+	public float getRTMVA() throws PsseModelException { return _list.getRTMVA(_ndx); }
+	public float getRTMVAPercent() throws PsseModelException { return _list.getRTMVAPercent(_ndx); }
 }
