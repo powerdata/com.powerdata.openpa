@@ -160,6 +160,28 @@ public class LinkNet implements Cloneable
 		return buses;
 	}
 	/**
+	 * Return both buses and branches in a single call.
+	 * @return array of nodes at index 0, and branches at index 1
+	 */
+	public int[][] findConnections(int busNdx)
+	{
+		int buses[] = new int[_cnt[busNdx]];
+		int branches[] = new int[_cnt[busNdx]];
+		int ndx = 0;
+		int end = _list[busNdx];
+		while (end >= 0)
+		{
+			int far = _far[end];
+			if (far >= 0)
+			{
+				buses[ndx] = far;
+				branches[ndx++] = end / 2;
+			}
+			end = _next[end];
+		}
+		return new int[][] {buses, branches};
+	}
+	/**
 	 * Return an array of all valid bus indexes.  This array will omit any
 	 * undefined bus indexes.
 	 * @return array of bus indexes.
@@ -275,7 +297,7 @@ public class LinkNet implements Cloneable
 			else
 			{
 				--(_cnt[_far[enda]]);
-				--(_cnt[_far[enda]]);
+				--(_cnt[_far[endb]]);
 				++_far[enda];
 				++_far[endb];
 				_far[enda] *= -1;
@@ -284,36 +306,24 @@ public class LinkNet implements Cloneable
 			}
 		}
 	}
+	/** Permanently remove a branch */
+	
 	/**
 	 * Creates and returns a copy of this object.
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException
-	{
-		LinkNet rv = (LinkNet) super.clone();
-		rv._far = _far.clone();
-		rv._list = _list.clone();
-		rv._next = _next.clone();
-		rv._cnt = _cnt.clone();
-		return rv;	
-	}
-	/*
-	public LinkNet copyOf()
+	public LinkNet clone()
 	{
 		LinkNet rv = new LinkNet();
 		rv._brcnt = _brcnt;
-		int nnode = getMaxNode();
-		int nend = _brcnt*2;
-		rv.ensureCapacity(nnode,_brcnt);
-		
-		System.arraycopy(_far, 0, rv._far, 0, nend);
-		System.arraycopy(_next, 0, rv._next, 0, nend);
-		System.arraycopy(_list, 0, rv._list, 0, nnode);
-		System.arraycopy(_cnt, 0, rv._cnt, 0, nnode);
-		
-		return rv;
+		rv._cnt = _cnt.clone();
+		rv._far = _far.clone();
+		rv._list = _list.clone();
+		rv._maxBusNdx = _maxBusNdx;
+		rv._next = _next.clone();
+		return rv;	
 	}
-	*/
+
 	/**
 	 * Just for unit testing.
 	 * @param args

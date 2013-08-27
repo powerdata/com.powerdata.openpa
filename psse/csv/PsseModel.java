@@ -17,8 +17,6 @@ import com.powerdata.openpa.tools.PComplex;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
-	float				_lowxthr = 0.001f;
-	float				_lowrthr = 0.0001f;
 
 	PsseRawModel 		_rmodel;
 	LoadList			_loads;
@@ -33,6 +31,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	public PsseModel(String parms) throws PsseModelException
 	{
 		_rmodel = new PsseRawModel(parms);
+		//TODO:  This needs to be optional
 		eliminateLowZBranches();
 
 	}

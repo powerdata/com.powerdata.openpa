@@ -4,6 +4,8 @@ import com.powerdata.openpa.tools.BaseObject;
 
 public interface TwoTermDev extends BaseObject
 {
+	public String getI() throws PsseModelException;
+	public String getJ() throws PsseModelException;
 	public Bus getFromBus() throws PsseModelException;
 	public Bus getToBus() throws PsseModelException;
 }

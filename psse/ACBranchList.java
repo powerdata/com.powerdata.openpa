@@ -18,6 +18,10 @@ public class ACBranchList extends BaseList<ACBranch>
 	{
 		public ACBranchObj(int ndx) {super(ACBranchList.this, ndx);}
 		@Override
+		public String getI() throws PsseModelException {return ACBranchList.this.getI(_ndx);}
+		@Override
+		public String getJ() throws PsseModelException {return ACBranchList.this.getJ(_ndx);}
+		@Override
 		public Bus getFromBus() throws PsseModelException {return ACBranchList.this.getFromBus(_ndx);}
 		@Override
 		public Bus getToBus() throws PsseModelException {return ACBranchList.this.getToBus(_ndx);}
@@ -55,6 +59,15 @@ public class ACBranchList extends BaseList<ACBranch>
 	PhaseShifterList _phaseshifters;
 	
 	ACBranchList() {super();}
+
+	public String getI(int ndx) throws PsseModelException
+	{
+		return findBranch(ndx).getJ();
+	}
+	public String getJ(int ndx) throws PsseModelException
+	{
+		return findBranch(ndx).getJ();
+	}
 
 	public ACBranchList(LineList l, TransformerList xf, PhaseShifterList ps)
 			throws PsseModelException
@@ -115,6 +128,6 @@ public class ACBranchList extends BaseList<ACBranch>
 
 	@Override
 	public int size() {return _size;}
-	
+
 }
 

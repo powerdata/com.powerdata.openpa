@@ -21,4 +21,16 @@ public class Switch extends PsseBaseObject implements TwoTermDev
 	public SwitchState getState() throws PsseModelException {return _list.getState(_ndx);}
 	public void setState(SwitchState state) throws PsseModelException { _list.setState(_ndx,state); }
 	public boolean canOperateUnderLoad() throws PsseModelException {return _list.canOperateUnderLoad(_ndx); }
+
+	@Override
+	public String getI() throws PsseModelException
+	{
+		return getFromBus().getObjectID();
+	}
+
+	@Override
+	public String getJ() throws PsseModelException
+	{
+		return getToBus().getObjectID();
+	}
 }

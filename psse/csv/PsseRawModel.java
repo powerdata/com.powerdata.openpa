@@ -1,6 +1,10 @@
 package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 
 import com.powerdata.openpa.psse.BusList;
@@ -11,6 +15,8 @@ import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
+import com.powerdata.openpa.psseraw.Psse2CSV;
+import com.powerdata.openpa.psseraw.PsseProcException;
 import com.powerdata.openpa.tools.QueryString;
 import com.powerdata.openpa.tools.StarNetwork;
 
@@ -26,19 +32,44 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	SvcRawList				_svcList;
 	LoadList			_loads;
 	GenList				_generatorList;
+	TP					_tp;
 
 	public PsseRawModel(String parms) throws PsseModelException
 	{
 		QueryString q = new QueryString(parms);
-		if (!q.containsKey("path"))
+		if (!q.containsKey("path") && !q.containsKey("raw"))
 		{
-			throw new PsseModelException("com.powerdata.openpa.psse.csv.PsseInputModel Missing path= in uri.");
+			throw new PsseModelException("com.powerdata.openpa.psse.csv.PsseInputModel Missing path= or raw= in uri.");
 		}
-		_dir = new File(q.get("path")[0]);
+		if (q.containsKey("raw"))
+		{
+			File raw = new File(q.get("raw")[0]);
+			File tmpdir = new File(System.getProperty("java.io.tmpdir"));
+			String sname = raw.getName();
+			_dir = new File(tmpdir, sname.substring(0, sname.length()-4));
+			if (!_dir.exists())
+			{
+				try
+				{
+					_dir.mkdirs();
+					Reader rpsse = new FileReader(raw);
+					Psse2CSV p2c = new Psse2CSV(rpsse, null, _dir);
+					p2c.process();
+					rpsse.close();
+					p2c.cleanup();
+				} catch (IOException | PsseProcException e)
+				{
+					throw new PsseModelException(e);
+				}
+			}
+		}
+		else
+		{
+			_dir = new File(q.get("path")[0]);
+		}
 		analyzeRawShunts();
 		analyzeRawTransformers();
 
-		
 	}
 	
 	
