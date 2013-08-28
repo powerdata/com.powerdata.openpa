@@ -84,6 +84,11 @@ public class BusSubList extends BusList
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
 	@Override
 	public int size() {return _ndxs.length;}
+	@Override
+	public float getRTVMag(int ndx) throws PsseModelException {return _base.getRTVMag(_ndxs[ndx]);}
+	@Override
+	public float getRTVAng(int ndx) throws PsseModelException {return _base.getRTVAng(_ndxs[ndx]);}
+	
 	
 	
 }

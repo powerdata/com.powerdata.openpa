@@ -103,4 +103,6 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public Complex getRTMismatch(int ndx) throws PsseModelException {return Complex.Zero;}
 	public float getRTFrequency(int ndx) throws PsseModelException {return 0f;}
 	public int getFrequencySourcePriority(int ndx) throws PsseModelException {return 0;}
+	public float getRTVMag(int ndx) throws PsseModelException {return getVM(ndx);}
+	public float getRTVAng(int ndx) throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
 }
