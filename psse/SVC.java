@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
-
 public class SVC extends PsseBaseObject implements OneTermDev
 {
 
@@ -15,10 +13,7 @@ public class SVC extends PsseBaseObject implements OneTermDev
 
 	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
-	public float getVoltageSetpoint() throws PsseModelException {return _list.getVoltageSetpoint(_ndx);}
-	public Limits getBLimits() throws PsseModelException {return _list.getBLimits(_ndx);}
 	public Bus getRegBus() throws PsseModelException {return _list.getRegBus(_ndx);}
-	public Complex getY() throws PsseModelException {return _list.getY(_ndx);}
 	
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}
 	public String getSWREM() throws PsseModelException {return _list.getSWREM(_ndx);}
@@ -26,38 +21,22 @@ public class SVC extends PsseBaseObject implements OneTermDev
 	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
-	@Override
-	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
-	@Override
-	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
-	public Complex getRTY() throws PsseModelException {return _list.getRTY(_ndx);}
-	public void setRTY(Complex y) throws PsseModelException {_list.setRTY(_ndx, y);}
 
 	@Override
-	public float getRTMW() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public float getRTMW() throws PsseModelException {return _list.getRTMW(_ndx);}
 	@Override
-	public float getRTMVar() throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	public float getRTMVar() throws PsseModelException {return _list.getRTMVAr(_ndx);}
 	@Override
-	public void setRTMW(float mw) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void setRTMW(float mw) throws PsseModelException { _list.setRTMW(_ndx, mw);}
 	@Override
-	public void setRTMVar(float mvar) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void setRTMVAr(float mvar) throws PsseModelException { _list.setRTMVAr(_ndx, mvar);}
+	@Override
+	public float getRTP() throws PsseModelException {return _list.getRTP(_ndx);}
+	@Override
+	public void setRTP(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
+	@Override
+	public float getRTQ() throws PsseModelException {return _list.getRTQ(_ndx);}
+	@Override
+	public void setRTQ(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
+	
 }

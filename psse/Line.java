@@ -90,14 +90,6 @@ public class Line extends PsseBaseObject implements ACBranch
 
 	/* real time fields */
 	
-	@Override
-	public void setRTFromS(Complex s) throws PsseModelException {_list.setRTFromS(_ndx, s);}
-	@Override
-	public void setRTToS(Complex s) throws PsseModelException {_list.setRTToS(_ndx, s);}
-	@Override
-	public Complex getRTFromS() throws PsseModelException {return _list.getRTFromS(_ndx);}
-	@Override
-	public Complex getRTToS() throws PsseModelException {return _list.getRTToS(_ndx);}
 
 	public float getRTMVA() throws PsseModelException { return _list.getRTMVA(_ndx); }
 	public float getRTMVAPercent() throws PsseModelException { return _list.getRTMVAPercent(_ndx); }

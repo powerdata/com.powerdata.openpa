@@ -6,8 +6,6 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
@@ -19,7 +17,6 @@ public class LineListRaw extends LineList
 	protected float _r[],_x[],_b[],_ratea[],_rateb[],_ratec[],_gi[],_bi[],_gj[],_bj[];
 	protected int _st[];
 	protected float _len[];
-	protected ComplexList _fs, _ts;
 	protected int _size;
 	
 	public LineListRaw(PsseRawModel model) throws PsseModelException
@@ -48,8 +45,6 @@ public class LineListRaw extends LineList
 			_len	= LoadArray.Float(branches,"LEN",this,"getLEN");
 			reindex();
 			
-			_fs = new ComplexList(_size, true);
-			_ts = new ComplexList(_size, true);
 		}
 		catch(Exception e)
 		{
@@ -122,15 +117,6 @@ public class LineListRaw extends LineList
 	public float getDeftLEN(int ndx) throws PsseModelException {return super.getLEN(ndx);}
 
 	/* Realtime fields */
-
-	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_fs.set(ndx, s);}
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {_ts.set(ndx, s);}
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
 
 
 }

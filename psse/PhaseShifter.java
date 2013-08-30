@@ -106,14 +106,5 @@ public class PhaseShifter extends PsseBaseObject implements ACBranch
 	/* real time fields */
 	
 	@Override
-	public void setRTFromS(Complex s) throws PsseModelException {_list.setRTFromS(_ndx, s);}
-	@Override
-	public void setRTToS(Complex s) throws PsseModelException {_list.setRTToS(_ndx, s);}
-	@Override
-	public Complex getRTFromS() throws PsseModelException {return _list.getRTFromS(_ndx);}
-	@Override
-	public Complex getRTToS() throws PsseModelException {return _list.getRTToS(_ndx);}
-
-	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 }

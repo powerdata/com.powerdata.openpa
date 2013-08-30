@@ -7,8 +7,6 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 
 public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 {
@@ -24,8 +22,6 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 	ArrayList<Boolean> _swonl = new ArrayList<>();
 	ArrayList<Float> _bl = new ArrayList<>(), _gl = new ArrayList<>();
 	ArrayList<String> _idl = new ArrayList<>(), _namel = new ArrayList<>();
-	
-	ComplexList _rts;
 	
 	public ShuntRawList() {super();}
 
@@ -104,7 +100,6 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 			_name[i] = _namel.get(i);
 		}
 	
-		_rts = new ComplexList(_size, true);
 	}
 
 	void scanBuses(BusListRaw rawbus) throws PsseModelException
@@ -179,9 +174,4 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 		return _swon[ndx];
 	}
 
-	@Override
-	public void setRTS(int ndx, Complex s) {_rts.set(ndx, s);}
-	@Override
-	public Complex getRTS(int ndx) {return _rts.get(ndx);}
-	
 }

@@ -73,13 +73,5 @@ public class LineSubList extends LineList
 	@Override
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return _lines.getOwnership(_ndxs[ndx]);}
 	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_lines.setRTFromS(_ndxs[ndx], s);}
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {_lines.setRTToS(_ndxs[ndx], s);}
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException {return _lines.getRTFromS(_ndxs[ndx]);}
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException {return _lines.getRTToS(_ndxs[ndx]);}
-	@Override
 	public void commit() throws PsseModelException {_lines.commit();}
 }

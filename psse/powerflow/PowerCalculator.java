@@ -9,6 +9,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
@@ -31,186 +32,196 @@ import com.powerdata.openpa.psse.powerflow.MismatchReport.MismatchReporter;
 import com.powerdata.openpa.psseraw.Psse2CSV;
 import com.powerdata.openpa.psseraw.PsseHeader;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
-import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.PComplex;
 
 public class PowerCalculator
 {
-	public static void calcACBranchFlows(ACBranchList branches)
-			throws PsseModelException
+	PsseModel _model;
+	MismatchReport _dbg;
+	
+	public PowerCalculator(PsseModel model)
 	{
-		for (ACBranch br : branches)
-			calcACBranchFlow(br);
+		_model = model;
 	}
-	public static void calcACBranchFlow(ACBranch br) throws PsseModelException
+
+	public PowerCalculator(PsseModel model, MismatchReport dbg)
 	{
-		if (br.isInSvc())
-		{
-			PComplex fv = br.getFromBus().getVoltage();
-			PComplex tv = br.getToBus().getVoltage();
-
-			float shift = fv.theta() - tv.theta() - br.getPhaseShift();
-
-			float tvmpq = fv.r() * tv.r() / (br.getFromTap() * br.getToTap());
-			float tvmp2 = fv.r() * fv.r() / (br.getFromTap() * br.getFromTap());
-			float tvmq2 = tv.r() * tv.r() / (br.getToTap() * br.getToTap());
-
-			float ctvmpq = tvmpq * (float) Math.cos(shift);
-			float stvmpq = tvmpq * (float) Math.sin(shift);
-
-			Complex y = br.getY();
-			float gcos = ctvmpq * y.re();
-			float bcos = ctvmpq * y.im();
-			float gsin = stvmpq * y.re();
-			float bsin = stvmpq * y.im();
-
-			
-			Complex froms = new Complex(-gcos - bsin + tvmp2 * y.re(), -gsin
-					+ bcos - tvmp2 * (y.im() + br.getFromYcm().im())).mult(-1f); 
-			Complex tos = new Complex(-gcos + bsin + tvmq2 * y.re(), gsin + bcos
-					- tvmq2 * (y.im() + br.getToYcm().im())).mult(-1f); 
-			
-			br.setRTFromS(froms);
-			br.setRTToS(tos);
-		}
-		else
-		{
-			br.setRTFromS(Complex.Zero);
-			br.setRTToS(Complex.Zero);
-		}
+		_model = model;
+		_dbg = dbg;
 	}
 	
-	public static void dumpBranchesToCSV(File csv, ACBranchList branches)
-			throws IOException, PsseModelException
+	public float[][] calcACBranchFlows(float[] vang, float[] vmag) throws PsseModelException
 	{
-		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(csv)));
-		pw.println("I,J,ObjectID,ObjectName,R,X,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
-		for(ACBranch branch: branches)
-		{
-			if (branch.isInSvc())
-			{
-				Bus frbus = branch.getFromBus();
-				Bus tobus = branch.getToBus();
-				Complex z = branch.getZ();
-				Complex y = branch.getY();
-				Complex ycm = branch.getFromYcm().add(branch.getToYcm());
-				PComplex frv = frbus.getVoltage(),
-						 tov = tobus.getVoltage();
-				Complex frs = branch.getRTFromS(),
-						tos = branch.getRTToS();
-				
-				pw.format("\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
-						frbus.getObjectID(),
-						tobus.getObjectID(),
-						branch.getObjectID(),
-						branch.getObjectName(),
-						z.re(), z.im(),
-						y.re(),y.im(), ycm.im(),
-						frv.r(), PAMath.rad2deg(frv.theta()),
-						tov.r(), PAMath.rad2deg(tov.theta()),
-						branch.getPhaseShift(),
-						branch.getFromTap(),
-						frs.re(), frs.im(),
-						tos.re(), tos.im());
-			}
-		}
-		
-		pw.close();
-	}
-	
-	public static void calculateMismatches(PsseModel model) throws PsseModelException
-	{
-		BusList blist = model.getBuses();
-		ComplexList mm = new ComplexList(blist.size(), true);
-		ACBranchList brlist = model.getBranches();
-		LoadList ldlist = model.getLoads();
-		GenList genlist = model.getGenerators();
-		ShuntList shuntlist = model.getShunts();
-		SvcList svclist = model.getSvcs();
-		
-		int nbus = blist.size();
-		int nacbranch = brlist.size();
-		int nload = ldlist.size();
-		int ngen = genlist.size();
-		int nshunt = shuntlist.size();
-		int nsvc = svclist.size();
-		
-		for (int i=0; i < nacbranch; ++i)
+		ACBranchList brlist = _model.getBranches();
+		int nbr = brlist.size();
+		float[] pfrm = new float[nbr], pto = new float[nbr],
+				qfrm = new float[nbr], qto = new float[nbr];
+		for (int i=0; i < nbr; ++i)
 		{
 			ACBranch br = brlist.get(i);
 			if (br.isInSvc())
 			{
-				int fb = br.getFromBus().getIndex(), tb = br.getToBus()
-						.getIndex();
-				mm.assignadd(fb, br.getRTFromS());
-				mm.assignadd(tb, br.getRTToS());
+				int fbndx = br.getFromBus().getIndex();
+				int tbndx = br.getToBus().getIndex();
+				float fvm = vmag[fbndx], tvm = vmag[tbndx],
+						fva = vang[fbndx], tva = vang[tbndx];
+				
+				float shift = fva - tva - br.getPhaseShift();
+
+				float tvmpq = fvm * tvm
+						/ (br.getFromTap() * br.getToTap());
+				float tvmp2 = fvm * fvm
+						/ (br.getFromTap() * br.getFromTap());
+				float tvmq2 = tvm * tvm / (br.getToTap() * br.getToTap());
+
+				float ctvmpq = tvmpq * (float) Math.cos(shift);
+				float stvmpq = tvmpq * (float) Math.sin(shift);
+
+				Complex y = br.getY();
+				float gcos = ctvmpq * y.re();
+				float bcos = ctvmpq * y.im();
+				float gsin = stvmpq * y.re();
+				float bsin = stvmpq * y.im();
+
+				pfrm[i] = -(-gcos - bsin + tvmp2 * y.re());
+				qfrm[i] = -(-gsin + bcos - tvmp2 * (y.im() + br.getFromYcm().im()));
+				pto[i] = -(-gcos + bsin + tvmq2 * y.re());
+				qto[i] = -(gsin + bcos - tvmq2 * (y.im() + br.getToYcm().im()));
 			}
 		}
+		if (_dbg != null) _dbg.setBranchFlows(pfrm, qfrm, pto, qto);
+		return new float[][] {pfrm, qfrm, pto, qto};
+	}
+	
+//	public static void dumpBranchesToCSV(File csv, ACBranchList branches)
+//			throws IOException, PsseModelException
+//	{
+//		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(csv)));
+//		pw.println("I,J,ObjectID,ObjectName,R,X,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
+//		for(ACBranch branch: branches)
+//		{
+//			if (branch.isInSvc())
+//			{
+//				Bus frbus = branch.getFromBus();
+//				Bus tobus = branch.getToBus();
+//				Complex z = branch.getZ();
+//				Complex y = branch.getY();
+//				Complex ycm = branch.getFromYcm().add(branch.getToYcm());
+//				PComplex frv = frbus.getVoltage(),
+//						 tov = tobus.getVoltage();
+//////				Complex frs = branch.getRTFromS(),
+//////						tos = branch.getRTToS();
+////				
+////				pw.format("\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+////						frbus.getObjectID(),
+////						tobus.getObjectID(),
+////						branch.getObjectID(),
+////						branch.getObjectName(),
+////						z.re(), z.im(),
+////						y.re(),y.im(), ycm.im(),
+////						frv.r(), PAMath.rad2deg(frv.theta()),
+////						tov.r(), PAMath.rad2deg(tov.theta()),
+////						branch.getPhaseShift(),
+////						branch.getFromTap(),
+////						frs.re(), frs.im(),
+////						tos.re(), tos.im());
+//			}
+//		}
+//		
+//		pw.close();
+//	}
+//	
+	public float[][] calculateMismatches(float[][] v)
+			throws PsseModelException
+	{
+		BusList blist = _model.getBuses();
+		int nbus = blist.size();
+		float[] pmm = new float[nbus], qmm = new float[nbus];
+		LoadList ldlist = _model.getLoads();
+		GenList genlist = _model.getGenerators();
 		
-		for(int i=0; i < nload; ++i)
+		applyBranches(pmm, qmm, calcACBranchFlows(v[0], v[1]));
+		applyShunts(qmm, calcShunts(), _model.getShunts());
+		applyShunts(qmm, calcSVCs(), _model.getSvcs());
+		for(Load l : ldlist)
 		{
-			Load l = ldlist.get(i);
 			if (l.isInSvc())
-				mm.assignadd(l.getBus().getIndex(), l.getRTS());
+			{
+				int bndx = l.getBus().getIndex();
+				pmm[bndx] -= l.getRTP();
+				qmm[bndx] -= l.getRTQ();
+			}
 		}
-		for(int i=0; i < ngen; ++i)
+		for(Gen g : genlist)
 		{
-			Gen g = genlist.get(i);
-			String oid = g.getBus().getObjectID(); 
 			if (g.isInSvc())
-				mm.assignadd(g.getBus().getIndex(), g.getRTS());
+			{
+				int bndx = g.getBus().getIndex();
+				pmm[bndx] += g.getRTP();
+				qmm[bndx] += g.getRTQ();
+			}
 		}
-		for(int i=0; i < nshunt; ++i)
-		{
-			Shunt s = shuntlist.get(i);
-			if (s.isSwitchedOn())
-				mm.assignadd(s.getBus().getIndex(), s.getRTS());
-		}
-		
-		for(int i=0; i < nsvc; ++i)
-		{
-			SVC s = svclist.get(i);
-			mm.assignadd(s.getBus().getIndex(), s.getRTS());
-		}
-		
-		for(int i=0; i < nbus; ++i)
-		{
-			blist.get(i).setRTMismatch(mm.get(i));
-		}
-		
+		return new float[][] {pmm, qmm};
 	}
 
-	public static void calcShunts(ShuntList shunts) throws PsseModelException
+	void applyBranches(float[] pmm, float[] qmm,
+			float[][] brflows) throws PsseModelException
 	{
-		for(Shunt s : shunts) calcShunt(s);
-	}
-	
-	public static void calcShunt(Shunt shunt) throws PsseModelException
-	{
-		float vm = shunt.getBus().getVoltage().r();
-		shunt.setRTS(new Complex(0f, shunt.getY().im()*vm*vm));
+		ACBranchList brlist = _model.getBranches();
+		int nbr = brlist.size();
+		for(int i=0; i < nbr; ++i)
+		{
+			ACBranch branch = brlist.get(i);
+			int fbndx = branch.getFromBus().getIndex();
+			int tbndx = branch.getToBus().getIndex();
+			pmm[fbndx] += brflows[0][i];
+			qmm[fbndx] += brflows[1][i];
+			pmm[tbndx] += brflows[2][i];
+			qmm[tbndx] += brflows[3][i];
+		}
 	}
 
-	public static void calcSVC(SVC svc) throws PsseModelException
+	void applyShunts(float[] qmm, float[] qshunt,
+			List<? extends OneTermDev> list) throws PsseModelException
 	{
-		float vm = svc.getBus().getVoltage().r();
-		svc.setRTS(new Complex(0f, svc.getRTY().im()*vm*vm));
+		for (int i = 0; i < list.size(); ++i)
+		{
+			int bndx = list.get(i).getBus().getIndex();
+			qmm[bndx] += qshunt[i];
+		}
 	}
-	
-	public static void calcSVCs(SvcList svcs) throws PsseModelException
+
+	public float[] calcShunts() throws PsseModelException
 	{
-		for(SVC s : svcs) calcSVC(s);
+		ShuntList shunts = _model.getShunts();
+		int nsh = shunts.size();
+		float[] q = new float[nsh];
+
+		for (int i = 0; i < nsh; ++i)
+		{
+			Shunt shunt = shunts.get(i);
+			float vm = shunt.getBus().getVoltage().r();
+			q[i] = shunt.getBpu() * vm * vm;
+		}
+		if (_dbg != null) _dbg.setShunts(q);
+		return q;
 	}
-	
-	public long test(PsseModel model) throws PsseModelException
+
+	public float[] calcSVCs() throws PsseModelException
 	{
-		ACBranchList bl = model.getBranches();
-		long ts = System.currentTimeMillis();
-		calcACBranchFlows(bl);
-		long tdiff = System.currentTimeMillis()-ts;
-//		System.out.format("Calculated %d AC branches in %d ms.\n", bl.size(), tdiff);
-		return tdiff;
+		SvcList svcs = _model.getSvcs();
+		int nsh = svcs.size();
+		float[] q = new float[nsh];
+
+		for (int i = 0; i < nsh; ++i)
+		{
+			SVC svc = svcs.get(i);
+			float vm = svc.getBus().getVoltage().r();
+			// TODO: Fix for SVC, only treating as a fixed shunt for now
+			q[i] = svc.getBINIT() / 100f * vm * vm;
+		}
+		if (_dbg != null) _dbg.setSVCs(q);
+		return q;
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -275,15 +286,25 @@ public class PowerCalculator
 		}
 		
 		PsseModel model = PsseModel.OpenInput("pssecsv:path="+csvdir);
-		calcACBranchFlows(model.getBranches());
-		calcShunts(model.getShunts());
-		calcSVCs(model.getSvcs());
-		calculateMismatches(model);
-		new ListDumper().dump(model, outdir);
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
-		new MismatchReport(model).report(new CsvMismatchReporter(mmout, model));
+		MismatchReport mmdbg = new MismatchReport(model);
+		PowerCalculator pcalc = new PowerCalculator(model, mmdbg);
+		float[][] mm = pcalc.calculateMismatches(pcalc.getCaseVoltages());
 		mmout.close();
-//		dumpBranchesToCSV(new File(outdir, "brdbg.csv"), model.getBranches());
+	}
+
+	public float[][] getCaseVoltages() throws PsseModelException
+	{
+		BusList blist = _model.getBuses();
+		int nbus = blist.size();
+		float[] va = new float[nbus], vm = new float[nbus];
+		for(int i=0; i < nbus; ++i)
+		{
+			va[i] = blist.getRTVAng(i);
+			vm[i] = blist.getRTVMag(i);
+		}
+		if (_dbg != null) _dbg.setVoltages(va, vm);
+		return new float[][] {va, vm};
 	}
 	
 }
@@ -314,24 +335,24 @@ class CsvMismatchReporter implements MismatchReporter
 		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,",
 				b.getObjectID(), b.getObjectName(), mm.re(), mm.im(), mmm);
 				
-		for(int acbranch : acbranches)
-		{
-			ACBranch acb = _acbr.get(acbranch);
-			int fbus = acb.getFromBus().getIndex();
-			Complex s = ((fbus == bus) ? acb.getRTFromS() : acb.getRTToS()).mult(100f);
-			_out.print(btmp);
-			_out.format("\"%s\",\"%s\",%f,%f\n",
-					acb.getObjectID(), acb.getObjectName(), s.re(), s.im());
-		}
-		
-		for(int otdx : onetermdevs)
-		{
-			OneTermDev otd = _otdevs.get(otdx);
-			Complex s = otd.getRTS().mult(100f);
-			_out.print(btmp);
-			_out.format("\"%s\",\"%s\",%f,%f\n",
-					otd.getObjectID(), otd.getObjectName(), s.re(), s.im());
-		}
+//		for(int acbranch : acbranches)
+//		{
+//			ACBranch acb = _acbr.get(acbranch);
+//			int fbus = acb.getFromBus().getIndex();
+//			Complex s = ((fbus == bus) ? acb.getRTFromS() : acb.getRTToS()).mult(100f);
+//			_out.print(btmp);
+//			_out.format("\"%s\",\"%s\",%f,%f\n",
+//					acb.getObjectID(), acb.getObjectName(), s.re(), s.im());
+//		}
+//		
+//		for(int otdx : onetermdevs)
+//		{
+//			OneTermDev otd = _otdevs.get(otdx);
+//			Complex s = otd.getRTS().mult(100f);
+//			_out.print(btmp);
+//			_out.format("\"%s\",\"%s\",%f,%f\n",
+//					otd.getObjectID(), otd.getObjectName(), s.re(), s.im());
+//		}
 	}
 	
 }

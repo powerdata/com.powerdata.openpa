@@ -97,14 +97,6 @@ public class PhaseShifterSubList extends PhaseShifterList
 	@Override
 	public OwnershipList getOwnership(int ndx) throws PsseModelException { return super.getOwnership(_ndxs[ndx]); }
 	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException { super.setRTFromS(ndx, s); }
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException { super.setRTToS(ndx, s); }
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException { return super.getRTFromS(_ndxs[ndx]); }
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException { return super.getRTToS(_ndxs[ndx]); }
-	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException { return super.getObjectName(_ndxs[ndx]); }

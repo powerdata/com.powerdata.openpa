@@ -31,10 +31,6 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	@Override
 	public float getG(int ndx) throws PsseModelException { return _base.getG(ndx); }
 	@Override
-	public void setRTS(int ndx, Complex s) { _base.setRTS(ndx, s); }
-	@Override
-	public Complex getRTS(int ndx) throws PsseModelException { return _base.getRTS(ndx); }
-	@Override
 	public boolean isInSvc(int ndx) throws PsseModelException { return _base.isInSvc(ndx); }
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(ndx);}

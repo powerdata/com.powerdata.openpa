@@ -28,8 +28,6 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
 	/** get the Generator mode */
 	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
-	/** get case complex power */
-	public Complex getS() throws PsseModelException {return _list.getS(_ndx);}
 	/** machine complex impedance */
 	public Complex getMachZ() throws PsseModelException {return _list.getMachZ(_ndx);}
 //	/** Step-up transformer impedance */
@@ -81,10 +79,10 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 
-	@Override
-	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
-	@Override
-	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
+//	@Override
+//	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
+//	@Override
+//	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
 	/** getg the realtime generator mode */
 	public GenMode getRTMode() throws PsseModelException { return _list.getRTMode(_ndx);}
 	/** set the realtime generator mode */
@@ -97,11 +95,17 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	@Override
 	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
 	@Override
-	public void setRTMVar(float mvar) throws PsseModelException
-	{
-		// TODO Auto-generated method stub
-	}
+	public void setRTMVAr(float mvar) throws PsseModelException {_list.setRTMVAr(_ndx, mvar);}
 
 	public float getRTMWSetPoint()  throws PsseModelException {return _list.getRTMWSetPoint(_ndx);}
 	public void setRTMWSetPoint(float mw) throws PsseModelException {_list.setRTMWSetPoint(_ndx, mw);}
+
+	@Override
+	public float getRTP() throws PsseModelException {return _list.getRTP(_ndx);}
+	@Override
+	public void setRTP(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
+	@Override
+	public float getRTQ() throws PsseModelException {return _list.getRTQ(_ndx);}
+	@Override
+	public void setRTQ(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
 }

@@ -56,13 +56,15 @@ public abstract class GenList extends PsseBaseList<Gen>
 			return GenMode.ON;
 		}
 	}
-	/** get case complex power */
-	public Complex getS(int ndx) throws PsseModelException
-	{
-		return new Complex(PAMath.mw2pu(getPG(ndx)),
-				PAMath.mvar2pu(getQG(ndx)));
-	}
 
+	
+	//	/** get case complex power */
+//	public Complex getS(int ndx) throws PsseModelException
+//	{
+//		return new Complex(PAMath.mw2pu(getPG(ndx)),
+//				PAMath.mvar2pu(getQG(ndx)));
+//	}
+//
 	/** reactive power limits */
 	public Limits getReactiveLimits(int ndx) throws PsseModelException
 	{
@@ -130,10 +132,6 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public float getPB(int ndx) throws PsseModelException {return -9999f;}
 
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}//TODO: implement
-
-	public Complex getRTS(int ndx) throws PsseModelException {return getS(ndx);}
-	public void setRTS(int ndx, Complex s) {/* do nothing */}
-
 	public GenMode getRTMode(int ndx) throws PsseModelException {return getMode(ndx);}
 	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {}
 
@@ -141,7 +139,13 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public float getRTMVAr(int ndx) throws PsseModelException {return getQG(ndx);}
 
 	public void setRTMW(int ndx, float mw) throws PsseModelException {}
+	public void setRTMVAr(int ndx, float mvar) throws PsseModelException {}
 
 	public float getRTMWSetPoint(int ndx) throws PsseModelException {return getRTMW(ndx);}
 	public void setRTMWSetPoint(int ndx, float mw) throws PsseModelException {/* do nothing */ }
+
+	public float getRTP(int ndx) throws PsseModelException {return getPG(ndx)/100f;}
+	public void setRTP(int ndx, float p) throws PsseModelException {}
+	public float getRTQ(int ndx) throws PsseModelException {return getQG(ndx)/100f;}
+	public void setRTQ(int ndx, float q) throws PsseModelException {}
 }

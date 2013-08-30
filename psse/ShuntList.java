@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.psse.powerflow.PowerCalculator;
 import com.powerdata.openpa.tools.Complex;
 
 public abstract class ShuntList extends PsseBaseList<Shunt>
@@ -14,8 +13,6 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 		@Override
 		public int size() {return 0;}
 	};
-	
-	Complex _tmps;
 	
 	protected ShuntList(){super();}
 
@@ -43,7 +40,11 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	{
 		return isSwitchedOn(ndx) ? getB(ndx)/100f : 0;
 	}
-	
+	public float getGpu(int ndx) throws PsseModelException
+	{
+		return isSwitchedOn(ndx) ? getG(ndx)/100f : 0;
+	}
+
 	public boolean isSwitchedOn(int ndx) throws PsseModelException {return false;}
 
 	/* raw methods */
@@ -55,16 +56,14 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	/** get G, MVAr at unity voltage */
 	public float getG(int ndx) throws PsseModelException {return 0f;}
 
-	/* RT fields */
-	
-	public void setRTS(int ndx, Complex s) {_tmps = s;}
-
-	public Complex getRTS(int ndx) throws PsseModelException
-	{
-		PowerCalculator.calcShunt(get(ndx));
-		return _tmps;
-	}
-
 	public boolean isInSvc(int ndx) throws PsseModelException {return isSwitchedOn(ndx);}
 
+	public float getRTMW(int ndx) throws PsseModelException {return 0f;}
+	public float getRTMVAr(int ndx) throws PsseModelException {return 0f;}
+	public void setRTMW(int ndx, float mw) throws PsseModelException {}
+	public void setRTMVAr(int ndx, float mvar) throws PsseModelException {}
+	public float getRTP(int ndx) throws PsseModelException {return 0f;}
+	public void setRTP(int ndx, float p) throws PsseModelException {}
+	public float getRTQ(int ndx) throws PsseModelException {return 0f;}
+	public void setRTQ(int ndx, float q) throws PsseModelException {}
 }

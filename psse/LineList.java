@@ -103,10 +103,6 @@ public abstract class LineList extends PsseBaseList<Line>
 
 	/* realtime fields */
 
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
-	public Complex getRTFromS(int ndx) throws PsseModelException { return Complex.Zero;}
-	public Complex getRTToS(int ndx) throws PsseModelException {return Complex.Zero;}
 	public float getRTMVA(int ndx) throws PsseModelException { return 0.0f; }
 	public float getRTMVAPercent(int ndx) throws PsseModelException { return 0.0f; }
 }	

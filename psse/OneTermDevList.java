@@ -2,7 +2,6 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.AbstractBaseObject;
 import com.powerdata.openpa.tools.BaseList;
-import com.powerdata.openpa.tools.Complex;
 
 public class OneTermDevList extends BaseList<OneTermDev>
 {
@@ -36,24 +35,34 @@ public class OneTermDevList extends BaseList<OneTermDev>
 			OneTermDevList.this.setRTMW(_ndx, mw);
 		}
 		@Override
-		public void setRTMVar(float mvar) throws PsseModelException
+		public void setRTMVAr(float mvar) throws PsseModelException
 		{
-			OneTermDevList.this.setRTMVar(_ndx, mvar);
-		}
-		@Override
-		public Complex getRTS() throws PsseModelException
-		{
-			return OneTermDevList.this.getRTS(_ndx);
-		}
-		@Override
-		public void setRTS(Complex s) throws PsseModelException
-		{
-			OneTermDevList.this.setRTS(_ndx, s);
+			OneTermDevList.this.setRTMVAr(_ndx, mvar);
 		}
 		@Override
 		public boolean isInSvc() throws PsseModelException
 		{
 			return OneTermDevList.this.isInSvc(_ndx);
+		}
+		@Override
+		public float getRTP() throws PsseModelException
+		{
+			return OneTermDevList.this.getRTP(_ndx);
+		}
+		@Override
+		public void setRTP(float p) throws PsseModelException
+		{
+			OneTermDevList.this.setRTP(_ndx, p);
+		}
+		@Override
+		public float getRTQ() throws PsseModelException
+		{
+			return OneTermDevList.this.getRTQ(_ndx);
+		}
+		@Override
+		public void setRTQ(float q) throws PsseModelException
+		{
+			OneTermDevList.this.setRTQ(_ndx, q);
 		}
 	}
 	
@@ -108,19 +117,9 @@ public class OneTermDevList extends BaseList<OneTermDev>
 		return findDev(ndx).getObjectName();
 	}
 
-	public void setRTS(int ndx, Complex s) throws PsseModelException
+	public void setRTMVAr(int ndx, float mvar) throws PsseModelException
 	{
-		findDev(ndx).setRTS(s);
-	}
-
-	public Complex getRTS(int ndx) throws PsseModelException
-	{
-		return findDev(ndx).getRTS();
-	}
-
-	public void setRTMVar(int ndx, float mvar) throws PsseModelException
-	{
-		findDev(ndx).setRTMVar(mvar);
+		findDev(ndx).setRTMVAr(mvar);
 	}
 
 	public void setRTMW(int ndx, float mw) throws PsseModelException
@@ -145,6 +144,22 @@ public class OneTermDevList extends BaseList<OneTermDev>
 	public boolean isInSvc(int ndx) throws PsseModelException
 	{
 		return findDev(ndx).isInSvc();
+	}
+	public void setRTQ(int ndx, float q) throws PsseModelException
+	{
+		findDev(ndx).setRTQ(q);
+	}
+	public float getRTQ(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).getRTQ();
+	}
+	public void setRTP(int ndx, float p) throws PsseModelException
+	{
+		findDev(ndx).setRTP(p);
+	}
+	public float getRTP(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).getRTP();
 	}
 
 	@Override

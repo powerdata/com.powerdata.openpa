@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
 public abstract class LoadList extends PsseBaseList<Load>
@@ -91,12 +90,9 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/** get the cold load MVar */
 	public float getRTColdMVar(int ndx) throws PsseModelException { return 0f; }
 	public void setRTMW(int ndx, float mw) throws PsseModelException { /* do nothing */ }
-	public void setRTMVar(int _ndx, float mvar) throws PsseModelException { /* do nothing */ }
-
-	public Complex getRTS(int ndx) throws PsseModelException
-	{
-		return new Complex(PAMath.mw2pu(getPL(ndx))*-1f, PAMath.mvar2pu(getQL(ndx))*-1f);
-	}
-
-	public void setRTS(int ndx, Complex s) throws PsseModelException { /* do nothing */}
+	public void setRTMVAr(int ndx, float mvar) throws PsseModelException { /* do nothing */ }
+	public float getRTP(int ndx) throws PsseModelException {return PAMath.mw2pu(getPL(ndx));}
+	public void setRTP(int ndx, float p) throws PsseModelException {}
+	public float getRTQ(int ndx) throws PsseModelException {return PAMath.mw2pu(getQL(ndx));}
+	public void setRTQ(int ndx, float q) throws PsseModelException {}
 }

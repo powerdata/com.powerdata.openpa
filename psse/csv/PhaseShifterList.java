@@ -101,14 +101,6 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	@Override
 	public OwnershipList getOwnership(int ndx) throws PsseModelException { return _base.getOwnership(ndx); }
 	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException { _base.setRTFromS(ndx, s); }
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException { _base.setRTToS(ndx, s); }
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException { return _base.getRTFromS(ndx); }
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException { return _base.getRTToS(ndx); }
-	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(ndx);}
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(ndx); }

@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
-
 public class Load extends PsseBaseObject implements OneTermDev
 {
 	protected LoadList _list;
@@ -72,15 +70,18 @@ public class Load extends PsseBaseObject implements OneTermDev
 	@Override
 	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
 	@Override
-	public void setRTMVar(float mvar) throws PsseModelException {_list.setRTMVar(_ndx, mvar);}
+	public void setRTMVAr(float mvar) throws PsseModelException {_list.setRTMVAr(_ndx, mvar);}
 	/** get the cold load MW */
 	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
 	/** get the cold load MVar */
 	public float getRTColdMVar() throws PsseModelException { return _list.getRTColdMVar(_ndx); }
 
 	@Override
-	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
+	public float getRTP() throws PsseModelException {return _list.getRTP(_ndx);}
 	@Override
-	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
-
+	public void setRTP(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
+	@Override
+	public float getRTQ() throws PsseModelException {return _list.getRTQ(_ndx);}
+	@Override
+	public void setRTQ(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
 }

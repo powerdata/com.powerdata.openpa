@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 
 public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterList
@@ -144,13 +143,4 @@ public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterL
 	public int size() {return _size;}
 	
 	/* Realtime fields */
-
-	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_fs.set(ndx, s);}
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {_ts.set(ndx, s);}
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
 }

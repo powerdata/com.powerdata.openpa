@@ -1,17 +1,11 @@
 package com.powerdata.openpa.psse.powerflow;
 
 import com.powerdata.openpa.psse.ACBranch;
-import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.Gen;
-import com.powerdata.openpa.psse.Load;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.OneTermDevList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.SVC;
-import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.tools.LinkNet;
-import com.powerdata.tools.utils.SmoothSort;
 
 public class MismatchReport
 {
@@ -61,6 +55,31 @@ public class MismatchReport
 		{
 			r.report(i, _brnet.findBranches(i), _otnet.findBranches(i));
 		}
+	}
+
+	public void setBranchFlows(float[] pfrm, float[] qfrm, float[] pto,
+			float[] qto)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setShunts(float[] q)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSVCs(float[] q)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setVoltages(float[] va, float[] vm)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

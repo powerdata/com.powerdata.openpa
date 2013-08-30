@@ -6,10 +6,7 @@ import java.io.IOException;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.LoadArray;
-import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SimpleCSV;
 
 public class LoadList extends com.powerdata.openpa.psse.LoadList
@@ -23,8 +20,6 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 	float[] _pl, _ql, _ip, _iq, _yp, _yq;
 	
 	BusList _buses;
-	
-	ComplexList _rts;
 	
 	public LoadList() {super();}
 	public LoadList(PsseModel eq, File dir) throws PsseModelException
@@ -57,24 +52,12 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 		{
 			throw new PsseModelException(e);
 		}
-		
-		float[] sre = new float[_size], sim = new float[_size];
-		for(int i=0; i < _size; ++i)
-		{
-			sre[i] = PAMath.mw2pu(_pl[i])*-1f;
-			sim[i] = PAMath.mvar2pu(_ql[i])*-1f;
-		}
-		_rts = new ComplexList(sre, sim);
 	}
 	
 	@Override
 	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return "LD-"+_i[ndx]+":"+_id[ndx];}
-	@Override
-	public Complex getRTS(int ndx) throws PsseModelException {return _rts.get(ndx);}
-	@Override
-	public void setRTS(int ndx, Complex s) throws PsseModelException {_rts.set(ndx, s);}
 	@Override
 	public String getID(int ndx) throws PsseModelException {return _id[ndx];}
 	@Override
