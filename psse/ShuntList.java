@@ -38,6 +38,12 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	{
 		return isSwitchedOn(ndx) ? new Complex(getG(ndx), getB(ndx)).div(100f) : Complex.Zero;
 	}
+	
+	public float getBpu(int ndx) throws PsseModelException
+	{
+		return isSwitchedOn(ndx) ? getB(ndx)/100f : 0;
+	}
+	
 	public boolean isSwitchedOn(int ndx) throws PsseModelException {return false;}
 
 	/* raw methods */
@@ -60,4 +66,5 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	}
 
 	public boolean isInSvc(int ndx) throws PsseModelException {return isSwitchedOn(ndx);}
+
 }

@@ -30,10 +30,6 @@ public class ListDumper
 		for (Method m : methods)
 		{
 			String nm = m.getName();
-			if (nm.equals("Lines"))
-			{
-				int xxx = 5;
-			}
 			if (nm.startsWith("get") && nm.endsWith("s") && !ListFilter.contains(nm))
 			{
 				String title = nm.substring(3);

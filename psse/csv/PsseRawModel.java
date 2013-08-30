@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.SwitchedShunt;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
@@ -32,7 +30,6 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	SvcRawList				_svcList;
 	LoadList			_loads;
 	GenList				_generatorList;
-	TP					_tp;
 
 	public PsseRawModel(String parms) throws PsseModelException
 	{

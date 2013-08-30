@@ -26,9 +26,17 @@ public class ACBranchList extends BaseList<ACBranch>
 		@Override
 		public Bus getToBus() throws PsseModelException {return ACBranchList.this.getToBus(_ndx);}
 		@Override
+		public float getR() throws PsseModelException {return ACBranchList.this.getR(_ndx);}
+		@Override
+		public float getX() throws PsseModelException {return ACBranchList.this.getX(_ndx);}
+		@Override
 		public Complex getZ() throws PsseModelException {return ACBranchList.this.getZ(_ndx);}
 		@Override
 		public Complex getY() throws PsseModelException {return ACBranchList.this.getY(_ndx);}
+		@Override
+		public float getFromBcm() throws PsseModelException {return ACBranchList.this.getFromBcm(_ndx);}
+		@Override
+		public float getToBcm() throws PsseModelException {return ACBranchList.this.getToBcm(_ndx);}
 		@Override
 		public Complex getFromYcm() throws PsseModelException {return ACBranchList.this.getFromYcm(_ndx);}
 		@Override
@@ -59,6 +67,11 @@ public class ACBranchList extends BaseList<ACBranch>
 	PhaseShifterList _phaseshifters;
 	
 	ACBranchList() {super();}
+
+	public float getFromBcm(int ndx) throws PsseModelException {return findBranch(ndx).getFromBcm();}
+	public float getToBcm(int ndx) throws PsseModelException {return findBranch(ndx).getToBcm();}
+	public float getR(int ndx) throws PsseModelException {return findBranch(ndx).getR();}
+	public float getX(int ndx) throws PsseModelException {return findBranch(ndx).getX();}
 
 	public String getI(int ndx) throws PsseModelException
 	{

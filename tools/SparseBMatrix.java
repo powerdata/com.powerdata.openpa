@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.powerdata.openpa.tools.SparseMatrixFactorizer.EliminatedBus;
 
-abstract public class SparseBMatrix
+public class SparseBMatrix
 {
 	SparseMatrixFactorizer _factorizer;
 	float[] _bbranch, _bself;

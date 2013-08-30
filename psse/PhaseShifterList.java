@@ -43,12 +43,16 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	
 	public Bus getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	public Bus getToBus(int ndx) throws PsseModelException {return _model.getBus(getJ(ndx));}
+	public float getR(int ndx) throws PsseModelException {return getZ(ndx).re();}
+	public float getX(int ndx) throws PsseModelException {return getZ(ndx).im();}
 	public Complex getZ(int ndx) throws PsseModelException
 	{
 		return _ztool.get(getCZ(ndx)).convert2W(get(ndx));
 	}
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
 
+	public float getFromBmag(int ndx) throws PsseModelException {return getFromYmag(ndx).im();}
+	public float getToBmag(int ndx) throws PsseModelException {return getToYmag(ndx).im();}
 	public Complex getFromYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
 	public Complex getToYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
 	public float getFromTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio1(get(ndx));}

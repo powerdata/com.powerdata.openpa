@@ -8,8 +8,10 @@ import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusSubList;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TP;
 import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.LinkNet;
@@ -27,13 +29,14 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	PhaseShifterList	_phaseshifters;
 	ShuntList	_shunts;
 	SvcList	_svcs;
+	TP _tp;
 
 	public PsseModel(String parms) throws PsseModelException
 	{
 		_rmodel = new PsseRawModel(parms);
 		//TODO:  This needs to be optional
 		eliminateLowZBranches();
-
+		_tp = new TP(this);
 	}
 	
 	public File getDir() {return _rmodel.getDir();}
@@ -129,7 +132,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			ACBranch br = (ACBranch) branchList.get(i);
 			if (br.isInSvc())
 			{
-				Complex z = br.getZ();
+//				Complex z = br.getZ();
 				Bus fbus = br.getFromBus();
 				Bus tbus = br.getToBus();
 				int fbusx = fbus.getIndex();
@@ -164,6 +167,31 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		return false;
 	}
 
+	public int getIslandCount() throws PsseModelException
+	{
+		return _tp.getIslandCount();
+	}
 
+	public boolean isNodeEnergized(int node) throws PsseModelException
+	{
+		return _tp.isIslandEnergized(_tp.getIsland(node));
+	}
+
+	public int getIsland(int node) throws PsseModelException
+	{
+		return _tp.getIsland(node);
+	}
+
+	public BusList getBusesForIsland(int island) throws PsseModelException
+	{
+		return new com.powerdata.openpa.psse.BusSubList(_buses,
+				_tp.getIslandNodes(island));
+	}
+
+	public BusTypeCode getBusType(int node) throws PsseModelException
+	{
+		return _tp.getBusType(node);
+	}
+	
 }
 

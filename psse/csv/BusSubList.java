@@ -5,26 +5,24 @@ import com.powerdata.openpa.psse.PsseModelException;
 
 public class BusSubList extends com.powerdata.openpa.psse.BusSubList
 {
-	TP _tp;
+	PsseModel _csvmodel;
 	
-	public BusSubList(BusList base, int[] ndxs, TP tp)
+	public BusSubList(PsseModel model, BusList base, int[] ndxs)
 	{
 		super(base, ndxs);
-		_tp = tp;
+		_csvmodel = model;
 	}
 
 	@Override
 	public boolean isEnergized(int ndx) throws PsseModelException
 	{
-		return _tp.isIslandEnergized(_tp.getIsland(ndx));
+		return _csvmodel.isNodeEnergized(ndx);
 	}
 
 	@Override
 	public int getIsland(int ndx) throws PsseModelException
 	{
-		return _tp.getIsland(ndx);
+		return _csvmodel.getIsland(ndx);
 	}
 
-	
-	
 }

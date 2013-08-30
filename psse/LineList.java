@@ -57,6 +57,8 @@ public abstract class LineList extends PsseBaseList<Line>
 				_model.getSBASE());
 	}
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
+	public float getFromBchg(int ndx) throws PsseModelException {return getB(ndx)/2f;}
+	public float getToBchg(int ndx) throws PsseModelException {return getB(ndx)/2f;}
 	public Complex getFromYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 	public Complex getToYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 	@Override

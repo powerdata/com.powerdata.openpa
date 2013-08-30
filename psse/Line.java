@@ -36,6 +36,10 @@ public class Line extends PsseBaseObject implements ACBranch
 	@Override
 	public Complex getY() throws PsseModelException {return _list.getY(_ndx);} 
 	@Override
+	public float getFromBcm() throws PsseModelException {return _list.getFromBchg(_ndx);}
+	@Override
+	public float getToBcm() throws PsseModelException {return _list.getToBchg(_ndx);}
+	@Override
 	public Complex getFromYcm() throws PsseModelException {return _list.getFromYchg(_ndx);}
 	@Override
 	public Complex getToYcm() throws PsseModelException {return _list.getToYchg(_ndx);}

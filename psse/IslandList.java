@@ -36,4 +36,12 @@ public abstract class IslandList extends PsseBaseList<Island>
 	public ShuntList getShunts(int ndx) throws PsseModelException {return ShuntList.Empty;}
 	public SvcList getSvcs(int ndx) throws PsseModelException {return SvcList.Empty;}
 	public SwitchList getSwitches(int ndx) {return SwitchList.Empty;}
+
+	public BusList getBusesForType(int ndx, BusTypeCode bustype) throws PsseModelException
+	{
+		return new BusSubList(_model.getBuses(), getBusNdxsForType(ndx, bustype));
+	}
+	public int[] getBusNdxsForType(int ndx, BusTypeCode bustype) throws PsseModelException {return new int[0];}
+	public boolean isEnergized(int ndx) throws PsseModelException {return false;}
+	public int getAngleRefBusNdx(int ndx) throws PsseModelException {return -1;}
 }

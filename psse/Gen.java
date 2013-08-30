@@ -30,15 +30,10 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
 	/** get case complex power */
 	public Complex getS() throws PsseModelException {return _list.getS(_ndx);}
-	/** generator reactive limits */
-	public Limits getReactiveLimits() throws PsseModelException {return _list.getReactiveLimits(_ndx);}
 	/** machine complex impedance */
 	public Complex getMachZ() throws PsseModelException {return _list.getMachZ(_ndx);}
 //	/** Step-up transformer impedance */
 //	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
-
-	/** generator active power limits p.u. on 100MVA base */
-	public Limits getActiveLimits() throws PsseModelException {return _list.getActiveLimits(_ndx);}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 

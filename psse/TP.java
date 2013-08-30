@@ -1,4 +1,6 @@
-package com.powerdata.openpa.psse.csv;
+package com.powerdata.openpa.psse;
+
+import java.util.Arrays;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
@@ -13,19 +15,52 @@ public class TP
 	int[] _bus2island;
 	boolean[] _energized;
 	int[][] _groups;
+	BusTypeCode[] _bustype;
+	int[] _angrefbus;
+	int[][] _loadbus, _genbus; 
 	
 	public TP(PsseModel model) throws PsseModelException
 	{
 		LinkNet net = configureNetwork(model);
 		_groups = net.findGroups();
-		_energized = new boolean[_groups.length];
+		int nisland = _groups.length;
+		_energized = new boolean[nisland];
+		_angrefbus = new int[nisland];
+		_loadbus = new int[nisland][];
+		_genbus = new int[nisland][];
+		Arrays.fill(_angrefbus, -1);
+		BusList buses = model.getBuses();
+		_bustype = new BusTypeCode[buses.size()];
+		Arrays.fill(_bustype, BusTypeCode.Load);
+		float[] maxgen = new float[nisland];
+//		int[] genbuscnt = new int[nisland];
+		
+		for(int i=0; i < buses.size(); ++i)
+		{
+			if (net.getConnectionCount(i)==0)
+			{
+				_bustype[i] = BusTypeCode.Isolated;
+			}
+		}
+		
 		for(Gen g : model.getGenerators())
 		{
-			if (g.isInSvc() && g.getPG() > 1)
+			if (g.isInSvc())
 			{
 				int busndx = g.getBus().getIndex();
 				int island = _bus2island[busndx];
-				if (!_energized[island]) _energized[island] = true;
+				if (!_energized[island])
+				{
+					_energized[island] = true;
+				}
+				if ((g.getQT() - g.getQB()) > 1f
+						&& _bustype[busndx] == BusTypeCode.Load)
+				{
+					_bustype[busndx] = BusTypeCode.Gen;
+					maxgen[busndx] += g.getPT();
+					if (maxgen[busndx] > maxgen[_angrefbus[island]])
+							_angrefbus[island] = busndx;
+				}
 			}
 		}
 	}
@@ -79,6 +114,26 @@ public class TP
 	public int[] getIslandNodes(int island)
 	{
 		return _groups[island];
+	}
+
+	public BusTypeCode getBusType(int bus)
+	{
+		return _bustype[bus];
+	}
+
+	public int[] getBusNdxsForType(int ndx, BusTypeCode bustype)
+	{
+		switch(bustype)
+		{
+			case Load: return _loadbus[ndx];
+			case Gen: return _genbus[ndx];
+			default: return new int[0];
+		}
+	}
+	
+	public int getAngleRefBusNdx(int ndx)
+	{
+		return _angrefbus[ndx];
 	}
 	
 }

@@ -19,5 +19,18 @@ public class Island extends PsseBaseObject
 	public ShuntList getShunts() throws PsseModelException { return _list.getShunts(_ndx); }
 	public SvcList getSvcs() throws PsseModelException { return _list.getSvcs(_ndx); }
 	public SwitchList getSwitches() throws PsseModelException {return _list.getSwitches(_ndx);}
+	
+	public BusList getBusesForType(BusTypeCode bustype) throws PsseModelException
+	{
+		return _list.getBusesForType(_ndx, bustype);
+	}
+	
+	public int[] getBusNdxsForType(BusTypeCode bustype) throws PsseModelException
+	{
+		return _list.getBusNdxsForType(_ndx, bustype);
+	}
 
+	public boolean isEnergized() throws PsseModelException {return _list.isEnergized(_ndx);}
+
+	public int getAngleRefBusNdx() throws PsseModelException {return _list.getAngleRefBusNdx(_ndx);}
 }

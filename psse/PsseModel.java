@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+
 import com.powerdata.openpa.tools.AbstractBaseObject;
 
 public class PsseModel
@@ -119,6 +120,7 @@ public class PsseModel
 	}
 	public String getURI() {return _uri;}
 	public void setURI(String uri) {_uri = uri;}
+
 }	
 
 

@@ -40,9 +40,9 @@ public class SparseMatrixFactorizer
 		eliminate(matrix, saveBusNdx);
 	}
 
-	void eliminate(LinkNet matrix, int[] saveBusNdx)
+	void eliminate(LinkNet net, int[] saveBusNdx)
 	{
-		LinkNet net = matrix.clone();
+//		LinkNet net = matrix.clone();
 		NodeCounts nc = new NodeCounts(net, saveBusNdx);
 		int iord = 0, nbus = nc.getNextBusNdx();
 		while (nbus != -1)
