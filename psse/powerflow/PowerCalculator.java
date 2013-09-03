@@ -6,33 +6,27 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
-import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.GenList;
-import com.powerdata.openpa.psse.ListDumper;
 import com.powerdata.openpa.psse.Load;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.OneTermDev;
-import com.powerdata.openpa.psse.OneTermDevList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
-import com.powerdata.openpa.psse.powerflow.MismatchReport.MismatchReporter;
 import com.powerdata.openpa.psseraw.Psse2CSV;
 import com.powerdata.openpa.psseraw.PsseHeader;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.PComplex;
 
 public class PowerCalculator
 {
@@ -287,9 +281,10 @@ public class PowerCalculator
 		
 		PsseModel model = PsseModel.OpenInput("pssecsv:path="+csvdir);
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
-		MismatchReport mmdbg = new MismatchReport(model);
-		PowerCalculator pcalc = new PowerCalculator(model, mmdbg);
+		MismatchReport mmr = new MismatchReport(model, mmout);
+		PowerCalculator pcalc = new PowerCalculator(model, mmr);
 		float[][] mm = pcalc.calculateMismatches(pcalc.getCaseVoltages());
+		mmr.report();
 		mmout.close();
 	}
 
@@ -309,50 +304,3 @@ public class PowerCalculator
 	
 }
 
-class CsvMismatchReporter implements MismatchReporter
-{
-	PrintWriter _out;
-	BusList _buses;
-	OneTermDevList _otdevs;
-	ACBranchList _acbr;
-	
-	public CsvMismatchReporter(PrintWriter out, PsseModel model) throws PsseModelException
-	{
-		_buses = model.getBuses();
-		_otdevs = model.getOneTermDevs();
-		_acbr = model.getBranches();
-		_out = out;
-		out.println("BusID,BusName,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
-	}
-	@Override
-	public void report(int bus, int[] acbranches, int[] onetermdevs) throws PsseModelException
-	{
-		Bus b = _buses.get(bus);
-		if (!b.isEnergized()) return;
-		Complex mm = b.getRTMismatch().mult(100f);
-		float mmm = Math.max(Math.abs(mm.re()), Math.abs(mm.im()));
-		
-		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,",
-				b.getObjectID(), b.getObjectName(), mm.re(), mm.im(), mmm);
-				
-//		for(int acbranch : acbranches)
-//		{
-//			ACBranch acb = _acbr.get(acbranch);
-//			int fbus = acb.getFromBus().getIndex();
-//			Complex s = ((fbus == bus) ? acb.getRTFromS() : acb.getRTToS()).mult(100f);
-//			_out.print(btmp);
-//			_out.format("\"%s\",\"%s\",%f,%f\n",
-//					acb.getObjectID(), acb.getObjectName(), s.re(), s.im());
-//		}
-//		
-//		for(int otdx : onetermdevs)
-//		{
-//			OneTermDev otd = _otdevs.get(otdx);
-//			Complex s = otd.getRTS().mult(100f);
-//			_out.print(btmp);
-//			_out.format("\"%s\",\"%s\",%f,%f\n",
-//					otd.getObjectID(), otd.getObjectName(), s.re(), s.im());
-//		}
-	}
-	
-}
