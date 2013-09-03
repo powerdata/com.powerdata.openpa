@@ -284,6 +284,7 @@ public class PowerCalculator
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		PowerCalculator pcalc = new PowerCalculator(model, mmr);
 		float[][] mm = pcalc.calculateMismatches(pcalc.getCaseVoltages());
+		mmr.setMismatches(mm[0], mm[1]);
 		mmr.report();
 		mmout.close();
 	}

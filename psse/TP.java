@@ -24,22 +24,33 @@ public class TP
 		LinkNet net = configureNetwork(model);
 		_groups = net.findGroups();
 		int nisland = _groups.length;
+		
 		_energized = new boolean[nisland];
 		_angrefbus = new int[nisland];
 		_loadbus = new int[nisland][];
 		_genbus = new int[nisland][];
 		Arrays.fill(_angrefbus, -1);
 		BusList buses = model.getBuses();
-		_bustype = new BusTypeCode[buses.size()];
+		int nbus = buses.size();
+		_bustype = new BusTypeCode[nbus];
 		Arrays.fill(_bustype, BusTypeCode.Load);
-		float[] maxgen = new float[nisland];
-//		int[] genbuscnt = new int[nisland];
-		
-		for(int i=0; i < buses.size(); ++i)
+		float[] maxgen = new float[nbus];
+
+		for(int i=0; i < nbus; ++i)
 		{
 			if (net.getConnectionCount(i)==0)
 			{
 				_bustype[i] = BusTypeCode.Isolated;
+			}
+		}
+
+		_bus2island = new int[nbus];
+		Arrays.fill(_bus2island, -1);
+		for (int igrp=0; igrp < _groups.length; ++igrp)
+		{
+			for(int gbus : _groups[igrp])
+			{
+				_bus2island[gbus] = igrp;
 			}
 		}
 		
@@ -58,7 +69,7 @@ public class TP
 				{
 					_bustype[busndx] = BusTypeCode.Gen;
 					maxgen[busndx] += g.getPT();
-					if (maxgen[busndx] > maxgen[_angrefbus[island]])
+					if (_angrefbus[island] == -1 || maxgen[busndx] > maxgen[_angrefbus[island]])
 							_angrefbus[island] = busndx;
 				}
 			}
