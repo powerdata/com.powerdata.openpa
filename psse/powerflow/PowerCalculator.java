@@ -125,7 +125,12 @@ public class PowerCalculator
 //		pw.close();
 //	}
 //	
-	public float[][] calculateMismatches(float[][] v)
+	public float[][] calculateMismatches(float[][] v) throws PsseModelException
+	{
+		return calculateMismatches(v[0], v[1]);
+	}
+	
+	public float[][] calculateMismatches(float[] va, float[] vm)
 			throws PsseModelException
 	{
 		BusList blist = _model.getBuses();
@@ -134,7 +139,7 @@ public class PowerCalculator
 		LoadList ldlist = _model.getLoads();
 		GenList genlist = _model.getGenerators();
 		
-		applyBranches(pmm, qmm, calcACBranchFlows(v[0], v[1]));
+		applyBranches(pmm, qmm, calcACBranchFlows(va, vm));
 		applyShunts(qmm, calcShunts(), _model.getShunts());
 		applyShunts(qmm, calcSVCs(), _model.getSvcs());
 		for(Load l : ldlist)
@@ -283,13 +288,13 @@ public class PowerCalculator
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		PowerCalculator pcalc = new PowerCalculator(model, mmr);
-		float[][] mm = pcalc.calculateMismatches(pcalc.getCaseVoltages());
+		float[][] mm = pcalc.calculateMismatches(pcalc.getRTVoltages());
 		mmr.setMismatches(mm[0], mm[1]);
 		mmr.report();
 		mmout.close();
 	}
 
-	public float[][] getCaseVoltages() throws PsseModelException
+	public float[][] getRTVoltages() throws PsseModelException
 	{
 		BusList blist = _model.getBuses();
 		int nbus = blist.size();

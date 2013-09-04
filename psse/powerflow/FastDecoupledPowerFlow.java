@@ -18,6 +18,8 @@ import com.powerdata.openpa.tools.SparseBMatrix;
 
 public class FastDecoupledPowerFlow
 {
+	public static final float _Ptol = 0.005f;
+	public static final float _Qtol = 0.005f;
 	PsseModel _model;
 	FactorizedBMatrix _bp, _bpp;
 	SparseBMatrix _prepbpp;
@@ -36,24 +38,54 @@ public class FastDecoupledPowerFlow
 	public void runPowerFlow() throws PsseModelException
 	{
 		int itermax = 40;
-		boolean[] cvg = new boolean[_hotislands.length];
+//		boolean[] cvg = new boolean[_hotislands.length];
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
-		float[] pmm = new float[nbus], qmm = new float[nbus];
-		for(int i=0; i < nbus; ++i)
-		{
-			
-		}
+
+		PowerCalculator pcalc = new PowerCalculator(_model);
 		
+		float[][] rtv = pcalc.getRTVoltages();
+		float[] va = rtv[0];
+		float[] vm = rtv[1];
 		
+		IslandList islandlist = _model.getIslands();
+
 		for(int iiter=0; iiter < itermax; ++iiter)
 		{
-			
+			float[][] mm = pcalc.calculateMismatches(rtv);
+			boolean conv = true;
+			for(int ihot=0; ihot < _hotislands.length; ++ihot)
+			{
+				Island island = islandlist.get(_hotislands[ihot]);
+				int[] ldbus = island.getBusNdxsForType(BusTypeCode.Load);
+				int[] genbus = island.getBusNdxsForType(BusTypeCode.Gen);
+				if (conv) conv &= testConverged(mm[0], ldbus, _Ptol);
+				if (conv) conv &= testConverged(mm[0], genbus, _Ptol);
+				if (conv) conv &= testConverged(mm[1], ldbus, _Qtol);
+				if (conv) return;
+			}
+
+			float[] dp = _bp.solve(mm[0]);
+			float[] dq = _bp.solve(mm[1]);
+			for(int i=0; i < nbus; ++i)
+			{
+				va[i] += dp[i];
+				vm[i] += dq[i];
+			}
+			mm = pcalc.calculateMismatches(va, vm);
 		}
-		
-		
 	}
 	
+
+	boolean testConverged(float[] mm, int[] buses, float tol)
+	{
+		for(int b : buses)
+		{
+			if (Math.abs(mm[b]) > tol) return false;
+		}
+		return true;
+	}
+
 	void setupBusTypes() throws PsseModelException
 	{
 		IslandList islands = _model.getIslands();
@@ -140,4 +172,10 @@ public class FastDecoupledPowerFlow
 		_bpp = _prepbpp.factorize();
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/5bustest.raw");
+		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
+		pf.runPowerFlow();
+	}
 }

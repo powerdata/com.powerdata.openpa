@@ -181,12 +181,11 @@ public class SimpleCSV
 	}
 	public void load(String filename) throws IOException
 	{
-		FileInputStream in = new FileInputStream(filename);
-		load(in);
-		in.close();
+		load(new File(filename));
 	}
 	public void load(File file) throws IOException
 	{
+		if (!file.exists()) return;
 		FileInputStream in = new FileInputStream(file);
 		load(in);
 		in.close();

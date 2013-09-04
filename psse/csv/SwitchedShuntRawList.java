@@ -1,6 +1,8 @@
 package com.powerdata.openpa.psse.csv;
 
+import java.io.File;
 import java.io.IOException;
+
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -26,7 +28,7 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	{
 		super(eq);
 		_eq = eq;
-		String dbfile = _eq.getDir().getPath() + "/SwitchedShunt.csv";
+		File dbfile = new File(_eq.getDir(), "SwitchedShunt.csv");
 		try
 		{
 			SimpleCSV swsh = new SimpleCSV(dbfile);
