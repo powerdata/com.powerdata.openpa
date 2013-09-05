@@ -73,7 +73,7 @@ public class MismatchReport
 	
 	public void report() throws Exception
 	{
-		_out.println("BusID,BusName,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
+		_out.println("BusID,BusName,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
 		for (int i=0; i < _nbus; ++i)
 		{
 			_report(i, _brnet.findBranches(i), _otnet.findBranches(i));
@@ -89,8 +89,8 @@ public class MismatchReport
 		ACBranchList acbr = _model.getBranches();
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
 
-		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,",
-				b.getObjectID(), b.getObjectName(), _pmm[i], _qmm[i], mmm);
+		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,%f,%f,",
+				b.getObjectID(), b.getObjectName(), _va[i], _vm[i], _pmm[i], _qmm[i], mmm);
 		for(int acbranch : branches)
 		{
 			ACBranch acb = acbr.get(acbranch);

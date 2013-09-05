@@ -1,5 +1,9 @@
 package com.powerdata.openpa.psse.powerflow;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -37,12 +41,17 @@ public class FastDecoupledPowerFlow
 
 	public void runPowerFlow() throws PsseModelException
 	{
+		runPowerFlow(null);
+	}
+	
+	public void runPowerFlow(MismatchReport mmr) throws PsseModelException
+	{
 		int itermax = 40;
 //		boolean[] cvg = new boolean[_hotislands.length];
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
 
-		PowerCalculator pcalc = new PowerCalculator(_model);
+		PowerCalculator pcalc = (mmr==null)? new PowerCalculator(_model) : new PowerCalculator(_model, mmr);
 		
 		float[][] rtv = pcalc.getRTVoltages();
 		float[] va = rtv[0];
@@ -174,8 +183,13 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/5bustest.raw");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw");
+		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
+		MismatchReport mmr = new MismatchReport(model, mmout);
+		
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
-		pf.runPowerFlow();
+		pf.runPowerFlow(mmr);
+		mmr.report();
+		mmout.close();
 	}
 }

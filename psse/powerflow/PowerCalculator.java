@@ -160,6 +160,7 @@ public class PowerCalculator
 				qmm[bndx] += g.getRTQ();
 			}
 		}
+		if (_dbg != null) _dbg.setMismatches(pmm, qmm);
 		return new float[][] {pmm, qmm};
 	}
 
@@ -288,8 +289,7 @@ public class PowerCalculator
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		PowerCalculator pcalc = new PowerCalculator(model, mmr);
-		float[][] mm = pcalc.calculateMismatches(pcalc.getRTVoltages());
-		mmr.setMismatches(mm[0], mm[1]);
+		pcalc.calculateMismatches(pcalc.getRTVoltages());
 		mmr.report();
 		mmout.close();
 	}
