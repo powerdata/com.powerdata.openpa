@@ -57,14 +57,8 @@ public abstract class GenList extends PsseBaseList<Gen>
 		}
 	}
 
-	
-	//	/** get case complex power */
-//	public Complex getS(int ndx) throws PsseModelException
-//	{
-//		return new Complex(PAMath.mw2pu(getPG(ndx)),
-//				PAMath.mvar2pu(getQG(ndx)));
-//	}
-//
+	public GenType getType(int ndx) throws PsseModelException {return GenType.Unknown;}
+
 	/** reactive power limits */
 	public Limits getReactiveLimits(int ndx) throws PsseModelException
 	{

@@ -34,6 +34,7 @@ public class Gen extends PsseBaseObject implements OneTermDev
 //	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	public GenType getGenType() throws PsseModelException {return _list.getType(_ndx);}
 
 	/* Raw PSS/e methods */
 	
