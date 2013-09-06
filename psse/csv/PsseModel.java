@@ -30,6 +30,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	ShuntList	_shunts;
 	SvcList	_svcs;
 	TP _tp;
+	IslandList _islands;
 
 	public PsseModel(String parms) throws PsseModelException
 	{
@@ -191,6 +192,13 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	public BusTypeCode getBusType(int node) throws PsseModelException
 	{
 		return _tp.getBusType(node);
+	}
+
+	@Override
+	public IslandList getIslands() throws PsseModelException
+	{
+		if (_islands == null) _islands = new IslandList(this, _tp);
+		return _islands;
 	}
 	
 }

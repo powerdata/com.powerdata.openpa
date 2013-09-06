@@ -12,7 +12,9 @@ import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.GenList;
 import com.powerdata.openpa.psse.Load;
@@ -153,11 +155,14 @@ public class PowerCalculator
 		}
 		for(Gen g : genlist)
 		{
-			if (g.isInSvc())
+			Bus b = g.getBus();
+			BusTypeCode btc = b.getBusType();
+			if (g.isInSvc() && btc != BusTypeCode.Slack)
 			{
-				int bndx = g.getBus().getIndex();
+				int bndx = b.getIndex();
 				pmm[bndx] += g.getRTP();
-				qmm[bndx] += g.getRTQ();
+				if (btc == BusTypeCode.Load)
+					qmm[bndx] += g.getRTQ();
 			}
 		}
 		if (_dbg != null) _dbg.setMismatches(pmm, qmm);

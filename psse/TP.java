@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -35,45 +36,50 @@ public class TP
 		_bustype = new BusTypeCode[nbus];
 		Arrays.fill(_bustype, BusTypeCode.Load);
 		float[] maxgen = new float[nbus];
+		ArrayList<Integer> ldbus = new ArrayList<>(), genbus = new ArrayList<>();
 
-		for(int i=0; i < nbus; ++i)
-		{
-			if (net.getConnectionCount(i)==0)
-			{
-				_bustype[i] = BusTypeCode.Isolated;
-			}
-		}
-
-		_bus2island = new int[nbus];
-		Arrays.fill(_bus2island, -1);
-		for (int igrp=0; igrp < _groups.length; ++igrp)
-		{
-			for(int gbus : _groups[igrp])
-			{
-				_bus2island[gbus] = igrp;
-			}
-		}
+		//TODO:  build _loadbus and _genbus
+		throw new UnsupportedOperationException();
 		
-		for(Gen g : model.getGenerators())
-		{
-			if (g.isInSvc())
-			{
-				int busndx = g.getBus().getIndex();
-				int island = _bus2island[busndx];
-				if (!_energized[island])
-				{
-					_energized[island] = true;
-				}
-				if ((g.getQT() - g.getQB()) > 1f
-						&& _bustype[busndx] == BusTypeCode.Load)
-				{
-					_bustype[busndx] = BusTypeCode.Gen;
-					maxgen[busndx] += g.getPT();
-					if (_angrefbus[island] == -1 || maxgen[busndx] > maxgen[_angrefbus[island]])
-							_angrefbus[island] = busndx;
-				}
-			}
-		}
+//		_bus2island = new int[nbus];
+//		Arrays.fill(_bus2island, -1);
+//		for (int igrp=0; igrp < _groups.length; ++igrp)
+//		{
+//			for(int gbus : _groups[igrp])
+//			{
+//				_bus2island[gbus] = igrp;
+//			}
+//		}
+//		
+//		for(int i=0; i < nbus; ++i)
+//		{
+//			if (net.getConnectionCount(i)==0)
+//			{
+//				_bustype[i] = BusTypeCode.Isolated;
+//			}
+//		}
+//
+//		for(Gen g : model.getGenerators())
+//		{
+//			if (g.isInSvc())
+//			{
+//				int busndx = g.getBus().getIndex();
+//				int island = _bus2island[busndx];
+//				if (!_energized[island])
+//				{
+//					_energized[island] = true;
+//				}
+//				if ((g.getQT() - g.getQB()) > 1f
+//						&& _bustype[busndx] == BusTypeCode.Load)
+//				{
+//					_bustype[busndx] = BusTypeCode.Gen;
+//					maxgen[busndx] += g.getPT();
+//					if (_angrefbus[island] == -1 || maxgen[busndx] > maxgen[_angrefbus[island]])
+//							_angrefbus[island] = busndx;
+//				}
+//			}
+//		}
+//		
 	}
 
 	LinkNet configureNetwork(PsseModel model) throws PsseModelException

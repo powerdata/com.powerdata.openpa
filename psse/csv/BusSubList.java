@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.PsseModelException;
 
 public class BusSubList extends com.powerdata.openpa.psse.BusSubList
@@ -25,4 +26,11 @@ public class BusSubList extends com.powerdata.openpa.psse.BusSubList
 		return _csvmodel.getIsland(ndx);
 	}
 
+	@Override
+	public BusTypeCode getBusType(int ndx) throws PsseModelException
+	{
+		return _csvmodel.getBusType(ndx);
+	}
+
+	
 }

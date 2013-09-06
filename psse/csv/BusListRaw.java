@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TransformerRaw;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 /**
@@ -34,8 +32,6 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 	float _va[];
 	float _gl[];
 	float _bl[];
-	
-	ComplexList _mm;
 	
 	public BusListRaw(PsseRawModel model) throws PsseModelException
 	{
@@ -66,7 +62,6 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
 			}
 			
-			_mm = new ComplexList(_size, true);
 		}
 		catch(Exception e)
 		{
@@ -169,22 +164,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 		_gl = Arrays.copyOf(_gl, newsz);
 		_bl = Arrays.copyOf(_bl, newsz);
 
-		_mm.ensureCapacity(newsz);
-		_mm.setSize(newsz);
-
 		_size = newsz;
-	}
-	
-	@Override
-	public void setRTMismatch(int ndx, Complex mismatch)
-			throws PsseModelException
-	{
-		_mm.set(ndx, mismatch);
-	}
-	@Override
-	public Complex getRTMismatch(int ndx) throws PsseModelException
-	{
-		return _mm.get(ndx);
 	}
 	
 }

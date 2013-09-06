@@ -8,10 +8,13 @@ import java.util.Arrays;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
+import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
+import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Island;
 import com.powerdata.openpa.psse.IslandList;
+import com.powerdata.openpa.psse.LogSev;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Shunt;
@@ -39,29 +42,60 @@ public class FastDecoupledPowerFlow
 		
 	}
 
-	public void runPowerFlow() throws PsseModelException
+	public void runPowerFlow(VoltageSource vsrc) throws PsseModelException
 	{
-		runPowerFlow(null);
+		runPowerFlow(null, vsrc);
 	}
 	
-	public void runPowerFlow(MismatchReport mmr) throws PsseModelException
+	public void runPowerFlow(MismatchReport mmr, VoltageSource vsrc) throws PsseModelException
 	{
 		int itermax = 40;
-//		boolean[] cvg = new boolean[_hotislands.length];
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
 
-		PowerCalculator pcalc = (mmr==null)? new PowerCalculator(_model) : new PowerCalculator(_model, mmr);
-		
-		float[][] rtv = pcalc.getRTVoltages();
-		float[] va = rtv[0];
-		float[] vm = rtv[1];
-		
+		PowerCalculator pcalc = (mmr == null) ? new PowerCalculator(_model)
+				: new PowerCalculator(_model, mmr);
+		float[] va=null, vm=null;
+
+		switch(vsrc)
+		{
+			case Flat:
+				va = new float[nbus];
+				vm = flatMag();
+				break;
+				
+			case Case:
+				throw new UnsupportedOperationException("Not yet implemented");
+				
+			case RealTime:
+				float[][] rtv = pcalc.getRTVoltages();
+				va = rtv[0];
+				vm = rtv[1];
+		}
+
+		for(Gen g : _model.getGenerators())
+		{
+			Bus b = g.getBus();
+			if (b.getBusType() == BusTypeCode.Gen)
+			{
+				//TODO:  resolve multiple setpoints if found
+				int bndx = b.getIndex();
+				if (vm[bndx] > 0f && vm[bndx] != g.getVS())
+				{
+					_model.log(LogSev.Error, b, "Generators have different voltage setpoints on same bus");
+				}
+				else
+				{
+					vm[bndx] = g.getVS();
+				}
+			}
+		}
+
 		IslandList islandlist = _model.getIslands();
 
 		for(int iiter=0; iiter < itermax; ++iiter)
 		{
-			float[][] mm = pcalc.calculateMismatches(rtv);
+			float[][] mm = pcalc.calculateMismatches(va, vm);
 			boolean conv = true;
 			for(int ihot=0; ihot < _hotislands.length; ++ihot)
 			{
@@ -85,6 +119,22 @@ public class FastDecoupledPowerFlow
 		}
 	}
 	
+
+	float[] flatMag() throws PsseModelException
+	{
+		IslandList islands = _model.getIslands();
+		float[] vm = new float[_model.getBuses().size()];
+		for(int hot : _hotislands)
+		{
+			Island island = islands.get(hot);
+			for(int b : island.getBusNdxsForType(BusTypeCode.Load))
+			{
+				vm[b] = 1;
+			}
+		}
+		
+		return vm;
+	}
 
 	boolean testConverged(float[] mm, int[] buses, float tol)
 	{
@@ -183,12 +233,12 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/4bustest.raw");
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
-		pf.runPowerFlow(mmr);
+		pf.runPowerFlow(mmr, VoltageSource.Flat);
 		mmr.report();
 		mmout.close();
 	}
