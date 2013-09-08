@@ -120,6 +120,14 @@ public class PsseModel
 	}
 	public String getURI() {return _uri;}
 	public void setURI(String uri) {_uri = uri;}
+	
+	public int[] getBusNdxForType(BusTypeCode bustype) throws PsseModelException {return new int[0];}
+
+	public BusList getBusesForType(BusTypeCode bustype)
+			throws PsseModelException
+	{
+		return new BusSubList(getBuses(), getBusNdxForType(bustype));
+	}
 
 }	
 

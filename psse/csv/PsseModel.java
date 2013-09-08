@@ -7,7 +7,6 @@ import java.util.List;
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
-import com.powerdata.openpa.psse.BusSubList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -108,7 +107,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			}
 		}
 		
-		_buses = new BusSubList(rbuses, busndx);
+		_buses = new BusSubList(this, rbuses, busndx);
 		_transformers = new TransformerSubList(_buses, xfrlist, convertIndex(keeptx));
 		_lines = new LineSubList(_buses, rlines, convertIndex(keepln));
 		_phaseshifters = new PhaseShifterList(_buses, pslist);

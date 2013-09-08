@@ -18,68 +18,88 @@ public class TP
 	int[][] _groups;
 	BusTypeCode[] _bustype;
 	int[] _angrefbus;
-	int[][] _loadbus, _genbus; 
+	int[] _loadbus, _genbus; 
 	
 	public TP(PsseModel model) throws PsseModelException
 	{
+		BusList buses = model.getBuses();
+		int nbus = buses.size();
 		LinkNet net = configureNetwork(model);
 		_groups = net.findGroups();
 		int nisland = _groups.length;
 		
 		_energized = new boolean[nisland];
 		_angrefbus = new int[nisland];
-		_loadbus = new int[nisland][];
-		_genbus = new int[nisland][];
+		_loadbus = new int[nbus];
+		_genbus = new int[nbus];
 		Arrays.fill(_angrefbus, -1);
-		BusList buses = model.getBuses();
-		int nbus = buses.size();
 		_bustype = new BusTypeCode[nbus];
-		Arrays.fill(_bustype, BusTypeCode.Load);
+		Arrays.fill(_bustype, BusTypeCode.Unknown);
 		float[] maxgen = new float[nbus];
-		ArrayList<Integer> ldbus = new ArrayList<>(), genbus = new ArrayList<>();
 
-		//TODO:  build _loadbus and _genbus
-		throw new UnsupportedOperationException();
+		_bus2island = new int[nbus];
+		Arrays.fill(_bus2island, -1);
+		for (int igrp=0; igrp < _groups.length; ++igrp)
+		{
+			for(int gbus : _groups[igrp])
+			{
+				_bus2island[gbus] = igrp;
+			}
+		}
 		
-//		_bus2island = new int[nbus];
-//		Arrays.fill(_bus2island, -1);
-//		for (int igrp=0; igrp < _groups.length; ++igrp)
-//		{
-//			for(int gbus : _groups[igrp])
-//			{
-//				_bus2island[gbus] = igrp;
-//			}
-//		}
-//		
-//		for(int i=0; i < nbus; ++i)
-//		{
-//			if (net.getConnectionCount(i)==0)
-//			{
-//				_bustype[i] = BusTypeCode.Isolated;
-//			}
-//		}
-//
-//		for(Gen g : model.getGenerators())
-//		{
-//			if (g.isInSvc())
-//			{
-//				int busndx = g.getBus().getIndex();
-//				int island = _bus2island[busndx];
-//				if (!_energized[island])
-//				{
-//					_energized[island] = true;
-//				}
-//				if ((g.getQT() - g.getQB()) > 1f
-//						&& _bustype[busndx] == BusTypeCode.Load)
-//				{
-//					_bustype[busndx] = BusTypeCode.Gen;
-//					maxgen[busndx] += g.getPT();
-//					if (_angrefbus[island] == -1 || maxgen[busndx] > maxgen[_angrefbus[island]])
-//							_angrefbus[island] = busndx;
-//				}
-//			}
-//		}
-//		
+		for(int i=0; i < nbus; ++i)
+		{
+			if (net.getConnectionCount(i)==0)
+			{
+				_bustype[i] = BusTypeCode.Isolated;
+			}
+		}
+
+		for(Gen g : model.getGenerators())
+		{
+			if (g.isInSvc())
+			{
+				int busndx = g.getBus().getIndex();
+				int island = _bus2island[busndx];
+				if (!_energized[island])
+				{
+					_energized[island] = true;
+				}
+				if ((g.getQT() - g.getQB()) > 1f
+						&& _bustype[busndx] == BusTypeCode.Unknown)
+				{
+					_bustype[busndx] = BusTypeCode.Gen;
+					
+					maxgen[busndx] += g.getPT();
+					if (_angrefbus[island] == -1 || maxgen[busndx] > maxgen[_angrefbus[island]])
+							_angrefbus[island] = busndx;
+				}
+			}
+		}
+
+		int[] genbus = new int[nbus];
+		int[] loadbus = new int[nbus];
+		int ngen=0, nload=0;
+		for (int i=0; i < nbus; ++i)
+		{
+			int island = _bus2island[i];
+			
+			if (_energized[island])
+			{
+				if (_bustype[i] == BusTypeCode.Gen)
+				{
+					if (_angrefbus[island] != i)
+						genbus[ngen++] = i;
+				}
+				else
+				{
+					_bustype[i] = BusTypeCode.Load;
+					loadbus[nload++] = i;
+				}
+			}
+		}
+		_genbus = Arrays.copyOf(genbus, ngen);
+		_loadbus = Arrays.copyOf(loadbus, nload);
 	}
 
 	LinkNet configureNetwork(PsseModel model) throws PsseModelException
@@ -138,12 +158,12 @@ public class TP
 		return _bustype[bus];
 	}
 
-	public int[] getBusNdxsForType(int ndx, BusTypeCode bustype)
+	public int[] getBusNdxsForType(BusTypeCode bustype)
 	{
 		switch(bustype)
 		{
-			case Load: return _loadbus[ndx];
-			case Gen: return _genbus[ndx];
+			case Load: return _loadbus;
+			case Gen: return _genbus;
 			default: return new int[0];
 		}
 	}
