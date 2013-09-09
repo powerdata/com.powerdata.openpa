@@ -199,6 +199,13 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		if (_islands == null) _islands = new IslandList(this, _tp);
 		return _islands;
 	}
-	
+
+	@Override
+	public int[] getBusNdxForType(BusTypeCode bustype)
+			throws PsseModelException
+	{
+		return _tp.getBusNdxsForType(bustype);
+	}
+
 }
 

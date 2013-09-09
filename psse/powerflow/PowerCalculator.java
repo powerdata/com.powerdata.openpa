@@ -165,7 +165,11 @@ public class PowerCalculator
 					qmm[bndx] += g.getRTQ();
 			}
 		}
-		if (_dbg != null) _dbg.setMismatches(pmm, qmm);
+		if (_dbg != null)
+		{
+			_dbg.setMismatches(pmm, qmm);
+			_dbg.setVoltages(va, vm);
+		}
 		return new float[][] {pmm, qmm};
 	}
 
@@ -309,7 +313,6 @@ public class PowerCalculator
 			va[i] = blist.getRTVAng(i);
 			vm[i] = blist.getRTVMag(i);
 		}
-		if (_dbg != null) _dbg.setVoltages(va, vm);
 		return new float[][] {va, vm};
 	}
 	

@@ -114,17 +114,9 @@ public class FastDecoupledPowerFlow
 
 	float[] flatMag() throws PsseModelException
 	{
-		IslandList islands = _model.getIslands();
 		float[] vm = new float[_model.getBuses().size()];
-		for(int hot : _hotislands)
-		{
-			Island island = islands.get(hot);
-			for(int b : island.getBusNdxsForType(BusTypeCode.Load))
-			{
-				vm[b] = 1;
-			}
-		}
-		
+		for(int b : _model.getBusNdxForType(BusTypeCode.Load))
+			vm[b] = 1f;
 		return vm;
 	}
 
@@ -189,13 +181,19 @@ public class FastDecoupledPowerFlow
 			bselfbpp[tbus] += (y.im() - br.getToBcm());
 		}
 
-		int[] pq = _model.getBusNdxForType(BusTypeCode.Load);
-		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
+//		int[] pq = _model.getBusNdxForType(BusTypeCode.Load);
 		
-		int[] pbus = Arrays.copyOf(pq, pq.length+pv.length);
-		System.arraycopy(pv, 0, pbus, pq.length, pv.length);
-		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), pbus, bbranchbp, bselfbp);
-		_prepbpp = new SparseBMatrix(net, pv, bbranchbpp, bselfbpp);
+//		int[] pbus = Arrays.copyOf(pq, pq.length+pv.length);
+//		System.arraycopy(pv, 0, pbus, pq.length, pv.length);
+
+		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
+		int[] slack = _model.getBusNdxForType(BusTypeCode.Slack);
+		int[] bppbus = Arrays.copyOf(pv, pv.length+slack.length);
+		System.arraycopy(slack, 0, bppbus, pv.length, slack.length);
+		
+		
+		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), _model.getBusNdxForType(BusTypeCode.Slack), bbranchbp, bselfbp);
+		_prepbpp = new SparseBMatrix(net, _model.getBusNdxForType(bustype), bbranchbpp, bselfbpp);
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();

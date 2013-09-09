@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -17,8 +16,9 @@ public class TP
 	boolean[] _energized;
 	int[][] _groups;
 	BusTypeCode[] _bustype;
-	int[] _angrefbus;
-	int[] _loadbus, _genbus; 
+	int[] _arefbyisland;
+	int[] _loadbus, _genbus, _arefbus; 
+	int[][] _pqbyisland, _pvbyisland;
 	
 	public TP(PsseModel model) throws PsseModelException
 	{
@@ -29,10 +29,8 @@ public class TP
 		int nisland = _groups.length;
 		
 		_energized = new boolean[nisland];
-		_angrefbus = new int[nisland];
-		_loadbus = new int[nbus];
-		_genbus = new int[nbus];
-		Arrays.fill(_angrefbus, -1);
+		_arefbyisland = new int[nisland];
+		Arrays.fill(_arefbyisland, -1);
 		_bustype = new BusTypeCode[nbus];
 		Arrays.fill(_bustype, BusTypeCode.Unknown);
 		float[] maxgen = new float[nbus];
@@ -55,6 +53,7 @@ public class TP
 			}
 		}
 
+		int nener = 0;
 		for(Gen g : model.getGenerators())
 		{
 			if (g.isInSvc())
@@ -64,6 +63,7 @@ public class TP
 				if (!_energized[island])
 				{
 					_energized[island] = true;
+					++nener;
 				}
 				if ((g.getQT() - g.getQB()) > 1f
 						&& _bustype[busndx] == BusTypeCode.Unknown)
@@ -71,15 +71,16 @@ public class TP
 					_bustype[busndx] = BusTypeCode.Gen;
 					
 					maxgen[busndx] += g.getPT();
-					if (_angrefbus[island] == -1 || maxgen[busndx] > maxgen[_angrefbus[island]])
-							_angrefbus[island] = busndx;
+					if (_arefbyisland[island] == -1 || maxgen[busndx] > maxgen[_arefbyisland[island]])
+							_arefbyisland[island] = busndx;
 				}
 			}
 		}
 
 		int[] genbus = new int[nbus];
 		int[] loadbus = new int[nbus];
-		int ngen=0, nload=0;
+		int ngen=0, nload=0, iref=0;
+		_arefbus = new int[nener];
 		for (int i=0; i < nbus; ++i)
 		{
 			int island = _bus2island[i];
@@ -88,8 +89,15 @@ public class TP
 			{
 				if (_bustype[i] == BusTypeCode.Gen)
 				{
-					if (_angrefbus[island] != i)
+					if (_arefbyisland[island] != i)
+					{
 						genbus[ngen++] = i;
+					}
+					else
+					{
+						_arefbus[iref++] = i;
+						_bustype[i] = BusTypeCode.Slack;
+					}
 				}
 				else
 				{
@@ -164,18 +172,41 @@ public class TP
 		{
 			case Load: return _loadbus;
 			case Gen: return _genbus;
+			case Slack: return _arefbus;
 			default: return new int[0];
 		}
 	}
 	
 	public int[] getBusNdxsForType(int islandndx, BusTypeCode bustype)
 	{
-		//TODO
-		return null;
+		if (_energized[islandndx])
+		{
+			if (_pqbyisland == null)
+			{
+				analyzeIslandBustypes();
+			}
+			switch(bustype)
+			{
+				case Load: return _pqbyisland[islandndx];
+				case Gen: return _pvbyisland[islandndx];
+				default: return new int[0];
+			}
+		}
+		else
+		{
+			return new int[0];
+		}
 	}
+
+	void analyzeIslandBustypes()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	public int getAngleRefBusNdx(int ndx)
 	{
-		return _angrefbus[ndx];
+		return _arefbyisland[ndx];
 	}
 	
 }
