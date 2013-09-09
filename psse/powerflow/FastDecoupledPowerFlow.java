@@ -30,14 +30,12 @@ public class FastDecoupledPowerFlow
 	PsseModel _model;
 	FactorizedBMatrix _bp, _bpp;
 	SparseBMatrix _prepbpp;
-	int[] _pq, _pv, _angref, _hotislands;
+	int[] _hotislands;
 	
 	public FastDecoupledPowerFlow(PsseModel model) throws PsseModelException
 	{
 		_model = model;
-		
 		setupHotIslands();
-		setupBusTypes();
 		buildMatrices();
 		
 	}
@@ -91,22 +89,16 @@ public class FastDecoupledPowerFlow
 			}
 		}
 
-		IslandList islandlist = _model.getIslands();
-
+		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
+		int[] genbus = _model.getBusNdxForType(BusTypeCode.Gen);
 		for(int iiter=0; iiter < itermax; ++iiter)
 		{
 			float[][] mm = pcalc.calculateMismatches(va, vm);
-			boolean conv = true;
-			for(int ihot=0; ihot < _hotislands.length; ++ihot)
-			{
-				Island island = islandlist.get(_hotislands[ihot]);
-				int[] ldbus = island.getBusNdxsForType(BusTypeCode.Load);
-				int[] genbus = island.getBusNdxsForType(BusTypeCode.Gen);
-				if (conv) conv &= testConverged(mm[0], ldbus, _Ptol);
-				if (conv) conv &= testConverged(mm[0], genbus, _Ptol);
-				if (conv) conv &= testConverged(mm[1], ldbus, _Qtol);
-				if (conv) return;
-			}
+
+			boolean conv = testConverged(mm[0], ldbus, _Ptol);
+			if (conv) conv &= testConverged(mm[0], genbus, _Ptol);
+			if (conv) conv &= testConverged(mm[1], ldbus, _Qtol);
+			if (conv) return;
 
 			float[] dp = _bp.solve(mm[0]);
 			float[] dq = _bp.solve(mm[1]);
@@ -145,32 +137,6 @@ public class FastDecoupledPowerFlow
 		return true;
 	}
 
-	void setupBusTypes() throws PsseModelException
-	{
-		IslandList islands = _model.getIslands();
-		int npq=0, npv=0;
-		for(int ihot : _hotislands)
-		{
-			Island i = islands.get(ihot);
-			npq += i.getBusNdxsForType(BusTypeCode.Load).length;
-			npv += i.getBusNdxsForType(BusTypeCode.Gen).length;
-		}
-		
-		_pq = new int[npq];
-		_pv = new int[npv];
-		_angref = new int[_hotislands.length];
-		npq=0; npv=0;
-		
-		for(int i=0; i < _hotislands.length; ++i)
-		{
-			Island island = islands.get(_hotislands[i]);
-			int[] pq = island.getBusNdxsForType(BusTypeCode.Load);
-			int[] pv = island.getBusNdxsForType(BusTypeCode.Gen);
-			System.arraycopy(pq, 0, _pq, npq, pq.length);
-			System.arraycopy(pv, 0, _pv, npv, pv.length);
-			_angref[i] = island.getAngleRefBusNdx();
-		}
-	}
 
 	void setupHotIslands() throws PsseModelException
 	{
@@ -222,10 +188,14 @@ public class FastDecoupledPowerFlow
 			bselfbpp[fbus] += (y.im() - br.getFromBcm());
 			bselfbpp[tbus] += (y.im() - br.getToBcm());
 		}
-		int[] pbus = Arrays.copyOf(_pq, _pq.length+_pv.length);
-		System.arraycopy(_pv, 0, pbus, _pq.length, _pv.length);
+
+		int[] pq = _model.getBusNdxForType(BusTypeCode.Load);
+		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
+		
+		int[] pbus = Arrays.copyOf(pq, pq.length+pv.length);
+		System.arraycopy(pv, 0, pbus, pq.length, pv.length);
 		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), pbus, bbranchbp, bselfbp);
-		_prepbpp = new SparseBMatrix(net, _pq, bbranchbpp, bselfbpp);
+		_prepbpp = new SparseBMatrix(net, pv, bbranchbpp, bselfbpp);
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();

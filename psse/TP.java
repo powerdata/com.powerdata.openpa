@@ -168,6 +168,11 @@ public class TP
 		}
 	}
 	
+	public int[] getBusNdxsForType(int islandndx, BusTypeCode bustype)
+	{
+		//TODO
+		return null;
+	}
 	public int getAngleRefBusNdx(int ndx)
 	{
 		return _angrefbus[ndx];
