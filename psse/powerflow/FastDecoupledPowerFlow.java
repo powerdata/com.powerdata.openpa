@@ -192,8 +192,8 @@ public class FastDecoupledPowerFlow
 		System.arraycopy(slack, 0, bppbus, pv.length, slack.length);
 		
 		
-		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), _model.getBusNdxForType(BusTypeCode.Slack), bbranchbp, bselfbp);
-		_prepbpp = new SparseBMatrix(net, _model.getBusNdxForType(bustype), bbranchbpp, bselfbpp);
+		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
+		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
