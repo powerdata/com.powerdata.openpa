@@ -157,7 +157,7 @@ public class PowerCalculator
 		{
 			Bus b = g.getBus();
 			BusTypeCode btc = b.getBusType();
-			if (g.isInSvc() && btc != BusTypeCode.Slack)
+			if (g.isInSvc()/* && btc != BusTypeCode.Slack*/)
 			{
 				int bndx = b.getIndex();
 				pmm[bndx] += g.getRTP();

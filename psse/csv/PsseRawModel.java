@@ -30,6 +30,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	SvcRawList				_svcList;
 	LoadList			_loads;
 	GenList				_generatorList;
+	boolean				_issolved = true;
 
 	public PsseRawModel(String parms) throws PsseModelException
 	{
@@ -64,6 +65,8 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			_dir = new File(q.get("path")[0]);
 		}
+		String slvd = q.get("issolved")[0];
+		if (slvd != null) _issolved = Boolean.parseBoolean(slvd);
 		analyzeRawShunts();
 		analyzeRawTransformers();
 
@@ -197,6 +200,12 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	{
 		if (_generatorList == null) _generatorList = new GenList(this, getDir());
 		return _generatorList;
+	}
+
+
+	public boolean issolved()
+	{
+		return _issolved;
 	}
 
 

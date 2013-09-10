@@ -103,12 +103,13 @@ public class FastDecoupledPowerFlow
 
 			float[] dp = _bp.solve(mm[0]);
 			float[] dq = _bp.solve(mm[1]);
-			for(int i=0; i < nbus; ++i)
+			for(int b : ldbus)
 			{
-				va[i] += dp[i];
-				vm[i] += dq[i];
+				va[b] += dp[b];
+				vm[b] += dq[b];
 			}
-			mm = pcalc.calculateMismatches(va, vm);
+			for(int b : genbus)
+				va[b] += dp[b];
 		}
 	}
 	
@@ -197,7 +198,7 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/4bustest.raw");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/psm/src/com/powerdata/openpa/psse/powerflow/2bustest.raw&issolved=false");
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		

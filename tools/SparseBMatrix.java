@@ -24,14 +24,14 @@ public class SparseBMatrix
 			int[] cnodes = ebus.getRemainingNodes();
 			int[] elimbr = ebus.getElimBranches();
 			int ebusndx = ebus.getElimBusNdx();
-			for(int i=0; i < cnodes.length; ++i)
+			for(int i=0; i < cnodes.length; ++i, ++jbr)
 			{
-				for(int j=1; j < cnodes.length; ++j, ++jbr)
-				{
+//				for(int j=1; j < cnodes.length; ++j, ++jbr)
+//				{
 					_pnode[jbr] = ebusndx;
-					_qnode[jbr] = cnodes[j];
-					_elimbrndx[jbr] = elimbr[j];
-				}
+					_qnode[jbr] = cnodes[i];
+					_elimbrndx[jbr] = elimbr[i];
+//				}
 			}
 		}
 	}
