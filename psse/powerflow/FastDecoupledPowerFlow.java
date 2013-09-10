@@ -74,7 +74,8 @@ public class FastDecoupledPowerFlow
 		for(Gen g : _model.getGenerators())
 		{
 			Bus b = g.getBus();
-			if (b.getBusType() == BusTypeCode.Gen)
+			BusTypeCode btc = b.getBusType();
+			if (btc == BusTypeCode.Gen || btc == BusTypeCode.Slack)
 			{
 				//TODO:  resolve multiple setpoints if found
 				int bndx = b.getIndex();
@@ -180,11 +181,6 @@ public class FastDecoupledPowerFlow
 			bselfbpp[fbus] += (y.im() - br.getFromBcm());
 			bselfbpp[tbus] += (y.im() - br.getToBcm());
 		}
-
-//		int[] pq = _model.getBusNdxForType(BusTypeCode.Load);
-		
-//		int[] pbus = Arrays.copyOf(pq, pq.length+pv.length);
-//		System.arraycopy(pv, 0, pbus, pq.length, pv.length);
 
 		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
 		int[] slack = _model.getBusNdxForType(BusTypeCode.Slack);

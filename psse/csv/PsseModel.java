@@ -84,7 +84,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		
 		int nbr = rlines.size()+xfrlist.size()+pslist.size();
 		LinkNet elimlnet = new LinkNet();
-		elimlnet.ensureCapacity(rbuses.size(), nbr);
+		elimlnet.ensureCapacity(rbuses.size()-1, nbr);
 		ArrayList<Integer> keepln = new ArrayList<>(nbr);
 		ArrayList<Integer> keeptx = new ArrayList<>(nbr);
 		

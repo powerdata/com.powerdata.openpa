@@ -20,6 +20,13 @@ public class SparseMatrixFactorizer
 		public int[] getRemainingNodes() {return _n[_ndx];}
 		public int[] getElimBranches() {return _bfr[_ndx];}
 		public int[] getRemainingBranches() {return _btr[_ndx];}
+
+		@Override
+		public String toString()
+		{
+			return String.format("Bus: index=%d, elimpos=%d", _elimorder[_ndx], _ndx);
+		}
+		
 	}
 
 	int[][] _n;
@@ -56,9 +63,9 @@ public class SparseMatrixFactorizer
 			_bfr[nbus] = branches;
 			int itbr = 0;
 			int[] tbr = new int[nnd*(nnd-1)/2];
-			for(int i=0; i < nodes.length; ++i)
+			for(int i=0; i < nnd; ++i)
 			{
-				for(int j=i+1; j < nodes.length; ++j)
+				for(int j=i+1; j < nnd; ++j)
 				{
 					int br = net.findBranch(nodes[i], nodes[j]);
 					if (br == -1) br = net.addBranch(nodes[i], nodes[j]);
@@ -122,7 +129,7 @@ class NodeCounts
 	
 	public NodeCounts(LinkNet net, int[] saveBusNdx)
 	{
-		int ndcnt = net.getMaxBusNdx()+1;
+		int ndcnt = net.getMaxBusNdx();
 		_busconncnt = new int[ndcnt];
 		for(int i=0; i < ndcnt; ++i)
 		{
@@ -191,7 +198,7 @@ class NodeCounts
 					return busndx;
 //				}
 			}
-			++cnt;
+			_lowcount = ++cnt;
 		}
 		return -1;
 	}
