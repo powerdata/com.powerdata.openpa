@@ -54,13 +54,13 @@ public class SparseMatrixFactorizer
 		int iord = 0, nbus = nc.getNextBusNdx();
 		while (nbus != -1)
 		{
-			_elimorder[iord++] = nbus;
+			_elimorder[iord] = nbus;
 			int[][] cinfo = net.findConnections(nbus);
 			int[] nodes = cinfo[0], branches = cinfo[1];
 			for(int br : branches) net.eliminateBranch(br, true);
 			int nnd = nodes.length;
-			_n[nbus] = nodes;
-			_bfr[nbus] = branches;
+			_n[iord] = nodes;
+			_bfr[iord] = branches;
 			int itbr = 0;
 			int[] tbr = new int[nnd*(nnd-1)/2];
 			for(int i=0; i < nnd; ++i)
@@ -72,8 +72,9 @@ public class SparseMatrixFactorizer
 					tbr[itbr++] = br;
 				}
 			}
-			_btr[nbus] = tbr;
+			_btr[iord] = tbr;
 			nbus = nc.getNextBusNdx();
+			++iord;
 		}
 		_size = iord;
 		_factbrcnt = net.getBranchCount();

@@ -14,7 +14,7 @@ public class FactorizedBMatrix
 		_qnode = qnode;
 	}
 	
-	public float[] solve(float[] mismatches)
+	public float[] solve(float[] mismatches, int[][] buses)
 	{
 		float[] mm = mismatches.clone();
 		int nnd = _bself.length;
@@ -28,12 +28,17 @@ public class FactorizedBMatrix
 		
 		/* backward substitution */
 		float[] dx = new float[nnd];
-		for (int i=0; i < nnd; ++i)
+//		for(int[] buslist : buses)
+//		{
+//			for (int b : buslist)
+//			{
+//				dx[b] = mm[b] / _bself[b];
+//			}
+//		}
+		for(int i=nbr-1; i >= 0; --i)
 		{
-			dx[i] = mm[i] / _bself[i];
-		}
-		for(int i=_bbrofs.length-1; i >= 0; --i)
-		{
+			int pn = _pnode[i];
+			dx[pn] = mm[pn] / _bself[pn];
 			dx[_pnode[i]] += _bbrofs[i] *  dx[_qnode[i]];
 		}
 		

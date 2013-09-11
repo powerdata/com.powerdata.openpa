@@ -92,25 +92,37 @@ public class FastDecoupledPowerFlow
 
 		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
 		int[] genbus = _model.getBusNdxForType(BusTypeCode.Gen);
+		int[][] pqbus = new int[][] {ldbus, genbus};
+		int[][] pvbus = new int[][] {ldbus};
+		int niter=0;
 		for(int iiter=0; iiter < itermax; ++iiter)
 		{
 			float[][] mm = pcalc.calculateMismatches(va, vm);
 
-			boolean conv = testConverged(mm[0], ldbus, _Ptol);
-			if (conv) conv &= testConverged(mm[0], genbus, _Ptol);
-			if (conv) conv &= testConverged(mm[1], ldbus, _Qtol);
-			if (conv) return;
+			boolean conv = testConverged(mm[0], pqbus, _Ptol);
+			if (conv) conv &= testConverged(mm[1], pvbus, _Qtol);
+			if (conv) {niter = iiter; break;}
 
-			float[] dp = _bp.solve(mm[0]);
-			float[] dq = _bp.solve(mm[1]);
-			for(int b : ldbus)
+			float[] dp = _bp.solve(mm[0], pqbus);
+			for(int[] blist : pqbus)
 			{
-				va[b] += dp[b];
-				vm[b] += dq[b];
+				for(int b : blist)
+					va[b] += dp[b];
 			}
-			for(int b : genbus)
-				va[b] += dp[b];
+			mm = pcalc.calculateMismatches(va, vm);
+			
+			float[] dq = _bpp.solve(mm[1], pvbus);
+			for(int b : ldbus)
+				vm[b] += dq[b];
+//			for(int b : ldbus)
+//			{
+//				va[b] += dp[b];
+//				vm[b] += dq[b];
+//			}
+//			for(int b : genbus)
+//				va[b] += dp[b];
 		}
+		System.out.format("Converged in %d iterations\n", niter);
 	}
 	
 
@@ -122,11 +134,12 @@ public class FastDecoupledPowerFlow
 		return vm;
 	}
 
-	boolean testConverged(float[] mm, int[] buses, float tol)
+	boolean testConverged(float[] mm, int[][] buses, float tol)
 	{
-		for(int b : buses)
+		for(int[] blist : buses)
 		{
-			if (Math.abs(mm[b]) > tol) return false;
+			for (int b : blist)
+				if (Math.abs(mm[b]) > tol) return false;
 		}
 		return true;
 	}
@@ -178,9 +191,10 @@ public class FastDecoupledPowerFlow
 			bbranchbp[brx] -= bbp;
 			bselfbp[fbus] += bbp;
 			bselfbp[tbus] += bbp;
-			bbranchbpp[brx] -= y.im();
-			bselfbpp[fbus] += (y.im() - br.getFromBcm());
-			bselfbpp[tbus] += (y.im() - br.getToBcm());
+			float bbpp = -y.im();
+			bbranchbpp[brx] -= bbpp;
+			bselfbpp[fbus] += (bbpp - br.getFromBcm());
+			bselfbpp[tbus] += (bbpp - br.getToBcm());
 		}
 
 		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
@@ -198,7 +212,8 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/psm/src/com/powerdata/openpa/psse/powerflow/2bustest.raw&issolved=false");
+//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/psm/src/com/powerdata/openpa/psse/powerflow/2bustest.raw&issolved=false");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/4bustest.raw&issolved=false");
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		

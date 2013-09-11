@@ -65,7 +65,7 @@ public class SparseBMatrix
 		float[] elimbbr = new float[nfbr];
 		for(int i=0; i < nfbr; ++i)
 		{
-			elimbbr[i] = -bbranch[_elimbrndx[i]] / _bself[_pnode[i]];
+			elimbbr[i] = -bbranch[_elimbrndx[i]] / bself[_pnode[i]];
 		}
 		return new FactorizedBMatrix(bself, elimbbr, _pnode, _qnode);
 	}
