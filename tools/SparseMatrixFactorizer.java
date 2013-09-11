@@ -49,8 +49,10 @@ public class SparseMatrixFactorizer
 
 	void eliminate(LinkNet net, int[] saveBusNdx)
 	{
-//		LinkNet net = matrix.clone();
-		NodeCounts nc = new NodeCounts(net, saveBusNdx);
+		/* step 1, find nodes that border the ones we want to save, temporarily flag branches as eliminated */
+		int[] border = findElimBorder(net, saveBusNdx);
+		
+		NodeCounts nc = new NodeCounts(net, new int[][] {saveBusNdx, border});
 		int iord = 0, nbus = nc.getNextBusNdx();
 		while (nbus != -1)
 		{
@@ -82,6 +84,12 @@ public class SparseMatrixFactorizer
 		
 	}
 	
+	int[] findElimBorder(LinkNet net, int[] saveBusNdx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public static void main(String[] args)
 	{
 		/* test the eliminate */
@@ -130,18 +138,40 @@ class NodeCounts
 	
 	public NodeCounts(LinkNet net, int[] saveBusNdx)
 	{
+		setup(net);
+		saveBuses(saveBusNdx);
+		analyze();
+	}
+	
+	public NodeCounts(LinkNet net, int[][] saveBusNdx)
+	{
+		setup(net);
+		for(int[] sb : saveBusNdx)
+			saveBuses(sb);
+		analyze();
+	}
+	
+	void setup(LinkNet net)
+	{
 		int ndcnt = net.getMaxBusNdx();
 		_busconncnt = new int[ndcnt];
 		for(int i=0; i < ndcnt; ++i)
 		{
 			_busconncnt[i] = net.getConnectionCount(i);
 		}
-		for(int i=0; i < saveBusNdx.length; ++i)
-		{
-			_busconncnt[saveBusNdx[i]] = -1;
-		}
-		analyze();
+		
 	}
+	
+	void saveBuses(int[] saveBuses)
+	{
+		for(int i=0; i < saveBuses.length; ++i)
+		{
+			_busconncnt[saveBuses[i]] = -1;
+		}
+		
+	}
+	
+	public boolean isSaved(int busndx) {return _busconncnt[busndx] == -1;}
 	
 	void analyze()
 	{
