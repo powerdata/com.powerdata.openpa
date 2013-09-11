@@ -213,8 +213,8 @@ public class FastDecoupledPowerFlow
 	public static void main(String[] args) throws Exception
 	{
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/psm/src/com/powerdata/openpa/psse/powerflow/2bustest.raw&issolved=false");
-//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/5bustest.raw&issolved=false");
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/5bustest.raw&issolved=false");
+//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		

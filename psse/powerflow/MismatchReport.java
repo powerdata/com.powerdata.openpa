@@ -12,6 +12,7 @@ import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LinkNet;
+import com.powerdata.openpa.tools.PAMath;
 
 public class MismatchReport
 {
@@ -92,7 +93,9 @@ public class MismatchReport
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
 
 		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,%f,%f,",
-				b.getObjectID(), b.getObjectName(), _va[i], _vm[i], _pmm[i], _qmm[i], mmm);
+				b.getObjectID(), b.getObjectName(), PAMath.rad2deg(_va[i]),
+				_vm[i] * b.getBASKV(), PAMath.pu2mw(_pmm[i]),
+				PAMath.pu2mvar(_qmm[i]), mmm);
 		for(int acbranch : branches)
 		{
 			ACBranch acb = acbr.get(acbranch);
@@ -110,7 +113,7 @@ public class MismatchReport
 			}
 			_out.print(btmp);
 			_out.format("\"%s\",\"%s\",%f,%f\n", acb.getObjectID(),
-					acb.getObjectName(), pp, qq);
+					acb.getObjectName(), PAMath.pu2mw(pp), PAMath.pu2mvar(qq));
 
 		}
 		
@@ -152,7 +155,7 @@ public class MismatchReport
 		}
 
 		_out.format("\"%s\",\"%s\",%f,%f\n",
-				od.getObjectID(), od.getObjectName(), pval, qval); 
+				od.getObjectID(), od.getObjectName(), PAMath.pu2mw(pval), PAMath.pu2mvar(qval)); 
 
 	}
 
