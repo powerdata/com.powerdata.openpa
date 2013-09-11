@@ -14,12 +14,14 @@ public class FactorizedBMatrix
 		_qnode = qnode;
 	}
 	
-	public float[] solve(float[] mismatches, int[][] buses)
+	public float[] solve(float[] mm, float[] vm)
 	{
-		float[] mm = mismatches.clone();
 		int nnd = _bself.length;
 		int nbr = _bbrofs.length;
 
+		for (int i=0; i < nnd; ++i)
+			mm[i] /= vm[i];
+		
 		/* run the forward reduction */
 		for(int i=0; i < nbr; ++i)
 		{

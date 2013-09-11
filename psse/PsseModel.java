@@ -61,7 +61,7 @@ public class PsseModel
 			String objnm = obj.getDebugName();
 			String objid = obj.getObjectID();
 			((severity == LogSev.Error) ? System.err : System.out)
-				.format("%s %s %s[%s] %s\n", objclass, objnm, objid, msg);
+				.format("%s %s[%s] %s\n", objclass, objnm, objid, msg);
 		}
 	};
 	

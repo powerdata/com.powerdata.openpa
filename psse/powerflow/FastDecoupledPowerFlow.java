@@ -103,7 +103,7 @@ public class FastDecoupledPowerFlow
 			if (conv) conv &= testConverged(mm[1], pvbus, _Qtol);
 			if (conv) {niter = iiter; break;}
 
-			float[] dp = _bp.solve(mm[0], pqbus);
+			float[] dp = _bp.solve(mm[0], vm);
 			for(int[] blist : pqbus)
 			{
 				for(int b : blist)
@@ -111,7 +111,7 @@ public class FastDecoupledPowerFlow
 			}
 			mm = pcalc.calculateMismatches(va, vm);
 			
-			float[] dq = _bpp.solve(mm[1], pvbus);
+			float[] dq = _bpp.solve(mm[1], vm);
 			for(int b : ldbus)
 				vm[b] += dq[b];
 //			for(int b : ldbus)
@@ -213,7 +213,8 @@ public class FastDecoupledPowerFlow
 	public static void main(String[] args) throws Exception
 	{
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/psm/src/com/powerdata/openpa/psse/powerflow/2bustest.raw&issolved=false");
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/4bustest.raw&issolved=false");
+//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/5bustest.raw&issolved=false");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
 		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
 		MismatchReport mmr = new MismatchReport(model, mmout);
 		

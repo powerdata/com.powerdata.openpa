@@ -60,7 +60,8 @@ public class TP
 			{
 				int busndx = g.getBus().getIndex();
 				int island = _bus2island[busndx];
-				if (!_energized[island])
+				//TODO:  should islands be able to be -1?
+				if (island != -1 && !_energized[island])
 				{
 					_energized[island] = true;
 					++nener;
@@ -85,7 +86,7 @@ public class TP
 		{
 			int island = _bus2island[i];
 			
-			if (_energized[island])
+			if (island > -1 && _energized[island])
 			{
 				if (_bustype[i] == BusTypeCode.Gen)
 				{

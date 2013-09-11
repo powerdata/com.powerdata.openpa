@@ -85,7 +85,9 @@ public class MismatchReport
 	{
 		BusList buses = _model.getBuses();
 		Bus b = buses.get(i);
-		if (!b.isEnergized()) return;
+//		if (!b.isEnergized()) return;
+		//TODO:  shoudl island really ever be able to be -1?
+		if (branches.length == 0 && otdevs.length == 0) return;
 		ACBranchList acbr = _model.getBranches();
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
 
