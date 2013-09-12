@@ -56,7 +56,9 @@ public class SparseBMatrix
 				int itarg = 0;
 				for(int j=1; j < cnodes.length; ++j)
 				{
-					bbranch[tbr[itarg++]] += bprep * bbranch[cbr[j]];
+					int bbrndx = tbr[itarg++];
+					if (bbrndx != -1)
+						bbranch[bbrndx] += bprep * bbranch[cbr[j]];
 				}
 			}
 		}

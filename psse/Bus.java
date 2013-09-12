@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.PComplex;
 
 public class Bus extends PsseBaseObject
 {
@@ -39,14 +38,14 @@ public class Bus extends PsseBaseObject
 	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
 	/** get complex shunt admittance to ground */
 	public Complex getShuntY() throws PsseModelException {return _list.getShuntY(_ndx);}
-	/** complex bus voltage */
-	public PComplex getVoltage() throws PsseModelException {return _list.getVoltage(_ndx);}
 	/** test if the bus is energized */
 	public boolean isEnergized() throws PsseModelException { return _list.isEnergized(_ndx); }
 	/** get frequency source priority */
 	public int getFrequencySourcePriority() throws PsseModelException {return _list.getFrequencySourcePriority(_ndx);}
 	/** get the island number */
 	public int getIsland() throws PsseModelException { return _list.getIsland(_ndx); }
+	/** angle in radians */
+	public float getVArad() throws PsseModelException {return _list.getVArad(_ndx);}
 
 	/* Raw PSS/e methods */
 	

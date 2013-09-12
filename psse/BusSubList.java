@@ -51,8 +51,6 @@ public class BusSubList extends BusList
 	@Override
 	public Complex getShuntY(int ndx) throws PsseModelException {return _base.getShuntY(_ndxs[ndx]);}
 	@Override
-	public PComplex getVoltage(int ndx) throws PsseModelException {return _base.getVoltage(_ndxs[ndx]);}
-	@Override
 	public String getObjectName(int ndx) throws PsseModelException {return _base.getObjectName(_ndxs[ndx]);}
 	@Override
 	public int getI(int ndx) throws PsseModelException {return _base.getI(_ndxs[ndx]);}

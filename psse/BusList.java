@@ -2,7 +2,6 @@ package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
-import com.powerdata.openpa.tools.PComplex;
 
 public abstract class BusList extends PsseBaseList<Bus>
 {
@@ -60,11 +59,7 @@ public abstract class BusList extends PsseBaseList<Bus>
 	{
 		return new Complex(PAMath.mw2pu(getGL(ndx)), PAMath.mvar2pu(getBL(ndx)));
 	}
-	/** complex bus voltage */
-	public PComplex getVoltage(int ndx) throws PsseModelException
-	{
-		return new PComplex(getVM(ndx), PAMath.deg2rad(getVA(ndx)));
-	}
+	public float getVArad(int ndx) throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
 
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException
@@ -106,3 +101,4 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public float getRTVMag(int ndx) throws PsseModelException {return getVM(ndx);}
 	public float getRTVAng(int ndx) throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
 }
+

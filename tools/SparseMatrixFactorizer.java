@@ -50,9 +50,9 @@ public class SparseMatrixFactorizer
 	void eliminate(LinkNet net, int[] saveBusNdx)
 	{
 		/* step 1, find nodes that border the ones we want to save, temporarily flag branches as eliminated */
-		int[] border = findElimBorder(net, saveBusNdx);
+//		int[] border = findElimBorder(net, saveBusNdx);
 		
-		NodeCounts nc = new NodeCounts(net, new int[][] {saveBusNdx, border});
+		NodeCounts nc = new NodeCounts(net, saveBusNdx);
 		int iord = 0, nbus = nc.getNextBusNdx();
 		while (nbus != -1)
 		{
@@ -70,7 +70,8 @@ public class SparseMatrixFactorizer
 				for(int j=i+1; j < nnd; ++j)
 				{
 					int br = net.findBranch(nodes[i], nodes[j]);
-					if (br == -1) br = net.addBranch(nodes[i], nodes[j]);
+					if (br == -1 && !nc.isSaved(nodes[i]) && !nc.isSaved(nodes[j]))
+						br = net.addBranch(nodes[i], nodes[j]);
 					tbr[itbr++] = br;
 				}
 			}
@@ -78,9 +79,9 @@ public class SparseMatrixFactorizer
 			nbus = nc.getNextBusNdx();
 			++iord;
 		}
+		
 		_size = iord;
 		_factbrcnt = net.getBranchCount();
-		
 		
 	}
 	
@@ -143,6 +144,12 @@ class NodeCounts
 		analyze();
 	}
 	
+	public void unsave(int[] border)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	public NodeCounts(LinkNet net, int[][] saveBusNdx)
 	{
 		setup(net);

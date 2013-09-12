@@ -142,8 +142,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				Bus tbus = br.getToBus();
 				int fbusx = fbus.getIndex();
 				int tbusx = tbus.getIndex();
-				PComplex vf = fbus.getVoltage();
-				PComplex vt = tbus.getVoltage();
+				float fvm = fbus.getVM(), tvm = tbus.getVM();
+				float fva = fbus.getVArad(), tva = tbus.getVArad();
 				
 				
 //				if ((Math.round(vf.r()*cutoff) == Math.round(vt.r()*cutoff) &&
@@ -151,8 +151,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 //					Math.round(vf.theta()*cutoff) == Math.round(vt.theta()*cutoff)) ||
 //					(z.re() <= _lowrthr && Math.abs(z.im()) <= _lowxthr))
 
-				if (_issolved && (Math.abs(vf.r()-vt.r()) < 0.00003 &&
-					Math.abs(vf.theta()-vt.theta()) < 0.00003))
+				if (_issolved && (Math.abs(fvm - tvm) < 0.00003 &&
+					Math.abs(fva - tva) < 0.00003))
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}

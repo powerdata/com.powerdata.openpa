@@ -142,8 +142,8 @@ public class PowerCalculator
 		GenList genlist = _model.getGenerators();
 		
 		applyBranches(pmm, qmm, calcACBranchFlows(va, vm));
-		applyShunts(qmm, calcShunts(), _model.getShunts());
-		applyShunts(qmm, calcSVCs(), _model.getSvcs());
+		applyShunts(qmm, calcShunts(vm), _model.getShunts());
+		applyShunts(qmm, calcSVCs(vm), _model.getSvcs());
 		for(Load l : ldlist)
 		{
 			if (l.isInSvc())
@@ -200,7 +200,7 @@ public class PowerCalculator
 		}
 	}
 
-	public float[] calcShunts() throws PsseModelException
+	public float[] calcShunts(float[] vm) throws PsseModelException
 	{
 		ShuntList shunts = _model.getShunts();
 		int nsh = shunts.size();
@@ -209,14 +209,15 @@ public class PowerCalculator
 		for (int i = 0; i < nsh; ++i)
 		{
 			Shunt shunt = shunts.get(i);
-			float vm = shunt.getBus().getVoltage().r();
-			q[i] = shunt.getBpu() * vm * vm;
+			int bndx = shunt.getBus().getIndex();
+			float bvm = vm[bndx];
+			q[i] = shunt.getBpu() * bvm * bvm;
 		}
 		if (_dbg != null) _dbg.setShunts(q);
 		return q;
 	}
 
-	public float[] calcSVCs() throws PsseModelException
+	public float[] calcSVCs(float[] vm) throws PsseModelException
 	{
 		SvcList svcs = _model.getSvcs();
 		int nsh = svcs.size();
@@ -225,9 +226,9 @@ public class PowerCalculator
 		for (int i = 0; i < nsh; ++i)
 		{
 			SVC svc = svcs.get(i);
-			float vm = svc.getBus().getVoltage().r();
-			// TODO: Fix for SVC, only treating as a fixed shunt for now
-			q[i] = svc.getBINIT() / 100f * vm * vm;
+			int bndx = svc.getBus().getIndex();
+			float bvm = vm[bndx];
+			q[i] = svc.getBINIT() / 100f * bvm * bvm;
 		}
 		if (_dbg != null) _dbg.setSVCs(q);
 		return q;
