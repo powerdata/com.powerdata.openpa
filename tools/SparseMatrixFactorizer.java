@@ -3,6 +3,8 @@ package com.powerdata.openpa.tools;
 import java.util.Arrays;
 import java.util.AbstractList;
 
+import com.powerdata.tools.utils.QuickSort;
+
 public class SparseMatrixFactorizer
 		extends
 		AbstractList<com.powerdata.openpa.tools.SparseMatrixFactorizer.EliminatedBus>
@@ -59,7 +61,11 @@ public class SparseMatrixFactorizer
 			_elimorder[iord] = nbus;
 			int[][] cinfo = net.findConnections(nbus);
 			int[] nodes = cinfo[0], branches = cinfo[1];
-			for(int br : branches) net.eliminateBranch(br, true);
+			for(int i=0; i < branches.length; ++i)
+			{
+				net.eliminateBranch(branches[i], true);
+				nc.dec(nodes[i]);
+			}
 			int nnd = nodes.length;
 			_n[iord] = nodes;
 			_bfr[iord] = branches;
@@ -71,7 +77,11 @@ public class SparseMatrixFactorizer
 				{
 					int br = net.findBranch(nodes[i], nodes[j]);
 					if (br == -1 && !nc.isSaved(nodes[i]) && !nc.isSaved(nodes[j]))
+					{
 						br = net.addBranch(nodes[i], nodes[j]);
+						nc.inc(nodes[i]);
+						nc.inc(nodes[j]);
+					}
 					tbr[itbr++] = br;
 				}
 			}
@@ -126,69 +136,163 @@ public class SparseMatrixFactorizer
 	public int getFactorizedBranchCount() {return _factbrcnt;}
 }
 
-
 class NodeCounts
 {
-	/** the number of connections for each bus index in the linknet */
-	int[] _busconncnt;
-	/** A list of bus indexes for each connection count */
-	int[][] _busbycnt;
-	/** starting position for each list of busses */
-	int[] _startpos;
-	int _lowcount = 1;
+	/** bus connection counts */
+	int[] _conncnt;
+	/** count distribution */
+	int[] _cntdist;
+	/** index sorted by count */
+	int[] _sndx;
+	/** next nonzero count */
+	int _nz = 0;
 	
 	public NodeCounts(LinkNet net, int[] saveBusNdx)
 	{
-		setup(net);
-		saveBuses(saveBusNdx);
-		analyze();
-	}
-	
-	public void unsave(int[] border)
-	{
-		// TODO Auto-generated method stub
-		
+		analyze(net, saveBusNdx);
+		sort();
 	}
 
-	public NodeCounts(LinkNet net, int[][] saveBusNdx)
+	public boolean isSaved(int i)
 	{
-		setup(net);
-		for(int[] sb : saveBusNdx)
-			saveBuses(sb);
-		analyze();
+		return _conncnt[i] == 0;
 	}
-	
-	void setup(LinkNet net)
+
+	public int getNextBusNdx()
 	{
-		int ndcnt = net.getMaxBusNdx();
-		_busconncnt = new int[ndcnt];
-		for(int i=0; i < ndcnt; ++i)
+		int rv = -1;
+		for(int i=1; i < _cntdist.length; ++i)
 		{
-			_busconncnt[i] = net.getConnectionCount(i);
+			if (_cntdist[i] > 0)
+			{
+				rv = findBus(i);
+				--_cntdist[i];
+				_conncnt[rv] = 0;
+				break;
+			}
 		}
-		
+		return rv;
 	}
-	
-	void saveBuses(int[] saveBuses)
+
+	int findBus(int cd)
 	{
-		for(int i=0; i < saveBuses.length; ++i)
+		for(int i=_nz; i < _sndx.length; ++i)
 		{
-			_busconncnt[saveBuses[i]] = -1;
+			int bndx = _sndx[i];
+			int cnt = _conncnt[bndx];
+			if (cnt == cd)
+			{
+				return bndx;
+			}
+//			else if (cnt == 0)
+//			{
+//				++_nz;
+//			}
 		}
-		
+		/* TODO:  should never get here, put a debug message in until tested */
+		throw new UnsupportedOperationException("Should never get here");
+//		return -1;
 	}
-	
-	public boolean isSaved(int busndx) {return _busconncnt[busndx] == -1;}
-	
-	void analyze()
+
+	void sort()
+	{
+		final int nbus = _conncnt.length;
+		_sndx = new int[nbus];
+		for(int i=0; i < nbus; ++i) _sndx[i] = i;
+//		new SmoothSort()
+//		{
+//			int v;
+//			@Override
+//			public void storeVal(int from)
+//			{
+//				v = _sndx[from];
+//			}
+//
+//			@Override
+//			public void setVal(int to)
+//			{
+//				_sndx[to] = v;
+//			}
+//
+//			@Override
+//			public int compareVal(int ofs)
+//			{
+//				return _conncnt[_sndx[v]] - _conncnt[_sndx[ofs]];
+//			}
+//
+//			@Override
+//			public int compare(int ofs1, int ofs2)
+//			{
+//				return _conncnt[_sndx[ofs1]] - _conncnt[_sndx[ofs2]];
+//			}
+//
+//			@Override
+//			public void set(int to, int from)
+//			{
+//				_sndx[to] = _sndx[from];
+//			}
+//
+//			@Override
+//			public int length()
+//			{
+//				return nbus;
+//			}
+//		}.sort();
+			
+		new QuickSort()
+		{
+			@Override
+			protected boolean isLess(int offset1, int offset2)
+			{
+				return _conncnt[_sndx[offset1]] < _conncnt[_sndx[offset2]];
+			}
+
+			@Override
+			protected void swap(int offset1, int offset2)
+			{
+				int t = _sndx[offset1];
+				_sndx[offset1] = _sndx[offset2];
+				_sndx[offset2] = t;
+			}
+
+			@Override
+			protected int size()
+			{
+				return nbus;
+			}
+		}.sort();
+		
+		for(int sx : _sndx)
+		{
+			if (_conncnt[sx] <= 0)
+			{
+				++_nz;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	void analyze(LinkNet net, int[] saveBusNdx)
 	{
 		/* count up all the nodes for each connection "level" */
 		int maxconnalloc = 100;
 		int maxconnfound = 1;
 		int[] buscntbyconn = new int[maxconnalloc];
-		for (int i = 0; i < _busconncnt.length; ++i)
+		int nbus = net.getMaxBusNdx();
+		_conncnt = new int[nbus];
+		for (int i = 0; i < nbus; ++i)
 		{
-			int cnt = _busconncnt[i];
+			int cnt = net.getConnectionCount(i);
+			_conncnt[i] = cnt;
+		}
+		for(int b : saveBusNdx) _conncnt[b] = 0;
+		
+		for (int i = 0; i < nbus; ++i)
+		{
+			int cnt = _conncnt[i];
 			if (cnt > 0)
 			{
 				if (cnt > maxconnfound)
@@ -198,47 +302,146 @@ class NodeCounts
 					maxconnalloc *= 2;
 					buscntbyconn = Arrays.copyOf(buscntbyconn, maxconnalloc);
 				}
-				++buscntbyconn[_busconncnt[i]];
+				++buscntbyconn[cnt];
 			}
 		}
-		
-		/* build the list of bus indexes, in order of connection count */
-		_busbycnt = new int[maxconnfound+1][];
-		int[] cpos = new int[maxconnfound+1];
-		for(int i=1; i <= maxconnfound; ++i)
-		{
-			_busbycnt[i] = new int[buscntbyconn[i]];
-		}
-		for(int i=0; i < _busconncnt.length; ++i)
-		{
-			int cnt = _busconncnt[i];
-			if (cnt > 0) _busbycnt[cnt][cpos[cnt]++] = i;
-		}
-		_startpos = new int[maxconnfound+1];
+		_cntdist = Arrays.copyOf(buscntbyconn, maxconnfound+1);
+
+	}
+
+	public void inc(int busndx)
+	{
+		int ccnt = _conncnt[busndx];
+		--_cntdist[ccnt];
+		++_cntdist[++ccnt];
+		_conncnt[busndx] = ccnt;
 	}
 	
-	public int getNextBusNdx()
+	public void dec(int busndx)
 	{
-		int cnt = _lowcount;
-		while (cnt < _busbycnt.length)
+		int ccnt = _conncnt[busndx];
+		if (ccnt > 0)
 		{
-			int[] bbc = _busbycnt[cnt];
-			int pos = _startpos[cnt];
-			while (pos < bbc.length)
-			{
-				int busndx = bbc[pos++];
-				// TODO: See how bad the count increases really get
-//				int acnt = _busconncnt[busndx];
-//				if ((acnt - cnt) < 1)
-//				{
-					++_startpos[cnt];
-					_busconncnt[busndx] = -1;
-					return busndx;
-//				}
-			}
-			_lowcount = ++cnt;
+			--_cntdist[ccnt];
+			++_cntdist[--ccnt];
+			_conncnt[busndx] = ccnt;
 		}
-		return -1;
 	}
 	
 }
+
+//class NodeCounts
+//{
+//	/** the number of connections for each bus index in the linknet */
+//	int[] _busconncnt;
+//	/** A list of bus indexes for each connection count */
+//	int[][] _busbycnt;
+//	/** starting position for each list of busses */
+//	int[] _startpos;
+//	int _lowcount = 1;
+//	
+//	public NodeCounts(LinkNet net, int[] saveBusNdx)
+//	{
+//		setup(net);
+//		saveBuses(saveBusNdx);
+//		analyze();
+//	}
+//	
+//	public void unsave(int[] border)
+//	{
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	public NodeCounts(LinkNet net, int[][] saveBusNdx)
+//	{
+//		setup(net);
+//		for(int[] sb : saveBusNdx)
+//			saveBuses(sb);
+//		analyze();
+//	}
+//	
+//	void setup(LinkNet net)
+//	{
+//		int ndcnt = net.getMaxBusNdx();
+//		_busconncnt = new int[ndcnt];
+//		for(int i=0; i < ndcnt; ++i)
+//		{
+//			_busconncnt[i] = net.getConnectionCount(i);
+//		}
+//		
+//	}
+//	
+//	void saveBuses(int[] saveBuses)
+//	{
+//		for(int i=0; i < saveBuses.length; ++i)
+//		{
+//			_busconncnt[saveBuses[i]] = -1;
+//		}
+//		
+//	}
+//	
+//	public boolean isSaved(int busndx) {return _busconncnt[busndx] == -1;}
+//	
+//	void analyze()
+//	{
+//		/* count up all the nodes for each connection "level" */
+//		int maxconnalloc = 100;
+//		int maxconnfound = 1;
+//		int[] buscntbyconn = new int[maxconnalloc];
+//		for (int i = 0; i < _busconncnt.length; ++i)
+//		{
+//			int cnt = _busconncnt[i];
+//			if (cnt > 0)
+//			{
+//				if (cnt > maxconnfound)
+//					maxconnfound = cnt;
+//				if (cnt >= maxconnalloc)
+//				{
+//					maxconnalloc *= 2;
+//					buscntbyconn = Arrays.copyOf(buscntbyconn, maxconnalloc);
+//				}
+//				++buscntbyconn[_busconncnt[i]];
+//			}
+//		}
+//		
+//		/* build the list of bus indexes, in order of connection count */
+//		_busbycnt = new int[maxconnfound+1][];
+//		int[] cpos = new int[maxconnfound+1];
+//		for(int i=1; i <= maxconnfound; ++i)
+//		{
+//			_busbycnt[i] = new int[buscntbyconn[i]];
+//		}
+//		for(int i=0; i < _busconncnt.length; ++i)
+//		{
+//			int cnt = _busconncnt[i];
+//			if (cnt > 0) _busbycnt[cnt][cpos[cnt]++] = i;
+//		}
+//		_startpos = new int[maxconnfound+1];
+//	}
+//	
+//	public int getNextBusNdx()
+//	{
+//		int cnt = _lowcount;
+//		while (cnt < _busbycnt.length)
+//		{
+//			int[] bbc = _busbycnt[cnt];
+//			int pos = _startpos[cnt];
+//			while (pos < bbc.length)
+//			{
+//				int busndx = bbc[pos++];
+//				// TODO: See how bad the count increases really get
+////				int acnt = _busconncnt[busndx];
+////				if ((acnt - cnt) < 1)
+////				{
+//					++_startpos[cnt];
+//					_busconncnt[busndx] = -1;
+//					return busndx;
+////				}
+//			}
+//			_lowcount = ++cnt;
+//		}
+//		return -1;
+//	}
+//	
+//}

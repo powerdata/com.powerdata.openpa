@@ -51,6 +51,10 @@ public class SparseBMatrix
 			for (int i=0; i < cnodes.length; ++i)
 			{
 				float bbrdiag = bbranch[cbr[i]];
+				if (Math.abs(bself[ebus.getElimBusNdx()]) < .01)
+				{
+					int xxx = 5;
+				}
 				float bprep = -bbrdiag / bself[ebus.getElimBusNdx()];
 				bself[cnodes[i]] += bprep * bbrdiag;
 				int itarg = 0;
