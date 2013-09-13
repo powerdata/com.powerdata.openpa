@@ -20,7 +20,9 @@ public class FactorizedBMatrix
 		int nbr = _bbrofs.length;
 
 		for (int i=0; i < nnd; ++i)
-			mm[i] /= vm[i];
+		{
+			if (mm[i] != 0f) mm[i] /= vm[i];
+		}
 		
 		/* run the forward reduction */
 		for(int i=0; i < nbr; ++i)
