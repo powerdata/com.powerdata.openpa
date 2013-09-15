@@ -53,7 +53,7 @@ public class TP
 			}
 		}
 
-		int nener = 0;
+		int egycnt = 0;
 		for(Gen g : model.getGenerators())
 		{
 			if (g.isInSvc())
@@ -64,24 +64,24 @@ public class TP
 				if (island != -1 && !_energized[island])
 				{
 					_energized[island] = true;
-					++nener;
 				}
 				if ((g.getQT() - g.getQB()) > 1f
 						&& _bustype[busndx] == BusTypeCode.Unknown)
 				{
 					_bustype[busndx] = BusTypeCode.Gen;
-					
+					++egycnt;
 					maxgen[busndx] += g.getPT();
 					if (_arefbyisland[island] == -1 || maxgen[busndx] > maxgen[_arefbyisland[island]])
 							_arefbyisland[island] = busndx;
 				}
 			}
 		}
-
+//		_arefbyisland[0] = 43;
+		
 		int[] genbus = new int[nbus];
 		int[] loadbus = new int[nbus];
-		int ngen=0, nload=0, iref=0;
-		_arefbus = new int[nener];
+		int ngen=0, nload=0, ihot=0;
+		_arefbus = new int[egycnt];
 		for (int i=0; i < nbus; ++i)
 		{
 			int island = _bus2island[i];
@@ -96,7 +96,7 @@ public class TP
 					}
 					else
 					{
-						_arefbus[iref++] = i;
+						_arefbus[ihot++] = i;
 						_bustype[i] = BusTypeCode.Slack;
 					}
 				}

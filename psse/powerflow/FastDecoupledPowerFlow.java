@@ -3,6 +3,8 @@ package com.powerdata.openpa.psse.powerflow;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
@@ -12,7 +14,6 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
-import com.powerdata.openpa.psse.Island;
 import com.powerdata.openpa.psse.IslandList;
 import com.powerdata.openpa.psse.LogSev;
 import com.powerdata.openpa.psse.PsseModel;
@@ -40,12 +41,12 @@ public class FastDecoupledPowerFlow
 		
 	}
 
-	public void runPowerFlow(VoltageSource vsrc) throws PsseModelException
+	public void runPowerFlow(VoltageSource vsrc) throws PsseModelException, IOException
 	{
 		runPowerFlow(null, vsrc);
 	}
 	
-	public void runPowerFlow(MismatchReport mmr, VoltageSource vsrc) throws PsseModelException
+	public void runPowerFlow(MismatchReport mmr, VoltageSource vsrc) throws PsseModelException, IOException
 	{
 		int itermax = 40;
 		BusList buses = _model.getBuses();
@@ -95,10 +96,14 @@ public class FastDecoupledPowerFlow
 		int[][] pqbus = new int[][] {ldbus, genbus};
 		int[][] pvbus = new int[][] {ldbus};
 		int niter=0;
+
 		for(int iiter=0; iiter < itermax; ++iiter)
 		{
 			float[][] mm = pcalc.calculateMismatches(va, vm);
-
+			if (mmr != null)
+			{
+				mmr.report(String.valueOf(iiter));
+			}
 			boolean conv = testConverged(mm[0], pqbus, _Ptol);
 			if (conv) conv &= testConverged(mm[1], pvbus, _Qtol);
 			if (conv) {niter = iiter; break;}
@@ -110,6 +115,10 @@ public class FastDecoupledPowerFlow
 					va[b] += dp[b];
 			}
 			mm = pcalc.calculateMismatches(va, vm);
+			if (mmr != null)
+			{
+				mmr.report(String.valueOf(iiter)+".5");
+			}
 			
 			float[] dq = _bpp.solve(mm[1], vm);
 			for(int b : ldbus)
@@ -132,8 +141,7 @@ public class FastDecoupledPowerFlow
 	float[] flatMag() throws PsseModelException
 	{
 		float[] vm = new float[_model.getBuses().size()];
-		for(int b : _model.getBusNdxForType(BusTypeCode.Load))
-			vm[b] = 1f;
+		Arrays.fill(vm, 1f);
 		return vm;
 	}
 
@@ -209,21 +217,73 @@ public class FastDecoupledPowerFlow
 		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
 		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
 		
+		try
+		{
+		File tdir = new File(System.getProperty("java.io.tmpdir"));
+		PrintWriter orgbp = openDebug(tdir, "bp-prep.csv");
+		PrintWriter orgbpp = openDebug(tdir, "bpp-prep.csv");
+		orgbp.println("\"p\",\"q\",\"bbranch\",\"bself\"");
+		orgbpp.println("\"p\",\"q\",\"bbranch\",\"bself\"");
+		for(int i=0; i < branches.size(); ++i)
+		{
+			ACBranch b = branches.get(i);
+			int fb = b.getFromBus().getIndex(), tb = b.getToBus().getIndex();
+			orgbp.format("%d,%d,%f,%f\n", fb, tb, bbranchbp[i], bselfbp[fb]);
+			orgbpp.format("%d,%d,%f,%f\n", fb, tb, bbranchbpp[i], bselfbpp[fb]);
+		}
+		orgbp.close();
+		orgbpp.close();
+		}
+		catch(IOException ioe)
+		{
+			throw new PsseModelException(ioe);
+		}
+		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/6bustest.raw&issolved=false");
+//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/6bustest.raw&issolved=false");
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
-//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw&issolved=false");
-		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File("/tmp/mismatch.csv"))));
-		MismatchReport mmr = new MismatchReport(model, mmout);
+//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw&issolved=true");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/Downloads/palco.raw&issolved=false");
+
+		File tdir = new File("/tmp");
+		File[] list = tdir.listFiles(new FilenameFilter()
+		{
+			@Override
+			public boolean accept(File dir, String name)
+			{
+				return name.startsWith("mismatch") && name.endsWith(".csv");
+			}
+		});
+		for (File f : list) f.delete();
+		
+		File ddir = new File (System.getProperty("java.io.tmpdir"));
+		MismatchReport mmr = new MismatchReport(model, ddir);
 		
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
+		pf.dumpMatrices(ddir);
 		pf.runPowerFlow(mmr, VoltageSource.Flat);
-		mmr.report();
-		mmout.close();
+	}
+
+	public void dumpMatrices(File tdir) throws IOException
+	{
+		dumpMatrix(_bp, tdir, "factbp.csv");
+		dumpMatrix(_bpp, tdir, "factbpp.csv");
+	}
+	
+	void dumpMatrix(FactorizedBMatrix b, File tdir, String nm) throws IOException
+	{
+		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(tdir, nm))));
+		b.dump(pw);
+		pw.close();
+	}
+
+	static PrintWriter openDebug(File tdir, String name) throws IOException
+	{
+		return new PrintWriter(new BufferedWriter(new FileWriter(new File(tdir, name))));
 	}
 }

@@ -1,13 +1,5 @@
 package com.powerdata.openpa.psse.powerflow;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
-import java.io.PrintWriter;
-import java.io.Reader;
 import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -26,8 +18,6 @@ import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
-import com.powerdata.openpa.psseraw.Psse2CSV;
-import com.powerdata.openpa.psseraw.PsseHeader;
 import com.powerdata.openpa.tools.Complex;
 
 public class PowerCalculator
@@ -234,76 +224,6 @@ public class PowerCalculator
 		return q;
 	}
 	
-	public static void main(String[] args) throws Exception
-	{
-		File cwd = new File(System.getProperty("user.dir"));
-		File csvdir = null;
-		File pssefile = null;
-		File outdir = cwd;
-		int narg = args.length;
-		for (int i = 0; i < narg;)
-		{
-			String a = args[i++];
-			if (a.startsWith("-"))
-			{
-				int idx = (a.charAt(1) == '-') ? 2 : 1;
-				switch (a.substring(idx))
-				{
-					case "psse": pssefile = new File(args[i++]); break;
-					case "csvdir": csvdir = new File(args[i++]); break;
-					case "outdir": outdir = new File(args[i++]); break;
-				}
-			}
-		}
-
-		File tmpdir = new File(System.getProperty("java.io.tmpdir"));
-
-		if (csvdir == null)
-		{
-			if (pssefile==null)
-			{
-				pssefile = cwd.listFiles(new FilenameFilter()
-				{
-					@Override
-					public boolean accept(File arg0, String arg1)
-					{
-						return arg1.endsWith(".raw");
-					}
-				})[0];
-			}
-		
-			String pssefn = pssefile.getName();
-			File tmpsub = new File(tmpdir, pssefn.substring(0, pssefn.length()-4));
-			if (!tmpsub.exists()) tmpsub.mkdirs();
-			
-			Reader rpsse = new BufferedReader(new FileReader(pssefile));
-			Psse2CSV p2c = new Psse2CSV(rpsse, null, tmpsub);
-			
-			PsseHeader hdr = p2c.getHeader();
-			System.out.println("Loading File: "+pssefile);
-			System.out.println("Change Code: "+hdr.getChangeCode());
-			System.out.println("System Base MVA: "+hdr.getSystemBaseMVA());
-			System.out.format("Case Time: %tc\n", hdr.getCaseTime());
-			System.out.format("Import Time: %tc\n", hdr.getImportTime());
-			System.out.println("Heading 1: "+hdr.getHeading1());
-			System.out.println("Heading 2: "+hdr.getHeading2());
-			System.out.println("Version: "+hdr.getVersion());
-			
-			p2c.process();
-			rpsse.close();
-			p2c.cleanup();
-			csvdir = tmpsub;
-		}
-		
-		PsseModel model = PsseModel.OpenInput("pssecsv:path="+csvdir);
-		PrintWriter mmout = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "mismatch.csv"))));
-		MismatchReport mmr = new MismatchReport(model, mmout);
-		PowerCalculator pcalc = new PowerCalculator(model, mmr);
-		pcalc.calculateMismatches(pcalc.getRTVoltages());
-		mmr.report();
-		mmout.close();
-	}
-
 	public float[][] getRTVoltages() throws PsseModelException
 	{
 		BusList blist = _model.getBuses();

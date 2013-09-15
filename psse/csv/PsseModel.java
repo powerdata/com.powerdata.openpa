@@ -151,19 +151,19 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 //					Math.round(vf.theta()*cutoff) == Math.round(vt.theta()*cutoff)) ||
 //					(z.re() <= _lowrthr && Math.abs(z.im()) <= _lowxthr))
 
-				if (_issolved && (Math.abs(fvm - tvm) < 0.00003 &&
-					Math.abs(fva - tva) < 0.00003))
-				{
-					elimlnet.addBranch(fbusx, tbusx);
-				}
-				else if (!_issolved && Math.abs(br.getX()) < 0.001f)
-				{
-					elimlnet.addBranch(fbusx, tbusx);
-				}
-				else
-				{
+//				if (_issolved && (Math.abs(fvm - tvm) < 0.00003 &&
+//					Math.abs(fva - tva) < 0.00003))
+//				{
+//					elimlnet.addBranch(fbusx, tbusx);
+//				}
+//				else if (!_issolved && Math.abs(br.getX()) < 0.001f)
+//				{
+//					elimlnet.addBranch(fbusx, tbusx);
+//				}
+//				else
+//				{
 					keep.add(i);
-				}
+//				}
 			}
 		}
 		

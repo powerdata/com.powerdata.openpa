@@ -1,5 +1,9 @@
 package com.powerdata.openpa.psse.powerflow;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +27,12 @@ public class MismatchReport
 	List<List<? extends OneTermDev>> _otdevorder;
 	int _ngen, _nload, _nshunt, _nsvc;
 	float[] _brflow, _shq, _svcq, _pfrm, _pto, _qfrm, _qto, _vm, _va, _pmm, _qmm;
-	PrintWriter _out;
+//	PrintWriter _out;
+	File _odir;
 	
-	public MismatchReport(PsseModel model, PrintWriter out) throws PsseModelException
+	public MismatchReport(PsseModel model, File odir) throws PsseModelException
 	{
+		_odir = odir;
 		_model = model;
 		_nbus = model.getBuses().size();
 		
@@ -69,20 +75,23 @@ public class MismatchReport
 				_otnet.addBranch(bndx, _nbus);
 			}
 		}
-		_out = out;
 	}
 	
-	public void report() throws Exception
+	public void report(String iter) throws IOException, PsseModelException
 	{
-		_out.println("BusID,BusName,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(
+				new File(_odir, "mismatch" + iter + ".csv"))));
+		
+		out.println("BusID,BusName,Type,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
 		for (int i=0; i < _nbus; ++i)
 		{
-			_report(i, _brnet.findBranches(i), _otnet.findBranches(i));
+			_report(out, i, _brnet.findBranches(i), _otnet.findBranches(i));
 		}
+		out.close();
 	}
 
 	
-	void _report(int i, int[] branches, int[] otdevs) throws PsseModelException
+	void _report(PrintWriter out, int i, int[] branches, int[] otdevs) throws PsseModelException
 	{
 		BusList buses = _model.getBuses();
 		Bus b = buses.get(i);
@@ -92,8 +101,8 @@ public class MismatchReport
 		ACBranchList acbr = _model.getBranches();
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
 
-		String btmp = String.format("\"%s\",\"%s\",%f,%f,%f,%f,%f,",
-				b.getObjectID(), b.getObjectName(), PAMath.rad2deg(_va[i]),
+		String btmp = String.format("\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,",
+				b.getObjectID(), b.getObjectName(), b.getBusType(), PAMath.rad2deg(_va[i]),
 				_vm[i] * b.getBASKV(), PAMath.pu2mw(_pmm[i]),
 				PAMath.pu2mvar(_qmm[i]), mmm);
 		for(int acbranch : branches)
@@ -111,21 +120,21 @@ public class MismatchReport
 				pp = _pto[acbranch];
 				qq = _qto[acbranch];
 			}
-			_out.print(btmp);
-			_out.format("\"%s\",\"%s\",%f,%f\n", acb.getObjectID(),
+			out.print(btmp);
+			out.format("\"%s\",\"%s\",%f,%f\n", acb.getObjectID(),
 					acb.getObjectName(), PAMath.pu2mw(pp), PAMath.pu2mvar(qq));
 
 		}
 		
 		for(int otdev : otdevs)
 		{
-			_out.print(btmp);
-			printDevice(otdev);
+			out.print(btmp);
+			printDevice(out, otdev);
 		}
 
 	}
 
-	void printDevice(int otdev) throws PsseModelException
+	void printDevice(PrintWriter out, int otdev) throws PsseModelException
 	{
 		OneTermDev od;
 		float pval, qval;
@@ -154,7 +163,7 @@ public class MismatchReport
 			qval = _svcq[otdev];
 		}
 
-		_out.format("\"%s\",\"%s\",%f,%f\n",
+		out.format("\"%s\",\"%s\",%f,%f\n",
 				od.getObjectID(), od.getObjectName(), PAMath.pu2mw(pval), PAMath.pu2mvar(qval)); 
 
 	}

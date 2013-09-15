@@ -75,14 +75,17 @@ public class SparseMatrixFactorizer
 			{
 				for(int j=i+1; j < nnd; ++j)
 				{
-					int br = net.findBranch(nodes[i], nodes[j]);
-					if (br == -1 && !nc.isSaved(nodes[i]) && !nc.isSaved(nodes[j]))
+					if (!nc.isSaved(nodes[i]) && !nc.isSaved(nodes[j]))
 					{
-						br = net.addBranch(nodes[i], nodes[j]);
-						nc.inc(nodes[i]);
-						nc.inc(nodes[j]);
+						int br = net.findBranch(nodes[i], nodes[j]);
+						if (br == -1)
+						{
+							br = net.addBranch(nodes[i], nodes[j]);
+							nc.inc(nodes[i]);
+							nc.inc(nodes[j]);
+						}
+						tbr[itbr++] = br;
 					}
-					tbr[itbr++] = br;
 				}
 			}
 			_btr[iord] = tbr;
@@ -312,6 +315,8 @@ class NodeCounts
 	public void inc(int busndx)
 	{
 		int ccnt = _conncnt[busndx];
+		if ((ccnt+1) >= _cntdist.length)
+			_cntdist = Arrays.copyOf(_cntdist, _cntdist.length*2);
 		--_cntdist[ccnt];
 		++_cntdist[++ccnt];
 		_conncnt[busndx] = ccnt;

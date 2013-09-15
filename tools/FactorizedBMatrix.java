@@ -1,5 +1,7 @@
 package com.powerdata.openpa.tools;
 
+import java.io.PrintWriter;
+
 public class FactorizedBMatrix
 {
 	float[] _bself, _bbrofs;
@@ -14,6 +16,16 @@ public class FactorizedBMatrix
 		_qnode = qnode;
 	}
 	
+	public void dump(PrintWriter pw)
+	{
+		pw.println("\"p\",\"q\",\"-bbranch/bself\",\"bself\"");
+		for(int i=0; i < _pnode.length; ++i)
+		{
+			int pn = _pnode[i];
+			pw.format("%d,%d,%f,%f\n", pn, _qnode[i], _bbrofs[i], _bself[pn]);  
+		}
+	}
+	
 	public float[] solve(float[] mm, float[] vm)
 	{
 		int nnd = _bself.length;
@@ -21,7 +33,7 @@ public class FactorizedBMatrix
 
 		for (int i=0; i < nnd; ++i)
 		{
-			if (mm[i] != 0f) mm[i] /= vm[i];
+			mm[i] /= vm[i];
 		}
 		
 		/* run the forward reduction */
@@ -43,7 +55,7 @@ public class FactorizedBMatrix
 		{
 			int pn = _pnode[i];
 			dx[pn] = mm[pn] / _bself[pn];
-			dx[_pnode[i]] += _bbrofs[i] *  dx[_qnode[i]];
+			dx[pn] += _bbrofs[i] *  dx[_qnode[i]];
 		}
 		
 		return dx;
