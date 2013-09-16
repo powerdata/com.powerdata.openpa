@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.AbstractList;
 
 import com.powerdata.tools.utils.QuickSort;
+import com.powerdata.tools.utils.SmoothSort;
 
 public class SparseMatrixFactorizer
 		extends
@@ -61,16 +62,12 @@ public class SparseMatrixFactorizer
 			_elimorder[iord] = nbus;
 			int[][] cinfo = net.findConnections(nbus);
 			int[] nodes = cinfo[0], branches = cinfo[1];
-			for(int i=0; i < branches.length; ++i)
-			{
-				net.eliminateBranch(branches[i], true);
-				nc.dec(nodes[i]);
-			}
 			int nnd = nodes.length;
 			_n[iord] = nodes;
 			_bfr[iord] = branches;
 			int itbr = 0;
 			int[] tbr = new int[nnd*(nnd-1)/2];
+			Arrays.fill(tbr, -1);
 			for(int i=0; i < nnd; ++i)
 			{
 				for(int j=i+1; j < nnd; ++j)
@@ -89,6 +86,11 @@ public class SparseMatrixFactorizer
 				}
 			}
 			_btr[iord] = tbr;
+			for(int i=0; i < branches.length; ++i)
+			{
+				net.eliminateBranch(branches[i], true);
+				nc.dec(nodes[i]);
+			}
 			nbus = nc.getNextBusNdx();
 			++iord;
 		}
@@ -202,68 +204,68 @@ class NodeCounts
 		final int nbus = _conncnt.length;
 		_sndx = new int[nbus];
 		for(int i=0; i < nbus; ++i) _sndx[i] = i;
-//		new SmoothSort()
-//		{
-//			int v;
-//			@Override
-//			public void storeVal(int from)
-//			{
-//				v = _sndx[from];
-//			}
-//
-//			@Override
-//			public void setVal(int to)
-//			{
-//				_sndx[to] = v;
-//			}
-//
-//			@Override
-//			public int compareVal(int ofs)
-//			{
-//				return _conncnt[_sndx[v]] - _conncnt[_sndx[ofs]];
-//			}
-//
-//			@Override
-//			public int compare(int ofs1, int ofs2)
-//			{
-//				return _conncnt[_sndx[ofs1]] - _conncnt[_sndx[ofs2]];
-//			}
-//
-//			@Override
-//			public void set(int to, int from)
-//			{
-//				_sndx[to] = _sndx[from];
-//			}
-//
-//			@Override
-//			public int length()
-//			{
-//				return nbus;
-//			}
-//		}.sort();
-			
-		new QuickSort()
+		new SmoothSort()
 		{
+			int v;
 			@Override
-			protected boolean isLess(int offset1, int offset2)
+			public void storeVal(int from)
 			{
-				return _conncnt[_sndx[offset1]] < _conncnt[_sndx[offset2]];
+				v = _sndx[from];
 			}
 
 			@Override
-			protected void swap(int offset1, int offset2)
+			public void setVal(int to)
 			{
-				int t = _sndx[offset1];
-				_sndx[offset1] = _sndx[offset2];
-				_sndx[offset2] = t;
+				_sndx[to] = v;
 			}
 
 			@Override
-			protected int size()
+			public int compareVal(int ofs)
+			{
+				return _conncnt[_sndx[v]] - _conncnt[_sndx[ofs]];
+			}
+
+			@Override
+			public int compare(int ofs1, int ofs2)
+			{
+				return _conncnt[_sndx[ofs1]] - _conncnt[_sndx[ofs2]];
+			}
+
+			@Override
+			public void set(int to, int from)
+			{
+				_sndx[to] = _sndx[from];
+			}
+
+			@Override
+			public int length()
 			{
 				return nbus;
 			}
 		}.sort();
+			
+//		new QuickSort()
+//		{
+//			@Override
+//			protected boolean isLess(int offset1, int offset2)
+//			{
+//				return _conncnt[_sndx[offset1]] < _conncnt[_sndx[offset2]];
+//			}
+//
+//			@Override
+//			protected void swap(int offset1, int offset2)
+//			{
+//				int t = _sndx[offset1];
+//				_sndx[offset1] = _sndx[offset2];
+//				_sndx[offset2] = t;
+//			}
+//
+//			@Override
+//			protected int size()
+//			{
+//				return nbus;
+//			}
+//		}.sort();
 		
 		for(int sx : _sndx)
 		{

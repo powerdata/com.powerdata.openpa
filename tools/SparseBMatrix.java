@@ -48,6 +48,10 @@ public class SparseBMatrix
 			int[] cnodes = ebus.getRemainingNodes();
 			int[] cbr = ebus.getElimBranches();
 			int[] tbr = ebus.getRemainingBranches();
+			if (tbr.length > 0)
+			{
+				int xxx = 5;
+			}
 			for (int i=0; i < cnodes.length; ++i)
 			{
 				float bbrdiag = bbranch[cbr[i]];
@@ -59,6 +63,7 @@ public class SparseBMatrix
 					int bbrndx = tbr[itarg++];
 					if (bbrndx != -1)
 						bbranch[bbrndx] += bprep * bbranch[cbr[j]];
+					int xxx = 5;
 				}
 			}
 		}

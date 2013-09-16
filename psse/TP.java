@@ -64,12 +64,12 @@ public class TP
 				if (island != -1 && !_energized[island])
 				{
 					_energized[island] = true;
+					++egycnt;
 				}
 				if ((g.getQT() - g.getQB()) > 1f
 						&& _bustype[busndx] == BusTypeCode.Unknown)
 				{
 					_bustype[busndx] = BusTypeCode.Gen;
-					++egycnt;
 					maxgen[busndx] += g.getPT();
 					if (_arefbyisland[island] == -1 || maxgen[busndx] > maxgen[_arefbyisland[island]])
 							_arefbyisland[island] = busndx;

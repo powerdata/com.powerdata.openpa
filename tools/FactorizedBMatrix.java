@@ -2,6 +2,10 @@ package com.powerdata.openpa.tools;
 
 import java.io.PrintWriter;
 
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.PsseModelException;
+
 public class FactorizedBMatrix
 {
 	float[] _bself, _bbrofs;
@@ -16,13 +20,17 @@ public class FactorizedBMatrix
 		_qnode = qnode;
 	}
 	
-	public void dump(PrintWriter pw)
+	public void dump(PsseModel model, PrintWriter pw) throws PsseModelException
 	{
-		pw.println("\"p\",\"q\",\"-bbranch/bself\",\"bself\"");
+		pw.println("\"p\",\"pndx\",\"q\",\"qndx\",\"-bbranch/bself\",\"bself\"");
+		BusList buses = model.getBuses();
 		for(int i=0; i < _pnode.length; ++i)
 		{
 			int pn = _pnode[i];
-			pw.format("%d,%d,%f,%f\n", pn, _qnode[i], _bbrofs[i], _bself[pn]);  
+			int qn = _qnode[i];
+
+			pw.format("\"%s\",%d,\"%s\",%d,%f,%f\n", buses.get(pn).getNAME(),
+					pn, buses.get(qn).getNAME(), qn, _bbrofs[i], _bself[pn]);
 		}
 	}
 	

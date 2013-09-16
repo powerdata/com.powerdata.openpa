@@ -214,30 +214,41 @@ public class FastDecoupledPowerFlow
 		System.arraycopy(slack, 0, bppbus, pv.length, slack.length);
 		
 		
-		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
-		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
-		
 		try
 		{
-		File tdir = new File(System.getProperty("java.io.tmpdir"));
-		PrintWriter orgbp = openDebug(tdir, "bp-prep.csv");
-		PrintWriter orgbpp = openDebug(tdir, "bpp-prep.csv");
-		orgbp.println("\"p\",\"q\",\"bbranch\",\"bself\"");
-		orgbpp.println("\"p\",\"q\",\"bbranch\",\"bself\"");
-		for(int i=0; i < branches.size(); ++i)
-		{
-			ACBranch b = branches.get(i);
-			int fb = b.getFromBus().getIndex(), tb = b.getToBus().getIndex();
-			orgbp.format("%d,%d,%f,%f\n", fb, tb, bbranchbp[i], bselfbp[fb]);
-			orgbpp.format("%d,%d,%f,%f\n", fb, tb, bbranchbpp[i], bselfbpp[fb]);
-		}
-		orgbp.close();
-		orgbpp.close();
-		}
-		catch(IOException ioe)
+			File tdir = new File(System.getProperty("java.io.tmpdir"));
+			PrintWriter orgbp = openDebug(tdir, "bp-prep.csv");
+			PrintWriter orgbpp = openDebug(tdir, "bpp-prep.csv");
+			String hdr = "\"p\",\"pndx\",\"q\",\"qndx\",\"bbranch\",\"bself\"";
+			orgbp.println(hdr);
+			orgbpp.println(hdr);
+			BusList buses = _model.getBuses();
+			for (int i = 0; i < net.getBranchCount(); ++i)
+			{
+				int[] nodes = net.getBusesForBranch(i);
+				int fbndx = nodes[0], tbndx = nodes[1];
+				if (fbndx >= 0 && tbndx >= 0)
+				{
+					Bus fb = buses.get(fbndx), tb = buses.get(tbndx);
+					orgbp.format("\"%s\",%d,\"%s\",%d,%f,%f\n", fb.getNAME(),
+							fbndx, tb.getNAME(), tbndx, bbranchbp[i],
+							bselfbp[fbndx]);
+					orgbpp.format("\"%s\",%d,\"%s\",%d,%f,%f\n", fb.getNAME(),
+							fbndx, tb.getNAME(), tbndx, bbranchbpp[i],
+							bselfbpp[fbndx]);
+				}
+			}
+			orgbp.close();
+			orgbpp.close();
+		} catch (IOException ioe)
 		{
 			throw new PsseModelException(ioe);
 		}
+
+		
+		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
+		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
+		
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
@@ -245,10 +256,9 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/6bustest.raw&issolved=false");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/palco.raw&issolved=false");
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw&issolved=true");
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/Downloads/palco.raw&issolved=false");
 
 		File tdir = new File("/tmp");
 		File[] list = tdir.listFiles(new FilenameFilter()
@@ -269,16 +279,16 @@ public class FastDecoupledPowerFlow
 		pf.runPowerFlow(mmr, VoltageSource.Flat);
 	}
 
-	public void dumpMatrices(File tdir) throws IOException
+	public void dumpMatrices(File tdir) throws IOException, PsseModelException
 	{
 		dumpMatrix(_bp, tdir, "factbp.csv");
 		dumpMatrix(_bpp, tdir, "factbpp.csv");
 	}
 	
-	void dumpMatrix(FactorizedBMatrix b, File tdir, String nm) throws IOException
+	void dumpMatrix(FactorizedBMatrix b, File tdir, String nm) throws IOException, PsseModelException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(tdir, nm))));
-		b.dump(pw);
+		b.dump(_model, pw);
 		pw.close();
 	}
 
