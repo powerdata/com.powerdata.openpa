@@ -48,8 +48,7 @@ public class SparseBMatrix
 			int[] cnodes = ebus.getRemainingNodes();
 			int[] cbr = ebus.getElimBranches();
 			int[] tbr = ebus.getRemainingBranches();
-//			int bx = ebus.getElimBusNdx();
-			if (cnodes.length == 3)
+			if (ebus.getElimBusNdx() == 42)
 			{
 				int xxx = 5;
 			}

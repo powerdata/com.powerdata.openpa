@@ -256,7 +256,7 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/Downloads/palco.raw&issolved=false");
+		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/palco.raw&issolved=false");
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
 //		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw&issolved=true");
 
