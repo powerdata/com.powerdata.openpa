@@ -72,17 +72,18 @@ public class SparseMatrixFactorizer
 			{
 				for(int j=i+1; j < nnd; ++j)
 				{
+					int br = -1;
 					if (!nc.isSaved(nodes[i]) && !nc.isSaved(nodes[j]))
 					{
-						int br = net.findBranch(nodes[i], nodes[j]);
+						br = net.findBranch(nodes[i], nodes[j]);
 						if (br == -1)
 						{
 							br = net.addBranch(nodes[i], nodes[j]);
 							nc.inc(nodes[i]);
 							nc.inc(nodes[j]);
 						}
-						tbr[itbr++] = br;
 					}
+					tbr[itbr++] = br;
 				}
 			}
 			_btr[iord] = tbr;
@@ -163,7 +164,7 @@ class NodeCounts
 		return _conncnt[i] == 0;
 	}
 
-	public int getNextBusNdx()
+	public int getNextBusNdx2()
 	{
 		int rv = -1;
 		for(int i=1; i < _cntdist.length; ++i)
@@ -177,6 +178,26 @@ class NodeCounts
 			}
 		}
 		return rv;
+	}
+
+	static final int[] elimorder = new int[]
+	{
+		4,8,17,18,22,30,35,64,1,2,5,9,11,12,
+		15,16,19,21,23,20,31,34,37,38,40,47,
+		49,50,52,53,54,55,56,58,59,60,62,63,
+		65,66,67,68,69,0,3,7,10,13,14,25,29,
+		39,24,26,27,36,46,51,61,33,28,44,45,
+		48,57,42
+	};
+	int _nb = 0;
+	public int getNextBusNdx()
+	{
+		if (_nb < elimorder.length)
+		{
+			int bx = elimorder[_nb++];
+			return _conncnt[bx] <= 0 ? -1 : bx;
+		}
+		return -1;
 	}
 
 	int findBus(int cd)

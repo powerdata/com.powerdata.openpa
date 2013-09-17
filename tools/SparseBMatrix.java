@@ -48,19 +48,20 @@ public class SparseBMatrix
 			int[] cnodes = ebus.getRemainingNodes();
 			int[] cbr = ebus.getElimBranches();
 			int[] tbr = ebus.getRemainingBranches();
-			if (tbr.length > 0)
+//			int bx = ebus.getElimBusNdx();
+			if (cnodes.length == 3)
 			{
 				int xxx = 5;
 			}
+			int itbr=0;
 			for (int i=0; i < cnodes.length; ++i)
 			{
 				float bbrdiag = bbranch[cbr[i]];
 				float bprep = -bbrdiag / bself[ebus.getElimBusNdx()];
 				bself[cnodes[i]] += bprep * bbrdiag;
-				int itarg = 0;
-				for(int j=1; j < cnodes.length; ++j)
+				for (int j=i+1; j < cnodes.length; ++j, ++itbr)
 				{
-					int bbrndx = tbr[itarg++];
+					int bbrndx = tbr[itbr];
 					if (bbrndx != -1)
 						bbranch[bbrndx] += bprep * bbranch[cbr[j]];
 					int xxx = 5;
@@ -74,7 +75,7 @@ public class SparseBMatrix
 		{
 			elimbbr[i] = -bbranch[_elimbrndx[i]] / bself[_pnode[i]];
 		}
-		return new FactorizedBMatrix(bself, elimbbr, _pnode, _qnode);
+		return new FactorizedBMatrix(bself, elimbbr, _pnode, _qnode, _elimbrndx);
 	}
 
 }

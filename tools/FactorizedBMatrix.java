@@ -9,27 +9,35 @@ import com.powerdata.openpa.psse.PsseModelException;
 public class FactorizedBMatrix
 {
 	float[] _bself, _bbrofs;
-	int[] _pnode, _qnode;
+	int[] _pnode, _qnode, _brndx;
 	
 	public FactorizedBMatrix(float[] bself, float[] bbrofs, int[] pnode,
-			int[] qnode)
+			int[] qnode, int[] brndx)
 	{
 		_bself = bself;
 		_bbrofs = bbrofs;
 		_pnode = pnode;
 		_qnode = qnode;
+		_brndx = brndx;
 	}
 	
 	public void dump(PsseModel model, PrintWriter pw) throws PsseModelException
 	{
-		pw.println("\"p\",\"pndx\",\"q\",\"qndx\",\"-bbranch/bself\",\"bself\"");
+		pw.println("\"brndx\",\"eord\",\"p\",\"pndx\",\"q\",\"qndx\",\"-bbranch/bself\",\"bself\"");
 		BusList buses = model.getBuses();
+		int iord=-1;
+		int oldpn = -1;
 		for(int i=0; i < _pnode.length; ++i)
 		{
 			int pn = _pnode[i];
 			int qn = _qnode[i];
-
-			pw.format("\"%s\",%d,\"%s\",%d,%f,%f\n", buses.get(pn).getNAME(),
+			if (pn != oldpn)
+			{
+				oldpn = pn;
+				++iord;
+			}
+			
+			pw.format("%d,%d,\"%s\",%d,\"%s\",%d,%f,%f\n", _brndx[i], iord, buses.get(pn).getNAME(),
 					pn, buses.get(qn).getNAME(), qn, _bbrofs[i], _bself[pn]);
 		}
 	}
