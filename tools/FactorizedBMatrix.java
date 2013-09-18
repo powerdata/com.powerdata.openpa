@@ -43,14 +43,17 @@ public class FactorizedBMatrix
 		}
 	}
 	
-	public float[] solve(float[] mm, float[] vm)
+	public float[] solve(float[] mm, float[] vm, int[][] actvbus)
 	{
 		int nnd = _bself.length;
 		int nbr = _bbrofs.length;
 
-		for (int i=0; i < nnd; ++i)
+		for(int[] list : actvbus)
 		{
-			mm[i] /= vm[i];
+			for (int b : list)
+			{
+				mm[b] /= vm[b];
+			}
 		}
 
 		/* run the forward reduction */
@@ -61,17 +64,16 @@ public class FactorizedBMatrix
 		
 		/* backward substitution */
 		float[] dx = new float[nnd];
-//		for(int[] buslist : buses)
-//		{
-//			for (int b : buslist)
-//			{
-//				dx[b] = mm[b] / _bself[b];
-//			}
-//		}
+		
+		for (int[] list : actvbus)
+			for (int b : list)
+			{
+				dx[b] = mm[b] / _bself[b];
+			}
+		
 		for(int i=nbr-1; i >= 0; --i)
 		{
 			int pn = _pnode[i];
-			dx[pn] = mm[pn] / _bself[pn];
 			dx[pn] += _bbrofs[i] *  dx[_qnode[i]];
 		}
 		

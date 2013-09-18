@@ -121,6 +121,7 @@ class NodeCounts
 	
 	public NodeCounts(LinkNet net, int[] saveBusNdx)
 	{
+//		eord = isp ? elimorderp : elimorderq;
 		analyze(net, saveBusNdx);
 		sort();
 	}
@@ -146,24 +147,31 @@ class NodeCounts
 		return rv;
 	}
 
-//	static final int[] elimorder = new int[]
-//	{
-//		4,8,17,18,22,30,35,64,1,2,5,9,11,12,
-//		15,16,19,21,23,20,31,34,37,38,40,47,
-//		49,50,52,53,54,55,56,58,59,60,62,63,
-//		65,66,67,68,69,0,3,7,10,13,14,25,29,
-//		39,24,26,27,36,46,51,61,33,28,44,45,
-//		48,57,42
-//	};
+//	static final int[]	elimorderp	= new int[] { 4, 8, 17, 18, 22, 35, 43, 64,
+//			1, 2, 9, 11, 12, 15, 16, 19, 21, 23, 20, 34, 37, 38, 41, 40, 47,
+//			49, 50, 52, 53, 54, 55, 56, 58, 59, 60, 62, 63, 65, 66, 67, 68, 69,
+//			0, 5, 6, 3, 7, 10, 13, 14, 25, 29, 31, 32, 39, 24, 26, 27, 36, 46,
+//			51, 61, 33, 42, 44, 45, 48, 57, 28 };
+//	
+//	static final int[]	elimorderq	= new int[] { 64, 1, 2, 9, 11, 12, 15, 19,
+//			23, 20, 34, 37, 38, 41, 40, 47, 49, 50, 52, 53, 54, 55, 56, 58, 59,
+//			60, 62, 63, 65, 66, 67, 68, 69, 0, 5, 6, 10, 13, 14, 29, 31, 32,
+//			36, 39, 3, 16, 21, 46, 61, 45, 51, 28, 7, 33, 44, 57, 48, 42 };
+//	
 //	int _nb = 0;
+//	int[] eord = elimorderp;
+
 //	public int getNextBusNdx()
 //	{
-//		if (_nb < elimorder.length)
+//		int rv = -1;
+//		if (_nb < eord.length)
 //		{
-//			int bx = elimorder[_nb++];
-//			return _conncnt[bx] <= 0 ? -1 : bx;
+//			rv = eord[_nb++];
+//			int cnt = _conncnt[rv];
+//			--_cntdist[cnt];
+//			_conncnt[rv] = 0;
 //		}
-//		return -1;
+//		return rv;
 //	}
 
 	int findBus(int cd)

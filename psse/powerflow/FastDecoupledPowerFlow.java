@@ -55,12 +55,17 @@ public class FastDecoupledPowerFlow
 		PowerCalculator pcalc = (mmr == null) ? new PowerCalculator(_model)
 				: new PowerCalculator(_model, mmr);
 		float[] va=null, vm=null;
+		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
+		int[] genbus = _model.getBusNdxForType(BusTypeCode.Gen);
+		int[] slackbus = _model.getBusNdxForType(BusTypeCode.Slack);
+		int[][] pbus = new int[][] {ldbus, genbus};
+		int[][] qbus = new int[][] {ldbus};
 
 		switch(vsrc)
 		{
 			case Flat:
 				va = new float[nbus];
-				vm = flatMag();
+				vm = flatMag(ldbus);
 				break;
 				
 			case Case:
@@ -84,78 +89,81 @@ public class FastDecoupledPowerFlow
 			}
 		}
 
-		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
-		int[] genbus = _model.getBusNdxForType(BusTypeCode.Gen);
-		int[] slackbus = _model.getBusNdxForType(BusTypeCode.Slack);
-		int[][] pqbus = new int[][] {ldbus, genbus};
-		int[][] pvbus = new int[][] {ldbus};
 		int niter=0;
-
-		for(int iiter=0; iiter < itermax; ++iiter)
+		boolean nconv=true;
+		float[][] mm = pcalc.calculateMismatches(va, vm);
+		if (mmr != null)
 		{
-			float[][] mm = pcalc.calculateMismatches(va, vm);
+			mmr.report(String.valueOf("pre"));
+		}
+		for(int iiter=0; iiter < itermax && nconv; ++iiter, ++niter)
+		{
+			{
+				float[] dp = _bp.solve(mm[0], vm, pbus);
+				for(int[] blist : pbus)
+				{
+					for(int b : blist)
+						va[b] += dp[b];
+				}
+			}
+			
+			mm = pcalc.calculateMismatches(va, vm);
 			if (mmr != null)
 			{
 				mmr.report(String.valueOf(iiter));
 			}
-			boolean conv = testConverged(mm[0], pqbus, _Ptol);
-			if (conv) conv &= testConverged(mm[1], pvbus, _Qtol);
-			if (conv) {niter = iiter; break;}
+			nconv = notConverged(mm[0], pbus, _Ptol, "p") != -1
+					|| notConverged(mm[1], qbus, _Qtol, "q") != -1;
 
-//			float[] pmm = mm[0];
-//			for (int b : slackbus) pmm[b] = 0f;
-			float[] dp = _bp.solve(mm[0], vm);
-//			for(int[] blist : pqbus)
-//			{
-//				for(int b : blist)
-//					va[b] += dp[b];
-//			}
-//			mm = pcalc.calculateMismatches(va, vm);
-//			if (mmr != null)
-//			{
-//				mmr.report(String.valueOf(iiter)+".5");
-//			}
-			
-//			float[] qmm = mm[1];
-//			for(int[] list : new int[][] {genbus, slackbus})
-//			{
-//				for (int b : list) qmm[b] = 0f; 
-//			}
-			float[] dq = _bpp.solve(mm[1], vm);
+			if (nconv)
+			{
+				float[] dq = _bpp.solve(mm[1], vm, qbus);
+				for (int b : ldbus)
+				{
+					vm[b] += dq[b];
+				}
+				mm = pcalc.calculateMismatches(va, vm);
+				if (mmr != null)
+				{
+					mmr.report(String.valueOf(iiter) + ".5");
+				}
+				nconv = notConverged(mm[0], pbus, _Ptol, "p") != -1
+						|| notConverged(mm[1], qbus, _Qtol, "q") != -1;
+			}
+
 //			for(int b : ldbus)
 //			{
+//				va[b] += dp[b];
 //				vm[b] += dq[b];
 //			}
-//
-			
-			
-			for(int b : ldbus)
-			{
-				va[b] += dp[b];
-				vm[b] += dq[b];
-			}
-			for(int b : genbus)
-				va[b] += dp[b];
+//			for(int b : genbus)
+//				va[b] += dp[b];
 		}
 		System.out.format("Converged in %d iterations\n", niter);
 	}
 	
 
-	float[] flatMag() throws PsseModelException
+	float[] flatMag(int[] qbus) throws PsseModelException
 	{
 		float[] vm = new float[_model.getBuses().size()];
-		Arrays.fill(vm, 1f);
+		for(int b : qbus) vm[b] = 1f;
 		return vm;
 	}
 
-	boolean testConverged(float[] mm, int[][] buses, float tol)
+	int notConverged(float[] mm, int[][] buses, float tol, String pq)
 	{
 		for(int[] blist : buses)
 		{
 			for (int b : blist)
-				if (Math.abs(mm[b]) > tol) return false;
+			{
+				if (Math.abs(mm[b]) > tol)
+				{
+					System.out.format("%s conv fail %d %f\n", pq, b, mm[b]);
+					return b;
+				}
+			}
 		}
-		return true;
+		return -1;
 	}
 
 
