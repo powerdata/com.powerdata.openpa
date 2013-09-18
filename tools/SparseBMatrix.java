@@ -15,9 +15,11 @@ public class SparseBMatrix
 		_factorizer = new SparseMatrixFactorizer(net, saveBusNdx);
 		_bbranch = bbranch;
 		_bself = bself;
-		_pnode = new int[_factorizer.getFactorizedBranchCount()];
-		_qnode = new int[_factorizer.getFactorizedBranchCount()];
-		_elimbrndx = new int[_factorizer.getFactorizedBranchCount()];
+		int nfactbr = _factorizer.getFactorizedBranchCount();
+		_pnode = new int[nfactbr];
+		_qnode = new int[nfactbr];
+		_elimbrndx = new int[nfactbr];
+		int nused=0;
 		for(int ielim=0, jbr=0; ielim < _factorizer.size(); ++ielim)
 		{
 			EliminatedBus ebus = _factorizer.get(ielim);
@@ -26,13 +28,17 @@ public class SparseBMatrix
 			int ebusndx = ebus.getElimBusNdx();
 			for(int i=0; i < cnodes.length; ++i, ++jbr)
 			{
-//				for(int j=1; j < cnodes.length; ++j, ++jbr)
-//				{
-					_pnode[jbr] = ebusndx;
-					_qnode[jbr] = cnodes[i];
-					_elimbrndx[jbr] = elimbr[i];
-//				}
+				++nused;
+				_pnode[jbr] = ebusndx;
+				_qnode[jbr] = cnodes[i];
+				_elimbrndx[jbr] = elimbr[i];
 			}
+		}
+		if (nused < nfactbr)
+		{
+			_pnode = Arrays.copyOf(_pnode, nused);
+			_qnode = Arrays.copyOf(_qnode, nused);
+			_elimbrndx = Arrays.copyOf(_elimbrndx, nused);
 		}
 	}
 	
@@ -48,10 +54,6 @@ public class SparseBMatrix
 			int[] cnodes = ebus.getRemainingNodes();
 			int[] cbr = ebus.getElimBranches();
 			int[] tbr = ebus.getRemainingBranches();
-			if (ebus.getElimBusNdx() == 42)
-			{
-				int xxx = 5;
-			}
 			int itbr=0;
 			for (int i=0; i < cnodes.length; ++i)
 			{
@@ -63,14 +65,14 @@ public class SparseBMatrix
 					int bbrndx = tbr[itbr];
 					if (bbrndx != -1)
 						bbranch[bbrndx] += bprep * bbranch[cbr[j]];
-					int xxx = 5;
 				}
 			}
 		}
 
 		/* convert bbranch to eliminated order */
-		float[] elimbbr = new float[nfbr];
-		for(int i=0; i < nfbr; ++i)
+		int nwl = _pnode.length;
+		float[] elimbbr = new float[nwl];
+		for(int i=0; i < nwl; ++i)
 		{
 			elimbbr[i] = -bbranch[_elimbrndx[i]] / bself[_pnode[i]];
 		}

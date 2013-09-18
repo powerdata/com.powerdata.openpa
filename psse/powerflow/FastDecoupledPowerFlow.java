@@ -48,7 +48,7 @@ public class FastDecoupledPowerFlow
 	
 	public void runPowerFlow(MismatchReport mmr, VoltageSource vsrc) throws PsseModelException, IOException
 	{
-		int itermax = 40;
+		int itermax = 100;
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
 
@@ -80,19 +80,13 @@ public class FastDecoupledPowerFlow
 			{
 				//TODO:  resolve multiple setpoints if found
 				int bndx = b.getIndex();
-				if (vm[bndx] > 0f && vm[bndx] != g.getVS())
-				{
-					_model.log(LogSev.Error, b, "Generators have different voltage setpoints on same bus");
-				}
-				else
-				{
-					vm[bndx] = g.getVS();
-				}
+				vm[bndx] = g.getVS();
 			}
 		}
 
 		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
 		int[] genbus = _model.getBusNdxForType(BusTypeCode.Gen);
+		int[] slackbus = _model.getBusNdxForType(BusTypeCode.Slack);
 		int[][] pqbus = new int[][] {ldbus, genbus};
 		int[][] pvbus = new int[][] {ldbus};
 		int niter=0;
@@ -108,31 +102,40 @@ public class FastDecoupledPowerFlow
 			if (conv) conv &= testConverged(mm[1], pvbus, _Qtol);
 			if (conv) {niter = iiter; break;}
 
+//			float[] pmm = mm[0];
+//			for (int b : slackbus) pmm[b] = 0f;
 			float[] dp = _bp.solve(mm[0], vm);
-			for(int[] blist : pqbus)
-			{
-				for(int b : blist)
-					va[b] += dp[b];
-			}
-			mm = pcalc.calculateMismatches(va, vm);
-			if (mmr != null)
-			{
-				mmr.report(String.valueOf(iiter)+".5");
-			}
+//			for(int[] blist : pqbus)
+//			{
+//				for(int b : blist)
+//					va[b] += dp[b];
+//			}
+//			mm = pcalc.calculateMismatches(va, vm);
+//			if (mmr != null)
+//			{
+//				mmr.report(String.valueOf(iiter)+".5");
+//			}
 			
+//			float[] qmm = mm[1];
+//			for(int[] list : new int[][] {genbus, slackbus})
+//			{
+//				for (int b : list) qmm[b] = 0f; 
+//			}
 			float[] dq = _bpp.solve(mm[1], vm);
-			for(int b : ldbus)
-				vm[b] += dq[b];
-
-			
-			
 //			for(int b : ldbus)
 //			{
-//				va[b] += dp[b];
 //				vm[b] += dq[b];
 //			}
-//			for(int b : genbus)
-//				va[b] += dp[b];
+//
+			
+			
+			for(int b : ldbus)
+			{
+				va[b] += dp[b];
+				vm[b] += dq[b];
+			}
+			for(int b : genbus)
+				va[b] += dp[b];
 		}
 		System.out.format("Converged in %d iterations\n", niter);
 	}
@@ -256,9 +259,28 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/palco.raw&issolved=false");
-//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/op12s_pk_version_30.raw&issolved=false");
-//		PsseModel model = PsseModel.OpenInput("pssecsv:raw=/home/chris/src/rod-tango/data/railbelt.raw&issolved=true");
+		System.out.println("start");
+		String uri = null;
+		for(int i=0; i < args.length;)
+		{
+			String s = args[i++].toLowerCase();
+			int ssx = 1;
+			if (s.startsWith("--")) ++ssx;
+			switch(s.substring(ssx))
+			{
+				case "uri":
+					uri = args[i++];
+					break;
+			}
+		}
+
+		if (uri == null)
+		{
+			System.err.format("Usage: -uri model_uri");
+			System.exit(1);
+		}
+		
+		PsseModel model = PsseModel.OpenInput(uri);
 
 		File tdir = new File("/tmp");
 		File[] list = tdir.listFiles(new FilenameFilter()

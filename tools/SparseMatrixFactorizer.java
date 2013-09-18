@@ -54,20 +54,6 @@ public class SparseMatrixFactorizer
 	{
 		NodeCounts nc = new NodeCounts(net, saveBusNdx);
 		
-		/* count connections between saved buses */
-		int nmutsaved = 0;
-		for (int sb : saveBusNdx)
-		{
-			int[] c = net.findBuses(sb);
-			for (int cb : c)
-			{
-				if (nc.isSaved(cb))
-					++nmutsaved;
-			}
-		}
-		
-		nmutsaved /= 2;
-		
 		int iord = 0, nbus = nc.getNextBusNdx();
 		while (nbus != -1)
 		{
@@ -109,7 +95,7 @@ public class SparseMatrixFactorizer
 		}
 		
 		_size = iord;
-		_factbrcnt = net.getBranchCount()-nmutsaved;
+		_factbrcnt = net.getBranchCount();
 		
 	}
 	

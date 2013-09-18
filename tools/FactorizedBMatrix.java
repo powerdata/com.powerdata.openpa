@@ -1,6 +1,7 @@
 package com.powerdata.openpa.tools;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModel;
@@ -51,7 +52,7 @@ public class FactorizedBMatrix
 		{
 			mm[i] /= vm[i];
 		}
-		
+
 		/* run the forward reduction */
 		for(int i=0; i < nbr; ++i)
 		{
