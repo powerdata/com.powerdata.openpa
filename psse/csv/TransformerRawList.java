@@ -246,5 +246,10 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
 	@Override
 	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
+
+	public void adjustLowX(float minx)
+	{
+		PsseRawModel._AdjustLowX(_z.im(), minx);
+	}
 }
 

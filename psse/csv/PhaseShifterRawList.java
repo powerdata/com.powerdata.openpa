@@ -141,6 +141,11 @@ public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterL
 
 	@Override
 	public int size() {return _size;}
+
+	public void adjustLowX(float minx)
+	{
+		PsseRawModel._AdjustLowX(_z.im(), minx);
+	}
 	
 	/* Realtime fields */
 }

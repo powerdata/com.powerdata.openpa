@@ -267,7 +267,6 @@ public class FastDecoupledPowerFlow
 	
 	public static void main(String[] args) throws Exception
 	{
-		System.out.println("start");
 		String uri = null;
 		for(int i=0; i < args.length;)
 		{

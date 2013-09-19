@@ -158,7 +158,8 @@ public class MismatchReport
 		}
 		else
 		{
-			od = _model.getSvcs().get(otdev-_nshunt);
+			otdev -= _nshunt;
+			od = _model.getSvcs().get(otdev);
 			pval = 0;
 			qval = _svcq[otdev];
 		}

@@ -116,6 +116,11 @@ public class LineListRaw extends LineList
 	public int getDeftST(int ndx) throws PsseModelException {return super.getST(ndx);}
 	public float getDeftLEN(int ndx) throws PsseModelException {return super.getLEN(ndx);}
 
+	public void adjustLowX(float minx)
+	{
+		PsseRawModel._AdjustLowX(_x, minx);
+	}
+
 	/* Realtime fields */
 
 

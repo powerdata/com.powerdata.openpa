@@ -30,15 +30,13 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	SvcList	_svcs;
 	TP _tp;
 	IslandList _islands;
-	boolean _issolved = true;
+	LowXHandling _lowx;
 
 	public PsseModel(String parms) throws PsseModelException
 	{
 		_rmodel = new PsseRawModel(parms);
-		if (!_rmodel.issolved())
-		{
-			_issolved = false;
-		}
+		_lowx = _rmodel.getLowXHandling();
+		
 		//TODO:  This needs to be optional
 		eliminateLowZBranches();
 		_tp = new TP(this);
@@ -96,6 +94,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		eliminate(rlines, elimlnet, keepln);
 		eliminate(xfrlist, elimlnet, keeptx);
 		
+		if (keepln.size() == rlines.size() && xfrlist.size() == keeptx.size())
+		{
+			System.err.println("TODO:  Clean up case where no elimination performed");
+		}
+		
 		int nrbus = rbuses.size();
 		int[] busndx = new int[nrbus];
 		for(int i=0; i < nrbus; ++i) busndx[i] = i;
@@ -118,6 +121,11 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		_phaseshifters = new PhaseShifterList(_buses, pslist);
 		_shunts = new ShuntList(_buses, _rmodel.getShunts());
 		_svcs = new SvcList(_buses, _rmodel.getSvcs());
+
+		if (_lowx == LowXHandling.Adjust)
+		{
+			_rmodel.adjustLowX(.001f);
+		}
 	}
 	
 	static int[] convertIndex(List<Integer> indexes)
@@ -137,7 +145,6 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			ACBranch br = (ACBranch) branchList.get(i);
 			if (br.isInSvc())
 			{
-//				Complex z = br.getZ();
 				Bus fbus = br.getFromBus();
 				Bus tbus = br.getToBus();
 				int fbusx = fbus.getIndex();
@@ -145,18 +152,12 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				float fvm = fbus.getVM(), tvm = tbus.getVM();
 				float fva = fbus.getVArad(), tva = tbus.getVArad();
 				
-				
-//				if ((Math.round(vf.r()*cutoff) == Math.round(vt.r()*cutoff) &&
-//						Math.round(vf.theta()*cutoff) == Math.round(vt.theta()*cutoff)))
-//					Math.round(vf.theta()*cutoff) == Math.round(vt.theta()*cutoff)) ||
-//					(z.re() <= _lowrthr && Math.abs(z.im()) <= _lowxthr))
-
-				if (_issolved && (Math.abs(fvm - tvm) < 0.00003 &&
+				if (_lowx == LowXHandling.ElimByVoltage && (Math.abs(fvm - tvm) < 0.00003 &&
 					Math.abs(fva - tva) < 0.00003))
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}
-				else if (!_issolved && Math.abs(br.getX()) <= 0.001f)
+				else if (_lowx == LowXHandling.ElimByX && Math.abs(br.getX()) <= 0.001f)
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}

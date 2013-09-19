@@ -30,7 +30,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	SvcRawList				_svcList;
 	LoadList			_loads;
 	GenList				_generatorList;
-	boolean				_issolved = true;
+	LowXHandling		_lowx = LowXHandling.Adjust;
 
 	public PsseRawModel(String parms) throws PsseModelException
 	{
@@ -65,8 +65,16 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			_dir = new File(q.get("path")[0]);
 		}
-		String slvd = q.get("issolved")[0];
-		if (slvd != null) _issolved = Boolean.parseBoolean(slvd);
+		String slvd = q.get("lowx")[0];
+		if (slvd != null)
+		{
+			switch(slvd.toLowerCase())
+			{
+				case "adjust": _lowx = LowXHandling.Adjust; break;
+				case "elimbyvoltage": _lowx = LowXHandling.ElimByVoltage; break;
+				case "elimbyx": _lowx = LowXHandling.ElimByX; break;
+			}
+		}
 		analyzeRawShunts();
 		analyzeRawTransformers();
 
@@ -203,9 +211,27 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	}
 
 
-	public boolean issolved()
+	public LowXHandling getLowXHandling()
 	{
-		return _issolved;
+		return _lowx;
+	}
+
+
+	public void adjustLowX(float minx)
+	{
+		_branchList.adjustLowX(minx);
+		_xfrList.adjustLowX(minx);
+		_psList.adjustLowX(minx);
+	}
+
+
+	static void _AdjustLowX(float[] x, float minx)
+	{
+		for (int i=0; i < x.length; ++i)
+		{
+			if (Math.abs(x[i]) <= 0.001f)
+				x[i] = Math.signum(x[i]) * 0.001f;
+		}
 	}
 
 

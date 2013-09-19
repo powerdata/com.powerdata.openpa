@@ -15,7 +15,7 @@ public class SparseBMatrix
 		_factorizer = new SparseMatrixFactorizer(net, saveBusNdx);
 		_bbranch = bbranch;
 		_bself = bself;
-		int nfactbr = _factorizer.getFactorizedBranchCount();
+		int nfactbr = (int) (_factorizer.getFactorizedBranchCount() * 1.25f);
 		_pnode = new int[nfactbr];
 		_qnode = new int[nfactbr];
 		_elimbrndx = new int[nfactbr];
