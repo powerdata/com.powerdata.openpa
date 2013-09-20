@@ -147,8 +147,8 @@ public class MismatchReport
 		else if ((otdev -= _ngen) < _nload)
 		{
 			od = _model.getLoads().get(otdev);
-			pval = od.getRTP();
-			qval = od.getRTQ();
+			pval = -od.getRTP();
+			qval = -od.getRTQ();
 		}
 		else if ((otdev -= _nload) < _nshunt)
 		{

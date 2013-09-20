@@ -157,7 +157,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}
-				else if (_lowx == LowXHandling.ElimByX && Math.abs(br.getX()) <= 0.001f)
+				else if (_lowx == LowXHandling.ElimByX && Math.abs(br.getX()) < 0.0001f)
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}

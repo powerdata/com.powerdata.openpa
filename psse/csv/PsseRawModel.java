@@ -2,6 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -45,20 +46,29 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 			File tmpdir = new File(System.getProperty("java.io.tmpdir"));
 			String sname = raw.getName();
 			_dir = new File(tmpdir, sname.substring(0, sname.length()-4));
-			if (!_dir.exists())
+			try
 			{
-				try
+				if (_dir.exists())
 				{
-					_dir.mkdirs();
-					Reader rpsse = new FileReader(raw);
-					Psse2CSV p2c = new Psse2CSV(rpsse, null, _dir);
-					p2c.process();
-					rpsse.close();
-					p2c.cleanup();
-				} catch (IOException | PsseProcException e)
-				{
-					throw new PsseModelException(e);
+					File[] flist = _dir.listFiles(new FilenameFilter()
+					{
+						@Override
+						public boolean accept(File arg0, String arg1)
+						{
+							return arg1.toLowerCase().endsWith(".csv");
+						}
+					});
+					for(File f : flist) f.delete();
 				}
+				_dir.mkdirs();
+				Reader rpsse = new FileReader(raw);
+				Psse2CSV p2c = new Psse2CSV(rpsse, null, _dir);
+				p2c.process();
+				rpsse.close();
+				p2c.cleanup();
+			} catch (IOException | PsseProcException e)
+			{
+				throw new PsseModelException(e);
 			}
 		}
 		else

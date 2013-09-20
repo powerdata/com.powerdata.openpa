@@ -48,7 +48,7 @@ public class FastDecoupledPowerFlow
 	
 	public void runPowerFlow(MismatchReport mmr, VoltageSource vsrc) throws PsseModelException, IOException
 	{
-		int itermax = 100;
+		int itermax = 1000;
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
 
@@ -67,9 +67,6 @@ public class FastDecoupledPowerFlow
 				va = new float[nbus];
 				vm = flatMag(ldbus);
 				break;
-				
-			case Case:
-				throw new UnsupportedOperationException("Not yet implemented");
 				
 			case RealTime:
 				float[][] rtv = pcalc.getRTVoltages();
@@ -194,29 +191,33 @@ public class FastDecoupledPowerFlow
 		
 		for(Shunt shunt : _model.getShunts())
 		{
-			bselfbpp[shunt.getBus().getIndex()] -= shunt.getBpu();
+			if (shunt.isInSvc() && shunt.isSwitchedOn())
+				bselfbpp[shunt.getBus().getIndex()] -= shunt.getBpu();
 		}
 		
 		for(ACBranch br : branches)
 		{
-			int fbus = br.getFromBus().getIndex();
-			int tbus = br.getToBus().getIndex();
-			int brx = net.findBranch(fbus, tbus);
-			if (brx == -1)
+			if (br.isInSvc())
 			{
-				brx = net.addBranch(fbus, tbus);
+				int fbus = br.getFromBus().getIndex();
+				int tbus = br.getToBus().getIndex();
+				int brx = net.findBranch(fbus, tbus);
+				if (brx == -1)
+				{
+					brx = net.addBranch(fbus, tbus);
+				}
+				Complex z = br.getZ();
+				float bbp = 1 / z.im();
+				Complex y = z.inv();
+
+				bbranchbp[brx] -= bbp;
+				bselfbp[fbus] += bbp;
+				bselfbp[tbus] += bbp;
+				float bbpp = -y.im();
+				bbranchbpp[brx] -= bbpp;
+				bselfbpp[fbus] += (bbpp - br.getFromBcm());
+				bselfbpp[tbus] += (bbpp - br.getToBcm());
 			}
-			Complex z = br.getZ();
-			float bbp = 1/z.im();
-			Complex y = z.inv();
-			
-			bbranchbp[brx] -= bbp;
-			bselfbp[fbus] += bbp;
-			bselfbp[tbus] += bbp;
-			float bbpp = -y.im();
-			bbranchbpp[brx] -= bbpp;
-			bselfbpp[fbus] += (bbpp - br.getFromBcm());
-			bselfbpp[tbus] += (bbpp - br.getToBcm());
 		}
 
 		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
@@ -256,10 +257,8 @@ public class FastDecoupledPowerFlow
 			throw new PsseModelException(ioe);
 		}
 
-		
 		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
 		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
-		
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
@@ -268,6 +267,7 @@ public class FastDecoupledPowerFlow
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;
+		String svstart = "Flat";
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -278,12 +278,18 @@ public class FastDecoupledPowerFlow
 				case "uri":
 					uri = args[i++];
 					break;
+				case "voltage":
+					svstart = args[i++];
+					break;
+					
 			}
 		}
+		
+		VoltageSource vstart = VoltageSource.fromConfig(svstart);
 
 		if (uri == null)
 		{
-			System.err.format("Usage: -uri model_uri");
+			System.err.format("Usage: -uri model_uri [-voltage flat|realtime]");
 			System.exit(1);
 		}
 		
@@ -300,12 +306,14 @@ public class FastDecoupledPowerFlow
 		});
 		for (File f : list) f.delete();
 		
+		
+		
 		File ddir = new File (System.getProperty("java.io.tmpdir"));
 		MismatchReport mmr = new MismatchReport(model, ddir);
 		
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
 		pf.dumpMatrices(ddir);
-		pf.runPowerFlow(mmr, VoltageSource.Flat);
+		pf.runPowerFlow(mmr, vstart);
 	}
 
 	public void dumpMatrices(File tdir) throws IOException, PsseModelException

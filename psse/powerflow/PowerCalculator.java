@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse.powerflow;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -237,5 +239,48 @@ public class PowerCalculator
 		return new float[][] {va, vm};
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		String uri = null;
+
+		for(int i=0; i < args.length;)
+		{
+			String s = args[i++].toLowerCase();
+			int ssx = 1;
+			if (s.startsWith("--")) ++ssx;
+			switch(s.substring(ssx))
+			{
+				case "uri":
+					uri = args[i++];
+					break;
+			}
+		}
+		
+		if (uri == null)
+		{
+			System.err.format("Usage: -uri model_uri");
+			System.exit(1);
+		}
+		
+		PsseModel model = PsseModel.OpenInput(uri);
+
+		File tdir = new File(System.getProperty("java.io.tmpdir"));
+		File[] list = tdir.listFiles(new FilenameFilter()
+		{
+			@Override
+			public boolean accept(File dir, String name)
+			{
+				return name.startsWith("mismatch") && name.endsWith(".csv");
+			}
+		});
+		for (File f : list) f.delete();
+		
+		
+		
+		MismatchReport mmr = new MismatchReport(model, tdir);
+		PowerCalculator pc = new PowerCalculator(model, mmr);
+		pc.calculateMismatches(pc.getRTVoltages());
+		mmr.report("");
+	}
 }
 
