@@ -23,7 +23,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	LoadList			_loads;
 	GenList				_generatorList;
 	BusList				_buses;
-	TransformerSubList	_transformers;
+//	TransformerSubList	_transformers;
+	TransformerList	_transformers;
 	LineSubList	_lines;
 	PhaseShifterList	_phaseshifters;
 	ShuntList	_shunts;
@@ -115,9 +116,33 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			}
 		}
 		
+		/* branches in parallel with an eliminated branch also need to be eliminated */
+		ArrayList<Integer> keepln2 = new ArrayList<>(keepln.size());
+		ArrayList<Integer> keeptx2 = new ArrayList<>(keeptx.size());
+		for(Integer br : keepln)
+		{
+			ACBranch b = rlines.get(br);
+			int fbr = elimlnet.findBranch(b.getFromBus().getIndex(), b.getToBus().getIndex()); 
+			if (fbr == -1)
+			{
+				keepln2.add(br);
+			}
+		}
+		for(Integer br : keeptx)
+		{
+			ACBranch b = xfrlist.get(br);
+			int fbr = elimlnet.findBranch(b.getFromBus().getIndex(), b.getToBus().getIndex()); 
+			if (fbr == -1)
+			{
+				keeptx2.add(br);
+			}
+		}
+		
+		
 		_buses = new BusSubList(this, rbuses, busndx);
-		_transformers = new TransformerSubList(_buses, xfrlist, convertIndex(keeptx));
-		_lines = new LineSubList(_buses, rlines, convertIndex(keepln));
+		_transformers = new TransformerSubList(_buses, xfrlist, convertIndex(keeptx2));
+		_transformers = xfrlist;
+		_lines = new LineSubList(_buses, rlines, convertIndex(keepln2));
 		_phaseshifters = new PhaseShifterList(_buses, pslist);
 		_shunts = new ShuntList(_buses, _rmodel.getShunts());
 		_svcs = new SvcList(_buses, _rmodel.getSvcs());
@@ -157,7 +182,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}
-				else if (_lowx == LowXHandling.ElimByX && Math.abs(br.getX()) < 0.0001f)
+				else if (_lowx == LowXHandling.ElimByX && Math.abs(br.getX()) < 0.001f)
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				}
