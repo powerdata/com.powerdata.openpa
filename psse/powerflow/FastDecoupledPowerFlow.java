@@ -201,6 +201,10 @@ public class FastDecoupledPowerFlow
 			{
 				int fbus = br.getFromBus().getIndex();
 				int tbus = br.getToBus().getIndex();
+				if (fbus == tbus)
+				{
+					int xxx = 5;
+				}
 				int brx = net.findBranch(fbus, tbus);
 				if (brx == -1)
 				{

@@ -68,12 +68,20 @@ public class FactorizedBMatrix
 		for (int[] list : actvbus)
 			for (int b : list)
 			{
+				if (Math.abs(_bself[b]) < 0.00001)
+				{
+					int xxx = 5;
+				}
 				dx[b] = mm[b] / _bself[b];
 			}
 		
 		for(int i=nbr-1; i >= 0; --i)
 		{
 			int pn = _pnode[i];
+			if (Math.abs(dx[_qnode[i]]) > 5000)
+			{
+				int xxx = 5;
+			}
 			dx[pn] += _bbrofs[i] *  dx[_qnode[i]];
 		}
 		

@@ -18,9 +18,9 @@ public class SvcList extends com.powerdata.openpa.psse.SvcList
 	@Override
 	public SVC get(String id) { return _base.get(id); }
 	@Override
-	public Bus getBus(int ndx) throws PsseModelException { return _base.getBus(ndx); }
+	public Bus getBus(int ndx) throws PsseModelException { return _buses.get(getI(ndx)); }
 	@Override
-	public Bus getRegBus(int ndx) throws PsseModelException { return _base.getRegBus(ndx); }
+	public Bus getRegBus(int ndx) throws PsseModelException { return _buses.get(getSWREM(ndx)); }
 	@Override
 	public String getI(int ndx) throws PsseModelException {return _base.getI(ndx);}
 	@Override
