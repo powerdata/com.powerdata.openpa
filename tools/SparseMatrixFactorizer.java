@@ -3,9 +3,6 @@ package com.powerdata.openpa.tools;
 import java.util.Arrays;
 import java.util.AbstractList;
 
-import com.powerdata.tools.utils.QuickSort;
-import com.powerdata.tools.utils.SmoothSort;
-
 public class SparseMatrixFactorizer
 		extends
 		AbstractList<com.powerdata.openpa.tools.SparseMatrixFactorizer.EliminatedBus>
@@ -110,11 +107,14 @@ public class SparseMatrixFactorizer
 
 class NodeCounts
 {
-	/** bus connection counts */
+	static final long LW = 0xffffffffL;
+	static final long HW = 0xffffffff00000000L;
+	
+//	/** bus connection counts */
 	int[] _conncnt;
 	/** count distribution */
 	int[] _cntdist;
-	/** index sorted by count */
+//	/** index sorted by count */
 	int[] _sndx;
 	/** next nonzero count */
 	int _nz = 0;
@@ -130,6 +130,8 @@ class NodeCounts
 	{
 		return _conncnt[i] == 0;
 	}
+	
+	
 
 	public int getNextBusNdx()
 	{
@@ -178,7 +180,7 @@ class NodeCounts
 	{
 		for(int i=_nz; i < _sndx.length; ++i)
 		{
-			int bndx = _sndx[i];
+			int bndx = getLW(_sndx[i]);
 			int cnt = _conncnt[bndx];
 			if (cnt == cd)
 			{
@@ -194,73 +196,35 @@ class NodeCounts
 //		return -1;
 	}
 
+	int getHW(long l)
+	{
+		return (int) (l & HW);
+	}
+
+	int getLW(long l)
+	{
+		return (int) (l & LW);
+	}
+
 	void sort()
 	{
-		final int nbus = _conncnt.length;
+		int nbus = _conncnt.length;
 		_sndx = new int[nbus];
-		for(int i=0; i < nbus; ++i) _sndx[i] = i;
-//		new SmoothSort()
-//		{
-//			int v;
-//			@Override
-//			public void storeVal(int from)
-//			{
-//				v = _sndx[from];
-//			}
-//
-//			@Override
-//			public void setVal(int to)
-//			{
-//				_sndx[to] = v;
-//			}
-//
-//			@Override
-//			public int compareVal(int ofs)
-//			{
-//				return _conncnt[_sndx[v]] - _conncnt[_sndx[ofs]];
-//			}
-//
-//			@Override
-//			public int compare(int ofs1, int ofs2)
-//			{
-//				return _conncnt[_sndx[ofs1]] - _conncnt[_sndx[ofs2]];
-//			}
-//
-//			@Override
-//			public void set(int to, int from)
-//			{
-//				_sndx[to] = _sndx[from];
-//			}
-//
-//			@Override
-//			public int length()
-//			{
-//				return nbus;
-//			}
-//		}.sort();
-			
-		new QuickSort()
+
+		long[] ts = new long[nbus];
+		for(int i=0; i < nbus; ++i)
 		{
-			@Override
-			protected boolean isLess(int offset1, int offset2)
-			{
-				return _conncnt[_sndx[offset1]] < _conncnt[_sndx[offset2]];
-			}
-
-			@Override
-			protected void swap(int offset1, int offset2)
-			{
-				int t = _sndx[offset1];
-				_sndx[offset1] = _sndx[offset2];
-				_sndx[offset2] = t;
-			}
-
-			@Override
-			protected int size()
-			{
-				return nbus;
-			}
-		}.sort();
+			long w = ((long) _conncnt[i]) << 32;
+			w |= i;
+			ts[i] = w;
+		}
+		
+		Arrays.sort(ts);
+		for(int i=0; i < nbus; ++i)
+		{
+			_sndx[i] = (int) (ts[i] & LW);
+		}
+		
 		
 		for(int sx : _sndx)
 		{
