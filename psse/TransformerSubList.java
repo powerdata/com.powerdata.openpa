@@ -27,10 +27,6 @@ public class TransformerSubList extends TransformerList
 	@Override
 	public Complex getY(int ndx) throws PsseModelException { return _base.getY(_ndxs[ndx]); }
 	@Override
-	public Complex getFromYmag(int ndx) throws PsseModelException { return _base.getFromYmag(_ndxs[ndx]); }
-	@Override
-	public Complex getToYmag(int ndx) throws PsseModelException { return _base.getToYmag(_ndxs[ndx]); }
-	@Override
 	public float getFromTap(int ndx) throws PsseModelException { return _base.getFromTap(_ndxs[ndx]); }
 	@Override
 	public float getToTap(int ndx) throws PsseModelException { return _base.getToTap(_ndxs[ndx]); }
@@ -111,15 +107,15 @@ public class TransformerSubList extends TransformerList
 	@Override
 	public int getNTP2(int ndx) throws PsseModelException { return _base.getNTP2(_ndxs[ndx]); }
 	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException { _base.setRTFromS(_ndxs[ndx], s); }
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException { _base.setRTToS(_ndxs[ndx], s); }
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException { return _base.getRTFromS(_ndxs[ndx]); }
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException { return _base.getRTToS(_ndxs[ndx]); }
-	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
+	@Override
+	public float getR(int ndx) throws PsseModelException {return _base.getR(ndx);}
+	@Override
+	public float getX(int ndx) throws PsseModelException {return _base.getX(ndx);}
+	@Override
+	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(ndx);}
+	@Override
+	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(ndx);}
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(_ndxs[ndx]); }
 	@Override

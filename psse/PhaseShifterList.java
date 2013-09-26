@@ -51,14 +51,12 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	}
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
 
-	public float getFromBmag(int ndx) throws PsseModelException {return getFromYmag(ndx).im();}
-	public float getToBmag(int ndx) throws PsseModelException {return getToYmag(ndx).im();}
-	public Complex getFromYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
-	public Complex getToYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
 	public float getFromTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio1(get(ndx));}
 	public float getToTap(int ndx) throws PsseModelException {return 1f;}
 	public float getPhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG1(ndx));}
 	public boolean isInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}
+	public float getGmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx)).re();}
+	public float getBmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx)).re();}
 
 	/* Raw methods */
 	
@@ -130,8 +128,5 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	{
 		return OwnershipList.Empty;
 	}
-
-	/* realtime fields */
-
 }	
 

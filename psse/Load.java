@@ -63,25 +63,25 @@ public class Load extends PsseBaseObject implements OneTermDev
 	/* Real-Time Methods */
 	/** get the load MW */
 	@Override
-	public float getRTMW() throws PsseModelException { return _list.getRTMW(_ndx); }
+	public float getP() throws PsseModelException { return _list.getRTMW(_ndx); }
 	/** get the load MVar */
 	@Override
-	public float getRTMVar() throws PsseModelException { return _list.getRTMVar(_ndx); }
+	public float getQ() throws PsseModelException { return _list.getRTMVar(_ndx); }
 	@Override
-	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
+	public void setP(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
 	@Override
-	public void setRTMVAr(float mvar) throws PsseModelException {_list.setRTMVAr(_ndx, mvar);}
+	public void setQ(float mvar) throws PsseModelException {_list.setRTMVAr(_ndx, mvar);}
 	/** get the cold load MW */
 	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
 	/** get the cold load MVar */
 	public float getRTColdMVar() throws PsseModelException { return _list.getRTColdMVar(_ndx); }
 
 	@Override
-	public float getRTP() throws PsseModelException {return _list.getRTP(_ndx);}
+	public float getPpu() throws PsseModelException {return _list.getRTP(_ndx);}
 	@Override
-	public void setRTP(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
+	public void setPpu(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
 	@Override
-	public float getRTQ() throws PsseModelException {return _list.getRTQ(_ndx);}
+	public float getQpu() throws PsseModelException {return _list.getRTQ(_ndx);}
 	@Override
-	public void setRTQ(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
+	public void setQpu(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
 }

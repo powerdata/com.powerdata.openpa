@@ -59,8 +59,6 @@ public abstract class LineList extends PsseBaseList<Line>
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
 	public float getFromBchg(int ndx) throws PsseModelException {return getB(ndx)/2f;}
 	public float getToBchg(int ndx) throws PsseModelException {return getB(ndx)/2f;}
-	public Complex getFromYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
-	public Complex getToYchg(int ndx) throws PsseModelException {return new Complex(0, getB(ndx)/2f);}
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException
 	{
@@ -103,6 +101,6 @@ public abstract class LineList extends PsseBaseList<Line>
 
 	/* realtime fields */
 
-	public float getRTMVA(int ndx) throws PsseModelException { return 0.0f; }
-	public float getRTMVAPercent(int ndx) throws PsseModelException { return 0.0f; }
+	public float getMVA(int ndx) throws PsseModelException { return 0.0f; }
+	public float getMVAPercent(int ndx) throws PsseModelException { return 0.0f; }
 }	

@@ -41,10 +41,6 @@ public class LineSubList extends LineList
 	@Override
 	public Complex getY(int ndx) throws PsseModelException {return _lines.getY(_ndxs[ndx]);}
 	@Override
-	public Complex getFromYchg(int ndx) throws PsseModelException {return _lines.getFromYchg(_ndxs[ndx]);}
-	@Override
-	public Complex getToYchg(int ndx) throws PsseModelException {return _lines.getToYchg(_ndxs[ndx]);}
-	@Override
 	public String getObjectName(int ndx) throws PsseModelException {return _lines.getObjectName(_ndxs[ndx]);}
 	@Override
 	public String getCKT(int ndx) throws PsseModelException {return _lines.getCKT(_ndxs[ndx]);}
@@ -70,6 +66,14 @@ public class LineSubList extends LineList
 	public int getST(int ndx) throws PsseModelException {return _lines.getST(_ndxs[ndx]);}
 	@Override
 	public float getLEN(int ndx) throws PsseModelException {return _lines.getLEN(_ndxs[ndx]);}
+	@Override
+	public float getFromBchg(int ndx) throws PsseModelException {return _lines.getFromBchg(_ndxs[ndx]);}
+	@Override
+	public float getToBchg(int ndx) throws PsseModelException {return _lines.getToBchg(_ndxs[ndx]);}
+	@Override
+	public float getMVA(int ndx) throws PsseModelException {return _lines.getMVA(_ndxs[ndx]);}
+	@Override
+	public float getMVAPercent(int ndx) throws PsseModelException {return _lines.getMVAPercent(_ndxs[ndx]);}
 	@Override
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return _lines.getOwnership(_ndxs[ndx]);}
 	@Override

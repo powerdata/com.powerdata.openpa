@@ -29,10 +29,6 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	@Override
 	public Complex getY(int ndx) throws PsseModelException { return _base.getY(ndx); }
 	@Override
-	public Complex getFromYmag(int ndx) throws PsseModelException { return _base.getFromYmag(ndx); }
-	@Override
-	public Complex getToYmag(int ndx) throws PsseModelException { return _base.getToYmag(ndx); }
-	@Override
 	public float getFromTap(int ndx) throws PsseModelException { return _base.getFromTap(ndx); }
 	@Override
 	public float getToTap(int ndx) throws PsseModelException { return _base.getToTap(ndx); }
@@ -105,6 +101,14 @@ public class PhaseShifterList extends com.powerdata.openpa.psse.PhaseShifterList
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(ndx); }
 
+	@Override
+	public float getR(int ndx) throws PsseModelException {return _base.getR(ndx);}
+	@Override
+	public float getX(int ndx) throws PsseModelException {return _base.getX(ndx);}
+	@Override
+	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(ndx);}
+	@Override
+	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(ndx);}
 	@Override
 	public int size() {return _base.size();}
 }

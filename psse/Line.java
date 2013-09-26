@@ -36,14 +36,6 @@ public class Line extends PsseBaseObject implements ACBranch
 	@Override
 	public Complex getY() throws PsseModelException {return _list.getY(_ndx);} 
 	@Override
-	public float getFromBcm() throws PsseModelException {return _list.getFromBchg(_ndx);}
-	@Override
-	public float getToBcm() throws PsseModelException {return _list.getToBchg(_ndx);}
-	@Override
-	public Complex getFromYcm() throws PsseModelException {return _list.getFromYchg(_ndx);}
-	@Override
-	public Complex getToYcm() throws PsseModelException {return _list.getToYchg(_ndx);}
-	@Override
 	public float getFromTap() throws PsseModelException {return 1f;}
 	@Override
 	public float getToTap() throws PsseModelException {return 1f;}
@@ -88,9 +80,16 @@ public class Line extends PsseBaseObject implements ACBranch
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 
-	/* real time fields */
-	
+	public float getMVA() throws PsseModelException { return _list.getMVA(_ndx); }
+	public float getMVAPercent() throws PsseModelException { return _list.getMVAPercent(_ndx); }
 
-	public float getRTMVA() throws PsseModelException { return _list.getRTMVA(_ndx); }
-	public float getRTMVAPercent() throws PsseModelException { return _list.getRTMVAPercent(_ndx); }
+
+	@Override
+	public float getGmag() throws PsseModelException {return 0f;}
+	@Override
+	public float getBmag() throws PsseModelException {return 0f;}
+	@Override
+	public float getFromBchg() throws PsseModelException {return _list.getFromBchg(_ndx);}
+	@Override
+	public float getToBchg() throws PsseModelException {return _list.getToBchg(_ndx);}
 }

@@ -34,14 +34,6 @@ public class ACBranchList extends BaseList<ACBranch>
 		@Override
 		public Complex getY() throws PsseModelException {return ACBranchList.this.getY(_ndx);}
 		@Override
-		public float getFromBcm() throws PsseModelException {return ACBranchList.this.getFromBcm(_ndx);}
-		@Override
-		public float getToBcm() throws PsseModelException {return ACBranchList.this.getToBcm(_ndx);}
-		@Override
-		public Complex getFromYcm() throws PsseModelException {return ACBranchList.this.getFromYcm(_ndx);}
-		@Override
-		public Complex getToYcm() throws PsseModelException {return ACBranchList.this.getToYcm(_ndx);}
-		@Override
 		public float getFromTap() throws PsseModelException {return ACBranchList.this.getFromTap(_ndx);}
 		@Override
 		public float getToTap() throws PsseModelException {return ACBranchList.this.getToTap(_ndx);}
@@ -49,6 +41,14 @@ public class ACBranchList extends BaseList<ACBranch>
 		public float getPhaseShift() throws PsseModelException {return ACBranchList.this.getPhaseShift(_ndx);}
 		@Override
 		public boolean isInSvc() throws PsseModelException {return ACBranchList.this.isInSvc(_ndx);}
+		@Override
+		public float getGmag() throws PsseModelException {return ACBranchList.this.getGmag(_ndx);}
+		@Override
+		public float getBmag() throws PsseModelException {return ACBranchList.this.getBmag(_ndx);}
+		@Override
+		public float getFromBchg() throws PsseModelException {return ACBranchList.this.getFromBchg(_ndx);}
+		@Override
+		public float getToBchg() throws PsseModelException  {return ACBranchList.this.getToBchg(_ndx);}
 	}
 	
 	int _nlines;
@@ -60,8 +60,6 @@ public class ACBranchList extends BaseList<ACBranch>
 	
 	ACBranchList() {super();}
 
-	public float getFromBcm(int ndx) throws PsseModelException {return findBranch(ndx).getFromBcm();}
-	public float getToBcm(int ndx) throws PsseModelException {return findBranch(ndx).getToBcm();}
 	public float getR(int ndx) throws PsseModelException {return findBranch(ndx).getR();}
 	public float getX(int ndx) throws PsseModelException {return findBranch(ndx).getX();}
 
@@ -98,8 +96,10 @@ public class ACBranchList extends BaseList<ACBranch>
 	public float getPhaseShift(int ndx) throws PsseModelException {return findBranch(ndx).getPhaseShift();}
 	public float getToTap(int ndx) throws PsseModelException {return findBranch(ndx).getToTap();}
 	public float getFromTap(int ndx) throws PsseModelException {return findBranch(ndx).getFromTap();}
-	public Complex getToYcm(int ndx) throws PsseModelException {return findBranch(ndx).getToYcm();}
-	public Complex getFromYcm(int ndx) throws PsseModelException {return findBranch(ndx).getFromYcm();}
+	public float getGmag(int ndx) throws PsseModelException {return findBranch(ndx).getGmag();}
+	public float getBmag(int ndx) throws PsseModelException {return findBranch(ndx).getBmag();}
+	public float getFromBchg(int ndx) throws PsseModelException {return findBranch(ndx).getFromBchg();}
+	public float getToBchg(int ndx) throws PsseModelException {return findBranch(ndx).getToBchg();}
 	public boolean isInSvc(int ndx) throws PsseModelException {return findBranch(ndx).isInSvc();}
 
 	ACBranch findBranch(int ndx)

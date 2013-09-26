@@ -34,8 +34,8 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 			_size	= gens.getRowCount();
 			_i		= gens.get("I");
 			_id		= LoadArray.String(gens,"ID",this,"getID");
-			_pg		= LoadArray.Float(gens,"PG",this,"getPG");
-			_qg		= LoadArray.Float(gens,"QG",this,"getQG");
+			_pg		= LoadArray.Float(gens,"PG",this,"getP");
+			_qg		= LoadArray.Float(gens,"QG",this,"getQ");
 			_qt		= LoadArray.Float(gens,"QT",this,"getQT");
 			_qb		= LoadArray.Float(gens,"QB",this,"getQB");
 			_vs		= LoadArray.Float(gens,"VS",this,"getVS");
@@ -66,9 +66,9 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	@Override
 	public String getID(int ndx) { return _id[ndx]; }
 	@Override
-	public float getPG(int ndx) { return _pg[ndx]; }
+	public float getP(int ndx) { return _pg[ndx]; }
 	@Override
-	public float getQG(int ndx) { return _qg[ndx]; }
+	public float getQ(int ndx) { return _qg[ndx]; }
 	@Override
 	public float getQT(int ndx) { return _qt[ndx]; }
 	@Override
@@ -108,8 +108,8 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	public int size() { return _size; }
 	
 	public String getDeftID(int ndx) throws PsseModelException {return super.getID(ndx);}
-	public float getDeftPG(int ndx) throws PsseModelException {return super.getPG(ndx);}
-	public float getDeftQG(int ndx) throws PsseModelException {return super.getQG(ndx);}
+	public float getDeftP(int ndx) throws PsseModelException {return super.getP(ndx);}
+	public float getDeftQ(int ndx) throws PsseModelException {return super.getQ(ndx);}
 	public float getDeftQT(int ndx) throws PsseModelException {return super.getQT(ndx);}
 	public float getDeftQB(int ndx) throws PsseModelException {return super.getQB(ndx);}
 	public float getDeftVS(int ndx) throws PsseModelException {return super.getVS(ndx);}

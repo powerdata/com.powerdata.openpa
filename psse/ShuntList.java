@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
-
 public abstract class ShuntList extends PsseBaseList<Shunt>
 {
 	public static final ShuntList Empty = new ShuntList()
@@ -31,10 +29,6 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	/* convenience methods */
 	
 	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
-	public Complex getY(int ndx) throws PsseModelException
-	{
-		return isSwitchedOn(ndx) ? new Complex(getG(ndx), getB(ndx)).div(100f) : Complex.Zero;
-	}
 	
 	public float getBpu(int ndx) throws PsseModelException
 	{
@@ -58,12 +52,12 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 
 	public boolean isInSvc(int ndx) throws PsseModelException {return isSwitchedOn(ndx);}
 
-	public float getRTMW(int ndx) throws PsseModelException {return 0f;}
-	public float getRTMVAr(int ndx) throws PsseModelException {return 0f;}
-	public void setRTMW(int ndx, float mw) throws PsseModelException {}
-	public void setRTMVAr(int ndx, float mvar) throws PsseModelException {}
-	public float getRTP(int ndx) throws PsseModelException {return 0f;}
-	public void setRTP(int ndx, float p) throws PsseModelException {}
-	public float getRTQ(int ndx) throws PsseModelException {return 0f;}
-	public void setRTQ(int ndx, float q) throws PsseModelException {}
+	public float getP(int ndx) throws PsseModelException {return 0f;}
+	public float getQ(int ndx) throws PsseModelException {return 0f;}
+	public void setP(int ndx, float mw) throws PsseModelException {}
+	public void setQ(int ndx, float mvar) throws PsseModelException {}
+	public float getPpu(int ndx) throws PsseModelException {return 0f;}
+	public void setPpu(int ndx, float p) throws PsseModelException {}
+	public float getQpu(int ndx) throws PsseModelException {return 0f;}
+	public void setQpu(int ndx, float q) throws PsseModelException {}
 }

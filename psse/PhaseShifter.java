@@ -27,14 +27,6 @@ public class PhaseShifter extends PsseBaseObject implements ACBranch
 	@Override
 	public Complex getY() throws PsseModelException {return _list.getY(_ndx);}
 	@Override
-	public float getFromBcm() throws PsseModelException {return _list.getFromBmag(_ndx);}
-	@Override
-	public float getToBcm() throws PsseModelException {return _list.getToBmag(_ndx);}
-	@Override
-	public Complex getFromYcm() throws PsseModelException {return _list.getFromYmag(_ndx);}
-	@Override
-	public Complex getToYcm() throws PsseModelException {return _list.getToYmag(_ndx);}
-	@Override
 	public float getFromTap() throws PsseModelException {return _list.getFromTap(_ndx);}
 	@Override
 	public float getToTap() throws PsseModelException {return 1f;}
@@ -107,4 +99,13 @@ public class PhaseShifter extends PsseBaseObject implements ACBranch
 	
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+
+	@Override
+	public float getGmag() throws PsseModelException {return _list.getGmag(_ndx);}
+	@Override
+	public float getBmag() throws PsseModelException {return _list.getBmag(_ndx);}
+	@Override
+	public float getFromBchg() throws PsseModelException {return 0f;}
+	@Override
+	public float getToBchg() throws PsseModelException {return 0f;}
 }

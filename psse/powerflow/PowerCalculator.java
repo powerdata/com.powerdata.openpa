@@ -30,6 +30,7 @@ public class PowerCalculator
 	public PowerCalculator(PsseModel model)
 	{
 		_model = model;
+		_dbg = null;
 	}
 
 	public PowerCalculator(PsseModel model, MismatchReport dbg)
@@ -72,53 +73,15 @@ public class PowerCalculator
 				float bsin = stvmpq * y.im();
 
 				pfrm[i] = -(-gcos - bsin + tvmp2 * y.re());
-				qfrm[i] = -(-gsin + bcos - tvmp2 * (y.im() + br.getFromYcm().im()));
+				qfrm[i] = -(-gsin + bcos - tvmp2 * (y.im() + br.getBmag()+br.getFromBchg()));
 				pto[i] = -(-gcos + bsin + tvmq2 * y.re());
-				qto[i] = -(gsin + bcos - tvmq2 * (y.im() + br.getToYcm().im()));
+				qto[i] = -(gsin + bcos - tvmq2 * (y.im() + br.getBmag()+br.getToBchg()));
 			}
 		}
 		if (_dbg != null) _dbg.setBranchFlows(pfrm, qfrm, pto, qto);
 		return new float[][] {pfrm, qfrm, pto, qto};
 	}
 	
-//	public static void dumpBranchesToCSV(File csv, ACBranchList branches)
-//			throws IOException, PsseModelException
-//	{
-//		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(csv)));
-//		pw.println("I,J,ObjectID,ObjectName,R,X,G,B,Bcm,FromVM,FromVA,ToVM,ToVA,Shift,a,pp,qp,pq,qq");
-//		for(ACBranch branch: branches)
-//		{
-//			if (branch.isInSvc())
-//			{
-//				Bus frbus = branch.getFromBus();
-//				Bus tobus = branch.getToBus();
-//				Complex z = branch.getZ();
-//				Complex y = branch.getY();
-//				Complex ycm = branch.getFromYcm().add(branch.getToYcm());
-//				PComplex frv = frbus.getVoltage(),
-//						 tov = tobus.getVoltage();
-//////				Complex frs = branch.getRTFromS(),
-//////						tos = branch.getRTToS();
-////				
-////				pw.format("\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
-////						frbus.getObjectID(),
-////						tobus.getObjectID(),
-////						branch.getObjectID(),
-////						branch.getObjectName(),
-////						z.re(), z.im(),
-////						y.re(),y.im(), ycm.im(),
-////						frv.r(), PAMath.rad2deg(frv.theta()),
-////						tov.r(), PAMath.rad2deg(tov.theta()),
-////						branch.getPhaseShift(),
-////						branch.getFromTap(),
-////						frs.re(), frs.im(),
-////						tos.re(), tos.im());
-//			}
-//		}
-//		
-//		pw.close();
-//	}
-//	
 	public float[][] calculateMismatches(float[][] v) throws PsseModelException
 	{
 		return calculateMismatches(v[0], v[1]);
@@ -141,8 +104,8 @@ public class PowerCalculator
 			if (l.isInSvc())
 			{
 				int bndx = l.getBus().getIndex();
-				pmm[bndx] -= l.getRTP();
-				qmm[bndx] -= l.getRTQ();
+				pmm[bndx] -= l.getPpu();
+				qmm[bndx] -= l.getQpu();
 			}
 		}
 		for(Gen g : genlist)
@@ -152,9 +115,9 @@ public class PowerCalculator
 			if (g.isInSvc()/* && btc != BusTypeCode.Slack*/)
 			{
 				int bndx = b.getIndex();
-				pmm[bndx] += g.getRTP();
+				pmm[bndx] += g.getPpu();
 				if (btc == BusTypeCode.Load)
-					qmm[bndx] += g.getRTQ();
+					qmm[bndx] += g.getQpu();
 			}
 		}
 		if (_dbg != null)
@@ -262,7 +225,7 @@ public class PowerCalculator
 			System.exit(1);
 		}
 		
-		PsseModel model = PsseModel.OpenInput(uri);
+		PsseModel model = PsseModel.Open(uri);
 
 		File tdir = new File(System.getProperty("java.io.tmpdir"));
 		File[] list = tdir.listFiles(new FilenameFilter()

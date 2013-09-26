@@ -50,10 +50,6 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 		return _ztool.get(getCZ(ndx)).convert2W(get(ndx));
 	}
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
-	public float getFromBmag(int ndx) throws PsseModelException {return getFromYmag(ndx).im();}
-	public float getToBmag(int ndx) throws PsseModelException {return getToYmag(ndx).im();}
-	public Complex getFromYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
-	public Complex getToYmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx));}
 	public float getFromTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio1(get(ndx));}
 	public float getToTap(int ndx) throws PsseModelException {return XfrWndTool.get(getCW(ndx)).getRatio2(get(ndx));}
 	public float getPhaseShift(int ndx) throws PsseModelException {return PAMath.deg2rad(getANG1(ndx));}
@@ -163,10 +159,6 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	 */
 	public int getNTP2(int ndx) throws PsseModelException {return 33;}
 
-	/* realtime fields */
-
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {/* do nothing */}
-	public Complex getRTFromS(int ndx) throws PsseModelException { return Complex.Zero;}
-	public Complex getRTToS(int ndx) throws PsseModelException {return Complex.Zero;}
+	public float getGmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx)).re();}
+	public float getBmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx)).im();}
 }	

@@ -96,10 +96,12 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 			_i[i] = _il.get(i);
 			_swon[i] = _swonl.get(i);
 			_b[i] = _bl.get(i);
+			_g[i] = _gl.get(i);
 			_id[i] = _idl.get(i);
 			_name[i] = _namel.get(i);
 		}
-	
+		_bl = null;
+		_gl = null;
 	}
 
 	void scanBuses(BusListRaw rawbus) throws PsseModelException
@@ -167,6 +169,8 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 	public String getI(int ndx) throws PsseModelException {return _i[ndx];}
 	@Override
 	public float getB(int ndx) throws PsseModelException {return _b[ndx];}
+	@Override
+	public float getG(int ndx) throws PsseModelException {return _g[ndx];}
 
 	@Override
 	public boolean isSwitchedOn(int ndx) throws PsseModelException

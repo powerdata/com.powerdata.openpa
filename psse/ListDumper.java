@@ -95,7 +95,7 @@ public class ListDumper
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.OpenInput("pssecsv:path=/tmp/frcc");
+		PsseModel model = PsseModel.Open("pssecsv:path=/tmp/frcc");
 		File outdir = new File("/tmp/frccout");
 		new ListDumper().dump(model, outdir);
 	}

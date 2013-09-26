@@ -4,7 +4,11 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 import com.powerdata.openpa.tools.AbstractBaseObject;
-
+/**
+ * 
+ * @author marck@powerdata.com
+ *
+ */
 public class PsseModel
 {
 	/** static translations of scheme to input class */
@@ -31,7 +35,7 @@ public class PsseModel
 	 * @return
 	 * @throws PsseModelException
 	 */
-	public static PsseModel OpenInput(String uri) throws PsseModelException
+	public static PsseModel Open(String uri) throws PsseModelException
 	{
 		System.out.println("uri: "+uri);
 		String[] tok = uri.split(":", 2);

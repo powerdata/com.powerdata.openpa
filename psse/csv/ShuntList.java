@@ -4,7 +4,6 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Shunt;
-import com.powerdata.openpa.tools.Complex;
 
 public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 {
@@ -20,8 +19,6 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	public Shunt get(String id) { return _base.get(id); }
 	@Override
 	public Bus getBus(int ndx) throws PsseModelException { return _buses.get(getI(ndx)); }
-	@Override
-	public Complex getY(int ndx) throws PsseModelException { return _base.getY(ndx); }
 	@Override
 	public boolean isSwitchedOn(int ndx) throws PsseModelException { return _base.isSwitchedOn(ndx); }
 	@Override

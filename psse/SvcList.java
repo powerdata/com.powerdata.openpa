@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PAMath;
 
 public abstract class SvcList extends PsseBaseList<SVC>
 {
@@ -40,12 +41,12 @@ public abstract class SvcList extends PsseBaseList<SVC>
 
 	public boolean isInSvc(int ndx) throws PsseModelException {return getBINIT(ndx) != 0f;}
 
-	public float getRTMW(int ndx) throws PsseModelException {return 0f;}
-	public float getRTMVAr(int ndx) throws PsseModelException {return 0f;} 
-	public void setRTMW(int ndx, float mw) throws PsseModelException {}
-	public void setRTMVAr(int ndx, float mvar) throws PsseModelException {} 
-	public float getRTP(int ndx) throws PsseModelException {return 0f;}
-	public void setRTP(int ndx, float p) throws PsseModelException {}
-	public float getRTQ(int ndx) throws PsseModelException {return 0f;}
-	public void setRTQ(int ndx, float q) throws PsseModelException {}
+	public float getP(int ndx) throws PsseModelException {return 0f;}
+	public float getQ(int ndx) throws PsseModelException {return 0f;} 
+	public void setP(int ndx, float mw) throws PsseModelException {}
+	public void setQ(int ndx, float mvar) throws PsseModelException {} 
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
+	public void setPpu(int ndx, float p) throws PsseModelException {}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
+	public void setQpu(int ndx, float q) throws PsseModelException {}
 }

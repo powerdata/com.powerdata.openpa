@@ -197,13 +197,6 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 		
 	}
 
-	boolean isCloseWithSmallX(PComplex vf, PComplex vt, Complex z)
-	{
-//		return (Math.abs(vf.r() - vt.r()) <= .0001f && Math.abs(z.im()) < .0001f);
-//		return z.re() <= 0.001f && Math.abs(z.im()) <= 0.001f;
-		return false;
-	}
-
 	public int getIslandCount() throws PsseModelException
 	{
 		return _tp.getIslandCount();

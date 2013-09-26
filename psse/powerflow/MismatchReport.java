@@ -103,7 +103,7 @@ public class MismatchReport
 
 		String btmp = String.format("\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,",
 				b.getObjectID(), b.getObjectName(), b.getBusType(), PAMath.rad2deg(_va[i]),
-				_vm[i] * b.getBASKV(), PAMath.pu2mw(_pmm[i]),
+				_vm[i], PAMath.pu2mw(_pmm[i]),
 				PAMath.pu2mvar(_qmm[i]), mmm);
 		for(int acbranch : branches)
 		{
@@ -141,14 +141,14 @@ public class MismatchReport
 		if (otdev < _ngen)
 		{
 			od = _model.getGenerators().get(otdev);
-			pval = od.getRTP();
-			qval = od.getRTQ();
+			pval = od.getPpu();
+			qval = od.getQpu();
 		}
 		else if ((otdev -= _ngen) < _nload)
 		{
 			od = _model.getLoads().get(otdev);
-			pval = -od.getRTP();
-			qval = -od.getRTQ();
+			pval = -od.getPpu();
+			qval = -od.getQpu();
 		}
 		else if ((otdev -= _nload) < _nshunt)
 		{

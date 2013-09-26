@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
-
 public class Gen extends PsseBaseObject implements OneTermDev
 {
 
@@ -28,10 +26,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public Bus getRemoteRegBus() throws PsseModelException {return _list.getRemoteRegBus(_ndx);}
 	/** get the Generator mode */
 	public GenMode getMode() throws PsseModelException {return _list.getMode(_ndx); }
-	/** machine complex impedance */
-	public Complex getMachZ() throws PsseModelException {return _list.getMachZ(_ndx);}
-//	/** Step-up transformer impedance */
-//	public Complex getTxZ() throws PsseModelException {return _list.getTxZ(_ndx);}
+	/** get the Generator mode */
+	public void setMode(GenMode mode) throws PsseModelException {_list.setMode(_ndx, mode); }
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	public GenType getGenType() throws PsseModelException {return _list.getType(_ndx);}
@@ -42,10 +38,17 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** Machine identifier */
 	public String getID() throws PsseModelException {return _list.getID(_ndx);}
+	@Override
 	/** Generator active power output in MW */
-	public float getPG() throws PsseModelException {return _list.getPG(_ndx);}
+	public float getP() throws PsseModelException {return _list.getP(_ndx);}
+	@Override
 	/** Generator reactive power output in MVAr */
-	public float getQG() throws PsseModelException {return _list.getQG(_ndx);}
+	public float getQ() throws PsseModelException {return _list.getQ(_ndx);}
+	@Override
+	public void setP(float mw) throws PsseModelException {_list.setP(_ndx, mw);}
+	@Override
+	public void setQ(float mvar) throws PsseModelException {_list.setQ(_ndx, mvar);}
+
 	/** Maximum generator reactive power output (MVAr) */
 	public float getQT() throws PsseModelException {return _list.getQT(_ndx);}
 	/** Minimum generator reactive power output (MVAr) */
@@ -80,33 +83,16 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 
-//	@Override
-//	public void setRTS(Complex s) throws PsseModelException {_list.setRTS(_ndx, s);}
-//	@Override
-//	public Complex getRTS() throws PsseModelException {return _list.getRTS(_ndx);}
-	/** getg the realtime generator mode */
-	public GenMode getRTMode() throws PsseModelException { return _list.getRTMode(_ndx);}
-	/** set the realtime generator mode */
-	public void setRTMode(GenMode mode) throws PsseModelException { _list.setRTMode(_ndx, mode); }
-
 	@Override
-	public float getRTMW() throws PsseModelException {return _list.getRTMW(_ndx);}
+	public float getPpu() throws PsseModelException {return _list.getPpu(_ndx);}
 	@Override
-	public float getRTMVar() throws PsseModelException {return _list.getRTMVAr(_ndx);}
+	public void setPpu(float p) throws PsseModelException {_list.setPpu(_ndx, p);}
 	@Override
-	public void setRTMW(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
+	public float getQpu() throws PsseModelException {return _list.getQpu(_ndx);}
 	@Override
-	public void setRTMVAr(float mvar) throws PsseModelException {_list.setRTMVAr(_ndx, mvar);}
-
-	public float getRTMWSetPoint()  throws PsseModelException {return _list.getRTMWSetPoint(_ndx);}
-	public void setRTMWSetPoint(float mw) throws PsseModelException {_list.setRTMWSetPoint(_ndx, mw);}
-
-	@Override
-	public float getRTP() throws PsseModelException {return _list.getRTP(_ndx);}
-	@Override
-	public void setRTP(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
-	@Override
-	public float getRTQ() throws PsseModelException {return _list.getRTQ(_ndx);}
-	@Override
-	public void setRTQ(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
+	public void setQpu(float q) throws PsseModelException {_list.setQpu(_ndx, q);}
+	/** get MW setpoint */
+	public float getPS() throws PsseModelException {return _list.getPS(_ndx);}
+	/** set MW setpoint */
+	public void setPS(float mw) throws PsseModelException {_list.setPS(_ndx, mw);}
 }

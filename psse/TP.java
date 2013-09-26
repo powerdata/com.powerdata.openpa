@@ -190,6 +190,7 @@ public class TP
 			{
 				case Load: return _pqbyisland[islandndx];
 				case Gen: return _pvbyisland[islandndx];
+				case Slack: return new int[] {_arefbyisland[islandndx]};
 				default: return new int[0];
 			}
 		}
@@ -201,8 +202,37 @@ public class TP
 
 	void analyzeIslandBustypes()
 	{
-		// TODO Auto-generated method stub
+		int nisland = _groups.length;
 		
+		_pqbyisland = new int[nisland][];
+		_pvbyisland = new int[nisland][];
+		int[] nld = new int[nisland], ngen = new int[nisland];
+		
+		for(int ig=0; ig < nisland; ++ig)
+		{
+			int[] grp = _groups[ig];
+			int ng = grp.length;
+			_pqbyisland[ig] = new int[ng];
+			_pvbyisland[ig] = new int[ng];
+		}
+
+		for(int gb : _genbus)
+		{
+			int ix = _bus2island[gb];
+			_pvbyisland[ix][ngen[ix]++] = gb;
+		}
+		
+		for(int lb : _loadbus)
+		{
+			int ix = _bus2island[lb];
+			_pqbyisland[ix][nld[ix]++] = lb;
+		}
+		
+		for(int ig=0; ig < nisland; ++ig)
+		{
+			_pvbyisland[ig] = Arrays.copyOf(_pvbyisland[ig], ngen[ig]);
+			_pqbyisland[ig] = Arrays.copyOf(_pqbyisland[ig], nld[ig]);
+		}
 	}
 
 	public int getAngleRefBusNdx(int ndx)

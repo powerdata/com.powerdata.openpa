@@ -1,6 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 
 public abstract class GenList extends PsseBaseList<Gen>
@@ -48,8 +47,8 @@ public abstract class GenList extends PsseBaseList<Gen>
 		}
 		else
 		{
-			float pg = getPG(ndx);
-			float qg = getQG(ndx);
+			float pg = getP(ndx);
+			float qg = getQ(ndx);
 			if (pg == 0f && qg == 0f) return GenMode.OFF;
 			if (pg >= -1f && pg <= 1f && qg != 0f) return GenMode.CON;
 			if (pg < -1f) return GenMode.PMP;
@@ -66,13 +65,6 @@ public abstract class GenList extends PsseBaseList<Gen>
 				PAMath.mvar2pu(getQT(ndx)));
 	}
 
-	/** machine impedance on 100 MVA base */
-	public Complex getMachZ(int ndx) throws PsseModelException
-	{
-		return PAMath.rebaseZ100(new Complex(getZR(ndx), getZX(ndx)),
-				getMBASE(ndx));
-	}
-
 	/** active power limits */
 	public Limits getActiveLimits(int ndx) throws PsseModelException
 	{
@@ -84,6 +76,11 @@ public abstract class GenList extends PsseBaseList<Gen>
 	{
 		return getBus(ndx).getObjectName()+":"+getID(ndx);
 	}
+	public void setMode(int ndx, GenMode mode) throws PsseModelException {}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
+	public void setPpu(int ndx, float p) throws PsseModelException {}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
+	public void setQpu(int ndx, float q) throws PsseModelException {}
 
 	/* raw methods */
 
@@ -92,9 +89,13 @@ public abstract class GenList extends PsseBaseList<Gen>
 	/** Machine identifier */
 	public String getID(int ndx) throws PsseModelException {return "1";}
 	/** Generator active power output in MW */
-	public float getPG(int ndx) throws PsseModelException {return 0f;}
+	public float getP(int ndx) throws PsseModelException {return 0f;}
+	/** Generator active power output in MW */
+	public void setP(int ndx, float p) throws PsseModelException {}
 	/** Generator reactive power output in MVAr */
-	public float getQG(int ndx) throws PsseModelException {return 0f;}
+	public float getQ(int ndx) throws PsseModelException {return 0f;}
+	/** Generator reactive power output in MVAr */
+	public void setQ(int ndx, float q) throws PsseModelException {}
 	/** Maximum generator reactive power output (MVAr) */
 	public float getQT(int ndx) throws PsseModelException {return 9999f;}
 	/** Minimum generator reactive power output (MVAr) */
@@ -126,20 +127,9 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public float getPB(int ndx) throws PsseModelException {return -9999f;}
 
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return OwnershipList.Empty;}//TODO: implement
-	public GenMode getRTMode(int ndx) throws PsseModelException {return getMode(ndx);}
-	public void setRTMode(int ndx, GenMode mode) throws PsseModelException {}
 
-	public float getRTMW(int ndx) throws PsseModelException {return getPG(ndx);}
-	public float getRTMVAr(int ndx) throws PsseModelException {return getQG(ndx);}
-
-	public void setRTMW(int ndx, float mw) throws PsseModelException {}
-	public void setRTMVAr(int ndx, float mvar) throws PsseModelException {}
-
-	public float getRTMWSetPoint(int ndx) throws PsseModelException {return getRTMW(ndx);}
-	public void setRTMWSetPoint(int ndx, float mw) throws PsseModelException {/* do nothing */ }
-
-	public float getRTP(int ndx) throws PsseModelException {return getPG(ndx)/100f;}
-	public void setRTP(int ndx, float p) throws PsseModelException {}
-	public float getRTQ(int ndx) throws PsseModelException {return getQG(ndx)/100f;}
-	public void setRTQ(int ndx, float q) throws PsseModelException {}
+	/** get MW setpoint */
+	public float getPS(int ndx) throws PsseModelException {return getP(ndx);}
+	/** set MW setpoint */
+	public void setPS(int ndx, float mw) throws PsseModelException {}
 }

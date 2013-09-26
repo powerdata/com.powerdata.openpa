@@ -239,8 +239,8 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	{
 		for (int i=0; i < x.length; ++i)
 		{
-			if (Math.abs(x[i]) <= 0.001f)
-				x[i] = Math.signum(x[i]) * 0.001f;
+			if (Math.abs(x[i]) <= minx)
+				x[i] = Math.copySign(minx, x[i]);
 		}
 	}
 

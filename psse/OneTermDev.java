@@ -6,20 +6,20 @@ public interface OneTermDev extends BaseObject
 {
 	public Bus getBus() throws PsseModelException;
 	/** get the load MW */
-	public float getRTMW() throws PsseModelException;
+	public float getP() throws PsseModelException;
 	/** get the load MVar */
-	public float getRTMVar() throws PsseModelException;
+	public float getQ() throws PsseModelException;
 	/** set the load MW */
-	public void setRTMW(float mw) throws PsseModelException;
+	public void setP(float mw) throws PsseModelException;
 	/** set the load MVar */
-	public void setRTMVAr(float mvar) throws PsseModelException;
+	public void setQ(float mvar) throws PsseModelException;
 	/** get active power p.u. on 100MVA base */
-	public float getRTP() throws PsseModelException;
+	public float getPpu() throws PsseModelException;
 	/** set active power p.u. on 100MVA base */
-	public void setRTP(float p) throws PsseModelException;
+	public void setPpu(float p) throws PsseModelException;
 	/** get reactive power p.u. on 100MVA base */
-	public float getRTQ() throws PsseModelException;
+	public float getQpu() throws PsseModelException;
 	/** set reactive power p.u. on 100MVA base */
-	public void setRTQ(float q) throws PsseModelException;
+	public void setQpu(float q) throws PsseModelException;
 	public boolean isInSvc() throws PsseModelException;
 }

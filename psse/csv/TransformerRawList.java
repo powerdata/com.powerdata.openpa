@@ -211,6 +211,10 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 	public Complex getZ(int ndx) throws PsseModelException {return _z.get(ndx);}
 
 	@Override
+	public float getR(int ndx) throws PsseModelException {return _z.re(ndx);}
+	@Override
+	public float getX(int ndx) throws PsseModelException {return _z.im(ndx);}
+	@Override
 	public String getObjectID(int ndx) throws PsseModelException
 	{
 		StringBuilder sb = new StringBuilder("XF-");
@@ -236,17 +240,6 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 	@Override
 	public int size() {return _size;}
 	
-	/* Realtime fields */
-
-	@Override
-	public void setRTFromS(int ndx, Complex s) throws PsseModelException {_fs.set(ndx, s);}
-	@Override
-	public void setRTToS(int ndx, Complex s) throws PsseModelException {_ts.set(ndx, s);}
-	@Override
-	public Complex getRTFromS(int ndx) throws PsseModelException {return _fs.get(ndx);}
-	@Override
-	public Complex getRTToS(int ndx) throws PsseModelException {return _ts.get(ndx);}
-
 	public void adjustLowX(float minx)
 	{
 		PsseRawModel._AdjustLowX(_z.im(), minx);

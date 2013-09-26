@@ -33,14 +33,6 @@ public class Transformer extends PsseBaseObject implements ACBranch
 	@Override
 	public Complex getY() throws PsseModelException {return _list.getY(_ndx);}
 	@Override
-	public float getFromBcm() throws PsseModelException {return _list.getFromBmag(_ndx);}
-	@Override
-	public float getToBcm() throws PsseModelException {return _list.getToBmag(_ndx);}
-	@Override
-	public Complex getFromYcm() throws PsseModelException {return _list.getFromYmag(_ndx);}
-	@Override
-	public Complex getToYcm() throws PsseModelException {return _list.getToYmag(_ndx);}
-	@Override
 	public float getFromTap() throws PsseModelException {return _list.getFromTap(_ndx);}
 	@Override
 	public float getToTap() throws PsseModelException {return _list.getToTap(_ndx);}
@@ -124,6 +116,12 @@ public class Transformer extends PsseBaseObject implements ACBranch
 	/** number of taps positions available */
 	public int getNTP2() throws PsseModelException {return _list.getNTP2(_ndx);}
 
-	/* real time fields */
-	
+	@Override
+	public float getGmag() throws PsseModelException {return _list.getGmag(_ndx);}
+	@Override
+	public float getBmag() throws PsseModelException {return _list.getBmag(_ndx);}
+	@Override
+	public float getFromBchg() throws PsseModelException {return 0f;}
+	@Override
+	public float getToBchg() throws PsseModelException  {return 0f;}
 }

@@ -20,24 +20,24 @@ public class OneTermDevList extends BaseList<OneTermDev>
 			return OneTermDevList.this.getBus(_ndx);
 		}
 		@Override
-		public float getRTMW() throws PsseModelException
+		public float getP() throws PsseModelException
 		{
-			return OneTermDevList.this.getRTMW(_ndx);
+			return OneTermDevList.this.getP(_ndx);
 		}
 		@Override
-		public float getRTMVar() throws PsseModelException
+		public float getQ() throws PsseModelException
 		{
-			return OneTermDevList.this.getRTMVar(_ndx);
+			return OneTermDevList.this.getQ(_ndx);
 		}
 		@Override
-		public void setRTMW(float mw) throws PsseModelException
+		public void setP(float mw) throws PsseModelException
 		{
-			OneTermDevList.this.setRTMW(_ndx, mw);
+			OneTermDevList.this.setP(_ndx, mw);
 		}
 		@Override
-		public void setRTMVAr(float mvar) throws PsseModelException
+		public void setQ(float mvar) throws PsseModelException
 		{
-			OneTermDevList.this.setRTMVAr(_ndx, mvar);
+			OneTermDevList.this.setQ(_ndx, mvar);
 		}
 		@Override
 		public boolean isInSvc() throws PsseModelException
@@ -45,24 +45,24 @@ public class OneTermDevList extends BaseList<OneTermDev>
 			return OneTermDevList.this.isInSvc(_ndx);
 		}
 		@Override
-		public float getRTP() throws PsseModelException
+		public float getPpu() throws PsseModelException
 		{
-			return OneTermDevList.this.getRTP(_ndx);
+			return OneTermDevList.this.getPpu(_ndx);
 		}
 		@Override
-		public void setRTP(float p) throws PsseModelException
+		public void setPpu(float p) throws PsseModelException
 		{
-			OneTermDevList.this.setRTP(_ndx, p);
+			OneTermDevList.this.setPpu(_ndx, p);
 		}
 		@Override
-		public float getRTQ() throws PsseModelException
+		public float getQpu() throws PsseModelException
 		{
-			return OneTermDevList.this.getRTQ(_ndx);
+			return OneTermDevList.this.getQpu(_ndx);
 		}
 		@Override
-		public void setRTQ(float q) throws PsseModelException
+		public void setQpu(float q) throws PsseModelException
 		{
-			OneTermDevList.this.setRTQ(_ndx, q);
+			OneTermDevList.this.setQpu(_ndx, q);
 		}
 	}
 	
@@ -117,24 +117,24 @@ public class OneTermDevList extends BaseList<OneTermDev>
 		return findDev(ndx).getObjectName();
 	}
 
-	public void setRTMVAr(int ndx, float mvar) throws PsseModelException
+	public void setQ(int ndx, float mvar) throws PsseModelException
 	{
-		findDev(ndx).setRTMVAr(mvar);
+		findDev(ndx).setQ(mvar);
 	}
 
-	public void setRTMW(int ndx, float mw) throws PsseModelException
+	public void setP(int ndx, float mw) throws PsseModelException
 	{
-		findDev(ndx).setRTMW(mw);
+		findDev(ndx).setP(mw);
 	}
 
-	public float getRTMVar(int ndx) throws PsseModelException
+	public float getQ(int ndx) throws PsseModelException
 	{
-		return findDev(ndx).getRTMVar();
+		return findDev(ndx).getQ();
 	}
 
-	public float getRTMW(int ndx) throws PsseModelException
+	public float getP(int ndx) throws PsseModelException
 	{
-		return findDev(ndx).getRTMW();
+		return findDev(ndx).getP();
 	}
 
 	public Bus getBus(int ndx) throws PsseModelException
@@ -145,21 +145,21 @@ public class OneTermDevList extends BaseList<OneTermDev>
 	{
 		return findDev(ndx).isInSvc();
 	}
-	public void setRTQ(int ndx, float q) throws PsseModelException
+	public void setQpu(int ndx, float q) throws PsseModelException
 	{
-		findDev(ndx).setRTQ(q);
+		findDev(ndx).setQpu(q);
 	}
-	public float getRTQ(int ndx) throws PsseModelException
+	public float getQpu(int ndx) throws PsseModelException
 	{
-		return findDev(ndx).getRTQ();
+		return findDev(ndx).getQpu();
 	}
-	public void setRTP(int ndx, float p) throws PsseModelException
+	public void setPpu(int ndx, float p) throws PsseModelException
 	{
-		findDev(ndx).setRTP(p);
+		findDev(ndx).setPpu(p);
 	}
-	public float getRTP(int ndx) throws PsseModelException
+	public float getPpu(int ndx) throws PsseModelException
 	{
-		return findDev(ndx).getRTP();
+		return findDev(ndx).getPpu();
 	}
 
 	@Override
