@@ -334,9 +334,7 @@ public class FastDecoupledPowerFlow
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
 //		pf.dumpMatrices(ddir);
 		
-		long ts = System.currentTimeMillis();
 		PowerFlowConvergenceList pslist = pf.runPowerFlow(new PowerCalculator(model), vstart);
-		System.out.format("Execution Time: %d ms\n", System.currentTimeMillis() - ts);
 		
 		System.out.println("Island Converged Iterations WorstPBus  Pmm  WorstQBus  Qmm");
 		IslandList islands = model.getIslands();
@@ -359,6 +357,7 @@ public class FastDecoupledPowerFlow
 		PowerCalculator pc = new PowerCalculator(model, mmr);
 		pc.calculateMismatches(pf.getVA(), pf.getVM());
 		mmr.report("final");
+		
 	}
 
 	public void dumpMatrices(File tdir) throws IOException, PsseModelException
