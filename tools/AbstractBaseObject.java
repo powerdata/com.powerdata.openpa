@@ -8,7 +8,6 @@ import com.powerdata.openpa.psse.PsseModelException;
  * @author chris@powerdata.com
  *
  */
-
 public abstract class AbstractBaseObject implements BaseObject
 {
 	protected int _ndx;
@@ -38,14 +37,17 @@ public abstract class AbstractBaseObject implements BaseObject
 	{
 		try
 		{
-		StringBuilder sb = new StringBuilder(String.format("%s[%d](%s) ",getClass().getSimpleName(),
-				_ndx,getObjectID()));
-			sb.append(getDebugName());
-			return sb.toString();
+			return getFullName();
 		} catch (Exception e) {return "err";}
 	}
 	
 	@Override
 	public String getDebugName() throws PsseModelException {return getObjectID();}
+
+	@Override
+	public String getFullName() throws PsseModelException
+	{
+		return getObjectName();
+	}
 
 }

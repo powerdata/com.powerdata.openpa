@@ -32,13 +32,12 @@ import com.powerdata.openpa.tools.SparseBMatrix;
  */
 public class FastDecoupledPowerFlow
 {
-	//TODO:  Make these configurable
 	/** active power convergence tolerance */
-	public static final float _Ptol = 0.005f;
+	float _ptol = 0.005f;
 	/** reactive power convergence tolerance */
-	public static final float _Qtol = 0.005f;
+	float _qtol = 0.005f;
 	/** maximum iterations before giving up */
-	public static final float _Itermax = 40;
+	int _itermax = 40;
 	PsseModel _model;
 	FactorizedBMatrix _bp, _bpp;
 	SparseBMatrix _prepbpp;
@@ -53,6 +52,11 @@ public class FastDecoupledPowerFlow
 		
 	}
 
+	public void setPtol(float ptol) {_ptol = ptol;}
+	public float getPtol() {return _ptol;}
+	public void setQtol(float qtol) {_qtol = qtol;}
+	public float getQtol() {return _qtol;}
+	
 	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc)
 			throws PsseModelException, IOException
 	{
@@ -102,9 +106,10 @@ public class FastDecoupledPowerFlow
 		boolean nconv=true;
 		float[][] mm = pcalc.calculateMismatches(va, vm);
 		
-		PowerFlowConvergenceList prlist = new PowerFlowConvergenceList(_hotislands.length);
+		PowerFlowConvergenceList prlist = new PowerFlowConvergenceList(
+				_hotislands.length);
 		
-		for(int iiter=0; iiter < _Itermax && nconv; ++iiter)
+		for(int iiter=0; iiter < _itermax && nconv; ++iiter)
 		{
 			{
 				float[] dp = _bp.solve(mm[0], vm, pbus);
@@ -117,7 +122,7 @@ public class FastDecoupledPowerFlow
 			
 			mm = pcalc.calculateMismatches(va, vm);
 			
-			nconv = notConverged(mm[0], mm[1], _Ptol, _Qtol, prlist, iiter);
+			nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 
 			if (nconv)
 			{
@@ -127,7 +132,7 @@ public class FastDecoupledPowerFlow
 					vm[b] += dq[b];
 				}
 				mm = pcalc.calculateMismatches(va, vm);
-				nconv = notConverged(mm[0], mm[1], _Ptol, _Qtol, prlist, iiter);
+				nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 			}
 		}
 		_vm = vm;

@@ -29,4 +29,7 @@ public abstract class SwitchList extends PsseBaseList<Switch>
 	public SwitchState getState(int ndx) throws PsseModelException {return SwitchState.Closed;}
 	public void setState(int ndx, SwitchState state) throws PsseModelException {}
 	public boolean canOperateUnderLoad(int ndx) throws PsseModelException {return true; }
+	public String getI(int ndx) throws PsseModelException {return getFromBus(ndx).getObjectID();}
+	public String getJ(int ndx) throws PsseModelException {return getToBus(ndx).getObjectID();}
+	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
 }
