@@ -17,6 +17,7 @@ public class PsseModel
 	static
 	{
 		SetSchemeInputClass("pssecsv", "com.powerdata.openpa.psse.csv.PsseModel");
+		SetSchemeInputClass("psseraw", "com.powerdata.openpa.psse.csv.PsseModel");
 		SetSchemeInputClass("pd2cim", "com.powerdata.pa.psse.pd2cim.PsseModel");
 	}
 	/**

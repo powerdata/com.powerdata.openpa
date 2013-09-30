@@ -10,7 +10,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.HashMap;
-
+/**
+ * Implementation of a PsseProcessor that generates CSV files.
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class Psse2CSV extends PsseProcessor
 {
 	PsseCSVWriter _wrtr;

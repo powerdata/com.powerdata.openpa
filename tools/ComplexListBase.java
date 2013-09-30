@@ -3,6 +3,13 @@ package com.powerdata.openpa.tools;
 import java.util.AbstractList;
 import java.util.Arrays;
 
+/**
+ * shared implementation between both forms of complex numbers 
+ * 
+ * @author chris@powerdata.com
+ *
+ * @param <T>
+ */
 public abstract class ComplexListBase<T> extends AbstractList<T>
 {
 	protected static final int DeftCap = 16; 

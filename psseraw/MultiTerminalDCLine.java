@@ -3,7 +3,12 @@ package com.powerdata.openpa.psseraw;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
-
+/**
+ * PsseClass that can parse and process raw PSS/e MultiTerminal DC Line records
+ * 
+ * @author chris@powerdata.com
+ * 
+ */
 public class MultiTerminalDCLine extends PsseClass
 {
 	public MultiTerminalDCLine() {super("MultiTerminalDCLine");}

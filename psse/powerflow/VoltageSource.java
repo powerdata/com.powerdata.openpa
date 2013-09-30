@@ -10,7 +10,7 @@ public enum VoltageSource
 		{
 			case "realtime": return RealTime;
 			case "last":
-			case "lostsolved": return LastSolved;
+			case "lastsolved": return LastSolved;
 			default: return Flat;
 		}
 	}

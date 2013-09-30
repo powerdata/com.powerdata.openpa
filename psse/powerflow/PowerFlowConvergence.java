@@ -1,6 +1,10 @@
 package com.powerdata.openpa.psse.powerflow;
 
-
+/**
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class PowerFlowConvergence
 {
 	int _ndx;

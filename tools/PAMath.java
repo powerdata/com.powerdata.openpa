@@ -1,5 +1,11 @@
 package com.powerdata.openpa.tools;
 
+/**
+ * Power Applications conversions 
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class PAMath
 {
 	/* constants */

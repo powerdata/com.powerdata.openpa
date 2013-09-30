@@ -2,6 +2,13 @@ package com.powerdata.openpa.tools;
 
 import com.powerdata.openpa.psse.PsseModelException;
 
+/**
+ * Starting point of the base object hierarchy
+ * 
+ * @author chris@powerdata.com
+ *
+ */
+
 public abstract class AbstractBaseObject implements BaseObject
 {
 	protected int _ndx;

@@ -17,7 +17,12 @@ import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
-
+/**
+ * Report mismatches for each bus 
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class MismatchReport
 {
 	PsseModel _model;

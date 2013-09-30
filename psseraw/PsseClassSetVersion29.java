@@ -1,6 +1,8 @@
 package com.powerdata.openpa.psseraw;
 
 /**
+ * Class and field definitions for PSS/e version 29
+ * 
  * @author chris@powerdata.com
  * 
  */

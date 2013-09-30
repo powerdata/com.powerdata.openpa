@@ -1,11 +1,16 @@
 package com.powerdata.openpa.tools;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
-
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+
+/**
+ * Keep a more efficient version of the factorized sparse matrix.  
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 
 public class FactorizedBMatrix
 {
@@ -43,6 +48,7 @@ public class FactorizedBMatrix
 		}
 	}
 	
+	/** run a forward reduction and backward substitution */
 	public float[] solve(float[] mm, float[] vm, int[][] actvbus)
 	{
 		int nnd = _bself.length;
@@ -69,10 +75,6 @@ public class FactorizedBMatrix
 		{
 			for (int b : list)
 			{
-				if (b == 14145)
-				{
-					int xxx = 5;
-				}
 				dx[b] = mm[b] / _bself[b];
 			}
 		}
@@ -80,10 +82,6 @@ public class FactorizedBMatrix
 		for(int i=nbr-1; i >= 0; --i)
 		{
 			dx[_pnode[i]] += _bbrofs[i] *  dx[_qnode[i]];
-			if (_pnode[i] == 14145)
-			{
-				int xxx = 5;
-			}
 		}
 		
 		return dx;

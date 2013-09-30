@@ -4,6 +4,14 @@ import java.util.AbstractList;
 import java.util.HashMap;
 import com.powerdata.openpa.psse.PsseModelException;
 
+/**
+ * Start of the object list hierarchy
+ * 
+ * @author chris@powerdata.com
+ *
+ * @param <T>
+ */
+
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
 {
 	protected HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();

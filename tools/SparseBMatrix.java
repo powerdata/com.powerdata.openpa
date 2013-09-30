@@ -4,6 +4,16 @@ import java.util.Arrays;
 
 import com.powerdata.openpa.tools.SparseMatrixFactorizer.EliminatedBus;
 
+/**
+ * Manage a sparse B matrix.  
+ * 
+ * TODO:  allow the original bself and bbranch values to be changed, so rhat 
+ * factorization can be re-run without creating a new object (and thus requiring elimination 
+ * to be re-run)
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class SparseBMatrix
 {
 	SparseMatrixFactorizer _factorizer;
@@ -42,6 +52,7 @@ public class SparseBMatrix
 		}
 	}
 	
+	/** factorize the B matrix */
 	public FactorizedBMatrix factorize()
 	{
 		float[] bself = _bself.clone();

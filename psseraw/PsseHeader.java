@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Parses out information 
- * @author chris
+ * Parses out the 1st 3 lines in the PSS/e file 
+ * @author chris@powerdata.com
  *
  */
 public class PsseHeader

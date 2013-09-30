@@ -9,11 +9,11 @@ import java.util.List;
 import com.powerdata.openpa.tools.StringParse;
 
 /**
- * Tracks PSS/e fields for a given object type.  Allows a single record to be
+ * Track PSS/e fields for a given object type.  Allows a single record to be
  * specified over multiple lines.  Lines can contain a variable list of related
  * records.
  * 
- * @author chris
+ * @author chris@powerdata.com
  *
  */
 public class PsseClass

@@ -24,12 +24,20 @@ import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SparseBMatrix;
-
+/**
+ * Utility to run a Fast-Decoupled AC Power Flow
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class FastDecoupledPowerFlow
 {
-
+	//TODO:  Make these configurable
+	/** active power convergence tolerance */
 	public static final float _Ptol = 0.005f;
+	/** reactive power convergence tolerance */
 	public static final float _Qtol = 0.005f;
+	/** maximum iterations before giving up */
 	public static final float _Itermax = 40;
 	PsseModel _model;
 	FactorizedBMatrix _bp, _bpp;
@@ -45,9 +53,10 @@ public class FastDecoupledPowerFlow
 		
 	}
 
-	public PowerFlowConvergenceList runPowerFlow(PowerCalculator pcalc,
-			VoltageSource vsrc) throws PsseModelException, IOException
+	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc)
+			throws PsseModelException, IOException
 	{
+		PowerCalculator pcalc = new PowerCalculator(_model);
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
 
@@ -63,6 +72,7 @@ public class FastDecoupledPowerFlow
 				float[][] rtv = pcalc.getRTVoltages();
 				va = rtv[0];
 				vm = rtv[1];
+				break;
 
 			case LastSolved:
 				va = _va;
@@ -334,15 +344,15 @@ public class FastDecoupledPowerFlow
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
 //		pf.dumpMatrices(ddir);
 		
-		PowerFlowConvergenceList pslist = pf.runPowerFlow(new PowerCalculator(model), vstart);
+		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart);
 		
-		System.out.println("Island Converged Iterations WorstPBus  Pmm  WorstQBus  Qmm");
+		System.out.println("Island Converged Iterations WorstPBus   Pmm   WorstQBus   Qmm");
 		IslandList islands = model.getIslands();
 		BusList buses = model.getBuses();
 		for(PowerFlowConvergence psol : pslist)
 		{
 			Island i = islands.get(psol.getIslandNdx());
-			System.out.format(" %s    %5s       %2d      %9s %7.2f %9s %7.2f\n",
+			System.out.format("  %s     %5s       %2d     %9s %7.2f %9s %7.2f\n",
 				i.getObjectName(),
 				String.valueOf(psol.getConverged()),
 				psol.getIterationCount(),

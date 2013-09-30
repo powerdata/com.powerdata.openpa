@@ -31,18 +31,18 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	SvcRawList				_svcList;
 	LoadList			_loads;
 	GenList				_generatorList;
-	LowXHandling		_lowx = LowXHandling.Adjust;
+	LowXHandling		_lowx = LowXHandling.None;
 
 	public PsseRawModel(String parms) throws PsseModelException
 	{
 		QueryString q = new QueryString(parms);
-		if (!q.containsKey("path") && !q.containsKey("raw"))
+		if (!q.containsKey("path") && !q.containsKey("file"))
 		{
-			throw new PsseModelException("com.powerdata.openpa.psse.csv.PsseInputModel Missing path= or raw= in uri.");
+			throw new PsseModelException("com.powerdata.openpa.psse.csv.PsseInputModel Missing path= or file= in uri.");
 		}
-		if (q.containsKey("raw"))
+		if (q.containsKey("file"))
 		{
-			File raw = new File(q.get("raw")[0]);
+			File raw = new File(q.get("file")[0]);
 			File tmpdir = new File(System.getProperty("java.io.tmpdir"));
 			String sname = raw.getName();
 			_dir = new File(tmpdir, sname.substring(0, sname.length()-4));
@@ -75,9 +75,10 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			_dir = new File(q.get("path")[0]);
 		}
-		String slvd = q.get("lowx")[0];
-		if (slvd != null)
+		String[] slvda = q.get("lowx");
+		if (slvda != null)
 		{
+			String slvd = slvda[0];
 			switch(slvd.toLowerCase())
 			{
 				case "adjust": _lowx = LowXHandling.Adjust; break;

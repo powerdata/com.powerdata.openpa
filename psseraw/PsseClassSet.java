@@ -1,5 +1,12 @@
 package com.powerdata.openpa.psseraw;
 
+/**
+ * Provide an abstract method to get a set of PsseClass objects appropriate to
+ * the given version
+ * 
+ * @author chris@powerdata.com
+ * 
+ */
 public abstract class PsseClassSet
 {
 	public static final int MaxConfigVerMajor = 30;

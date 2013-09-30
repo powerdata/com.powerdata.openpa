@@ -1,5 +1,11 @@
 package com.powerdata.openpa.psseraw;
 
+/**
+ * Track information for a single psse field
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class PsseField
 {
 	private String _name;

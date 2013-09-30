@@ -1,5 +1,11 @@
 package com.powerdata.openpa.psseraw;
 
+/**
+ * Class and field definitions for PSS/e version 30
+ * 
+ * @author chris
+ *
+ */
 public class PsseClassSetVersion30 extends PsseClassSetVersion29
 {
 	private static final int		VersionMajor	= 30;

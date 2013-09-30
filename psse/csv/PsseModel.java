@@ -12,53 +12,57 @@ import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TP;
 import com.powerdata.openpa.psse.TransformerList;
-import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.LinkNet;
-import com.powerdata.openpa.tools.PComplex;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 {
 
-	PsseRawModel 		_rmodel;
+	PsseRawModel		_rmodel;
 	LoadList			_loads;
 	GenList				_generatorList;
 	BusList				_buses;
-//	TransformerSubList	_transformers;
-	TransformerList	_transformers;
-	LineSubList	_lines;
+	// TransformerSubList _transformers;
+	TransformerList		_transformers;
+	LineSubList			_lines;
 	PhaseShifterList	_phaseshifters;
-	ShuntList	_shunts;
-	SvcList	_svcs;
-	TP _tp;
-	IslandList _islands;
-	LowXHandling _lowx;
+	ShuntList			_shunts;
+	SvcList				_svcs;
+	TP					_tp;
+	IslandList			_islands;
+	LowXHandling		_lowx;
 
 	public PsseModel(String parms) throws PsseModelException
 	{
 		_rmodel = new PsseRawModel(parms);
 		_lowx = _rmodel.getLowXHandling();
-		
-		//TODO:  This needs to be optional
+
+		// TODO: This needs to move to a separate utility, and not a parameter
+		// to the model
 		eliminateLowZBranches();
 		_tp = new TP(this);
 	}
-	
-	public File getDir() {return _rmodel.getDir();}
-	
+
+	public File getDir()
+	{
+		return _rmodel.getDir();
+	}
+
 	@Override
 	public LoadList getLoads() throws PsseModelException
 	{
-		if (_loads == null) _loads = new LoadList(this, getDir());
+		if (_loads == null)
+			_loads = new LoadList(this, getDir());
 		return _loads;
 	}
 
 	@Override
 	public GenList getGenerators() throws PsseModelException
 	{
-		if (_generatorList == null) _generatorList = new GenList(this, getDir());
+		if (_generatorList == null)
+			_generatorList = new GenList(this, getDir());
 		return _generatorList;
 	}
-	
+
 	@Override
 	public Bus getBus(String id) throws PsseModelException
 	{
@@ -66,44 +70,70 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	}
 
 	@Override
-	public BusList getBuses() throws PsseModelException {return _buses;}
+	public BusList getBuses() throws PsseModelException
+	{
+		return _buses;
+	}
+
 	@Override
-	public LineList getLines() throws PsseModelException {return _lines;}
+	public LineList getLines() throws PsseModelException
+	{
+		return _lines;
+	}
+
 	@Override
-	public TransformerList getTransformers() throws PsseModelException {return _transformers;}
+	public TransformerList getTransformers() throws PsseModelException
+	{
+		return _transformers;
+	}
+
 	@Override
-	public PhaseShifterList getPhaseShifters() throws PsseModelException {return _phaseshifters;}
+	public PhaseShifterList getPhaseShifters() throws PsseModelException
+	{
+		return _phaseshifters;
+	}
+
 	@Override
-	public ShuntList getShunts() throws PsseModelException {return _shunts;}
+	public ShuntList getShunts() throws PsseModelException
+	{
+		return _shunts;
+	}
+
 	@Override
-	public SvcList getSvcs() throws PsseModelException {return _svcs;}
+	public SvcList getSvcs() throws PsseModelException
+	{
+		return _svcs;
+	}
 
 	void eliminateLowZBranches() throws PsseModelException
 	{
 		BusListRaw rbuses = _rmodel.getBuses();
 		LineList rlines = _rmodel.getLines();
-		
+
 		TransformerRawList xfrlist = _rmodel.getTransformers();
 		PhaseShifterRawList pslist = _rmodel.getPhaseShifters();
-		
-		int nbr = rlines.size()+xfrlist.size()+pslist.size();
+
+		int nbr = rlines.size() + xfrlist.size() + pslist.size();
 		LinkNet elimlnet = new LinkNet();
-		elimlnet.ensureCapacity(rbuses.size()-1, nbr);
+		elimlnet.ensureCapacity(rbuses.size() - 1, nbr);
 		ArrayList<Integer> keepln = new ArrayList<>(nbr);
 		ArrayList<Integer> keeptx = new ArrayList<>(nbr);
-		
+
 		eliminate(rlines, elimlnet, keepln);
 		eliminate(xfrlist, elimlnet, keeptx);
-		
-		if (keepln.size() == rlines.size() && xfrlist.size() == keeptx.size())
-		{
-			System.err.println("TODO:  Clean up case where no elimination performed");
-		}
-		
+
+		// TODO: Clean up elimination and move it to a separate utility or part of the API
+//		if (keepln.size() == rlines.size() && xfrlist.size() == keeptx.size())
+//		{
+//			System.err
+//					.println("TODO:  Clean up case where no elimination performed");
+//		}
+
 		int nrbus = rbuses.size();
 		int[] busndx = new int[nrbus];
-		for(int i=0; i < nrbus; ++i) busndx[i] = i;
-		for(int[] g : elimlnet.findGroups())
+		for (int i = 0; i < nrbus; ++i)
+			busndx[i] = i;
+		for (int[] g : elimlnet.findGroups())
 		{
 			int ng = g.length;
 			if (ng > 1)
@@ -115,23 +145,28 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				}
 			}
 		}
-		
+
 		_buses = new BusSubList(this, rbuses, busndx);
-		/* branches in parallel with an eliminated branch also need to be eliminated */
+		/*
+		 * branches in parallel with an eliminated branch also need to be
+		 * eliminated
+		 */
 		ArrayList<Integer> keepln2 = new ArrayList<>(keepln.size());
 		ArrayList<Integer> keeptx2 = new ArrayList<>(keeptx.size());
-		for(Integer br : keepln)
+		for (Integer br : keepln)
 		{
 			ACBranch b = rlines.get(br);
 			int fbx = _buses.get(b.getI()).getIndex();
 			String tbid = b.getJ();
-			int tbx = _buses.get((tbid.charAt(0)=='-')?tbid.substring(1):tbid).getIndex(); 
+			int tbx = _buses.get(
+					(tbid.charAt(0) == '-') ? tbid.substring(1) : tbid)
+					.getIndex();
 			if (fbx != tbx)
 			{
 				keepln2.add(br);
 			}
 		}
-		for(Integer br : keeptx)
+		for (Integer br : keeptx)
 		{
 			ACBranch b = xfrlist.get(br);
 			int fbx = _buses.get(b.getI()).getIndex();
@@ -141,9 +176,9 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				keeptx2.add(br);
 			}
 		}
-		
-		
-		_transformers = new TransformerSubList(_buses, xfrlist, convertIndex(keeptx2));
+
+		_transformers = new TransformerSubList(_buses, xfrlist,
+				convertIndex(keeptx2));
 		_lines = new LineSubList(_buses, rlines, convertIndex(keepln2));
 		_phaseshifters = new PhaseShifterList(_buses, pslist);
 		_shunts = new ShuntList(_buses, _rmodel.getShunts());
@@ -154,20 +189,21 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 			_rmodel.adjustLowX(.001f);
 		}
 	}
-	
+
 	static int[] convertIndex(List<Integer> indexes)
 	{
 		int n = indexes.size();
 		int[] ndxs = new int[n];
-		for(int i=0; i < n; ++i)
+		for (int i = 0; i < n; ++i)
 			ndxs[i] = indexes.get(i);
 		return ndxs;
 	}
-	
-	void eliminate(List<?> branchList, LinkNet elimlnet, List<Integer> keep) throws PsseModelException
+
+	void eliminate(List<?> branchList, LinkNet elimlnet, List<Integer> keep)
+			throws PsseModelException
 	{
 		int nbr = branchList.size();
-		for(int i=0; i < nbr; ++i)
+		for (int i = 0; i < nbr; ++i)
 		{
 			ACBranch br = (ACBranch) branchList.get(i);
 			if (br.isInSvc())
@@ -178,23 +214,23 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				int tbusx = tbus.getIndex();
 				float fvm = fbus.getVM(), tvm = tbus.getVM();
 				float fva = fbus.getVArad(), tva = tbus.getVArad();
-				
-				if (_lowx == LowXHandling.ElimByVoltage && (Math.abs(fvm - tvm) < 0.00003 &&
-					Math.abs(fva - tva) < 0.00003))
+
+				if (_lowx == LowXHandling.ElimByVoltage
+						&& (Math.abs(fvm - tvm) < 0.00003 && Math
+								.abs(fva - tva) < 0.00003))
 				{
 					elimlnet.addBranch(fbusx, tbusx);
-				}
-				else if (_lowx == LowXHandling.ElimByX && Math.abs(br.getX()) < 0.001f)
+				} else if (_lowx == LowXHandling.ElimByX
+						&& Math.abs(br.getX()) < 0.001f)
 				{
 					elimlnet.addBranch(fbusx, tbusx);
-				}
-				else
+				} else
 				{
 					keep.add(i);
 				}
 			}
 		}
-		
+
 	}
 
 	public int getIslandCount() throws PsseModelException
@@ -226,7 +262,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	@Override
 	public IslandList getIslands() throws PsseModelException
 	{
-		if (_islands == null) _islands = new IslandList(this, _tp);
+		if (_islands == null)
+			_islands = new IslandList(this, _tp);
 		return _islands;
 	}
 
@@ -238,4 +275,3 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 	}
 
 }
-

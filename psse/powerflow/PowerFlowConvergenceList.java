@@ -2,7 +2,11 @@ package com.powerdata.openpa.psse.powerflow;
 
 import java.util.AbstractList;
 import java.util.Arrays;
-
+/**
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class PowerFlowConvergenceList extends AbstractList<PowerFlowConvergence>
 {
 	int[] _worstpbus, _worstqbus, _niter;

@@ -23,18 +23,28 @@ public class PComplex
 	public float r() {return _r;}
 	public float theta() {return _theta;}
 	
+	/** multiply two complex numbers */
 	public PComplex mult(PComplex v) {return new PComplex(_r*v.r(), _theta+v.theta());}
+	/** multiply two complex numbers */
 	public PComplex mult(float r, float theta) {return new PComplex(_r*r, _theta + theta);}
+	/** multiply a complex number by a scalar */
 	public PComplex mult(float scalar) {return new PComplex(_r * scalar, _theta);}
 
+	/** multiply two complex numbers */
 	public PComplex div(PComplex v) {return new PComplex(_r/v.r(), _theta-v.theta());}
+	/** multiply two complex numbers */
 	public PComplex div(float r, float theta) {return new PComplex(_r/r, _theta - theta);}
+	/** multiply a complex number by a scalar */
 	public PComplex div(float scalar) {return new PComplex(_r / scalar, _theta);}
 	
+	/** invert the complex number */
 	public PComplex inv() {return new PComplex(1F/_r, -_theta);}
+	/** return the absolute value of the complex number */
 	public float abs() {return _r;}
+	/** return the complex conjugate */
 	public PComplex conjg() {return new PComplex(_r, -_theta);}
 	
+	/** convert to cartesian coordinates */
 	public Complex cartesian()
 	{
 		return new Complex((float) (_r * Math.cos(_theta)),

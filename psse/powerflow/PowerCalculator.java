@@ -21,12 +21,21 @@ import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.tools.Complex;
-
+/**
+ * Utility to calculate branch flows and bus mismatches.
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public class PowerCalculator
 {
 	PsseModel _model;
 	MismatchReport _dbg;
 	
+	/**
+	 * 
+	 * @param model
+	 */
 	public PowerCalculator(PsseModel model)
 	{
 		_model = model;
@@ -178,6 +187,7 @@ public class PowerCalculator
 		int nsh = svcs.size();
 		float[] q = new float[nsh];
 
+		//TODO:  Make this an actual SVC calculation, not a fixed shunt
 		for (int i = 0; i < nsh; ++i)
 		{
 			SVC svc = svcs.get(i);

@@ -3,6 +3,14 @@ package com.powerdata.openpa.tools;
 import java.util.Arrays;
 import java.util.AbstractList;
 
+/**
+ * Perform elimination and keep the the order stored to allow for changes to the
+ * matrix outside of topology
+ * 
+ * @author chris@powerdata.com
+ * 
+ */
+
 public class SparseMatrixFactorizer
 		extends
 		AbstractList<com.powerdata.openpa.tools.SparseMatrixFactorizer.EliminatedBus>
