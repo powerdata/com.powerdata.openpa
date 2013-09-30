@@ -101,4 +101,10 @@ The [PowerCalculator](http://powerdata.github.io/com.powerdata.openpa/com/powerd
  class provides utilities to calculate branch flows and mismatches.
 
 ###Fast Decoupled Power Flow
-The [FastDecoupledPowerFlow](http://powerdata.github.io/com.powerdata.openpa/com/powerdata/openpa/psse/powerflow/FastDecoupledPowerFlow.html). 
+The [FastDecoupledPowerFlow](http://powerdata.github.io/com.powerdata.openpa/com/powerdata/openpa/psse/powerflow/FastDecoupledPowerFlow.html)
+class provides services to solve bus angles and voltages for the given model.
+The flow can be run from a flat start, from realtime data provided by the OpenPA API,
+or from a previous powerflow run.  Use the getVA() and getVM() methods to retrieve
+the results.  These can then be used with the PowerCalculator class to generate
+flows if desired.
+
