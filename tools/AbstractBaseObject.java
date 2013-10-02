@@ -42,12 +42,15 @@ public abstract class AbstractBaseObject implements BaseObject
 	}
 	
 	@Override
-	public String getDebugName() throws PsseModelException {return getObjectID();}
+	public String getDebugName() throws PsseModelException
+	{
+		return _list.getDebugName(_ndx); //getObjectID();
+	}
 
 	@Override
 	public String getFullName() throws PsseModelException
 	{
-		return getObjectName();
+		return _list.getFullName(_ndx); //getObjectName();
 	}
 
 }

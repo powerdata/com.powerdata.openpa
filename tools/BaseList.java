@@ -22,6 +22,14 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	{
 		return getObjectID(ndx);
 	}
+	public String getFullName(int ndx) throws PsseModelException
+	{
+		return getObjectName(ndx);
+	}
+	public String getDebugName(int ndx) throws PsseModelException
+	{
+		return getFullName(ndx);
+	}
 	
 	public HashMap<String,Integer> idmap() {return _idToNdx;}
 	
