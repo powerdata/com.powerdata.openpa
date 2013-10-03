@@ -228,7 +228,7 @@ public class FastDecoupledPowerFlow
 		
 		for(Shunt shunt : _model.getShunts())
 		{
-			if (shunt.isInSvc() && shunt.isSwitchedOn())
+			if (shunt.isInSvc() && shunt.isInSvc())
 				bselfbpp[shunt.getBus().getIndex()] -= shunt.getBpu();
 		}
 		

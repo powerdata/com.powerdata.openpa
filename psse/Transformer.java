@@ -40,7 +40,13 @@ public class Transformer extends PsseBaseObject implements ACBranch
 	public float getPhaseShift() throws PsseModelException {return _list.getPhaseShift(_ndx);}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	/** get the transformer control mode */
+	public TransformerCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}
+	public boolean getRegStat() throws PsseModelException {return _list.getRegStat(_ndx);}
+	public void setRegStat(boolean stat) throws PsseModelException {_list.setRegStat(_ndx, stat);}
 
+	
+	
 	/* RAW methods */
 	/** Winding 1 bus number or name */ 
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}

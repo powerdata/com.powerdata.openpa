@@ -20,8 +20,6 @@ public class ShuntList extends com.powerdata.openpa.psse.ShuntList
 	@Override
 	public Bus getBus(int ndx) throws PsseModelException { return _buses.get(getI(ndx)); }
 	@Override
-	public boolean isSwitchedOn(int ndx) throws PsseModelException { return _base.isSwitchedOn(ndx); }
-	@Override
 	public String getI(int ndx) throws PsseModelException {return _base.getI(ndx);}
 	@Override
 	public float getB(int ndx) throws PsseModelException { return _base.getB(ndx); }

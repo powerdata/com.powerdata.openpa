@@ -32,32 +32,28 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	
 	public float getBpu(int ndx) throws PsseModelException
 	{
-		return isSwitchedOn(ndx) ? getB(ndx)/100f : 0;
+		return isInSvc(ndx) ? getB(ndx)/100f : 0;
 	}
 	public float getGpu(int ndx) throws PsseModelException
 	{
-		return isSwitchedOn(ndx) ? getG(ndx)/100f : 0;
+		return isInSvc(ndx) ? getG(ndx)/100f : 0;
 	}
 
-	public boolean isSwitchedOn(int ndx) throws PsseModelException {return false;}
-
-	/* raw methods */
-	
 	/** get connected bus */
 	public abstract String getI(int ndx) throws PsseModelException;
 	/** shunt nominal B in MVAr at unity bus voltage */
 	public float getB(int ndx) throws PsseModelException {return 0f;}
-	/** get G, MVAr at unity voltage */
+	/** shunt nominal G, MW at unity voltage */
 	public float getG(int ndx) throws PsseModelException {return 0f;}
 
-	public boolean isInSvc(int ndx) throws PsseModelException {return isSwitchedOn(ndx);}
+	public boolean isInSvc(int ndx) throws PsseModelException {return false;}
 
 	public float getP(int ndx) throws PsseModelException {return 0f;}
 	public float getQ(int ndx) throws PsseModelException {return 0f;}
 	public void setP(int ndx, float mw) throws PsseModelException {}
 	public void setQ(int ndx, float mvar) throws PsseModelException {}
 	public float getPpu(int ndx) throws PsseModelException {return 0f;}
-	public void setPpu(int ndx, float p) throws PsseModelException {}
+	public void setPpu(int ndx, float p) throws PsseModelException {setP(ndx, p*100f);}
 	public float getQpu(int ndx) throws PsseModelException {return 0f;}
-	public void setQpu(int ndx, float q) throws PsseModelException {}
+	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, q*100f);}
 }

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
@@ -142,9 +141,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		
 		class ResolveXfrPrep
 		{
-			TransformerPrep get(TransformerCtrlMode mode)
+			TransformerPrep get(int mode)
 			{
-				return (mode == TransformerCtrlMode.ActivePowerFlow) ? psprep : xfprep;
+				return (Math.abs(mode) == 3) ? psprep : xfprep;
 			}
 		}
 
@@ -160,7 +159,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 			
 			if (k.equals("0"))
 			{
-				rp.get(xf.getCtrlMode1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
+				rp.get(xf.getCOD1()).prep(xf, 1, bus1, bus2, zt.convert2W(xf));
 			}
 			else
 			{
@@ -168,9 +167,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 				ndx3w.add(xf.getIndex());
 				String newstar = "TXSTAR-"+xf.getObjectID();
 				StarNetwork z = zt.convert3W(xf).star();
-				rp.get(xf.getCtrlMode1()).prep(xf, 1, bus1, newstar, z.getZ1());
-				rp.get(xf.getCtrlMode2()).prep(xf, 2, bus2, newstar, z.getZ2());
-				rp.get(xf.getCtrlMode3()).prep(xf, 3, bus3, newstar, z.getZ3());
+				rp.get(xf.getCOD1()).prep(xf, 1, bus1, newstar, z.getZ1());
+				rp.get(xf.getCOD2()).prep(xf, 2, bus2, newstar, z.getZ2());
+				rp.get(xf.getCOD3()).prep(xf, 3, bus3, newstar, z.getZ3());
 			}
 		}
 		_buses.addStarNodes(rlist, ndx3w);

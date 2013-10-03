@@ -173,7 +173,7 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 	public float getG(int ndx) throws PsseModelException {return _g[ndx];}
 
 	@Override
-	public boolean isSwitchedOn(int ndx) throws PsseModelException
+	public boolean isInSvc(int ndx) throws PsseModelException
 	{
 		return _swon[ndx];
 	}
