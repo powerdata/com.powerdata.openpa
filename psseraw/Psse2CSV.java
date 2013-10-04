@@ -61,6 +61,7 @@ public class Psse2CSV extends PsseProcessor
 					case "ver":
 					case "version":
 						sversion = args[i++];
+						break;
 					case "h":
 					case "help":
 						showHelp(false);
@@ -90,7 +91,12 @@ public class Psse2CSV extends PsseProcessor
 		System.out.format("Import Time: %tc\n", hdr.getImportTime());
 		System.out.println("Heading 1: "+hdr.getHeading1());
 		System.out.println("Heading 2: "+hdr.getHeading2());
-		System.out.println("Version: "+hdr.getVersion());
+		String hver = hdr.getVersion();
+		if (hver == null)
+		{
+			hver = String.format("%s - overridden", sversion);
+		}
+		System.out.println("Version: "+hver);
 		
 		p2c.process();
 		rpsse.close();
