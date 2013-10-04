@@ -220,9 +220,11 @@ public class SimpleCSV
 			char c = s.charAt(i);
 			switch(c)
 			{
-				case '+': if (i>0 || len == 1) return false;
-				case '-': if (i>0 || len == 1) return false;
+				case '+': if (len == 1) return false;
+				case '-': if (len == 1) return false;
 				case '.': if (len == 1) return false;
+				case 'e': if (len == 1) return false;
+				case 'E': if (len == 1) return false;
 				case '0':
 				case '1':
 				case '2':
