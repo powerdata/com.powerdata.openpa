@@ -121,7 +121,7 @@ public class FastDecoupledPowerFlow
 			}
 			
 			mm = pcalc.calculateMismatches(va, vm);
-			
+			System.out.format("Iteration %d angle: ", iiter);
 			nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 
 			if (nconv)
@@ -132,6 +132,7 @@ public class FastDecoupledPowerFlow
 					vm[b] += dq[b];
 				}
 				mm = pcalc.calculateMismatches(va, vm);
+				System.out.format("Iteration %d voltage: ", iiter);
 				nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 			}
 		}
@@ -169,6 +170,12 @@ public class FastDecoupledPowerFlow
 		int[] pv = island.getBusNdxsForType(BusTypeCode.Gen);
 		int worstp = findWorst(pmm, new int[][] { pq, pv }, r);
 		int worstq = findWorst(qmm, new int[][] {pq}, r);
+		BusList buses = _model.getBuses();
+		Bus pworst = buses.get(worstp);
+		Bus qworst = buses.get(worstq);
+		System.out.format("pmm %s [%s] %f, qmm %s [%s] %f\n", 
+				pworst.getObjectID(), pworst.getNAME(), pmm[worstp],
+				qworst.getObjectID(), qworst.getNAME(), qmm[worstq]);
 		boolean conv = (Math.abs(pmm[worstp]) < ptol) && (Math.abs(qmm[worstq]) < qtol);
 		r.setWorstPbus(worstp);
 		r.setWorstPmm(pmm[worstp]);
@@ -245,12 +252,12 @@ public class FastDecoupledPowerFlow
 				}
 				Complex z = br.getZ();
 				float bbp = 1 / z.im();
-				Complex y = z.inv();
+//				Complex y = z.inv();
 
 				bbranchbp[brx] -= bbp;
 				bselfbp[fbus] += bbp;
 				bselfbp[tbus] += bbp;
-				float bbpp = -y.im();
+				float bbpp = -br.getY().im();
 				bbranchbpp[brx] -= bbpp;
 				bselfbpp[fbus] += (bbpp - br.getFromBchg() - br.getBmag());
 				bselfbpp[tbus] += (bbpp - br.getToBchg() - br.getBmag());
@@ -268,6 +275,7 @@ public class FastDecoupledPowerFlow
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
+		try{dumpMatrices(new File("/tmp"));}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	public static void main(String[] args) throws Exception

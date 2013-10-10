@@ -1,5 +1,9 @@
 package com.powerdata.openpa.tools;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.AbstractList;
 
@@ -57,7 +61,17 @@ public class SparseMatrixFactorizer
 
 	void eliminate(LinkNet net, int[] saveBusNdx)
 	{
-		NodeCounts nc = new NodeCounts(net, saveBusNdx);
+		for(int sb : saveBusNdx)
+		{
+			/* TODO: coordinate to fix net.findBranches, it doesn't 
+			 * check that _far[end] >= 0 in the event that branches have been eliminated.  Used by other apps
+			 */
+//			int[] branches = net.findBranches(sb);
+			int[] branches = net.findConnections(sb)[1];
+			for(int br : branches)
+				net.eliminateBranch(br, true);
+		}
+		NodeCounts nc = new NodeCounts(net);
 		
 		int iord = 0, nbus = nc.getNextBusNdx();
 		while (nbus != -1)
@@ -75,16 +89,12 @@ public class SparseMatrixFactorizer
 			{
 				for(int j=i+1; j < nnd; ++j)
 				{
-					int br = -1;
-					if (!nc.isSaved(nodes[i]) && !nc.isSaved(nodes[j]))
+					int br = net.findBranch(nodes[i], nodes[j]);
+					if (br == -1)
 					{
-						br = net.findBranch(nodes[i], nodes[j]);
-						if (br == -1)
-						{
-							br = net.addBranch(nodes[i], nodes[j]);
-							nc.inc(nodes[i]);
-							nc.inc(nodes[j]);
-						}
+						br = net.addBranch(nodes[i], nodes[j]);
+						nc.inc(nodes[i]);
+						nc.inc(nodes[j]);
 					}
 					tbr[itbr++] = br;
 				}
@@ -118,28 +128,20 @@ class NodeCounts
 	static final long LW = 0xffffffffL;
 	static final long HW = 0xffffffff00000000L;
 	
-//	/** bus connection counts */
+	/** bus connection counts */
 	int[] _conncnt;
 	/** count distribution */
 	int[] _cntdist;
-//	/** index sorted by count */
+	/** index sorted by count */
 	int[] _sndx;
 	/** next nonzero count */
 	int _nz = 0;
 	
-	public NodeCounts(LinkNet net, int[] saveBusNdx)
+	public NodeCounts(LinkNet net)
 	{
-//		eord = isp ? elimorderp : elimorderq;
-		analyze(net, saveBusNdx);
+		analyze(net);
 		sort();
 	}
-
-	public boolean isSaved(int i)
-	{
-		return _conncnt[i] == 0;
-	}
-	
-	
 
 	public int getNextBusNdx()
 	{
@@ -149,40 +151,14 @@ class NodeCounts
 			if (_cntdist[i] > 0)
 			{
 				rv = findBus(i);
-				--_cntdist[i];
+				int cnt = _conncnt[rv];
+				--_cntdist[cnt];
 				_conncnt[rv] = 0;
 				break;
 			}
 		}
 		return rv;
 	}
-
-//	static final int[]	elimorderp	= new int[] { 4, 8, 17, 18, 22, 35, 43, 64,
-//			1, 2, 9, 11, 12, 15, 16, 19, 21, 23, 20, 34, 37, 38, 41, 40, 47,
-//			49, 50, 52, 53, 54, 55, 56, 58, 59, 60, 62, 63, 65, 66, 67, 68, 69,
-//			0, 5, 6, 3, 7, 10, 13, 14, 25, 29, 31, 32, 39, 24, 26, 27, 36, 46,
-//			51, 61, 33, 42, 44, 45, 48, 57, 28 };
-//	
-//	static final int[]	elimorderq	= new int[] { 64, 1, 2, 9, 11, 12, 15, 19,
-//			23, 20, 34, 37, 38, 41, 40, 47, 49, 50, 52, 53, 54, 55, 56, 58, 59,
-//			60, 62, 63, 65, 66, 67, 68, 69, 0, 5, 6, 10, 13, 14, 29, 31, 32,
-//			36, 39, 3, 16, 21, 46, 61, 45, 51, 28, 7, 33, 44, 57, 48, 42 };
-//	
-//	int _nb = 0;
-//	int[] eord = elimorderp;
-
-//	public int getNextBusNdx()
-//	{
-//		int rv = -1;
-//		if (_nb < eord.length)
-//		{
-//			rv = eord[_nb++];
-//			int cnt = _conncnt[rv];
-//			--_cntdist[cnt];
-//			_conncnt[rv] = 0;
-//		}
-//		return rv;
-//	}
 
 	int findBus(int cd)
 	{
@@ -199,11 +175,24 @@ class NodeCounts
 //				++_nz;
 //			}
 		}
+
 		/* TODO:  should never get here, put a debug message in until tested */
-		throw new UnsupportedOperationException("Should never get here");
-//		return -1;
+			throw new UnsupportedOperationException("Should never get here");
 	}
 
+	void dumpcounts()
+	{
+		try
+		{
+			File f = File.createTempFile("counts-", ".csv");
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)));
+			pw.println("\"Bus Index\",\"Count\"");
+			for(int i=0; i < _conncnt.length; ++i) pw.format("%d,%d\n", i, _conncnt[i]);
+			pw.close();
+		}catch(Exception e) {e.printStackTrace();}
+		
+	}
+	
 	int getHW(long l)
 	{
 		return (int) (l & HW);
@@ -247,7 +236,7 @@ class NodeCounts
 		}
 	}
 
-	void analyze(LinkNet net, int[] saveBusNdx)
+	void analyze(LinkNet net)
 	{
 		/* count up all the nodes for each connection "level" */
 		int maxconnalloc = 100;
@@ -260,7 +249,6 @@ class NodeCounts
 			int cnt = net.getConnectionCount(i);
 			_conncnt[i] = cnt;
 		}
-		for(int b : saveBusNdx) _conncnt[b] = 0;
 		
 		for (int i = 0; i < nbus; ++i)
 		{
@@ -284,11 +272,14 @@ class NodeCounts
 	public void inc(int busndx)
 	{
 		int ccnt = _conncnt[busndx];
-		if ((ccnt+1) >= _cntdist.length)
-			_cntdist = Arrays.copyOf(_cntdist, _cntdist.length*2);
-		--_cntdist[ccnt];
-		++_cntdist[++ccnt];
-		_conncnt[busndx] = ccnt;
+		if (ccnt > 0)
+		{
+			if ((ccnt + 1) >= _cntdist.length)
+				_cntdist = Arrays.copyOf(_cntdist, _cntdist.length * 2);
+			--_cntdist[ccnt];
+			++_cntdist[++ccnt];
+			_conncnt[busndx] = ccnt;
+		}
 	}
 	
 	public void dec(int busndx)
