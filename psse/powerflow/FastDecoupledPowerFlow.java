@@ -263,37 +263,6 @@ public class FastDecoupledPowerFlow
 		System.arraycopy(slack, 0, bppbus, pv.length, slack.length);
 		
 		
-//		try
-//		{
-//			File tdir = new File(System.getProperty("java.io.tmpdir"));
-//			PrintWriter orgbp = openDebug(tdir, "bp-prep.csv");
-//			PrintWriter orgbpp = openDebug(tdir, "bpp-prep.csv");
-//			String hdr = "\"p\",\"pndx\",\"q\",\"qndx\",\"bbranch\",\"bself\"";
-//			orgbp.println(hdr);
-//			orgbpp.println(hdr);
-//			BusList buses = _model.getBuses();
-//			for (int i = 0; i < net.getBranchCount(); ++i)
-//			{
-//				int[] nodes = net.getBusesForBranch(i);
-//				int fbndx = nodes[0], tbndx = nodes[1];
-//				if (fbndx >= 0 && tbndx >= 0)
-//				{
-//					Bus fb = buses.get(fbndx), tb = buses.get(tbndx);
-//					orgbp.format("\"%s\",%d,\"%s\",%d,%f,%f\n", fb.getNAME(),
-//							fbndx, tb.getNAME(), tbndx, bbranchbp[i],
-//							bselfbp[fbndx]);
-//					orgbpp.format("\"%s\",%d,\"%s\",%d,%f,%f\n", fb.getNAME(),
-//							fbndx, tb.getNAME(), tbndx, bbranchbpp[i],
-//							bselfbpp[fbndx]);
-//				}
-//			}
-//			orgbp.close();
-//			orgbpp.close();
-//		} catch (IOException ioe)
-//		{
-//			throw new PsseModelException(ioe);
-//		}
-
 		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
 		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
 		
