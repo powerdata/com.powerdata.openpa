@@ -109,13 +109,13 @@ public class TransformerSubList extends TransformerList
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
 	@Override
-	public float getR(int ndx) throws PsseModelException {return _base.getR(ndx);}
+	public float getR(int ndx) throws PsseModelException {return _base.getR(_ndxs[ndx]);}
 	@Override
-	public float getX(int ndx) throws PsseModelException {return _base.getX(ndx);}
+	public float getX(int ndx) throws PsseModelException {return _base.getX(_ndxs[ndx]);}
 	@Override
-	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(ndx);}
+	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(_ndxs[ndx]);}
 	@Override
-	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(ndx);}
+	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(_ndxs[ndx]);}
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(_ndxs[ndx]); }
 	@Override

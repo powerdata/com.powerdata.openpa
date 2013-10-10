@@ -17,7 +17,7 @@ public class ListDumper
 {
 	static final char Dlm = ',';
 	static final Set<String> MethodFilter = 
-		new HashSet<>(Arrays.asList(new String[] {"getPsseModel", "getClass", "isEmpty"}));
+		new HashSet<>(Arrays.asList(new String[] {"getPsseModel", "getClass", "isEmpty","getBusNdxsForType","getBusesForType"}));
 		
 	static final Set<String> ListFilter = 
 		new HashSet<>(Arrays.asList(new String[] {"getBus", "getClass"}));
@@ -81,7 +81,8 @@ public class ListDumper
 					Object v = ometh.get(j).invoke(list, i);
 					boolean isstr = !Number.class.isInstance(v);
 					if (isstr) pw.print('"');
-					pw.print(v);
+					String vs = v == null ? null : v.toString();
+					pw.print((vs==null)?"<null>":vs);
 					if (isstr) pw.print('"');
 				}
 				pw.println();
@@ -95,8 +96,8 @@ public class ListDumper
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.Open("pssecsv:path=/tmp/frcc");
-		File outdir = new File("/tmp/frccout");
+		PsseModel model = PsseModel.Open("pssecsv:path=/tmp/pjm");
+		File outdir = new File("/tmp/pjmdump");
 		new ListDumper().dump(model, outdir);
 	}
 

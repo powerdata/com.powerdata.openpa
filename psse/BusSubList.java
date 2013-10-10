@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.PComplex;
 
 public class BusSubList extends BusList
 {
