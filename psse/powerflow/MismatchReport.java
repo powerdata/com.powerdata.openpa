@@ -33,11 +33,8 @@ public class MismatchReport
 	int _ngen, _nload, _nshunt, _nsvc;
 	float[] _brflow, _shq, _svcq, _pfrm, _pto, _qfrm, _qto, _vm, _va, _pmm, _qmm;
 //	PrintWriter _out;
-	File _odir;
-	
-	public MismatchReport(PsseModel model, File odir) throws PsseModelException
+	public MismatchReport(PsseModel model) throws PsseModelException
 	{
-		_odir = odir;
 		_model = model;
 		_nbus = model.getBuses().size();
 		
@@ -82,20 +79,23 @@ public class MismatchReport
 		}
 	}
 	
-	public void report(String iter) throws IOException, PsseModelException
+	public void report(PrintWriter out) throws IOException, PsseModelException
 	{
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(
-				new File(_odir, "mismatch" + iter + ".csv"))));
-		
 		out.println("BusID,BusName,Type,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
 		for (int i=0; i < _nbus; ++i)
 		{
 			_report(out, i, _brnet.findBranches(i), _otnet.findBranches(i));
 		}
+	}
+
+	public void report(File odir, String iter) throws IOException, PsseModelException
+	{
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(
+				new File(odir, "mismatch" + iter + ".csv"))));
+		report(out);
 		out.close();
 	}
 
-	
 	void _report(PrintWriter out, int i, int[] branches, int[] otdevs) throws PsseModelException
 	{
 		BusList buses = _model.getBuses();

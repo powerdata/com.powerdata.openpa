@@ -337,10 +337,10 @@ public class FastDecoupledPowerFlow
 				
 		}
 		File ddir = new File (System.getProperty("java.io.tmpdir"));
-		MismatchReport mmr = new MismatchReport(model, ddir);
+		MismatchReport mmr = new MismatchReport(model);
 		PowerCalculator pc = new PowerCalculator(model, mmr);
 		pc.calculateMismatches(pf.getVA(), pf.getVM());
-		mmr.report("final");
+		mmr.report(ddir, "final");
 		
 	}
 

@@ -1,7 +1,8 @@
 package com.powerdata.openpa.psse.powerflow;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -215,6 +216,8 @@ public class PowerCalculator
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;
+		String sout = null;
+		PrintWriter out = new PrintWriter(System.out);
 
 		for(int i=0; i < args.length;)
 		{
@@ -226,34 +229,30 @@ public class PowerCalculator
 				case "uri":
 					uri = args[i++];
 					break;
+				case "out":
+					sout = args[i++];
+					break;
 			}
 		}
 		
 		if (uri == null)
 		{
-			System.err.format("Usage: -uri model_uri");
+			System.err.format("Usage: -uri model_uri -out output_file");
 			System.exit(1);
 		}
 		
 		PsseModel model = PsseModel.Open(uri);
 
-		File tdir = new File(System.getProperty("java.io.tmpdir"));
-		File[] list = tdir.listFiles(new FilenameFilter()
+		if (sout != null)
 		{
-			@Override
-			public boolean accept(File dir, String name)
-			{
-				return name.startsWith("mismatch") && name.endsWith(".csv");
-			}
-		});
-		for (File f : list) f.delete();
+			out = new PrintWriter(new BufferedWriter(new FileWriter(sout)));
+		}
 		
-		
-		
-		MismatchReport mmr = new MismatchReport(model, tdir);
+		MismatchReport mmr = new MismatchReport(model);
 		PowerCalculator pc = new PowerCalculator(model, mmr);
 		pc.calculateMismatches(pc.getRTVoltages());
-		mmr.report("");
+		mmr.report(out);
+		if (sout != null) out.close();
 	}
 }
 

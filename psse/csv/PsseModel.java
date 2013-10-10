@@ -216,8 +216,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				float fva = fbus.getVArad(), tva = tbus.getVArad();
 
 				if (_lowx == LowXHandling.ElimByVoltage
-						&& (Math.abs(fvm - tvm) < 0.00003 && Math
-								.abs(fva - tva) < 0.00003))
+						&& (Math.abs(fvm - tvm) < 0.00005 && Math
+								.abs(fva - tva) < 0.0005))
 				{
 					elimlnet.addBranch(fbusx, tbusx);
 				} else if (_lowx == LowXHandling.ElimByX
@@ -240,7 +240,8 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 
 	public boolean isNodeEnergized(int node) throws PsseModelException
 	{
-		return _tp.isIslandEnergized(_tp.getIsland(node));
+		int island = _tp.getIsland(node);
+		return (island == -1) ? false : _tp.isIslandEnergized(island);
 	}
 
 	public int getIsland(int node) throws PsseModelException
