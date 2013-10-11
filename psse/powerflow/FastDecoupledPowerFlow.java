@@ -19,6 +19,9 @@ import com.powerdata.openpa.psse.IslandList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Shunt;
+import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
+import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
@@ -43,6 +46,9 @@ public class FastDecoupledPowerFlow
 	SparseBMatrix _prepbpp;
 	int[] _hotislands;
 	float[] _vm, _va;
+	boolean _adjusttaps = false;
+	int[] _adjustablexfr = null;
+	float _qtoltap = .05f;
 	
 	public FastDecoupledPowerFlow(PsseModel model) throws PsseModelException
 	{
@@ -57,12 +63,27 @@ public class FastDecoupledPowerFlow
 	public void setQtol(float qtol) {_qtol = qtol;}
 	public float getQtol() {return _qtol;}
 	
-	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc)
+	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc, File mmdir)
 			throws PsseModelException, IOException
 	{
-		PowerCalculator pcalc = new PowerCalculator(_model);
+		boolean dbgmm = mmdir != null;
+		MismatchReport mmr = null;
+		PowerCalculator pcalc = null;
+		if (dbgmm)
+		{
+			mmr = new MismatchReport(_model);
+			pcalc = new PowerCalculator(_model, mmr);
+		}
+		else
+		{
+			pcalc = new PowerCalculator(_model);
+		}
+		
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
+		
+		if (_adjusttaps) 
+			findAdjustableTransformers();
 
 		float[] vm, va;
 		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
@@ -105,6 +126,7 @@ public class FastDecoupledPowerFlow
 
 		boolean nconv=true;
 		float[][] mm = pcalc.calculateMismatches(va, vm);
+		if (dbgmm) mmr.report(mmdir, "000");
 		
 		PowerFlowConvergenceList prlist = new PowerFlowConvergenceList(
 				_hotislands.length);
@@ -121,6 +143,7 @@ public class FastDecoupledPowerFlow
 			}
 			
 			mm = pcalc.calculateMismatches(va, vm);
+			if (dbgmm) mmr.report(mmdir, String.format("%02d-va", iiter));
 			System.out.format("Iteration %d angle: ", iiter);
 			nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 
@@ -132,6 +155,7 @@ public class FastDecoupledPowerFlow
 					vm[b] += dq[b];
 				}
 				mm = pcalc.calculateMismatches(va, vm);
+				if (dbgmm) mmr.report(mmdir, String.format("%02d-vm", iiter));
 				System.out.format("Iteration %d voltage: ", iiter);
 				nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 			}
@@ -141,6 +165,21 @@ public class FastDecoupledPowerFlow
 		return prlist;
 	}
 	
+	void findAdjustableTransformers() throws PsseModelException
+	{
+		TransformerList transformers = _model.getTransformers();
+		int[] tndx = new int[transformers.size()];
+		int nadj=0;
+		for(Transformer t : transformers)
+		{
+			if (t.getRegStat() && t.getCtrlMode() == TransformerCtrlMode.Voltage)
+			{
+				tndx[nadj++] = t.getIndex();
+			}
+		}
+		_adjustablexfr = Arrays.copyOf(tndx, nadj);
+	}
+
 	float[] flatMag(int[] qbus) throws PsseModelException
 	{
 		float[] vm = new float[_model.getBuses().size()];
@@ -326,7 +365,10 @@ public class FastDecoupledPowerFlow
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
 //		pf.dumpMatrices(ddir);
 		
-		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart);
+		File mmdbg = new File(new File(System.getProperty("java.io.tmpdir")), "mmdbg");
+		cleanmmdbg(mmdbg);
+		
+		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart, mmdbg);
 		
 		System.out.println("Island Converged Iterations WorstPBus   Pmm   WorstQBus   Qmm");
 		IslandList islands = model.getIslands();
@@ -352,6 +394,26 @@ public class FastDecoupledPowerFlow
 		
 	}
 
+	static void cleanmmdbg(File mmdbg)
+	{
+		if (mmdbg.exists())
+		{
+			File[] existing = mmdbg.listFiles(new FilenameFilter()
+			{
+				@Override
+				public boolean accept(File arg0, String arg1)
+				{
+					return arg1.startsWith("mismatch") && arg1.endsWith(".csv");
+				}
+			});
+			for(File f : existing) f.delete();
+		}
+		else
+		{
+			mmdbg.mkdirs();
+		}
+	}
+
 	public void dumpMatrices(File tdir) throws IOException, PsseModelException
 	{
 		dumpMatrix(_bp, tdir, "factbp.csv");
@@ -367,8 +429,8 @@ public class FastDecoupledPowerFlow
 		pw.close();
 	}
 
-	static PrintWriter openDebug(File tdir, String name) throws IOException
+	void adjustTransformerTaps(float[] vm, float[] va)
 	{
-		return new PrintWriter(new BufferedWriter(new FileWriter(new File(tdir, name))));
+		
 	}
 }

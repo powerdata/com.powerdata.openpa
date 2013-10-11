@@ -101,7 +101,12 @@ public class LineListRaw extends LineList
 	@Override
 	public float getLEN(int ndx) { return _len[ndx]; }
 	@Override
-	public String getObjectID(int ndx) { return "LN-"+_i[ndx]+":"+_j[ndx]+":"+_ckt[ndx]; }
+	public String getObjectID(int ndx)
+	{
+		String j = _j[ndx];
+		if (j.startsWith("-")) j = j.substring(1);
+		return "LN-" + _i[ndx] + ":" + j + ":" + _ckt[ndx];
+	}
 
 	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}
 	public float getDeftR(int ndx) throws PsseModelException {return super.getR(ndx);}

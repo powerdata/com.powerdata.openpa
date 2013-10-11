@@ -12,6 +12,9 @@ import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
+import com.powerdata.openpa.psse.Island;
+import com.powerdata.openpa.psse.IslandList;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -81,7 +84,7 @@ public class MismatchReport
 	
 	public void report(PrintWriter out) throws IOException, PsseModelException
 	{
-		out.println("BusID,BusName,Type,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
+		out.println("BusID,BusName,Energized,Island,Type,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
 		for (int i=0; i < _nbus; ++i)
 		{
 			_report(out, i, _brnet.findBranches(i), _otnet.findBranches(i));
@@ -105,11 +108,16 @@ public class MismatchReport
 		if (branches.length == 0 && otdevs.length == 0) return;
 		ACBranchList acbr = _model.getBranches();
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
-
-		String btmp = String.format("\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,",
-				b.getObjectID(), b.getObjectName(), b.getBusType(), PAMath.rad2deg(_va[i]),
-				_vm[i], PAMath.pu2mw(_pmm[i]),
-				PAMath.pu2mvar(_qmm[i]), mmm);
+		IslandList islands = _model.getIslands();
+		
+		Island island = islands.get(b.getIsland());
+		
+		String btmp = String.format(
+				"\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,", 
+				b.getObjectID(), b.getObjectName(),
+				island.isEnergized() ? "true" : "false", island.getIndex(), 
+				b.getBusType(), PAMath.rad2deg(_va[i]), _vm[i], 
+				PAMath.pu2mw(_pmm[i]), PAMath.pu2mvar(_qmm[i]), mmm);
 		for(int acbranch : branches)
 		{
 			ACBranch acb = acbr.get(acbranch);
@@ -146,8 +154,9 @@ public class MismatchReport
 		if (otdev < _ngen)
 		{
 			od = _model.getGenerators().get(otdev);
-			pval = od.getPpu();
-			qval = od.getQpu();
+			Bus b = od.getBus();
+			pval = (b.getBusType() == BusTypeCode.Slack) ? 0f : od.getPpu();
+			qval = (b.getBusType() != BusTypeCode.Load) ? 0f : od.getQpu();
 		}
 		else if ((otdev -= _ngen) < _nload)
 		{
