@@ -2,6 +2,41 @@ package com.powerdata.openpa.psse;
 
 public class Island extends PsseBaseObject
 {
+	public static final Island	DeEnergizedIsland	= new Island(-1, null)
+	{
+		@Override
+		public BusList getBuses() throws PsseModelException {return BusList.Empty;}
+		@Override
+		public GenList getGenerators() throws PsseModelException {return GenList.Empty;}
+		@Override
+		public LoadList getLoads() throws PsseModelException {return LoadList.Empty;}
+		@Override
+		public LineList getLines() throws PsseModelException {return LineList.Empty;}
+		@Override
+		public TransformerList getTransformers() throws PsseModelException {return TransformerList.Empty;}
+		@Override
+		public PhaseShifterList getPhaseShifters() throws PsseModelException {return PhaseShifterList.Empty;}
+		@Override
+		public ShuntList getShunts() throws PsseModelException {return ShuntList.Empty;}
+		@Override
+		public SvcList getSvcs() throws PsseModelException {return SvcList.Empty;}
+		@Override
+		public SwitchList getSwitches() throws PsseModelException {return SwitchList.Empty;}
+		@Override
+		public BusList getBusesForType(BusTypeCode bustype) throws PsseModelException {return BusList.Empty;}
+		@Override
+		public int[] getBusNdxsForType(BusTypeCode bustype) throws PsseModelException {return new int[0];}
+
+														@Override
+														public boolean isEnergized()
+																throws PsseModelException
+														{
+															return false;
+														}
+
+		@Override
+		public int getAngleRefBusNdx() throws PsseModelException {return -1;}
+	};
 	protected IslandList _list;
 	
 	public Island(int ndx, IslandList list)

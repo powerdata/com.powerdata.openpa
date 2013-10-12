@@ -65,7 +65,7 @@ public class ACBranchList extends BaseList<ACBranch>
 
 	public String getI(int ndx) throws PsseModelException
 	{
-		return findBranch(ndx).getJ();
+		return findBranch(ndx).getI();
 	}
 	public String getJ(int ndx) throws PsseModelException
 	{
