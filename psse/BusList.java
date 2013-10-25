@@ -59,7 +59,6 @@ public abstract class BusList extends PsseBaseList<Bus>
 	{
 		return new Complex(PAMath.mw2pu(getGL(ndx)), PAMath.mvar2pu(getBL(ndx)));
 	}
-	public float getVArad(int ndx) throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
 
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException
@@ -84,21 +83,29 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public int getAREA(int ndx) throws PsseModelException {return 1;}
 	/** Zone number */
 	public int getZONE(int ndx) throws PsseModelException {return 1;}
+	/** Bus voltage KV */
+	public float getVM(int ndx) throws PsseModelException {return getVMpu(ndx) * getBASKV(ndx);}
+	/** set bus voltage KV */
+	public void setVM(int ndx, float kv) throws PsseModelException {}
 	/** Bus voltage magnitude p.u.*/
-	public float getVM(int ndx) throws PsseModelException {return 1F;}
+	public float getVMpu(int ndx) throws PsseModelException {return 1F;}
+	/** set bus voltage magnitude pu */
+	public void setVMpu(int ndex, float v) throws PsseModelException {}
 	/** Bus voltage phase angle in degrees */
-	public float getVA(int ndx) throws PsseModelException {return 0F;}
+	public float getVA(int ndx) throws PsseModelException {return 0f;}
+	/** set voltage phase angle in degrees */
+	public void setVA(int ndx, float va) throws PsseModelException {}
+	/** Bus voltage phase angle in radians */
+	public float getVArad(int ndx) throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
+	/** set bus voltage phase angle in radians */
+	public void setVArad(int ndx, float rad) throws PsseModelException {}
 	/** Owner number */
 	public int getOWNER(int ndx) throws PsseModelException {return 1;}
 
 
 	/* realtime methods */
 
-	public void setRTMismatch(int ndx, Complex mismatch)throws PsseModelException {/* do nothing */}
-	public Complex getRTMismatch(int ndx) throws PsseModelException {return Complex.Zero;}
-	public float getRTFrequency(int ndx) throws PsseModelException {return 0f;}
+	public float getFrequency(int ndx) throws PsseModelException {return 0f;}
 	public int getFrequencySourcePriority(int ndx) throws PsseModelException {return 0;}
-	public float getRTVMag(int ndx) throws PsseModelException {return getVM(ndx);}
-	public float getRTVAng(int ndx) throws PsseModelException {return PAMath.deg2rad(getVA(ndx));}
 }
 

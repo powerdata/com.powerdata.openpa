@@ -7,6 +7,7 @@ import java.util.List;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.tools.LoadArray;
+import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SimpleCSV;
 /**
  * Implement bus for CSV.  Currently based on Robin's version.
@@ -28,7 +29,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 	int _area[];
 	int _zone[];
 	int _owner[];
-	float _vm[];
+	float _vmpu[];
 	float _va[];
 	float _gl[];
 	float _bl[];
@@ -50,7 +51,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 			_area	= LoadArray.Int(buses,"AREA",this,"getDeftAREA");
 			_zone	= LoadArray.Int(buses,"ZONE",this,"getDeftZONE");
 			_owner	= LoadArray.Int(buses,"OWNER",this,"getDeftOWNER");
-			_vm		= LoadArray.Float(buses,"VM",this,"getDeftVM");
+			_vmpu	= LoadArray.Float(buses,"VM",this,"getDeftVMpu");
 			_va		= LoadArray.Float(buses,"VA",this,"getDeftVA");
 			_gl		= LoadArray.Float(buses,"GL",this,"getDeftGL");
 			_bl		= LoadArray.Float(buses,"BL",this,"getDeftBL");
@@ -75,7 +76,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 	public float getDeftBL(int ndx) throws PsseModelException {return super.getBL(ndx);}
 	public int getDeftAREA(int ndx) throws PsseModelException {return super.getAREA(ndx);}
 	public int getDeftZONE(int ndx) throws PsseModelException {return super.getZONE(ndx);}
-	public float getDeftVM(int ndx) throws PsseModelException {return super.getVM(ndx);}
+	public float getDeftVMpu(int ndx) throws PsseModelException {return super.getVMpu(ndx);}
 	public float getDeftVA(int ndx) throws PsseModelException {return super.getVA(ndx);}
 	public int getDeftOWNER(int ndx) throws PsseModelException {return super.getOWNER(ndx);}
 	
@@ -98,9 +99,19 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 	@Override
 	public int getZONE(int ndx) { return _zone[ndx]; }
 	@Override
-	public float getVM(int ndx) { return _vm[ndx]; }
+	public float getVM(int ndx) throws PsseModelException
+	{
+		return getVMpu(ndx) * getBASKV(ndx);
+	}
+	@Override
+	public float getVMpu(int ndx) { return _vmpu[ndx]; }
 	@Override
 	public float getVA(int ndx) { return _va[ndx]; }
+	@Override
+	public float getVArad(int ndx) throws PsseModelException
+	{
+		return PAMath.deg2rad(getVA(ndx));
+	}
 	@Override
 	public int getOWNER(int ndx) { return _owner[ndx]; }
 	@Override
@@ -134,7 +145,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 		_area = Arrays.copyOf(_area, newsz);
 		_zone = Arrays.copyOf(_zone, newsz);
 		_owner = Arrays.copyOf(_owner, newsz);
-		_vm = Arrays.copyOf(_vm, newsz);
+		_vmpu = Arrays.copyOf(_vmpu, newsz);
 		_va = Arrays.copyOf(_va, newsz);
 
 		for (int i = 0, bi = _size; i < nxfr; ++i, ++bi)
@@ -145,7 +156,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 			_area[bi] = _area[busindx];
 			_zone[bi] = _zone[busindx];
 			_owner[bi] = _owner[busindx];
-			_vm[bi] = t.getVMSTAR();
+			_vmpu[bi] = t.getVMSTAR();
 			_va[bi] = t.getANSTAR();
 			_ids[bi] = "TXSTAR-"+t.getObjectID();
 			if (_idToNdx.put(_ids[bi], bi)!= null)

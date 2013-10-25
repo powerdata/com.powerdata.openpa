@@ -22,6 +22,7 @@ import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PAMath;
 /**
  * Utility to calculate branch flows and bus mismatches.
  * 
@@ -207,8 +208,8 @@ public class PowerCalculator
 		float[] va = new float[nbus], vm = new float[nbus];
 		for(int i=0; i < nbus; ++i)
 		{
-			va[i] = blist.getRTVAng(i);
-			vm[i] = blist.getRTVMag(i);
+			va[i] = blist.getVArad(i);
+			vm[i] = blist.getVMpu(i);
 		}
 		return new float[][] {va, vm};
 	}

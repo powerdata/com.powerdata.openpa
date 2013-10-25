@@ -44,8 +44,6 @@ public class Bus extends PsseBaseObject
 	public int getFrequencySourcePriority() throws PsseModelException {return _list.getFrequencySourcePriority(_ndx);}
 	/** get the island number */
 	public int getIsland() throws PsseModelException { return _list.getIsland(_ndx); }
-	/** angle in radians */
-	public float getVArad() throws PsseModelException {return _list.getVArad(_ndx);}
 
 	/* Raw PSS/e methods */
 	
@@ -66,17 +64,19 @@ public class Bus extends PsseBaseObject
 	/** Zone number */
 	public int getZONE() throws PsseModelException {return _list.getZONE(_ndx);}
 	/** Bus voltage magnitude p.u.*/
-	public float getVM() throws PsseModelException {return _list.getVM(_ndx);}
+	public float getVMpu() throws PsseModelException {return _list.getVMpu(_ndx);}
+	/** Set Bus voltage magnitude p.u.*/
+	public void setVMpu(float vm) throws PsseModelException {_list.setVMpu(_ndx, vm);}
 	/** Bus voltage phase angle in degrees */
 	public float getVA() throws PsseModelException {return _list.getVA(_ndx);}
+	/** Set Bus voltage phase angle in degrees */
+	public void setVA(float va) throws PsseModelException {_list.setVA(_ndx, va);}
+	/** Bus voltage phase angle in radians */
+	public float getVArad() throws PsseModelException {return _list.getVArad(_ndx);}
+	/** Set Bus voltage phase angle in radians */
+	public void setVArad(float va) throws PsseModelException {_list.setVArad(_ndx, va);}
 	/** Owner number */
 	public int getOWNER() throws PsseModelException {return _list.getOWNER(_ndx);}
 
-	public void setRTMismatch(Complex mismatch) throws PsseModelException {_list.setRTMismatch(_ndx, mismatch);}
-	public Complex getRTMismatch() throws PsseModelException {return _list.getRTMismatch(_ndx);}
-	public float getRTFrequency() throws PsseModelException {return _list.getRTFrequency(_ndx);}
-	/** get real-time voltage magnitude p.u. on bus base KV */
-	public float getRTVmag() throws PsseModelException {return _list.getRTVMag(_ndx);}
-	/** get real-time voltage angle in radians */
-	public float getRTVang() throws PsseModelException {return _list.getRTVAng(_ndx);}
+	public float getFrequency() throws PsseModelException {return _list.getFrequency(_ndx);}
 }

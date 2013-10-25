@@ -72,20 +72,14 @@ public class BusSubList extends BusList
 	@Override
 	public float getVA(int ndx) throws PsseModelException {return _base.getVA(_ndxs[ndx]);}
 	@Override
+	public float getVMpu(int ndx) throws PsseModelException {return _base.getVMpu(_ndxs[ndx]);}
+	@Override
+	public float getVArad(int ndx) throws PsseModelException {return _base.getVArad(_ndxs[ndx]);}
+	@Override
 	public int getOWNER(int ndx) throws PsseModelException {return _base.getOWNER(_ndxs[ndx]);}
-	@Override
-	public void setRTMismatch(int ndx, Complex mismatch) throws PsseModelException {_base.setRTMismatch(ndx, mismatch);}
-	@Override
-	public Complex getRTMismatch(int ndx) throws PsseModelException {return _base.getRTMismatch(_ndxs[ndx]);}
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
 	@Override
 	public int size() {return _ndxs.length;}
-	@Override
-	public float getRTVMag(int ndx) throws PsseModelException {return _base.getRTVMag(_ndxs[ndx]);}
-	@Override
-	public float getRTVAng(int ndx) throws PsseModelException {return _base.getRTVAng(_ndxs[ndx]);}
-	
-	
 	
 }
