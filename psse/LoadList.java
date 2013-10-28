@@ -66,9 +66,11 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/** index of related zone record.  Defaults to same zone as bus I */
 	public int getZONE(int ndx) throws PsseModelException {return getBus(ndx).getZONE();}
 	/** active power of constant MVA load in MW */
-	public float getPL(int ndx) throws PsseModelException {return 0f;}
+	public float getP(int ndx) throws PsseModelException {return 0f;}
 	/** reactive power of constant MVA load in MVAr */
-	public float getQL(int ndx) throws PsseModelException {return 0f;}
+	public void setP(int ndx, float mw) throws PsseModelException {}
+	public float getQ(int ndx) throws PsseModelException {return 0f;}
+	public void setQ(int ndx, float mvar) throws PsseModelException {}
 	/** active power of constant current load MW at 1pu voltage */
 	public float getIP(int ndx) throws PsseModelException {return 0f;}
 	/** reactive power of constant current load MVAr at 1pu voltage */
@@ -80,19 +82,15 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/** index of related OWNER record.  Defaults to same owner as bus I */
 	public int getOWNER(int ndx) throws PsseModelException {return getBus(ndx).getOWNER();}
 	
-	/* Real-Time Methods */
-	/** get the load MW */
-	public float getRTMW(int ndx) throws PsseModelException { return getPL(ndx); }
-	/** get the load MVar */
-	public float getRTMVar(int ndx) throws PsseModelException { return getQL(ndx); }
-	/** get the cold load MW */
-	public float getRTColdMW(int ndx) throws PsseModelException { return 0f; }
-	/** get the cold load MVar */
-	public float getRTColdMVar(int ndx) throws PsseModelException { return 0f; }
-	public void setRTMW(int ndx, float mw) throws PsseModelException { /* do nothing */ }
-	public void setRTMVAr(int ndx, float mvar) throws PsseModelException { /* do nothing */ }
-	public float getRTP(int ndx) throws PsseModelException {return PAMath.mw2pu(getPL(ndx));}
-	public void setRTP(int ndx, float p) throws PsseModelException {}
-	public float getRTQ(int ndx) throws PsseModelException {return PAMath.mw2pu(getQL(ndx));}
-	public void setRTQ(int ndx, float q) throws PsseModelException {}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(ndx);}
+	public void setPpu(int ndx, float p) throws PsseModelException {}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(ndx);}
+	public void setQpu(int ndx, float q) throws PsseModelException {}
+	public float getPS(int ndx) throws PsseModelException {return getP(ndx);}
+	public void setPS(int ndx, float mw) throws PsseModelException {}
+	public float getQS(int ndx) throws PsseModelException {return getQ(ndx);}
+	public void setQS(int ndx, float mvar) throws PsseModelException {}
+	public float getPcold(int ndx) throws PsseModelException {return 0f;}
+	public float getQcold(int ndx) throws PsseModelException {return 0f;}
+
 }

@@ -46,9 +46,15 @@ public class Load extends PsseBaseObject implements OneTermDev
 	/** index of related zone record.  Defaults to same zone as bus I */
 	public int getZONE() throws PsseModelException {return _list.getZONE(_ndx);}
 	/** active power of constant MVA load in MW */
-	public float getPL() throws PsseModelException {return _list.getPL(_ndx);}
+	@Override
+	public float getP() throws PsseModelException {return _list.getP(_ndx);}
 	/** reactive power of constant MVA load in MVAr */
-	public float getQL() throws PsseModelException {return _list.getQL(_ndx);}
+	@Override
+	public float getQ() throws PsseModelException {return _list.getQ(_ndx);}
+	@Override
+	public void setP(float mw) throws PsseModelException {_list.setP(_ndx, mw);}
+	@Override
+	public void setQ(float mvar) throws PsseModelException {_list.setQ(_ndx, mvar);}
 	/** active power of constant current load MW at 1pu voltage */
 	public float getIP() throws PsseModelException {return _list.getIP(_ndx);}
 	/** reactive power of constant current load MVAr at 1pu voltage */
@@ -59,29 +65,27 @@ public class Load extends PsseBaseObject implements OneTermDev
 	public float getYQ() throws PsseModelException {return _list.getYQ(_ndx);}
 	/** index of related OWNER record.  Defaults to same owner as bus I */
 	public int getOWNER() throws PsseModelException {return _list.getOWNER(_ndx);}
-	
-	/* Real-Time Methods */
-	/** get the load MW */
-	@Override
-	public float getP() throws PsseModelException { return _list.getRTMW(_ndx); }
-	/** get the load MVar */
-	@Override
-	public float getQ() throws PsseModelException { return _list.getRTMVar(_ndx); }
-	@Override
-	public void setP(float mw) throws PsseModelException {_list.setRTMW(_ndx, mw);}
-	@Override
-	public void setQ(float mvar) throws PsseModelException {_list.setRTMVAr(_ndx, mvar);}
-	/** get the cold load MW */
-	public float getRTColdMW() throws PsseModelException { return _list.getRTColdMW(_ndx); }
-	/** get the cold load MVar */
-	public float getRTColdMVar() throws PsseModelException { return _list.getRTColdMVar(_ndx); }
 
 	@Override
-	public float getPpu() throws PsseModelException {return _list.getRTP(_ndx);}
+	public float getPpu() throws PsseModelException {return _list.getPpu(_ndx);}
 	@Override
-	public void setPpu(float p) throws PsseModelException {_list.setRTP(_ndx, p);}
+	public void setPpu(float p) throws PsseModelException {_list.setPpu(_ndx, p);}
 	@Override
-	public float getQpu() throws PsseModelException {return _list.getRTQ(_ndx);}
+	public float getQpu() throws PsseModelException {return _list.getQpu(_ndx);}
 	@Override
-	public void setQpu(float q) throws PsseModelException {_list.setRTQ(_ndx, q);}
+	public void setQpu(float q) throws PsseModelException {_list.setQpu(_ndx, q);}
+	
+	/** get the load MW "setpoint" */
+	public float getPS() throws PsseModelException {return _list.getPS(_ndx);}
+	/** set the load MW setpoint */
+	public void setPS(float mw) throws PsseModelException {_list.setPS(_ndx, mw);}
+	/** get the load MVAr setpoint */
+	public float getQS() throws PsseModelException {return _list.getQS(_ndx);}
+	/** set the load MVAr setpoint */
+	public void setQS(float mvar) throws PsseModelException {_list.setQS(_ndx, mvar);} 
+	
+	/** get the cold load MW */
+	public float getPcold()  throws PsseModelException {return _list.getPcold(_ndx);}
+	/** get the cold load MVAr */
+	public float getQcold() throws PsseModelException {return _list.getQcold(_ndx);}
 }

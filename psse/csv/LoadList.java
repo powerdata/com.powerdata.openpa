@@ -67,9 +67,9 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 	@Override
 	public int getZONE(int ndx) throws PsseModelException {return _zone[ndx];}
 	@Override
-	public float getPL(int ndx) throws PsseModelException {return _pl[ndx];}
+	public float getP(int ndx) throws PsseModelException {return _pl[ndx];}
 	@Override
-	public float getQL(int ndx) throws PsseModelException {return _ql[ndx];}
+	public float getQ(int ndx) throws PsseModelException {return _ql[ndx];}
 	@Override
 	public float getIP(int ndx) throws PsseModelException {return _ip[ndx];}
 	@Override
