@@ -212,7 +212,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 				Bus tbus = br.getToBus();
 				int fbusx = fbus.getIndex();
 				int tbusx = tbus.getIndex();
-				float fvm = fbus.getVM(), tvm = tbus.getVM();
+				float fvm = fbus.getVMpu(), tvm = tbus.getVMpu();
 				float fva = fbus.getVArad(), tva = tbus.getVArad();
 
 				if (_lowx == LowXHandling.ElimByVoltage
