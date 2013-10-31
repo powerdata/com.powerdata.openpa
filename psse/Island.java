@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 public class Island extends PsseBaseObject
 {
-	public static final Island	DeEnergizedIsland	= new Island(-1, null)
+	public static final Island	DeEnergizedIsland	= new Island(-1, IslandList.Empty)
 	{
 		@Override
 		public BusList getBuses() throws PsseModelException {return BusList.Empty;}

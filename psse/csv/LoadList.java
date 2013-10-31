@@ -35,8 +35,8 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 			_size = loads.getRowCount();
 			_i		= loads.get("I");
 			_id		= LoadArray.String(loads,"ID",this,"getID");
-			_pl		= LoadArray.Float(loads,"PL",this,"getPL");
-			_ql		= LoadArray.Float(loads,"QL",this,"getQL");
+			_pl		= LoadArray.Float(loads,"PL",this,"getP");
+			_ql		= LoadArray.Float(loads,"QL",this,"getQ");
 			_ip		= LoadArray.Float(loads,"IP",this,"getIP");
 			_iq		= LoadArray.Float(loads,"IQ",this,"getIQ");
 			_yp		= LoadArray.Float(loads,"YP",this,"getYP");
