@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class LinkNet implements Cloneable
 {
 	public static final int Empty = -1;
+	public static final int NoNode = -2;
 	
 	/**
 	 * Each item in this list contains an identifier to a link list stored in
@@ -21,6 +22,23 @@ public class LinkNet implements Cloneable
 	protected int _cnt[] = new int[0];
 	/** Maximum bus index plus 1 */
 	protected int _maxBusNdx = 0;
+
+	/** Explicitly add nodes to the system so that isolated nodes are tracked */
+	public void addNodes(int[] vnodes)
+	{
+		for (int v : vnodes) _list[v] = Empty;
+	}
+	/** Explicitly add nodes to the system so that isolated nodes are tracked */
+	public void addNodes(int startofs, int count)
+	{
+		for (int i=0; i < count; ++i, ++startofs)
+			_list[startofs] = Empty;
+	}
+	/** Explicitly add nodes to the system so that isolated nodes are tracked */
+	public void addNode(int node)
+	{
+		_list[node] = Empty;
+	}
 	/**
 	 * Ensure there is enough storage for the number of buses and branches
 	 * specified.  The algorithm over sizes by a factor of 2 to reduce memory
@@ -39,7 +57,7 @@ public class LinkNet implements Cloneable
 			{
 				int l = _list.length;
 				_list = Arrays.copyOf(_list, maxBusNdx*2);
-				Arrays.fill(_list, l, _list.length, Empty);
+				Arrays.fill(_list, l, _list.length, NoNode);
 				_cnt = Arrays.copyOf(_cnt, _list.length);
 			}
 		}
@@ -222,6 +240,14 @@ public class LinkNet implements Cloneable
 		int brem = bcnt;
 		/** mark each bus that has been seen */
 		boolean used[] = new boolean[bcnt];
+		for (int i = 0; i < bcnt; ++i)
+		{
+			if (_list[i] == -2)
+			{
+				used[i] = true;
+				--brem;
+			}
+		}
 		int usedndx = 0;
 		/** map bus to an island */
 		int busIslandMap[] = new int[bcnt];
@@ -234,18 +260,15 @@ public class LinkNet implements Cloneable
 		while (brem > 0)
 		{
 			// start out with a new island
-			while(used[usedndx] && usedndx < bcnt) ++usedndx;
+			while(usedndx < bcnt && used[usedndx]) ++usedndx;
 			int nextbus  = usedndx;
 			stack[stackptr++] = nextbus;
 			used[usedndx] = true;
-			boolean valid = false;
 			while(stackptr > 0)
 			{
 				--brem;
 				int p = stack[--stackptr];
 				int end = _list[p];
-				if (end < 0) break;
-				valid = true;
 				busIslandMap[p] = nisland;
 				islandCounts[nisland] += 1;
 				while (end >= 0)
@@ -259,7 +282,7 @@ public class LinkNet implements Cloneable
 					end = _next[end];
 				}
 			}
-			if (valid) ++nisland;
+			++nisland;
 		}
 		
 		// Organize results into a 2d array
@@ -289,8 +312,8 @@ public class LinkNet implements Cloneable
 			{
 				_far[enda] *= -1;
 				_far[endb] *= -1;
-				--_far[enda];
-				--_far[endb];
+				_far[enda] -= 2;
+				_far[endb] -= 2;
 				++(_cnt[_far[enda]]);
 				++(_cnt[_far[endb]]);
 			}
@@ -298,8 +321,8 @@ public class LinkNet implements Cloneable
 			{
 				--(_cnt[_far[enda]]);
 				--(_cnt[_far[endb]]);
-				++_far[enda];
-				++_far[endb];
+				_far[enda] += 2;
+				_far[endb] += 2;
 				_far[enda] *= -1;
 				_far[endb] *= -1;
 				
