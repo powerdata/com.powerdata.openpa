@@ -10,6 +10,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.tools.LinkNet;
 
+@Deprecated
 public class TP
 {
 	int[] _bus2island;

@@ -16,7 +16,11 @@ public abstract class IslandList extends PsseBaseList<Island>
 
 	/** Get a Transformer by it's index. */
 	@Override
-	public Island get(int ndx) { return (ndx==-1) ? Island.DeEnergizedIsland : new Island(ndx,this); }
+	public Island get(int ndx)
+	{
+		return (ndx == -1) ? Island.DeEnergizedIsland : new Island(ndx, this);
+	}
+
 	/** Get a Transformer by it's ID. */
 	@Override
 	public Island get(String id) { return super.get(id); }

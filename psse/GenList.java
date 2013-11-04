@@ -132,4 +132,9 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public float getPS(int ndx) throws PsseModelException {return getP(ndx);}
 	/** set MW setpoint */
 	public void setPS(int ndx, float mw) throws PsseModelException {}
+
+	public boolean isInAvr(int ndx) throws PsseModelException
+	{
+		return !((getQ(ndx) == getQB(ndx)) && (getQ(ndx) == getQT(ndx))); 
+	}
 }

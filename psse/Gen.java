@@ -31,6 +31,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	public GenType getGenType() throws PsseModelException {return _list.getType(_ndx);}
+	/** is unit in Automatic Voltage Regulation (AVR) */
+	public boolean isInAvr() throws PsseModelException {return _list.isInAvr(_ndx);}
 
 	/* Raw PSS/e methods */
 	
