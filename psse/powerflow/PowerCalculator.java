@@ -1,8 +1,5 @@
 package com.powerdata.openpa.psse.powerflow;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
@@ -22,7 +19,6 @@ import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.PAMath;
 /**
  * Utility to calculate branch flows and bus mismatches.
  * 
@@ -214,46 +210,5 @@ public class PowerCalculator
 		return new float[][] {va, vm};
 	}
 	
-	public static void main(String[] args) throws Exception
-	{
-		String uri = null;
-		String sout = null;
-		PrintWriter out = new PrintWriter(System.out);
-
-		for(int i=0; i < args.length;)
-		{
-			String s = args[i++].toLowerCase();
-			int ssx = 1;
-			if (s.startsWith("--")) ++ssx;
-			switch(s.substring(ssx))
-			{
-				case "uri":
-					uri = args[i++];
-					break;
-				case "out":
-					sout = args[i++];
-					break;
-			}
-		}
-		
-		if (uri == null)
-		{
-			System.err.format("Usage: -uri model_uri -out output_file");
-			System.exit(1);
-		}
-		
-		PsseModel model = PsseModel.Open(uri);
-
-		if (sout != null)
-		{
-			out = new PrintWriter(new BufferedWriter(new FileWriter(sout)));
-		}
-		
-		MismatchReport mmr = new MismatchReport(model);
-		PowerCalculator pc = new PowerCalculator(model, mmr);
-		pc.calculateMismatches(pc.getRTVoltages());
-		mmr.report(out);
-		if (sout != null) out.close();
-	}
 }
 
