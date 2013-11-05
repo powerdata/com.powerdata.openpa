@@ -13,6 +13,7 @@ public abstract class PsseClassSet
 	
 	public static PsseClassSet GetClassSetForVersion(String version) throws PsseProcException
 	{
+		final String msg = "Version %d not supported, attempting to read using version %d\n";
 		int ix = version.indexOf('.');
 		String svmaj = null;
 		svmaj = (ix == -1) ? version : version.substring(0, ix);
@@ -28,13 +29,17 @@ public abstract class PsseClassSet
 		{
 			rv = new PsseClassSetVersion30();
 		}
-		else if (vmaj <= MaxConfigVerMajor)
+		else if (vmaj <= 32)
 		{
-			rv = new PsseClassSetVersion33();
+			System.err.format(msg, vmaj, 30);
+			rv = new PsseClassSetVersion30();
 		}
 		else
 		{
-			throw new PsseProcException("Not configured for Version "+version);
+			if (vmaj > MaxConfigVerMajor)
+				System.err.format(msg, vmaj, 33);
+			System.err.println("Version 33 support may not be fully implemented.");
+			rv = new PsseClassSetVersion33();
 		}
 		
 		return rv;

@@ -19,9 +19,11 @@ public class SparseBMatrix
 	SparseMatrixFactorizer _factorizer;
 	float[] _bbranch, _bself;
 	int[] _pnode, _qnode, _elimbrndx;
+	boolean[] _buselim;
 	
-	public SparseBMatrix(LinkNet net, int[] saveBusNdx, float[] bbranch, float[] bself)
+	public SparseBMatrix(LinkNet onet, int[] saveBusNdx, float[] bbranch, float[] bself)
 	{
+		LinkNet net = onet.clone();
 		_factorizer = new SparseMatrixFactorizer(net, saveBusNdx);
 		_bbranch = bbranch;
 		_bself = bself;
@@ -44,12 +46,25 @@ public class SparseBMatrix
 				_elimbrndx[jbr] = elimbr[i];
 			}
 		}
+		/*
+		 * TODO: CMM (11/2013)- review if this is really necessary, I think I
+		 * fixed the issue that originally made this necessary
+		 */
 		if (nused < nfactbr)
 		{
 			_pnode = Arrays.copyOf(_pnode, nused);
 			_qnode = Arrays.copyOf(_qnode, nused);
 			_elimbrndx = Arrays.copyOf(_elimbrndx, nused);
 		}
+		
+		/*
+		 * track the nodes we plan on eliminating
+		 */
+		int nbus = _bself.length;
+		_buselim = new boolean[nbus];
+		Arrays.fill(_buselim, true);
+		for (int b : saveBusNdx) _buselim[b] = false;
+		
 	}
 	
 	/** factorize the B matrix */
@@ -88,7 +103,7 @@ public class SparseBMatrix
 		{
 			elimbbr[i] = -bbranch[_elimbrndx[i]] / bself[_pnode[i]];
 		}
-		return new FactorizedBMatrix(bself, elimbbr, _pnode, _qnode, _elimbrndx);
+		return new FactorizedBMatrix(bself, elimbbr, _pnode, _qnode, _elimbrndx, _buselim);
 	}
 
 }

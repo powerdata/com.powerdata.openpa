@@ -16,24 +16,27 @@ public class FactorizedBMatrix
 {
 	float[] _bself, _bbrofs;
 	int[] _pnode, _qnode, _brndx;
+	/** bus eliminated */
+	boolean[] _buselim;
 	
 	public FactorizedBMatrix(float[] bself, float[] bbrofs, int[] pnode,
-			int[] qnode, int[] brndx)
+			int[] qnode, int[] brndx, boolean[] buselim)
 	{
 		_bself = bself;
 		_bbrofs = bbrofs;
 		_pnode = pnode;
 		_qnode = qnode;
 		_brndx = brndx;
+		_buselim = buselim;
 	}
-	
+
 	public void dump(PsseModel model, PrintWriter pw) throws PsseModelException
 	{
 		pw.println("\"brndx\",\"eord\",\"p\",\"pndx\",\"q\",\"qndx\",\"-bbranch/bself\",\"bself\"");
 		BusList buses = model.getBuses();
-		int iord=-1;
+		int iord = -1;
 		int oldpn = -1;
-		for(int i=0; i < _pnode.length; ++i)
+		for (int i = 0; i < _pnode.length; ++i)
 		{
 			int pn = _pnode[i];
 			int qn = _qnode[i];
@@ -42,48 +45,69 @@ public class FactorizedBMatrix
 				oldpn = pn;
 				++iord;
 			}
-			
-			pw.format("%d,%d,\"%s\",%d,\"%s\",%d,%f,%f\n", _brndx[i], iord, buses.get(pn).getNAME(),
-					pn, buses.get(qn).getNAME(), qn, _bbrofs[i], _bself[pn]);
+
+			pw.format("%d,%d,\"%s\",%d,\"%s\",%d,%f,%f\n", _brndx[i], iord,
+					buses.get(pn).getNAME(), pn, buses.get(qn).getNAME(), qn,
+					_bbrofs[i], _bself[pn]);
 		}
 	}
 	
-	/** run a forward reduction and backward substitution */
-	public float[] solve(float[] mm, float[] vm, int[][] actvbus)
+	/** 
+	 * Perform a forward reduction
+	 * @param mm mismatch array
+	 * @return
+	 */
+	public float[] forwardReduction(float[] mm)
 	{
-		int nnd = _bself.length;
+		int nbus = mm.length;
 		int nbr = _bbrofs.length;
+		float[] rv = new float[nbus];
 
-		for(int[] list : actvbus)
+		for (int i = 0; i < nbr; ++i)
 		{
-			for (int b : list)
-			{
-				mm[b] /= vm[b];
-			}
+			rv[_qnode[i]] = mm[_qnode[i]] + _bbrofs[i] * mm[_pnode[i]];
 		}
+		return rv;
+	}
 
-		/* run the forward reduction */
-		for(int i=0; i < nbr; ++i)
+	/**
+	 * Perform backward substitution
+	 * @param ds result of forward reduction
+	 * @return
+	 */
+	public float[] backwardSubstitution(float[] ds)
+	{
+		int nbr = _bbrofs.length;
+		float[] dx = new float[ds.length];
+		for (int i = 0; i < _buselim.length; ++i)
 		{
-			mm[_qnode[i]] += _bbrofs[i] * mm[_pnode[i]];
+			if (_buselim[i])
+				dx[i] = ds[i] / _bself[i];
 		}
-		
-		/* backward substitution */
-		float[] dx = new float[nnd];
-		
-		for (int[] list : actvbus)
+		for (int i = nbr - 1; i >= 0; --i)
 		{
-			for (int b : list)
-			{
-				dx[b] = mm[b] / _bself[b];
-			}
+			dx[_pnode[i]] += _bbrofs[i] * dx[_qnode[i]];
 		}
-		
-		for(int i=nbr-1; i >= 0; --i)
-		{
-			dx[_pnode[i]] += _bbrofs[i] *  dx[_qnode[i]];
-		}
-		
 		return dx;
 	}
+	
+	/**
+	 * convenience method to solve the matrix by running both forward reduction
+	 * and backward substitution
+	 * 
+	 * @param mm
+	 *            Mismatch array
+	 * @return
+	 */
+	public float[] solve(float[] mm)
+	{
+		return backwardSubstitution(forwardReduction(mm));
+	}
+
+	/**
+	 * As a convenience, return whether the bus was eliminated or retained during factorization
+	 * @param busNdx index of the bus
+	 * @return
+	 */
+	public boolean wasBusEliminated(int busNdx) {return _buselim[busNdx];}
 }

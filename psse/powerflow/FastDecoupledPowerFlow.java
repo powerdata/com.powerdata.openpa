@@ -86,10 +86,6 @@ public class FastDecoupledPowerFlow
 			findAdjustableTransformers();
 
 		float[] vm, va;
-		int[] ldbus = _model.getBusNdxForType(BusTypeCode.Load);
-		int[] genbus = _model.getBusNdxForType(BusTypeCode.Gen);
-		int[][] pbus = new int[][] { ldbus, genbus };
-		int[][] qbus = new int[][] { ldbus };
 
 		switch(vsrc)
 		{
@@ -107,7 +103,7 @@ public class FastDecoupledPowerFlow
 			case Flat:
 			default:
 				va = new float[nbus];
-				vm = flatMag(ldbus);
+				vm = flatMag(_model.getBusNdxForType(BusTypeCode.Load));
 				break;
 
 		}
@@ -133,12 +129,17 @@ public class FastDecoupledPowerFlow
 		
 		for(int iiter=0; iiter < _itermax && nconv; ++iiter)
 		{
+			/* 
+			 * put this section in its own block to allow the results of solve to get cleaned up sooner 
+			 */
 			{
-				float[] dp = _bp.solve(mm[0], vm, pbus);
-				for(int[] blist : pbus)
+				float[] pmm = mm[0];
+				for(int i=0; i < pmm.length; ++i) pmm[i] /= vm[i];
+				float[] dp = _bp.solve(pmm);
+				for(int i=0; i < nbus; ++i)
 				{
-					for(int b : blist)
-						va[b] += dp[b];
+					if (_bp.wasBusEliminated(i))
+						va[i] += dp[i];
 				}
 			}
 			
@@ -149,10 +150,13 @@ public class FastDecoupledPowerFlow
 
 			if (nconv)
 			{
-				float[] dq = _bpp.solve(mm[1], vm, qbus);
-				for (int b : ldbus)
+				float[] qmm = mm[1];
+				for(int i=0; i < qmm.length; ++i) qmm[i] /= vm[i];
+				float[] dq = _bpp.solve(qmm);
+				for(int i=0; i < nbus; ++i)
 				{
-					vm[b] += dq[b];
+					if (_bpp.wasBusEliminated(i))
+						vm[i] += dq[i];
 				}
 				mm = pcalc.calculateMismatches(va, vm);
 				if (dbgmm) mmr.report(mmdir, String.format("%02d-vm", iiter));
@@ -207,8 +211,8 @@ public class FastDecoupledPowerFlow
 	{
 		int[] pq = island.getBusNdxsForType(BusTypeCode.Load);
 		int[] pv = island.getBusNdxsForType(BusTypeCode.Gen);
-		int worstp = findWorst(pmm, new int[][] { pq, pv }, r);
-		int worstq = findWorst(qmm, new int[][] {pq}, r);
+		int worstp = findWorst(pmm, new int[][] { pq, pv });
+		int worstq = findWorst(qmm, new int[][] {pq});
 		BusList buses = _model.getBuses();
 		Bus pworst = buses.get(worstp);
 		Bus qworst = buses.get(worstq);
@@ -225,7 +229,7 @@ public class FastDecoupledPowerFlow
 		return !conv;
 	}
 
-	int findWorst(float[] mm, int[][] lists, PowerFlowConvergence r)
+	int findWorst(float[] mm, int[][] lists)
 	{
 		float wval = 0f;
 		int wb = -1;
