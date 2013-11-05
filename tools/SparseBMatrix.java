@@ -21,6 +21,13 @@ public class SparseBMatrix
 	int[] _pnode, _qnode, _elimbrndx;
 	int[] _buselim;
 	
+	/**
+	 * Create a new Sparse Susceptance Matrix
+	 * @param onet LinkNet sparse representation of network
+	 * @param saveBusNdx Set of bus indexes to be retained during elimination
+	 * @param bbranch Array of Off-diagonal elements in the same order as branches added to LinkNet
+	 * @param bself Array of Diagonal elements for each bus
+	 */
 	public SparseBMatrix(LinkNet onet, int[] saveBusNdx, float[] bbranch, float[] bself)
 	{
 		LinkNet net = onet.clone();

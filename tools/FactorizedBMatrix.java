@@ -19,7 +19,7 @@ public class FactorizedBMatrix
 	/** bus eliminated */
 	int[] _buselim;
 	
-	public FactorizedBMatrix(float[] bself, float[] bbrofs, int[] pnode,
+	FactorizedBMatrix(float[] bself, float[] bbrofs, int[] pnode,
 			int[] qnode, int[] brndx, int[] buselim)
 	{
 		_bself = bself;
