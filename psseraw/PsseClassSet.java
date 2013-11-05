@@ -61,4 +61,5 @@ public abstract class PsseClassSet
 	public abstract PsseClass getInterAreaTransfer();
 	public abstract PsseClass getOwner();
 	public abstract PsseClass getFACTSDevice();
+	public abstract PsseClass getFixedShunt();
 }

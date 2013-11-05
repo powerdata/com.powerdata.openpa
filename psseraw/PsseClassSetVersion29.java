@@ -31,6 +31,7 @@ public class PsseClassSetVersion29 extends PsseClassSet
 	public static final PsseClass		InterAreaTransfer		= new PsseClass("InterAreaTransfer");
 	public static final PsseClass		Owner					= new PsseClass("Owner");
 	public static final PsseClass		FACTSDevice				= new PsseClass("FACTSDevice");
+	public static final PsseClass		FixedShunt				= new PsseClass("FixedShunt");
 	
 	static
 	{
@@ -491,4 +492,6 @@ public class PsseClassSetVersion29 extends PsseClassSet
 	public PsseClass getOwner() {return Owner;}
 	@Override
 	public PsseClass getFACTSDevice() {return FACTSDevice;}
+	@Override
+	public PsseClass getFixedShunt() {return FixedShunt;}
 }
