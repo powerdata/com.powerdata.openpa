@@ -81,7 +81,7 @@ public class PsseClass
 		rvofs += recstart;
 		int endofs = rvofs + pl.length;
 		StringParse sp = parseLine(l);
-		while (sp.hasMoreTokens())
+		while (sp.hasMoreTokens() && rvofs < endofs)
 			rec[rvofs++] = sp.nextToken().trim();
 		Arrays.fill(rec, rvofs, endofs, "");
 		return endofs;

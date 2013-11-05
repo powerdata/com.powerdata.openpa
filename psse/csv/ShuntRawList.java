@@ -7,6 +7,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Shunt;
 
 public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 {
@@ -82,6 +83,7 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 		
 		scanBuses(rawbus);
 		scanLines(rawline, rawbus);
+		scanFixedShunts(new RawFixedShuntList(model));
 		
 		_size = _il.size();
 		_i = new String[_size];
@@ -102,6 +104,19 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 		}
 		_bl = null;
 		_gl = null;
+	}
+
+	protected void scanFixedShunts(RawFixedShuntList rsh) throws PsseModelException
+	{
+		for(Shunt s : rsh)
+		{
+			float gl = s.getG();
+			float bl = s.getB();
+			if (gl != 0f || bl != 0f)
+			{
+				mkShunt(bl, gl, s.getBus(), s.getObjectID(), s.getObjectName(), s.getSTAT()==1);
+			}
+		}
 	}
 
 	void scanBuses(BusListRaw rawbus) throws PsseModelException

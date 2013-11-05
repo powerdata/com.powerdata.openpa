@@ -44,7 +44,8 @@ public abstract class PsseProcessor
 		for (PsseClass pc : getPsseClassSet().getPsseClasses())
 		{
 			PsseRecWriter w = getWriter(pc.getClassName());
-			pc.processRecords(_rdr, w, _cset);
+			if (!pc.getLines().isEmpty())
+				pc.processRecords(_rdr, w, _cset);
 		}
 	}
 

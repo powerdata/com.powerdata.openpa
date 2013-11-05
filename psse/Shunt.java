@@ -44,4 +44,11 @@ public class Shunt extends PsseBaseObject implements OneTermDev
 	public float getQpu() throws PsseModelException {return _list.getQpu(_ndx);}
 	@Override
 	public void setQpu(float q) throws PsseModelException {_list.setQpu(_ndx, q);}
+	
+	/** get circuit ID of shunt */
+	public String getID() throws PsseModelException {return _list.getID(_ndx);}
+	/** get status
+	 * TODO:  Have not verified this field with documentation yet, but assume 1 for in service, and 0 for out of service 
+	 */
+	public int getSTAT() throws PsseModelException {return _list.getSTAT(_ndx);}
 }

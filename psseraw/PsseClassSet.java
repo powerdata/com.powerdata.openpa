@@ -9,7 +9,7 @@ package com.powerdata.openpa.psseraw;
  */
 public abstract class PsseClassSet
 {
-	public static final int MaxConfigVerMajor = 30;
+	public static final int MaxConfigVerMajor = 33;
 	
 	public static PsseClassSet GetClassSetForVersion(String version) throws PsseProcException
 	{
@@ -24,9 +24,13 @@ public abstract class PsseClassSet
 		{
 			rv = new PsseClassSetVersion29();
 		}
-		else if (vmaj <= MaxConfigVerMajor)
+		else if (vmaj <= 30)
 		{
 			rv = new PsseClassSetVersion30();
+		}
+		else if (vmaj <= MaxConfigVerMajor)
+		{
+			rv = new PsseClassSetVersion33();
 		}
 		else
 		{
