@@ -17,10 +17,10 @@ public class FactorizedBMatrix
 	float[] _bself, _bbrofs;
 	int[] _pnode, _qnode, _brndx;
 	/** bus eliminated */
-	boolean[] _buselim;
+	int[] _buselim;
 	
 	public FactorizedBMatrix(float[] bself, float[] bbrofs, int[] pnode,
-			int[] qnode, int[] brndx, boolean[] buselim)
+			int[] qnode, int[] brndx, int[] buselim)
 	{
 		_bself = bself;
 		_bbrofs = bbrofs;
@@ -59,13 +59,12 @@ public class FactorizedBMatrix
 	 */
 	public float[] forwardReduction(float[] mm)
 	{
-		int nbus = mm.length;
 		int nbr = _bbrofs.length;
-		float[] rv = new float[nbus];
+		float[] rv = mm.clone();
 
 		for (int i = 0; i < nbr; ++i)
 		{
-			rv[_qnode[i]] = mm[_qnode[i]] + _bbrofs[i] * mm[_pnode[i]];
+			rv[_qnode[i]] += _bbrofs[i] * rv[_pnode[i]];
 		}
 		return rv;
 	}
@@ -79,11 +78,8 @@ public class FactorizedBMatrix
 	{
 		int nbr = _bbrofs.length;
 		float[] dx = new float[ds.length];
-		for (int i = 0; i < _buselim.length; ++i)
-		{
-			if (_buselim[i])
-				dx[i] = ds[i] / _bself[i];
-		}
+		for(int bus : _buselim)
+			dx[bus] = ds[bus] / _bself[bus];
 		for (int i = nbr - 1; i >= 0; --i)
 		{
 			dx[_pnode[i]] += _bbrofs[i] * dx[_qnode[i]];
@@ -105,9 +101,8 @@ public class FactorizedBMatrix
 	}
 
 	/**
-	 * As a convenience, return whether the bus was eliminated or retained during factorization
-	 * @param busNdx index of the bus
-	 * @return
+	 * As a convenience, return buses that we determined get eliminated
+	 * @return array of eliminated bus indexes
 	 */
-	public boolean wasBusEliminated(int busNdx) {return _buselim[busNdx];}
+	public int[] getEliminatedBuses() {return _buselim;}
 }

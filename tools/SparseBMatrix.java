@@ -19,7 +19,7 @@ public class SparseBMatrix
 	SparseMatrixFactorizer _factorizer;
 	float[] _bbranch, _bself;
 	int[] _pnode, _qnode, _elimbrndx;
-	boolean[] _buselim;
+	int[] _buselim;
 	
 	public SparseBMatrix(LinkNet onet, int[] saveBusNdx, float[] bbranch, float[] bself)
 	{
@@ -61,10 +61,14 @@ public class SparseBMatrix
 		 * track the nodes we plan on eliminating
 		 */
 		int nbus = _bself.length;
-		_buselim = new boolean[nbus];
-		Arrays.fill(_buselim, true);
-		for (int b : saveBusNdx) _buselim[b] = false;
-		
+		_buselim = new int[nbus - saveBusNdx.length];
+		boolean[] elim = new boolean[nbus];
+		Arrays.fill(elim, true);
+		for(int bx : saveBusNdx) elim[bx] = false;
+		for(int i=0, j=0; i < nbus; ++i)
+		{
+			if (elim[i]) _buselim[j++] = i;
+		}
 	}
 	
 	/** factorize the B matrix */

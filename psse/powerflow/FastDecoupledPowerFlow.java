@@ -134,13 +134,11 @@ public class FastDecoupledPowerFlow
 			 */
 			{
 				float[] pmm = mm[0];
-				for(int i=0; i < pmm.length; ++i) pmm[i] /= vm[i];
+				int[] ebus = _bp.getEliminatedBuses();
+				for(int bx : ebus) pmm[bx] /= vm[bx];
 				float[] dp = _bp.solve(pmm);
-				for(int i=0; i < nbus; ++i)
-				{
-					if (_bp.wasBusEliminated(i))
-						va[i] += dp[i];
-				}
+//				for(int i=0; i < nbus; ++i) va[i] += dp[i];
+				for(int bx : ebus) va[bx] += dp[bx];
 			}
 			
 			mm = pcalc.calculateMismatches(va, vm);
@@ -151,13 +149,11 @@ public class FastDecoupledPowerFlow
 			if (nconv)
 			{
 				float[] qmm = mm[1];
-				for(int i=0; i < qmm.length; ++i) qmm[i] /= vm[i];
+				int[] ebus = _bpp.getEliminatedBuses();
+				for(int bx : ebus) qmm[bx] /= vm[bx];
 				float[] dq = _bpp.solve(qmm);
-				for(int i=0; i < nbus; ++i)
-				{
-					if (_bpp.wasBusEliminated(i))
-						vm[i] += dq[i];
-				}
+//				for(int i=0; i < nbus; ++i) va[i] += dp[i];
+				for(int bx : ebus) vm[bx] += dq[bx];
 				mm = pcalc.calculateMismatches(va, vm);
 				if (dbgmm) mmr.report(mmdir, String.format("%02d-vm", iiter));
 				System.out.format("Iteration %d voltage: ", iiter);
