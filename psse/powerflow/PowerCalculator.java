@@ -31,7 +31,7 @@ public class PowerCalculator
 	MismatchReport _dbg;
 	
 	/**
-	 * 
+	 * Create a new power calculator
 	 * @param model
 	 */
 	public PowerCalculator(PsseModel model)
@@ -40,21 +40,72 @@ public class PowerCalculator
 		_dbg = null;
 	}
 
+	/**
+	 * Create a new PowerCalculator with debugging enabled
+	 * 
+	 * @param model
+	 * @param dbg
+	 */
 	public PowerCalculator(PsseModel model, MismatchReport dbg)
 	{
 		_model = model;
 		_dbg = dbg;
 	}
-	
-	public float[][] calcACBranchFlows(float[] vang, float[] vmag) throws PsseModelException
+
+	/**
+	 * Calculate AC branch flows on all AC branches in model
+	 * 
+	 * @param vang
+	 *            Bus voltage angles
+	 * @param vmag
+	 *            Bus voltage magnitudes
+	 * @return <p>
+	 *         System active and reactive branch flows in order of all system
+	 *         branches from PsseModel.getBranches()
+	 *         </p>
+	 *         <ul>
+	 *         <li>Offset 0 - Array of from-side active power flows (p.u.)</li>
+	 *         <li>Offset 1 - Array of from-side reactive power flows (p.u.)</li>
+	 *         <li>Offset 2 - Array of to-side active power flows (p.u.)</li>
+	 *         <li>Offset 3 - Array of to-side reactive power flows (p.u.)</li>
+	 *         </ul>
+	 * @throws PsseModelException
+	 */
+	public float[][] calcACBranchFlows(float[] vang, float[] vmag)
+			throws PsseModelException
 	{
-		ACBranchList brlist = _model.getBranches();
-		int nbr = brlist.size();
+		return calcACBranchFlows(_model.getBranches(), vang, vmag);
+	}
+	
+	/**
+	 * Calculate AC branch flows
+	 * 
+	 * @param branches
+	 *            List of branches to calculate.
+	 * @param vang
+	 *            Bus voltage angles
+	 * @param vmag
+	 *            Bus voltage magnitudes
+	 * @return <p>
+	 *         System active and reactive branch flows in order of branches
+	 *         </p>
+	 *         <ul>
+	 *         <li>Offset 0 - Array of from-side active power flows (p.u.)</li>
+	 *         <li>Offset 1 - Array of from-side reactive power flows (p.u.)</li>
+	 *         <li>Offset 2 - Array of to-side active power flows (p.u.)</li>
+	 *         <li>Offset 3 - Array of to-side reactive power flows (p.u.)</li>
+	 *         </ul>
+	 * @throws PsseModelException
+	 */
+	public float[][] calcACBranchFlows(List<? extends ACBranch> branches,
+			float[] vang, float[] vmag) throws PsseModelException
+	{
+		int nbr = branches.size();
 		float[] pfrm = new float[nbr], pto = new float[nbr],
 				qfrm = new float[nbr], qto = new float[nbr];
 		for (int i=0; i < nbr; ++i)
 		{
-			ACBranch br = brlist.get(i);
+			ACBranch br = branches.get(i);
 			if (br.isInSvc())
 			{
 				int fbndx = br.getFromBus().getIndex();
@@ -162,9 +213,30 @@ public class PowerCalculator
 		}
 	}
 
+	/**
+	 * Calculate fixed shunt reactive power on all system shunts defined in
+	 * PsseModel.getShunts()
+	 * 
+	 * @param vm
+	 *            current solved Bus voltage magnitudes
+	 * @return shunt reactive power for all model shunts from
+	 *         PsseModel.getShunts()
+	 * @throws PsseModelException
+	 */
 	public float[] calcShunts(float[] vm) throws PsseModelException
 	{
-		ShuntList shunts = _model.getShunts();
+		return calcShunts(_model.getShunts(), vm);
+	}
+
+	/**
+	 * Calculate fixed shunt reactive power
+	 * @param shunts List of shunts
+	 * @param vm current solved Bus voltage magnitudes
+	 * @return shunt reactive power 
+	 * @throws PsseModelException
+	 */
+	public float[] calcShunts(ShuntList shunts, float[] vm) throws PsseModelException
+	{
 		int nsh = shunts.size();
 		float[] q = new float[nsh];
 
@@ -179,9 +251,31 @@ public class PowerCalculator
 		return q;
 	}
 
+	/**
+	 * Calculate SVC reactive power for all model SVC's using PsseModel.getSvcs()
+	 * 
+	 * @param vm
+	 *            Bus solved voltage magnitudes
+	 * @return SVC reactive power in order of PsseModel.getSvcs()
+	 * @throws PsseModelException
+	 */
 	public float[] calcSVCs(float[] vm) throws PsseModelException
 	{
-		SvcList svcs = _model.getSvcs();
+		return calcSVCs(_model.getSvcs(), vm);
+	}
+	
+	/**
+	 * Calculate SVC reactive power
+	 * 
+	 * @param svcs
+	 *            List of SVC's to calculate
+	 * @param vm
+	 *            Bus solved voltage magnitudes
+	 * @return SVC reactive power in order of SvcList
+	 * @throws PsseModelException
+	 */
+	public float[] calcSVCs(SvcList svcs, float[] vm) throws PsseModelException
+	{
 		int nsh = svcs.size();
 		float[] q = new float[nsh];
 

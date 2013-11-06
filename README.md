@@ -49,12 +49,18 @@ for(Switch s : switches)
     s.setState(SwitchState.Open);
 }
 ```
+
+PsseModel is not exactly PSSe
+-----------------------------
 By now you may have noticed that the model representation is based on PSS/e but is not exactly PSS/e:
-* Include Switch detail as an extension to allow for more accurate representation of a poweer system.
+* Include Switch detail as an extension to allow for more accurate representation of a power system when available.
 * 3-winding transformers have been converted to an equivalent representation of 3 2-winding transformermers.
 * Phase shifters are in a separate list
 * Shunts that are identified as part of the Bus or NontransformerBranch record are converted to entries in the ShuntList.
 * SwitchedShunt segments are converted into individual entries in the ShuntList.
+* Impedances on any branch object are automatically converted to per-unit on a 100 MVA base and bus base voltage when using getR(), getX(), getZ, and getY()
+* Methods (getP, setP, getQ, setQ, etc), are defined to allow common attributes to be written to the back end system when supported.
+
 
 PsseModel URI description
 --------------------
