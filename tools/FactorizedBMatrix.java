@@ -55,7 +55,7 @@ public class FactorizedBMatrix
 	/** 
 	 * Perform a forward reduction
 	 * @param mm mismatch array
-	 * @return
+	 * @return Array (in bus order) results of forward reduction results 
 	 */
 	public float[] forwardReduction(float[] mm)
 	{
@@ -72,7 +72,7 @@ public class FactorizedBMatrix
 	/**
 	 * Perform backward substitution
 	 * @param ds result of forward reduction
-	 * @return
+	 * @return Array (in bus order) of corrections
 	 */
 	public float[] backwardSubstitution(float[] ds)
 	{
@@ -93,7 +93,7 @@ public class FactorizedBMatrix
 	 * 
 	 * @param mm
 	 *            Mismatch array
-	 * @return
+	 * @return Array (in bus order) of corrections
 	 */
 	public float[] solve(float[] mm)
 	{
