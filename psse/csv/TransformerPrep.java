@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import java.util.ArrayList;
 
-import com.powerdata.openpa.psse.TransformerRaw;
+import com.powerdata.openpa.psse.util.TransformerRaw;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 

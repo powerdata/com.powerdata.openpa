@@ -4,7 +4,7 @@ import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.PsseModelException;
 
-public class BusSubList extends com.powerdata.openpa.psse.BusSubList
+public class BusSubList extends com.powerdata.openpa.psse.util.BusSubList
 {
 	PsseModel _csvmodel;
 	

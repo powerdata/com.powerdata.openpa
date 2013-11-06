@@ -1,9 +1,9 @@
 package com.powerdata.openpa.psse.conversions;
 
 import com.powerdata.openpa.psse.Limits;
-import com.powerdata.openpa.psse.LogSev;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.util.LogSev;
 
 public abstract class VoltageControlBand
 {

@@ -4,8 +4,8 @@ package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Transformer;
-import com.powerdata.openpa.psse.TransformerRaw;
 import com.powerdata.openpa.psse.conversions.XfrWndTool;
+import com.powerdata.openpa.psse.util.TransformerRaw;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 

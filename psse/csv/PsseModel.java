@@ -10,8 +10,8 @@ import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TP;
 import com.powerdata.openpa.psse.TransformerList;
+import com.powerdata.openpa.psse.util.TP;
 import com.powerdata.openpa.tools.LinkNet;
 
 public class PsseModel extends com.powerdata.openpa.psse.PsseModel
@@ -251,7 +251,7 @@ public class PsseModel extends com.powerdata.openpa.psse.PsseModel
 
 	public BusList getBusesForIsland(int island) throws PsseModelException
 	{
-		return new com.powerdata.openpa.psse.BusSubList(_buses,
+		return new com.powerdata.openpa.psse.util.BusSubList(_buses,
 				_tp.getIslandNodes(island));
 	}
 

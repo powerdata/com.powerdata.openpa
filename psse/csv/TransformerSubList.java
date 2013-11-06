@@ -4,7 +4,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModelException;
 
-public class TransformerSubList extends com.powerdata.openpa.psse.TransformerSubList
+public class TransformerSubList extends com.powerdata.openpa.psse.util.TransformerSubList
 {
 	BusList _buses;
 	

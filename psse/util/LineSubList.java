@@ -1,5 +1,11 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.Line;
+import com.powerdata.openpa.psse.LineList;
+import com.powerdata.openpa.psse.LineMeterEnd;
+import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
 
 public class LineSubList extends LineList

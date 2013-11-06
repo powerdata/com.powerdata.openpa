@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse.conversions;
 import com.powerdata.openpa.psse.PhaseShifter;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Transformer;
-import com.powerdata.openpa.psse.TransformerRaw;
+import com.powerdata.openpa.psse.util.TransformerRaw;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.DeltaNetwork;
 import com.powerdata.openpa.tools.PAMath;

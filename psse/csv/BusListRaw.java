@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerRaw;
+import com.powerdata.openpa.psse.util.TransformerRaw;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SimpleCSV;

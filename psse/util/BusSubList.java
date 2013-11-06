@@ -1,5 +1,20 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
+import com.powerdata.openpa.psse.Area;
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
+import com.powerdata.openpa.psse.GenList;
+import com.powerdata.openpa.psse.LineList;
+import com.powerdata.openpa.psse.LoadList;
+import com.powerdata.openpa.psse.Owner;
+import com.powerdata.openpa.psse.PhaseShifterList;
+import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.ShuntList;
+import com.powerdata.openpa.psse.SvcList;
+import com.powerdata.openpa.psse.SwitchList;
+import com.powerdata.openpa.psse.TransformerList;
+import com.powerdata.openpa.psse.Zone;
 import com.powerdata.openpa.tools.Complex;
 
 public class BusSubList extends BusList

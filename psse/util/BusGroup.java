@@ -1,5 +1,7 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
+import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LinkNet;
 
 /**
@@ -15,21 +17,23 @@ public abstract class BusGroup
 	/** from group index to representative Bus */
 	int[]	_grpbus;
 	
-	public BusGroup(PsseModel model, GroupBuilder gbld) throws PsseModelException
+	public BusGroup(PsseModel model, GroupBuilder gbld)
+			throws PsseModelException
 	{
 		LinkNet gnet = gbld.build(model);
 		int[][] groups = gnet.findGroups();
 		int ngrp = groups.length, nbus = model.getBuses().size();
 		_busgrp = new int[nbus];
 		_grpbus = new int[ngrp];
-		for(int igrp=0; igrp < ngrp; ++igrp)
+		for (int igrp = 0; igrp < ngrp; ++igrp)
 		{
 			int[] grp = groups[igrp];
-			for(int b : grp) _busgrp[b] = igrp;
+			for (int b : grp)
+				_busgrp[b] = igrp;
 			_grpbus[igrp] = grp[0];
 		}
 	}
-	
+
 	public int size() {return _busgrp.length;}
 	
 	/** return the offset of the group of which this bus is a member */

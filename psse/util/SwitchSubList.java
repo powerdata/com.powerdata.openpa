@@ -1,4 +1,10 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
+
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Switch;
+import com.powerdata.openpa.psse.SwitchList;
+import com.powerdata.openpa.psse.SwitchState;
 
 public class SwitchSubList extends SwitchList
 {
@@ -6,7 +12,7 @@ public class SwitchSubList extends SwitchList
 	int _ndxs[];
 	public SwitchSubList(SwitchList switches, int ndxs[])
 	{
-		super(switches._model);
+		super(switches.getPsseModel());
 		_switches = switches;
 		_ndxs = ndxs;
 		_idToNdx = switches.idmap();

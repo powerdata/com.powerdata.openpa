@@ -1,4 +1,4 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
 public enum LogSev
 {

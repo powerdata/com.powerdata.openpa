@@ -1,5 +1,10 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Switch;
+import com.powerdata.openpa.psse.SwitchList;
 import com.powerdata.openpa.tools.LinkNet;
 
 public class TopologicalBusGroup extends BusGroup

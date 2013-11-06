@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.util.LogSev;
 import com.powerdata.openpa.tools.PAMath;
 
 public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>

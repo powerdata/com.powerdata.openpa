@@ -1,4 +1,4 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.tools.BaseList;
 
 public class ListDumper

@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse.csv;
 
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TP;
+import com.powerdata.openpa.psse.util.TP;
 
 public class IslandList extends com.powerdata.openpa.psse.IslandList
 {

@@ -1,21 +1,28 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.tools.Complex;
 
-public class PhaseShifterSubList extends PhaseShifterList
+public class TransformerSubList extends TransformerList
 {
-	PhaseShifterList _base;
+	TransformerList _base;
 	int[] _ndxs;
 	
-	public PhaseShifterSubList(PhaseShifterList base, int[] ndxs) throws PsseModelException
+	public TransformerSubList(TransformerList base, int[] ndxs)
+			throws PsseModelException
 	{
 		super(base.getPsseModel());
 		_base = base;
 		_ndxs = ndxs;
 		_idToNdx = base.idmap();
 	}
+
 	@Override
-	public PhaseShifter get(String id) {return new PhaseShifter(_ndxs[_idToNdx.get(id)], this);}
+	public Transformer get(String id) { return new Transformer(_ndxs[_idToNdx.get(id)], this);}
 	@Override
 	public Bus getFromBus(int ndx) throws PsseModelException { return _base.getFromBus(_ndxs[ndx]); }
 	@Override
@@ -33,7 +40,7 @@ public class PhaseShifterSubList extends PhaseShifterList
 	@Override
 	public boolean isInSvc(int ndx) throws PsseModelException { return _base.isInSvc(_ndxs[ndx]); }
 	@Override
-	public String getI(int ndx) throws PsseModelException { return _base.getI(_ndxs[ndx]);}
+	public String getI(int ndx) throws PsseModelException {return _base.getI(_ndxs[ndx]);}
 	@Override
 	public String getJ(int ndx) throws PsseModelException {return _base.getJ(_ndxs[ndx]);}
 	@Override
@@ -57,7 +64,7 @@ public class PhaseShifterSubList extends PhaseShifterList
 	@Override
 	public float getR1_2(int ndx) throws PsseModelException { return _base.getR1_2(_ndxs[ndx]); }
 	@Override
-	public float getX1_2(int ndx) throws PsseModelException { return _base.getX1_2(_ndxs[ndx]);}
+	public float getX1_2(int ndx) throws PsseModelException {return _base.getX1_2(_ndxs[ndx]);}
 	@Override
 	public float getSBASE1_2(int ndx) throws PsseModelException { return _base.getSBASE1_2(_ndxs[ndx]); }
 	@Override
@@ -74,6 +81,8 @@ public class PhaseShifterSubList extends PhaseShifterList
 	public float getRATC1(int ndx) throws PsseModelException { return _base.getRATC1(_ndxs[ndx]); }
 	@Override
 	public int getCOD1(int ndx) throws PsseModelException { return _base.getCOD1(_ndxs[ndx]); }
+	@Override
+	public String getCONT1(int ndx) throws PsseModelException { return _base.getCONT1(_ndxs[ndx]); }
 	@Override
 	public float getRMA1(int ndx) throws PsseModelException { return _base.getRMA1(_ndxs[ndx]); }
 	@Override
@@ -93,11 +102,17 @@ public class PhaseShifterSubList extends PhaseShifterList
 	@Override
 	public OwnershipList getOwnership(int ndx) throws PsseModelException { return _base.getOwnership(_ndxs[ndx]); }
 	@Override
+	public float getWINDV2(int ndx) throws PsseModelException { return _base.getWINDV2(_ndxs[ndx]); }
+	@Override
+	public float getNOMV2(int ndx) throws PsseModelException { return _base.getNOMV2(_ndxs[ndx]); }
+	@Override
+	public float getRMA2(int ndx) throws PsseModelException { return _base.getRMA2(_ndxs[ndx]); }
+	@Override
+	public float getRMI2(int ndx) throws PsseModelException { return _base.getRMI2(_ndxs[ndx]); }
+	@Override
+	public int getNTP2(int ndx) throws PsseModelException { return _base.getNTP2(_ndxs[ndx]); }
+	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
-	@Override
-	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(_ndxs[ndx]); }
-	@Override
-	public int size() {return _ndxs.length;}
 	@Override
 	public float getR(int ndx) throws PsseModelException {return _base.getR(_ndxs[ndx]);}
 	@Override
@@ -106,4 +121,9 @@ public class PhaseShifterSubList extends PhaseShifterList
 	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(_ndxs[ndx]);}
 	@Override
 	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(_ndxs[ndx]);}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(_ndxs[ndx]); }
+	@Override
+	public int size() {return _ndxs.length;}
+	
 }

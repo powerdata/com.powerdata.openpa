@@ -1,10 +1,11 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
 
 import java.util.Arrays;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.PsseModel;

@@ -1,4 +1,11 @@
-package com.powerdata.openpa.psse;
+package com.powerdata.openpa.psse.util;
+
+import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.OwnershipList;
+import com.powerdata.openpa.psse.PsseBaseList;
+import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
 
 
 public abstract class TransformerRawList extends PsseBaseList<TransformerRaw>

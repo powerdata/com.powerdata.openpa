@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse.conversions;
 
 import com.powerdata.openpa.psse.Limits;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.TransformerRawList;
+import com.powerdata.openpa.psse.util.TransformerRawList;
 
 public class PwrCtrlBand
 {

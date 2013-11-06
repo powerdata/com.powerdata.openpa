@@ -11,7 +11,7 @@ import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
 
-public class Transformer3RawList extends com.powerdata.openpa.psse.TransformerRawList
+public class Transformer3RawList extends com.powerdata.openpa.psse.util.TransformerRawList
 {
 	PsseModel _eq;
 	BusList _buses;
