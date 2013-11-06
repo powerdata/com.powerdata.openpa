@@ -50,6 +50,11 @@ for(Switch s : switches)
 }
 ```
 
+Usage Pattern for equipment lists
+---------------------------------
+Each object retrieved from a list is backed directly by the list.  These are small
+trivial objects which make heavy use of the backing list to answer queries and updates.  In general, references to these objects should not persist outside of immediate usage.  Allowing them to be garbage collected is desirable for overall performance and efficiency.
+
 PsseModel is not exactly PSSe
 -----------------------------
 By now you may have noticed that the model representation is based on PSS/e but is not exactly PSS/e:

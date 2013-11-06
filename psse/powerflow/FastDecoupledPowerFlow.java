@@ -274,7 +274,7 @@ public class FastDecoupledPowerFlow
 		
 		for(Shunt shunt : _model.getShunts())
 		{
-			if (shunt.isInSvc() && shunt.isInSvc())
+			if (shunt.isInSvc())
 				bselfbpp[shunt.getBus().getIndex()] -= shunt.getBpu();
 		}
 		
@@ -291,7 +291,6 @@ public class FastDecoupledPowerFlow
 				}
 				Complex z = br.getZ();
 				float bbp = 1 / z.im();
-//				Complex y = z.inv();
 
 				bbranchbp[brx] -= bbp;
 				bselfbp[fbus] += bbp;
@@ -309,7 +308,7 @@ public class FastDecoupledPowerFlow
 		System.arraycopy(slack, 0, bppbus, pv.length, slack.length);
 		
 		
-		SparseBMatrix prepbp = new SparseBMatrix(net.clone(), slack, bbranchbp, bselfbp);
+		SparseBMatrix prepbp = new SparseBMatrix(net, slack, bbranchbp, bselfbp);
 		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
 		
 		_bp = prepbp.factorize();
