@@ -63,6 +63,11 @@ public class FastDecoupledPowerFlow
 	public void setQtol(float qtol) {_qtol = qtol;}
 	public float getQtol() {return _qtol;}
 	
+	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc) throws PsseModelException, IOException
+	{
+		return runPowerFlow(vsrc, null);
+	}
+	
 	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc, File mmdir)
 			throws PsseModelException, IOException
 	{
@@ -313,7 +318,7 @@ public class FastDecoupledPowerFlow
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
-		try{dumpMatrices(new File("/tmp"));}catch(Exception e) {e.printStackTrace();}
+//		try{dumpMatrices(new File("/tmp"));}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -347,27 +352,13 @@ public class FastDecoupledPowerFlow
 		
 		PsseModel model = PsseModel.Open(uri);
 
-		File tdir = new File("/tmp");
-		File[] list = tdir.listFiles(new FilenameFilter()
-		{
-			@Override
-			public boolean accept(File dir, String name)
-			{
-				return name.startsWith("mismatch") && name.endsWith(".csv");
-			}
-		});
-		for (File f : list) f.delete();
-		
-		
-		
-		
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
 //		pf.dumpMatrices(ddir);
 		
-		File mmdbg = new File(new File(System.getProperty("java.io.tmpdir")), "mmdbg");
-		cleanmmdbg(mmdbg);
+//		File mmdbg = new File(new File(System.getProperty("java.io.tmpdir")), "mmdbg");
+//		cleanmmdbg(mmdbg);
 		
-		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart, mmdbg);
+		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart);
 		
 		System.out.println("Island Converged Iterations WorstPBus   Pmm   WorstQBus   Qmm");
 		IslandList islands = model.getIslands();
@@ -391,6 +382,15 @@ public class FastDecoupledPowerFlow
 		pc.calculateMismatches(pf.getVA(), pf.getVM());
 		mmr.report(ddir, "final");
 		
+//		long ts = System.currentTimeMillis();
+//		int nrepeat = 100;
+//		for (int i=0; i < nrepeat; ++i)
+//		{
+//			pf.runPowerFlow(VoltageSource.LastSolved);
+//		}
+//		long te = System.currentTimeMillis();
+//		
+//		System.out.format("Time for repeat iterations: %fms\n", ((float)(te-ts))/(float)nrepeat);
 	}
 
 	static void cleanmmdbg(File mmdbg)
