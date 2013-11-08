@@ -68,5 +68,19 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	
 	/* rectifier data methods */
 	
-	/** 
+	/** rectifier AC bus */
+	public String getIPR() throws PsseModelException {return _list.getIPR(_ndx);}
+	/** rectifier AC bus */
+	public Bus getBusR() throws PsseModelException {return _list.getBusR(_ndx);}
+	/** number of of rectifier bridges */
+	public int getNBR() throws PsseModelException {return _list.getNBR(_ndx);}
+	/** maximum rectifier angle */
+	public float getALFMX() throws PsseModelException {return _list.getALFMX(_ndx);}
+	/** minimum stead-state rectifier angle */
+	public float getALFMN() throws PsseModelException {return _list.getALFMN(_ndx);}
+	/** Rectifier commutating resistance per bridge in ohms */
+	public float getRCR() throws PsseModelException {return _list.getRCR(_ndx);}
+	/** Rectifier commutating reactance per bridge in ohms */
+	public float getXCR() throws PsseModelException {return _list.getXCR(_ndx);}
+	
 }

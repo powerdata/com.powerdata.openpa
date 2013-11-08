@@ -115,4 +115,46 @@ public class TwoTermDCLineList extends PsseBaseList<TwoTermDCLine>
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	public String getIPR(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Bus getBusR(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getNBR(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public float getALFMX(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public float getALFMN(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public float getRCR(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public float getXCR(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
