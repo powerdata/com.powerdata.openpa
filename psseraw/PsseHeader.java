@@ -17,13 +17,14 @@ import java.util.regex.Pattern;
 public class PsseHeader
 {
 	private static Pattern _CaseInfoPattern =
-			Pattern.compile("\\s*,*\\s+");
+			Pattern.compile("\\s*,*[\\s/]+");
 
 	private static Pattern[] _VersionPattern = 
 	{
 		Pattern.compile("PSS/E-"),
 		Pattern.compile("PSS\\(R\\)E-"),
-		Pattern.compile("PSS\\(R\\)E ")
+		Pattern.compile("PSS\\(R\\)E "),
+		Pattern.compile("RAWD VER ")
 	};
 	
 	private static String[]	_Months = new String[] {"JAN", "FEB", "MAR",

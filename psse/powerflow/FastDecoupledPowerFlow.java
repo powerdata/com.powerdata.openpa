@@ -3,10 +3,10 @@ package com.powerdata.openpa.psse.powerflow;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Stack;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
@@ -49,27 +49,52 @@ public class FastDecoupledPowerFlow
 	boolean _adjusttaps = false;
 	int[] _adjustablexfr = null;
 	float _qtoltap = .05f;
+	File _dbgdir;
 	
 	public FastDecoupledPowerFlow(PsseModel model) throws PsseModelException
 	{
 		_model = model;
 		setupHotIslands();
 		buildMatrices();
-		
 	}
 
+	public void setDebugDir(File dbgdir) throws IOException, PsseModelException
+	{
+		_dbgdir = dbgdir;
+		if (_dbgdir.exists())
+		{
+			Stack<File> subdir = new Stack<>();
+			subdir.push(dbgdir);
+			for(File df : subdir)
+			{
+				File[] dirlist = df.listFiles();
+
+				for (File d : dirlist)
+				{
+					if (d.isDirectory())
+						subdir.push(d);
+					else
+						d.delete();
+				}
+				df.delete();
+			}
+		}
+		_dbgdir.mkdirs();
+		dumpMatrices(_dbgdir);
+	}
+	
 	public void setPtol(float ptol) {_ptol = ptol;}
 	public float getPtol() {return _ptol;}
 	public void setQtol(float qtol) {_qtol = qtol;}
 	public float getQtol() {return _qtol;}
 	
-	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc, File mmdir)
+	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc)
 			throws PsseModelException, IOException
 	{
-		boolean dbgmm = mmdir != null;
+		boolean debug = _dbgdir != null;
 		MismatchReport mmr = null;
 		PowerCalculator pcalc = null;
-		if (dbgmm)
+		if (debug)
 		{
 			mmr = new MismatchReport(_model);
 			pcalc = new PowerCalculator(_model, mmr);
@@ -122,7 +147,7 @@ public class FastDecoupledPowerFlow
 
 		boolean nconv=true;
 		float[][] mm = pcalc.calculateMismatches(va, vm);
-		if (dbgmm) mmr.report(mmdir, "000");
+		if (debug) mmr.report(_dbgdir, "000");
 		
 		PowerFlowConvergenceList prlist = new PowerFlowConvergenceList(
 				_hotislands.length);
@@ -142,7 +167,7 @@ public class FastDecoupledPowerFlow
 			}
 			
 			mm = pcalc.calculateMismatches(va, vm);
-			if (dbgmm) mmr.report(mmdir, String.format("%02d-va", iiter));
+			if (debug) mmr.report(_dbgdir, String.format("%02d-va", iiter));
 			System.out.format("Iteration %d angle: ", iiter);
 			nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 
@@ -152,10 +177,10 @@ public class FastDecoupledPowerFlow
 				int[] ebus = _bpp.getEliminatedBuses();
 				for(int bx : ebus) qmm[bx] /= vm[bx];
 				float[] dq = _bpp.solve(qmm);
-//				for(int i=0; i < nbus; ++i) va[i] += dp[i];
+
 				for(int bx : ebus) vm[bx] += dq[bx];
 				mm = pcalc.calculateMismatches(va, vm);
-				if (dbgmm) mmr.report(mmdir, String.format("%02d-vm", iiter));
+				if (debug) mmr.report(_dbgdir, String.format("%02d-vm", iiter));
 				System.out.format("Iteration %d voltage: ", iiter);
 				nconv = notConverged(mm[0], mm[1], _ptol, _qtol, prlist, iiter);
 			}
@@ -313,13 +338,13 @@ public class FastDecoupledPowerFlow
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
-		try{dumpMatrices(new File("/tmp"));}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;
 		String svstart = "Flat";
+		File dbgdir = null;
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -333,6 +358,9 @@ public class FastDecoupledPowerFlow
 				case "voltage":
 					svstart = args[i++];
 					break;
+				case "debug":
+					dbgdir = new File(args[i++]);
+					break;
 					
 			}
 		}
@@ -341,33 +369,17 @@ public class FastDecoupledPowerFlow
 
 		if (uri == null)
 		{
-			System.err.format("Usage: -uri model_uri [-voltage flat|realtime]");
+			System.err.format("Usage: -uri model_uri [-voltage flat|realtime] -debug dir");
 			System.exit(1);
 		}
 		
 		PsseModel model = PsseModel.Open(uri);
 
-		File tdir = new File("/tmp");
-		File[] list = tdir.listFiles(new FilenameFilter()
-		{
-			@Override
-			public boolean accept(File dir, String name)
-			{
-				return name.startsWith("mismatch") && name.endsWith(".csv");
-			}
-		});
-		for (File f : list) f.delete();
-		
-		
-		
-		
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
-//		pf.dumpMatrices(ddir);
 		
-		File mmdbg = new File(new File(System.getProperty("java.io.tmpdir")), "mmdbg");
-		cleanmmdbg(mmdbg);
+		if (dbgdir != null) pf.setDebugDir(dbgdir);
 		
-		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart, mmdbg);
+		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart);
 		
 		System.out.println("Island Converged Iterations WorstPBus   Pmm   WorstQBus   Qmm");
 		IslandList islands = model.getIslands();
@@ -391,26 +403,6 @@ public class FastDecoupledPowerFlow
 		pc.calculateMismatches(pf.getVA(), pf.getVM());
 		mmr.report(ddir, "final");
 		
-	}
-
-	static void cleanmmdbg(File mmdbg)
-	{
-		if (mmdbg.exists())
-		{
-			File[] existing = mmdbg.listFiles(new FilenameFilter()
-			{
-				@Override
-				public boolean accept(File arg0, String arg1)
-				{
-					return arg1.startsWith("mismatch") && arg1.endsWith(".csv");
-				}
-			});
-			for(File f : existing) f.delete();
-		}
-		else
-		{
-			mmdbg.mkdirs();
-		}
 	}
 
 	public void dumpMatrices(File tdir) throws IOException, PsseModelException

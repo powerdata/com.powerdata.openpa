@@ -18,7 +18,7 @@ import com.powerdata.openpa.tools.StringParse;
  */
 public class PsseClass
 {
-	protected static final String parseDelim = " ,";
+	protected static final String parseDelim = ",";
 	protected static final char quoteChar = '\'';
 	
 	protected String _classnm;
