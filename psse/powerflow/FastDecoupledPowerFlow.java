@@ -345,6 +345,7 @@ public class FastDecoupledPowerFlow
 		String uri = null;
 		String svstart = "Flat";
 		File dbgdir = null;
+		File results = null;
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -361,6 +362,9 @@ public class FastDecoupledPowerFlow
 				case "debug":
 					dbgdir = new File(args[i++]);
 					break;
+				case "results":
+					results = new File(args[i++]);
+					break;
 					
 			}
 		}
@@ -369,7 +373,7 @@ public class FastDecoupledPowerFlow
 
 		if (uri == null)
 		{
-			System.err.format("Usage: -uri model_uri [-voltage flat|realtime] -debug dir");
+			System.err.format("Usage: -uri model_uri [-voltage flat|realtime] -debug dir -results path_to_results");
 			System.exit(1);
 		}
 		
@@ -397,11 +401,14 @@ public class FastDecoupledPowerFlow
 				PAMath.pu2mvar(psol.getWorstQmm()));
 				
 		}
-		File ddir = new File (System.getProperty("java.io.tmpdir"));
-		MismatchReport mmr = new MismatchReport(model);
-		PowerCalculator pc = new PowerCalculator(model, mmr);
-		pc.calculateMismatches(pf.getVA(), pf.getVM());
-		mmr.report(ddir, "final");
+		
+		if (results != null)
+		{
+			MismatchReport mmr = new MismatchReport(model);
+			PowerCalculator pc = new PowerCalculator(model, mmr);
+			pc.calculateMismatches(pf.getVA(), pf.getVM());
+			mmr.report(results);
+		}
 		
 	}
 

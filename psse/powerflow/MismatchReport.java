@@ -98,6 +98,13 @@ public class MismatchReport
 		report(out);
 		out.close();
 	}
+	
+	public void report(File out) throws IOException, PsseModelException
+	{
+		PrintWriter fout = new PrintWriter(new BufferedWriter(new FileWriter(out)));
+		report(fout);
+		fout.close();
+	}
 
 	void _report(PrintWriter out, int i, int[] branches, int[] otdevs) throws PsseModelException
 	{
