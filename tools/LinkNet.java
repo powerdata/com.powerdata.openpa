@@ -23,21 +23,21 @@ public class LinkNet implements Cloneable
 	/** Maximum bus index plus 1 */
 	protected int _maxBusNdx = 0;
 
-	/** Explicitly add nodes to the system so that isolated nodes are tracked */
-	public void addNodes(int[] vnodes)
+	/** Explicitly add buses to the system so that isolated buses are tracked */
+	public void addBuses(int[] vbuses)
 	{
-		for (int v : vnodes) _list[v] = Empty;
+		for (int v : vbuses) _list[v] = Empty;
 	}
-	/** Explicitly add nodes to the system so that isolated nodes are tracked */
-	public void addNodes(int startofs, int count)
+	/** Explicitly add buses to the system so that isolated buses are tracked */
+	public void addBuses(int startofs, int count)
 	{
 		for (int i=0; i < count; ++i, ++startofs)
 			_list[startofs] = Empty;
 	}
-	/** Explicitly add nodes to the system so that isolated nodes are tracked */
-	public void addNode(int node)
+	/** Explicitly add buses to the system so that isolated buses are tracked */
+	public void addBus(int bus)
 	{
-		_list[node] = Empty;
+		_list[bus] = Empty;
 	}
 	/**
 	 * Ensure there is enough storage for the number of buses and branches

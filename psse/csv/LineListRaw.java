@@ -5,6 +5,7 @@ import java.io.File;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.LineList;
+import com.powerdata.openpa.psse.LineMeterEnd;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -73,7 +74,19 @@ public class LineListRaw extends LineList
 	@Override
 	public String getI(int ndx) { return _i[ndx]; }
 	@Override
-	public String getJ(int ndx) { return _j[ndx]; }
+	public String getJ(int ndx)
+	{
+		String j = _j[ndx];
+		if (j.charAt(0) == '-') j = j.substring(1);
+		return j;
+	}
+	
+	@Override
+	public LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException
+	{
+		return (_j[ndx].charAt(0)=='-')?LineMeterEnd.To : LineMeterEnd.From;
+	}
+
 	@Override
 	public String getCKT(int ndx) { return _ckt[ndx]; }
 	@Override

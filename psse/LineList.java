@@ -35,19 +35,9 @@ public abstract class LineList extends PsseBaseList<Line>
 	/** From-side bus */
 	public Bus getFromBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	/** To-side bus */
-	public Bus getToBus(int ndx)  throws PsseModelException
-	{
-		String j = getJ(ndx);
-		return _model.getBus((!j.isEmpty()&&j.charAt(0)=='-')?
-			j.substring(1):j); 
-	}
+	public Bus getToBus(int ndx)  throws PsseModelException {return _model.getBus(getJ(ndx));}
 	/** Get "metered" end */
-	public LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException
-	{
-		String j = getJ(ndx);
-		return (!j.isEmpty() && j.charAt(0) == '-') ? 
-			LineMeterEnd.To : LineMeterEnd.From;
-	}
+	public LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException {return LineMeterEnd.Unknown;}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
 	public boolean isInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
 	/** get complex impedance */

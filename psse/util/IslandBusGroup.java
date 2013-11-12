@@ -31,7 +31,7 @@ public class IslandBusGroup extends BusGroup
 				ACBranchList acb = model.getBranches();
 				BusList buses = model.getBuses();
 				rv.ensureCapacity(buses.size() - 1, acb.size());
-				rv.addNodes(0, buses.size());
+				rv.addBuses(0, buses.size());
 
 				for (ACBranch d : model.getBranches())
 				{

@@ -27,7 +27,7 @@ public class TopologicalBusGroup extends BusGroup
 				BusList buses = model.getBuses();
 				SwitchList switches = model.getSwitches();
 				rv.ensureCapacity(buses.size()-1, switches.size());
-				rv.addNodes(0, buses.size());
+				rv.addBuses(0, buses.size());
 				
 				for(Switch s : switches)
 				{

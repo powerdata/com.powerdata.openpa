@@ -58,6 +58,7 @@ trivial objects which make heavy use of the backing list to answer queries and u
 PsseModel is not exactly PSSe
 -----------------------------
 By now you may have noticed that the model representation is based on PSS/e but is not exactly PSS/e:
+* Line.getJ() will not return a negative sign normally supported by PSS/e.  Caller must use Line.getMeteredEnd().
 * Include Switch detail as an extension to allow for more accurate representation of a power system when available.
 * 3-winding transformers have been converted to an equivalent representation of 3 2-winding transformermers.
 * Phase shifters are in a separate list
