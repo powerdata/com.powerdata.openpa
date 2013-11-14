@@ -2,6 +2,7 @@ package com.powerdata.openpa.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 /**
  * Utiltiy to parse query strings.
  * 
@@ -25,8 +26,12 @@ public class QueryString
 	HashMap<String,String[]> _fields = new HashMap<String,String[]>();
 	public QueryString(String query)
 	{
+		this(query, false);
+	}
+	public QueryString(String query, boolean keepQuotes)
+	{
 		// split based on &
-		String pairs[] = new StringParse(query,"&").getTokens();
+		String pairs[] = new StringParse(query,"&", keepQuotes).getTokens();
 		// split based on = and index them
 		_query = new String[pairs.length][];
 		HashMap<String,ArrayList<String>> fields = new HashMap<String,ArrayList<String>>();
@@ -56,4 +61,23 @@ public class QueryString
 	public int getFieldCount() { return _fields.size(); }
 	public HashMap<String,String[]> getMap() { return _fields; }
 	public String[][] getQuery() { return _query; }
+	
+	public static void main(String args[])
+	{
+		String str = "db=/home/faby/git/usrmgmt/usermgmt.pddb&cdb=/home/faby/git/usrmgmt/config.pddb&pddef=/home/faby/git/psm/src/com/powerdata/security/pd2/security.pddef&usersview=\"view:group=PDSecurityDB&name=Users\"&credentialsview=\"view:group=PDSecurityDB&name=Credential\"";
+		QueryString q = new QueryString(str, true);
+		if(!q.containsKey("usersview")) 
+		{
+			System.out.println("QueryString: doesnt contain usersview");
+			System.exit(0);
+		}
+		String v = q.get("usersview")[0];
+		System.out.println("Usersview ["+v+"]");
+		
+		// test
+		for(int i = 0; i < q.count(); i++)
+		{
+			System.out.println(i+") "+q.getField(i)+" : "+q.getVal(i));
+		}
+	}
 }
