@@ -22,6 +22,8 @@ public abstract class AbstractBaseObject implements BaseObject
 	@Override
 	public int getIndex() {return _ndx;}
 	@Override
+	public int getRootIndex() {return _list.getRootIndex(_ndx);}
+	@Override
 	public String getObjectID() throws PsseModelException
 	{
 		return _list.getObjectID(_ndx);

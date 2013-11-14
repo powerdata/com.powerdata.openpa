@@ -13,5 +13,6 @@ public interface BaseObject
 	public String getDebugName() throws PsseModelException;
 	/** return the name of the object with additional context to aid recognition */
 	public String getFullName() throws PsseModelException;
-
+	/** get index from main list.  If a sublist, this can be different from getIndex */
+	public int getRootIndex();
 }

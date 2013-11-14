@@ -8,7 +8,7 @@ public class BusSubList extends com.powerdata.openpa.psse.util.BusSubList
 {
 	PsseModel _csvmodel;
 	
-	public BusSubList(PsseModel model, BusList base, int[] ndxs)
+	public BusSubList(PsseModel model, BusList base, int[] ndxs) throws PsseModelException
 	{
 		super(base, ndxs);
 		_csvmodel = model;

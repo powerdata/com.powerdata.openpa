@@ -22,16 +22,16 @@ public class BusSubList extends BusList
 	BusList _base;
 	int[] _ndxs;
 	
-	public BusSubList(BusList base, int[] ndxs)
+	public BusSubList(BusList base, int[] ndxs) throws PsseModelException
 	{
 		super(base.getPsseModel());
 		_base = base;
 		_ndxs = ndxs;
-		_idToNdx = base.idmap();
+		reindex();
 	}
 	
 	@Override
-	public Bus get(String id) {return new Bus(_ndxs[_idToNdx.get(id)], this);}
+	public Bus get(String id) {return new Bus(_idToNdx.get(id), this);}
 	@Override
 	public GenList getGenerators(int ndx) throws PsseModelException {return _base.getGenerators(_ndxs[ndx]);}
 	@Override
@@ -96,5 +96,6 @@ public class BusSubList extends BusList
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
 	@Override
 	public int size() {return _ndxs.length;}
-	
+	@Override
+	public int getRootIndex(int ndx) {return _base.getRootIndex(_ndxs[ndx]);}
 }

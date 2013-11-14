@@ -48,5 +48,5 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 		for(int i=0; i<count; i++) idToNdx.put(getObjectID(i), i);
 		_idToNdx = idToNdx;
 	}
-	
+	public int getRootIndex(int ndx) {return ndx;}
 }
