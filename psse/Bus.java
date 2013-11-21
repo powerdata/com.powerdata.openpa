@@ -44,6 +44,8 @@ public class Bus extends PsseBaseObject
 	public int getFrequencySourcePriority() throws PsseModelException {return _list.getFrequencySourcePriority(_ndx);}
 	/** get the island number */
 	public int getIsland() throws PsseModelException { return _list.getIsland(_ndx); }
+	/** get a station number if it exists or zero if not */
+	public int getStation() throws PsseModelException {return _list.getStation(_ndx); }
 
 	/* Raw PSS/e methods */
 	

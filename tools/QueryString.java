@@ -2,6 +2,7 @@ package com.powerdata.openpa.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 /**
  * Utiltiy to parse query strings.
  * 
@@ -25,8 +26,12 @@ public class QueryString
 	HashMap<String,String[]> _fields = new HashMap<String,String[]>();
 	public QueryString(String query)
 	{
+		this(query, false);
+	}
+	public QueryString(String query, boolean keepQuotes)
+	{
 		// split based on &
-		String pairs[] = new StringParse(query,"&").getTokens();
+		String pairs[] = new StringParse(query,"&", keepQuotes).getTokens();
 		// split based on = and index them
 		_query = new String[pairs.length][];
 		HashMap<String,ArrayList<String>> fields = new HashMap<String,ArrayList<String>>();

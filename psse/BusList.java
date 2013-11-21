@@ -42,6 +42,8 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public boolean isEnergized(int ndx) throws PsseModelException {return getIDE(ndx) != 4;}
 	/** get the island number */
 	public int getIsland(int ndx) throws PsseModelException {return 0;}
+	/** get a station number if it exists or zero if not */
+	public int getStation(int ndx) throws PsseModelException {return 0; }
 
 	/** enumerated IDE code */
 	public BusTypeCode getBusType(int ndx) throws PsseModelException {return BusTypeCode.fromCode(getIDE(ndx));}
