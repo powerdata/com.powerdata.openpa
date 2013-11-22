@@ -3,7 +3,7 @@ package com.powerdata.openpa.psse.util;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.Transformer;
+import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.tools.Complex;
 
@@ -18,11 +18,9 @@ public class TransformerSubList extends TransformerList
 		super(base.getPsseModel());
 		_base = base;
 		_ndxs = ndxs;
-		_idToNdx = base.idmap();
+		reindex();
 	}
 
-	@Override
-	public Transformer get(String id) { return new Transformer(_ndxs[_idToNdx.get(id)], this);}
 	@Override
 	public Bus getFromBus(int ndx) throws PsseModelException { return _base.getFromBus(_ndxs[ndx]); }
 	@Override
@@ -125,5 +123,13 @@ public class TransformerSubList extends TransformerList
 	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(_ndxs[ndx]); }
 	@Override
 	public int size() {return _ndxs.length;}
-	
+
+	@Override
+	public TransformerCtrlMode getCtrlMode(int ndx) throws PsseModelException {return _base.getCtrlMode(_ndxs[ndx]);}
+	@Override
+	public boolean getRegStat(int ndx) throws PsseModelException {return _base.getRegStat(_ndxs[ndx]);}
+	@Override
+	public void setRegStat(int ndx, boolean stat) throws PsseModelException {_base.setRegStat(_ndxs[ndx], stat);}
+	@Override
+	public int getRootIndex(int ndx) {return _base.getRootIndex(_ndxs[ndx]);}
 }

@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.util;
 
 import com.powerdata.openpa.psse.Area;
-import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.GenList;
@@ -30,8 +29,6 @@ public class BusSubList extends BusList
 		reindex();
 	}
 	
-	@Override
-	public Bus get(String id) {return new Bus(_idToNdx.get(id), this);}
 	@Override
 	public GenList getGenerators(int ndx) throws PsseModelException {return _base.getGenerators(_ndxs[ndx]);}
 	@Override
@@ -98,4 +95,19 @@ public class BusSubList extends BusList
 	public int size() {return _ndxs.length;}
 	@Override
 	public int getRootIndex(int ndx) {return _base.getRootIndex(_ndxs[ndx]);}
+
+	@Override
+	public int getStation(int ndx) throws PsseModelException {return _base.getStation(_ndxs[ndx]);}
+	@Override
+	public void setVM(int ndx, float kv) throws PsseModelException {_base.setVM(_ndxs[ndx], kv);}
+	@Override
+	public void setVMpu(int ndx, float v) throws PsseModelException {_base.setVMpu(_ndxs[ndx], v);}
+	@Override
+	public void setVA(int ndx, float va) throws PsseModelException {_base.setVA(_ndxs[ndx], va);}
+	@Override
+	public void setVArad(int ndx, float rad) throws PsseModelException {_base.setVArad(_ndxs[ndx], rad);}
+	@Override
+	public float getFrequency(int ndx) throws PsseModelException {return _base.getFrequency(_ndxs[ndx]);}
+	@Override
+	public int getFrequencySourcePriority(int ndx) throws PsseModelException {return _base.getFrequencySourcePriority(_ndxs[ndx]);}
 }

@@ -2,7 +2,6 @@ package com.powerdata.openpa.psse.util;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
-import com.powerdata.openpa.psse.PhaseShifter;
 import com.powerdata.openpa.psse.PhaseShifterList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
@@ -17,10 +16,8 @@ public class PhaseShifterSubList extends PhaseShifterList
 		super(base.getPsseModel());
 		_base = base;
 		_ndxs = ndxs;
-		_idToNdx = base.idmap();
+		reindex();
 	}
-	@Override
-	public PhaseShifter get(String id) {return new PhaseShifter(_ndxs[_idToNdx.get(id)], this);}
 	@Override
 	public Bus getFromBus(int ndx) throws PsseModelException { return _base.getFromBus(_ndxs[ndx]); }
 	@Override
@@ -111,4 +108,6 @@ public class PhaseShifterSubList extends PhaseShifterList
 	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(_ndxs[ndx]);}
 	@Override
 	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(_ndxs[ndx]);}
+	@Override
+	public int getRootIndex(int ndx) {return _base.getRootIndex(_ndxs[ndx]);}
 }

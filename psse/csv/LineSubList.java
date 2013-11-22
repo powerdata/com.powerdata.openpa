@@ -19,10 +19,5 @@ public class LineSubList extends com.powerdata.openpa.psse.util.LineSubList
 	@Override
 	public Bus getFromBus(int ndx) throws PsseModelException {return _buses.get(getI(ndx));}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException
-	{
-		String j = getJ(ndx);
-		if (j.charAt(0) == '-') j = j.substring(1);
-		return _buses.get(j);
-	}
+	public Bus getToBus(int ndx) throws PsseModelException {return _buses.get(getJ(ndx));}
 }

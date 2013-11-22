@@ -1,7 +1,6 @@
 package com.powerdata.openpa.psse.util;
 
 import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.LineMeterEnd;
 import com.powerdata.openpa.psse.OwnershipList;
@@ -19,11 +18,9 @@ public class LineSubList extends LineList
 		super(lines.getPsseModel());
 		_lines = lines;
 		_ndxs = ndxs;
-		_idToNdx = lines.idmap();
+		reindex();
 	}
 
-	@Override
-	public Line get(String id) {return new Line(_ndxs[_idToNdx.get(id)], this);}
 	@Override
 	public String getI(int ndx) throws PsseModelException {return _lines.getI(_ndxs[ndx]);}
 	@Override
@@ -84,4 +81,6 @@ public class LineSubList extends LineList
 	public OwnershipList getOwnership(int ndx) throws PsseModelException {return _lines.getOwnership(_ndxs[ndx]);}
 	@Override
 	public void commit() throws PsseModelException {_lines.commit();}
+	@Override
+	public int getRootIndex(int ndx) {return _lines.getRootIndex(_ndxs[ndx]);}
 }
