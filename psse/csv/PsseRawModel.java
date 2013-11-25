@@ -8,10 +8,12 @@ import java.io.Reader;
 import java.util.ArrayList;
 
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
+import com.powerdata.openpa.psse.util.TP;
 import com.powerdata.openpa.psse.util.TransformerRaw;
 import com.powerdata.openpa.psseraw.Psse2CSV;
 import com.powerdata.openpa.psseraw.PsseProcException;
@@ -30,7 +32,8 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	SvcRawList				_svcList;
 	LoadList			_loads;
 	GenList				_generatorList;
-	LowXHandling		_lowx = LowXHandling.None;
+	TP					_tp;
+	IslandList			_islands;
 
 	public PsseRawModel(String parms) throws PsseModelException
 	{
@@ -74,19 +77,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			_dir = new File(q.get("path")[0]);
 		}
-		String[] slvda = q.get("lowx");
-		if (slvda != null)
-		{
-			String slvd = slvda[0];
-			switch(slvd.toLowerCase())
-			{
-				case "adjust": _lowx = LowXHandling.Adjust; break;
-				case "elimbyvoltage": _lowx = LowXHandling.ElimByVoltage; break;
-				case "elimbyx": _lowx = LowXHandling.ElimByX; break;
-			}
-		}
 		analyzeRawShunts();
 		analyzeRawTransformers();
+		_tp = new TP(this);
 
 	}
 	
@@ -118,13 +111,11 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	@Override
 	public ShuntRawList getShunts() throws PsseModelException
 	{
-//		if (_shList == null) analyzeRawShunts();
 		return _shList;
 	}
 	@Override
 	public SvcRawList getSvcs() throws PsseModelException
 	{
-//		if (_svcList == null) analyzeRawShunts();
 		return _svcList;
 	}
 	
@@ -220,28 +211,46 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		return _generatorList;
 	}
 
-
-	public LowXHandling getLowXHandling()
+	public int getIslandCount() throws PsseModelException
 	{
-		return _lowx;
+		return _tp.getIslandCount();
 	}
 
-
-	public void adjustLowX(float minx)
+	public boolean isNodeEnergized(int node) throws PsseModelException
 	{
-		_branchList.adjustLowX(minx);
-		_xfrList.adjustLowX(minx);
-		_psList.adjustLowX(minx);
+		int island = _tp.getIsland(node);
+		return (island == -1) ? false : _tp.isIslandEnergized(island);
 	}
 
-
-	static void _AdjustLowX(float[] x, float minx)
+	public int getIsland(int node) throws PsseModelException
 	{
-		for (int i=0; i < x.length; ++i)
-		{
-			if (Math.abs(x[i]) <= minx)
-				x[i] = Math.copySign(minx, x[i]);
-		}
+		return _tp.getIsland(node);
+	}
+
+	public BusList getBusesForIsland(int island) throws PsseModelException
+	{
+		return new com.powerdata.openpa.psse.util.BusSubList(_buses,
+				_tp.getIslandNodes(island));
+	}
+
+	public BusTypeCode getBusType(int node) throws PsseModelException
+	{
+		return _tp.getBusType(node);
+	}
+
+	@Override
+	public IslandList getIslands() throws PsseModelException
+	{
+		if (_islands == null)
+			_islands = new IslandList(this, _tp);
+		return _islands;
+	}
+
+	@Override
+	public int[] getBusNdxForType(BusTypeCode bustype)
+			throws PsseModelException
+	{
+		return _tp.getBusNdxsForType(bustype);
 	}
 
 

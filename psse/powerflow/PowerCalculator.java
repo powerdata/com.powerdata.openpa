@@ -18,7 +18,9 @@ import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
+import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.ComplexList;
 /**
  * Utility to calculate branch flows and bus mismatches.
  * 
@@ -29,6 +31,8 @@ public class PowerCalculator
 {
 	PsseModel _model;
 	MismatchReport _dbg;
+	float _minX = 0f;
+	ImpedanceFilter _zf;
 	
 	/**
 	 * Create a new power calculator
@@ -45,13 +49,47 @@ public class PowerCalculator
 	 * 
 	 * @param model
 	 * @param dbg
+	 * @param set minimum reactance value.  It forces |X| >= setMinX
+	 * @throws PsseModelException 
 	 */
-	public PowerCalculator(PsseModel model, MismatchReport dbg)
+	public PowerCalculator(PsseModel model, MismatchReport dbg, float setMinX) throws PsseModelException
 	{
 		_model = model;
 		_dbg = dbg;
+		_minX = setMinX;
+		int nbr = _model.getBranches().size();
+		float[] r = new float[nbr];
+		float[] x = new float[nbr];
+		if (setMinX > 0.0f) loadAdjZ(r, x); else loadZ(r, x);
+		_z = new ComplexList(r, x);
 	}
 
+	protected void loadAdjZ(float[] r, float[] x) throws PsseModelException
+	{
+		ACBranchList branches = _model.getBranches();
+		int nbr = branches.size();
+		for(int i=0; i < nbr; ++i)
+		{
+			r[i] = branches.getR(i);
+			float tx = branches.getX(i); 
+			if (tx < 0f)
+			{
+				//TODO IMPLEMENT
+			}
+		}
+	}
+
+	protected void loadZ(float[] r, float[] x) throws PsseModelException
+	{
+		ACBranchList branches = _model.getBranches();
+		int nbr = branches.size();
+		for(int i=0; i < nbr; ++i)
+		{
+			r[i] = branches.getR(i);
+			x[i] = branches.getX(i);
+		}
+	}
+	
 	/**
 	 * Calculate AC branch flows on all AC branches in model
 	 * 
