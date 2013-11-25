@@ -20,7 +20,6 @@ import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 /**
  * Utility to calculate branch flows and bus mismatches.
  * 
@@ -31,64 +30,37 @@ public class PowerCalculator
 {
 	PsseModel _model;
 	MismatchReport _dbg;
-	float _minX = 0f;
-	ImpedanceFilter _zf;
-	
+	ImpedanceFilter _zfilt;
+
 	/**
 	 * Create a new power calculator
 	 * @param model
+	 * @throws PsseModelException 
 	 */
-	public PowerCalculator(PsseModel model)
+	public PowerCalculator(PsseModel model) throws PsseModelException
 	{
 		_model = model;
 		_dbg = null;
+		_zfilt = new ImpedanceFilter(_model.getBranches());
 	}
-
 	/**
-	 * Create a new PowerCalculator with debugging enabled
-	 * 
+	 * Create a new power calculator
 	 * @param model
-	 * @param dbg
-	 * @param set minimum reactance value.  It forces |X| >= setMinX
+	 * @prarm zfilt Default impedance filter 
 	 * @throws PsseModelException 
 	 */
-	public PowerCalculator(PsseModel model, MismatchReport dbg, float setMinX) throws PsseModelException
+	public PowerCalculator(PsseModel model, ImpedanceFilter zfilt) throws PsseModelException
 	{
 		_model = model;
-		_dbg = dbg;
-		_minX = setMinX;
-		int nbr = _model.getBranches().size();
-		float[] r = new float[nbr];
-		float[] x = new float[nbr];
-		if (setMinX > 0.0f) loadAdjZ(r, x); else loadZ(r, x);
-		_z = new ComplexList(r, x);
+		_dbg = null;
+		_zfilt = zfilt;
 	}
 
-	protected void loadAdjZ(float[] r, float[] x) throws PsseModelException
-	{
-		ACBranchList branches = _model.getBranches();
-		int nbr = branches.size();
-		for(int i=0; i < nbr; ++i)
-		{
-			r[i] = branches.getR(i);
-			float tx = branches.getX(i); 
-			if (tx < 0f)
-			{
-				//TODO IMPLEMENT
-			}
-		}
-	}
 
-	protected void loadZ(float[] r, float[] x) throws PsseModelException
-	{
-		ACBranchList branches = _model.getBranches();
-		int nbr = branches.size();
-		for(int i=0; i < nbr; ++i)
-		{
-			r[i] = branches.getR(i);
-			x[i] = branches.getX(i);
-		}
-	}
+	public void setDebugEnabled(MismatchReport dbg) {_dbg = dbg;}
+	public void setDebugDisabled() {_dbg = null;}
+	public void setImpedanceFilter(ImpedanceFilter zfilt) {_zfilt = zfilt;}
+	public ImpedanceFilter getImpedanceFilter() {return _zfilt;}
 	
 	/**
 	 * Calculate AC branch flows on all AC branches in model
@@ -112,7 +84,7 @@ public class PowerCalculator
 	public float[][] calcACBranchFlows(float[] vang, float[] vmag)
 			throws PsseModelException
 	{
-		return calcACBranchFlows(_model.getBranches(), vang, vmag);
+		return calcACBranchFlows(_model.getBranches(), vang, vmag, _zfilt);
 	}
 	
 	/**
@@ -136,7 +108,7 @@ public class PowerCalculator
 	 * @throws PsseModelException
 	 */
 	public float[][] calcACBranchFlows(List<? extends ACBranch> branches,
-			float[] vang, float[] vmag) throws PsseModelException
+			float[] vang, float[] vmag, ImpedanceFilter zfilt) throws PsseModelException
 	{
 		int nbr = branches.size();
 		float[] pfrm = new float[nbr], pto = new float[nbr],
@@ -162,7 +134,7 @@ public class PowerCalculator
 				float ctvmpq = tvmpq * (float) Math.cos(shift);
 				float stvmpq = tvmpq * (float) Math.sin(shift);
 
-				Complex y = br.getY();
+				Complex y = zfilt.getY(i);
 				float gcos = ctvmpq * y.re();
 				float bcos = ctvmpq * y.im();
 				float gsin = stvmpq * y.re();

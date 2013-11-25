@@ -22,6 +22,8 @@ import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerList;
+import com.powerdata.openpa.psse.util.ImpedanceFilter;
+import com.powerdata.openpa.psse.util.MinZFilter;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
@@ -50,12 +52,13 @@ public class FastDecoupledPowerFlow
 	int[] _adjustablexfr = null;
 	float _qtoltap = .05f;
 	File _dbgdir;
+	ImpedanceFilter _zfilt;
 	
 	public FastDecoupledPowerFlow(PsseModel model) throws PsseModelException
 	{
 		_model = model;
 		setupHotIslands();
-		buildMatrices();
+		_zfilt = new ImpedanceFilter(model.getBranches());
 	}
 
 	public void setDebugDir(File dbgdir) throws IOException, PsseModelException
@@ -83,27 +86,30 @@ public class FastDecoupledPowerFlow
 		dumpMatrices(_dbgdir);
 	}
 	
+	/** Set active power convergence tolerance (p.u. on 100MVA base) */
 	public void setPtol(float ptol) {_ptol = ptol;}
+	/** Get active power convergence tolerance (p.u. on 100MVA base) */
 	public float getPtol() {return _ptol;}
+	/** Set reactive power convergence tolerance (p.u. on 100MVA base) */
 	public void setQtol(float qtol) {_qtol = qtol;}
+	/** Get reactive power convergence tolerance (p.u. on 100MVA base) */
 	public float getQtol() {return _qtol;}
+	/** Get current impedance filter */
+	public ImpedanceFilter getImpedanceFilter() {return _zfilt;}
+	/** set the current impedance filter */
+	public void setImpedanceFilter(ImpedanceFilter zfilt) {_zfilt = zfilt;}
 	
 	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc)
 			throws PsseModelException, IOException
 	{
+		buildMatrices();
 		boolean debug = _dbgdir != null;
-		MismatchReport mmr = null;
-		PowerCalculator pcalc = null;
+		MismatchReport mmr = new MismatchReport(_model);
+		PowerCalculator pcalc = new PowerCalculator(_model, _zfilt);
 		if (debug)
 		{
-			mmr = new MismatchReport(_model);
-			pcalc = new PowerCalculator(_model, mmr);
+			pcalc.setDebugEnabled(mmr);
 		}
-		else
-		{
-			pcalc = new PowerCalculator(_model);
-		}
-		
 		BusList buses = _model.getBuses();
 		int nbus = buses.size();
 		
@@ -302,9 +308,11 @@ public class FastDecoupledPowerFlow
 			if (shunt.isInSvc())
 				bselfbpp[shunt.getBus().getIndex()] -= shunt.getBpu();
 		}
-		
-		for(ACBranch br : branches)
+
+		int nbr = branches.size();
+		for(int i=0; i < nbr; ++i)
 		{
+			ACBranch br = branches.get(i);
 			if (br.isInSvc())
 			{
 				int fbus = br.getFromBus().getIndex();
@@ -314,13 +322,13 @@ public class FastDecoupledPowerFlow
 				{
 					brx = net.addBranch(fbus, tbus);
 				}
-				Complex z = br.getZ();
+				Complex z = _zfilt.getZ(i);
 				float bbp = 1 / z.im();
 
 				bbranchbp[brx] -= bbp;
 				bselfbp[fbus] += bbp;
 				bselfbp[tbus] += bbp;
-				float bbpp = -br.getY().im();
+				float bbpp = -_zfilt.getY(i).im();
 				bbranchbpp[brx] -= bbpp;
 				bselfbpp[fbus] += (bbpp - br.getFromBchg() - br.getBmag());
 				bselfbpp[tbus] += (bbpp - br.getToBchg() - br.getBmag());
@@ -380,6 +388,7 @@ public class FastDecoupledPowerFlow
 		PsseModel model = PsseModel.Open(uri);
 
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
+		pf.setImpedanceFilter(new MinZFilter(model.getBranches(), 0.001f));
 		
 		if (dbgdir != null) pf.setDebugDir(dbgdir);
 		
@@ -405,7 +414,8 @@ public class FastDecoupledPowerFlow
 		if (results != null)
 		{
 			MismatchReport mmr = new MismatchReport(model);
-			PowerCalculator pc = new PowerCalculator(model, mmr);
+			PowerCalculator pc = new PowerCalculator(model);
+			pc.setDebugEnabled(mmr);
 			pc.calculateMismatches(pf.getVA(), pf.getVM());
 			mmr.report(results);
 		}

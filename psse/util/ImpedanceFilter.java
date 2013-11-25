@@ -7,7 +7,7 @@ import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.tools.Complex;
 
-/** Force Reactance a minimum distance away from zero. */
+/** Allow manipulation of impedance values */
 public class ImpedanceFilter extends AbstractList<Complex>
 {
 	List<? extends ACBranch> _branches;
