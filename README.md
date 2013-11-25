@@ -120,3 +120,5 @@ or from a previous powerflow run.  Use the getVA() and getVM() methods to retrie
 the results.  These can then be used with the PowerCalculator class to generate
 flows if desired.
 
+The main() method provides a calling example.
+
