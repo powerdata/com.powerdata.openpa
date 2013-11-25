@@ -2,5 +2,6 @@ com.powerdata.openpa.psse
 com.powerdata.openpa.psse.conversions
 com.powerdata.openpa.psse.csv
 com.powerdata.openpa.psse.powerflow
+com.powerdata.openpa.psse.util
 com.powerdata.openpa.psseraw
 com.powerdata.openpa.tools
