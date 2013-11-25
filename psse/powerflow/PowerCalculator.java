@@ -87,6 +87,11 @@ public class PowerCalculator
 		return calcACBranchFlows(_model.getBranches(), vang, vmag, _zfilt);
 	}
 	
+	public float[][] calcACBranchFlows(List<? extends ACBranch> branches, float[] vang, float[] vmag) throws PsseModelException
+	{
+		return calcACBranchFlows(branches, vang, vmag, new ImpedanceFilter(branches));
+	}
+	
 	/**
 	 * Calculate AC branch flows
 	 * 

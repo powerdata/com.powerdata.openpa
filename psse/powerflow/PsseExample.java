@@ -8,6 +8,7 @@ import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.MinZMagFilter;
 import com.powerdata.openpa.tools.PAMath;
 
 /**
@@ -56,6 +57,11 @@ public class PsseExample
 		 */
 		LineList lines = _model.getLines();
 		float[][] results = pcalc.calcACBranchFlows(lines, _va, _vm);
+		
+		/*
+		 * Another example of the same thing, but filtering and manipulating small X values
+		 */
+		float[][] results2 = pcalc.calcACBranchFlows(lines, _va, _vm, new MinZMagFilter(lines, 0.001f));
 
 		/*
 		 * Results come back as an array of arrays, from-side active power,

@@ -12,17 +12,17 @@ import com.powerdata.openpa.tools.Complex;
  * @author chris@powerdata.com
  *
  */
-public class MinZFilter extends ImpedanceFilter
+public class MinZMagFilter extends ImpedanceFilter
 {
 	protected float[] _x, _g, _b;
 	
 	/**
 	 * Create a new minimum impedance filter.
 	 * @param branches List of branches on which to manipulate reactance
-	 * @param minX smallest value of X, such that |X| >= minX
+	 * @param minxmag smallest value of X, such that |X| >= minX
 	 * @throws PsseModelException 
 	 */
-	public MinZFilter(List<? extends ACBranch> branches, float minX) throws PsseModelException
+	public MinZMagFilter(List<? extends ACBranch> branches, float minxmag) throws PsseModelException
 	{
 		super(branches);
 		int nbr = branches.size();
@@ -34,9 +34,9 @@ public class MinZFilter extends ImpedanceFilter
 			ACBranch branch = branches.get(i);
 			float r = branch.getR();
 			float x = branch.getX();
-			if (Math.abs(x) < minX)
+			if (Math.abs(x) < minxmag)
 			{
-				x = Math.signum(x) * minX;
+				x = Math.signum(x) * minxmag;
 			}
 			Complex y = new Complex(r, x).inv();
 			_x[i] = x;

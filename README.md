@@ -94,12 +94,12 @@ of the source data, the CSV file parser currently supports version 30 objects an
 *Parameters*
 * path=/path/to/csv/files
 
-Note that both psse models automatically adjust |X| < 0.001 to +/- .001.  This function 
-is going to be moved out of the factory in the near future into a library or API call.  In the
-meantime, to disable it use "&lowx=none" in the URI string.
 
 Utilities
 ---------
+###Psse API Example
+A simple example to fetch all the AC branches and display flows generated from case data. [PsseExample](http://powerdata.github.io/com.powerdata.openpa/com/powerdata/openpa/tools/PsseExample.html)
+
 ###Sparse B Matrix processing
 A sparse B matrix can be generated using class [SparseBMatrix](http://powerdata.github.io/com.powerdata.openpa/com/powerdata/openpa/tools/SparseBMatrix.html).
 Call factorize() to return a [FactorizedBMatrix](http://powerdata.github.io/com.powerdata.openpa/com/powerdata/openpa/tools/FactorizedBMatrix.html).

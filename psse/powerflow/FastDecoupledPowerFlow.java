@@ -23,7 +23,7 @@ import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
-import com.powerdata.openpa.psse.util.MinZFilter;
+import com.powerdata.openpa.psse.util.MinZMagFilter;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
@@ -354,6 +354,7 @@ public class FastDecoupledPowerFlow
 		String svstart = "Flat";
 		File dbgdir = null;
 		File results = null;
+		float minxmag = 0.001f;
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -373,7 +374,9 @@ public class FastDecoupledPowerFlow
 				case "results":
 					results = new File(args[i++]);
 					break;
-					
+				case "minxmag":
+					minxmag = Float.parseFloat(args[i++]);
+					break;
 			}
 		}
 		
@@ -381,14 +384,14 @@ public class FastDecoupledPowerFlow
 
 		if (uri == null)
 		{
-			System.err.format("Usage: -uri model_uri [-voltage flat|realtime] -debug dir -results path_to_results");
+			System.err.format("Usage: -uri model_uri [-voltage flat|realtime] [ -minxmag smallest reactance magnitude (default to 0.001) ] [ -debug dir ] [ -results path_to_results]");
 			System.exit(1);
 		}
 		
 		PsseModel model = PsseModel.Open(uri);
 
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
-		pf.setImpedanceFilter(new MinZFilter(model.getBranches(), 0.001f));
+		pf.setImpedanceFilter(new MinZMagFilter(model.getBranches(), minxmag));
 		
 		if (dbgdir != null) pf.setDebugDir(dbgdir);
 		
