@@ -54,6 +54,7 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 			{
 				throw new PsseModelException(getClass().getName()+" missing I in "+dbfile);
 			}
+			
 			reindex();
 		}
 		catch(Exception e)

@@ -36,7 +36,7 @@ public class MinZMagFilter extends ImpedanceFilter
 			float x = branch.getX();
 			if (Math.abs(x) < minxmag)
 			{
-				x = Math.signum(x) * minxmag;
+				x = Math.copySign(minxmag, x);
 			}
 			Complex y = new Complex(r, x).inv();
 			_x[i] = x;

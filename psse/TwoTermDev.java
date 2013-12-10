@@ -8,4 +8,6 @@ public interface TwoTermDev extends BaseObject
 	public String getJ() throws PsseModelException;
 	public Bus getFromBus() throws PsseModelException;
 	public Bus getToBus() throws PsseModelException;
+	/** get in service flag */
+	public boolean isInSvc() throws PsseModelException;
 }

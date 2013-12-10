@@ -1,7 +1,9 @@
 package com.powerdata.openpa.psse;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.powerdata.openpa.psse.util.BusSubList;
 import com.powerdata.openpa.psse.util.LogSev;
@@ -116,6 +118,7 @@ public class PsseModel
 	public ShuntList getShunts() throws PsseModelException {return ShuntList.Empty;}
 	public SvcList getSvcs() throws PsseModelException {return SvcList.Empty;}
 	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return SwitchedShuntList.Empty;}
+	public TwoTermDCLineList getTwoTermDCLines() throws PsseModelException {return TwoTermDCLineList.Empty;}
 	
 	/** for convience, get a list of all ac branches */
 	public ACBranchList getBranches() throws PsseModelException
@@ -126,6 +129,13 @@ public class PsseModel
 	{
 		return new OneTermDevList(getLoads(), getGenerators(), getShunts(), getSvcs());
 	}
+
+	public TwoTermDevList getTwoTermDevs() throws PsseModelException
+	{
+		return new TwoTermDevList(new Object[] { getLines(), getTransformers(),
+				getPhaseShifters(), getSwitches(), getTwoTermDCLines() });
+	}
+
 	public String getURI() {return _uri;}
 	public void setURI(String uri) {_uri = uri;}
 	

@@ -18,8 +18,12 @@ import com.powerdata.openpa.psse.SVC;
 import com.powerdata.openpa.psse.Shunt;
 import com.powerdata.openpa.psse.ShuntList;
 import com.powerdata.openpa.psse.SvcList;
+import com.powerdata.openpa.psse.TwoTermDCLine;
+import com.powerdata.openpa.psse.TwoTermDCLine.CtrlMode;
+import com.powerdata.openpa.psse.TwoTermDCLineList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.PAMath;
 /**
  * Utility to calculate branch flows and bus mismatches.
  * 
@@ -49,13 +53,13 @@ public class PowerCalculator
 	 * @prarm zfilt Default impedance filter 
 	 * @throws PsseModelException 
 	 */
-	public PowerCalculator(PsseModel model, ImpedanceFilter zfilt) throws PsseModelException
+	public PowerCalculator(PsseModel model, ImpedanceFilter zfilt)
+			throws PsseModelException
 	{
 		_model = model;
 		_dbg = null;
 		_zfilt = zfilt;
 	}
-
 
 	public void setDebugEnabled(MismatchReport dbg) {_dbg = dbg;}
 	public void setDebugDisabled() {_dbg = null;}
@@ -87,9 +91,11 @@ public class PowerCalculator
 		return calcACBranchFlows(_model.getBranches(), vang, vmag, _zfilt);
 	}
 	
-	public float[][] calcACBranchFlows(List<? extends ACBranch> branches, float[] vang, float[] vmag) throws PsseModelException
+	public float[][] calcACBranchFlows(List<? extends ACBranch> branches,
+			float[] vang, float[] vmag) throws PsseModelException
 	{
-		return calcACBranchFlows(branches, vang, vmag, new ImpedanceFilter(branches));
+		return calcACBranchFlows(branches, vang, vmag, new ImpedanceFilter(
+				branches));
 	}
 	
 	/**
@@ -169,6 +175,7 @@ public class PowerCalculator
 		LoadList ldlist = _model.getLoads();
 		GenList genlist = _model.getGenerators();
 		
+		applyTwoTermDCLine(pmm, qmm, calcTwoTermDCLines(_model.getTwoTermDCLines(), vm));
 		applyBranches(pmm, qmm, calcACBranchFlows(va, vm));
 		applyShunts(qmm, calcShunts(vm), _model.getShunts());
 		applyShunts(qmm, calcSVCs(vm), _model.getSvcs());
@@ -201,6 +208,23 @@ public class PowerCalculator
 		return new float[][] {pmm, qmm};
 	}
 
+	protected void applyTwoTermDCLine(float[] pmm, float[] qmm,
+			TwoTermDCLineResultList dclresults) throws PsseModelException
+	{
+		TwoTermDCLineList dclines = _model.getTwoTermDCLines();
+		for (int i=0; i < dclines.size(); ++i)
+		{
+			TwoTermDCLine l = dclines.get(i);
+			TwoTermDCLineResult r = dclresults.get(i);
+			int fn = l.getFromBus().getIndex();
+			int tn = l.getToBus().getIndex();
+			pmm[fn] += r.getMWR();
+			pmm[tn] += r.getMWI();
+			qmm[fn] += r.getMVArR();
+			qmm[tn] += r.getMVArI();
+		}
+	}
+	
 	void applyBranches(float[] pmm, float[] qmm,
 			float[][] brflows) throws PsseModelException
 	{
@@ -306,6 +330,11 @@ public class PowerCalculator
 		return q;
 	}
 	
+	/** 
+	 * Get current Realtime voltage information (model bus order)
+	 * @return Array of float arrays, 0: va, 1: vm
+	 * @throws PsseModelException
+	 */
 	public float[][] getRTVoltages() throws PsseModelException
 	{
 		BusList blist = _model.getBuses();
@@ -317,6 +346,189 @@ public class PowerCalculator
 			vm[i] = blist.getVMpu(i);
 		}
 		return new float[][] {va, vm};
+	}
+	
+	/**
+	 * Currently uses a simplified approach to leave constant angle and calculate tap algebraically
+	 * @param lines List of 2-terminal dc lines
+	 * @param vm solved voltage magnitudes
+	 * @return List of results for each line
+	 * @throws PsseModelException
+	 */
+	public TwoTermDCLineResultList calcTwoTermDCLines(TwoTermDCLineList lines,
+			float[] vm) throws PsseModelException
+	{
+		int nl = lines.size();
+		float[] rtap = new float[nl];
+		float[] itap = new float[nl];
+		float[] alpha = new float[nl];
+		float[] gamma = new float[nl];
+		float[] rmw = new float[nl];
+		float[] rmvar = new float[nl];
+		float[] imw = new float[nl];
+		float[] imvar = new float[nl];
+		
+		for (int i=0; i < nl; ++i)
+		{
+			TwoTermDCLine dcl = lines.get(i);
+			if (dcl.getCtrlMode() != CtrlMode.Blocked)
+			{
+				int rbus = dcl.getFromBus().getIndex();
+				int ibus = dcl.getToBus().getIndex();
+				float[] setpt = getDCSetpoints(dcl);
+				float isp = setpt[0], vdr = setpt[1], vdi = setpt[2];
+				float[] rresult = calc2TDCRect(dcl, isp, vdr, vm[rbus]);
+				float[] iresult = calc2TDInv(dcl, isp, vdi, vm[ibus]);
+				alpha[i] = rresult[0];
+				rtap[i] = rresult[1];
+				rmw[i] = PAMath.mw2pu(-rresult[2]);
+				rmvar[i] = PAMath.mvar2pu(-rresult[3]);
+				gamma[i] = iresult[0];
+				itap[i] = iresult[1];
+				imw[i] = PAMath.mw2pu(iresult[2]);
+				imvar[i] = PAMath.mvar2pu(-iresult[3]);
+			}
+		}
+		if (_dbg != null)
+		{
+			_dbg.setTwoTermDCLineFlows(rmw, rmvar, imw, imvar);
+		}
+		
+		return new TwoTermDCLineResultList(lines, rtap, itap, alpha, gamma,
+				rmw, rmvar, imw, imvar);
+	}
+
+	/**
+	 * Calculate Inverter quantities
+	 * @param dcl Two Terminal DC Line object
+	 * @param isp DC current set point (kA)
+	 * @param vd Scheduled DC Inverter voltage (kV)
+	 * @param vm Converter AC Bus voltage magnitude (per-unit)
+	 * @return
+	 * @throws PsseModelException 
+	 */
+	protected float[] calc2TDInv(TwoTermDCLine dcl, float isp, float vdi,
+			float vm) throws PsseModelException
+	{
+		return calc2TConverter(isp, vdi, vm, dcl.getEBASI(), dcl.getNBI(),
+				dcl.getGAMMNrad(), dcl.getGAMMXrad(), dcl.getTRI(), dcl.getTMXI(),
+				dcl.getTMNI(), dcl.getSTPI(), dcl.getXCI());
+	}
+	/**
+	 * Calculate Rectifier quantities
+	 * @param dcl Two Terminal DC Line object
+	 * @param isp DC current set point (kA)
+	 * @param vd Scheduled DC Rectifier voltage (kV)
+	 * @param vm Converter AC Bus voltage magnitude (per-unit)
+	 * @return
+	 * @throws PsseModelException 
+	 */
+	protected float[] calc2TDCRect(TwoTermDCLine dcl, float isp, float vdr,
+			float vm) throws PsseModelException
+	{
+		return calc2TConverter(isp, vdr, vm, dcl.getEBASR(), dcl.getNBR(),
+				dcl.getALFMNrad(), dcl.getALFMXrad(), dcl.getTRR(), dcl.getTMXR(),
+				dcl.getTMNR(), dcl.getSTPR(), dcl.getXCR());
+	}
+
+	/**
+	 * Calculate 2-terminal dc line converter quantities
+	 * @param isp DC Current set point (kA)
+	 * @param vd DC Voltage set point
+	 * @param vm AC converter bus magnitude
+	 * @param ebas AC transformer primary side base voltage (KV)
+	 * @param nb Number of rectifier bridges in series
+	 * @param angmn Minimum converter operating angle
+	 * @param angmx Maximum converter operating angle
+	 * @param tr Converter Transformer ratio
+	 * @param tmx Maximum tap ratio
+	 * @param tmn Minimum tap ratio
+	 * @param stp Tap step size
+	 * @param xc Commutation reactance (ohms)
+	 * @return array of solved quantities 0: angle, 1:tap, 2:mw, 3:mvar
+	 */
+	protected float[] calc2TConverter(float isp, float vd, float vm, float ebas, int nb,
+			float angmn, float angmx, float tr, float tmx,
+			float tmn, float stp, float xc)
+	{
+		float[] rv = new float[4];
+		/* force minimum angle */
+		rv[0] = angmn;
+		
+		float vd0 = (vd + isp * nb * PAMath.THREEOVERPI * xc)
+				/ ((float) Math.cos(angmn));
+		/* calculated tap */
+		rv[1] = PAMath.THREESQRT2OVERPI * nb * tr * vm * ebas / vd0;
+		float cosphi = vd / vd0;
+		
+		/* active power (MW) */
+		rv[2] = isp * vd;
+		/* reactive power (MVAr) */
+		rv[3] = rv[2] * ((float) Math.tan(Math.acos(cosphi)));
+		return rv;
+	}
+	/**
+	 * Determine dc current, rectifier and inverter dc voltage setpoints
+	 * @param dcl DC Line
+	 * @return array of results  0: current, 1:rectifier voltage, 2:inverter voltage
+	 * @throws PsseModelException
+	 */
+	protected float[] getDCSetpoints(TwoTermDCLine dcl) throws PsseModelException
+	{
+		CtrlMode cmode = dcl.getCtrlMode();
+		float isp = 0;
+		float demand = dcl.getSETVL();
+		float rdc = dcl.getRDC();
+		float rcomp = dcl.getRCOMP();
+		float vsp = dcl.getVSCHD();
+		float rrcomp = rdc - rcomp;
+		if (cmode == CtrlMode.Current)
+		{
+			isp = demand/1000f;
+		}
+		else if (cmode == CtrlMode.Power)
+		{
+			float r = rrcomp;
+			/** power specified at inverter? */
+			boolean ispinv = false;
+			if (demand < 0)
+			{
+				demand *= -1f;
+				r = rcomp;
+				ispinv = true;
+			}
+			
+			if (r == 0)
+			{
+				isp = demand / vsp;
+			}
+			else
+			{
+				/* quadratic in both E and I */
+				float p = vsp/r, q = -demand/r;
+				if (ispinv)
+				{
+					p *= -1;
+					q *= -1;
+				}
+				float np2 = -p/2;
+				float sqt = (float) Math.sqrt(np2*np2-q);
+				float isp1 = np2 + sqt;
+				float isp2 = np2 - sqt;
+				/* find the reasonable root */
+				float guess = demand / vsp;
+				isp = Math.abs((Math.abs(isp1-guess) < Math.abs(isp2-guess)) ? isp1 : isp2);
+			}
+		}
+		float[] rv = new float[3];
+		/* current set point */
+		rv[0] = isp;
+		/* voltage setpoint at rectifier */
+		rv[1] = vsp + isp * rrcomp;
+		/* voltage setpoint at inverter */
+		rv[2] = vsp - isp * rcomp;
+
+		return rv;
 	}
 	
 }

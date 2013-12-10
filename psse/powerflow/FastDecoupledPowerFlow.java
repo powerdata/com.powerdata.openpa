@@ -54,11 +54,13 @@ public class FastDecoupledPowerFlow
 	File _dbgdir;
 	ImpedanceFilter _zfilt;
 	
-	public FastDecoupledPowerFlow(PsseModel model) throws PsseModelException
+	public FastDecoupledPowerFlow(PsseModel model, ImpedanceFilter zfilt)
+			throws PsseModelException, IOException
 	{
 		_model = model;
 		setupHotIslands();
-		_zfilt = new ImpedanceFilter(model.getBranches());
+		_zfilt = zfilt;
+		buildMatrices();
 	}
 
 	public void setDebugDir(File dbgdir) throws IOException, PsseModelException
@@ -96,13 +98,10 @@ public class FastDecoupledPowerFlow
 	public float getQtol() {return _qtol;}
 	/** Get current impedance filter */
 	public ImpedanceFilter getImpedanceFilter() {return _zfilt;}
-	/** set the current impedance filter */
-	public void setImpedanceFilter(ImpedanceFilter zfilt) {_zfilt = zfilt;}
 	
 	public PowerFlowConvergenceList runPowerFlow(VoltageSource vsrc)
 			throws PsseModelException, IOException
 	{
-		buildMatrices();
 		boolean debug = _dbgdir != null;
 		MismatchReport mmr = new MismatchReport(_model);
 		PowerCalculator pcalc = new PowerCalculator(_model, _zfilt);
@@ -292,7 +291,7 @@ public class FastDecoupledPowerFlow
 	public float[] getVA() {return _va;}
 	public float[] getVM() {return _vm;}
 
-	void buildMatrices() throws PsseModelException
+	void buildMatrices() throws PsseModelException, IOException
 	{
 		LinkNet net = new LinkNet();
 		ACBranchList branches = _model.getBranches();
@@ -346,6 +345,7 @@ public class FastDecoupledPowerFlow
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
+
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -390,8 +390,8 @@ public class FastDecoupledPowerFlow
 		
 		PsseModel model = PsseModel.Open(uri);
 
-		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model);
-		pf.setImpedanceFilter(new MinZMagFilter(model.getBranches(), minxmag));
+		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model,
+				new MinZMagFilter(model.getBranches(), minxmag));
 		
 		if (dbgdir != null) pf.setDebugDir(dbgdir);
 		

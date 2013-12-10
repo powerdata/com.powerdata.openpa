@@ -81,10 +81,10 @@ public class ListDumper
 					if (j>0) pw.print(Dlm);
 					Object v = ometh.get(j).invoke(list, i);
 					boolean isstr = !Number.class.isInstance(v);
-					if (isstr) pw.print('"');
+					if (isstr) pw.print('\'');
 					String vs = v == null ? null : v.toString();
 					pw.print((vs==null)?"<null>":vs);
-					if (isstr) pw.print('"');
+					if (isstr) pw.print('\'');
 				}
 				pw.println();
 			}
@@ -97,8 +97,8 @@ public class ListDumper
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		PsseModel model = PsseModel.Open("pssecsv:path=/tmp/modwecc");
-		File outdir = new File("/tmp/modweccdump");
+		PsseModel model = PsseModel.Open("pssecsv:path=/tmp/pjm");
+		File outdir = new File("/tmp/pjmmodel");
 		new ListDumper().dump(model, outdir);
 	}
 

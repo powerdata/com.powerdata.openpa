@@ -26,6 +26,4 @@ public interface ACBranch extends TwoTermDev
 	public float getToBchg() throws PsseModelException;
 	/** get phase shift through branch (in RAD)*/
 	public float getPhaseShift() throws PsseModelException;
-	/** get in service flag */
-	public boolean isInSvc() throws PsseModelException; 
 }

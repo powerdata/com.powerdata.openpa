@@ -77,8 +77,6 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 		
 		loadLine4(rlist, xfndx, wndx);
 
-//		adjustImpedances();
-		
 		_fs = new ComplexList(_size, true);
 		_ts = new ComplexList(_size, true);
 	}	

@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.TP;
 import com.powerdata.openpa.psse.util.TransformerRaw;
 import com.powerdata.openpa.tools.LoadArray;
 import com.powerdata.openpa.tools.PAMath;
@@ -176,6 +178,11 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 		_bl = Arrays.copyOf(_bl, newsz);
 
 		_size = newsz;
+	}
+	@Override
+	public BusTypeCode getBusType(int ndx) throws PsseModelException
+	{
+		return _eq._tp.getBusType(ndx);
 	}
 	
 }

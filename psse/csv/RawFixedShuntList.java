@@ -33,6 +33,13 @@ public class RawFixedShuntList extends ShuntList
 		{
 			throw new PsseModelException(e);
 		}
+		for(int i=0; i < _size; ++i)
+		{
+			if (getBus(i).getIDE() == 4)
+			{
+				_stat[i] = 0;
+			}
+		}
 
 	}
 	

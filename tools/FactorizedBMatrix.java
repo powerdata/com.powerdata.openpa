@@ -79,7 +79,9 @@ public class FactorizedBMatrix
 		int nbr = _bbrofs.length;
 		float[] dx = new float[ds.length];
 		for(int bus : _buselim)
+		{
 			dx[bus] = ds[bus] / _bself[bus];
+		}
 		for (int i = nbr - 1; i >= 0; --i)
 		{
 			dx[_pnode[i]] += _bbrofs[i] * dx[_qnode[i]];

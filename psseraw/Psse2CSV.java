@@ -139,7 +139,7 @@ public class Psse2CSV extends PsseProcessor
 class PsseCSVWriter implements PsseRecWriter
 {
 	protected static final char _FldDelim = ',';
-	protected static final char _QuoteChar = '"';
+	protected static final char _QuoteChar = '\'';
 	
 	protected File _dir;
 	protected HashMap<String,PrintWriter> _fmap = new HashMap<>();

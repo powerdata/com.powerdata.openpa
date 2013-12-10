@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
@@ -18,6 +16,8 @@ import com.powerdata.openpa.psse.IslandList;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TwoTermDCLineList;
+import com.powerdata.openpa.psse.TwoTermDev;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
 /**
@@ -28,58 +28,66 @@ import com.powerdata.openpa.tools.PAMath;
  */
 public class MismatchReport
 {
-	PsseModel _model;
-	LinkNet _brnet = new LinkNet();
-	LinkNet _otnet = new LinkNet();
-	int _nbus;
-	List<List<? extends OneTermDev>> _otdevorder;
-	int _ngen, _nload, _nshunt, _nsvc;
-	float[] _brflow, _shq, _svcq, _pfrm, _pto, _qfrm, _qto, _vm, _va, _pmm, _qmm;
-//	PrintWriter _out;
+	PsseModel							_model;
+	LinkNet								_brnet	= new LinkNet();
+	LinkNet								_otnet	= new LinkNet();
+	int									_nbus;
+	Object[]		_otdevorder;
+	Object[]		_brorder;
+	int									_ngen, _nload, _nshunt, _nsvc, _nbr;
+	float[]								_shq, _svcq, _pfrm, _pto,
+			_qfrm, _qto, _vm, _va, _pmm, _qmm;
+
+	//	PrintWriter _out;
+	@SuppressWarnings("unchecked")
 	public MismatchReport(PsseModel model) throws PsseModelException
 	{
 		_model = model;
 		_nbus = model.getBuses().size();
 		
-		_otdevorder = new ArrayList<List<? extends OneTermDev>>();
-		_otdevorder.add(_model.getGenerators());
-		_otdevorder.add(_model.getLoads());
-		_otdevorder.add(_model.getShunts());
-		_otdevorder.add(_model.getSvcs());
+		_otdevorder = new Object[] {
+				_model.getGenerators(), _model.getLoads(), _model.getShunts(),
+				_model.getSvcs() };
 		
-		_ngen = _otdevorder.get(0).size();
-		_nload = _otdevorder.get(1).size();
-		_nshunt = _otdevorder.get(2).size();
+		_ngen = _model.getGenerators().size();
+		_nload = _model.getLoads().size();
+		_nshunt = _model.getShunts().size();
 
 		int otsize = 0;
-		for(List<? extends OneTermDev> l : _otdevorder)
-			otsize += l.size();
+		for(Object l : _otdevorder)
+			otsize += ((List<? extends OneTermDev>) l).size();
 		
-		_brnet.ensureCapacity(_nbus+1, model.getBranches()
-				.size());
+//		TwoTermDevList ttdevs = model.getTwoTermDevs();
+		TwoTermDCLineList t2dclines = model.getTwoTermDCLines();
+		ACBranchList acbranch = model.getBranches();
+		_nbr = acbranch.size()+t2dclines.size();
+		_brnet.ensureCapacity(_nbus+1, _nbr);
 		_otnet.ensureCapacity(_nbus+1, otsize);
-
-		for(ACBranch branch : model.getBranches())
+		_brorder = new Object[] { acbranch, t2dclines };
+		for(Object olist : _brorder)
 		{
-			int fndx = _nbus;
-			int tndx = _nbus;
-			
-			if (branch.isInSvc())
+			List<? extends TwoTermDev> list = (List<? extends TwoTermDev>) olist; 
+			for(TwoTermDev dev : list)
 			{
-				fndx = branch.getFromBus().getIndex();
-				tndx = branch.getToBus().getIndex();
+				int fndx = dev.getFromBus().getIndex();
+				int tndx = dev.getToBus().getIndex();
+				_brnet.addBranch(fndx, tndx);
 			}
-			_brnet.addBranch(fndx, tndx);
 		}
-
-		for (List<? extends OneTermDev> otlist : _otdevorder)
+		
+		for (Object otlist : _otdevorder)
 		{
-			for (OneTermDev otd : otlist)
+			for (OneTermDev otd : (List<? extends OneTermDev>)otlist)
 			{
 				int bndx = (otd.isInSvc()) ? otd.getBus().getIndex() : _nbus;
 				_otnet.addBranch(bndx, _nbus);
 			}
 		}
+		
+		_pfrm = new float[_nbr];
+		_qfrm = new float[_nbr];
+		_pto = new float[_nbr];
+		_qto = new float[_nbr];
 	}
 	
 	public void report(PrintWriter out) throws IOException, PsseModelException
@@ -113,7 +121,6 @@ public class MismatchReport
 //		if (!b.isEnergized()) return;
 		//TODO:  shoudl island really ever be able to be -1?
 		if (branches.length == 0 && otdevs.length == 0) return;
-		ACBranchList acbr = _model.getBranches();
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
 		IslandList islands = _model.getIslands();
 		
@@ -125,24 +132,33 @@ public class MismatchReport
 				island.isEnergized() ? "true" : "false", island.getIndex(), 
 				b.getBusType(), PAMath.rad2deg(_va[i]), _vm[i], 
 				PAMath.pu2mw(_pmm[i]), PAMath.pu2mvar(_qmm[i]), mmm);
-		for(int acbranch : branches)
+		for(int ttdev : branches)
 		{
-			ACBranch acb = acbr.get(acbranch);
-			int fbus = acb.getFromBus().getIndex();
+			TwoTermDev ttd = null;
+			int t = ttdev;
+			for(Object blist : _brorder)
+			{
+				@SuppressWarnings("unchecked")
+				List<? extends TwoTermDev> list = (List<? extends TwoTermDev>) blist;
+				if (t < list.size()) {ttd = list.get(t); break;}
+				t -= list.size();
+			}
+			
+			int fbus = ttd.getFromBus().getIndex();
 			float pp, qq;
 			if (fbus == i)
 			{
-				pp = _pfrm[acbranch];
-				qq = _qfrm[acbranch];
+				pp = _pfrm[ttdev];
+				qq = _qfrm[ttdev];
 			}
 			else
 			{
-				pp = _pto[acbranch];
-				qq = _qto[acbranch];
+				pp = _pto[ttdev];
+				qq = _qto[ttdev];
 			}
 			out.print(btmp);
-			out.format("\"%s\",\"%s\",%f,%f\n", acb.getObjectID(),
-					acb.getObjectName(), PAMath.pu2mw(pp), PAMath.pu2mvar(qq));
+			out.format("\"%s\",\"%s\",%f,%f\n", ttd.getObjectID(),
+					ttd.getObjectName(), PAMath.pu2mw(pp), PAMath.pu2mvar(qq));
 
 		}
 		
@@ -193,10 +209,20 @@ public class MismatchReport
 	public void setBranchFlows(float[] pfrm, float[] qfrm, float[] pto,
 			float[] qto)
 	{
-		_pfrm = pfrm;
-		_qfrm = qfrm;
-		_pto = pto;
-		_qto = qto;
+		System.arraycopy(pfrm, 0, _pfrm, 0, pfrm.length);
+		System.arraycopy(qfrm, 0, _qfrm, 0, qfrm.length);
+		System.arraycopy(pto, 0, _pto, 0, pto.length);
+		System.arraycopy(qto, 0, _qto, 0, qto.length);
+	}
+
+	public void setTwoTermDCLineFlows(float[] pfrm, float[] qfrm, float[] pto,
+			float[] qto) throws PsseModelException
+	{
+		int nbr = _model.getBranches().size();
+		System.arraycopy(pfrm, 0, _pfrm, nbr, pfrm.length);
+		System.arraycopy(qfrm, 0, _qfrm, nbr, qfrm.length);
+		System.arraycopy(pto, 0, _pto, nbr, pto.length);
+		System.arraycopy(qto, 0, _qto, nbr, qto.length);
 	}
 
 	public void setShunts(float[] q)

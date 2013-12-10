@@ -36,6 +36,8 @@ public class Bus extends PsseBaseObject
 	public Zone getZoneObject() throws PsseModelException {return _list.getZoneObject(_ndx);}
 	/** Owner */
 	public Owner getOwnerObject() throws PsseModelException {return _list.getOwnerObject(_ndx);}
+	@Deprecated
+	/* CMM - we actually expclitily model the shunt in the ShuntList, so we should not need this call */
 	/** get complex shunt admittance to ground */
 	public Complex getShuntY() throws PsseModelException {return _list.getShuntY(_ndx);}
 	/** test if the bus is energized */
@@ -57,8 +59,12 @@ public class Bus extends PsseBaseObject
 	public float getBASKV() throws PsseModelException {return _list.getBASKV(_ndx);}
 	/** Bus type code */
 	public int getIDE() throws PsseModelException {return _list.getIDE(_ndx);}
+	@Deprecated
+	/* CMM we explicitely model the shunt, so this should not be needed */
 	/** Active component of shunt admittance to ground in MW at unity voltage*/
 	public float getGL() throws PsseModelException {return _list.getGL(_ndx);}
+	@Deprecated
+	/* CMM we explicitely model the shunt, so this should not be needed */
 	/** Reactive component of shunt admittance to ground in MVAr at unity voltage*/
 	public float getBL() throws PsseModelException {return _list.getBL(_ndx);}
 	/** Area number */

@@ -30,6 +30,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	PhaseShifterRawList	_psList;
 	ShuntRawList			_shList;
 	SvcRawList				_svcList;
+	TwoTermDCLineList		_dcline;
 	LoadList			_loads;
 	GenList				_generatorList;
 	TP					_tp;
@@ -77,9 +78,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		{
 			_dir = new File(q.get("path")[0]);
 		}
-		analyzeRawShunts();
 		analyzeRawTransformers();
 		_tp = new TP(this);
+		analyzeRawShunts();
 
 	}
 	
@@ -91,6 +92,14 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		if (_buses == null) _buses = new BusListRaw(this);
 		return _buses;
 	}
+	
+	@Override
+	public TwoTermDCLineList getTwoTermDCLines() throws PsseModelException
+	{
+		if (_dcline == null) _dcline = new TwoTermDCLineList(this);
+		return _dcline;
+	}
+
 	@Override
 	public LineList getLines() throws PsseModelException
 	{

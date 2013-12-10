@@ -6,7 +6,7 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	{
 		Unknown, Blocked, Power, Current;
 		private static final CtrlMode[] _Codes = new CtrlMode[]
-				{Blocked, Power, Current};
+			{Blocked, Power, Current};
 		public static CtrlMode fromCode(int cod)
 		{
 			int code = Math.abs(cod);
@@ -87,16 +87,26 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	public float getALFMX() throws PsseModelException {return _list.getALFMX(_ndx);}
 	/** minimum stead-state rectifier angle */
 	public float getALFMN() throws PsseModelException {return _list.getALFMN(_ndx);}
+	/** maximum rectifier angle (Rad)*/
+	public float getALFMXrad() throws PsseModelException {return _list.getALFMXrad(_ndx);}
+	/** minimum stead-state rectifier angle (rad) */
+	public float getALFMNrad() throws PsseModelException {return _list.getALFMNrad(_ndx);}
 	/** Rectifier commutating resistance per bridge in ohms */
 	public float getRCR() throws PsseModelException {return _list.getRCR(_ndx);}
 	/** Rectifier commutating reactance per bridge in ohms */
 	public float getXCR() throws PsseModelException {return _list.getXCR(_ndx);}
-	
-	/*
-	 * We are going to take the approach that the transformer completely
-	 * contains the tap adjustment information specified in this record.  So, no
-	 * transformer parameters are located here.
-	 */
+	/** Rectifier transformer primary base voltage in KV */
+	public float getEBASR() throws PsseModelException {return _list.getEBASR(_ndx);}
+	/** rectifier transformer ratio */
+	public float getTRR() throws PsseModelException {return _list.getTRR(_ndx);}
+	/** rectifier transformer tap ratio */
+	public float getTAPR() throws PsseModelException {return _list.getTAPR(_ndx);}
+	/** rectifier transformer maximum tap ratio */
+	public float getTMXR() throws PsseModelException {return _list.getTMXR(_ndx);}
+	/** rectifier transformer minimum tap ratio */
+	public float getTMNR() throws PsseModelException {return _list.getTMNR(_ndx);}
+	/** rectifier transformer tap step size */
+	public float getSTPR() throws PsseModelException {return _list.getSTPR(_ndx);}
 	
 	/** rectifier firing angle reference bus */
 	public String getICR() throws PsseModelException {return _list.getICR(_ndx);}
@@ -111,7 +121,7 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	/** rectifier commutating capacitor reactance in ohms */
 	public float getXCAPR() throws PsseModelException {return _list.getXCAPR(_ndx);}
 	
-	/* rectifier data methods */
+	/* inverter data methods */
 	
 	/** inverter AC bus */
 	public String getIPI() throws PsseModelException {return _list.getIPI(_ndx);}
@@ -121,17 +131,26 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	public float getGAMMX() throws PsseModelException {return _list.getGAMMX(_ndx);}
 	/** minimum stead-state inverter angle */
 	public float getGAMMN() throws PsseModelException {return _list.getGAMMN(_ndx);}
+	/** maximum inverter angle (Radians)*/
+	public float getGAMMXrad() throws PsseModelException {return _list.getGAMMXrad(_ndx);}
+	/** minimum stead-state inverter angle  (Radians)*/
+	public float getGAMMNrad() throws PsseModelException {return _list.getGAMMNrad(_ndx);}
 	/** inverter commutating resistance per bridge in ohms */
 	public float getRCI() throws PsseModelException {return _list.getRCI(_ndx);}
 	/** inverter commutating reactance per bridge in ohms */
 	public float getXCI() throws PsseModelException {return _list.getXCI(_ndx);}
-	
-	/*
-	 * We are going to take the approach that the transformer completely
-	 * contains the tap adjustment information specified in this record.  So, no
-	 * transformer parameters are located here.
-	 */
-	
+	/** Inverter transformer primary base voltage in KV */
+	public float getEBASI() throws PsseModelException {return _list.getEBASI(_ndx);}
+	/** inverter transformer ratio */
+	public float getTRI() throws PsseModelException {return _list.getTRI(_ndx);}
+	/** inverter transformer tap ratio */
+	public float getTAPI() throws PsseModelException {return _list.getTAPI(_ndx);}
+	/** inverter transformer maximum tap ratio */
+	public float getTMXI() throws PsseModelException {return _list.getTMXI(_ndx);}
+	/** inverter transformer minimum tap ratio */
+	public float getTMNI() throws PsseModelException {return _list.getTMNI(_ndx);}
+	/** inverter transformer tap step size */
+	public float getSTPI() throws PsseModelException {return _list.getSTPI(_ndx);}
 	/** inverter firing angle reference bus */
 	public String getICI() throws PsseModelException {return _list.getICI(_ndx);}
 	/** from-side inverter transformer bus */
@@ -144,5 +163,7 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	public String getIDI() throws PsseModelException {return _list.getIDI(_ndx);}
 	/** inverter commutating capacitor reactance in ohms */
 	public float getXCAPI() throws PsseModelException {return _list.getXCAPI(_ndx);}
-	
+
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 }

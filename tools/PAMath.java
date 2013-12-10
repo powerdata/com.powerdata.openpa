@@ -8,10 +8,17 @@ package com.powerdata.openpa.tools;
  */
 public class PAMath
 {
-	/* constants */
+	/* constants that get re-used */
+	public static final float PI = (float) Math.PI;
+	
+	/** 3 over PI */
+	public static final float THREEOVERPI = 3f / PI;
+	
+	/** 3 sqrt(2) over PI */
+	public static final float THREESQRT2OVERPI = THREEOVERPI * ((float) Math.sqrt(2f));
 
 	/** Constant to convert degrees and radians */
-	public static final float D2R = ((float)Math.PI)/180F;
+	public static final float D2R = PI/180f;
 
 	
 	/** convert degrees to radians */

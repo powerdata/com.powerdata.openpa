@@ -1,30 +1,60 @@
 package com.powerdata.openpa.psse;
 
 import com.powerdata.openpa.psse.TwoTermDCLine.CtrlMode;
+import com.powerdata.openpa.tools.PAMath;
 
 public abstract class TwoTermDCLineList extends PsseBaseList<TwoTermDCLine>
 {
-//	public static final TwoTermDCLineList Empty = new TwoTermDCLineList() {};
-	@Override
-	public String getObjectID(int ndx) throws PsseModelException
+	public static final TwoTermDCLineList Empty = new TwoTermDCLineList()
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public float getRDC(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getSETVL(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getVSCHD(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public String getIPR(int ndx) throws PsseModelException {return "";}
+		@Override
+		public int getNBR(int ndx) throws PsseModelException {return 0;}
+		@Override
+		public float getALFMX(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getALFMN(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getXCR(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public String getIPI(int ndx) throws PsseModelException {return "";}
+		@Override
+		public int getNBI(int ndx) throws PsseModelException  {return 0;}
+		@Override
+		public float getGAMMX(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getGAMMN(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getXCI(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public int getDCLineNum(int ndx) throws PsseModelException {return 0;}
+		@Override
+		public int size() {return 0;}
+		@Override
+		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		@Override
+		public float getEBASR(int ndx) throws PsseModelException {return 0f;}
+		@Override
+		public float getEBASI(int ndx) throws PsseModelException {return 0f;}
+	};
 
+	protected TwoTermDCLineList() {super();}
+	public TwoTermDCLineList(PsseModel model) {super(model);}
+	
+	
+	/** Get a Two Terminal DC Line by it's index. */
 	@Override
-	public TwoTermDCLine get(int index)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public TwoTermDCLine get(int index) {return new TwoTermDCLine(this, index);}
+	/** Get a Two Terminal DC Line by it's ID. */
 	@Override
-	public int size()
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public TwoTermDCLine get(String id) {return super.get(id);}
 
 	public String getI(int ndx) throws PsseModelException {return getIPR(ndx);}
 	public String getJ(int ndx) throws PsseModelException {return getIPI(ndx);}
@@ -82,5 +112,21 @@ public abstract class TwoTermDCLineList extends PsseBaseList<TwoTermDCLine>
 
 	public int getCCCITMX(int ndx) throws PsseModelException {return 20;}
 	public float getCCCACC(int ndx) throws PsseModelException {return 1f;}
-
+	public float getTRR(int ndx) throws PsseModelException {return 1f;}
+	public float getTAPR(int ndx) throws PsseModelException {return 1f;}
+	public float getTMXR(int ndx) throws PsseModelException {return 1.5f;}
+	public float getTMNR(int ndx) throws PsseModelException {return 0.51f;}
+	public float getSTPR(int ndx) throws PsseModelException {return .00625f;}
+	public float getTRI(int ndx) throws PsseModelException {return 1f;}
+	public float getTAPI(int ndx) throws PsseModelException {return 1f;}
+	public float getTMXI(int ndx) throws PsseModelException {return 1.5f;}
+	public float getTMNI(int ndx) throws PsseModelException {return 0.51f;}
+	public float getSTPI(int ndx) throws PsseModelException {return .00625f;}
+	public abstract float getEBASR(int ndx) throws PsseModelException;
+	public abstract float getEBASI(int ndx) throws PsseModelException;
+	public float getALFMXrad(int ndx) throws PsseModelException {return PAMath.deg2rad(getALFMX(ndx));}
+	public float getALFMNrad(int ndx) throws PsseModelException {return PAMath.deg2rad(getALFMN(ndx));}
+	public float getGAMMXrad(int ndx) throws PsseModelException {return PAMath.deg2rad(getGAMMX(ndx));}
+	public float getGAMMNrad(int ndx) throws PsseModelException {return PAMath.deg2rad(getGAMMN(ndx));}
+	public boolean isInSvc(int ndx) throws PsseModelException {return getMDC(ndx) != 0;}
 }

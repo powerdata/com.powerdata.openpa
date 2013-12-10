@@ -2,13 +2,13 @@ package com.powerdata.openpa.psse.util;
 
 import java.util.Arrays;
 
-import com.powerdata.openpa.psse.ACBranch;
-import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.TwoTermDev;
+import com.powerdata.openpa.psse.TwoTermDevList;
 import com.powerdata.openpa.tools.LinkNet;
 
 @Deprecated
@@ -116,13 +116,13 @@ public class TP
 	LinkNet configureNetwork(PsseModel model) throws PsseModelException
 	{
 		BusList buses = model.getBuses();
-		ACBranchList branches = model.getBranches();
+		TwoTermDevList branches = model.getTwoTermDevs();
 		LinkNet rv = new LinkNet();
 		int nbr = branches.size();
 		rv.ensureCapacity(buses.getI(buses.size()-1), nbr);
 		for(int i=0; i < nbr; ++i)
 		{
-			ACBranch b = branches.get(i);
+			TwoTermDev b = branches.get(i);
 			if (b.isInSvc())
 			{
 				rv.addBranch(b.getFromBus().getIndex(), b.getToBus().getIndex());
