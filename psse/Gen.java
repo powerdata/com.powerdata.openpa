@@ -2,6 +2,10 @@ package com.powerdata.openpa.psse;
 
 public class Gen extends PsseBaseObject implements OneTermDev
 {
+	public enum GenRegMode
+	{
+		Voltage, ReactivePower;
+	}
 
 	protected GenList _list;
 	
@@ -31,8 +35,15 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	public GenType getGenType() throws PsseModelException {return _list.getType(_ndx);}
+	@Deprecated
 	/** is unit in Automatic Voltage Regulation (AVR) */
 	public boolean isInAvr() throws PsseModelException {return _list.isInAvr(_ndx);}
+	
+	/** get regulation Mode */
+	public GenRegMode getRegMode() throws PsseModelException {return _list.getRegMode(_ndx);}
+	/** set reguation model */
+	public void setRegMode(GenRegMode mode) throws PsseModelException {_list.setRegMode(_ndx, mode);}
+
 
 	/* Raw PSS/e methods */
 	
@@ -97,4 +108,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public float getPS() throws PsseModelException {return _list.getPS(_ndx);}
 	/** set MW setpoint */
 	public void setPS(float mw) throws PsseModelException {_list.setPS(_ndx, mw);}
+	/** get MVAr set point (when regulating reactive power) */
+	public float getQS() throws PsseModelException {return _list.getQS(_ndx);}
+	/** set MVAr set point (when regulating reactive power) */
+	public void setQS(float mvar) throws PsseModelException {_list.setQS(_ndx, mvar);}
 }

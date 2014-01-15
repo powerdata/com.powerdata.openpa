@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.Gen.GenRegMode;
 import com.powerdata.openpa.tools.PAMath;
 
 public abstract class GenList extends PsseBaseList<Gen>
@@ -133,8 +134,19 @@ public abstract class GenList extends PsseBaseList<Gen>
 	/** set MW setpoint */
 	public void setPS(int ndx, float mw) throws PsseModelException {}
 
+	@Deprecated /* use getRegMode instead */
 	public boolean isInAvr(int ndx) throws PsseModelException
 	{
 		return !((getQ(ndx) == getQB(ndx)) && (getQ(ndx) == getQT(ndx))); 
 	}
+
+	public GenRegMode getRegMode(int ndx) throws PsseModelException
+	{
+		return ((getQ(ndx) == getQB(ndx)) && (getQ(ndx) == getQT(ndx))) ? 
+				GenRegMode.ReactivePower : GenRegMode.Voltage;
+	}
+
+	public void setRegMode(int ndx, GenRegMode mode) throws PsseModelException {}
+	public float getQS(int ndx) throws PsseModelException {return 0;}
+	public void setQS(int _ndx, float mvar) throws PsseModelException {}
 }
