@@ -103,6 +103,7 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public float getQB(int ndx) throws PsseModelException  {return -9999f;}
 	/** Regulated voltage setpoint entered in p.u. */
 	public float getVS(int ndx) throws PsseModelException {return 1f;}
+	public void setVS(int ndx, float vmpu) throws PsseModelException {}
 	/** remote regulated bus number or name.  Set to 0 if regulating local bus */
 	public String getIREG(int ndx) throws PsseModelException {return getI(ndx);}
 	/** total MVA base of units represented in this machine */
@@ -149,4 +150,5 @@ public abstract class GenList extends PsseBaseList<Gen>
 	public void setRegMode(int ndx, GenRegMode mode) throws PsseModelException {}
 	public float getQS(int ndx) throws PsseModelException {return 0;}
 	public void setQS(int _ndx, float mvar) throws PsseModelException {}
+
 }

@@ -68,6 +68,8 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public float getQB() throws PsseModelException {return _list.getQB(_ndx);}
 	/** Regulated voltage setpoint entered in p.u. */
 	public float getVS() throws PsseModelException {return _list.getVS(_ndx);}
+	/** Regulated voltage setpoint entered in p.u. */
+	public void setVS(float vmpu) throws PsseModelException {_list.setVS(_ndx, vmpu);}
 	/** remote regulated bus number or name.  Set to 0 if regulating local bus */
 	public String getIREG() throws PsseModelException {return _list.getIREG(_ndx);}
 	/** total MVA base of units represented in this machine */
