@@ -5,13 +5,13 @@ import com.powerdata.openpa.tools.BaseObject;
 public interface OneTermDev extends BaseObject
 {
 	public Bus getBus() throws PsseModelException;
-	/** get the load MW */
+	/** get the current MW */
 	public float getP() throws PsseModelException;
-	/** get the load MVar */
+	/** get the current MVar */
 	public float getQ() throws PsseModelException;
-	/** set the load MW */
+	/** set the current MW */
 	public void setP(float mw) throws PsseModelException;
-	/** set the load MVar */
+	/** set the current MVar */
 	public void setQ(float mvar) throws PsseModelException;
 	/** get active power p.u. on 100MVA base */
 	public float getPpu() throws PsseModelException;
