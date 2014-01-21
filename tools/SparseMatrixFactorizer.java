@@ -164,7 +164,7 @@ class NodeCounts
 	{
 		for(int i=_nz; i < _sndx.length; ++i)
 		{
-			int bndx = getLW(_sndx[i]);
+			int bndx = _sndx[i];
 			int cnt = _conncnt[bndx];
 			if (cnt == cd)
 			{
@@ -193,16 +193,6 @@ class NodeCounts
 		
 	}
 	
-	int getHW(long l)
-	{
-		return (int) (l & HW);
-	}
-
-	int getLW(long l)
-	{
-		return (int) (l & LW);
-	}
-
 	void sort()
 	{
 		int nbus = _conncnt.length;
