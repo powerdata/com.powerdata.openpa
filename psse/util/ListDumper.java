@@ -7,22 +7,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.tools.BaseList;
+import com.powerdata.openpa.tools.BaseObject;
 
 public class ListDumper
 {
 	static final char Dlm = ',';
-	static final Set<String> MethodFilter = 
-		new HashSet<>(Arrays.asList(new String[] {"getPsseModel", "getClass", "isEmpty","getBusNdxsForType","getBusesForType"}));
-		
-	static final Set<String> ListFilter = 
-		new HashSet<>(Arrays.asList(new String[] {"getBus", "getClass"}));
-	
 	public void dump(PsseModel model, File outdir) throws IOException,
 			ReflectiveOperationException, RuntimeException
 	{
@@ -30,13 +22,25 @@ public class ListDumper
 		Method[] methods = model.getClass().getMethods();
 		for (Method m : methods)
 		{
-			String nm = m.getName();
-			if (nm.startsWith("get") && nm.endsWith("s") && !ListFilter.contains(nm))
+			Class<?> rtype = m.getReturnType();
+			if (rtype.getPackage() != null && rtype.getPackage().getName()
+					.equals("com.powerdata.openpa.psse"))
 			{
-				String title = nm.substring(3);
-				File nfile = new File(outdir, title+".csv");
-				BaseList<?> list = (BaseList<?>) m.invoke(model, new Object[] {});
-				dumpList(nfile, list);
+				while (rtype != null && rtype != Object.class
+						&& rtype != void.class)
+				{
+					if (rtype == BaseList.class
+							&& m.getParameterTypes().length == 0)
+					{
+						String nm = m.getName();
+						String title = nm.substring(3);
+						File nfile = new File(outdir, title + ".csv");
+						BaseList<?> list = (BaseList<?>) m.invoke(model,
+								new Object[] {});
+						dumpList(nfile, list);
+					}
+					rtype = rtype.getSuperclass();
+				}
 			}
 		}
 	}
@@ -49,14 +53,25 @@ public class ListDumper
 		ArrayList<String> mname = new ArrayList<>();
 		for (Method m : methods)
 		{
-			String nm = m.getName();
-			boolean yget = nm.startsWith("get");
-			boolean yis = nm.startsWith("is");
-			if ((yget || yis) && nm.length() > 3
-					&& !MethodFilter.contains(nm))
+			Class<?> mclass = m.getReturnType();
+			while (mclass != null && mclass != Object.class && mclass != void.class)
 			{
-				ometh.add(m);
-				mname.add(nm.substring(yget?3:2));
+				boolean isbasobj = false;
+				for(Class<?> ic : mclass.getInterfaces()) {if (ic == BaseObject.class){isbasobj=true; break;}}
+				if (mclass.isPrimitive() || isbasobj || mclass == String.class)
+				{
+					Class<?>[] ptype = m.getParameterTypes();
+					if (ptype.length == 1 && ptype[0] == int.class)
+					{
+
+						String nm = m.getName();
+						boolean yget = nm.startsWith("get");
+						boolean yis = nm.startsWith("is");
+						ometh.add(m);
+						mname.add(nm.equals("get")?"toString()" : nm.substring(yget ? 3 : (yis ? 2 : 0)));
+					}
+				}
+				mclass = mclass.getSuperclass();
 			}
 		}
 		int n = list.size();
@@ -91,15 +106,4 @@ public class ListDumper
 			pw.close();
 		}
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception
-	{
-		PsseModel model = PsseModel.Open("pssecsv:path=/tmp/pjm");
-		File outdir = new File("/tmp/pjmmodel");
-		new ListDumper().dump(model, outdir);
-	}
-
 }
