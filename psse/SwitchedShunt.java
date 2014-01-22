@@ -20,10 +20,7 @@ public class SwitchedShunt extends PsseBaseObject
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}
 	/** control mode */
 	public SwShuntCtrlMode getCtrlMode() throws PsseModelException {return _list.getCtrlMode(_ndx);}
-	/** get voltage limits for controlled bus */
-	public Limits getVoltageLimits() throws PsseModelException {return _list.getVoltageLimits(_ndx);}
-	/** get reactive power limits for controlled bus */
-	public Limits getReacPwrLimits() throws PsseModelException {return _list.getVoltageLimits(_ndx);}
+	/** get voltage limits for controlled bus TODO:  this does not reflect how these objects are modeled in PSS/e*/
 	/** get controlled bus */
 	public Bus getCtrlBus() throws PsseModelException {return _list.getCtrlBus(_ndx);}
 	/** get case shunt susceptance */

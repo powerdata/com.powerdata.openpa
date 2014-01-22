@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.Limits;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 
@@ -75,5 +76,12 @@ public class SvcRawList extends com.powerdata.openpa.psse.SvcList
 	public float getRMPCT(int ndx) throws PsseModelException {return _rmpct[ndx];}
 	@Override
 	public float getBINIT(int ndx) throws PsseModelException {return _binit[ndx];}
+
+	@Override
+	public Limits getReactivePowerLimits(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
