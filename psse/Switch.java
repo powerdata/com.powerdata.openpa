@@ -19,6 +19,7 @@ public class Switch extends PsseBaseObject implements ACBranch
 	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}
 	@Override
 	public Bus getToBus() throws PsseModelException {return _list.getToBus(_ndx);}
+	@Deprecated // use getObjectName()
 	public String getName() throws PsseModelException {return _list.getName(_ndx);}
 	public SwitchState getState() throws PsseModelException {return _list.getState(_ndx);}
 	public void setState(SwitchState state) throws PsseModelException { _list.setState(_ndx,state); }

@@ -92,8 +92,7 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 	public float getWINDV1(int ndx) throws PsseModelException
 	{
 		return (getCW(ndx)==2)?
-				_model.getBus(getI(ndx)).getBASKV() :
-				1f;
+				_model.getBus(getI(ndx)).getBASKV() : 1f;
 	}
 	/** nominal winding 1 voltage in kV */
 	public float getNOMV1(int ndx) throws PsseModelException {return getFromBus(ndx).getBASKV();}

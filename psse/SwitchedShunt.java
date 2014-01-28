@@ -2,7 +2,7 @@ package com.powerdata.openpa.psse;
 
 /* TODO:  Not fully implemented.  Shunts are broken out into separate lists */
 
-public class SwitchedShunt extends PsseBaseObject
+public class SwitchedShunt extends PsseBaseObject implements OneTermDev
 {
 	protected SwitchedShuntList _list;
 	
@@ -46,5 +46,23 @@ public class SwitchedShunt extends PsseBaseObject
 	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
 	
 	ShuntList getShunts() throws PsseModelException {return _list.getShunts(_ndx);}
-	
+
+	@Override
+	public float getP() throws PsseModelException {return _list.getP(_ndx);}
+	@Override
+	public float getQ() throws PsseModelException {return _list.getQ(_ndx);}
+	@Override
+	public void setP(float mw) throws PsseModelException {_list.setP(_ndx, mw);}
+	@Override
+	public void setQ(float mvar) throws PsseModelException {_list.setQ(_ndx, mvar);}
+	@Override
+	public float getPpu() throws PsseModelException {return _list.getPpu(_ndx);}
+	@Override
+	public void setPpu(float p) throws PsseModelException {_list.setPpu(_ndx, p);}
+	@Override
+	public float getQpu() throws PsseModelException {return _list.getQpu(_ndx);}
+	@Override
+	public void setQpu(float q) throws PsseModelException {_list.setQpu(_ndx, q);}
+	@Override
+	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 }

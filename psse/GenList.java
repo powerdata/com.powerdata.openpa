@@ -149,6 +149,6 @@ public abstract class GenList extends PsseBaseList<Gen>
 
 	public void setRegMode(int ndx, GenRegMode mode) throws PsseModelException {}
 	public float getQS(int ndx) throws PsseModelException {return 0;}
-	public void setQS(int _ndx, float mvar) throws PsseModelException {}
+	public void setQS(int ndx, float mvar) throws PsseModelException {}
 
 }

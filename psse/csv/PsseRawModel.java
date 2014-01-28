@@ -220,28 +220,33 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		return _generatorList;
 	}
 
+	@Deprecated
 	public int getIslandCount() throws PsseModelException
 	{
 		return _tp.getIslandCount();
 	}
 
+	@Deprecated
 	public boolean isNodeEnergized(int node) throws PsseModelException
 	{
 		int island = _tp.getIsland(node);
 		return (island == -1) ? false : _tp.isIslandEnergized(island);
 	}
 
+	@Deprecated
 	public int getIsland(int node) throws PsseModelException
 	{
 		return _tp.getIsland(node);
 	}
 
+	@Deprecated
 	public BusList getBusesForIsland(int island) throws PsseModelException
 	{
 		return new com.powerdata.openpa.psse.util.BusSubList(_buses,
 				_tp.getIslandNodes(island));
 	}
 
+	@Deprecated
 	public BusTypeCode getBusType(int node) throws PsseModelException
 	{
 		return _tp.getBusType(node);
@@ -255,6 +260,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		return _islands;
 	}
 
+	@Deprecated
 	@Override
 	public int[] getBusNdxForType(BusTypeCode bustype)
 			throws PsseModelException

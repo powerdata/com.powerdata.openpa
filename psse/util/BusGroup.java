@@ -1,49 +1,67 @@
 package com.powerdata.openpa.psse.util;
 
-import com.powerdata.openpa.psse.PsseModel;
+import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.GenList;
+import com.powerdata.openpa.psse.LineList;
+import com.powerdata.openpa.psse.LoadList;
+import com.powerdata.openpa.psse.PhaseShifterList;
+import com.powerdata.openpa.psse.PsseLists;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.LinkNet;
+import com.powerdata.openpa.psse.ShuntList;
+import com.powerdata.openpa.psse.SvcList;
+import com.powerdata.openpa.psse.SwitchList;
+import com.powerdata.openpa.psse.SwitchedShuntList;
+import com.powerdata.openpa.psse.TransformerList;
+import com.powerdata.openpa.psse.TwoTermDCLineList;
+import com.powerdata.openpa.tools.AbstractBaseObject;
 
-/**
- * Create connectivity-based groups of buses
- * 
- * @author chris@powerdata.com
- *
- */
-public abstract class BusGroup
+public class BusGroup extends AbstractBaseObject implements PsseLists
 {
-	/** from bus index to group index */
-	int[]	_busgrp;
-	/** from group index to representative Bus */
-	int[]	_grpbus;
+	BusGroupList _bglist;
 	
-	public BusGroup(PsseModel model, GroupBuilder gbld)
-			throws PsseModelException
+	public BusGroup(BusGroupList list, int ndx)
 	{
-		LinkNet gnet = gbld.build(model);
-		int[][] groups = gnet.findGroups();
-		int ngrp = groups.length, nbus = model.getBuses().size();
-		_busgrp = new int[nbus];
-		_grpbus = new int[ngrp];
-		for (int igrp = 0; igrp < ngrp; ++igrp)
-		{
-			int[] grp = groups[igrp];
-			for (int b : grp)
-				_busgrp[b] = igrp;
-			_grpbus[igrp] = grp[0];
-		}
+		super(list, ndx);
+		_bglist = list;
 	}
 
-	public int size() {return _busgrp.length;}
-	
-	/** return the offset of the group of which this bus is a member */
-	public int getGroupOfs(int busndx)
+	@Override
+	public BusList getBuses() throws PsseModelException {return _bglist.getBuses(_ndx);}
+	@Override
+	public GenList getGenerators() throws PsseModelException {return _bglist.getGenerators(_ndx);}
+	@Override
+	public LoadList getLoads() throws PsseModelException {return _bglist.getLoads(_ndx);}
+	@Override
+	public LineList getLines() throws PsseModelException {return _bglist.getLines(_ndx);}
+
+	@Override
+	public TransformerList getTransformers() throws PsseModelException
 	{
-		return _busgrp[busndx];
+		return _bglist.getTransformers(_ndx);
 	}
-	
-	public int getGroupBusNdx(int busndx)
+
+	@Override
+	public PhaseShifterList getPhaseShifters() throws PsseModelException
 	{
-		return _grpbus[_busgrp[busndx]];
+		return _bglist.getPhaseShifters(_ndx);
 	}
+
+	@Override
+	public SwitchList getSwitches() throws PsseModelException {return _bglist.getSwitches(_ndx);}
+	@Override
+	public ShuntList getShunts() throws PsseModelException {return _bglist.getShunts(_ndx);}
+	@Override
+	public SvcList getSvcs() throws PsseModelException {return _bglist.getSvcs(_ndx);}
+	@Override
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException 
+	{
+		return _bglist.getSwitchedShunts(_ndx);
+	}
+
+	@Override
+	public TwoTermDCLineList getTwoTermDCLines() throws PsseModelException
+	{
+		return _bglist.getTwoTermDCLines(_ndx);
+	}
+
 }

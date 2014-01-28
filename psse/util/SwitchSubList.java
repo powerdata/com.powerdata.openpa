@@ -8,67 +8,72 @@ import com.powerdata.openpa.psse.SwitchState;
 
 public class SwitchSubList extends SwitchList
 {
-	SwitchList _switches;
-	int _ndxs[];
-	public SwitchSubList(SwitchList switches, int ndxs[]) throws PsseModelException
+	SwitchList _base;
+	int[] _ndxs;
+	boolean _indexed = false;
+	
+	public SwitchSubList() {super();}
+	public SwitchSubList(SwitchList switches, int[] ndxs) throws PsseModelException
 	{
 		super(switches.getPsseModel());
-		_switches = switches;
+		_base = switches;
 		_ndxs = ndxs;
-		reindex();
 	}
+
+	
 	@Override
-	public void commit() throws PsseModelException
+	public Switch get(String id)
 	{
-		_switches.commit();
+		if (!_indexed)
+		{
+			_indexed = true;
+			try
+			{
+				reindex();
+			} catch (PsseModelException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return super.get(id);
 	}
+
+	protected int map(int ndx) {return _ndxs[ndx];}
 	@Override
-	public Bus getFromBus(int ndx) throws PsseModelException
-	{
-		return _switches.getFromBus(_ndxs[ndx]);
-	}
+	public Bus getFromBus(int ndx) throws PsseModelException {return _base.getFromBus(map(ndx));}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException
-	{
-		return _switches.getToBus(_ndxs[ndx]);
-	}
+	public Bus getToBus(int ndx) throws PsseModelException {return _base.getToBus(map(ndx));}
 	@Override
-	public String getName(int ndx) throws PsseModelException
-	{
-		return _switches.getName(_ndxs[ndx]);
-	}
+	@Deprecated // use getObjectName
+	public String getName(int ndx) throws PsseModelException {return _base.getName(map(ndx));}
 	@Override
-	public SwitchState getState(int ndx) throws PsseModelException
-	{
-		return _switches.getState(_ndxs[ndx]);
-	}
+	public SwitchState getState(int ndx) throws PsseModelException {return _base.getState(map(ndx));}
 	@Override
-	public void setState(int ndx, SwitchState state) throws PsseModelException
-	{
-		_switches.setState(_ndxs[ndx],state);
-	}
-	@Override
-	public String getObjectID(int ndx) throws PsseModelException
-	{
-		return _switches.getObjectID(_ndxs[ndx]);
-	}
-	@Override
-	public int size() { return _ndxs.length; }
+	public void setState(int ndx, SwitchState state) throws PsseModelException {_base.setState(map(ndx), state);}
 	@Override
 	public boolean canOperateUnderLoad(int ndx) throws PsseModelException
 	{
-		return _switches.canOperateUnderLoad(_ndxs[ndx]);
+		return _base.canOperateUnderLoad(map(ndx));
 	}
 	@Override
-	public Switch get(String id) {return new Switch(_ndxs[_idToNdx.get(id)], this);}
+	public String getI(int ndx) throws PsseModelException {return _base.getI(map(ndx));}
 	@Override
-	public String getObjectName(int ndx) throws PsseModelException {return _switches.getObjectName(_ndxs[ndx]);}
+	public String getJ(int ndx) throws PsseModelException {return _base.getJ(map(ndx));}
 	@Override
-	public String getI(int ndx) throws PsseModelException {return _switches.getI(_ndxs[ndx]);}
+	public boolean isInSvc(int ndx) throws PsseModelException {return _base.isInSvc(map(ndx));}
 	@Override
-	public String getJ(int ndx) throws PsseModelException {return _switches.getJ(_ndxs[ndx]);}
+	public void commit() throws PsseModelException {_base.commit();}
 	@Override
-	public boolean isInSvc(int ndx) throws PsseModelException {return _switches.isInSvc(_ndxs[ndx]);}
+	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(map(ndx));}
 	@Override
-	public int getRootIndex(int ndx) {return _switches.getRootIndex(_ndxs[ndx]);}
+	public String getObjectName(int ndx) throws PsseModelException {return _base.getObjectName(map(ndx));}
+	@Override
+	public String getFullName(int ndx) throws PsseModelException {return _base.getFullName(map(ndx));}
+	@Override
+	public String getDebugName(int ndx) throws PsseModelException {return _base.getDebugName(map(ndx));}
+	@Override
+	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
+	@Override
+	public int size() {return _ndxs.length;}
+	
 }

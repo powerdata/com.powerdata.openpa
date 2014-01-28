@@ -242,7 +242,7 @@ public class LinkNet implements Cloneable
 		boolean used[] = new boolean[bcnt];
 		for (int i = 0; i < bcnt; ++i)
 		{
-			if (_list[i] == -2)
+			if (_list[i] == NoNode)
 			{
 				used[i] = true;
 				--brem;

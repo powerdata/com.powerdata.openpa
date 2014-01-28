@@ -12,9 +12,6 @@ public class Bus extends PsseBaseObject
 		_list = list;
 	}
 
-	@Override
-	public String getDebugName() throws PsseModelException {return getNAME();}
-	
 	/* Groups */
 	public SwitchList getSwitches() throws PsseModelException { return _list.getSwitches(_ndx); }
 	public GenList getGenerators() throws PsseModelException { return _list.getGenerators(_ndx); }

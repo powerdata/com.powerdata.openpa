@@ -10,14 +10,6 @@ public class Load extends PsseBaseObject implements OneTermDev
 		_list = list;
 	}
 
-	@Override
-	public String getDebugName() throws PsseModelException
-	{
-		return String.format("%s %s", getBus().getNAME(), getID());
-	}
-
-	/* convenience methods */
-	
 	/** Load bus (I) */ 
 	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}

@@ -11,7 +11,7 @@ import com.powerdata.openpa.tools.AbstractBaseObject;
  * @author marck@powerdata.com
  *
  */
-public class PsseModel
+public class PsseModel implements PsseLists
 {
 	/** static translations of scheme to input class */
 	static HashMap<String,String> _SchemeToInputClass = new HashMap<String,String>();
@@ -99,22 +99,33 @@ public class PsseModel
 	public IslandList getIslands() throws PsseModelException {return IslandList.Empty;}
 
 	/* equipment group lists */
+	@Override
 	public BusList getBuses() throws PsseModelException {return BusList.Empty;}
+	@Override
 	public GenList getGenerators() throws PsseModelException {return GenList.Empty;}
+	@Override
 	public LoadList getLoads() throws PsseModelException {return LoadList.Empty;}
+	@Override
 	public LineList getLines() throws PsseModelException {return LineList.Empty;}
+	@Override
 	public TransformerList getTransformers() throws PsseModelException
 	{
 		return TransformerList.Empty;
 	}
+	@Override
 	public PhaseShifterList getPhaseShifters() throws PsseModelException
 	{
 		return PhaseShifterList.Empty;
 	}
+	@Override
 	public SwitchList getSwitches() throws PsseModelException {return SwitchList.Empty;}
+	@Override
 	public ShuntList getShunts() throws PsseModelException {return ShuntList.Empty;}
+	@Override
 	public SvcList getSvcs() throws PsseModelException {return SvcList.Empty;}
+	@Override
 	public SwitchedShuntList getSwitchedShunts() throws PsseModelException {return SwitchedShuntList.Empty;}
+	@Override
 	public TwoTermDCLineList getTwoTermDCLines() throws PsseModelException {return TwoTermDCLineList.Empty;}
 	
 	/** for convience, get a list of all ac branches */
@@ -136,8 +147,10 @@ public class PsseModel
 	public String getURI() {return _uri;}
 	public void setURI(String uri) {_uri = uri;}
 	
+	@Deprecated
 	public int[] getBusNdxForType(BusTypeCode bustype) throws PsseModelException {return new int[0];}
 
+	@Deprecated
 	public BusList getBusesForType(BusTypeCode bustype)
 			throws PsseModelException
 	{

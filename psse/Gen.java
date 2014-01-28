@@ -15,14 +15,6 @@ public class Gen extends PsseBaseObject implements OneTermDev
 		_list = list;
 	}
 
-	@Override
-	public String getDebugName() throws PsseModelException
-	{
-		return String.format("%s %s", getBus().getNAME(), getID());
-	}
-
-	/* Convenience methods */
-
 	/** Generator bus (I) */ 
 	@Override
 	public Bus getBus() throws PsseModelException {return _list.getBus(_ndx);}

@@ -25,6 +25,7 @@ public abstract class SwitchList extends PsseBaseList<Switch>
 
 	public abstract Bus getFromBus(int ndx) throws PsseModelException;
 	public abstract Bus getToBus(int ndx) throws PsseModelException;
+	@Deprecated // use getObjectName, this is redundant
 	public String getName(int ndx) throws PsseModelException {return "";}
 	public SwitchState getState(int ndx) throws PsseModelException {return SwitchState.Closed;}
 	public void setState(int ndx, SwitchState state) throws PsseModelException {}

@@ -3,6 +3,7 @@ package com.powerdata.openpa.psse.util;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OwnershipList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.tools.Complex;
@@ -11,125 +12,154 @@ public class TransformerSubList extends TransformerList
 {
 	TransformerList _base;
 	int[] _ndxs;
-	
-	public TransformerSubList(TransformerList base, int[] ndxs)
-			throws PsseModelException
+	boolean _indexed = false;
+		
+	public TransformerSubList(TransformerList base, int[] ndxs) throws PsseModelException
 	{
 		super(base.getPsseModel());
 		_base = base;
 		_ndxs = ndxs;
-		reindex();
+	}
+	
+	protected int map(int ndx) {return _ndxs[ndx];}
+
+	@Override
+	public Transformer get(String id)
+	{
+		if (!_indexed)
+		{
+			_indexed = true;
+			try
+			{
+				reindex();
+			} catch (PsseModelException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return super.get(id);
 	}
 
 	@Override
-	public Bus getFromBus(int ndx) throws PsseModelException { return _base.getFromBus(_ndxs[ndx]); }
+	public String getCKT(int ndx) throws PsseModelException {return _base.getCKT(map(ndx));}
 	@Override
-	public Bus getToBus(int ndx) throws PsseModelException { return _base.getToBus(_ndxs[ndx]); }
+	public float getANG1(int ndx) throws PsseModelException {return _base.getANG1(map(ndx));}
 	@Override
-	public Complex getZ(int ndx) throws PsseModelException { return _base.getZ(_ndxs[ndx]); }
+	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(map(ndx));}
 	@Override
-	public Complex getY(int ndx) throws PsseModelException { return _base.getY(_ndxs[ndx]); }
+	public Bus getFromBus(int ndx) throws PsseModelException {return _base.getFromBus(map(ndx));}
 	@Override
-	public float getFromTap(int ndx) throws PsseModelException { return _base.getFromTap(_ndxs[ndx]); }
+	public Bus getToBus(int ndx) throws PsseModelException {return _base.getToBus(map(ndx));}
 	@Override
-	public float getToTap(int ndx) throws PsseModelException { return _base.getToTap(_ndxs[ndx]); }
+	public float getR(int ndx) throws PsseModelException {return _base.getR(map(ndx));}
 	@Override
-	public float getPhaseShift(int ndx) throws PsseModelException { return _base.getPhaseShift(_ndxs[ndx]); }
+	public float getX(int ndx) throws PsseModelException {return _base.getX(map(ndx));}
 	@Override
-	public boolean isInSvc(int ndx) throws PsseModelException { return _base.isInSvc(_ndxs[ndx]); }
+	public Complex getZ(int ndx) throws PsseModelException {return _base.getZ(map(ndx));}
 	@Override
-	public String getI(int ndx) throws PsseModelException {return _base.getI(_ndxs[ndx]);}
+	public Complex getY(int ndx) throws PsseModelException {return _base.getY(map(ndx));}
 	@Override
-	public String getJ(int ndx) throws PsseModelException {return _base.getJ(_ndxs[ndx]);}
+	public float getFromTap(int ndx) throws PsseModelException {return _base.getFromTap(map(ndx));}
 	@Override
-	public String getCKT(int ndx) throws PsseModelException { return _base.getCKT(_ndxs[ndx]); }
+	public float getToTap(int ndx) throws PsseModelException {return _base.getToTap(map(ndx));}
 	@Override
-	public int getCW(int ndx) throws PsseModelException { return _base.getCW(_ndxs[ndx]); }
+	public float getPhaseShift(int ndx) throws PsseModelException {return _base.getPhaseShift(map(ndx));}
 	@Override
-	public int getCZ(int ndx) throws PsseModelException { return _base.getCZ(_ndxs[ndx]); }
+	public boolean isInSvc(int ndx) throws PsseModelException {return _base.isInSvc(map(ndx));}
 	@Override
-	public int getCM(int ndx) throws PsseModelException { return _base.getCM(_ndxs[ndx]); }
+	public TransformerCtrlMode getCtrlMode(int ndx) throws PsseModelException
+	{
+		return _base.getCtrlMode(map(ndx));
+	}
 	@Override
-	public float getMAG1(int ndx) throws PsseModelException { return _base.getMAG1(_ndxs[ndx]); }
+	public boolean getRegStat(int ndx) throws PsseModelException {return _base.getRegStat(map(ndx));}
 	@Override
-	public float getMAG2(int ndx) throws PsseModelException { return _base.getMAG2(_ndxs[ndx]); }
+	public void setRegStat(int ndx, boolean stat) throws PsseModelException {_base.setRegStat(map(ndx), stat);}
 	@Override
-	public int getNMETR(int ndx) throws PsseModelException { return _base.getNMETR(_ndxs[ndx]); }
+	public String getI(int ndx) throws PsseModelException {return _base.getI(map(ndx));}
 	@Override
-	public String getNAME(int ndx) throws PsseModelException { return _base.getNAME(_ndxs[ndx]); }
+	public String getJ(int ndx) throws PsseModelException {return _base.getJ(map(ndx));}
 	@Override
-	public int getSTAT(int ndx) throws PsseModelException { return _base.getSTAT(_ndxs[ndx]); }
+	public int getCW(int ndx) throws PsseModelException {return _base.getCW(map(ndx));}
 	@Override
-	public float getR1_2(int ndx) throws PsseModelException { return _base.getR1_2(_ndxs[ndx]); }
+	public int getCZ(int ndx) throws PsseModelException {return _base.getCZ(map(ndx));}
 	@Override
-	public float getX1_2(int ndx) throws PsseModelException {return _base.getX1_2(_ndxs[ndx]);}
+	public int getCM(int ndx) throws PsseModelException {return _base.getCM(map(ndx));}
 	@Override
-	public float getSBASE1_2(int ndx) throws PsseModelException { return _base.getSBASE1_2(_ndxs[ndx]); }
+	public float getMAG1(int ndx) throws PsseModelException {return _base.getMAG1(map(ndx));}
 	@Override
-	public float getWINDV1(int ndx) throws PsseModelException { return _base.getWINDV1(_ndxs[ndx]); }
+	public float getMAG2(int ndx) throws PsseModelException {return _base.getMAG2(map(ndx));}
 	@Override
-	public float getNOMV1(int ndx) throws PsseModelException { return _base.getNOMV1(_ndxs[ndx]); }
+	public int getNMETR(int ndx) throws PsseModelException {return _base.getNMETR(map(ndx));}
 	@Override
-	public float getANG1(int ndx) throws PsseModelException { return _base.getANG1(_ndxs[ndx]); }
+	public String getNAME(int ndx) throws PsseModelException {return _base.getNAME(map(ndx));}
 	@Override
-	public float getRATA1(int ndx) throws PsseModelException { return _base.getRATA1(_ndxs[ndx]); }
+	public int getSTAT(int ndx) throws PsseModelException {return _base.getSTAT(map(ndx));}
 	@Override
-	public float getRATB1(int ndx) throws PsseModelException { return _base.getRATB1(_ndxs[ndx]); }
+	public float getR1_2(int ndx) throws PsseModelException {return _base.getR1_2(map(ndx));}
 	@Override
-	public float getRATC1(int ndx) throws PsseModelException { return _base.getRATC1(_ndxs[ndx]); }
+	public float getX1_2(int ndx) throws PsseModelException {return _base.getX1_2(map(ndx));}
 	@Override
-	public int getCOD1(int ndx) throws PsseModelException { return _base.getCOD1(_ndxs[ndx]); }
+	public float getSBASE1_2(int ndx) throws PsseModelException {return _base.getSBASE1_2(map(ndx));}
 	@Override
-	public String getCONT1(int ndx) throws PsseModelException { return _base.getCONT1(_ndxs[ndx]); }
+	public float getWINDV1(int ndx) throws PsseModelException {return _base.getWINDV1(map(ndx));}
 	@Override
-	public float getRMA1(int ndx) throws PsseModelException { return _base.getRMA1(_ndxs[ndx]); }
+	public float getNOMV1(int ndx) throws PsseModelException {return _base.getNOMV1(map(ndx));}
 	@Override
-	public float getRMI1(int ndx) throws PsseModelException { return _base.getRMI1(_ndxs[ndx]); }
+	public float getRATA1(int ndx) throws PsseModelException {return _base.getRATA1(map(ndx));}
 	@Override
-	public float getVMA1(int ndx) throws PsseModelException { return _base.getVMA1(_ndxs[ndx]); }
+	public float getRATB1(int ndx) throws PsseModelException {return _base.getRATB1(map(ndx));}
 	@Override
-	public float getVMI1(int ndx) throws PsseModelException { return _base.getVMI1(_ndxs[ndx]); }
+	public float getRATC1(int ndx) throws PsseModelException {return _base.getRATC1(map(ndx));}
 	@Override
-	public int getNTP1(int ndx) throws PsseModelException { return _base.getNTP1(_ndxs[ndx]); }
+	public int getCOD1(int ndx) throws PsseModelException {return _base.getCOD1(map(ndx));}
 	@Override
-	public int getTAB1(int ndx) throws PsseModelException { return _base.getTAB1(_ndxs[ndx]); }
+	public String getCONT1(int ndx) throws PsseModelException {return _base.getCONT1(map(ndx));}
 	@Override
-	public float getCR1(int ndx) throws PsseModelException { return _base.getCR1(_ndxs[ndx]); }
+	public float getRMA1(int ndx) throws PsseModelException {return _base.getRMA1(map(ndx));}
 	@Override
-	public float getCX1(int ndx) throws PsseModelException { return _base.getCX1(_ndxs[ndx]); }
+	public float getRMI1(int ndx) throws PsseModelException {return _base.getRMI1(map(ndx));}
 	@Override
-	public OwnershipList getOwnership(int ndx) throws PsseModelException { return _base.getOwnership(_ndxs[ndx]); }
+	public float getVMA1(int ndx) throws PsseModelException {return _base.getVMA1(map(ndx));}
 	@Override
-	public float getWINDV2(int ndx) throws PsseModelException { return _base.getWINDV2(_ndxs[ndx]); }
+	public float getVMI1(int ndx) throws PsseModelException {return _base.getVMI1(map(ndx));}
 	@Override
-	public float getNOMV2(int ndx) throws PsseModelException { return _base.getNOMV2(_ndxs[ndx]); }
+	public int getNTP1(int ndx) throws PsseModelException {return _base.getNTP1(map(ndx));}
 	@Override
-	public float getRMA2(int ndx) throws PsseModelException { return _base.getRMA2(_ndxs[ndx]); }
+	public int getTAB1(int ndx) throws PsseModelException {return _base.getTAB1(map(ndx));}
 	@Override
-	public float getRMI2(int ndx) throws PsseModelException { return _base.getRMI2(_ndxs[ndx]); }
+	public float getCR1(int ndx) throws PsseModelException {return _base.getCR1(map(ndx));}
 	@Override
-	public int getNTP2(int ndx) throws PsseModelException { return _base.getNTP2(_ndxs[ndx]); }
+	public float getCX1(int ndx) throws PsseModelException {return _base.getCX1(map(ndx));}
 	@Override
-	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(_ndxs[ndx]);}
+	public OwnershipList getOwnership(int ndx) throws PsseModelException 
+	{
+		return _base.getOwnership(map(ndx));
+	}
 	@Override
-	public float getR(int ndx) throws PsseModelException {return _base.getR(_ndxs[ndx]);}
+	public float getWINDV2(int ndx) throws PsseModelException {return _base.getWINDV2(map(ndx));}
 	@Override
-	public float getX(int ndx) throws PsseModelException {return _base.getX(_ndxs[ndx]);}
+	public float getNOMV2(int ndx) throws PsseModelException {return _base.getNOMV2(map(ndx));}
 	@Override
-	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(_ndxs[ndx]);}
+	public float getRMA2(int ndx) throws PsseModelException {return _base.getRMA2(map(ndx));}
 	@Override
-	public float getBmag(int ndx) throws PsseModelException {return _base.getBmag(_ndxs[ndx]);}
+	public float getRMI2(int ndx) throws PsseModelException {return _base.getRMI2(map(ndx));}
 	@Override
-	public String getObjectName(int ndx) throws PsseModelException { return _base.getObjectName(_ndxs[ndx]); }
+	public int getNTP2(int ndx) throws PsseModelException {return _base.getNTP2(map(ndx));}
+	@Override
+	public float getGmag(int ndx) throws PsseModelException {return _base.getGmag(map(ndx));}
+	@Override
+	public void commit() throws PsseModelException {_base.commit();}
+	@Override
+	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(map(ndx));}
+	@Override
+	public String getObjectName(int ndx) throws PsseModelException {return _base.getObjectName(map(ndx));}
+	@Override
+	public String getFullName(int ndx) throws PsseModelException {return _base.getFullName(map(ndx));}
+	@Override
+	public String getDebugName(int ndx) throws PsseModelException {return _base.getDebugName(map(ndx));}
+	@Override
+	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
 	public int size() {return _ndxs.length;}
-
-	@Override
-	public TransformerCtrlMode getCtrlMode(int ndx) throws PsseModelException {return _base.getCtrlMode(_ndxs[ndx]);}
-	@Override
-	public boolean getRegStat(int ndx) throws PsseModelException {return _base.getRegStat(_ndxs[ndx]);}
-	@Override
-	public void setRegStat(int ndx, boolean stat) throws PsseModelException {_base.setRegStat(_ndxs[ndx], stat);}
-	@Override
-	public int getRootIndex(int ndx) {return _base.getRootIndex(_ndxs[ndx]);}
 }

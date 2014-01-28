@@ -13,16 +13,6 @@ public class Line extends PsseBaseObject implements ACBranch
 		_list = list;
 	}
 
-	
-	@Override
-	public String getDebugName() throws PsseModelException
-	{
-		return String.format("%s %s %s", getFromBus().getNAME(), 
-				getToBus().getNAME(), getCKT());
-	}
-
-	/* Convenience methods */
-
 	/** From-side bus */
 	@Override
 	public Bus getFromBus() throws PsseModelException {return _list.getFromBus(_ndx);}

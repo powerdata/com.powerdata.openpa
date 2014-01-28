@@ -67,8 +67,13 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public ShuntList getCapacitors(int ndx) throws PsseModelException {return ShuntList.Empty;}
 	public ShuntList getReactors(int ndx) throws PsseModelException {return ShuntList.Empty;}
 	public ShuntList getShunts(int ndx) throws PsseModelException {return ShuntList.Empty;}
-	
-	/**
-	 * TODO:  add limits for 
-	 */
+	public float getP(int ndx) throws PsseModelException {return 0f;}
+	public float getQ(int ndx) throws PsseModelException {return 0f;}
+	public void setP(int ndx, float mw) throws PsseModelException {}
+	public void setQ(int ndx, float mvar) throws PsseModelException {}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
+	public void setPpu(int ndx, float p) throws PsseModelException {setP(ndx, PAMath.pu2mw(p));}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
+	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, PAMath.mvar2pu(q));}
+	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
 }

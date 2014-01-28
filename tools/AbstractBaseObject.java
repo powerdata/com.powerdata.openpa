@@ -8,7 +8,7 @@ import com.powerdata.openpa.psse.PsseModelException;
  * @author chris@powerdata.com
  *
  */
-public abstract class AbstractBaseObject implements BaseObject
+public class AbstractBaseObject implements BaseObject
 {
 	protected int _ndx;
 	protected BaseList<?> _list;

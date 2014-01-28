@@ -106,4 +106,33 @@ public class ListDumper
 			pw.close();
 		}
 	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		String uri = null;
+		File outdir = new File(System.getProperty("user.dir"));
+		for(int i=0; i < args.length;)
+		{
+			String s = args[i++].toLowerCase();
+			int ssx = 1;
+			if (s.startsWith("--")) ++ssx;
+			switch(s.substring(ssx))
+			{
+				case "uri":
+					uri = args[i++];
+					break;
+				case "outdir":
+					outdir = new File(args[i++]);
+					break;
+			}
+		}
+		if (uri == null)
+		{
+			System.err.format("Usage: -uri model_uri "
+					+ "[ --outdir output_directory (deft to $CWD ]");
+			System.exit(1);
+		}
+		
+		new ListDumper().dump(PsseModel.Open(uri), outdir);
+	}
 }
