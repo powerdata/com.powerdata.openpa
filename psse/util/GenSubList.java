@@ -111,7 +111,11 @@ public class GenSubList extends GenList
 	@Override
 	public float getPT(int ndx) throws PsseModelException {return _base.getPT(map(ndx));}
 	@Override
+	public void setPT(int ndx, float mw) throws PsseModelException {_base.setPT(map(ndx), mw);}
+	@Override
 	public float getPB(int ndx) throws PsseModelException {return _base.getPB(map(ndx));}
+	@Override
+	public void setPB(int ndx, float mw) throws PsseModelException {_base.setPB(map(ndx), mw);}
 	@Override
 	public OwnershipList getOwnership(int ndx) throws PsseModelException
 	{
@@ -142,5 +146,4 @@ public class GenSubList extends GenList
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
 	public int size() {return _ndxs.length;}
-	
 }

@@ -83,9 +83,12 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public float getRMPCT() throws PsseModelException {return _list.getRMPCT(_ndx);}
 	/** max active power in MW */
 	public float getPT() throws PsseModelException {return _list.getPT(_ndx);}
+	/** max active power in MW */
+	public void setPT(float mw) throws PsseModelException {_list.setPT(_ndx, mw);}
 	/** min active power in MW */
 	public float getPB() throws PsseModelException {return _list.getPB(_ndx);}
-	
+	/** min active power in MW */
+	public void setPB(float mw) throws PsseModelException {_list.setPB(_ndx, mw);}
 	
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
