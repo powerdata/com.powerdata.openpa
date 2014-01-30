@@ -85,7 +85,11 @@ public class GenSubList extends GenList
 	@Override
 	public float getQT(int ndx) throws PsseModelException {return _base.getQT(map(ndx));}
 	@Override
+	public void setQT(int ndx, float mvar) throws PsseModelException {_base.setQT(map(ndx), mvar);}
+	@Override
 	public float getQB(int ndx) throws PsseModelException {return _base.getQB(map(ndx));}
+	@Override
+	public void setQB(int ndx, float mvar) throws PsseModelException {_base.setQB(map(ndx), mvar);}
 	@Override
 	public float getVS(int ndx) throws PsseModelException {return _base.getVS(map(ndx));}
 	@Override

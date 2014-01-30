@@ -56,8 +56,12 @@ public class Gen extends PsseBaseObject implements OneTermDev
 
 	/** Maximum generator reactive power output (MVAr) */
 	public float getQT() throws PsseModelException {return _list.getQT(_ndx);}
+	/** Maximum generator reactive power output (MVAr) */
+	public void setQT(float mvar) throws PsseModelException {_list.setQT(_ndx, mvar);}
 	/** Minimum generator reactive power output (MVAr) */
 	public float getQB() throws PsseModelException {return _list.getQB(_ndx);}
+	/** Minimum generator reactive power output (MVAr) */
+	public void setQB(float mvar) throws PsseModelException {_list.setQB(_ndx, mvar);}
 	/** Regulated voltage setpoint entered in p.u. */
 	public float getVS() throws PsseModelException {return _list.getVS(_ndx);}
 	/** Regulated voltage setpoint entered in p.u. */
