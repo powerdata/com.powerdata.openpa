@@ -33,4 +33,5 @@ public abstract class SwitchList extends PsseBaseList<Switch>
 	public String getI(int ndx) throws PsseModelException {return getFromBus(ndx).getObjectID();}
 	public String getJ(int ndx) throws PsseModelException {return getToBus(ndx).getObjectID();}
 	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 }

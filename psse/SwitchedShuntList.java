@@ -76,4 +76,5 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
 	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, PAMath.mvar2pu(q));}
 	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 }

@@ -49,6 +49,8 @@ public class ACBranchList extends BaseList<ACBranch>
 		public float getFromBchg() throws PsseModelException {return ACBranchList.this.getFromBchg(_ndx);}
 		@Override
 		public float getToBchg() throws PsseModelException  {return ACBranchList.this.getToBchg(_ndx);}
+		@Override
+		public void setInSvc(boolean state) throws PsseModelException {ACBranchList.this.setInSvc(_ndx, state);}
 	}
 	
 	int _nlines;
@@ -60,6 +62,7 @@ public class ACBranchList extends BaseList<ACBranch>
 	
 	ACBranchList() {super();}
 
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {findBranch(ndx).setInSvc(state);}
 	public float getR(int ndx) throws PsseModelException {return findBranch(ndx).getR();}
 	public float getX(int ndx) throws PsseModelException {return findBranch(ndx).getX();}
 

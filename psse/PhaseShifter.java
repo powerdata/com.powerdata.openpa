@@ -95,10 +95,10 @@ public class PhaseShifter extends PsseBaseObject implements ACBranch
 	/** return Ownership as a list */
 	public OwnershipList getOwnership() throws PsseModelException {return _list.getOwnership(_ndx);}
 
-	/* real time fields */
-	
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 
 	@Override
 	public float getGmag() throws PsseModelException {return _list.getGmag(_ndx);}

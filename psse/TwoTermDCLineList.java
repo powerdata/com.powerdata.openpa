@@ -129,4 +129,5 @@ public abstract class TwoTermDCLineList extends PsseBaseList<TwoTermDCLine>
 	public float getGAMMXrad(int ndx) throws PsseModelException {return PAMath.deg2rad(getGAMMX(ndx));}
 	public float getGAMMNrad(int ndx) throws PsseModelException {return PAMath.deg2rad(getGAMMN(ndx));}
 	public boolean isInSvc(int ndx) throws PsseModelException {return getMDC(ndx) != 0;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 }

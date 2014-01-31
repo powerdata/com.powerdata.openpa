@@ -18,7 +18,7 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	
 	// Base values from the CSV file
 	String[] _i, _swrem, _rmidnt;
-	int[] _modsw;
+	int[] _modsw, _stat;
 	float[] _vswhi, _vswlo, _rmpct, _binit;
 
 	int[][] _n;
@@ -41,11 +41,10 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 			_rmpct = LoadArray.Float(swsh, "RMPCT", this, "getDeftRMPCT");
 			_rmidnt = LoadArray.String(swsh, "RMIDNT", this, "getDeftRMIDNT");
 			_binit = LoadArray.Float(swsh, "BINIT", this, "getDeftBINIT");
+			_stat = LoadArray.Int(swsh, "STAT", this, "getDeftSTAT");
 			
 			_n = new int[_size][8];
 			_b = new float[_size][8];
-			
-			
 			
 			for (int i=0, j=1; i < 8; ++i, ++j)
 			{
@@ -93,12 +92,21 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	public float getDeftRMPCT(int ndx) throws PsseModelException {return super.getRMPCT(ndx);}
 	public String getDeftRMIDNT(int ndx) throws PsseModelException {return super.getRMIDNT(ndx);}
 	public float getDeftBINIT(int ndx) throws PsseModelException {return super.getBINIT(ndx);}
+	public int getDeftSTAT(int ndx) throws PsseModelException {return super.isInSvc(ndx)?1:0;}
 	
 	public int getDeftN(int ndx) throws PsseModelException {return 0;}
 	public float getDeftB(int ndx) throws PsseModelException {return 0f;}
 	
 	public int[] getN(int ndx) {return _n[ndx];}
 	public float[] getB(int ndx) {return _b[ndx];}
+
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException {return _stat[ndx] == 1;}
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		_stat[ndx] = state ? 1 : 0;
+	}
 	
 	
 }

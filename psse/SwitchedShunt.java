@@ -65,4 +65,6 @@ public class SwitchedShunt extends PsseBaseObject implements OneTermDev
 	public void setQpu(float q) throws PsseModelException {_list.setQpu(_ndx, q);}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 }

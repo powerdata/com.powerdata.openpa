@@ -26,6 +26,11 @@ public class TwoTermDevList extends BaseList<TwoTermDev>
 		public Bus getToBus() throws PsseModelException {return TwoTermDevList.this.getToBus(_ndx);}
 		@Override
 		public boolean isInSvc() throws PsseModelException {return TwoTermDevList.this.isInSvc(_ndx);}
+		@Override
+		public void setInSvc(boolean state) throws PsseModelException
+		{
+			TwoTermDevList.this.setInSvc(_ndx, state);
+		}
 	}
 	
 	public TwoTermDevList(Object[] lists)
@@ -41,6 +46,11 @@ public class TwoTermDevList extends BaseList<TwoTermDev>
 		}
 	}
 	
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		findDev(ndx).setInSvc(state);
+	}
+
 	@SuppressWarnings("unchecked")
 	public TwoTermDev findDev(int ndx)
 	{

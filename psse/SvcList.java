@@ -46,6 +46,7 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	public float getVSWLO(int ndx)  throws PsseModelException {return 1f;}
 
 	public boolean isInSvc(int ndx) throws PsseModelException {return getBINIT(ndx) != 0f;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 	
 	/** get / set SVC mode */
 
@@ -91,7 +92,5 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	}
 	
 	public void setQS(int ndx) throws PsseModelException {}
-
 	public abstract Limits getReactivePowerLimits(int ndx) throws PsseModelException;
-	
 }

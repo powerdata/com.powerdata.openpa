@@ -1,6 +1,7 @@
 package com.powerdata.openpa.psse.csv;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.powerdata.openpa.psse.Bus;
@@ -114,7 +115,7 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 			float bl = s.getB();
 			if (gl != 0f || bl != 0f)
 			{
-				mkShunt(bl, gl, s.getBus(), s.getObjectID(), s.getObjectName(), s.getSTAT()==1);
+				mkShunt(bl, gl, s.getBus(), s.getObjectID(), s.getObjectName(), s.isInSvc());
 			}
 		}
 	}
@@ -191,6 +192,12 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 	public boolean isInSvc(int ndx) throws PsseModelException
 	{
 		return _swon[ndx];
+	}
+
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		_swon[ndx] = state;
 	}
 
 }

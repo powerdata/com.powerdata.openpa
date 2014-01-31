@@ -16,6 +16,8 @@ public class Load extends PsseBaseObject implements OneTermDev
 	@Override
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 	/** get Area Interchange record */
 	public Area getAreaObj() throws PsseModelException {return _list.getAreaObj(_ndx);}
 	/** get Zone record */

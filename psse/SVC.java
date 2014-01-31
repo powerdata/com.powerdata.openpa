@@ -54,7 +54,8 @@ public class SVC extends PsseBaseObject implements OneTermDev
 	
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
-
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 	@Override
 	public float getP() throws PsseModelException {return _list.getP(_ndx);}
 	@Override

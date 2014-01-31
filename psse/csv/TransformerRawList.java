@@ -237,5 +237,11 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 
 	@Override
 	public int size() {return _size;}
+
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		_stat[ndx] = state ? 1 : 0;
+	}
 }
 

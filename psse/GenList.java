@@ -156,4 +156,6 @@ public abstract class GenList extends PsseBaseList<Gen>
 
 	public void setQT(int ndx, float mvar) throws PsseModelException {}
 	public void setQB(int ndx, float mvar) throws PsseModelException {}
+
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 }

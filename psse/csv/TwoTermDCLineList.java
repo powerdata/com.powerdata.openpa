@@ -24,6 +24,7 @@ public class TwoTermDCLineList extends com.powerdata.openpa.psse.TwoTermDCLineLi
 			_stpr, _tri, _tapi, _tmxi, _tmni, _stpi;
 	protected String[]		_ipr, _ipi, _icr, _ici, _ifr, _ifi, _itr, _iti,
 			_idr, _idi;
+	protected boolean[] _insvc;
 	
 	
 	public TwoTermDCLineList(PsseRawModel model) throws PsseModelException
@@ -78,9 +79,15 @@ public class TwoTermDCLineList extends com.powerdata.openpa.psse.TwoTermDCLineLi
 			_tmni = LoadArray.Float(lines, "TMNI", this, "getDeftTMNI");
 			_stpr = LoadArray.Float(lines, "STPR", this, "getDeftSTPR");
 			_stpi = LoadArray.Float(lines, "STPI", this, "getDeftSTPI");
+
 		} catch (IOException | ReflectiveOperationException | RuntimeException e)
 		{
 			throw new PsseModelException(e);
+		}
+		_insvc = new boolean[_size];
+		for(int i=0; i < _size; ++i)
+		{
+			_insvc[i] = _mdc[i] != 0;
 		}
 	}
 	
@@ -222,4 +229,8 @@ public class TwoTermDCLineList extends com.powerdata.openpa.psse.TwoTermDCLineLi
 		ld.dump(m, new File(path));
 	}
 
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException {return _insvc[ndx];}
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {_insvc[ndx] = state;}
 }

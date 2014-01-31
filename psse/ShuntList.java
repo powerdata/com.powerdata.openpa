@@ -46,7 +46,8 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	/** shunt nominal G, MW at unity voltage */
 	public float getG(int ndx) throws PsseModelException {return 0f;}
 
-	public boolean isInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}
+	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 
 	public float getP(int ndx) throws PsseModelException {return 0f;}
 	public float getQ(int ndx) throws PsseModelException {return 0f;}
@@ -58,5 +59,4 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, q*100f);}
 
 	public String getID(int ndx) throws PsseModelException {return "";}
-	public int getSTAT(int ndx) throws PsseModelException {return 0;}
 }

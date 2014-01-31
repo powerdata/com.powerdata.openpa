@@ -33,6 +33,8 @@ public class Line extends PsseBaseObject implements ACBranch
 	public float getPhaseShift() throws PsseModelException {return 0f;}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 
 	/* Raw PSS/e methods */
 	

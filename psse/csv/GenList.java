@@ -107,7 +107,9 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	public String getObjectID(int ndx) { return "GEN-"+_i[ndx]+":"+_id[ndx]; }
 	@Override
 	public int size() { return _size; }
-	
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {_stat[ndx] = state?1:0;}
+
 	public String getDeftID(int ndx) throws PsseModelException {return super.getID(ndx);}
 	public float getDeftP(int ndx) throws PsseModelException {return super.getP(ndx);}
 	public float getDeftQ(int ndx) throws PsseModelException {return super.getQ(ndx);}

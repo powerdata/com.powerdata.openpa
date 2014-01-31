@@ -21,6 +21,8 @@ public class Shunt extends PsseBaseObject implements OneTermDev
 
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 	/** get connected bus */
 	public String getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** shunt nominal B in MVAr at unity bus voltage */
@@ -47,8 +49,4 @@ public class Shunt extends PsseBaseObject implements OneTermDev
 	
 	/** get circuit ID of shunt */
 	public String getID() throws PsseModelException {return _list.getID(_ndx);}
-	/** get status
-	 * TODO:  Have not verified this field with documentation yet, but assume 1 for in service, and 0 for out of service 
-	 */
-	public int getSTAT() throws PsseModelException {return _list.getSTAT(_ndx);}
 }

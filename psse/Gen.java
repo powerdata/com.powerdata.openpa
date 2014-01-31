@@ -113,4 +113,7 @@ public class Gen extends PsseBaseObject implements OneTermDev
 	public float getQS() throws PsseModelException {return _list.getQS(_ndx);}
 	/** set MVAr set point (when regulating reactive power) */
 	public void setQS(float mvar) throws PsseModelException {_list.setQS(_ndx, mvar);}
+
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 }

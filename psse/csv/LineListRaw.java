@@ -121,6 +121,12 @@ public class LineListRaw extends LineList
 		return "LN-" + _i[ndx] + ":" + j + ":" + _ckt[ndx];
 	}
 
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		_st[ndx] = state ? 1 : 0;
+	}
+
 	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}
 	public float getDeftR(int ndx) throws PsseModelException {return super.getR(ndx);}
 	public float getDeftB(int ndx) throws PsseModelException {return super.getB(ndx);}

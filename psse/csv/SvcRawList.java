@@ -15,6 +15,7 @@ public class SvcRawList extends com.powerdata.openpa.psse.SvcList
 	String[] _i, _swrem;
 	float[] _rmpct, _binit, _minB, _maxB, _vsp;
 	String[] _id;
+	int[] _stat;
 	
 	public SvcRawList() {super();}
 
@@ -32,6 +33,7 @@ public class SvcRawList extends com.powerdata.openpa.psse.SvcList
 		_maxB = new float[_size];
 		_id = new String[_size];
 		_vsp = new float[_size];
+		_stat = new int[_size];
 
 		BusList rawbus = model.getBuses();
 		
@@ -45,6 +47,7 @@ public class SvcRawList extends com.powerdata.openpa.psse.SvcList
 			_rmpct[i] = raw.getRMPCT(ndx);
 			_binit[i] = raw.getBINIT(ndx);
 			_vsp[i] = (raw.getVSWHI(ndx)+raw.getVSWLO(ndx))/2f;
+			_stat[i] = raw.isInSvc(ndx)?1:0;
 			
 			int[] n = raw.getN(ndx);
 			float[] b = raw.getB(ndx);
@@ -82,6 +85,14 @@ public class SvcRawList extends com.powerdata.openpa.psse.SvcList
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException {return _stat[ndx] == 1;}
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException 
+	{
+		_stat[ndx] = state ? 1 : 0;
 	}
 
 }

@@ -163,7 +163,8 @@ public class TwoTermDCLine extends PsseBaseObject implements TwoTermDev
 	public String getIDI() throws PsseModelException {return _list.getIDI(_ndx);}
 	/** inverter commutating capacitor reactance in ohms */
 	public float getXCAPI() throws PsseModelException {return _list.getXCAPI(_ndx);}
-
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 }

@@ -10,4 +10,6 @@ public interface TwoTermDev extends BaseObject
 	public Bus getToBus() throws PsseModelException;
 	/** get in service flag */
 	public boolean isInSvc() throws PsseModelException;
+	public void setInSvc(boolean state) throws PsseModelException;
+
 }

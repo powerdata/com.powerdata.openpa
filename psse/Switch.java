@@ -54,4 +54,6 @@ public class Switch extends PsseBaseObject implements ACBranch
 	public float getPhaseShift() throws PsseModelException {return 0;}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
+	@Override
+	public void setInSvc(boolean state) throws PsseModelException {_list.setInSvc(_ndx, state);}
 }

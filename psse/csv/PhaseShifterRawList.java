@@ -89,6 +89,13 @@ public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterL
 	public int getSTAT(int ndx) throws PsseModelException {return _stat[ndx];}
 
 	@Override
+	public void setInSvc(int ndx, boolean state)
+			throws PsseModelException
+	{
+		_stat[ndx] = state ? 1 : 0;
+	}
+
+	@Override
 	public float getR1_2(int ndx) throws PsseModelException {return _z.re(ndx);}
 	@Override
 	public float getX1_2(int ndx) throws PsseModelException {return _z.im(ndx);}

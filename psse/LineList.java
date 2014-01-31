@@ -40,6 +40,7 @@ public abstract class LineList extends PsseBaseList<Line>
 	public LineMeterEnd getMeteredEnd(int ndx) throws PsseModelException {return LineMeterEnd.Unknown;}
 	/** get initial branch status (ST) as a boolean.  Returns true if in service */
 	public boolean isInSvc(int ndx) throws PsseModelException {return getST(ndx) == 1;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 	/** get complex impedance */
 	public Complex getZ(int ndx) throws PsseModelException
 	{

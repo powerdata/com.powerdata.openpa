@@ -22,4 +22,5 @@ public interface OneTermDev extends BaseObject
 	/** set reactive power p.u. on 100MVA base */
 	public void setQpu(float q) throws PsseModelException;
 	public boolean isInSvc() throws PsseModelException;
+	public void setInSvc(boolean state) throws PsseModelException;
 }

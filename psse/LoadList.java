@@ -32,6 +32,7 @@ public abstract class LoadList extends PsseBaseList<Load>
 	public Bus getBus(int ndx) throws PsseModelException {return _model.getBus(getI(ndx));}
 	/** get load in-service status (STATUS) as a boolean.  Returns true if in service */
 	public boolean isInSvc(int ndx) throws PsseModelException {return getSTATUS(ndx) == 1;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 	/** get Area Interchange record */
 	public Area getAreaObj(int ndx) throws PsseModelException
 	{
@@ -92,5 +93,4 @@ public abstract class LoadList extends PsseBaseList<Load>
 	public void setQS(int ndx, float mvar) throws PsseModelException {}
 	public float getPcold(int ndx) throws PsseModelException {return 0f;}
 	public float getQcold(int ndx) throws PsseModelException {return 0f;}
-
 }

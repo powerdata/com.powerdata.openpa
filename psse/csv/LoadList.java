@@ -82,5 +82,10 @@ public class LoadList extends com.powerdata.openpa.psse.LoadList
 	public int getOWNER(int ndx) throws PsseModelException {return _owner[ndx];}
 	@Override
 	public int size() {return _size;}
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		_status[ndx] = state ? 1 : 0;
+	}
 
 }

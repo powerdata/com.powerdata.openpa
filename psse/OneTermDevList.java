@@ -64,6 +64,11 @@ public class OneTermDevList extends BaseList<OneTermDev>
 		{
 			OneTermDevList.this.setQpu(_ndx, q);
 		}
+		@Override
+		public void setInSvc(boolean state) throws PsseModelException
+		{
+			OneTermDevList.this.setInSvc(_ndx, state);
+		}
 	}
 	
 	int _nload, _ngen, _nsh, _nsvc, _size;
@@ -144,6 +149,10 @@ public class OneTermDevList extends BaseList<OneTermDev>
 	public boolean isInSvc(int ndx) throws PsseModelException
 	{
 		return findDev(ndx).isInSvc();
+	}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		findDev(ndx).setInSvc(state);
 	}
 	public void setQpu(int ndx, float q) throws PsseModelException
 	{
