@@ -26,7 +26,7 @@ public class RawFixedShuntList extends ShuntList
 			_id = LoadArray.String(shunts, "ID", this, "getDeftID");
 			_g = LoadArray.Float(shunts, "G", this, "getDeftG");
 			_b = LoadArray.Float(shunts, "B", this, "getDeftB");
-			_stat = LoadArray.Int(shunts, "STATUS", this, "getDeftSTAT");
+			_stat = LoadArray.Int(shunts, "STAT", this, "getDeftSTAT");
 
 		} catch (IOException | ReflectiveOperationException e)
 		{

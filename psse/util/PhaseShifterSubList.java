@@ -140,4 +140,7 @@ public class PhaseShifterSubList extends PhaseShifterList
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
 	public int size() {return _ndxs.length;}
+
+	@Override
+	public void setInSvc(int ndx, boolean status) throws PsseModelException {_base.setInSvc(map(ndx), status);}
 }

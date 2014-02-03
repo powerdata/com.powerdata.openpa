@@ -70,8 +70,6 @@ public class ShuntSubList extends ShuntList
 	@Override
 	public String getID(int ndx) throws PsseModelException {return _base.getID(map(ndx));}
 	@Override
-	public int getSTAT(int ndx) throws PsseModelException {return _base.getSTAT(map(ndx));}
-	@Override
 	public void commit() throws PsseModelException {_base.commit();}
 	@Override
 	public String getObjectID(int ndx) throws PsseModelException {return _base.getObjectID(map(ndx));}
@@ -85,4 +83,6 @@ public class ShuntSubList extends ShuntList
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
 	public int size() {return _ndxs.length;}
+	@Override
+	public void setInSvc(int ndx, boolean state) throws PsseModelException {_base.setInSvc(map(ndx), state);}
 }
