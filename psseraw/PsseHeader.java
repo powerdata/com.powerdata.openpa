@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
  */
 public class PsseHeader
 {
-	private static Pattern _CaseInfoPattern =
-			Pattern.compile("\\s*,*[\\s/]+");
+//	private static Pattern _CaseInfoPattern =
+//			Pattern.compile("\\s*,*[\\s/]+");
 
 	private static Pattern[] _VersionPattern = 
 	{
@@ -47,19 +47,29 @@ public class PsseHeader
 		_heading1 = rdr.readLine();
 		_heading2 = rdr.readLine();
 		
-		// get the change code
-		Matcher cim = _CaseInfoPattern.matcher(l1);
-		int end=-1;
-		if (cim.find())
+		int start = 0;
+		for (int i=0; i < l1.length(); ++i)
+			if (l1.charAt(i) == ' ') ++start; else break;
+		
+		StringBuilder sb = new StringBuilder();
+		int end = start;
+		for(int i=start; i < l1.length(); ++i, ++end)
 		{
-			_changeCode = Integer.valueOf(l1.substring(0, cim.start()).trim());
-			end = cim.end();
+			char c = l1.charAt(i);
+			if (c != ',' && c != ' ')
+				sb.append(c); else break;
 		}
-		if (cim.find())
+		_changeCode = Integer.valueOf(sb.toString());
+		for(int i=++end; i < l1.length(); ++i, ++end)
+			if (l1.charAt(i) != ' ') break;
+		
+		sb = new StringBuilder();
+		for(int i = end; i < l1.length(); ++i, ++end)
 		{
-			_systemBaseMVA = Float.valueOf(l1.substring(end, cim.start()).trim());
-			end = cim.end();
+			char c = l1.charAt(i);
+			if (c != Character.LINE_SEPARATOR && c != '/' && c != ' ' && c != ',') sb.append(c); else break;
 		}
+		_systemBaseMVA = Float.parseFloat(sb.toString().trim());
 		
 		// see if we can determine the version
 		String rstring = l1.substring(end);
@@ -68,11 +78,13 @@ public class PsseHeader
 			Matcher v = vp.matcher(rstring);
 			if (v.find())
 			{
-				cim = _CaseInfoPattern.matcher(rstring);
-				cim.find(v.end());
-				_version = rstring.substring(v.end(), cim.start());
-				end = cim.end();
-				break;
+				StringBuilder sbv = new StringBuilder();
+				for(int i=v.end(); i < rstring.length(); ++i)
+				{
+					char c = rstring.charAt(i);
+					if (c != ' ') sbv.append(c); else break;
+				}
+				_version = sbv.toString();
 			}
 		}
 
