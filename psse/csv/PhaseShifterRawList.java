@@ -6,6 +6,7 @@ import com.powerdata.openpa.tools.ComplexList;
 public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterList
 {
 	int _size;
+	PsseRawModel _eq;
 
 	/* line 1 */
 	private String[] _ckt, _name, _i, _j;
@@ -27,6 +28,7 @@ public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterL
 			TransformerPrep prep) throws PsseModelException
 	{
 		super(model);
+		_eq = model;
 
 		_size = prep.size();
 		
@@ -93,6 +95,7 @@ public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterL
 			throws PsseModelException
 	{
 		_stat[ndx] = state ? 1 : 0;
+		_eq.resetTP();
 	}
 
 	@Override

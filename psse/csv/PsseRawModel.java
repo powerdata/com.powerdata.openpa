@@ -33,9 +33,9 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	TwoTermDCLineList		_dcline;
 	LoadList			_loads;
 	GenList				_generatorList;
-	TP					_tp;
-	IslandList			_islands;
-
+	private TP			_tp = null;
+	IslandList			_islands = null;
+	
 	public PsseRawModel(String parms) throws PsseModelException
 	{
 		QueryString q = new QueryString(parms);
@@ -79,9 +79,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 			_dir = new File(q.get("path")[0]);
 		}
 		analyzeRawTransformers();
-		_tp = new TP(this);
 		analyzeRawShunts();
-
 	}
 	
 	
@@ -219,54 +217,58 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		if (_generatorList == null) _generatorList = new GenList(this, getDir());
 		return _generatorList;
 	}
-
-	@Deprecated
-	public int getIslandCount() throws PsseModelException
+	public TP tp() throws PsseModelException
 	{
-		return _tp.getIslandCount();
+		if (_tp == null) _tp = new TP(this);
+		return _tp;
 	}
 
-	@Deprecated
-	public boolean isNodeEnergized(int node) throws PsseModelException
-	{
-		int island = _tp.getIsland(node);
-		return (island == -1) ? false : _tp.isIslandEnergized(island);
-	}
-
-	@Deprecated
-	public int getIsland(int node) throws PsseModelException
-	{
-		return _tp.getIsland(node);
-	}
-
-	@Deprecated
-	public BusList getBusesForIsland(int island) throws PsseModelException
-	{
-		return new com.powerdata.openpa.psse.util.BusSubList(_buses,
-				_tp.getIslandNodes(island));
-	}
-
-	@Deprecated
-	public BusTypeCode getBusType(int node) throws PsseModelException
-	{
-		return _tp.getBusType(node);
-	}
-
+	public void resetTP() {_tp = null;}
+	
+//	@Deprecated
+//	public int getIslandCount() throws PsseModelException
+//	{
+//		return _tp.getIslandCount();
+//	}
+//
+//	@Deprecated
+//	public boolean isNodeEnergized(int node) throws PsseModelException
+//	{
+//		int island = _tp.getIsland(node);
+//		return (island == -1) ? false : _tp.isIslandEnergized(island);
+//	}
+//
+//	@Deprecated
+//	public int getIsland(int node) throws PsseModelException
+//	{
+//		return _tp.getIsland(node);
+//	}
+//
+//	@Deprecated
+//	public BusList getBusesForIsland(int island) throws PsseModelException
+//	{
+//		return new com.powerdata.openpa.psse.util.BusSubList(_buses,
+//				_tp.getIslandNodes(island));
+//	}
+//
+//	@Deprecated
+//	public BusTypeCode getBusType(int node) throws PsseModelException
+//	{
+//		return _tp.getBusType(node);
+//	}
+//
 	@Override
 	public IslandList getIslands() throws PsseModelException
 	{
 		if (_islands == null)
-			_islands = new IslandList(this, _tp);
+			_islands = new IslandList(this);
 		return _islands;
 	}
 
-	@Deprecated
 	@Override
 	public int[] getBusNdxForType(BusTypeCode bustype)
 			throws PsseModelException
 	{
-		return _tp.getBusNdxsForType(bustype);
+		return tp().getBusNdxsForType(bustype);
 	}
-
-
 }

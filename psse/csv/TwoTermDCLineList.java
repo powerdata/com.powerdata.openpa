@@ -231,6 +231,11 @@ public class TwoTermDCLineList extends com.powerdata.openpa.psse.TwoTermDCLineLi
 
 	@Override
 	public boolean isInSvc(int ndx) throws PsseModelException {return _insvc[ndx];}
+
 	@Override
-	public void setInSvc(int ndx, boolean state) throws PsseModelException {_insvc[ndx] = state;}
+	public void setInSvc(int ndx, boolean state) throws PsseModelException
+	{
+		_insvc[ndx] = state;
+		_eq.resetTP();
+	}
 }

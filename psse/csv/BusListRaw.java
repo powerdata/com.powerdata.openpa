@@ -182,7 +182,7 @@ public class BusListRaw extends com.powerdata.openpa.psse.BusList
 	@Override
 	public BusTypeCode getBusType(int ndx) throws PsseModelException
 	{
-		return _eq._tp.getBusType(ndx);
+		return _eq.tp().getBusType(ndx);
 	}
 	
 }

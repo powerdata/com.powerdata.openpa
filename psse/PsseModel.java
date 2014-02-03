@@ -2,9 +2,11 @@ package com.powerdata.openpa.psse;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+
 import com.powerdata.openpa.psse.util.BusSubList;
 import com.powerdata.openpa.psse.util.LogSev;
 import com.powerdata.openpa.psse.util.PsseModelLog;
+import com.powerdata.openpa.psse.util.TP;
 import com.powerdata.openpa.tools.AbstractBaseObject;
 /**
  * 
@@ -147,15 +149,12 @@ public class PsseModel implements PsseLists
 	public String getURI() {return _uri;}
 	public void setURI(String uri) {_uri = uri;}
 	
-	@Deprecated
 	public int[] getBusNdxForType(BusTypeCode bustype) throws PsseModelException {return new int[0];}
 
-	@Deprecated
 	public BusList getBusesForType(BusTypeCode bustype)
 			throws PsseModelException
 	{
 		return new BusSubList(getBuses(), getBusNdxForType(bustype));
 	}
-
 }	
 

@@ -7,13 +7,11 @@ import com.powerdata.openpa.psse.PsseModel;
 
 public class IslandList extends com.powerdata.openpa.psse.IslandList
 {
-	
-	TP _tp;
-	
-	public IslandList(PsseModel eq, TP tp) throws PsseModelException
+	PsseRawModel _model;
+	public IslandList(PsseRawModel eq) throws PsseModelException
 	{
 		super(eq);
-		_tp = tp;
+		_model = eq;
 	}
 	
 	@Override
@@ -23,23 +21,35 @@ public class IslandList extends com.powerdata.openpa.psse.IslandList
 	}
 
 	@Override
-	public int size() {return _tp.getIslandCount();}
+	public int size()
+	{
+		int rv = 0;
+		try
+		{
+			rv = _model.tp().getIslandCount();
+		}
+		catch(PsseModelException ex)
+		{
+			System.err.println(ex);
+		}
+		return rv;
+	}
 
 	@Override
-	public int[] getBusNdxsForType(int ndx, BusTypeCode bustype)
+	public int[] getBusNdxsForType(int ndx, BusTypeCode bustype) throws PsseModelException
 	{
-		return _tp.getBusNdxsForType(ndx, bustype);
+		return _model.tp().getBusNdxsForType(ndx, bustype);
 	}
 
 	@Override
 	public boolean isEnergized(int ndx) throws PsseModelException
 	{
-		return _tp.isIslandEnergized(ndx);
+		return _model.tp().isIslandEnergized(ndx);
 	}
 
 	@Override
 	public int getAngleRefBusNdx(int ndx) throws PsseModelException
 	{
-		return _tp.getAngleRefBusNdx(ndx);
+		return _model.tp().getAngleRefBusNdx(ndx);
 	}
 }

@@ -125,6 +125,7 @@ public class LineListRaw extends LineList
 	public void setInSvc(int ndx, boolean state) throws PsseModelException
 	{
 		_st[ndx] = state ? 1 : 0;
+		_eq.resetTP();
 	}
 
 	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}

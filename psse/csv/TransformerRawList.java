@@ -12,6 +12,7 @@ import com.powerdata.openpa.tools.ComplexList;
 public class TransformerRawList extends com.powerdata.openpa.psse.TransformerList
 {
 	int _size;
+	PsseRawModel _eq;
 
 	/* line 1 */
 	String[] _ckt, _name, _cont1, _i, _j;
@@ -37,6 +38,7 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 			TransformerPrep prep) throws PsseModelException 
 	{
 		super(model);
+		_eq = model;
 		_size = prep.size();
 		
 		int[] xfndx = prep.getXfRaw(), wndx = prep.getWndx(); 
@@ -242,6 +244,7 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 	public void setInSvc(int ndx, boolean state) throws PsseModelException
 	{
 		_stat[ndx] = state ? 1 : 0;
+		_eq.resetTP();
 	}
 }
 
