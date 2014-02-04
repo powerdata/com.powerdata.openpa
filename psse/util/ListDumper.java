@@ -129,7 +129,7 @@ public class ListDumper
 		if (uri == null)
 		{
 			System.err.format("Usage: -uri model_uri "
-					+ "[ --outdir output_directory (deft to $CWD ]");
+					+ "[ --outdir output_directory (deft to $CWD ]\n");
 			System.exit(1);
 		}
 		
