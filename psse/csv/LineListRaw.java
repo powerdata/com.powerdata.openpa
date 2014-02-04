@@ -23,6 +23,7 @@ public class LineListRaw extends LineList
 	public LineListRaw(PsseRawModel model) throws PsseModelException
 	{
 		super(model);
+		_eq = model;
 		try
 		{
 			File dbfile = new File(model.getDir(), "NontransformerBranch.csv");
