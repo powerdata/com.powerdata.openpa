@@ -225,7 +225,7 @@ public class FastDecoupledPowerFlow
 		for (int i=0; i < res.size(); ++i)
 		{
 			PowerFlowConvergence pr = res.get(i);
-			boolean tnc = notConverged(pmm, qmm, islands.get(i), ptol, qtol, pr); 
+			boolean tnc = notConverged(pmm, qmm, islands.get(_hotislands[i]), ptol, qtol, pr); 
 			nc |= tnc;
 			if (!tnc) pr.setIterationCount(iter+1);
 		}
@@ -259,6 +259,14 @@ public class FastDecoupledPowerFlow
 	{
 		float wval = 0f;
 		int wb = -1;
+		for(int i=0; wb == -1 && i < lists.length; ++i)
+		{
+			for (int b : lists[i])
+			{
+				wb = b;
+				break;
+			}
+		}
 		for (int[] list : lists)
 		{
 			for (int b : list)
@@ -389,6 +397,8 @@ public class FastDecoupledPowerFlow
 		}
 		
 		PsseModel model = PsseModel.Open(uri);
+		
+		model.getBranches().setInSvc(49, false);
 
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model,
 				new MinZMagFilter(model.getBranches(), minxmag));
