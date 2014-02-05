@@ -129,6 +129,12 @@ public class LineListRaw extends LineList
 		_eq.resetTP();
 	}
 
+	@Override
+	public boolean isInSvc(int ndx) throws PsseModelException
+	{
+		return _st[ndx] == 1;
+	}
+
 	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}
 	public float getDeftR(int ndx) throws PsseModelException {return super.getR(ndx);}
 	public float getDeftB(int ndx) throws PsseModelException {return super.getB(ndx);}
