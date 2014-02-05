@@ -398,8 +398,6 @@ public class FastDecoupledPowerFlow
 		
 		PsseModel model = PsseModel.Open(uri);
 		
-		model.getBranches().setInSvc(49, false);
-
 		FastDecoupledPowerFlow pf = new FastDecoupledPowerFlow(model,
 				new MinZMagFilter(model.getBranches(), minxmag));
 		
