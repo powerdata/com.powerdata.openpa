@@ -6,11 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.tools.BaseList;
-import com.powerdata.openpa.tools.BaseObject;
 
 public class ListDumper
 {
@@ -54,24 +55,28 @@ public class ListDumper
 		for (Method m : methods)
 		{
 			Class<?> mclass = m.getReturnType();
-			while (mclass != null && mclass != Object.class && mclass != void.class)
+			boolean isiterator = false;
+			for(Class<?> i : mclass.getInterfaces()) {if (i == Iterator.class) {isiterator=true;break;}}
+			Class<?> mcsuper = mclass.getSuperclass();
+			while (mcsuper != null && mcsuper != Object.class)
 			{
-				boolean isbasobj = false;
-				for(Class<?> ic : mclass.getInterfaces()) {if (ic == BaseObject.class){isbasobj=true; break;}}
-				if (mclass.isPrimitive() || isbasobj || mclass == String.class)
+				mclass = mcsuper;
+				mcsuper = mclass.getSuperclass();
+			}
+			if (mclass != AbstractCollection.class && !mclass.isArray()
+					&& mclass != void.class && mclass != Object.class && !isiterator)
+			{
+				Class<?>[] ptype = m.getParameterTypes();
+				if (ptype.length == 1 && ptype[0] == int.class)
 				{
-					Class<?>[] ptype = m.getParameterTypes();
-					if (ptype.length == 1 && ptype[0] == int.class)
-					{
 
-						String nm = m.getName();
-						boolean yget = nm.startsWith("get");
-						boolean yis = nm.startsWith("is");
-						ometh.add(m);
-						mname.add(nm.equals("get")?"toString()" : nm.substring(yget ? 3 : (yis ? 2 : 0)));
-					}
+					String nm = m.getName();
+					boolean yget = nm.startsWith("get");
+					boolean yis = nm.startsWith("is");
+					ometh.add(m);
+					mname.add(nm.equals("get") ? "toString()" : nm
+							.substring(yget ? 3 : (yis ? 2 : 0)));
 				}
-				mclass = mclass.getSuperclass();
 			}
 		}
 		int n = list.size();
