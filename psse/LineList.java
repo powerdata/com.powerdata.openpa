@@ -8,15 +8,19 @@ public abstract class LineList extends PsseBaseList<Line>
 	public static final LineList Empty = new LineList()
 	{
 		@Override
-		public String getI(int ndx) throws PsseModelException {return null;}
+		public String getI(int ndx) {return null;}
 		@Override
-		public String getJ(int ndx) throws PsseModelException {return null;}
+		public String getJ(int ndx) {return null;}
 		@Override
-		public float getX(int ndx) throws PsseModelException {return 0f;}
+		public float getX(int ndx) {return 0f;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
+		@Override
+		public Line getByKey(long key) {return null;}
 	};
 	
 	protected LineList() {super();}
@@ -48,8 +52,8 @@ public abstract class LineList extends PsseBaseList<Line>
 				_model.getSBASE());
 	}
 	public Complex getY(int ndx) throws PsseModelException {return getZ(ndx).inv();}
-	public float getFromBchg(int ndx) throws PsseModelException {return getB(ndx)/2f;}
-	public float getToBchg(int ndx) throws PsseModelException {return getB(ndx)/2f;}
+	public float getFromBchg(int ndx) throws PsseModelException {return 0;}
+	public float getToBchg(int ndx) throws PsseModelException {return 0;}
 	@Override
 	public String getObjectName(int ndx) throws PsseModelException
 	{
@@ -67,7 +71,7 @@ public abstract class LineList extends PsseBaseList<Line>
 	public float getR(int ndx) throws PsseModelException {return 0f;}
 	/** Branch reactance entered in p.u. */
 	public abstract float getX(int ndx) throws PsseModelException;
-	/** Branch charging susceptance entered in p.u. */
+	/** Charging susceptance pu on system base */
 	public float getB(int ndx) throws PsseModelException {return 0f;}
 	/** First loading rating entered in MVA */
 	public float getRATEA(int ndx) throws PsseModelException {return 0f;}

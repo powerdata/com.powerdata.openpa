@@ -7,11 +7,13 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public static final SwitchedShuntList Empty = new SwitchedShuntList()
 	{
 		@Override
-		public String getI(int ndx) throws PsseModelException {return null;}
+		public String getI(int ndx) {return null;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	
 	protected SwitchedShuntList() {super();}

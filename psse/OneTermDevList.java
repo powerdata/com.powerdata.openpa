@@ -174,4 +174,9 @@ public class OneTermDevList extends BaseList<OneTermDev>
 	@Override
 	public int size() {return _size;}
 
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).getKey();
+	}
 }

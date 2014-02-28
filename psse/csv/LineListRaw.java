@@ -94,7 +94,6 @@ public class LineListRaw extends LineList
 	public float getR(int ndx) { return _r[ndx]; }
 	@Override
 	public float getX(int ndx) { return _x[ndx]; }
-	@Override
 	public float getB(int ndx) { return _b[ndx]; }
 	@Override
 	public float getRATEA(int ndx) { return _ratea[ndx]; }
@@ -121,6 +120,20 @@ public class LineListRaw extends LineList
 		if (j.startsWith("-")) j = j.substring(1);
 		return "LN-" + _i[ndx] + ":" + j + ":" + _ckt[ndx];
 	}
+	
+	
+
+	@Override
+	public float getFromBchg(int ndx) throws PsseModelException
+	{
+		return _b[ndx]/2;
+	}
+
+	@Override
+	public float getToBchg(int ndx) throws PsseModelException
+	{
+		return _b[ndx]/2;
+	}
 
 	@Override
 	public void setInSvc(int ndx, boolean state) throws PsseModelException
@@ -137,7 +150,6 @@ public class LineListRaw extends LineList
 
 	public String getDeftCKT(int ndx) throws PsseModelException {return super.getCKT(ndx);}
 	public float getDeftR(int ndx) throws PsseModelException {return super.getR(ndx);}
-	public float getDeftB(int ndx) throws PsseModelException {return super.getB(ndx);}
 	public float getDeftRATEA(int ndx) throws PsseModelException {return super.getRATEA(ndx);}
 	public float getDeftRATEB(int ndx) throws PsseModelException {return super.getRATEB(ndx);}
 	public float getDeftRATEC(int ndx) throws PsseModelException {return super.getRATEC(ndx);}
@@ -147,5 +159,6 @@ public class LineListRaw extends LineList
 	public float getDeftBJ(int ndx) throws PsseModelException {return super.getBJ(ndx);}
 	public int getDeftST(int ndx) throws PsseModelException {return super.getST(ndx);}
 	public float getDeftLEN(int ndx) throws PsseModelException {return super.getLEN(ndx);}
+	public float getDeftB(int ndx) throws PsseModelException {return 0;}
 
 }

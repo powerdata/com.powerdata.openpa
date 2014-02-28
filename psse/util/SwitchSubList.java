@@ -77,4 +77,6 @@ public class SwitchSubList extends SwitchList
 	public int size() {return _ndxs.length;}
 	@Override
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {_base.setInSvc(map(ndx), state);}
+	@Override
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
 }

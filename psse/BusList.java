@@ -8,11 +8,15 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public static final BusList Empty = new BusList()
 	{
 		@Override
-		public int getI(int ndx) throws PsseModelException {return 0;}
+		public int getI(int ndx) {return 0;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
+		@Override
+		public Bus getByKey(long key) {return null;}
 	};
 	
 	protected BusList() {super();}
@@ -40,10 +44,8 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public SwitchList isolate(int ndx) throws PsseModelException { return SwitchList.Empty; }
 	/** test if the bus is energized */
 	public boolean isEnergized(int ndx) throws PsseModelException {return getIDE(ndx) != 4;}
-	/** get the island number */
-	public int getIsland(int ndx) throws PsseModelException {return 0;}
-	/** get a station number if it exists or zero if not */
-	public int getStation(int ndx) throws PsseModelException {return 0; }
+	/** get the island */
+	public Island getIsland(int ndx) throws PsseModelException {return null;}
 
 	/** enumerated IDE code */
 	public BusTypeCode getBusType(int ndx) throws PsseModelException {return BusTypeCode.fromCode(getIDE(ndx));}
@@ -105,9 +107,10 @@ public abstract class BusList extends PsseBaseList<Bus>
 	public int getOWNER(int ndx) throws PsseModelException {return 1;}
 
 
-	/* realtime methods */
-
 	public float getFrequency(int ndx) throws PsseModelException {return 0f;}
 	public int getFrequencySourcePriority(int ndx) throws PsseModelException {return 0;}
+
+	public BusList getBusesForType(BusTypeCode type) throws PsseModelException {return BusList.Empty;}
+	public Station getStation(int ndx) throws PsseModelException {return null;}
 }
 

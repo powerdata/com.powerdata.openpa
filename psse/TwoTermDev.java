@@ -11,5 +11,4 @@ public interface TwoTermDev extends BaseObject
 	/** get in service flag */
 	public boolean isInSvc() throws PsseModelException;
 	public void setInSvc(boolean state) throws PsseModelException;
-
 }

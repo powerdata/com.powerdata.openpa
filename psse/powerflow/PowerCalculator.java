@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
-import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.GenList;
@@ -21,6 +19,8 @@ import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.psse.TwoTermDCLine;
 import com.powerdata.openpa.psse.TwoTermDCLine.CtrlMode;
 import com.powerdata.openpa.psse.TwoTermDCLineList;
+import com.powerdata.openpa.psse.util.BusGroup;
+import com.powerdata.openpa.psse.util.BusGroup2TDevList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
@@ -35,30 +35,39 @@ public class PowerCalculator
 	PsseModel _model;
 	MismatchReport _dbg;
 	ImpedanceFilter _zfilt;
+	/** topological nodes */
+	BusGroup2TDevList _tn;
 
 	/**
 	 * Create a new power calculator
 	 * @param model
 	 * @throws PsseModelException 
 	 */
-	public PowerCalculator(PsseModel model) throws PsseModelException
+	public PowerCalculator(PsseModel model, BusGroup2TDevList tn) throws PsseModelException
 	{
 		_model = model;
 		_dbg = null;
+		/*
+		 * TODO:  clean up impedance filters to operate more flexibly and
+		 * probably not require a branch list.  Otherwise, the filter will 
+		 * not operate correctly on sublists;
+		 */
 		_zfilt = new ImpedanceFilter(_model.getBranches());
+		_tn = tn;
 	}
 	/**
 	 * Create a new power calculator
 	 * @param model
-	 * @prarm zfilt Default impedance filter 
+	 * @param zfilt impedance filter used to force impedance within certain bounds  
 	 * @throws PsseModelException 
 	 */
-	public PowerCalculator(PsseModel model, ImpedanceFilter zfilt)
+	public PowerCalculator(PsseModel model, ImpedanceFilter zfilt, BusGroup2TDevList tn)
 			throws PsseModelException
 	{
 		_model = model;
 		_dbg = null;
 		_zfilt = zfilt;
+		_tn = tn;
 	}
 
 	public void setDebugEnabled(MismatchReport dbg) {_dbg = dbg;}
@@ -129,8 +138,8 @@ public class PowerCalculator
 			ACBranch br = branches.get(i);
 			if (br.isInSvc())
 			{
-				int fbndx = br.getFromBus().getIndex();
-				int tbndx = br.getToBus().getIndex();
+				int fbndx = _tn.findGrpNdx(br.getFromBus());
+				int tbndx = _tn.findGrpNdx(br.getToBus());
 				float fvm = vmag[fbndx], tvm = vmag[tbndx],
 						fva = vang[fbndx], tva = vang[tbndx];
 				
@@ -169,8 +178,7 @@ public class PowerCalculator
 	public float[][] calculateMismatches(float[] va, float[] vm)
 			throws PsseModelException
 	{
-		BusList blist = _model.getBuses();
-		int nbus = blist.size();
+		int nbus = _tn.size();
 		float[] pmm = new float[nbus], qmm = new float[nbus];
 		LoadList ldlist = _model.getLoads();
 		GenList genlist = _model.getGenerators();
@@ -183,22 +191,23 @@ public class PowerCalculator
 		{
 			if (l.isInSvc())
 			{
-				int bndx = l.getBus().getIndex();
+				int bndx = _tn.findGrpNdx(l.getBus());
 				pmm[bndx] -= l.getPpu();
 				qmm[bndx] -= l.getQpu();
 			}
 		}
 		for(Gen g : genlist)
 		{
-			Bus b = g.getBus();
+			BusGroup b = _tn.findGroup(g.getBus());
 			BusTypeCode btc = b.getBusType();
-			if (g.isInSvc()/* && btc != BusTypeCode.Slack*/)
+			if (g.isInSvc())
 			{
 				int bndx = b.getIndex();
-				pmm[bndx] += g.getPpu();
+				pmm[bndx] += PAMath.mw2pu(g.getPS());
 				if (btc == BusTypeCode.Load)
-					qmm[bndx] += g.getQpu();
+					qmm[bndx] += PAMath.mw2pu(g.getQS());
 			}
+			//TODO: should not be converting to per-unit here
 		}
 		if (_dbg != null)
 		{
@@ -216,8 +225,8 @@ public class PowerCalculator
 		{
 			TwoTermDCLine l = dclines.get(i);
 			TwoTermDCLineResult r = dclresults.get(i);
-			int fn = l.getFromBus().getIndex();
-			int tn = l.getToBus().getIndex();
+			int fn = _tn.findGrpNdx(l.getFromBus());
+			int tn = _tn.findGrpNdx(l.getToBus());
 			pmm[fn] += r.getMWR();
 			pmm[tn] += r.getMWI();
 			qmm[fn] += r.getMVArR();
@@ -233,8 +242,8 @@ public class PowerCalculator
 		for(int i=0; i < nbr; ++i)
 		{
 			ACBranch branch = brlist.get(i);
-			int fbndx = branch.getFromBus().getIndex();
-			int tbndx = branch.getToBus().getIndex();
+			int fbndx = _tn.findGrpNdx(branch.getFromBus());
+			int tbndx = _tn.findGrpNdx(branch.getToBus());
 			pmm[fbndx] += brflows[0][i];
 			qmm[fbndx] += brflows[1][i];
 			pmm[tbndx] += brflows[2][i];
@@ -247,7 +256,7 @@ public class PowerCalculator
 	{
 		for (int i = 0; i < list.size(); ++i)
 		{
-			int bndx = list.get(i).getBus().getIndex();
+			int bndx = _tn.findGrpNdx(list.get(i).getBus());
 			qmm[bndx] += qshunt[i];
 		}
 	}
@@ -282,7 +291,7 @@ public class PowerCalculator
 		for (int i = 0; i < nsh; ++i)
 		{
 			Shunt shunt = shunts.get(i);
-			int bndx = shunt.getBus().getIndex();
+			int bndx = _tn.findGrpNdx(shunt.getBus());
 			float bvm = vm[bndx];
 			q[i] = shunt.getBpu() * bvm * bvm;
 		}
@@ -322,7 +331,7 @@ public class PowerCalculator
 		for (int i = 0; i < nsh; ++i)
 		{
 			SVC svc = svcs.get(i);
-			int bndx = svc.getBus().getIndex();
+			int bndx = _tn.findGrpNdx(svc.getBus());
 			float bvm = vm[bndx];
 			q[i] = svc.getBINIT() / 100f * bvm * bvm;
 		}
@@ -337,13 +346,12 @@ public class PowerCalculator
 	 */
 	public float[][] getRTVoltages() throws PsseModelException
 	{
-		BusList blist = _model.getBuses();
-		int nbus = blist.size();
+		int nbus = _tn.size();
 		float[] va = new float[nbus], vm = new float[nbus];
 		for(int i=0; i < nbus; ++i)
 		{
-			va[i] = blist.getVArad(i);
-			vm[i] = blist.getVMpu(i);
+			va[i] = _tn.getVArad(i);
+			vm[i] = _tn.getVMpu(i);
 		}
 		return new float[][] {va, vm};
 	}
@@ -373,8 +381,8 @@ public class PowerCalculator
 			TwoTermDCLine dcl = lines.get(i);
 			if (dcl.getCtrlMode() != CtrlMode.Blocked)
 			{
-				int rbus = dcl.getFromBus().getIndex();
-				int ibus = dcl.getToBus().getIndex();
+				int rbus = _tn.findGrpNdx(dcl.getFromBus());
+				int ibus = _tn.findGrpNdx(dcl.getToBus());
 				float[] setpt = getDCSetpoints(dcl);
 				float isp = setpt[0], vdr = setpt[1], vdi = setpt[2];
 				float[] rresult = calc2TDCRect(dcl, isp, vdr, vm[rbus]);

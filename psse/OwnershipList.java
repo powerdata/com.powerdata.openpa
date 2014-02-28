@@ -7,9 +7,11 @@ public abstract class OwnershipList extends PsseBaseList<Ownership>
 	public static final OwnershipList Empty = new OwnershipList()
 	{
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	protected OwnershipList() {super();}
 	public OwnershipList(PsseModel model, OwnedEquip eq)

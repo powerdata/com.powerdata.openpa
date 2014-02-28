@@ -13,15 +13,17 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	public static final TransformerList Empty = new TransformerList()
 	{
 		@Override
-		public String getI(int ndx) throws PsseModelException {return null;}
+		public String getI(int ndx) {return null;}
 		@Override
-		public String getJ(int ndx) throws PsseModelException {return null;}
+		public String getJ(int ndx) {return null;}
 		@Override
-		public float getX1_2(int ndx) throws PsseModelException {return 0f;}
+		public float getX1_2(int ndx) {return 0f;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	
 	protected TransformerList() {super();}

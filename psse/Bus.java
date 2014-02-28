@@ -22,6 +22,9 @@ public class Bus extends PsseBaseObject
 	public SvcList getSvcs() throws PsseModelException { return _list.getSvcs(_ndx); }
 	public PhaseShifterList getPhaseShifters() throws PsseModelException {return _list.getPhaseShifters(_ndx);}
 
+	public Island getIsland() throws PsseModelException {return _list.getIsland(_ndx);}
+	public Station getStation() throws PsseModelException {return _list.getStation(_ndx);}
+	
 	/* Convenience methods */
 	/** request that this node be islolated */
 	public SwitchList isolate() throws PsseModelException { return _list.isolate(_ndx); }
@@ -41,13 +44,7 @@ public class Bus extends PsseBaseObject
 	public boolean isEnergized() throws PsseModelException { return _list.isEnergized(_ndx); }
 	/** get frequency source priority */
 	public int getFrequencySourcePriority() throws PsseModelException {return _list.getFrequencySourcePriority(_ndx);}
-	/** get the island number */
-	public int getIsland() throws PsseModelException { return _list.getIsland(_ndx); }
-	/** get a station number if it exists or zero if not */
-	public int getStation() throws PsseModelException {return _list.getStation(_ndx); }
 
-	/* Raw PSS/e methods */
-	
 	/** Bus number */
 	public int getI() throws PsseModelException {return _list.getI(_ndx);}
 	/** Alphanumeric identifier */
@@ -84,4 +81,5 @@ public class Bus extends PsseBaseObject
 	public int getOWNER() throws PsseModelException {return _list.getOWNER(_ndx);}
 
 	public float getFrequency() throws PsseModelException {return _list.getFrequency(_ndx);}
+	
 }

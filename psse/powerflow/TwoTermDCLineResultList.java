@@ -52,4 +52,7 @@ public class TwoTermDCLineResultList extends BaseList<TwoTermDCLineResult>
 	public float getMWI(int ndx) throws PsseModelException {return _mwi[ndx];}
 	public float getMVArR(int ndx) throws PsseModelException {return _mvarr[ndx];}
 	public float getMVArI(int ndx) throws PsseModelException {return _mvari[ndx];}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException {return ndx;}
 }

@@ -132,7 +132,8 @@ public class SwitchedShuntSubList extends SwitchedShuntList
 	public void setQpu(int ndx, float q) throws PsseModelException {_base.setQpu(map(ndx), q);}
 	@Override
 	public boolean isInSvc(int ndx) throws PsseModelException {return _base.isInSvc(map(ndx));}
-
 	@Override
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {_base.setInSvc(map(ndx), state);}
+	@Override
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
 }

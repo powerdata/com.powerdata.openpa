@@ -1,7 +1,9 @@
 package com.powerdata.openpa.psse.csv;
 
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.BusSubList;
 import com.powerdata.openpa.psse.util.TP;
 import com.powerdata.openpa.psse.PsseModel;
 
@@ -36,9 +38,9 @@ public class IslandList extends com.powerdata.openpa.psse.IslandList
 	}
 
 	@Override
-	public int[] getBusNdxsForType(int ndx, BusTypeCode bustype) throws PsseModelException
+	public BusList getBusesForType(int ndx, BusTypeCode bustype) throws PsseModelException
 	{
-		return _model.tp().getBusNdxsForType(ndx, bustype);
+		return new BusSubList(_model.getBuses(), _model.tp().getBusNdxsForType(ndx, bustype));
 	}
 
 	@Override
@@ -47,9 +49,4 @@ public class IslandList extends com.powerdata.openpa.psse.IslandList
 		return _model.tp().isIslandEnergized(ndx);
 	}
 
-	@Override
-	public int getAngleRefBusNdx(int ndx) throws PsseModelException
-	{
-		return _model.tp().getAngleRefBusNdx(ndx);
-	}
 }

@@ -184,7 +184,8 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		
 		for (int i=0; i < rsh.size(); ++i)
 		{
-			((testForSvc(rsh.getMODSW(i), rsh.getBINIT(i), rsh.getN(i), rsh.getB(i)))?svcndx:shndx).add(i);
+			((testForSvc(rsh.getMODSW(i), rsh.getBINIT(i), rsh.getN(i),
+					rsh.getB(i))) ? svcndx : shndx).add(i);
 		}
 		
 		_shList = new ShuntRawList(this, rsh, shndx);
@@ -265,10 +266,4 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 		return _islands;
 	}
 
-	@Override
-	public int[] getBusNdxForType(BusTypeCode bustype)
-			throws PsseModelException
-	{
-		return tp().getBusNdxsForType(bustype);
-	}
 }

@@ -7,13 +7,16 @@ public abstract class AreaList extends PsseBaseList<Area>
 	public static final AreaList Empty = new AreaList()
 	{
 		@Override
-		public int getI(int ndx) throws PsseModelException {return 0;}
+		public int getI(int ndx) {return 0;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
+		@Override
+		public Area getByKey(long key) {return null;}
 	};
-	
 	
 	public AreaList() {super();}
 	public AreaList(PsseModel model) {super(model);}

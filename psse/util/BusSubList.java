@@ -5,6 +5,7 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.GenList;
+import com.powerdata.openpa.psse.Island;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.Owner;
@@ -72,8 +73,6 @@ public class BusSubList extends BusList
 	@Override
 	public boolean isEnergized(int ndx) throws PsseModelException {return _base.isEnergized(map(ndx));}
 	@Override
-	public int getIsland(int ndx) throws PsseModelException {return _base.getIsland(map(ndx));}
-	@Override
 	public BusTypeCode getBusType(int ndx) throws PsseModelException {return _base.getBusType(map(ndx));}
 	@Override
 	public Area getAreaObject(int ndx) throws PsseModelException {return _base.getAreaObject(map(ndx));}
@@ -119,7 +118,7 @@ public class BusSubList extends BusList
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 
 	@Override
-	public int getStation(int ndx) throws PsseModelException {return _base.getStation(map(ndx));}
+	public Island getIsland(int ndx) throws PsseModelException {return _base.getIsland(map(ndx));}
 	@Override
 	public void setVM(int ndx, float kv) throws PsseModelException {_base.setVM(map(ndx), kv);}
 	@Override
@@ -137,4 +136,7 @@ public class BusSubList extends BusList
 	public String getFullName(int ndx) throws PsseModelException {return _base.getFullName(map(ndx));}
 	@Override
 	public String getDebugName(int ndx) throws PsseModelException {return _base.getDebugName(map(ndx));}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
 }

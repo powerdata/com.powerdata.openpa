@@ -1,5 +1,7 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.util.HashKeyFinder;
+import com.powerdata.openpa.psse.util.KeyFinder;
 import com.powerdata.openpa.tools.AbstractBaseObject;
 import com.powerdata.openpa.tools.BaseList;
 import com.powerdata.openpa.tools.Complex;
@@ -91,7 +93,21 @@ public class ACBranchList extends BaseList<ACBranch>
 	public ACBranch get(int ndx) { return new ACBranchObj(ndx); }
 	@Override
 	public ACBranch get(String id) { return super.get(id); }
-
+	@Override
+	public ACBranch getByKey(long key) throws PsseModelException
+	{
+		return get(kf().findNdx(key));
+	}
+	protected KeyFinder kf() throws PsseModelException
+	{
+		if (_kf == null)
+		{
+			int n = size();
+			_kf = new HashKeyFinder(n);
+			for(int i=0; i < n; ++i) _kf.map(getKey(i));
+		}
+		return _kf;
+	}
 	public Complex getZ(int ndx) throws PsseModelException {return findBranch(ndx).getZ();}
 	public Complex getY(int ndx) throws PsseModelException {return findBranch(ndx).getY();}
 	public Bus getToBus(int ndx) throws PsseModelException {return findBranch(ndx).getToBus();}
@@ -132,6 +148,12 @@ public class ACBranchList extends BaseList<ACBranch>
 
 	@Override
 	public int size() {return _size;}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		return findBranch(ndx).getKey();
+	}
 
 }
 

@@ -75,8 +75,6 @@ public class LineSubList extends LineList
 	@Override
 	public float getR(int ndx) throws PsseModelException {return _base.getR(map(ndx));}
 	@Override
-	public float getB(int ndx) throws PsseModelException {return _base.getB(map(ndx));}
-	@Override
 	public float getRATEA(int ndx) throws PsseModelException {return _base.getRATEA(map(ndx));}
 	@Override
 	public float getRATEB(int ndx) throws PsseModelException {return _base.getRATEB(map(ndx));}
@@ -110,4 +108,6 @@ public class LineSubList extends LineList
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {_base.setInSvc(map(ndx), state);}
+	@Override
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
 }

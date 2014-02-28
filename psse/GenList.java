@@ -10,11 +10,15 @@ public abstract class GenList extends PsseBaseList<Gen>
 		@Override
 		public String getI(int ndx) throws PsseModelException {return null;}
 		@Override
-		public OwnershipList getOwnership(int ndx) throws PsseModelException {return null;}
+		public OwnershipList getOwnership(int ndx) {return null;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
+		@Override
+		public Gen getByKey(long key) {return null;}
 	};
 	
 	protected GenList() {super();}

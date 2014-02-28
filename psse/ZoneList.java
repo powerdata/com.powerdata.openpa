@@ -5,11 +5,13 @@ public abstract class ZoneList extends PsseBaseList<Zone>
 	public static final ZoneList Empty = new ZoneList()
 	{
 		@Override
-		public int getI(int ndx) throws PsseModelException {return 0;}
+		public int getI(int ndx) {return 0;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	protected ZoneList() {super();}
 	public ZoneList(PsseModel model) {super(model);}

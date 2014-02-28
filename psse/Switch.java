@@ -1,8 +1,6 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.Complex;
-
-public class Switch extends PsseBaseObject implements ACBranch
+public class Switch extends PsseBaseObject implements TwoTermDev
 {
 	protected SwitchList _list;
 	
@@ -30,28 +28,6 @@ public class Switch extends PsseBaseObject implements ACBranch
 	@Override
 	public String getJ() throws PsseModelException {return _list.getJ(_ndx);}
 
-	@Override
-	public float getR() throws PsseModelException {return 0;}
-	@Override
-	public float getX() throws PsseModelException {return 0;}
-	@Override
-	public Complex getZ() throws PsseModelException {return Complex.Zero;}
-	@Override
-	public Complex getY() throws PsseModelException {return Complex.Zero;}
-	@Override
-	public float getFromTap() throws PsseModelException {return 1;}
-	@Override
-	public float getToTap() throws PsseModelException {return 1;}
-	@Override
-	public float getGmag() throws PsseModelException {return 0;}
-	@Override
-	public float getBmag() throws PsseModelException {return 0;}
-	@Override
-	public float getFromBchg() throws PsseModelException {return 0;}
-	@Override
-	public float getToBchg() throws PsseModelException {return 0;}
-	@Override
-	public float getPhaseShift() throws PsseModelException {return 0;}
 	@Override
 	public boolean isInSvc() throws PsseModelException {return _list.isInSvc(_ndx);}
 	@Override

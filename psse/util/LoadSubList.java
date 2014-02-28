@@ -112,7 +112,8 @@ public class LoadSubList extends LoadList
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
 	public int size() {return _ndxs.length;}
-
 	@Override
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {_base.setInSvc(map(ndx), state);}
+	@Override
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
 }

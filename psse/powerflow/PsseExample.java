@@ -8,6 +8,7 @@ import com.powerdata.openpa.psse.Line;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.BusGroup2TDevList;
 import com.powerdata.openpa.psse.util.MinZMagFilter;
 import com.powerdata.openpa.tools.PAMath;
 
@@ -49,7 +50,7 @@ public class PsseExample
 		/*
 		 * PowerCalculator contains utilities to calculate line flows
 		 */
-		PowerCalculator pcalc = new PowerCalculator(_model);
+		PowerCalculator pcalc = new PowerCalculator(_model, new BusGroup2TDevList(_model));
 		
 		/*
 		 * calculate flows for just nontransformer branches, any list of objects

@@ -2,7 +2,10 @@ package com.powerdata.openpa.tools;
 
 import java.util.AbstractList;
 import java.util.HashMap;
+
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.HashKeyFinder;
+import com.powerdata.openpa.psse.util.KeyFinder;
 
 /**
  * Start of the object list hierarchy
@@ -14,10 +17,13 @@ import com.powerdata.openpa.psse.PsseModelException;
 
 public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
 {
+	protected KeyFinder _kf = null;
 	protected HashMap<String,Integer> _idToNdx = new HashMap<String,Integer>();
 	
 	/** Get a unique identifier for the object */
 	public abstract String getObjectID(int ndx) throws PsseModelException;
+	/** return a persistent key for this object */
+	public abstract long getKey(int ndx) throws PsseModelException;
 	public String getObjectName(int ndx) throws PsseModelException
 	{
 		return getObjectID(ndx);
@@ -39,6 +45,24 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 		Integer ndx = _idToNdx.get(objectid);
 		return (ndx != null)?get(ndx):null;
 	}
+	/** get an object by it's key */
+	public T getByKey(long key) throws PsseModelException
+	{
+		return get(kf().findNdx(key));
+	}
+	protected KeyFinder kf() throws PsseModelException
+	{
+		if (_kf == null)
+		{
+			int n = size();
+			_kf = new HashKeyFinder(n);
+			for(int i=0; i < n; ++i) _kf.map(getKey(i));
+		}
+		return _kf;
+	}
+
+	
+
 	/** Reindex the objectID to ndx mapping. 
 	 * @throws PsseModelException */
 	protected void reindex() throws PsseModelException
@@ -48,5 +72,7 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 		for(int i=0; i<count; i++) idToNdx.put(getObjectID(i), i);
 		_idToNdx = idToNdx;
 	}
+	@Deprecated
 	public int getRootIndex(int ndx) {return ndx;}
+	
 }

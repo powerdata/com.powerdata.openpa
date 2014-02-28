@@ -1,9 +1,9 @@
 package com.powerdata.openpa.tools;
 
 import java.io.PrintWriter;
-import com.powerdata.openpa.psse.BusList;
-import com.powerdata.openpa.psse.PsseModel;
+
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.BusGroup2TDevList;
 
 /**
  * Keep a more efficient version of the factorized sparse matrix.  
@@ -30,7 +30,7 @@ public class FactorizedBMatrix
 		_buselim = buselim;
 	}
 
-	public void dump(PsseModel model, PrintWriter pw) throws PsseModelException
+	public void dump(BusGroup2TDevList tn, PrintWriter pw) throws PsseModelException
 	{
 		pw.println("'brndx','eord','p','pndx','q','qndx','-bbranch/bself','bself'");
 		BusList buses = model.getBuses();

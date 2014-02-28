@@ -5,13 +5,15 @@ public abstract class SwitchList extends PsseBaseList<Switch>
 	public static final SwitchList Empty = new SwitchList()
 	{
 		@Override
-		public Bus getFromBus(int ndx) throws PsseModelException {return null;}
+		public Bus getFromBus(int ndx) {return null;}
 		@Override
-		public Bus getToBus(int ndx) throws PsseModelException {return null;}
+		public Bus getToBus(int ndx) {return null;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	protected SwitchList(){super();}
 	public SwitchList(PsseModel model) {super(model);}

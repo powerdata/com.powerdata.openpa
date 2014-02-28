@@ -8,41 +8,43 @@ public abstract class TwoTermDCLineList extends PsseBaseList<TwoTermDCLine>
 	public static final TwoTermDCLineList Empty = new TwoTermDCLineList()
 	{
 		@Override
-		public float getRDC(int ndx) throws PsseModelException {return 0f;}
+		public float getRDC(int ndx) {return 0f;}
 		@Override
-		public float getSETVL(int ndx) throws PsseModelException {return 0f;}
+		public float getSETVL(int ndx) {return 0f;}
 		@Override
-		public float getVSCHD(int ndx) throws PsseModelException {return 0f;}
+		public float getVSCHD(int ndx) {return 0f;}
 		@Override
-		public String getIPR(int ndx) throws PsseModelException {return "";}
+		public String getIPR(int ndx) {return "";}
 		@Override
-		public int getNBR(int ndx) throws PsseModelException {return 0;}
+		public int getNBR(int ndx) {return 0;}
 		@Override
-		public float getALFMX(int ndx) throws PsseModelException {return 0f;}
+		public float getALFMX(int ndx) {return 0f;}
 		@Override
-		public float getALFMN(int ndx) throws PsseModelException {return 0f;}
+		public float getALFMN(int ndx) {return 0f;}
 		@Override
-		public float getXCR(int ndx) throws PsseModelException {return 0f;}
+		public float getXCR(int ndx) {return 0f;}
 		@Override
-		public String getIPI(int ndx) throws PsseModelException {return "";}
+		public String getIPI(int ndx) {return "";}
 		@Override
-		public int getNBI(int ndx) throws PsseModelException  {return 0;}
+		public int getNBI(int ndx)  {return 0;}
 		@Override
-		public float getGAMMX(int ndx) throws PsseModelException {return 0f;}
+		public float getGAMMX(int ndx) {return 0f;}
 		@Override
-		public float getGAMMN(int ndx) throws PsseModelException {return 0f;}
+		public float getGAMMN(int ndx) {return 0f;}
 		@Override
-		public float getXCI(int ndx) throws PsseModelException {return 0f;}
+		public float getXCI(int ndx) {return 0f;}
 		@Override
-		public int getDCLineNum(int ndx) throws PsseModelException {return 0;}
+		public int getDCLineNum(int ndx) {return 0;}
 		@Override
 		public int size() {return 0;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
-		public float getEBASR(int ndx) throws PsseModelException {return 0f;}
+		public float getEBASR(int ndx) {return 0f;}
 		@Override
-		public float getEBASI(int ndx) throws PsseModelException {return 0f;}
+		public float getEBASI(int ndx) {return 0f;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 
 	protected TwoTermDCLineList() {super();}

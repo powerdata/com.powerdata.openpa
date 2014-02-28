@@ -6,9 +6,13 @@ public abstract class ImpCorrTblList extends PsseBaseList<ImpCorrTbl>
 	public static final ImpCorrTblList Empty = new ImpCorrTblList()
 	{
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
+		@Override
+		public ImpCorrTbl getByKey(long key) {return null;}
 	};
 
 	protected ImpCorrTblList() {super(null);}

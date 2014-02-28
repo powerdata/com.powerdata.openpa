@@ -11,17 +11,22 @@ import java.util.Stack;
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Island;
 import com.powerdata.openpa.psse.IslandList;
+import com.powerdata.openpa.psse.Load;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.Shunt;
+import com.powerdata.openpa.psse.Switch;
+import com.powerdata.openpa.psse.SwitchState;
 import com.powerdata.openpa.psse.Transformer;
 import com.powerdata.openpa.psse.TransformerCtrlMode;
 import com.powerdata.openpa.psse.TransformerList;
+import com.powerdata.openpa.psse.util.BusGroup;
+import com.powerdata.openpa.psse.util.BusGroup2TDevList;
+import com.powerdata.openpa.psse.util.BusGroupList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.psse.util.MinZMagFilter;
 import com.powerdata.openpa.tools.Complex;
@@ -53,16 +58,44 @@ public class FastDecoupledPowerFlow
 	float _qtoltap = .05f;
 	File _dbgdir;
 	ImpedanceFilter _zfilt;
+	BusGroup2TDevList _tn;
 	
 	public FastDecoupledPowerFlow(PsseModel model, ImpedanceFilter zfilt)
 			throws PsseModelException, IOException
 	{
 		_model = model;
+		System.err.println("construct power flow");
+		if (model.getSwitches().isEmpty())
+		{
+			/*
+			 * TODO: Make a simpler BusGroupList for unswitched models that can
+			 * just pass through efficiently but maintain the interface
+			 */
+			
+			_tn = new BusGroup2TDevList(model);
+		}
+		else
+		{
+			_tn = new BusGroup2TDevList(model)
+			{
+				@Override
+				protected boolean incSW(Switch s) throws PsseModelException
+				{
+					return s.getState() == SwitchState.Closed;
+				}
+			}.addSwitches();
+		}
+		System.err.println("topological nodes complete");
 		setupHotIslands();
 		_zfilt = zfilt;
+		System.err.println("build matrices");
+		
 		buildMatrices();
+		System.err.println("done matrices");
 	}
 
+	public BusGroup2TDevList getTopologicalNodes() {return _tn;}
+	
 	public void setDebugDir(File dbgdir) throws IOException, PsseModelException
 	{
 		_dbgdir = dbgdir;
@@ -103,14 +136,13 @@ public class FastDecoupledPowerFlow
 			throws PsseModelException, IOException
 	{
 		boolean debug = _dbgdir != null;
-		MismatchReport mmr = new MismatchReport(_model);
-		PowerCalculator pcalc = new PowerCalculator(_model, _zfilt);
+		MismatchReport mmr = new MismatchReport(_model, _tn);
+		PowerCalculator pcalc = new PowerCalculator(_model, _zfilt, _tn);
 		if (debug)
 		{
 			pcalc.setDebugEnabled(mmr);
 		}
-		BusList buses = _model.getBuses();
-		int nbus = buses.size();
+		int nbus = _tn.size();
 		
 		if (_adjusttaps) 
 			findAdjustableTransformers();
@@ -133,20 +165,21 @@ public class FastDecoupledPowerFlow
 			case Flat:
 			default:
 				va = new float[nbus];
-				vm = flatMag(_model.getBusNdxForType(BusTypeCode.Load));
+				vm = flatMag(BusTypeCode.Load);
 				break;
 
 		}
 
 		for(Gen g : _model.getGenerators())
 		{
-			Bus b = g.getBus();
+			BusGroup b = _tn.findGroup(g.getBus());
 			BusTypeCode btc = b.getBusType();
 			if (btc == BusTypeCode.Gen || btc == BusTypeCode.Slack)
 			{
 				//TODO:  resolve multiple setpoints if found
-				int bndx = b.getIndex();
-				vm[bndx] = g.getVS();
+				int bndx = b.getRootIndex();
+//				vm[bndx] = g.getVS();
+				vm[bndx] = b.getVMpu();
 			}
 		}
 
@@ -167,7 +200,6 @@ public class FastDecoupledPowerFlow
 				int[] ebus = _bp.getEliminatedBuses();
 				for(int bx : ebus) pmm[bx] /= vm[bx];
 				float[] dp = _bp.solve(pmm);
-//				for(int i=0; i < nbus; ++i) va[i] += dp[i];
 				for(int bx : ebus) va[bx] += dp[bx];
 			}
 			
@@ -210,10 +242,11 @@ public class FastDecoupledPowerFlow
 		_adjustablexfr = Arrays.copyOf(tndx, nadj);
 	}
 
-	float[] flatMag(int[] qbus) throws PsseModelException
+	float[] flatMag(BusTypeCode type) throws PsseModelException
 	{
-		float[] vm = new float[_model.getBuses().size()];
-		for(int b : qbus) vm[b] = 1f;
+		float[] vm = new float[_tn.size()];
+		for(Bus b: _model.getIslands().getBusesForType(type))
+			vm[_tn.findGrpNdx(b.getRootIndex())] = 1f;
 		return vm;
 	}
 
@@ -229,48 +262,66 @@ public class FastDecoupledPowerFlow
 			nc |= tnc;
 			if (!tnc) pr.setIterationCount(iter+1);
 		}
+		System.out.println();
 		return nc;
 	}
 
 	boolean notConverged(float[] pmm, float[] qmm, Island island, float ptol,
 			float qtol, PowerFlowConvergence r) throws PsseModelException
 	{
-		int[] pq = island.getBusNdxsForType(BusTypeCode.Load);
-		int[] pv = island.getBusNdxsForType(BusTypeCode.Gen);
-		int worstp = findWorst(pmm, new int[][] { pq, pv });
-		int worstq = findWorst(qmm, new int[][] {pq});
-		BusList buses = _model.getBuses();
-		Bus pworst = buses.get(worstp);
-		Bus qworst = buses.get(worstq);
-		System.out.format("pmm %s [%s] %f, qmm %s [%s] %f\n", 
-				pworst.getObjectID(), pworst.getNAME(), pmm[worstp],
-				qworst.getObjectID(), qworst.getNAME(), qmm[worstq]);
-		boolean conv = (Math.abs(pmm[worstp]) < ptol) && (Math.abs(qmm[worstq]) < qtol);
-		r.setWorstPbus(worstp);
-		r.setWorstPmm(pmm[worstp]);
-		r.setWorstQbus(worstq);
-		r.setWorstQmm(qmm[worstq]);
+		boolean pconv = true, qconv = true;
+		BusGroup2TDevList pq = _tn.getForType(BusTypeCode.Load, island);
+		BusGroup2TDevList pv = _tn.getForType(BusTypeCode.Gen, island);
+		int pwndx = findWorst(pmm, new BusGroup2TDevList[] { pq, pv });
+		int qwndx = findWorst(qmm, new BusGroup2TDevList[] {pq});
+		if (pwndx == -1 && qwndx == -1) return false;
+		System.out.format("\n\t%s", island.getObjectName());
+		r.setWorstPbus(pwndx);
+		if (pwndx != -1)
+		{
+			BusGroup pworst = _tn.get(pwndx);
+			float mmw = pmm[pwndx];
+			System.out.format("\n\t\tindex %d id %s name %s pmismatch %f", pwndx,
+					pworst.getObjectID(), pworst.getDebugName(), mmw);
+			r.setWorstPmm(mmw);
+			pconv = Math.abs(mmw) < ptol;
+		}
+		
+		r.setWorstQbus(qwndx);
+		if (qwndx != -1)
+		{
+			BusGroup qworst = _tn.get(qwndx);
+			float mmw = qmm[qwndx];
+			System.out.format("\n\t\tindex %d id %s name %s qmismatch %f", qwndx,
+					qworst.getObjectID(), qworst.getDebugName(), mmw);
+			r.setWorstQmm(mmw);
+			qconv = Math.abs(mmw) < ptol;
+		}
+		System.out.println();
+		
+		boolean conv = pconv && qconv;
 
 		r.setConverged(conv);
 		return !conv;
 	}
 
-	int findWorst(float[] mm, int[][] lists)
+	int findWorst(float[] mm, BusGroup2TDevList[] lists) throws PsseModelException
 	{
 		float wval = 0f;
 		int wb = -1;
 		for(int i=0; wb == -1 && i < lists.length; ++i)
 		{
-			for (int b : lists[i])
+			for (BusGroup b : lists[i])
 			{
-				wb = b;
+				wb = b.getRootIndex();
 				break;
 			}
 		}
-		for (int[] list : lists)
+		for (BusGroup2TDevList list : lists)
 		{
-			for (int b : list)
+			for (BusGroup bus : list)
 			{
+				int b = bus.getRootIndex();
 				float am = Math.abs(mm[b]);
 				if (am > wval)
 				{
@@ -289,7 +340,7 @@ public class FastDecoupledPowerFlow
 		int[] hotisl = new int[islands.size()];
 		for(int i=0; i < islands.size(); ++i)
 		{
-			if (islands.get(i).isEnergized())
+			if (islands.isEnergized(i))
 				hotisl[nhot++] = i; 
 		}
 		
@@ -303,27 +354,29 @@ public class FastDecoupledPowerFlow
 	{
 		LinkNet net = new LinkNet();
 		ACBranchList branches = _model.getBranches();
-		int nbus = _model.getBuses().size(), nbranch = branches.size();
+		int nbus = _tn.size(), nbranch = branches.size();
 		net.ensureCapacity(nbus-1, nbranch);
 		float[] bselfbp = new float[nbus];
 		float[] bbranchbp = new float[nbranch];
 		float[] bselfbpp = new float[nbus];
 		float[] bbranchbpp = new float[nbranch];
 		
-		for(Shunt shunt : _model.getShunts())
+		for(Shunt s : _model.getShunts())
 		{
-			if (shunt.isInSvc())
-				bselfbpp[shunt.getBus().getIndex()] -= shunt.getBpu();
+			if (s.isInSvc())
+			{
+				bselfbpp[_tn.findGrpNdx(s.getBus())] -= s.getBpu();
+			}
 		}
-
+		
 		int nbr = branches.size();
 		for(int i=0; i < nbr; ++i)
 		{
 			ACBranch br = branches.get(i);
 			if (br.isInSvc())
 			{
-				int fbus = br.getFromBus().getIndex();
-				int tbus = br.getToBus().getIndex();
+				int fbus = _tn.findGrpNdx(br.getFromBus());
+				int tbus = _tn.findGrpNdx(br.getToBus());
 				int brx = net.findBranch(fbus, tbus);
 				if (brx == -1)
 				{
@@ -342,18 +395,33 @@ public class FastDecoupledPowerFlow
 			}
 		}
 
-		int[] pv = _model.getBusNdxForType(BusTypeCode.Gen);
-		int[] slack = _model.getBusNdxForType(BusTypeCode.Slack);
-		int[] bppbus = Arrays.copyOf(pv, pv.length+slack.length);
-		System.arraycopy(slack, 0, bppbus, pv.length, slack.length);
+//		IslandList islands = _model.getIslands();
+		BusGroupList pv = _tn.getForType(BusTypeCode.Gen);
+		BusGroupList slack = _tn.getForType(BusTypeCode.Slack);
+		int[] bppbus = prepBusArray(new BusGroup2TDevList[] {pv, slack});
 		
 		
-		SparseBMatrix prepbp = new SparseBMatrix(net, slack, bbranchbp, bselfbp);
+		SparseBMatrix prepbp = new SparseBMatrix(net, prepBusArray(new BusGroup2TDevList[]{slack}), bbranchbp, bselfbp);
 		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
 		
 		_bp = prepbp.factorize();
 		_bpp = _prepbpp.factorize();
 
+	}
+	
+	int[] prepBusArray(BusGroup2TDevList[] lists) throws PsseModelException
+	{
+		int rvsz = 0, j=0;
+		for(BusGroup2TDevList list : lists) rvsz += list.size();
+		int[] rv = new int[rvsz];
+		for(BusGroup2TDevList list : lists)
+		{
+			for (BusGroup b : list)
+			{
+				rv[j++] = b.getRootIndex();
+			}
+		}
+		return rv;
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -405,27 +473,36 @@ public class FastDecoupledPowerFlow
 		
 		PowerFlowConvergenceList pslist = pf.runPowerFlow(vstart);
 		
-		System.out.println("Island Converged Iterations WorstPBus   Pmm   WorstQBus   Qmm");
+		System.out.println("Island Converged Iterations WorstPBus   Pmm   WorstQBus   Qmm   Load    Gen");
 		IslandList islands = model.getIslands();
-		BusList buses = model.getBuses();
+		BusGroup2TDevList topbus = pf.getTopologicalNodes();
+		
 		for(PowerFlowConvergence psol : pslist)
 		{
 			Island i = islands.get(psol.getIslandNdx());
-			System.out.format("  %s     %5s       %2d     %9s %7.2f %9s %7.2f\n",
+			float ld = 0, gn = 0;
+			for(Gen g : i.getGenerators())
+				gn += g.getPS();
+			for(Load l : i.getLoads())
+				ld += l.getP();
+			
+			
+			System.out.format("  %s     %5s       %2d     %9s %7.2f %9s %7.2f %7.2f %7.2f\n",
 				i.getObjectName(),
 				String.valueOf(psol.getConverged()),
 				psol.getIterationCount(),
-				buses.get(psol.getWorstPbus()).getObjectName(),
+				(psol.getWorstPbus() == -1)?" -- ":topbus.get(psol.getWorstPbus()).getObjectName(),
 				PAMath.pu2mw(psol.getWorstPmm()),
-				buses.get(psol.getWorstQbus()).getObjectName(),
-				PAMath.pu2mvar(psol.getWorstQmm()));
-				
+				(psol.getWorstQbus() == -1)?" -- ":topbus.get(psol.getWorstQbus()).getObjectName(),
+				PAMath.pu2mvar(psol.getWorstQmm()), ld, gn);
 		}
-		
+		/*
+		 * TODO:  results should probably be for the switched model, not the topological view
+		 */
 		if (results != null)
 		{
-			MismatchReport mmr = new MismatchReport(model);
-			PowerCalculator pc = new PowerCalculator(model);
+			MismatchReport mmr = new MismatchReport(model, topbus);
+			PowerCalculator pc = new PowerCalculator(model, topbus);
 			pc.setDebugEnabled(mmr);
 			pc.calculateMismatches(pf.getVA(), pf.getVM());
 			mmr.report(results);
@@ -444,7 +521,7 @@ public class FastDecoupledPowerFlow
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
 				new File(tdir, nm))));
-		b.dump(_model, pw);
+		b.dump(_tn, pw);
 		pw.close();
 	}
 

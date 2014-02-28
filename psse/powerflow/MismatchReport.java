@@ -8,16 +8,16 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import com.powerdata.openpa.psse.ACBranchList;
-import com.powerdata.openpa.psse.Bus;
-import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
+import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Island;
-import com.powerdata.openpa.psse.IslandList;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TwoTermDCLineList;
 import com.powerdata.openpa.psse.TwoTermDev;
+import com.powerdata.openpa.psse.util.BusGroup;
+import com.powerdata.openpa.psse.util.BusGroup2TDevList;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
 /**
@@ -37,13 +37,15 @@ public class MismatchReport
 	int									_ngen, _nload, _nshunt, _nsvc, _nbr;
 	float[]								_shq, _svcq, _pfrm, _pto,
 			_qfrm, _qto, _vm, _va, _pmm, _qmm;
+	BusGroup2TDevList _tn;
 
 	//	PrintWriter _out;
 	@SuppressWarnings("unchecked")
-	public MismatchReport(PsseModel model) throws PsseModelException
+	public MismatchReport(PsseModel model, BusGroup2TDevList tn) throws PsseModelException
 	{
 		_model = model;
-		_nbus = model.getBuses().size();
+		_tn = tn;
+		_nbus = _tn.size();
 		
 		_otdevorder = new Object[] {
 				_model.getGenerators(), _model.getLoads(), _model.getShunts(),
@@ -57,7 +59,6 @@ public class MismatchReport
 		for(Object l : _otdevorder)
 			otsize += ((List<? extends OneTermDev>) l).size();
 		
-//		TwoTermDevList ttdevs = model.getTwoTermDevs();
 		TwoTermDCLineList t2dclines = model.getTwoTermDCLines();
 		ACBranchList acbranch = model.getBranches();
 		_nbr = acbranch.size()+t2dclines.size();
@@ -69,8 +70,8 @@ public class MismatchReport
 			List<? extends TwoTermDev> list = (List<? extends TwoTermDev>) olist; 
 			for(TwoTermDev dev : list)
 			{
-				int fndx = dev.getFromBus().getIndex();
-				int tndx = dev.getToBus().getIndex();
+				int fndx = _tn.findGrpNdx(dev.getFromBus());
+				int tndx = _tn.findGrpNdx(dev.getToBus());
 				_brnet.addBranch(fndx, tndx);
 			}
 		}
@@ -79,7 +80,7 @@ public class MismatchReport
 		{
 			for (OneTermDev otd : (List<? extends OneTermDev>)otlist)
 			{
-				int bndx = (otd.isInSvc()) ? otd.getBus().getIndex() : _nbus;
+				int bndx = (otd.isInSvc()) ? _tn.findGrpNdx(otd.getBus()) : _nbus;
 				_otnet.addBranch(bndx, _nbus);
 			}
 		}
@@ -92,7 +93,7 @@ public class MismatchReport
 	
 	public void report(PrintWriter out) throws IOException, PsseModelException
 	{
-		out.println("BusID,BusName,Energized,Island,Type,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev");
+		out.println("BusNdx,BusID,BusName,Energized,Island,Type,VA,VM,Pmm,Qmm,MaxMM,DevID,DevName,Pdev,Qdev,Pmin,Pmax,Qmin,Qmax,AtPlim,AtQlim");
 		for (int i=0; i < _nbus; ++i)
 		{
 			_report(out, i, _brnet.findBranches(i), _otnet.findBranches(i));
@@ -116,22 +117,20 @@ public class MismatchReport
 
 	void _report(PrintWriter out, int i, int[] branches, int[] otdevs) throws PsseModelException
 	{
-		BusList buses = _model.getBuses();
-		Bus b = buses.get(i);
-//		if (!b.isEnergized()) return;
-		//TODO:  shoudl island really ever be able to be -1?
+		BusGroup b = _tn.get(i);
+
 		if (branches.length == 0 && otdevs.length == 0) return;
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
-		IslandList islands = _model.getIslands();
-		
-		Island island = islands.get(b.getIsland());
+
+		Island island = b.getIsland();
 		
 		String btmp = String.format(
-				"\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,", 
-				b.getObjectID(), b.getObjectName(),
+				"%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,", 
+				i, b.getObjectID(), b.getDebugName(),
 				island.isEnergized() ? "true" : "false", island.getIndex(), 
 				b.getBusType(), PAMath.rad2deg(_va[i]), _vm[i], 
 				PAMath.pu2mw(_pmm[i]), PAMath.pu2mvar(_qmm[i]), mmm);
+
 		for(int ttdev : branches)
 		{
 			TwoTermDev ttd = null;
@@ -144,7 +143,7 @@ public class MismatchReport
 				t -= list.size();
 			}
 			
-			int fbus = ttd.getFromBus().getIndex();
+			int fbus = _tn.findGrpNdx(ttd.getFromBus());
 			float pp, qq;
 			if (fbus == i)
 			{
@@ -165,21 +164,47 @@ public class MismatchReport
 		for(int otdev : otdevs)
 		{
 			out.print(btmp);
-			printDevice(out, otdev);
+			printDevice(out, otdev, _pmm[i], _qmm[i]);
 		}
 
 	}
 
-	void printDevice(PrintWriter out, int otdev) throws PsseModelException
+	void printDevice(PrintWriter out, int otdev, float pmm, float qmm) throws PsseModelException
 	{
 		OneTermDev od;
 		float pval, qval;
+		String pmax="", pmin="", qmax="", qmin="",atplim="",atqlim="";
 		if (otdev < _ngen)
 		{
-			od = _model.getGenerators().get(otdev);
-			Bus b = od.getBus();
-			pval = (b.getBusType() == BusTypeCode.Slack) ? 0f : od.getPpu();
-			qval = (b.getBusType() != BusTypeCode.Load) ? 0f : od.getQpu();
+			Gen god = _model.getGenerators().get(otdev);
+			od = god;
+			BusGroup b = _tn.findGroup(od.getBus());
+			BusTypeCode btype = b.getBusType();
+			pval = (!b.isEnergized()) ? 0f : PAMath.mw2pu(god.getPS());
+			qval = (b.isEnergized() && btype == BusTypeCode.Load) ? PAMath.mvar2pu(god.getQS()) : 0f;
+			float pb = god.getPB(), pt = god.getPT(), qb = god.getQB(), qt = god.getQT();
+			pmax = String.format("%f", pt);
+			pmin = String.format("%f", pb);
+			qmax = String.format("%f", qt);
+			qmin = String.format("%f", qb);
+			float pvmm = pval + pmm, qvmm = qval + qmm;
+			if ((pvmm+0.005f) < PAMath.mw2pu(pb))
+			{
+				atplim = String.format("%f", PAMath.pu2mw(pvmm) - pb);
+			}
+			else if ((pvmm-0.005f) > PAMath.mw2pu(pt))
+			{
+				atplim = String.format("%f", PAMath.pu2mw(pvmm) - pt);
+			}
+			if ((qvmm+0.005f) < PAMath.mw2pu(qb))
+			{
+				atqlim = String.format("%f", PAMath.pu2mw(qvmm) - qb);
+			}
+			else if ((qvmm-0.005f) > PAMath.mw2pu(qt))
+			{
+				atqlim = String.format("%f", PAMath.pu2mw(qvmm) - qt);
+			}
+			
 		}
 		else if ((otdev -= _ngen) < _nload)
 		{
@@ -201,8 +226,9 @@ public class MismatchReport
 			qval = _svcq[otdev];
 		}
 
-		out.format("\"%s\",\"%s\",%f,%f\n",
-				od.getObjectID(), od.getObjectName(), PAMath.pu2mw(pval), PAMath.pu2mvar(qval)); 
+		out.format("\"%s\",\"%s\",%f,%f,%s,%s,%s,%s,%s,%s\n",
+				od.getObjectID(), od.getDebugName(), PAMath.pu2mw(pval), PAMath.pu2mvar(qval),
+				pmin, pmax, qmin, qmax, atplim, atqlim);
 
 	}
 

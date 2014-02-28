@@ -10,13 +10,15 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	public static final SvcList Empty = new SvcList()
 	{
 		@Override
-		public String getI(int ndx) throws PsseModelException {return null;}
+		public String getI(int ndx) {return null;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
 		@Override
-		public Limits getReactivePowerLimits(int ndx) throws PsseModelException {return new Limits(1f,1f);}
+		public Limits getReactivePowerLimits(int ndx) {return new Limits(1f,1f);}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	
 	Complex _tmps;
@@ -72,10 +74,11 @@ public abstract class SvcList extends PsseBaseList<SVC>
 		else
 		{
 			float bs = getBINIT(ndx);
-			Limits qlim = getReactivePowerLimits(ndx);
-			if (bs <= qlim.getMin()) return State.ReactorLimit;
-			else if (bs >= qlim.getMax()) return State.CapacitorLimit;
-			else return State.Normal;
+//			Limits qlim = getReactivePowerLimits(ndx);
+//			if (bs <= qlim.getMin()) return State.ReactorLimit;
+//			else if (bs >= qlim.getMax()) return State.CapacitorLimit;
+//			else return State.Normal;
+			return State.Normal;
 		}
 	}
 

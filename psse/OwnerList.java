@@ -10,6 +10,8 @@ public abstract class OwnerList extends PsseBaseList<Owner>
 		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) throws PsseModelException {return -1;}
 	};
 	protected OwnerList() {super();}
 	public OwnerList(PsseModel model) {super(model);}

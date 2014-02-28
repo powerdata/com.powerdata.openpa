@@ -10,6 +10,8 @@ public abstract class ShuntList extends PsseBaseList<Shunt>
 		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	
 	protected ShuntList(){super();}

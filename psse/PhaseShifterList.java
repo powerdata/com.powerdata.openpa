@@ -22,6 +22,8 @@ public abstract class PhaseShifterList extends PsseBaseList<PhaseShifter>
 		public String getObjectID(int ndx) throws PsseModelException {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
 	};
 	
 	protected PhaseShifterList() {super();}

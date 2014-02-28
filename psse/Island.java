@@ -24,18 +24,6 @@ public class Island extends PsseBaseObject
 		public SwitchList getSwitches() throws PsseModelException {return SwitchList.Empty;}
 		@Override
 		public BusList getBusesForType(BusTypeCode bustype) throws PsseModelException {return BusList.Empty;}
-		@Override
-		public int[] getBusNdxsForType(BusTypeCode bustype) throws PsseModelException {return new int[0];}
-
-														@Override
-														public boolean isEnergized()
-																throws PsseModelException
-														{
-															return false;
-														}
-
-		@Override
-		public int getAngleRefBusNdx() throws PsseModelException {return -1;}
 	};
 	protected IslandList _list;
 	
@@ -60,12 +48,5 @@ public class Island extends PsseBaseObject
 		return _list.getBusesForType(_ndx, bustype);
 	}
 	
-	public int[] getBusNdxsForType(BusTypeCode bustype) throws PsseModelException
-	{
-		return _list.getBusNdxsForType(_ndx, bustype);
-	}
-
 	public boolean isEnergized() throws PsseModelException {return _list.isEnergized(_ndx);}
-
-	public int getAngleRefBusNdx() throws PsseModelException {return _list.getAngleRefBusNdx(_ndx);}
 }

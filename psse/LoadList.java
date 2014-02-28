@@ -7,11 +7,15 @@ public abstract class LoadList extends PsseBaseList<Load>
 	public static final LoadList Empty = new LoadList()
 	{
 		@Override
-		public String getI(int ndx) throws PsseModelException {return null;}
+		public String getI(int ndx) {return null;}
 		@Override
-		public String getObjectID(int ndx) throws PsseModelException {return null;}
+		public String getObjectID(int ndx) {return null;}
 		@Override
 		public int size() {return 0;}
+		@Override
+		public long getKey(int ndx) {return -1;}
+		@Override
+		public Load getByKey(long key) {return null;}
 	};
 	
 	protected LoadList() {super();}

@@ -1,7 +1,9 @@
 package com.powerdata.openpa.psse.util;
 
 import com.powerdata.openpa.psse.BusList;
+import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.GenList;
+import com.powerdata.openpa.psse.Island;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.LoadList;
 import com.powerdata.openpa.psse.PhaseShifterList;
@@ -17,6 +19,7 @@ import com.powerdata.openpa.tools.AbstractBaseObject;
 
 public class BusGroup extends AbstractBaseObject implements PsseLists
 {
+	
 	BusGroupList _bglist;
 	
 	public BusGroup(BusGroupList list, int ndx)
@@ -64,4 +67,20 @@ public class BusGroup extends AbstractBaseObject implements PsseLists
 		return _bglist.getTwoTermDCLines(_ndx);
 	}
 
+	/** return the island this group is in */
+	@Deprecated /*CMM - not all groups have meaningful voltage or energization status */
+	public Island getIsland() throws PsseModelException {return _bglist.getIsland(_ndx);}
+
+	@Deprecated /*CMM - not all groups have meaningful voltage or energization status */
+	public BusTypeCode getBusType() throws PsseModelException
+	{
+		return _bglist.getBusType(_ndx);
+	}
+	
+	@Deprecated /*CMM - not all groups have meaningful voltage or energization status */
+	public float getVArad() throws PsseModelException {return _bglist.getVArad(_ndx);}
+	@Deprecated /*CMM - not all groups have meaningful voltage or energization status */
+	public float getVMpu() throws PsseModelException {return _bglist.getVMpu(_ndx);}
+	@Deprecated /*CMM - not all groups have meaningful voltage or energization status */
+	public boolean isEnergized() throws PsseModelException {return _bglist.isEnergized(_ndx);}
 }
