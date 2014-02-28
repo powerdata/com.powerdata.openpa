@@ -32,7 +32,7 @@ public class FactorizedBMatrix
 
 	public void dump(PsseModel model, PrintWriter pw) throws PsseModelException
 	{
-		pw.println("\"brndx\",\"eord\",\"p\",\"pndx\",\"q\",\"qndx\",\"-bbranch/bself\",\"bself\"");
+		pw.println("'brndx','eord','p','pndx','q','qndx','-bbranch/bself','bself'");
 		BusList buses = model.getBuses();
 		int iord = -1;
 		int oldpn = -1;
@@ -46,7 +46,7 @@ public class FactorizedBMatrix
 				++iord;
 			}
 
-			pw.format("%d,%d,\"%s\",%d,\"%s\",%d,%f,%f\n", _brndx[i], iord,
+			pw.format("%d,%d,'%s',%d,'%s',%d,%f,%f\n", _brndx[i], iord,
 					buses.get(pn).getNAME(), pn, buses.get(qn).getNAME(), qn,
 					_bbrofs[i], _bself[pn]);
 		}
