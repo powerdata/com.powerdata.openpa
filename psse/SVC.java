@@ -45,7 +45,7 @@ public class SVC extends PsseBaseObject implements OneTermDev
 	public void setVS(float vs) throws PsseModelException {_list.setVS(_ndx, vs);}
 	/** get reactive power setpoint in MVAr */
 	public float getQS() throws PsseModelException {return _list.getQS(_ndx);}
-	/** set reacxtive power setpoint in MVAr */
+	/** set reactive power setpoint in MVAr */
 	public void setQS(float qs) throws PsseModelException {_list.setQS(_ndx);} 
 	/** get reactive power setpoint p.u. on 100MVA base */
 	

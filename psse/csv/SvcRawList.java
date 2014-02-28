@@ -83,8 +83,7 @@ public class SvcRawList extends com.powerdata.openpa.psse.SvcList
 	@Override
 	public Limits getReactivePowerLimits(int ndx) throws PsseModelException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new Limits(_minB[ndx], _maxB[ndx]);
 	}
 
 	@Override
