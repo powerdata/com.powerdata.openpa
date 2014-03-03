@@ -252,5 +252,12 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 	{
 		return _stat[ndx] == 1;
 	}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 

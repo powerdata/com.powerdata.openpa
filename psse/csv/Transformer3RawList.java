@@ -521,5 +521,12 @@ public class Transformer3RawList extends com.powerdata.openpa.psse.util.Transfor
 		return sbase;
 	}
 
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 }

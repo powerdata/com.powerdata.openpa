@@ -200,4 +200,11 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 		_swon[ndx] = state;
 	}
 
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

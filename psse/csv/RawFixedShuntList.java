@@ -76,4 +76,11 @@ public class RawFixedShuntList extends ShuntList
 	public boolean isInSvc(int ndx) throws PsseModelException {return _stat[ndx] == 1;}
 	@Override
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {_stat[ndx] = state ? 1 : 0;}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

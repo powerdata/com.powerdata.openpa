@@ -127,5 +127,11 @@ public class GenList extends com.powerdata.openpa.psse.GenList
 	public float getDeftRMPCT(int ndx) throws PsseModelException {return super.getRMPCT(ndx);}
 	public float getDeftPT(int ndx) throws PsseModelException {return super.getPT(ndx);}
 	public float getDeftPB(int ndx) throws PsseModelException {return super.getPB(ndx);}
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

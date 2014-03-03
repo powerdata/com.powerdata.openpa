@@ -161,4 +161,11 @@ public class LineListRaw extends LineList
 	public float getDeftLEN(int ndx) throws PsseModelException {return super.getLEN(ndx);}
 	public float getDeftB(int ndx) throws PsseModelException {return 0;}
 
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

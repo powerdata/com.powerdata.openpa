@@ -238,4 +238,11 @@ public class TwoTermDCLineList extends com.powerdata.openpa.psse.TwoTermDCLineLi
 		_insvc[ndx] = state;
 		_eq.resetTP();
 	}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

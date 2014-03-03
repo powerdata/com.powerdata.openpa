@@ -158,4 +158,11 @@ public class PhaseShifterRawList extends com.powerdata.openpa.psse.PhaseShifterL
 	@Override
 	public int size() {return _size;}
 
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

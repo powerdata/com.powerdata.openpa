@@ -49,4 +49,11 @@ public class IslandList extends com.powerdata.openpa.psse.IslandList
 		return _model.tp().isIslandEnergized(ndx);
 	}
 
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -107,6 +107,13 @@ public class SwitchedShuntRawList extends com.powerdata.openpa.psse.SwitchedShun
 	{
 		_stat[ndx] = state ? 1 : 0;
 	}
+
+	@Override
+	public long getKey(int ndx) throws PsseModelException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 }

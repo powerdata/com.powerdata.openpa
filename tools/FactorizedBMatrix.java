@@ -2,8 +2,10 @@ package com.powerdata.openpa.tools;
 
 import java.io.PrintWriter;
 
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.util.BusGroup2TDevList;
+import com.powerdata.openpa.psse.util.BusGroupList;
 
 /**
  * Keep a more efficient version of the factorized sparse matrix.  
@@ -30,27 +32,27 @@ public class FactorizedBMatrix
 		_buselim = buselim;
 	}
 
-	public void dump(BusGroup2TDevList tn, PrintWriter pw) throws PsseModelException
-	{
-		pw.println("'brndx','eord','p','pndx','q','qndx','-bbranch/bself','bself'");
-		BusList buses = model.getBuses();
-		int iord = -1;
-		int oldpn = -1;
-		for (int i = 0; i < _pnode.length; ++i)
-		{
-			int pn = _pnode[i];
-			int qn = _qnode[i];
-			if (pn != oldpn)
-			{
-				oldpn = pn;
-				++iord;
-			}
-
-			pw.format("%d,%d,'%s',%d,'%s',%d,%f,%f\n", _brndx[i], iord,
-					buses.get(pn).getNAME(), pn, buses.get(qn).getNAME(), qn,
-					_bbrofs[i], _bself[pn]);
-		}
-	}
+//	public void dump(BusGroupList tn, PrintWriter pw) throws PsseModelException
+//	{
+//		pw.println("'brndx','eord','p','pndx','q','qndx','-bbranch/bself','bself'");
+////		BusList buses = tn.getBuses();
+//		int iord = -1;
+//		int oldpn = -1;
+//		for (int i = 0; i < _pnode.length; ++i)
+//		{
+//			int pn = _pnode[i];
+//			int qn = _qnode[i];
+//			if (pn != oldpn)
+//			{
+//				oldpn = pn;
+//				++iord;
+//			}
+//
+//			pw.format("%d,%d,'%s',%d,'%s',%d,%f,%f\n", _brndx[i], iord,
+//					buses.get(pn).getNAME(), pn, buses.get(qn).getNAME(), qn,
+//					_bbrofs[i], _bself[pn]);
+//		}
+//	}
 	
 	/** 
 	 * Perform a forward reduction

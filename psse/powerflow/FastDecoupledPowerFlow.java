@@ -398,14 +398,15 @@ public class FastDecoupledPowerFlow
 //		IslandList islands = _model.getIslands();
 		BusGroupList pv = _tn.getForType(BusTypeCode.Gen);
 		BusGroupList slack = _tn.getForType(BusTypeCode.Slack);
-		int[] bppbus = prepBusArray(new BusGroup2TDevList[] {pv, slack});
-		
-		
-		SparseBMatrix prepbp = new SparseBMatrix(net, prepBusArray(new BusGroup2TDevList[]{slack}), bbranchbp, bselfbp);
-		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
-		
-		_bp = prepbp.factorize();
-		_bpp = _prepbpp.factorize();
+		//TODO:  reimplement
+//		int[] bppbus = prepBusArray(new BusGroup2TDevList[] {pv, slack});
+//		
+//		
+//		SparseBMatrix prepbp = new SparseBMatrix(net, prepBusArray(new BusGroup2TDevList[]{slack}), bbranchbp, bselfbp);
+//		_prepbpp = new SparseBMatrix(net, bppbus, bbranchbpp, bselfbpp);
+//		
+//		_bp = prepbp.factorize();
+//		_bpp = _prepbpp.factorize();
 
 	}
 	
@@ -521,7 +522,8 @@ public class FastDecoupledPowerFlow
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
 				new File(tdir, nm))));
-		b.dump(_tn, pw);
+		//TODO:  reimplement
+//		b.dump(_tn, pw);
 		pw.close();
 	}
 
