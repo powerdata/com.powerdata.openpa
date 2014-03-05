@@ -48,7 +48,8 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	/** get an object by it's key */
 	public T getByKey(long key) throws PsseModelException
 	{
-		return get(kf().findNdx(key));
+		int n = kf().findNdx(key);
+		return (n == -1) ? null : get(n);
 	}
 	protected KeyFinder kf() throws PsseModelException
 	{

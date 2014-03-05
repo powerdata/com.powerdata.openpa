@@ -32,7 +32,8 @@ public class HashKeyFinder implements KeyFinder
 	@Override
 	public int findNdx(long key)
 	{
-		return _map.get(key);
+		Integer n = _map.get(key);
+		return (n == null) ? -1 : n;
 	}
 
 }
