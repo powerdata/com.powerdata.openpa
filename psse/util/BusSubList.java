@@ -138,5 +138,5 @@ public class BusSubList extends BusList
 	public String getDebugName(int ndx) throws PsseModelException {return _base.getDebugName(map(ndx));}
 
 	@Override
-	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(map(ndx));}
 }

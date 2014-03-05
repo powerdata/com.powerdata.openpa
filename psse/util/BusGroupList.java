@@ -55,7 +55,7 @@ public class BusGroupList extends BaseList<BusGroup>
 	public BusGroupList(PsseLists plists) throws PsseModelException
 	{
 		_model = plists;
-		Arrays.fill(_lstref, new WeakReference<int[][]>(null));
+		Arrays.fill(_lstref, new WeakReference<List<int[]>>(null));
 		_bus2grp = null;
 	}
 	
@@ -68,7 +68,7 @@ public class BusGroupList extends BaseList<BusGroup>
 	public BusGroupList(PsseLists plists, int[] busmap, int ngrp)
 	{
 		_model = plists;
-		Arrays.fill(_lstref, new WeakReference<int[][]>(null));
+		Arrays.fill(_lstref, new WeakReference<List<int[]>>(null));
 		_bus2grp = busmap;
 		_ngrp = ngrp;
 	}

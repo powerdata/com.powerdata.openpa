@@ -143,5 +143,5 @@ public class PhaseShifterSubList extends PhaseShifterList
 	@Override
 	public void setInSvc(int ndx, boolean status) throws PsseModelException {_base.setInSvc(map(ndx), status);}
 	@Override
-	public long getKey(int ndx) throws PsseModelException {return _base.getKey(ndx);}
+	public long getKey(int ndx) throws PsseModelException {return _base.getKey(map(ndx));}
 }

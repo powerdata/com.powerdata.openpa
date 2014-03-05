@@ -126,5 +126,5 @@ public class BusGroupSubList extends BusGroup2TDevList
 	@Deprecated
 	public int getRootIndex(int ndx) {return _base.getRootIndex(map(ndx));}
 	@Override
-	public long getKey(int ndx) {return _base.getKey(ndx);}
+	public long getKey(int ndx) {return _base.getKey(map(ndx));}
 }
