@@ -41,7 +41,11 @@ public class PsseClass
 
 	
 
-	protected String readLine(LineNumberReader r) throws IOException {return r.readLine().trim();}
+	protected String readLine(LineNumberReader r) throws IOException
+	{
+		String rv = r.readLine();
+		return (rv == null) ? null : rv.trim();
+	}
 	
 	public void processRecords(LineNumberReader rdr, PsseRecWriter wrtr,
 			PsseClassSet cset) throws PsseProcException
@@ -92,6 +96,7 @@ public class PsseClass
 
 	protected boolean isRecord(String l)
 	{
+		if (l == null) return false;
 		boolean rv = true;
 		
 		// look for comments, remove and re-trim;

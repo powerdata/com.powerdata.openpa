@@ -78,6 +78,10 @@ public class ShuntRawList extends com.powerdata.openpa.psse.ShuntList
 						++posinswsh;
 						--nshblk;
 					}
+					if (bshblk == 0f && nshblk > 0)
+					{
+						--nshblk;
+					}
 				}
 			}
 		}

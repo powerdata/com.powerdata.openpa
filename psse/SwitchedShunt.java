@@ -6,6 +6,19 @@ public class SwitchedShunt extends PsseBaseObject implements OneTermDev
 {
 	protected SwitchedShuntList _list;
 	
+	public static class SwitchedShuntBlock
+	{
+		private int _n;
+		private float _b;
+		public SwitchedShuntBlock(int n, float b)
+		{
+			_n = n;
+			_b = b;
+		}
+		public int getN() {return _n;}
+		public float getB() {return _b;}
+	}
+	
 	public SwitchedShunt(int ndx, SwitchedShuntList list)
 	{
 		super(list,ndx);
@@ -45,7 +58,8 @@ public class SwitchedShunt extends PsseBaseObject implements OneTermDev
 	/** switched shunt susceptance */
 	public float getBINIT() throws PsseModelException {return _list.getBINIT(_ndx);}
 	
-	ShuntList getShunts() throws PsseModelException {return _list.getShunts(_ndx);}
+	public ShuntList getShunts() throws PsseModelException {return _list.getShunts(_ndx);}
+	public SwitchedShuntBlock[] getBlocks() throws PsseModelException {return _list.getBlocks(_ndx);}
 
 	@Override
 	public float getP() throws PsseModelException {return _list.getP(_ndx);}

@@ -89,16 +89,22 @@ public class PsseHeader
 		}
 
 		// parse the date if it exists
-		int ixm = -1;
-		rstring = rstring.substring(end);
-		for(String m : _Months)
+		if (rstring == null || !rstring.isEmpty())
 		{
-			if ((ixm = rstring.indexOf(m))!= -1)
+			int ixm = -1;
+			rstring = rstring.substring(end);
+			for (String m : _Months)
 			{
-				parseDate(rstring.substring(ixm));
+				if ((ixm = rstring.indexOf(m)) != -1)
+				{
+					parseDate(rstring.substring(ixm));
+				}
 			}
+		}		
+		else
+		{
+			_caseTime = new GregorianCalendar();
 		}
-		
 		// track the time we run
 		_importTime = new GregorianCalendar();
 	}

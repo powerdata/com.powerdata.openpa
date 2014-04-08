@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse;
 
+import com.powerdata.openpa.psse.SwitchedShunt.SwitchedShuntBlock;
 import com.powerdata.openpa.tools.PAMath;
 
 public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
@@ -79,4 +80,8 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, PAMath.mvar2pu(q));}
 	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
+	public SwitchedShuntBlock[] getBlocks(int ndx) throws PsseModelException
+	{
+		return null;
+	}
 }

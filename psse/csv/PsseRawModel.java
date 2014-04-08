@@ -24,6 +24,8 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 {
 	/** root of the directory where the csv files are stored */
 	File _dir;
+	AreaList			_areas;
+	OwnerList			_owners;
 	BusListRaw				_buses;
 	LineListRaw			_branchList;
 	TransformerRawList		_xfrList;
@@ -125,7 +127,26 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	{
 		return _svcList;
 	}
-	
+	@Override
+	public AreaList getAreas() throws PsseModelException
+	{
+		if (_areas == null)
+		{
+			_areas = new AreaList(this, _dir);
+		}
+		return _areas;
+	}
+
+	@Override
+	public OwnerList getOwners() throws PsseModelException
+	{
+		if (_owners == null)
+		{
+			_owners = new OwnerList(this, _dir);
+		}
+		return _owners;
+	}
+
 	/** convert 3-winding to 2-winding and detect phase shifters */
 	protected void analyzeRawTransformers() throws PsseModelException
 	{
