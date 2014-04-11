@@ -412,4 +412,8 @@ public class LinkNet implements Cloneable
 			System.out.println("Error: "+e);
 		}
 	}
+	public int[] getConnectionCounts()
+	{
+		return _cnt.clone();
+	}
 }

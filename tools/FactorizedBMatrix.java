@@ -1,11 +1,6 @@
 package com.powerdata.openpa.tools;
 
-import java.io.PrintWriter;
-
-import com.powerdata.openpa.psse.BusList;
-import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.util.BusGroup2TDevList;
-import com.powerdata.openpa.psse.util.BusGroupList;
+import java.util.Arrays;
 
 /**
  * Keep a more efficient version of the factorized sparse matrix.  
@@ -16,44 +11,21 @@ import com.powerdata.openpa.psse.util.BusGroupList;
 
 public class FactorizedBMatrix
 {
-	float[] _bself, _bbrofs;
-	int[] _pnode, _qnode, _brndx;
-	/** bus eliminated */
-	int[] _buselim;
-	
-	FactorizedBMatrix(float[] bself, float[] bbrofs, int[] pnode,
-			int[] qnode, int[] brndx, int[] buselim)
+	float[] _bd, _adjbo;
+	int[] _p, _q, _elimbusord;
+	public FactorizedBMatrix(float[] bDiag, float[] bOffDiag,
+			int[] p, int[] q, int[] elimNdOrder,int elimBusCnt,
+			int[] elimBrOrder, int elimBranchCount)
 	{
-		_bself = bself;
-		_bbrofs = bbrofs;
-		_pnode = pnode;
-		_qnode = qnode;
-		_brndx = brndx;
-		_buselim = buselim;
+		_bd = bDiag.clone();
+		_p = Arrays.copyOf(p, elimBranchCount);
+		_q = Arrays.copyOf(q, elimBranchCount);
+		_adjbo = new float[elimBranchCount];
+		for(int i=0; i < elimBranchCount; ++i)
+			_adjbo[i] = -bOffDiag[elimBrOrder[i]] / bDiag[p[i]];
+		_elimbusord = Arrays.copyOf(elimNdOrder, elimBusCnt);
 	}
 
-//	public void dump(BusGroupList tn, PrintWriter pw) throws PsseModelException
-//	{
-//		pw.println("'brndx','eord','p','pndx','q','qndx','-bbranch/bself','bself'");
-////		BusList buses = tn.getBuses();
-//		int iord = -1;
-//		int oldpn = -1;
-//		for (int i = 0; i < _pnode.length; ++i)
-//		{
-//			int pn = _pnode[i];
-//			int qn = _qnode[i];
-//			if (pn != oldpn)
-//			{
-//				oldpn = pn;
-//				++iord;
-//			}
-//
-//			pw.format("%d,%d,'%s',%d,'%s',%d,%f,%f\n", _brndx[i], iord,
-//					buses.get(pn).getNAME(), pn, buses.get(qn).getNAME(), qn,
-//					_bbrofs[i], _bself[pn]);
-//		}
-//	}
-	
 	/** 
 	 * Perform a forward reduction
 	 * @param mm mismatch array
@@ -61,12 +33,12 @@ public class FactorizedBMatrix
 	 */
 	public float[] forwardReduction(float[] mm)
 	{
-		int nbr = _bbrofs.length;
+		int nbr = _adjbo.length;
 		float[] rv = mm.clone();
 
 		for (int i = 0; i < nbr; ++i)
 		{
-			rv[_qnode[i]] += _bbrofs[i] * rv[_pnode[i]];
+			rv[_q[i]] += _adjbo[i] * rv[_p[i]];
 		}
 		return rv;
 	}
@@ -78,15 +50,15 @@ public class FactorizedBMatrix
 	 */
 	public float[] backwardSubstitution(float[] ds)
 	{
-		int nbr = _bbrofs.length;
+		int nbr = _adjbo.length;
 		float[] dx = new float[ds.length];
-		for(int bus : _buselim)
+		for(int bus : _elimbusord)
 		{
-			dx[bus] = ds[bus] / _bself[bus];
+			dx[bus] = ds[bus] / _bd[bus];
 		}
 		for (int i = nbr - 1; i >= 0; --i)
 		{
-			dx[_pnode[i]] += _bbrofs[i] * dx[_qnode[i]];
+			dx[_p[i]] += _adjbo[i] * dx[_q[i]];
 		}
 		return dx;
 	}
@@ -103,10 +75,4 @@ public class FactorizedBMatrix
 	{
 		return backwardSubstitution(forwardReduction(mm));
 	}
-
-	/**
-	 * As a convenience, return buses that we determined get eliminated
-	 * @return array of eliminated bus indexes
-	 */
-	public int[] getEliminatedBuses() {return _buselim;}
 }
