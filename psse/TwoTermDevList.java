@@ -100,6 +100,24 @@ public class TwoTermDevList extends BaseList<TwoTermDev>
 
 
 	@Override
+	public String getObjectName(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).getObjectName();
+	}
+
+	@Override
+	public String getFullName(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).getFullName();
+	}
+
+	@Override
+	public String getDebugName(int ndx) throws PsseModelException
+	{
+		return findDev(ndx).getDebugName();
+	}
+
+	@Override
 	public int size() {return _size;}
 
 	@Override

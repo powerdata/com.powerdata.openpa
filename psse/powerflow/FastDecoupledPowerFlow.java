@@ -33,7 +33,7 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
-import com.powerdata.openpa.tools.SparseBMatrix;
+//import com.powerdata.openpa.tools.SparseBMatrix;
 /**
  * Utility to run a Fast-Decoupled AC Power Flow
  * 
@@ -50,7 +50,7 @@ public class FastDecoupledPowerFlow
 	int _itermax = 40;
 	PsseModel _model;
 	FactorizedBMatrix _bp, _bpp;
-	SparseBMatrix _prepbpp;
+//	SparseBMatrix _prepbpp;
 	int[] _hotislands;
 	float[] _vm, _va;
 	boolean _adjusttaps = false;
@@ -197,7 +197,7 @@ public class FastDecoupledPowerFlow
 			 */
 			{
 				float[] pmm = mm[0];
-				int[] ebus = _bp.getEliminatedBuses();
+				int[] ebus=null;//TODO: = _bp.getEliminatedBuses();
 				for(int bx : ebus) pmm[bx] /= vm[bx];
 				float[] dp = _bp.solve(pmm);
 				for(int bx : ebus) va[bx] += dp[bx];
@@ -211,7 +211,7 @@ public class FastDecoupledPowerFlow
 			if (nconv)
 			{
 				float[] qmm = mm[1];
-				int[] ebus = _bpp.getEliminatedBuses();
+				int[] ebus=null;//TODO: = _bpp.getEliminatedBuses();
 				for(int bx : ebus) qmm[bx] /= vm[bx];
 				float[] dq = _bpp.solve(qmm);
 
