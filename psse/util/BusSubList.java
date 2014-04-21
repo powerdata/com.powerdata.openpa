@@ -12,6 +12,7 @@ import com.powerdata.openpa.psse.Owner;
 import com.powerdata.openpa.psse.PhaseShifterList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.ShuntList;
+import com.powerdata.openpa.psse.Station;
 import com.powerdata.openpa.psse.SvcList;
 import com.powerdata.openpa.psse.SwitchList;
 import com.powerdata.openpa.psse.TransformerList;
@@ -139,4 +140,7 @@ public class BusSubList extends BusList
 
 	@Override
 	public long getKey(int ndx) throws PsseModelException {return _base.getKey(map(ndx));}
+
+	@Override
+	public Station getStation(int ndx) throws PsseModelException {return _base.getStation(map(ndx));}
 }

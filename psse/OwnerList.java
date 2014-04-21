@@ -25,7 +25,7 @@ public abstract class OwnerList extends PsseBaseList<Owner>
 
 	/* raw data methods */
 	public abstract int getI(int ndx) throws PsseModelException;
-	public String getOWNAME(int ndx) {return "";}
+	public String getOWNAME(int ndx) throws PsseModelException {return "";}
 	
 	/* lists */
 	public SwitchList getSwitches(int ndx) throws PsseModelException {return SwitchList.Empty;}

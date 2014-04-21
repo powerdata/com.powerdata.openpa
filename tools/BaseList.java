@@ -76,4 +76,5 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	@Deprecated
 	public int getRootIndex(int ndx) {return ndx;}
 	
+	public void cleanup() throws PsseModelException{}
 }
