@@ -82,6 +82,6 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 	public SwitchedShuntBlock[] getBlocks(int ndx) throws PsseModelException
 	{
-		return null;
+		return new SwitchedShuntBlock[0];
 	}
 }

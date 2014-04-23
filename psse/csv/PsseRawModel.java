@@ -11,6 +11,7 @@ import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.LineList;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.SwitchedShuntList;
 import com.powerdata.openpa.psse.conversions.XfrZToolFactory;
 import com.powerdata.openpa.psse.conversions.XfrZTools;
 import com.powerdata.openpa.psse.util.TP;
@@ -37,6 +38,7 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	GenList				_generatorList;
 	private TP			_tp = null;
 	IslandList			_islands = null;
+	SwitchedShuntRawList _swshraw = null;
 	
 	public PsseRawModel(String parms) throws PsseModelException
 	{
@@ -118,6 +120,13 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 	}
 	
 	@Override
+	public SwitchedShuntList getSwitchedShunts() throws PsseModelException
+	{
+		return _swshraw;
+	}
+
+
+	@Override
 	public ShuntRawList getShunts() throws PsseModelException
 	{
 		return _shList;
@@ -198,19 +207,19 @@ public class PsseRawModel extends com.powerdata.openpa.psse.PsseModel
 
 	protected void analyzeRawShunts() throws PsseModelException
 	{
-		SwitchedShuntRawList rsh = new SwitchedShuntRawList(this);
+		_swshraw= new SwitchedShuntRawList(this);
 		
 		ArrayList<Integer> shndx = new ArrayList<>();
 		ArrayList<Integer> svcndx = new ArrayList<>();
 		
-		for (int i=0; i < rsh.size(); ++i)
+		for (int i=0; i < _swshraw.size(); ++i)
 		{
-			((testForSvc(rsh.getMODSW(i), rsh.getBINIT(i), rsh.getN(i),
-					rsh.getB(i))) ? svcndx : shndx).add(i);
+			((testForSvc(_swshraw.getMODSW(i), _swshraw.getBINIT(i), _swshraw.getN(i),
+					_swshraw.getB(i))) ? svcndx : shndx).add(i);
 		}
 		
-		_shList = new ShuntRawList(this, rsh, shndx);
-		_svcList = new SvcRawList(this, rsh, svcndx);
+		_shList = new ShuntRawList(this, _swshraw, shndx);
+		_svcList = new SvcRawList(this, _swshraw, svcndx);
 	}
 	
 	
