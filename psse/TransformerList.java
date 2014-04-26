@@ -167,4 +167,9 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 
 	public float getGmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx)).re();}
 	public float getBmag(int ndx) throws PsseModelException {return XfrMagYTool.getYMag(get(ndx)).im();}
+	
+	public float[] getRATA1() { return null;}
+	public float[] getRATB1() { return null;}
+	public float[] getRATC1() { return null;}
+
 }	
