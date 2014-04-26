@@ -147,5 +147,14 @@ public class LineListRaw extends LineList
 	public float getDeftBJ(int ndx) throws PsseModelException {return super.getBJ(ndx);}
 	public int getDeftST(int ndx) throws PsseModelException {return super.getST(ndx);}
 	public float getDeftLEN(int ndx) throws PsseModelException {return super.getLEN(ndx);}
+	
+	@Override
+	public float[] getRATEA() { return _ratea; }
+	@Override
+	public float[] getRATEB() {	return _rateb; }
+	@Override
+	public float[] getRATEC() {	return _ratec; }
+
+	
 
 }
