@@ -259,5 +259,13 @@ public class TransformerRawList extends com.powerdata.openpa.psse.TransformerLis
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	@Override
+	public float[] getRATA1() { return _rata1;}
+	@Override
+	public float[] getRATB1() { return _ratb1;}
+	@Override
+	public float[] getRATC1() { return _ratc1;}
+
 }
 
