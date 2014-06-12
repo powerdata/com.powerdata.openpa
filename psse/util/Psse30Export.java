@@ -242,7 +242,7 @@ public class Psse30Export
 		Bus db = _m.getBuses().get(s.getRMIDNT());
 		String sd = (db == null) ? "" : String.valueOf(getSingleBus(db));
 		if (rb == null) rb = s.getBus();
-		_o.format("%d %d %f, %f, %d, %f, %s, %f", getSingleBus(s.getBus()), s.getMODSW(),
+		_o.format("%d, %d, %f, %f, %d, %f, %s, %f", getSingleBus(s.getBus()), s.getMODSW(),
 				s.getVSWHI(), s.getVSWLO(), getSingleBus(rb), s.getRMPCT(),
 				sd, s.getBINIT());
 		for (SwitchedShuntBlock b : s.getBlocks())
