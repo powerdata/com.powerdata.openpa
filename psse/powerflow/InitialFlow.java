@@ -10,14 +10,13 @@ import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.util.BusGroup2TDevList;
-import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.psse.util.MinZMagFilter;
 
 public class InitialFlow
 {
 	public interface FlowWriter
 	{
-		void write(String p, int px, String q, int qx, String name, float mw, float mvar);
+		void write(String p, int px, String q, int qx, String id, String name, float mw, float mvar);
 	}
 	
 	PsseModel _model;
@@ -43,9 +42,9 @@ public class InitialFlow
 			ACBranch br = branches.get(i);
 			Bus fb = br.getFromBus(), tb = br.getToBus();
 			_wr.write(fb.getObjectID(), fb.getIndex(), tb.getObjectID(),
-				tb.getIndex(), br.getObjectID(), flows[0][i] * 100f, flows[1][i] * 100f);
+				tb.getIndex(), br.getObjectID(), br.getFullName(), flows[0][i] * 100f, flows[1][i] * 100f);
 			_wr.write(tb.getObjectID(), tb.getIndex(), fb.getObjectID(),
-				fb.getIndex(), br.getObjectID(), flows[2][i] * 100f, flows[3][i] * 100f);
+				fb.getIndex(), br.getObjectID(), br.getFullName(), flows[2][i] * 100f, flows[3][i] * 100f);
 		}
 	}
 
@@ -79,18 +78,18 @@ public class InitialFlow
 			System.exit(1);
 		}
 		
-		pw.println("FromBus,FBusNdx,ToBus,TBusNdx,ID,MW,MVAr");
+		pw.println("FromBus,FBusNdx,ToBus,TBusNdx,ID,Name,MW,MVAr");
 		
 		InitialFlow ifl = new InitialFlow(PsseModel.Open(uri), new FlowWriter()
 		{
 			@Override
-			public void write(String p, int px, String q, int qx, String name, float mw, float mvar)
+			public void write(String p, int px, String q,
+				int qx, String id, String name, float mw, float mvar)
 			{
-				pw.format("%s,%d,%s,%d,%s,%f,%f\n",
-					p, px, q, qx, name, mw, mvar);
+				pw.format("'%s',%d,'%s',%d,'%s','%s',%f,%f\n", p, px, q, qx, id, name,
+					mw, mvar);
 			}
-		});
-		
+		});		
 		ifl.write();
 		
 		pw.close();
