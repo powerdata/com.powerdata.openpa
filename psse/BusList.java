@@ -45,7 +45,7 @@ public abstract class BusList extends PsseBaseList<Bus>
 	/** test if the bus is energized */
 	public boolean isEnergized(int ndx) throws PsseModelException {return getIDE(ndx) != 4;}
 	/** get the island */
-	public Island getIsland(int ndx) throws PsseModelException {return null;}
+	public Island getIsland(int ndx) throws PsseModelException {return Island.DeEnergizedIsland;}
 
 	/** enumerated IDE code */
 	public BusTypeCode getBusType(int ndx) throws PsseModelException {return BusTypeCode.fromCode(getIDE(ndx));}

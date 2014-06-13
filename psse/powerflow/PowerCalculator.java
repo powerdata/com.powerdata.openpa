@@ -1,7 +1,10 @@
 package com.powerdata.openpa.psse.powerflow;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.List;
-
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.BusTypeCode;
@@ -22,6 +25,7 @@ import com.powerdata.openpa.psse.TwoTermDCLineList;
 import com.powerdata.openpa.psse.util.BusGroup;
 import com.powerdata.openpa.psse.util.BusGroup2TDevList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
+import com.powerdata.openpa.psse.util.MinZMagFilter;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 /**
@@ -539,5 +543,44 @@ public class PowerCalculator
 		return rv;
 	}
 	
+	public static void main(String[] args) throws Exception
+	{
+		String uri = null;
+		PrintWriter pws = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(System.out)));
+		for(int i=0; i < args.length;)
+		{
+			String s = args[i++].toLowerCase();
+			int ssx = 1;
+			if (s.startsWith("--")) ++ssx;
+			switch(s.substring(ssx))
+			{
+				case "uri":
+					uri = args[i++];
+					break;
+				case "output":
+					pws = new PrintWriter(new BufferedWriter(new FileWriter(args[i++])));
+					break;
+			}
+		}
+		
+		final PrintWriter pw = pws;
+		
+		if (uri == null)
+		{
+			System.err.format("Usage: -uri model_uri [ -output path_to_output_file ]");
+			System.exit(1);
+		}
+		PsseModel model = PsseModel.Open(uri);
+		BusGroup2TDevList tn = new BusGroup2TDevList(model);
+		PowerCalculator pc = new PowerCalculator(model, 
+			new MinZMagFilter(model.getBranches(), 0.0001f), 
+			tn);
+		MismatchReport mmr = new MismatchReport(model, tn);
+		pc.setDebugEnabled(mmr);
+		pc.calculateMismatches(pc.getRTVoltages());
+		mmr.report(pws);
+		pws.close();
+	}
 }
 

@@ -7,8 +7,11 @@ import java.io.PrintWriter;
 import com.powerdata.openpa.psse.ACBranch;
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.Bus;
+import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.TwoTermDCLine;
+import com.powerdata.openpa.psse.TwoTermDCLineList;
 import com.powerdata.openpa.psse.util.BusGroup2TDevList;
 import com.powerdata.openpa.psse.util.MinZMagFilter;
 
@@ -16,9 +19,10 @@ public class InitialFlow
 {
 	public interface FlowWriter
 	{
-		void write(String p, int px, String q, int qx, String id, String name, float mw, float mvar);
-	}
-	
+		void write(String p, int px, String q, int qx,
+			String id, String name, float mw,
+			float mvar) throws PsseModelException;
+	}	
 	PsseModel _model;
 	FlowWriter _wr;
 	
@@ -32,7 +36,7 @@ public class InitialFlow
 	{
 		ACBranchList branches = _model.getBranches();
 		PowerCalculator pc = new PowerCalculator(_model, 
-			new MinZMagFilter(branches, 0.001f), 
+			new MinZMagFilter(branches, 0.0001f), 
 			new BusGroup2TDevList(_model));
 		float[][] v = pc.getRTVoltages();
 		float[][] flows = pc.calcACBranchFlows(branches, v[0], v[1], pc.getImpedanceFilter());
@@ -46,14 +50,31 @@ public class InitialFlow
 			_wr.write(tb.getObjectID(), tb.getIndex(), fb.getObjectID(),
 				fb.getIndex(), br.getObjectID(), br.getFullName(), flows[2][i] * 100f, flows[3][i] * 100f);
 		}
+		
+		
+		TwoTermDCLineList dclines = _model.getTwoTermDCLines();
+		TwoTermDCLineResultList results = pc.calcTwoTermDCLines(dclines, v[1]);
+		int ndc = dclines.size();
+		for(int i=0; i < ndc; ++i)
+		{
+			TwoTermDCLine line = dclines.get(i);
+			TwoTermDCLineResult lres = results.get(i);
+			Bus fb = line.getFromBus(), tb = line.getToBus();
+			_wr.write(fb.getObjectID(), fb.getIndex(), tb.getObjectID(),
+				tb.getIndex(), line.getObjectID(), line.getFullName(),
+				lres.getMWR()*100f, lres.getMVArR()*100f);
+			_wr.write(tb.getObjectID(), tb.getIndex(), fb.getObjectID(),
+				fb.getIndex(), line.getObjectID(), line.getFullName(),
+				lres.getMWI()*100f, lres.getMVArI()*100f);
+		}
 	}
 
 	
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;
-		PrintWriter pws = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
-
+		PrintWriter pws = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(System.out)));
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -78,15 +99,16 @@ public class InitialFlow
 			System.exit(1);
 		}
 		
-		pw.println("FromBus,FBusNdx,ToBus,TBusNdx,ID,Name,MW,MVAr");
-		
-		InitialFlow ifl = new InitialFlow(PsseModel.Open(uri), new FlowWriter()
+		pw.println("FromBus,FName,FBusNdx,ToBus,TName,TBusNdx,ID,Name,MW,MVAr");
+		final PsseModel model = PsseModel.Open(uri);
+		InitialFlow ifl = new InitialFlow(model, new FlowWriter()
 		{
 			@Override
 			public void write(String p, int px, String q,
-				int qx, String id, String name, float mw, float mvar)
+				int qx, String id, String name, float mw, float mvar) throws PsseModelException
 			{
-				pw.format("'%s',%d,'%s',%d,'%s','%s',%f,%f\n", p, px, q, qx, id, name,
+				BusList b = model.getBuses();
+				pw.format("'%s','%s',%d,'%s','%s',%d,'%s','%s',%f,%f\n", p, b.get(px).getNAME(), px, q, b.get(qx).getNAME(),qx, id, name,
 					mw, mvar);
 			}
 		});		

@@ -6,11 +6,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-
 import com.powerdata.openpa.psse.ACBranchList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.Gen;
 import com.powerdata.openpa.psse.Island;
+import com.powerdata.openpa.psse.IslandList;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
@@ -38,12 +38,15 @@ public class MismatchReport
 	float[]								_shq, _svcq, _pfrm, _pto,
 			_qfrm, _qto, _vm, _va, _pmm, _qmm;
 	BusGroup2TDevList _tn;
+	IslandList _islands;
+
 
 	//	PrintWriter _out;
 	@SuppressWarnings("unchecked")
 	public MismatchReport(PsseModel model, BusGroup2TDevList tn) throws PsseModelException
 	{
 		_model = model;
+		 _islands = model.getIslands();
 		_tn = tn;
 		_nbus = _tn.size();
 		
@@ -122,7 +125,7 @@ public class MismatchReport
 		if (branches.length == 0 && otdevs.length == 0) return;
 		float mmm = Math.max(Math.abs(_pmm[i]), Math.abs(_qmm[i]));
 
-		Island island = b.getIsland();
+		Island island = _islands.findForBus(b.getBuses().get(0));
 		
 		String btmp = String.format(
 				"%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,", 
@@ -164,12 +167,12 @@ public class MismatchReport
 		for(int otdev : otdevs)
 		{
 			out.print(btmp);
-			printDevice(out, otdev, _pmm[i], _qmm[i]);
+			printDevice(out, otdev, _pmm[i], _qmm[i], b, b.getBusType(), island.isEnergized());
 		}
 
 	}
 
-	void printDevice(PrintWriter out, int otdev, float pmm, float qmm) throws PsseModelException
+	void printDevice(PrintWriter out, int otdev, float pmm, float qmm, BusGroup b, BusTypeCode btype, boolean isener) throws PsseModelException
 	{
 		OneTermDev od;
 		float pval, qval;
@@ -178,10 +181,8 @@ public class MismatchReport
 		{
 			Gen god = _model.getGenerators().get(otdev);
 			od = god;
-			BusGroup b = _tn.findGroup(od.getBus());
-			BusTypeCode btype = b.getBusType();
-			pval = (!b.isEnergized()) ? 0f : PAMath.mw2pu(god.getPS());
-			qval = (b.isEnergized() && btype == BusTypeCode.Load) ? PAMath.mvar2pu(god.getQS()) : 0f;
+			pval = !isener ? 0f : PAMath.mw2pu(god.getPS());
+			qval = (isener && btype == BusTypeCode.Load) ? PAMath.mvar2pu(god.getQS()) : 0f;
 			float pb = god.getPB(), pt = god.getPT(), qb = god.getQB(), qt = god.getQT();
 			pmax = String.format("%f", pt);
 			pmin = String.format("%f", pb);
