@@ -2,8 +2,9 @@ package com.powerdata.openpa.tools;
 
 import com.powerdata.openpa.psse.PsseModel;
 import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.tools.BaseObject;
 
+/* PsseModel, no longer supported */
+@Deprecated
 public enum EqType
 {
 	UNKNOWN(0),

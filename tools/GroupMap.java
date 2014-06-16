@@ -1,4 +1,4 @@
-package com.powerdata.openpa.psse.util;
+package com.powerdata.openpa.tools;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class GroupMap extends AbstractList<int[]>
 {
 	protected int[] start, next, cnt;
-	protected int ngrp;
+	protected int ngrp, nxtsz=0, lstcnt;
 
 	/**
 	 * Set up a group map
@@ -16,21 +16,46 @@ public class GroupMap extends AbstractList<int[]>
 	 */
 	public GroupMap(int[] map, int ngrp)
 	{
+		lstcnt = map.length;
+		initmap(ngrp, map.length);
+		setmap(map);
+	}
+	
+	/**
+	 * initialize tha map
+	 * @param ngrp number of groups
+	 * @param maplen length of "next" array
+	 */
+	void initmap(int ngrp, int maplen)
+	{
 		this.ngrp = ngrp;
 		start = new int[ngrp];
 		cnt = new int[ngrp];
-		next = new int[map.length]; 
+		next = new int[maplen]; 
 		Arrays.fill(start, -1);
-		for(int i=0; i < map.length; ++i)
+		Arrays.fill(next, -1);
+	}
+	
+	void setmap(int[] map)
+	{
+		for (int i = 0; i < map.length; ++i)
 		{
 			int g = map[i];
 			if (g != -1)
 			{
-				next[i] = start[g];
-				start[g] = i;
+				next[nxtsz] = start[g];
+				start[g] = nxtsz;
 				++cnt[g];
 			}
+			++nxtsz;
 		}
+	}
+	public GroupMap(int[] fmap, int[] tmap, int ngrp)
+	{
+		lstcnt = fmap.length;
+		initmap(ngrp, fmap.length+tmap.length);
+		setmap(fmap);
+		setmap(tmap);
 	}
 	@Override
 	public int[] get(int grpndx)
@@ -40,12 +65,13 @@ public class GroupMap extends AbstractList<int[]>
 		return rv;
 	}
 	
-	protected void fill(int[] rv, int ofs, int grpndx)
+	//TODO:  This should not have to be public after pss/e api is retired
+	public void fill(int[] rv, int ofs, int grpndx)
 	{
 		int s = start[grpndx];
 		while (s != -1)
 		{
-			rv[ofs++] = s;
+			rv[ofs++] = s<lstcnt?s:s-lstcnt;
 			s = next[s];
 		}
 	}
@@ -57,5 +83,6 @@ public class GroupMap extends AbstractList<int[]>
 	 * @param grpndx Group index
 	 * @return the number of items in group
 	 */
+
 	public int getCount(int grpndx) {return cnt[grpndx];}
 }

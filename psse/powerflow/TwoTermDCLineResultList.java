@@ -1,8 +1,8 @@
 package com.powerdata.openpa.psse.powerflow;
 
+import com.powerdata.openpa.tools.BaseList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TwoTermDCLineList;
-import com.powerdata.openpa.tools.BaseList;
 
 public class TwoTermDCLineResultList extends BaseList<TwoTermDCLineResult>
 {

@@ -6,6 +6,8 @@ import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.powerdata.openpa.tools.BaseList;
+import com.powerdata.openpa.tools.BaseObject;
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
@@ -24,8 +26,7 @@ import com.powerdata.openpa.psse.SwitchedShuntList;
 import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.psse.TwoTermDCLineList;
 import com.powerdata.openpa.psse.TwoTermDev;
-import com.powerdata.openpa.tools.BaseList;
-import com.powerdata.openpa.tools.BaseObject;
+import com.powerdata.openpa.tools.GroupMap;
 
 public class BusGroupList extends BaseList<BusGroup>
 {

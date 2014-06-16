@@ -2,6 +2,7 @@ package com.powerdata.openpa.tools;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
 import com.powerdata.openpa.psse.Bus;
 import com.powerdata.openpa.psse.OneTermDev;
 import com.powerdata.openpa.psse.PsseModel;
