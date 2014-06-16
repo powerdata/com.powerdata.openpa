@@ -6,28 +6,30 @@ The goal of the API is to make model access simple and fast regardless of the ba
 
 For details please check the [Javadoc](http://powerdata.github.io/com.powerdata.openpa) Reference.
 
-PsseModel Usage
+PAModel Usage
 -----
-To open a model use the *PsseModel.Open()* function.  The parameter to this function is a URI that
+A PAModel provides access to the power system network and equipment
+
+To open a model use the *PAModel.Open()* function.  The parameter to this function is a URI that
 describes the back-end storage where the data will come from.  For example, to use a PSSE file named
 */tmp/palco.raw* directly:
 ```java
-PsseModel eq = PsseModel.Open("psseraw:file=/tmp/palco.raw");
+PAModel eq = PAModel.Open("psseraw:file=/tmp/palco.raw");
 ```
 or to use a directory of psse CSV files named */tmp/testdata/db*:
 ```java
-PsseModel eq = PsseModel.Open("pssecsv:path=/tmp/testdata/db");
+PAModel eq = PAModel.Open("pssecsv:path=/tmp/testdata/db");
 ```
 This can even be extended to proprietary databases, for example:
 ```java
-PsseModel eq = PsseModel.Open("pd2cim:db=/tmp/wecc.pddb&inputctx=Ots");
+PAModel eq = PAModel.Open("pd2cim:db=/tmp/wecc.pddb&inputctx=Ots");
 ```
 opens the model using the PD2 CIM database named */tmp/wecc.pddb*.
 
 The main point is that the code doesn't need to change, only the URI string.
 See URI details for the public model parameters below
 
-Once we have the *PsseModel* object, *eq* in our examples, we can access lists of equipment.  For example,
+Once we have the *PAModel* object, *eq* in our examples, we can access lists of equipment.  For example,
 to examine every line in the model you could use:
 ```java
 for(Line line : eq.getLines())

@@ -1,6 +1,8 @@
 package com.powerdata.openpa.psse;
 
-public class PsseModelException extends Exception
+import com.powerdata.openpa.PAModelException;
+
+public class PsseModelException extends PAModelException
 {
 	private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,6 @@
 package com.powerdata.openpa.psse.util;
 
+import com.powerdata.openpa.tools.AbstractBaseObject;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.GenList;
@@ -15,7 +16,6 @@ import com.powerdata.openpa.psse.SwitchList;
 import com.powerdata.openpa.psse.SwitchedShuntList;
 import com.powerdata.openpa.psse.TransformerList;
 import com.powerdata.openpa.psse.TwoTermDCLineList;
-import com.powerdata.openpa.tools.AbstractBaseObject;
 
 public class BusGroup extends AbstractBaseObject implements PsseLists
 {
