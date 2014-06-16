@@ -4,8 +4,8 @@ public class SeriesReacSubList extends SeriesReacList
 {
 	protected SeriesReacSubList(PALists model, SeriesReacList src, int[] srcndx)
 	{
-		super(model, cvtSublistKeys(src, srcndx));
-		// TODO Auto-generated constructor stub
+		super(model, src.getKeys(srcndx), src.getFBusKeys(srcndx),
+				src.getTBusKeys(srcndx));
 	}
 	// TODO: override every method
 }

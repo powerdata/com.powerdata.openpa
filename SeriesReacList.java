@@ -7,10 +7,9 @@ public class SeriesReacList extends ACBranchList<SeriesReac>
 
 	protected SeriesReacList() {super();}
 	
-	protected SeriesReacList(PALists model, int[] keys)
+	protected SeriesReacList(PALists model, int[] keys, int[] fbkey, int[] tbkey)
 	{
-		super(model, keys);
-		// TODO Auto-generated constructor stub
+		super(model, keys, fbkey, tbkey);
 	}
 
 	@Override

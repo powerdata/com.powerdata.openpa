@@ -5,10 +5,9 @@ public class TwoTermDCLineList extends TwoTermDevList<TwoTermDCLine>
 
 	public static final TwoTermDCLineList	Empty	= new TwoTermDCLineList();
 
-	protected TwoTermDCLineList(PALists model, int[] keys)
+	protected TwoTermDCLineList(PALists model, int[] keys, int[] fbkey, int[] tbkey)
 	{
-		super(model, keys);
-		// TODO Auto-generated constructor stub
+		super(model, keys, fbkey, tbkey);
 	}
 
 	protected TwoTermDCLineList() {super();}

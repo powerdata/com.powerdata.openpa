@@ -5,10 +5,9 @@ public class SeriesCapList extends ACBranchList<SeriesCap>
 
 	public static final SeriesCapList	Empty	= new SeriesCapList();
 
-	protected SeriesCapList(PALists model, int[] keys)
+	protected SeriesCapList(PALists model, int[] keys, int[] fbkey, int[] tbkey)
 	{
-		super(model, keys);
-		// TODO Auto-generated constructor stub
+		super(model, keys, fbkey, tbkey);
 	}
 
 	protected SeriesCapList() {super();}

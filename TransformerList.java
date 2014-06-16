@@ -7,10 +7,9 @@ public class TransformerList extends ACBranchList<Transformer>
 
 	protected TransformerList() {super();}
 	
-	protected TransformerList(PALists model, int[] keys)
+	protected TransformerList(PALists model, int[] keys, int[] fbkey, int[] tbkey)
 	{
-		super(model, keys);
-		// TODO Auto-generated constructor stub
+		super(model, keys, fbkey, tbkey);
 	}
 
 	@Override

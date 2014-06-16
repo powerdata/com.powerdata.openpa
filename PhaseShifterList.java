@@ -5,10 +5,9 @@ public class PhaseShifterList extends ACBranchList<PhaseShifter>
 
 	public static final PhaseShifterList	Empty	= new PhaseShifterList();
 
-	protected PhaseShifterList(PALists model, int[] keys)
+	protected PhaseShifterList(PALists model, int[] keys, int[] fbkey, int[] tbkey)
 	{
-		super(model, keys);
-		// TODO Auto-generated constructor stub
+		super(model, keys, fbkey, tbkey);
 	}
 
 	protected PhaseShifterList() {super();}
