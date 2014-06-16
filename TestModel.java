@@ -72,11 +72,11 @@ public class TestModel
 	public static void main(String[] args) throws Exception
 	{
 		PAModel m = PflowModelBuilder.Create(
-			"pd2cim:sdb=/tmp/config.pddb&db=/home/chris/pdc.workarea/ephem/1/exports/cim.pddb")
+			"pd2cim:sdb=/tmp/config.pddb&db=/home/chris/Documents/testmodels/public/palcim/exports/cim.pddb")
 			.load();
 		TestModel tm = new TestModel(m);
 		tm.dumpBusLists(new File("/tmp/buses.txt"));
-//		tm.dumpSwitches(new File("/tmp/switches.txt"));
+		tm.dumpSwitches(new File("/tmp/switches.txt"));
 		tm.dumpTopNodes(new File("/tmp/tnode.txt"));
 		
 	}

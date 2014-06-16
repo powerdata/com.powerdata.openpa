@@ -1,6 +1,5 @@
 package com.powerdata.openpa;
 
-import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 
 import com.powerdata.openpa.tools.SNdxKeyOfs;
@@ -28,7 +27,6 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 			_keys[i] = i;
 		_keyndx = new SNdxKeyOfs()
 		{
-//			WeakReference<int[]> _keys = new WeakReference<>(null);
 			@Override
 			public int size()
 			{

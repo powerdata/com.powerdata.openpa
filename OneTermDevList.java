@@ -2,23 +2,35 @@ package com.powerdata.openpa;
 
 public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T> 
 {
+	protected int[] _bx;
+	protected BusList _buses;
+
 	protected OneTermDevList(PALists model, int[] keys)
 	{
 		super(model, keys);
+		int n = size();
+		_bx = new int[n];
+		_buses = model.getBuses();
+		for(int i=0; i < n; ++i)
+			_bx[i] = _buses.getOfs(keys[i]);
 	}
 	
 	protected OneTermDevList() {super();}
 
 	public Bus getBus(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _buses.get(_bx[ndx]);
 	}
 	
 	public int[] getBusIndexes()
 	{
 		// TODO
 		return null;
+	}
+	
+	public BusList getBuses()
+	{
+		return new BusSubList(_model, _buses, _bx);
 	}
 	
 	public float getP(int ndx)
