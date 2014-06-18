@@ -47,4 +47,6 @@ public class SwitchList extends TwoTermDevList<Switch>
 			_state = state;
 		}
 	}
+	/** create this  **/
+	public boolean canOperateUnderLoad(int ndx)	{	return true;	}
 }

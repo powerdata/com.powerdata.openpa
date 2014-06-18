@@ -163,5 +163,16 @@ public class BusList extends BusListIfc
 			_va = va;
 		}
 	}
+	@Override
+	public int getAREA(int ndx)
+	{
+		return 0;
+	}
+	
+	@Override
+	public SwitchList isolate(int ndx)
+	{
+		return null;
+	}
 
 }

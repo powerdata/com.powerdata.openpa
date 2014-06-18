@@ -10,6 +10,15 @@ public class Bus extends AbstractBaseObject implements PALists
 		_list = list;
 	}
 	
+	public boolean isEnergized()
+	{
+		/** Would this make sense? **/
+		return false;
+	}
+	public int getAREA()
+	{
+		return _list.getAREA(_ndx);
+	}
 	/** get bus base KV */
 	public float getBaseKV()
 	{
@@ -40,7 +49,10 @@ public class Bus extends AbstractBaseObject implements PALists
 	{
 		_list.setVA(_ndx, va);
 	}
-
+	public float getVMpu()
+	{
+		return 0;
+	}
 	@Override
 	public BusList getBuses() 
 	{

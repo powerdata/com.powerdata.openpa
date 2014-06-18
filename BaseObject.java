@@ -15,6 +15,9 @@ public interface BaseObject
 	public void setID(String id);
 	/** get object name */
 	public String getName();
+	/*
+	 * Difference between getName and getFullName??? Does it matter?
+	 */
 	/** set object name */
 	public void setName(String name);
 	/** unique object integer identifier */

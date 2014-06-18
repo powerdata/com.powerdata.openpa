@@ -25,6 +25,12 @@ public class SingleBusList extends BusListIfc
 
 		_buses = model.getBuses();
 	}
+	
+	@Override
+	public int getAREA(int ndx)
+	{
+		return 0;
+	}
 
 	@Override
 	public float getBaseKV(int ndx)
@@ -207,6 +213,10 @@ public class SingleBusList extends BusListIfc
 				_buses.setName(b, name[i]);
 		}
 	}
-
+	@Override
+	public SwitchList isolate(int ndx)
+	{
+		return null;
+	}
 	
 }

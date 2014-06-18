@@ -1,10 +1,9 @@
 package com.powerdata.openpa.tools;
 
-import com.powerdata.openpa.psse.PsseModel;
-import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.PAModel;
+import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.BaseObject;
 
-/* PsseModel, no longer supported */
-@Deprecated
 public enum EqType
 {
 	UNKNOWN(0),
@@ -40,26 +39,26 @@ public enum EqType
 		}
 		return null;
 	}
-	public static BaseObject getObject(PsseModel mdl, EqType type, int ndx) throws PsseModelException
+	public static BaseObject getObject(PAModel mdl, EqType type, int ndx) throws PAModelException
 	{
 		BaseObject eq = null;
 		switch(type)
 		{
 			case UNKNOWN:		eq = null;
-			case SVC:			eq = mdl.getSvcs().get(ndx); break;
-			case AREA:			eq = mdl.getAreas().get(ndx); break;
+			//case SVC:			eq = mdl.getSvcs().get(ndx); break;
+			//case AREA:			eq = mdl.getAreas().get(ndx); break;
 			case BUS:			eq = mdl.getBuses().get(ndx); break;
 			case GEN:			eq = mdl.getGenerators().get(ndx); break;
 			case LINE:			eq = mdl.getLines().get(ndx); break;
 			case LOAD:			eq = mdl.getLoads().get(ndx); break;
 			case PHASESHIFTER:	eq = mdl.getPhaseShifters().get(ndx); break;
-			case SHUNT:			eq = mdl.getShunts().get(ndx); break;
+			//case SHUNT:			eq = mdl.getShunts().get(ndx); break;
 			case SWITCH:		eq = mdl.getSwitches().get(ndx); break;
 			case TRANSFORMER:	eq = mdl.getTransformers().get(ndx); break;
 		}
 		return eq;
 	}
-	public static BaseObject getObject(PsseModel mdl, long id) throws PsseModelException
+	public static BaseObject getObject(PAModel mdl, long id) throws PAModelException
 	{
 		EqType t = valueOf((int)(id >> 32));
 		int ndx  = (int)(id & 0xFFFFFFFF);
