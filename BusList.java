@@ -172,7 +172,6 @@ public class BusList extends BusListIfc
 	@Override
 	public SwitchList isolate(int ndx)
 	{
-		return null;
+		return SwitchList.Empty;
 	}
-
 }

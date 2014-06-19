@@ -21,6 +21,12 @@ public class PAModel implements PALists
 	
 	protected PAModel(){}
 	
+	/** call for an event */
+	public void processChanges(ModelEventListener l)
+	{
+		
+	}
+
 	@Override
 	public BusList getBuses()
 	{

@@ -136,5 +136,5 @@ public class Bus extends AbstractBaseObject implements PALists
 	{
 		return _list.getSVCs(_ndx);
 	}
-
+	public SwitchList isolate() throws PAModelException { return _list.isolate(_ndx); }
 }
