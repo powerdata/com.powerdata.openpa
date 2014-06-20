@@ -45,4 +45,51 @@ public class Gen extends OneTermDev
 	{
 		_list.setMode(_ndx, m);
 	}
+	
+	public float getPB() throws PAModelException // {return _list.getPB(_ndx);}
+	{
+		return 0;
+	}
+	public void setPB(float mw) throws PAModelException
+	{
+	}
+	public void setPS(float mw) throws PAModelException //{_list.setPS(_ndx, mw);}
+	{
+	}
+	public float getPS() throws PAModelException 
+	{
+		return 0;
+	}
+	/** max active power in MW */
+	public float getPT() throws PAModelException // {return _list.getPT(_ndx);}
+	{
+		return 0;
+	}
+	/** max active power in MW */
+	public void setPT(float mw) throws PAModelException // {_list.setPT(_ndx, mw);}
+	{
+		
+	}
+	/** Maximum generator reactive power output (MVAr) */
+	public float getQT() throws PAModelException // {return _list.getQT(_ndx);}
+	{
+		return 0;
+	}
+	/** Maximum generator reactive power output (MVAr) */
+	public void setQT(float mvar) throws PAModelException // {_list.setQT(_ndx, mvar);}
+	{
+		
+	}
+	/** Minimum generator reactive power output (MVAr) */
+	public float getQB() throws PAModelException // {return _list.getQB(_ndx);}
+	{
+		return 0;
+	}
+	/** Minimum generator reactive power output (MVAr) */
+	public void setQB(float mvar) throws PAModelException // {_list.setQB(_ndx, mvar);}
+	{
+		
+	}
+
+
 }

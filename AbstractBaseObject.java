@@ -38,12 +38,21 @@ public class AbstractBaseObject implements BaseObject
 		_list.setID(_ndx, id);
 	}
 
+	// TODO: 
+	// WHat is the different between name and fullname, does it matter?
+	
 	@Override
 	public String getName()
 	{
 		return _list.getName(_ndx);
 	}
 
+	/** FPC, June 20, 2014 Not sure this is really necessary, if it is not we can remove it and rename all the calls */
+	@Override
+	public String getFullName()
+	{
+		return getName();
+	}
 	@Override
 	public void setName(String name)
 	{

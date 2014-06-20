@@ -137,4 +137,26 @@ public class Bus extends AbstractBaseObject implements PALists
 		return _list.getSVCs(_ndx);
 	}
 	public SwitchList isolate() throws PAModelException { return _list.isolate(_ndx); }
+	public float getFrequency() throws PAModelException //{return _list.getFrequency(_ndx);}
+	{
+		return 0;
+	}
+	/** get frequency source priority */
+	public int getFrequencySourcePriority() throws PAModelException //{return _list.getFrequencySourcePriority(_ndx);}
+	{
+		return 0;
+	}
+
+	public int getIsland()
+	{
+		System.out.println("Bus.getIsland has to be implemented");
+		return 0;
+	}
+	/**
+	 * FPC: Is this something we are going to do????
+	public Station getStation()
+	{
+		
+	}
+	*/
 }

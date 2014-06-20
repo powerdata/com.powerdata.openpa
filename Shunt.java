@@ -9,4 +9,5 @@ public class Shunt extends OneTermDev
 		_list = list;
 	}
 
+	public float getB()	{	return 0;	}
 }
