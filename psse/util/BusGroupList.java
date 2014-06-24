@@ -193,7 +193,7 @@ public class BusGroupList extends BaseList<BusGroup>
 		{
 			gmap = new GroupMap(_bus2grp, _ngrp);
 			_lstref[idx] = new WeakReference<>(gmap);
-			System.err.println("Bus Group Map cache miss");
+			//System.err.println("Bus Group Map cache miss");
 		}
 		return gmap;
 	}
