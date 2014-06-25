@@ -27,9 +27,10 @@ public class SingleBusList extends BusListIfc
 	}
 	
 	@Override
-	public int getAREA(int ndx)
+	public Area getArea(int ndx)
 	{
-		return 0;
+		//TODO
+		return null;
 	}
 
 	@Override

@@ -11,17 +11,29 @@ public abstract class TwoTermDevList<T extends TwoTermDev> extends BaseList<T>
 	protected TwoTermDevList(PALists model, int[] keys, int[] fbkey, int[] tbkey)
 	{
 		super(model, keys);
-		int n = size();
-		_fbx = new int[n];
-		_tbx = new int[n];
 		_buses = model.getBuses();
-		for(int i=0; i < n; ++i)
-		{
-			_fbx[i] = _buses.getOfs(fbkey[i]);
-			_tbx[i] = _buses.getOfs(tbkey[i]);
-		}
+		_fbx = cvtBusKeys(fbkey);
+		_tbx = cvtBusKeys(tbkey);
 	}
+	
+	protected TwoTermDevList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size);
+		_buses = model.getBuses();
+		_fbx = cvtBusKeys(fbkey);
+		_tbx = cvtBusKeys(tbkey);
+	}
+	
 
+	protected int[] cvtBusKeys(int[] bkeys)
+	{
+		int n = _buses.size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = _buses.getOfs(bkeys[i]);
+		return rv;
+	}
+	
 	public Bus getFromBus(int ndx)
 	{
 		return _buses.get(_fbx[ndx]);

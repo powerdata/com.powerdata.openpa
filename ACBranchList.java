@@ -11,6 +11,10 @@ public abstract class ACBranchList<T extends ACBranch> extends TwoTermDevList<T>
 	{
 		super(model, keys, fbkey, tbkey);
 	}
+	protected ACBranchList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
 
 	/** get resistance p.u. on 100 MVA and bus base kv */
 	public float getR(int ndx)

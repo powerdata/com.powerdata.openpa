@@ -5,9 +5,15 @@ public class ShuntReacList extends ShuntList<ShuntReactor>
 
 	public static final ShuntReacList	Empty	= new ShuntReacList();
 
-	protected ShuntReacList(PALists model, int[] keys)
+	protected ShuntReacList(PALists model, int[] keys, int[] buskeys)
 	{
-		super(model, keys);
+		super(model, keys, buskeys);
+		// TODO Auto-generated constructor stub
+	}
+
+	protected ShuntReacList(PALists model, int size, int[] buskeys)
+	{
+		super(model, size, buskeys);
 		// TODO Auto-generated constructor stub
 	}
 

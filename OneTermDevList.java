@@ -5,21 +5,33 @@ public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T>
 	protected int[] _bx;
 	protected BusList _buses;
 
-	protected OneTermDevList(PALists model, int[] keys)
-	{
-		super(model, keys);
-		int n = size();
-		_bx = new int[n];
-		_buses = model.getBuses();
-		for(int i=0; i < n; ++i)
-			_bx[i] = _buses.getOfs(keys[i]);
-	}
-	
 	protected OneTermDevList() {super();}
 
+	protected OneTermDevList(PALists model, int[] keys, int[] buskeys)
+	{
+		super(model, keys);
+		_buses = model.getBuses();
+		cvtBusKeys(buskeys);
+	}
+	protected OneTermDevList(PALists model, int size, int[] buskeys)
+	{
+		super(model, size);
+		_buses = model.getBuses();
+		cvtBusKeys(buskeys);
+	}
+	
 	public Bus getBus(int ndx)
 	{
 		return _buses.get(_bx[ndx]);
+	}
+	
+	protected int[] cvtBusKeys(int[] bkeys)
+	{
+		int n = _buses.size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = _buses.getOfs(bkeys[i]);
+		return rv;
 	}
 	
 	public int[] getBusIndexes()
@@ -103,6 +115,15 @@ public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T>
 	public void setInSvc(boolean[] state)
 	{
 		// TODO Auto-generated method stub
+	}
+	
+	protected int[] getBusKeys(int[] offsets)
+	{
+		int n = offsets.length;
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getBus(offsets[i]).getKey();
+		return rv;
 	}
 
 }

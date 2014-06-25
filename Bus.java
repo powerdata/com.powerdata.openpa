@@ -15,9 +15,10 @@ public class Bus extends AbstractBaseObject implements PALists
 		/** Would this make sense? **/
 		return false;
 	}
-	public int getAREA()
+	
+	public Area getArea()
 	{
-		return _list.getAREA(_ndx);
+		return _list.getArea(_ndx);
 	}
 	/** get bus base KV */
 	public float getBaseKV()

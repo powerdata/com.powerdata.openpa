@@ -5,9 +5,15 @@ public class SwitchedShuntList extends ShuntList<SwitchedShunt>
 
 	public static final SwitchedShuntList	Empty	= new SwitchedShuntList();
 
-	public SwitchedShuntList(PALists model, int[] keys)
+	public SwitchedShuntList(PALists model, int[] keys, int[] buskeys)
 	{
-		super(model, keys);
+		super(model, keys, buskeys);
+		// TODO Auto-generated constructor stub
+	}
+
+	public SwitchedShuntList(PALists model, int size, int[] buskeys)
+	{
+		super(model, size, buskeys);
 		// TODO Auto-generated constructor stub
 	}
 

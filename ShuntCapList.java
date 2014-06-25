@@ -5,9 +5,14 @@ public class ShuntCapList extends ShuntList<ShuntCapacitor>
 
 	public static final ShuntCapList	Empty	= new ShuntCapList();
 
-	protected ShuntCapList(PALists model, int[] keys)
+	protected ShuntCapList(PALists model, int[] keys, int[] buskeys)
 	{
-		super(model, keys);
+		super(model, keys, buskeys);
+		// TODO Auto-generated constructor stub
+	}
+	protected ShuntCapList(PALists model, int size, int[] buskeys)
+	{
+		super(model, size, buskeys);
 		// TODO Auto-generated constructor stub
 	}
 

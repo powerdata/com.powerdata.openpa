@@ -14,6 +14,10 @@ public class SwitchList extends TwoTermDevList<Switch>
 	{
 		super(model, keys, fbuskey, tbuskey);
 	}
+	protected SwitchList(PALists model, int size, int[] fbuskey, int[] tbuskey)
+	{
+		super(model, size, fbuskey, tbuskey);
+	}
 
 	@Override
 	public Switch get(int index)

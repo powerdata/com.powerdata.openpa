@@ -4,9 +4,14 @@ public class LoadList extends OneTermDevList<Load>
 {
 	public static final LoadList	Empty	= new LoadList();
 
-	protected LoadList(PALists model, int[] keys)
+	protected LoadList(PALists model, int[] keys, int[] buskeys)
 	{
-		super(model, keys);
+		super(model, keys, buskeys);
+	}
+
+	protected LoadList(PALists model, int size, int[] buskeys)
+	{
+		super(model, size, buskeys);
 	}
 
 	protected LoadList() {super();}

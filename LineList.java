@@ -10,6 +10,10 @@ public class LineList extends ACBranchList<Line>
 	{
 		super(model, keys, fbkey, tbkey);
 	}
+	protected LineList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
 
 	@Override
 	public Line get(int index)

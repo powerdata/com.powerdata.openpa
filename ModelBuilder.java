@@ -17,8 +17,11 @@ public abstract class  ModelBuilder
 	protected abstract SwitchList getSwitches() throws PAModelException;
 	
 	protected abstract LineList getLines() throws PAModelException;
+
+	protected abstract AreaList getAreas() throws PAModelException;
 	
 	protected BusList createBusList(int[] keys) {return new BusList(_m, keys);}
+	protected BusList createBusList(int size) {return new BusList(_m, size);}
 	
 	protected SwitchList createSwitchList(int[] keys, int[] fbuskeys,
 			int[] tbuskeys)
@@ -31,11 +34,12 @@ public abstract class  ModelBuilder
 		return new LineList(_m, keys, fbuskeys, tbuskeys);
 	}
 	
+	protected AreaList createAreaList(int[] keys) {
 
 	protected void createModel() throws PAModelException
 	{
 		_m = new PAModel();
 		_m.load(this);
 	}
-	
+
 }

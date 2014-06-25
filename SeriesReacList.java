@@ -11,6 +11,10 @@ public class SeriesReacList extends ACBranchList<SeriesReac>
 	{
 		super(model, keys, fbkey, tbkey);
 	}
+	protected SeriesReacList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
 
 	@Override
 	public SeriesReac get(int index)

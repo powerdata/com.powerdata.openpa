@@ -9,9 +9,14 @@ public class GenList extends OneTermDevList<Gen>
 
 	protected GenList() {super();}
 	
-	protected GenList(PALists model, int[] keys)
+	protected GenList(PALists model, int[] keys, int[] buskeys)
 	{
-		super(model, keys);
+		super(model, keys, buskeys);
+		// TODO Auto-generated constructor stub
+	}
+	protected GenList(PALists model, int size, int[] buskeys)
+	{
+		super(model, size, buskeys);
 		// TODO Auto-generated constructor stub
 	}
 

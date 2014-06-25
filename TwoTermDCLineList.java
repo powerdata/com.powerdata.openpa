@@ -9,6 +9,10 @@ public class TwoTermDCLineList extends TwoTermDevList<TwoTermDCLine>
 	{
 		super(model, keys, fbkey, tbkey);
 	}
+	protected TwoTermDCLineList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
 
 	protected TwoTermDCLineList() {super();}
 

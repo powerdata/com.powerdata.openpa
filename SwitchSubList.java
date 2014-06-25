@@ -9,7 +9,7 @@ public class SwitchSubList extends SwitchList
 
 	protected SwitchSubList(PALists model, SwitchList src, int[] srcndx)
 	{
-		super(model, src.getKeys(srcndx), src.getFBusKeys(srcndx),
+		super(model, srcndx.length, src.getFBusKeys(srcndx),
 			src.getTBusKeys(srcndx));
 		_ndx = srcndx;
 		_src = src;

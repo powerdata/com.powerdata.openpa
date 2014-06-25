@@ -11,12 +11,15 @@ public class PAModel implements PALists
 	protected BusList _buslist;
 	protected SwitchList _swlist;
 	protected LineList _linelist;
+	protected IslandList _islands = null;
+	protected AreaList _areas;
 	
 	protected void load(ModelBuilder mb) throws PAModelException
 	{
 		_buslist = mb.getBuses();
 		_swlist = mb.getSwitches();
 		_linelist = mb.getLines();
+		_areas = mb.getAreas();
 	}
 	
 	protected PAModel(){}
@@ -27,6 +30,19 @@ public class PAModel implements PALists
 		
 	}
 
+	public IslandList getIslands()
+	{
+		if (_islands == null)
+			refreshIslands();
+		return _islands;
+	}
+	
+	public IslandList refreshIslands()
+	{
+		_islands = new IslandList(this);
+		return _islands;
+	}
+	
 	@Override
 	public BusList getBuses()
 	{

@@ -47,7 +47,7 @@ public abstract class BusListIfc extends EquipLists<Bus>
 
 	public abstract void setVA(float[] va);
 	
-	public abstract int getAREA(int ndx);
+	public abstract Area getArea(int ndx);
 
 	public abstract SwitchList isolate(int ndx);
 

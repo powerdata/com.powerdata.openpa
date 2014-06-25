@@ -11,6 +11,10 @@ public class TransformerList extends ACBranchList<Transformer>
 	{
 		super(model, keys, fbkey, tbkey);
 	}
+	protected TransformerList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
 
 	@Override
 	public Transformer get(int index)

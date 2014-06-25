@@ -46,13 +46,6 @@ public class AbstractBaseObject implements BaseObject
 	{
 		return _list.getName(_ndx);
 	}
-
-	/** FPC, June 20, 2014 Not sure this is really necessary, if it is not we can remove it and rename all the calls */
-	@Override
-	public String getFullName()
-	{
-		return getName();
-	}
 	@Override
 	public void setName(String name)
 	{

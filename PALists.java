@@ -2,6 +2,9 @@ package com.powerdata.openpa;
 
 public interface PALists
 {
+	/** return list of areas */
+	AreaList getAreas();
+	
 	/** return list of buses */
 	BusList getBuses();
 	

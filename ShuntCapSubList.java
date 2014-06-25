@@ -4,7 +4,7 @@ public class ShuntCapSubList extends ShuntCapList
 {
 	protected ShuntCapSubList(PALists model, ShuntCapList src, int[] srcndx)
 	{
-		super(model, src.getKeys(srcndx));
+		super(model, srcndx.length, src.getBusKeys(srcndx));
 	}
 	// TODO: override every method
 }

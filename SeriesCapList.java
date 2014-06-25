@@ -10,6 +10,11 @@ public class SeriesCapList extends ACBranchList<SeriesCap>
 		super(model, keys, fbkey, tbkey);
 	}
 
+	protected SeriesCapList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
+
 	protected SeriesCapList() {super();}
 
 	@Override

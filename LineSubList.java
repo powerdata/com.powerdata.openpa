@@ -8,7 +8,7 @@ public class LineSubList extends LineList
 	
 	protected LineSubList(PALists model, LineList src, int[] srcndx)
 	{
-		super(model, src.getKeys(srcndx), src.getFBusKeys(srcndx),
+		super(model, srcndx.length, src.getFBusKeys(srcndx),
 				src.getTBusKeys(srcndx));
 		_ndx = srcndx;
 		_src = src;

@@ -60,6 +60,7 @@ public class BusList extends BusListIfc
 	}
 
 	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
+	int[] _area;
 	
 	public static final BusList Empty = new BusList();
 
@@ -68,8 +69,21 @@ public class BusList extends BusListIfc
 	protected BusList(PALists model, int[] keys)
 	{
 		super(model, keys, new SmplBusGrpMap(keys.length));
+		cfgArea();
+	}
+	
+	protected BusList(PALists model, int size)
+	{
+		super(model, new SmplBusGrpMap(size));
+		cfgArea();
 	}
 
+	protected void cfgArea()
+	{
+		int n = size();
+		_area = new int[n];
+		AreaList areas = _model.getAreas();
+	}
 	
 	@Override
 	public Bus get(int index)
@@ -164,9 +178,9 @@ public class BusList extends BusListIfc
 		}
 	}
 	@Override
-	public int getAREA(int ndx)
+	public Area getArea(int ndx)
 	{
-		return 0;
+		return 
 	}
 	
 	@Override

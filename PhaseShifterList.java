@@ -9,6 +9,10 @@ public class PhaseShifterList extends ACBranchList<PhaseShifter>
 	{
 		super(model, keys, fbkey, tbkey);
 	}
+	protected PhaseShifterList(PALists model, int size, int[] fbkey, int[] tbkey)
+	{
+		super(model, size, fbkey, tbkey);
+	}
 
 	protected PhaseShifterList() {super();}
 
