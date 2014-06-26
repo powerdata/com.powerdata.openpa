@@ -10,21 +10,22 @@ public class Bus extends AbstractBaseObject implements PALists
 		_list = list;
 	}
 	
-	public boolean isEnergized()
-	{
-		/** Would this make sense? **/
-		return false;
-	}
-	
 	public Area getArea()
 	{
 		return _list.getArea(_ndx);
 	}
+
+	public void setArea(Area a)
+	{
+		_list.setArea(_ndx, a);
+	}
+	
 	/** get bus base KV */
 	public float getBaseKV()
 	{
 		return _list.getBaseKV(_ndx);
 	}
+	
 	/** set bus base KV */
 	public void setBaseKV(float kv)
 	{
@@ -137,27 +138,44 @@ public class Bus extends AbstractBaseObject implements PALists
 	{
 		return _list.getSVCs(_ndx);
 	}
-	public SwitchList isolate() throws PAModelException { return _list.isolate(_ndx); }
-	public float getFrequency() throws PAModelException //{return _list.getFrequency(_ndx);}
-	{
-		return 0;
-	}
+	
 	/** get frequency source priority */
-	public int getFrequencySourcePriority() throws PAModelException //{return _list.getFrequencySourcePriority(_ndx);}
+	public int getFrequencySourcePriority()
 	{
-		return 0;
+		return _list.getFrequencySourcePriority(_ndx);
 	}
-
-	public int getIsland()
+	
+	public void setFrequencySourcePriority(int fsp)
 	{
-		System.out.println("Bus.getIsland has to be implemented");
-		return 0;
+		_list.setFrequencySourcePriority(_ndx, fsp);
 	}
+	
 	/**
-	 * FPC: Is this something we are going to do????
+	 * Bus Frequency
+	 * @return frequency at the bus, or -1 if not available
+	 */
+	public float getFrequency()
+	{
+		return _list.getFrequency(_ndx);
+	}
+	
+	public void setFrequency(float f)
+	{
+		_list.setFrequency(_ndx, f);
+	}
+	
+	public Island getIsland()
+	{
+		return _list.getIsland(_ndx);
+	}
+	
 	public Station getStation()
 	{
-		
+		return _list.getStation(_ndx);
 	}
-	*/
+
+	public void setStation(Station s)
+	{
+		_list.setStation(_ndx, s);
+	}
 }

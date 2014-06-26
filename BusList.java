@@ -69,22 +69,13 @@ public class BusList extends BusListIfc
 	protected BusList(PALists model, int[] keys)
 	{
 		super(model, keys, new SmplBusGrpMap(keys.length));
-		cfgArea();
 	}
 	
 	protected BusList(PALists model, int size)
 	{
 		super(model, new SmplBusGrpMap(size));
-		cfgArea();
 	}
 
-	protected void cfgArea()
-	{
-		int n = size();
-		_area = new int[n];
-		AreaList areas = _model.getAreas();
-	}
-	
 	@Override
 	public Bus get(int index)
 	{
@@ -180,12 +171,63 @@ public class BusList extends BusListIfc
 	@Override
 	public Area getArea(int ndx)
 	{
-		return 
+		//TODO: 
+		return null;
 	}
 	
 	@Override
-	public SwitchList isolate(int ndx)
+	public Island getIsland(int ndx)
 	{
-		return SwitchList.Empty;
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getFrequencySourcePriority(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getFrequency(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setArea(int ndx, Area a)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFrequencySourcePriority(int ndx, int fsp)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFrequency(int ndx, float f)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Station getStation(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setStation(int ndx, Station s)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

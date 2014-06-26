@@ -34,8 +34,6 @@ public abstract class  ModelBuilder
 		return new LineList(_m, keys, fbuskeys, tbuskeys);
 	}
 	
-	protected AreaList createAreaList(int[] keys) {
-
 	protected void createModel() throws PAModelException
 	{
 		_m = new PAModel();

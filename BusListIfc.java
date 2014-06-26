@@ -49,7 +49,21 @@ public abstract class BusListIfc extends EquipLists<Bus>
 	
 	public abstract Area getArea(int ndx);
 
-	public abstract SwitchList isolate(int ndx);
+	public abstract void setArea(int ndx, Area a);
+
+	public abstract Island getIsland(int ndx);
+
+	public abstract int getFrequencySourcePriority(int ndx);
+
+	public abstract void setFrequencySourcePriority(int ndx, int fsp);
+
+	public abstract float getFrequency(int ndx);
+
+	public abstract void setFrequency(int ndx, float f);
+
+	public abstract Station getStation(int ndx);
+
+	public abstract void setStation(int ndx, Station s);
 
 }
 

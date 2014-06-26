@@ -27,13 +27,6 @@ public class SingleBusList extends BusListIfc
 	}
 	
 	@Override
-	public Area getArea(int ndx)
-	{
-		//TODO
-		return null;
-	}
-
-	@Override
 	public float getBaseKV(int ndx)
 	{
 		return _buses.getBaseKV(_bgmap.getTokens()[ndx]);
@@ -214,10 +207,68 @@ public class SingleBusList extends BusListIfc
 				_buses.setName(b, name[i]);
 		}
 	}
+
 	@Override
-	public SwitchList isolate(int ndx)
+	public Island getIsland(int ndx)
 	{
+		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int getFrequencySourcePriority(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getFrequency(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setArea(int ndx, Area a)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFrequencySourcePriority(int ndx, int fsp)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFrequency(int ndx, float f)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Station getStation(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setStation(int ndx, Station s)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 	
+	@Override
+	public Area getArea(int ndx)
+	{
+		//TODO
+		return null;
+	}
+
 }

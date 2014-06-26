@@ -30,7 +30,16 @@ public class Switch extends TwoTermDev
 		_list = list;
 	}
 	public State getState() {return _list.getState(_ndx);} 
-	public boolean canOperateUnderLoad()	{	return _list.canOperateUnderLoad(_ndx);}
-	public void setState(Switch.State state)	{	/* What to do?? */	}
-	public void commit()	{	/* What to do */	}
+	public void setState(State state)
+	{
+		_list.setState(_ndx, state);
+	}
+	public boolean isOperable()
+	{
+		return _list.isOperable(_ndx);
+	}
+	public void setOperable(boolean op)
+	{
+		_list.setOperable(_ndx, op);
+	}
 }

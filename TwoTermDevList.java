@@ -23,11 +23,10 @@ public abstract class TwoTermDevList<T extends TwoTermDev> extends BaseList<T>
 		_fbx = cvtBusKeys(fbkey);
 		_tbx = cvtBusKeys(tbkey);
 	}
-	
 
 	protected int[] cvtBusKeys(int[] bkeys)
 	{
-		int n = _buses.size();
+		int n = bkeys.length;
 		int[] rv = new int[n];
 		for(int i=0; i < n; ++i)
 			rv[i] = _buses.getOfs(bkeys[i]);

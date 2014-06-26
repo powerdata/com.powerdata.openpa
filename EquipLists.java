@@ -130,38 +130,40 @@ public abstract class EquipLists<T extends BaseObject> extends BaseList<T>
 		return new GroupMap(map, _bgmap.size());
 	}
 	
-	protected List<int[]> getAreaMap()
-	{
-		List<int[]> map = _areamap.get();
-		if (map == null)
-		{
-			map = mapAreas();
-			_areamap = new WeakReference<>(map);
-		}
-		return map;
-	}
+//	protected List<int[]> getAreaMap()
+//	{
+//		List<int[]> map = _areamap.get();
+//		if (map == null)
+//		{
+//			map = mapAreas();
+//			_areamap = new WeakReference<>(map);
+//		}
+//		return map;
+//	}
 	
-	protected List<int[]> mapAreas()
-	{
-		List<int[]> bgrp = _bgmap.map();
-		BusList buses = _model.getBuses();
-		int cnt = buses.size();
-		int[] map = new int[cnt];
-		Arrays.fill(map, -1);
-		for(int[] g : bgrp)
-		{
-			for (int b : g)
-				map[g] = buses.getArea(b).getIndex();
-		}
-		return new GroupMap(map, _bgmap.size())
-	}
+//	protected List<int[]> mapAreas()
+//	{
+//		List<int[]> bgrp = _bgmap.map();
+//		BusList buses = _model.getBuses();
+//		int cnt = buses.size();
+//		int[] map = new int[cnt];
+//		Arrays.fill(map, -1);
+//		for(int[] g : bgrp)
+//		{
+//			for (int b : g)
+//				map[g] = buses.getArea(b).getIndex();
+//		}
+//		return new GroupMap(map, _bgmap.size())
+//	}
 	/**
 	 * return list of areas
 	 */
 	public AreaList getAreas(int ndx)
 	{
-		AreaList list = _model.getAreas();
-		return new AreaSubList(_model, )
+//		AreaList list = _model.getAreas();
+//		return new AreaSubList(_model, )
+		//TODO:
+		return AreaList.Empty;
 	}
 	
 	/**

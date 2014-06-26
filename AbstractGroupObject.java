@@ -1,18 +1,13 @@
 package com.powerdata.openpa;
 
-public class Island extends AbstractBaseObject implements PALists
+public class AbstractGroupObject extends AbstractBaseObject implements PALists
 {
-	protected IslandList _list;
+	protected EquipLists<? extends BaseObject> _list;
 	
-	public Island(IslandList list, int ndx)
+	public AbstractGroupObject(EquipLists<? extends BaseObject> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;
-	}
-	
-	public boolean isEnergized()
-	{
-		return _list.isEnergized(_ndx);
 	}
 
 	@Override
@@ -98,6 +93,4 @@ public class Island extends AbstractBaseObject implements PALists
 	{
 		return _list.getSVCs(_ndx);
 	}
-	
-	
 }
