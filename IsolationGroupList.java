@@ -67,6 +67,11 @@ public class IsolationGroupList extends EquipLists<IsolationGroup>
 		return new IsolationGroup(this, index);
 	}
 	
+	public IsolationGroup getByBus(Bus b)
+	{
+		return get(_bgmap.getGrp(b.getIndex()));
+	}
+	
 	SwitchList getOpSw(int ndx, boolean op)
 	{
 		SwitchList list = _model.getSwitches();
@@ -179,23 +184,35 @@ public class IsolationGroupList extends EquipLists<IsolationGroup>
 		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
 				new File(outdir, "isolgrp.csv"))));
+
+		PAModel m = PflowModelBuilder.Create(uri).load();
+		IsolationGroupList list = new IsolationGroupList(m); 
+		BusList buses = m.getBuses();
+		Bus b0 = buses.get(buses.size()-1);
+		pw.format("-- Get Group By Bus for Bus %s --\n", b0);
+		PrintGrp(list.getByBus(b0), pw);
 		
-		for(IsolationGroup g : new IsolationGroupList(PflowModelBuilder.Create(uri).load()))
+		pw.println("-- dump all isolation groups --");
+		for(IsolationGroup g : list)
 		{
-			pw.format("%s: ", g.toString());
-			for(Bus b : g.getBuses())
-				pw.format("%s, ", b.toString());
-			pw.print("\noperable: ");
-			for(Switch b : g.getOperableSwitches())
-				pw.format("%s, ", b.toString());
-			pw.println();
-			pw.print("INoperable: ");
-			for(Switch b : g.getInoperableSwitches())
-				pw.format("%s, ", b.toString());
-			pw.println();
+			PrintGrp(g, pw);
 		}
 		
 		pw.close();
-		
+	}
+	
+	static void PrintGrp(IsolationGroup g, PrintWriter pw)
+	{
+		pw.format("%s: ", g.toString());
+		for(Bus b : g.getBuses())
+			pw.format("%s, ", b.toString());
+		pw.print("\noperable: ");
+		for(Switch b : g.getOperableSwitches())
+			pw.format("%s, ", b.toString());
+		pw.println();
+		pw.print("INoperable: ");
+		for(Switch b : g.getInoperableSwitches())
+			pw.format("%s, ", b.toString());
+		pw.println();
 	}
 }
