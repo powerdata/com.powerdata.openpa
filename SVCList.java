@@ -24,5 +24,11 @@ public class SVCList extends ShuntList<SVC>
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	protected SVC[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

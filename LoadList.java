@@ -28,5 +28,12 @@ public class LoadList extends OneTermDevList<Load>
 		return 0;
 	}
 
+	@Override
+	protected Load[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 

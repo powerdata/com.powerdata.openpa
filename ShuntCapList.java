@@ -25,5 +25,11 @@ public class ShuntCapList extends ShuntList<ShuntCapacitor>
 		return null;
 	}
 	//TODO:  add "switchable", "order", and insvc
+	@Override
+	protected ShuntCapacitor[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

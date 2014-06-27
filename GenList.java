@@ -51,4 +51,11 @@ public class GenList extends OneTermDevList<Gen>
 		
 	}
 
+	@Override
+	protected Gen[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

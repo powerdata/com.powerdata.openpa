@@ -93,4 +93,17 @@ public class AbstractGroupObject extends AbstractBaseObject implements PALists
 	{
 		return _list.getSVCs(_ndx);
 	}
+
+	@Override
+	public AreaList getAreas()
+	{
+		return _list.getAreas(_ndx);
+	}
+
+	@Override
+	public OwnerList getOwners()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

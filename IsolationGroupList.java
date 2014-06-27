@@ -215,4 +215,11 @@ public class IsolationGroupList extends EquipLists<IsolationGroup>
 			pw.format("%s, ", b.toString());
 		pw.println();
 	}
+
+	@Override
+	protected IsolationGroup[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

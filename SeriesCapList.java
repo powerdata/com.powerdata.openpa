@@ -23,4 +23,11 @@ public class SeriesCapList extends ACBranchList<SeriesCap>
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	protected SeriesCap[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

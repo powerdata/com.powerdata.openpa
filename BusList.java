@@ -1,7 +1,5 @@
 package com.powerdata.openpa;
 
-import gnu.trove.impl.hash.THash;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
@@ -62,20 +60,22 @@ public class BusList extends BusListIfc
 	}
 
 	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
-	int[] _areas, _areao;
+	int[] _areas, _areao, _owners, _ownero;
 	AreaList _arealist;
+	OwnerList _ownerlist;
 	
 	public static final BusList Empty = new BusList();
 
 	BusList(){super();}
 	
-	public BusList(PAModel model, int[] keys)
+	public BusList(PALists model, int[] keys)
 	{
 		super(model, keys, new UnityBusGrpMap(keys.length));
 		_arealist = model.getAreas();
+		_ownerlist = model.getOwners();
 	}
 	
-	public BusList(PAModel model, int size)
+	public BusList(PALists model, int size)
 	{
 		super(model, new UnityBusGrpMap(size));
 		_arealist = model.getAreas();
@@ -201,6 +201,33 @@ public class BusList extends BusListIfc
 	}
 	
 	@Override
+	public Owner getOwner(int ndx)
+	{
+		return _ownerlist.get(_owners[ndx]);
+	}
+
+	@Override
+	public void setOwner(int ndx, Owner o)
+	{
+		_owners[ndx] = o.getIndex();
+	}
+	public Owner[] getOwner()
+	{
+		return _ownerlist.toArray(_owners);
+	}
+
+	public void setOwners(Owner[] owner)
+	{
+		if (_ownero == null)
+			_ownero = _owners;
+		if (_owners == null)
+			_owners = new int[_size];
+		for(int i=0; i<_size; ++i)
+			_owners[i] = owner[i].getIndex();
+	}
+	
+
+	@Override
 	public Island getIsland(int ndx)
 	{
 		// TODO Auto-generated method stub
@@ -262,5 +289,4 @@ public class BusList extends BusListIfc
 		// TODO Auto-generated method stub
 		
 	}
-	
 }

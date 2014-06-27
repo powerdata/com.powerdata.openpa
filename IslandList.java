@@ -114,5 +114,12 @@ public class IslandList extends EquipLists<Island>
 			System.out.println(i);
 		}
 	}
+
+	@Override
+	protected Island[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

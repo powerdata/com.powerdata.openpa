@@ -20,6 +20,16 @@ public class Bus extends AbstractGroupObject
 		_list.setArea(_ndx, a);
 	}
 	
+	public Owner getOwner()
+	{
+		return _list.getOwner(_ndx);
+	}
+
+	public void setOwner(Owner o)
+	{
+		_list.setOwner(_ndx, o);
+	}
+	
 	/** get bus base KV */
 	public float getBaseKV()
 	{

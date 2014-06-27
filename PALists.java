@@ -43,4 +43,10 @@ public interface PALists
 	
 	/** return list of SVC's */
 	SVCList getSVCs();
+	
+	/** return list of Areas */
+	AreaList getAreas();
+
+	/** return list of Owners */
+	OwnerList getOwners();
 }

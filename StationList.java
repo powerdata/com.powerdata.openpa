@@ -7,4 +7,11 @@ public class StationList extends EquipLists<Station>
 	{
 		return new Station(this, index);
 	}
+
+	@Override
+	protected Station[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

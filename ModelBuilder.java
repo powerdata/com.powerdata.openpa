@@ -13,6 +13,7 @@ public abstract class ModelBuilder
 		PAModel m = new PAModel();
 		loadStart(m);
 		m._areas = loadAreas(m);
+		m._owners = loadOwners(m);
 		m._buslist = loadBuses(m);
 		m._swlist = loadSwitches(m);
 		m._linelist = loadLines(m);
@@ -27,5 +28,5 @@ public abstract class ModelBuilder
 	protected abstract SwitchList loadSwitches(PAModel m) throws PAModelException;
 	protected abstract LineList loadLines(PAModel m) throws PAModelException;
 	protected abstract AreaList loadAreas(PAModel m) throws PAModelException;
-	
+	protected abstract OwnerList loadOwners(PAModel m) throws PAModelException;
 }

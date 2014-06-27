@@ -285,4 +285,18 @@ public class SingleBusList extends BusListIfc
 		
 	}
 
+	@Override
+	public Owner getOwner(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setOwner(int ndx, Owner o)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

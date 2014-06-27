@@ -13,6 +13,7 @@ public class PAModel implements PALists
 	protected LineList _linelist;
 	protected IslandList _islands = null;
 	protected AreaList _areas;
+	protected OwnerList _owners;
 	
 	protected PAModel(){}
 	
@@ -36,9 +37,16 @@ public class PAModel implements PALists
 		return _islands;
 	}
 	
+	@Override
 	public AreaList getAreas()
 	{
 		return _areas;
+	}
+	
+	@Override
+	public OwnerList getOwners()
+	{
+		return _owners;
 	}
 	
 	@Override

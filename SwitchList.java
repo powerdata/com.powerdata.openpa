@@ -60,4 +60,11 @@ public class SwitchList extends TwoTermDevList<Switch>
 	{
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	protected Switch[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

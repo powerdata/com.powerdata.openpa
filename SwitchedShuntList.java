@@ -26,4 +26,11 @@ public class SwitchedShuntList extends ShuntList<SwitchedShunt>
 		return null;
 	}
 
+	@Override
+	protected SwitchedShunt[] newarray(int size)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
