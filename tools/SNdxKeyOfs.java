@@ -14,6 +14,7 @@ public abstract class SNdxKeyOfs
 	public abstract boolean containsKey(int key);
 	/** get offset for the key, returns -1 if not available */
 	public abstract int getOffset(int key);
+	public abstract int[] getOffsets(int[] keys);
 	public abstract int[] getKeys();
 
 	public static SNdxKeyOfs Create(int[] keys)
@@ -72,6 +73,16 @@ class SortNdx extends SNdxKeyOfs
 	}
 
 	@Override
+	public int[] getOffsets(int[] keys)
+	{
+		int n = keys.length;
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = _ndxToOfs.getOfs(keys[i]);
+		return rv;
+	}
+
+	@Override
 	public int[] getKeys()
 	{
 		int[] keys = _keys.get();
@@ -114,6 +125,16 @@ class TroveNdx extends SNdxKeyOfs
 	public int getOffset(int key)
 	{
 		return _keyndx.get(key);
+	}
+
+	@Override
+	public int[] getOffsets(int[] keys)
+	{
+		int n = keys.length;
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = _keyndx.get(keys[i]);
+		return rv;
 	}
 
 	@Override
@@ -167,6 +188,16 @@ class OfsNdx extends SNdxKeyOfs
 	public int getOffset(int key)
 	{
 		return (key < _minkey)?-1:(_offsets[key-_minkey]);
+	}
+
+	@Override
+	public int[] getOffsets(int[] keys)
+	{
+		int n = keys.length;
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getOffset(keys[i]);
+		return rv;
 	}
 }
 

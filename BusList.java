@@ -7,12 +7,12 @@ import java.util.List;
 
 public class BusList extends BusListIfc
 {
-	static class SmplBusGrpMap implements BusGrpMap
+	static class DegenBusGrpMap implements BusGrpMap
 	{
 		int _size;
 		WeakReference<int[]> _tok = new WeakReference<>(null);
 		
-		SmplBusGrpMap(int size)
+		DegenBusGrpMap(int size)
 		{
 			_size = size;
 		}
@@ -66,14 +66,14 @@ public class BusList extends BusListIfc
 
 	BusList(){super();}
 	
-	protected BusList(PALists model, int[] keys)
+	public BusList(PALists model, int[] keys)
 	{
-		super(model, keys, new SmplBusGrpMap(keys.length));
+		super(model, keys, new DegenBusGrpMap(keys.length));
 	}
 	
-	protected BusList(PALists model, int size)
+	public BusList(PALists model, int size)
 	{
-		super(model, new SmplBusGrpMap(size));
+		super(model, new DegenBusGrpMap(size));
 	}
 
 	@Override

@@ -63,103 +63,6 @@ public class LineSubList extends LineList
 	}
 
 	@Override
-	public float getFromTap(int ndx)
-	{
-		return _src.getFromTap(_ndx[ndx]);
-	}
-
-	@Override
-	public float[] getFromTap()
-	{
-		return _src.getSubListFromTap(_ndx);
-	}
-
-	@Override
-	public void setFromTap(int ndx, float a)
-	{
-		_src.setFromTap(_ndx[ndx], a);
-	}
-
-	@Override
-	public void setFromTap(float[] a)
-	{
-		_src.setSubListFromTap(a, _ndx);
-	}
-
-	@Override
-	public float getToTap(int ndx)
-	{
-		return _src.getToTap(_ndx[ndx]);
-	}
-
-	@Override
-	public float[] getToTap()
-	{
-		return _src.getSubListToTap(_ndx);
-	}
-
-	@Override
-	public void setToTap(int ndx, float a)
-	{
-		_src.setToTap(_ndx[ndx], a);
-	}
-
-	@Override
-	public void setToTap(float[] a)
-	{
-		_src.setSubListToTap(a, _ndx);
-	}
-
-	@Override
-	public float getGmag(int ndx)
-	{
-		return _src.getGmag(_ndx[ndx]);
-	}
-
-	@Override
-	public float[] getGmag()
-	{
-		return _src.getSubListGmag(_ndx);
-	}
-
-	@Override
-	public void setGmag(int ndx, float g)
-	{
-		_src.setGmag(_ndx[ndx], g);
-	}
-
-	@Override
-	public void setGmag(float[] g)
-	{
-		_src.setSubListGmag(g, _ndx);
-		
-	}
-
-	@Override
-	public float getBmag(int ndx)
-	{
-		return _src.getBmag(_ndx[ndx]);
-	}
-
-	@Override
-	public float[] getBmag()
-	{
-		return _src.getSubListBmag(_ndx);
-	}
-
-	@Override
-	public void setBmag(int ndx, float b)
-	{
-		_src.setBmag(_ndx[ndx], b);
-	}
-
-	@Override
-	public void setBmag(float[] b)
-	{
-		_src.setSubListBmag(b, _ndx);
-	}
-
-	@Override
 	public float getFromBchg(int ndx)
 	{
 		return _src.getFromBchg(_ndx[ndx]);
@@ -205,30 +108,6 @@ public class LineSubList extends LineList
 	public void setToBchg(float[] b)
 	{
 		_src.setSubListToBch(b, _ndx);
-	}
-
-	@Override
-	public float getShift(int ndx)
-	{
-		return _src.getShift(_ndx[ndx]);
-	}
-
-	@Override
-	public float[] getShift()
-	{
-		return _src.getSubListShift(_ndx);
-	}
-
-	@Override
-	public void setShift(int ndx, float sdeg)
-	{
-		_src.setShift(_ndx[ndx], sdeg);
-	}
-
-	@Override
-	public void setShift(float[] sdeg)
-	{
-		_src.setSubListShift(sdeg, _ndx);
 	}
 
 	@Override

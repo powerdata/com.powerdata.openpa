@@ -6,38 +6,21 @@ package com.powerdata.openpa;
  * @author chris@powerdata.com
  * 
  */
-public abstract class  ModelBuilder
+public abstract class ModelBuilder
 {
-	protected PAModel _m;
-	
-	public abstract PAModel load() throws PAModelException;
-
-	protected abstract BusList getBuses() throws PAModelException;
-	
-	protected abstract SwitchList getSwitches() throws PAModelException;
-	
-	protected abstract LineList getLines() throws PAModelException;
-
-	protected abstract AreaList getAreas() throws PAModelException;
-	
-	protected BusList createBusList(int[] keys) {return new BusList(_m, keys);}
-	protected BusList createBusList(int size) {return new BusList(_m, size);}
-	
-	protected SwitchList createSwitchList(int[] keys, int[] fbuskeys,
-			int[] tbuskeys)
+	public PAModel load() throws PAModelException
 	{
-		return new SwitchList(_m, keys, fbuskeys, tbuskeys);
-	}
-	protected LineList createLineList(int[] keys, int[] fbuskeys,
-			int[] tbuskeys)
-	{
-		return new LineList(_m, keys, fbuskeys, tbuskeys);
-	}
-	
-	protected void createModel() throws PAModelException
-	{
-		_m = new PAModel();
-		_m.load(this);
+		PAModel m = new PAModel();
+		m._areas = loadAreas(m);
+		m._buslist = loadBuses(m);
+		m._swlist = loadSwitches(m);
+		m._linelist = loadLines(m);
+		return m;
 	}
 
+	protected abstract BusList loadBuses(PAModel m) throws PAModelException;
+	protected abstract SwitchList loadSwitches(PAModel m) throws PAModelException;
+	protected abstract LineList loadLines(PAModel m) throws PAModelException;
+	protected abstract AreaList loadAreas(PAModel m) throws PAModelException;
+	
 }

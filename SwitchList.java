@@ -10,7 +10,7 @@ public class SwitchList extends TwoTermDevList<Switch>
 
 	protected SwitchList(){super();}
 	
-	protected SwitchList(PALists model, int[] keys, int[] fbuskey, int[] tbuskey)
+	public SwitchList(PALists model, int[] keys, int[] fbuskey, int[] tbuskey)
 	{
 		super(model, keys, fbuskey, tbuskey);
 	}

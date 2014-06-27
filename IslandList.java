@@ -55,9 +55,18 @@ public class IslandList extends EquipLists<Island>
 			protected boolean incD2(TwoTermDCLine d)
 			{
 				return d.isInSvc();
-			}}.addAll().getMap());
+			}
+		}.addAll().getMap());
 		
-		
+		_name = new String[_size];
+		_id = new String[_size];
+		for(int i=0; i < _size; ++i)
+		{
+			String s = String.valueOf(i);
+			_name[i] = s;
+			_id[i] = s;
+		}
+			
 	}
 	
 	@Override

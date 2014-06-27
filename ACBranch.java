@@ -40,71 +40,71 @@ public class ACBranch extends TwoTermDev
 	/** get from-side off-nominal tap ratio p.u. on 100MVA base and bus base KV */
 	public float getFromTap()
 	{
-		return _list.getFromTap(_ndx);
+		return 1f;
 	}
 	/** set from-side off-nominal tap ratio p.u. on 100MVA base and bus base KV */
 	public void setFromTap(float a)
 	{
-		_list.setFromTap(_ndx, a);
+		// defaults to no operation
 	}
 	/** get to-side off-nominal tap ratio p.u on 100MVA base and bus base KV */
 	public float getToTap()
 	{
-		return _list.getToTap(_ndx);
+		return 1f;
 	}
 	/** set to-side off-nominal tap ratio p.u on 100MVA base and bus base KV */
 	public void setToTap(float a)
 	{
-		_list.setToTap(_ndx, a);
+		// defaults to no operation
 	}
 	/** get transformer magnetizing conductance p.u. on 100MVA base */
 	public float getGmag()
 	{
-		return _list.getGmag(_ndx);
+		return 0f;
 	}
 	/** set transformer magnetizing conductance p.u. on 100MVA base */
 	public void setGmag(float g)
 	{
-		_list.setGmag(_ndx, g);
+		// defaults to no operation
 	}
 	/** get transformer magnetizing susceptance p.u. on 100 MVA base */
 	public float getBmag()
 	{
-		return _list.getBmag(_ndx);
+		return 0f;
 	}
 	/** set transformer magnetizing susceptance p.u. on 100 MVA base */
 	public void setBmag(float b)
 	{
-		_list.setBmag(_ndx, b);
+		// defaults to no operation
 	}
 	/** get from-side charging susceptance */
 	public float getFromBchg()
 	{
-		return _list.getFromBchg(_ndx);
+		return 0f;
 	}
 	/** set from-side charging susceptance */
 	public void setFromBchg(float b)
 	{
-		_list.setFromBchg(_ndx, b);
+		// defaults to no operation
 	}
 	/** get to-side charging susceptance */
 	public float getToBchg()
 	{
-		return _list.getToBchg(_ndx);
+		return 0f;
 	}
 	/** set to-side charging susceptance */
 	public void setToBchg(float b)
 	{
-		_list.setToBchg(_ndx, b);
+		// defaults to no operation
 	}
 	/** get phase shift through branch in Degrees */
 	public float getShift()
 	{
-		return _list.getShift(_ndx);
+		return 0f;
 	}
 	/** set phase shift through branch in Degrees */
 	public void setShift(float sdeg)
 	{
-		_list.setShift(_ndx, sdeg);
+		// defaults to no operation
 	}
 }

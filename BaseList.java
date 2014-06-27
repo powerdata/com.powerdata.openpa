@@ -55,6 +55,12 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 			public int getKey(int ndx)
 			{
 				return ndx;
+			}
+
+			@Override
+			public int[] getOffsets(int[] keys)
+			{
+				return keys;
 			}};
 	}
 	
@@ -63,7 +69,7 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 		_model = model;
 		_size = keys.length;
 		_keys = keys;
-		_keyndx = null;
+		_keyndx = SNdxKeyOfs.Create(getKey());
 	}
 	
 	protected BaseList()
@@ -84,11 +90,12 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	
 	public int getOfs(int key)
 	{
-		if (_keyndx == null)
-		{
-			_keyndx = SNdxKeyOfs.Create(getKey());
-		}
 		return _keyndx.getOffset(key);
+	}
+	
+	public int[] getOffsets(int[] keys)
+	{
+		return _keyndx.getOffsets(keys);
 	}
 
 	/** get unique object key */

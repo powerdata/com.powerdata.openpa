@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -20,24 +22,28 @@ public class ListDumper
 		Method[] methods = model.getClass().getMethods();
 		for (Method m : methods)
 		{
-			Class<?> rtype = m.getReturnType();
-			if (rtype.getPackage() != null && rtype.getPackage().getName()
-					.equals("com.powerdata.openpa"))
+			if (m.getAnnotation(Nodump.class) == null)
 			{
-				while (rtype != null && rtype != Object.class
-						&& rtype != void.class)
+				Class<?> rtype = m.getReturnType();
+				if (rtype.getPackage() != null
+						&& rtype.getPackage().getName()
+								.equals("com.powerdata.openpa"))
 				{
-					if (rtype == BaseList.class
-							&& m.getParameterTypes().length == 0)
+					while (rtype != null && rtype != Object.class
+							&& rtype != void.class)
 					{
-						String nm = m.getName();
-						String title = nm.substring(3);
-						File nfile = new File(outdir, title + ".csv");
-						BaseList<?> list = (BaseList<?>) m.invoke(model,
+						if (rtype == BaseList.class
+								&& m.getParameterTypes().length == 0)
+						{
+							String nm = m.getName();
+							String title = nm.substring(3);
+							File nfile = new File(outdir, title + ".csv");
+							BaseList<?> list = (BaseList<?>) m.invoke(model,
 								new Object[] {});
-						dumpList(nfile, list);
+							dumpList(nfile, list);
+						}
+						rtype = rtype.getSuperclass();
 					}
-					rtype = rtype.getSuperclass();
 				}
 			}
 		}

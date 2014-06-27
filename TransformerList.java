@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class TransformerList extends ACBranchList<Transformer>
+public class TransformerList extends TransformerBaseList<Transformer>
 {
 
 	public static final TransformerList	Empty	= new TransformerList();

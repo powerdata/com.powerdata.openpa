@@ -11,8 +11,21 @@ public class AbstractBaseObject implements BaseObject
 	protected int _ndx;
 	protected BaseList<? extends BaseObject> _list;
 	
+	public static final BaseObject Null = new AbstractBaseObject(null, -1)
+	{
+		@Override
+		public String toString()
+		{
+			return "Null";
+		}
+	};
+	
 	public AbstractBaseObject(BaseList<? extends BaseObject> list, int ndx)
 	{
+		if (_ndx == -1)
+		{
+			int xxx = 5;
+		}
 		_list = list;
 		_ndx = ndx;
 	}
@@ -55,6 +68,7 @@ public class AbstractBaseObject implements BaseObject
 	@Override
 	public String toString()
 	{
+		if (_ndx == -1) return "Null";
 		try
 		{
 			return new StringBuilder(getClass().getSimpleName()).append(' ')

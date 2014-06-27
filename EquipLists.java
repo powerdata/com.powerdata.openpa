@@ -43,7 +43,7 @@ public abstract class EquipLists<T extends BaseObject> extends BaseList<T>
 		D2
 	}
 	
-	BusGrpMap _bgmap;
+	protected BusGrpMap _bgmap;
 	WeakReference<List<int[]>> _areamap = new WeakReference<>(null);
 
 	protected EquipLists() {super();}
@@ -61,7 +61,7 @@ public abstract class EquipLists<T extends BaseObject> extends BaseList<T>
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	WeakReference<List<int[]>>[] _lstref =
 		new WeakReference[EqType.values().length];

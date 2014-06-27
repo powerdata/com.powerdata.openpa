@@ -14,14 +14,6 @@ public class PAModel implements PALists
 	protected IslandList _islands = null;
 	protected AreaList _areas;
 	
-	protected void load(ModelBuilder mb) throws PAModelException
-	{
-		_buslist = mb.getBuses();
-		_swlist = mb.getSwitches();
-		_linelist = mb.getLines();
-		_areas = mb.getAreas();
-	}
-	
 	protected PAModel(){}
 	
 	/** call for an event */
@@ -37,6 +29,7 @@ public class PAModel implements PALists
 		return _islands;
 	}
 	
+	@Nodump
 	public IslandList refreshIslands()
 	{
 		_islands = new IslandList(this);

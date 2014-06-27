@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class Transformer extends ACBranch
+public class Transformer extends TransformerBase
 {
 
 	public Transformer(TransformerList list, int ndx)

@@ -4,8 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.powerdata.openpa.tools.GroupMap;
 import com.powerdata.openpa.tools.LinkNet;
 
 /**
@@ -180,14 +178,11 @@ public class BusGrpMapBldr
 			return _grps.length;
 		}
 		
-	}
-	static class BBusGrpMap implements BusGrpMap
+	};
+	
+
+	static class BBusGrpMap extends BasicBusGrpMap
 	{
-		WeakReference<List<int[]>> _grps = new WeakReference<>(null);
-		WeakReference<int[]> _tokens = new WeakReference<>(null);
-		int[] _map;
-		int _ngrp;
-		
 		public BBusGrpMap(int[][] grps, int nbus)
 		{
 			List<int[]> fm = new FixedGrpMap(grps);
@@ -202,47 +197,7 @@ public class BusGrpMapBldr
 			}
 		}
 
-		@Override
-		public int getGrp(int index)
-		{
-			return _map[index];
-		}
-
-		@Override
-		public List<int[]> map()
-		{
-			List<int[]> rv = _grps.get();
-			if (rv == null)
-			{
-				rv = new GroupMap(_map, _ngrp);
-				_grps = new WeakReference<>(rv);
-			}
-			return rv;
-		}
-
-		@Override
-		public int size()
-		{
-			return _ngrp;
-		}
-
-		@Override
-		public int[] getTokens()
-		{
-			int[] rv = _tokens.get();
-			int n = size();
-			if (rv == null)
-			{
-				rv = new int[n];
-				List<int[]> l = map();
-				for(int i=0; i < n; ++i)
-				{
-					rv[i] = l.get(i)[0];
-				}
-			}
-			return rv;
-		}
-	};
-	
+		
+	}
 	
 }

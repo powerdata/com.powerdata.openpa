@@ -27,7 +27,7 @@ public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T>
 	
 	protected int[] cvtBusKeys(int[] bkeys)
 	{
-		int n = _buses.size();
+		int n = bkeys.length;
 		int[] rv = new int[n];
 		for(int i=0; i < n; ++i)
 			rv[i] = _buses.getOfs(bkeys[i]);
