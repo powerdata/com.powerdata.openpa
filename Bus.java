@@ -95,4 +95,14 @@ public class Bus extends AbstractGroupObject
 	{
 		_list.setStation(_ndx, s);
 	}
+	
+	public boolean isEnergized()
+	{
+		return _list.isEnergized(_ndx);
+	}
+	
+	public void setEnergized(boolean state)
+	{
+		_list.setEnergized(_ndx, state);
+	}
 }
