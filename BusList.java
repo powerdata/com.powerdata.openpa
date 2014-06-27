@@ -59,8 +59,10 @@ public class BusList extends BusListIfc
 		}
 	}
 
-	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
-	int[] _areas, _areao, _owners, _ownero;
+//	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
+//	int[] _areas, _areao, _owners, _ownero;
+	float[][] _bkv=IFlt(), _vm=IFlt(), _va=IFlt();
+	int[][] _areas=IInt(), _owners=IInt();
 	AreaList _arealist;
 	OwnerList _ownerlist;
 	
@@ -88,142 +90,76 @@ public class BusList extends BusListIfc
 	}
 	
 	@Override
-	public float getBaseKV(int ndx)
-	{
-		return _bkv[ndx];
-	}
+	public float getBaseKV(int ndx) {return getFloat(_bkv, ndx);}
 
-	public float[] getBaseKV()
-	{
-		return _bkv;
-	}
+	public float[] getBaseKV() {return getFloat(_bkv);}
 
 	@Override
-	public void setBaseKV(int ndx, float kv)
-	{
-		if (_bkvo == null && _bkv != null)
-			_bkvo = _bkv.clone();
-		_bkv[ndx] = kv;
-	}
+	public void setBaseKV(int ndx, float kv) {setFloat(_bkv, ndx, kv);}
 
-	public void setBaseKV(float[] kv)
-	{
-		if (_bkv != kv)
-		{
-			if (_bkvo == null)
-				_bkvo = _bkv;
-			_bkv = kv;
-		}
-	}
+	public void setBaseKV(float[] kv) {setFloat(_bkv, kv);}
 	
 	@Override
-	public float getVM(int ndx)
-	{
-		return _vm[ndx];
-	}
+	public float getVM(int ndx) {return getFloat(_vm, ndx);}
 
-	public float[] getVM()
-	{
-		return _vm;
-	}
+	public float[] getVM() {return getFloat(_vm);}
 
 	@Override
-	public void setVM(int ndx, float vm)
-	{
-		if (_vmo == null && _vm != null)
-			_vmo = _vm.clone();
-		_vm[ndx] = vm;
-	}
+	public void setVM(int ndx, float vm) {setFloat(_vm, ndx, vm);}
 
-	public void setVM(float[] vm)
-	{
-		if (_vm != vm)
-		{
-			if (_vmo == null)
-				_vmo = _vm;
-			_vm = vm;
-		}
-	}
+	public void setVM(float[] vm) {setFloat(_vm, vm);}
 	
 	@Override
-	public float getVA(int ndx)
-	{
-		return _va[ndx];
-	}
+	public float getVA(int ndx) {return getFloat(_va, ndx);}
 
-	public float[] getVA()
-	{
-		return _va;
-	}
+	public float[] getVA() {return getFloat(_va);}
 
 	@Override
-	public void setVA(int ndx, float va)
-	{
-		if (_vao == null && _va != null) 
-			_vao = _va.clone();
-		_va[ndx] = va;
-	}
+	public void setVA(int ndx, float va) {setFloat(_va, ndx, va);}
 	
-	public void setVA(float[] va)
-	{
-		if (_va != va)
-		{
-			if (_vao == null)
-				_vao = va;
-			_va = va;
-		}
-	}
+	public void setVA(float[] va) {setFloat(_va, va);}
+
 	@Override
 	public Area getArea(int ndx)
 	{
-		return _arealist.get(_areas[ndx]);
+		return _arealist.get(getInt(_areas, ndx));
 	}
 	
 	@Override
 	public void setArea(int ndx, Area a)
 	{
-		_areas[ndx] = a.getIndex();
+		setInt(_areas, ndx, a.getIndex());
 	}
 
-	public Area[] getAreas()
+	public Area[] getArea()
 	{
-		return _arealist.toArray(_areas);
+		return _arealist.toArray(getInt(_areas));
 	}
 
-	public void setAreas(Area[] area)
+	public void setArea(Area[] area)
 	{
-		if (_areao == null)
-			_areao = _areas;
-		if (_areas == null)
-			_areas = new int[_size];
-		for(int i=0; i<_size; ++i)
-			_areas[i] = area[i].getIndex();
+		setInt(_areas, objectNdx(area));
 	}
 	
 	@Override
 	public Owner getOwner(int ndx)
 	{
-		return _ownerlist.get(_owners[ndx]);
+		return _ownerlist.get(getInt(_owners, ndx));
 	}
 
 	@Override
 	public void setOwner(int ndx, Owner o)
 	{
-		_owners[ndx] = o.getIndex();
+		setInt(_owners, ndx, o.getIndex());
 	}
 	public Owner[] getOwner()
 	{
-		return _ownerlist.toArray(_owners);
+		return _ownerlist.toArray(getInt(_owners));
 	}
 
-	public void setOwners(Owner[] owner)
+	public void setOwner(Owner[] owner)
 	{
-		if (_ownero == null)
-			_ownero = _owners;
-		if (_owners == null)
-			_owners = new int[_size];
-		for(int i=0; i<_size; ++i)
-			_owners[i] = owner[i].getIndex();
+		setInt(_owners, objectNdx(owner));
 	}
 	
 

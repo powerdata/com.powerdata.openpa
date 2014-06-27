@@ -58,15 +58,11 @@ public class IslandList extends EquipLists<Island>
 			}
 		}.addAll().getMap());
 		
-		_name = new String[_size];
-		_id = new String[_size];
+		String[] id = new String[_size];
 		for(int i=0; i < _size; ++i)
-		{
-			String s = String.valueOf(i);
-			_name[i] = s;
-			_id[i] = s;
-		}
-			
+			id[i] = String.valueOf(i+1);
+		setName(id);
+		setID(id);
 	}
 	
 	@Override
