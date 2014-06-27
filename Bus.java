@@ -178,4 +178,14 @@ public class Bus extends AbstractBaseObject implements PALists
 	{
 		_list.setStation(_ndx, s);
 	}
+	
+	public boolean isEnergized()
+	{
+		return _list.isEnergized(_ndx);
+	}
+	
+	public void setEnergized(boolean state)
+	{
+		_list.setEnergized(_ndx, state);
+	}
 }

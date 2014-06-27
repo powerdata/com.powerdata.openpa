@@ -271,4 +271,18 @@ public class SingleBusList extends BusListIfc
 		return null;
 	}
 
+	@Override
+	public boolean isEnergized(int ndx)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setEnergized(int ndx, boolean state)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

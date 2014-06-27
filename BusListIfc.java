@@ -1,6 +1,5 @@
 package com.powerdata.openpa;
 
-
 /**
  * Interface for bus List values needed by the Bus class. Makes the Bus object
  * usable by multiple lists (i.e. connectivity and single-bus views)
@@ -8,8 +7,7 @@ package com.powerdata.openpa;
  * @author chris@powerdata.com
  * 
  */
-public abstract class BusListIfc extends EquipLists<Bus>
-{
+public abstract class BusListIfc extends EquipLists<Bus> {
 
 	protected BusListIfc(PALists model, int[] keys, BusGrpMap grp)
 	{
@@ -21,7 +19,10 @@ public abstract class BusListIfc extends EquipLists<Bus>
 		super(model, grp);
 	}
 
-	protected BusListIfc() {super();}
+	protected BusListIfc()
+	{
+		super();
+	}
 
 	public abstract float getBaseKV(int ndx);
 
@@ -46,7 +47,7 @@ public abstract class BusListIfc extends EquipLists<Bus>
 	public abstract float[] getVA();
 
 	public abstract void setVA(float[] va);
-	
+
 	public abstract Area getArea(int ndx);
 
 	public abstract void setArea(int ndx, Area a);
@@ -65,6 +66,8 @@ public abstract class BusListIfc extends EquipLists<Bus>
 
 	public abstract void setStation(int ndx, Station s);
 
+	public abstract boolean isEnergized(int ndx);
+
+	public abstract void setEnergized(int ndx, boolean state);
+
 }
-
-
