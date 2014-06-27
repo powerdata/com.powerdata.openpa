@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -57,28 +55,38 @@ public class ListDumper
 		ArrayList<String> mname = new ArrayList<>();
 		for (Method m : methods)
 		{
-			Class<?> mclass = m.getReturnType();
-			boolean isiterator = false;
-			for(Class<?> i : mclass.getInterfaces()) {if (i == Iterator.class) {isiterator=true;break;}}
-			Class<?> mcsuper = mclass.getSuperclass();
-			while (mcsuper != null && mcsuper != Object.class)
+			if (m.getAnnotation(Nodump.class) == null)
 			{
-				mclass = mcsuper;
-				mcsuper = mclass.getSuperclass();
-			}
-			if (mclass != AbstractCollection.class && !mclass.isArray()
-					&& mclass != void.class && mclass != Object.class && !isiterator)
-			{
-				Class<?>[] ptype = m.getParameterTypes();
-				if (ptype.length == 1 && ptype[0] == int.class)
+				Class<?> mclass = m.getReturnType();
+				boolean isiterator = false;
+				for (Class<?> i : mclass.getInterfaces())
 				{
-
-					String nm = m.getName();
-					boolean yget = nm.startsWith("get");
-					boolean yis = nm.startsWith("is");
-					ometh.add(m);
-					mname.add(nm.equals("get") ? "toString()" : nm
-							.substring(yget ? 3 : (yis ? 2 : 0)));
+					if (i == Iterator.class)
+					{
+						isiterator = true;
+						break;
+					}
+				}
+				Class<?> mcsuper = mclass.getSuperclass();
+				while (mcsuper != null && mcsuper != Object.class)
+				{
+					mclass = mcsuper;
+					mcsuper = mclass.getSuperclass();
+				}
+				if (mclass != AbstractCollection.class && !mclass.isArray()
+						&& mclass != void.class && mclass != Object.class
+						&& !isiterator)
+				{
+					Class<?>[] ptype = m.getParameterTypes();
+					if (ptype.length == 1 && ptype[0] == int.class)
+					{
+						String nm = m.getName();
+						boolean yget = nm.startsWith("get");
+						boolean yis = nm.startsWith("is");
+						ometh.add(m);
+						mname.add(nm.equals("get") ? "toString()" : nm
+								.substring(yget ? 3 : (yis ? 2 : 0)));
+					}
 				}
 			}
 		}

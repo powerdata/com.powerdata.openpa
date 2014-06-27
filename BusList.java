@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import gnu.trove.impl.hash.THash;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
@@ -7,12 +9,12 @@ import java.util.List;
 
 public class BusList extends BusListIfc
 {
-	static class DegenBusGrpMap implements BusGrpMap
+	static class UnityBusGrpMap implements BusGrpMap
 	{
 		int _size;
 		WeakReference<int[]> _tok = new WeakReference<>(null);
 		
-		DegenBusGrpMap(int size)
+		UnityBusGrpMap(int size)
 		{
 			_size = size;
 		}
@@ -60,20 +62,23 @@ public class BusList extends BusListIfc
 	}
 
 	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
-	int[] _area;
+	int[] _areas, _areao;
+	AreaList _arealist;
 	
 	public static final BusList Empty = new BusList();
 
 	BusList(){super();}
 	
-	public BusList(PALists model, int[] keys)
+	public BusList(PAModel model, int[] keys)
 	{
-		super(model, keys, new DegenBusGrpMap(keys.length));
+		super(model, keys, new UnityBusGrpMap(keys.length));
+		_arealist = model.getAreas();
 	}
 	
-	public BusList(PALists model, int size)
+	public BusList(PAModel model, int size)
 	{
-		super(model, new DegenBusGrpMap(size));
+		super(model, new UnityBusGrpMap(size));
+		_arealist = model.getAreas();
 	}
 
 	@Override
@@ -171,8 +176,28 @@ public class BusList extends BusListIfc
 	@Override
 	public Area getArea(int ndx)
 	{
-		//TODO: 
-		return null;
+		return _arealist.get(_areas[ndx]);
+	}
+	
+	@Override
+	public void setArea(int ndx, Area a)
+	{
+		_areas[ndx] = a.getIndex();
+	}
+
+	public Area[] getAreas()
+	{
+		return _arealist.toArray(_areas);
+	}
+
+	public void setAreas(Area[] area)
+	{
+		if (_areao == null)
+			_areao = _areas;
+		if (_areas == null)
+			_areas = new int[_size];
+		for(int i=0; i<_size; ++i)
+			_areas[i] = area[i].getIndex();
 	}
 	
 	@Override
@@ -194,13 +219,6 @@ public class BusList extends BusListIfc
 	{
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public void setArea(int ndx, Area a)
-	{
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -244,4 +262,5 @@ public class BusList extends BusListIfc
 		// TODO Auto-generated method stub
 		
 	}
+	
 }

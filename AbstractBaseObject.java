@@ -22,10 +22,6 @@ public class AbstractBaseObject implements BaseObject
 	
 	public AbstractBaseObject(BaseList<? extends BaseObject> list, int ndx)
 	{
-		if (_ndx == -1)
-		{
-			int xxx = 5;
-		}
 		_list = list;
 		_ndx = ndx;
 	}

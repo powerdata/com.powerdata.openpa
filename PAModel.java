@@ -36,6 +36,11 @@ public class PAModel implements PALists
 		return _islands;
 	}
 	
+	public AreaList getAreas()
+	{
+		return _areas;
+	}
+	
 	@Override
 	public BusList getBuses()
 	{

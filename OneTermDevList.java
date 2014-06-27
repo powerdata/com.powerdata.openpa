@@ -30,7 +30,7 @@ public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T>
 		int n = bkeys.length;
 		int[] rv = new int[n];
 		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getOfs(bkeys[i]);
+			rv[i] = _buses.getIndex(bkeys[i]);
 		return rv;
 	}
 	

@@ -83,17 +83,20 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 		return _size;
 	}
 	
+	@Nodump
 	public T getByKey(int key)
 	{
-		return get(getOfs(key));
+		return get(getIndex(key));
 	}
 	
-	public int getOfs(int key)
+	@Nodump
+	public int getIndex(int key)
 	{
 		return _keyndx.getOffset(key);
 	}
 	
-	public int[] getOffsets(int[] keys)
+	@Nodump
+	public int[] getIndexes(int[] keys)
 	{
 		return _keyndx.getOffsets(keys);
 	}
