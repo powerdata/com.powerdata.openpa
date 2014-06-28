@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class IsolationGroup extends AbstractGroupObject
+public class IsolationGroup extends Group
 {
 	protected IsolationGroupList _list;
 	

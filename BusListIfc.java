@@ -7,7 +7,7 @@ package com.powerdata.openpa;
  * @author chris@powerdata.com
  * 
  */
-public abstract class BusListIfc extends EquipLists<Bus> {
+public abstract class BusListIfc extends GroupList<Bus> {
 
 	protected BusListIfc(PALists model, int[] keys, BusGrpMap grp)
 	{

@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class Bus extends AbstractGroupObject
+public class Bus extends Group
 {
 	BusListIfc _list;
 	

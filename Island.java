@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class Island extends AbstractGroupObject
+public class Island extends Group
 {
 	protected IslandList _list;
 	

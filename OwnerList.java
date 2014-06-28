@@ -1,7 +1,7 @@
 package com.powerdata.openpa;
 
 
-public class OwnerList extends EquipLists<Owner>
+public class OwnerList extends GroupList<Owner>
 {
 	public static final OwnerList Empty = new OwnerList();
 

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class IsolTest 
 {
@@ -40,7 +41,7 @@ public class IsolTest
 
 		PAModel m = PflowModelBuilder.Create(uri).load();
 		
-		EquipLists<AbstractGroupObject> list = new EquipLists<>(m, new BusGrpMapBldr(m)
+		GroupList<Group> list = new GroupList<>(m, new BusGrpMapBldr(m)
 		{
 			@Override
 			protected boolean incSW(Switch d)
@@ -57,7 +58,7 @@ public class IsolTest
 		PrintGrp(list.getByBus(b0), pw);
 		
 		pw.println("-- dump all isolation groups --");
-		for(AbstractGroupObject g : list)
+		for(Group g : list)
 		{
 			PrintGrp(g, pw);
 		}
@@ -65,7 +66,7 @@ public class IsolTest
 		pw.close();
 	}
 	
-	static void PrintGrp(AbstractGroupObject g, PrintWriter pw)
+	static void PrintGrp(Group g, PrintWriter pw)
 	{
 		pw.format("%s: ", g.toString());
 		for(Bus b : g.getBuses())

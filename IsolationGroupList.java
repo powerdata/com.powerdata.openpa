@@ -17,7 +17,7 @@ import com.powerdata.openpa.tools.GroupMap;
  * @author chris@powerdata.com
  *
  */
-public class IsolationGroupList extends EquipLists<IsolationGroup>
+public class IsolationGroupList extends GroupList<IsolationGroup>
 {
 	protected WeakReference<List<int[]>> 
 			_opsw = new WeakReference<>(null),

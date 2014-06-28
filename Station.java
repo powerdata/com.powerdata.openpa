@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class Station extends AbstractGroupObject
+public class Station extends Group
 {
 	protected StationList _list;
 	

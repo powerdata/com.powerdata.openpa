@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class StationList extends EquipLists<Station>
+public class StationList extends GroupList<Station>
 {
 	@Override
 	public Station get(int index)

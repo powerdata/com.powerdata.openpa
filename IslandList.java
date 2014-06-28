@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Switch.State;
 
-public class IslandList extends EquipLists<Island>
+public class IslandList extends GroupList<Island>
 {
 	protected boolean[] _egzd = null;
 	

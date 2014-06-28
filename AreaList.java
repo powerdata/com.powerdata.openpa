@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
-public class AreaList extends EquipLists<Area>
+public class AreaList extends GroupList<Area>
 {
 	public static final AreaList Empty = new AreaList();
 

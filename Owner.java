@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class Owner extends AbstractGroupObject
+public class Owner extends Group
 {
 	protected OwnerList _list;
 	

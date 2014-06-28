@@ -1,10 +1,10 @@
 package com.powerdata.openpa;
 
-public class AbstractGroupObject extends AbstractBaseObject implements PALists
+public class Group extends AbstractBaseObject implements PALists
 {
-	protected EquipLists<? extends BaseObject> _list;
+	protected GroupList<? extends BaseObject> _list;
 	
-	public AbstractGroupObject(EquipLists<? extends BaseObject> list, int ndx)
+	public Group(GroupList<? extends BaseObject> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.powerdata.openpa.tools.GroupMap;
 
-public class EquipLists<T extends AbstractGroupObject> extends BaseList<T>
+public class GroupList<T extends Group> extends BaseList<T>
 {
 	protected abstract class EquipListList<U extends BaseList<? extends BaseObject>> extends AbstractList<U>
 	{
@@ -47,16 +47,16 @@ public class EquipLists<T extends AbstractGroupObject> extends BaseList<T>
 	protected BusGrpMap _bgmap;
 	WeakReference<List<int[]>> _areamap = new WeakReference<>(null);
 
-	protected EquipLists() {super();}
+	protected GroupList() {super();}
 	
-	public EquipLists(PALists model, int[] keys, BusGrpMap busgrp)
+	public GroupList(PALists model, int[] keys, BusGrpMap busgrp)
 	{
 		super(model, keys);
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	public EquipLists(PALists model, BusGrpMap busgrp)
+	public GroupList(PALists model, BusGrpMap busgrp)
 	{
 		super(model, busgrp.size());
 		_bgmap = busgrp;
@@ -438,7 +438,7 @@ public class EquipLists<T extends AbstractGroupObject> extends BaseList<T>
 	@Override
 	public T get(int index)
 	{
-		return (T) new AbstractGroupObject(this, index);
+		return (T) new Group(this, index);
 	}
 
 	public T getByBus(Bus b)
