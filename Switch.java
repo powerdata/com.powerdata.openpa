@@ -34,12 +34,20 @@ public class Switch extends TwoTermDev
 	{
 		_list.setState(_ndx, state);
 	}
-	public boolean isOperable()
+	public boolean isOperableUnderLoad()
 	{
-		return _list.isOperable(_ndx);
+		return _list.isOperableUnderLoad(_ndx);
 	}
-	public void setOperable(boolean op)
+	public void setOperableUnderLoad(boolean op)
 	{
-		_list.setOperable(_ndx, op);
+		_list.setOperableUnderLoad(_ndx, op);
+	}
+	public boolean isEnabled()
+	{
+		return _list.isEnabled(_ndx);
+	}
+	public void setEnabled(boolean enable)
+	{
+		_list.setEnabled(_ndx, enable);
 	}
 }

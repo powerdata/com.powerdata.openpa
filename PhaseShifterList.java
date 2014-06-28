@@ -66,11 +66,5 @@ public class PhaseShifterList extends TransformerBaseList<PhaseShifter>
 		for(int i=0; i < n; ++i)
 			setShift(slndx[i], shift[i]);
 	}
-	@Override
-	protected PhaseShifter[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

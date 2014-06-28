@@ -27,11 +27,4 @@ public class ShuntReacList extends ShuntList<ShuntReactor>
 	}
 	//TODO:  add "switchable", "order", and insvc
 
-	@Override
-	protected ShuntReactor[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -65,13 +65,14 @@ public class AbstractBaseObject implements BaseObject
 	public String toString()
 	{
 		if (_ndx == -1) return "Null";
+		StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append(' ');
 		try
 		{
-			return new StringBuilder(getClass().getSimpleName()).append(' ')
-					.append(getName()).append(' ').append(getID()).toString();
+			return sb.append(getName()).append(' ').append(getID()).toString();
+					
 		} catch (Exception e)
 		{
-			return "err";
+			return sb.append(_ndx).toString();
 		}
 	}
 }

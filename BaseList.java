@@ -1,6 +1,7 @@
 package com.powerdata.openpa;
 
 import java.util.AbstractList;
+
 import com.powerdata.openpa.tools.SNdxKeyOfs;
 
 /**
@@ -254,18 +255,30 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 
 	public T[] toArray(int[] indexes)
 	{
-		T[] us = newarray(_size);
+		T[] us = newArray(_size);
 		for(int i=0; i < _size; ++i)
 			us[i] = get(i);
 		int n = indexes.length;
-		T[] rv = newarray(n);
+		T[] rv = newArray(n);
 		for(int i=0; i < n; ++i)
 			rv[i] = us[indexes[i]];
 		return rv;
 	}
 	
-	protected abstract T[] newarray(int size);
+	@SuppressWarnings("unchecked")
+	protected T[] newArray(int size)
+	{
+		return (T[]) java.lang.reflect.Array.newInstance(get(0).getClass(), size);
+	}
+	
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(int index)
+	{
+		return (T) new AbstractBaseObject(this, index);
+	}
+	
 	protected int[] getKeys(int[] offsets)
 	{
 		int n = offsets.length;

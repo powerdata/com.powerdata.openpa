@@ -74,9 +74,4 @@ public abstract class BusListIfc extends EquipLists<Bus> {
 
 	public abstract void setOwner(int ndx, Owner o);
 
-	@Override
-	protected Bus[] newarray(int size)
-	{
-		return new Bus[size];
-	}
 }

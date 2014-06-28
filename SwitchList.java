@@ -51,20 +51,24 @@ public class SwitchList extends TwoTermDevList<Switch>
 			_state = state;
 		}
 	}
-	public boolean isOperable(int ndx)
+	public boolean isOperableUnderLoad(int ndx)
 	{
 		//TODO:
 		return true;
 	}
-	public void setOperable(int ndx, boolean op)
+	public void setOperableUnderLoad(int ndx, boolean op)
 	{
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	protected Switch[] newarray(int size)
+	public boolean isEnabled(int ndx)
+	{
+		return true;
+	}
+
+	public void setEnabled(int ndx, boolean enable)
 	{
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 }

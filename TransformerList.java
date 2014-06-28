@@ -23,11 +23,4 @@ public class TransformerList extends TransformerBaseList<Transformer>
 		return null;
 	}
 
-	@Override
-	protected Transformer[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

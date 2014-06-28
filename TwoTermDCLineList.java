@@ -22,11 +22,5 @@ public class TwoTermDCLineList extends TwoTermDevList<TwoTermDCLine>
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	protected TwoTermDCLine[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

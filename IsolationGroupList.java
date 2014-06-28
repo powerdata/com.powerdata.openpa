@@ -34,7 +34,7 @@ public class IsolationGroupList extends EquipLists<IsolationGroup>
 			@Override
 			protected boolean incSW(Switch d)
 			{
-				return !d.isOperable();
+				return !d.isOperableUnderLoad();
 			}
 		}.addAll().getMap());
 		createIDs();
@@ -65,11 +65,6 @@ public class IsolationGroupList extends EquipLists<IsolationGroup>
 	public IsolationGroup get(int index)
 	{
 		return new IsolationGroup(this, index);
-	}
-	
-	public IsolationGroup getByBus(Bus b)
-	{
-		return get(_bgmap.getGrp(b.getIndex()));
 	}
 	
 	SwitchList getOpSw(int ndx, boolean op)
@@ -214,12 +209,5 @@ public class IsolationGroupList extends EquipLists<IsolationGroup>
 		for(Switch b : g.getInoperableSwitches())
 			pw.format("%s, ", b.toString());
 		pw.println();
-	}
-
-	@Override
-	protected IsolationGroup[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

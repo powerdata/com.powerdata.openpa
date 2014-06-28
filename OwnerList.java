@@ -29,10 +29,4 @@ public class OwnerList extends EquipLists<Owner>
 	{
 		return new Owner(this, index);
 	}
-
-	@Override
-	protected Owner[] newarray(int size)
-	{
-		return new Owner[size];
-	}
 }

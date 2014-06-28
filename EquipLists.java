@@ -4,9 +4,10 @@ import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
+
 import com.powerdata.openpa.tools.GroupMap;
 
-public abstract class EquipLists<T extends BaseObject> extends BaseList<T>
+public class EquipLists<T extends AbstractGroupObject> extends BaseList<T>
 {
 	protected abstract class EquipListList<U extends BaseList<? extends BaseObject>> extends AbstractList<U>
 	{
@@ -430,5 +431,18 @@ public abstract class EquipLists<T extends BaseObject> extends BaseList<T>
 			}
 		};
 	}
+
 	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(int index)
+	{
+		return (T) new AbstractGroupObject(this, index);
+	}
+
+	public T getByBus(Bus b)
+	{
+		return get(_bgmap.getGrp(b.getIndex()));
+	}
 }

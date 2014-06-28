@@ -22,11 +22,4 @@ public class SeriesReacList extends ACBranchList<SeriesReac>
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	protected SeriesReac[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

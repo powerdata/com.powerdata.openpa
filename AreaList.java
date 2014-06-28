@@ -62,7 +62,7 @@ public class AreaList extends EquipLists<Area>
 
 		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
-				new File(outdir, "areagrps.csv"))));
+				new File(outdir, "areagrps.txt"))));
 
 		PAModel m = PflowModelBuilder.Create(uri).load();
 		for(Area a : m.getAreas())
@@ -79,12 +79,6 @@ public class AreaList extends EquipLists<Area>
 		pw.println("\tLines:");
 		for(Line l : a.getLines())
 			pw.format("\t\t%s\n", l);
-	}
-
-	@Override
-	protected Area[] newarray(int size)
-	{
-		return new Area[size];
 	}
 
 }

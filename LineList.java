@@ -109,11 +109,4 @@ public class LineList extends ACBranchList<Line>
 		for(int i=0; i < n; ++i)
 			setToBchg(slndx[i], b[i]);
 	}
-
-	@Override
-	protected Line[] newarray(int size)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
