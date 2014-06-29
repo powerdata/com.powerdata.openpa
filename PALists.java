@@ -49,4 +49,7 @@ public interface PALists
 
 	/** return list of Owners */
 	OwnerList getOwners();
+	
+	/** return list of Stations */
+	StationList getStations();
 }

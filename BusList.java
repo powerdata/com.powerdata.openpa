@@ -62,9 +62,10 @@ public class BusList extends BusListIfc
 //	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
 //	int[] _areas, _areao, _owners, _ownero;
 	float[][] _bkv=IFlt(), _vm=IFlt(), _va=IFlt();
-	int[][] _areas=IInt(), _owners=IInt();
+	int[][] _areas=IInt(), _owners=IInt(), _stations=IInt();
 	AreaList _arealist;
 	OwnerList _ownerlist;
+	StationList _stationlist;
 	
 	public static final BusList Empty = new BusList();
 
@@ -75,6 +76,7 @@ public class BusList extends BusListIfc
 		super(model, keys, new UnityBusGrpMap(keys.length));
 		_arealist = model.getAreas();
 		_ownerlist = model.getOwners();
+		_stationlist = model.getStations();
 	}
 	
 	public BusList(PALists model, int size)
@@ -201,15 +203,23 @@ public class BusList extends BusListIfc
 	@Override
 	public Station getStation(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _stationlist.get(getInt(_stations, ndx));
 	}
 
 	@Override
 	public void setStation(int ndx, Station s)
 	{
-		// TODO Auto-generated method stub
-		
+		setInt(_stations, ndx, s.getIndex());
+	}
+	
+	public Station[] getStation()
+	{
+		return _stationlist.toArray(getInt(_stations));
+	}
+	
+	public void setStation(Station[] s)
+	{
+		setInt(_stations, objectNdx(s));
 	}
 
 	@Override

@@ -106,4 +106,11 @@ public class Group extends AbstractBaseObject implements PALists
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public StationList getStations()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
