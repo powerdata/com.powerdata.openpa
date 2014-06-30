@@ -445,4 +445,19 @@ public class GroupList<T extends Group> extends BaseList<T>
 	{
 		return get(_bgmap.getGrp(b.getIndex()));
 	}
+
+	public OwnerList getOwners(int ndx)
+	{
+		return OwnerList.Empty;
+	}
+
+	public StationList getStations(int ndx)
+	{
+		return StationList.Empty;
+	}
+
+	public VoltageLevelList getVoltageLevels(int ndx)
+	{
+		return VoltageLevelList.Empty;
+	}
 }

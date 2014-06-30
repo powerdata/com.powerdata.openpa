@@ -103,14 +103,18 @@ public class Group extends AbstractBaseObject implements PALists
 	@Override
 	public OwnerList getOwners()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _list.getOwners(_ndx);
 	}
 
 	@Override
 	public StationList getStations()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _list.getStations(_ndx);
+	}
+
+	@Override
+	public VoltageLevelList getVoltageLevels()
+	{
+		return _list.getVoltageLevels(_ndx);
 	}
 }
