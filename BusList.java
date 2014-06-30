@@ -59,9 +59,7 @@ public class BusList extends BusListIfc
 		}
 	}
 
-//	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
-//	int[] _areas, _areao, _owners, _ownero;
-	float[][] _bkv=IFlt(), _vm=IFlt(), _va=IFlt();
+	float[][] _vm=IFlt(), _va=IFlt();
 	int[][] _areas=IInt(), _owners=IInt(), _stations=IInt(), _vlevs=IInt();
 	AreaList _arealist;
 	OwnerList _ownerlist;
@@ -92,16 +90,6 @@ public class BusList extends BusListIfc
 	{
 		return new Bus(this, index);
 	}
-	
-	@Override
-	public float getBaseKV(int ndx) {return getFloat(_bkv, ndx);}
-
-	public float[] getBaseKV() {return getFloat(_bkv);}
-
-	@Override
-	public void setBaseKV(int ndx, float kv) {setFloat(_bkv, ndx, kv);}
-
-	public void setBaseKV(float[] kv) {setFloat(_bkv, kv);}
 	
 	@Override
 	public float getVM(int ndx) {return getFloat(_vm, ndx);}
@@ -170,10 +158,17 @@ public class BusList extends BusListIfc
 	@Override
 	public Island getIsland(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _model.getIslands().getByBus(get(ndx));
 	}
 
+	public Island[] getIsland()
+	{
+		Island[] rv = new Island[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getIsland(i);
+		return rv;
+	}
+	
 	@Override
 	public int getFrequencySourcePriority(int ndx)
 	{
@@ -214,6 +209,16 @@ public class BusList extends BusListIfc
 		setInt(_stations, ndx, s.getIndex());
 	}
 	
+	public Station[] getStation()
+	{
+		return _stationlist.toArray(getInt(_stations));
+	}
+	
+	public void setStation(Station[] s)
+	{
+		setInt(_stations, objectNdx(s));
+	}
+
 	@Override
 	public VoltageLevel getVoltageLevel(int ndx)
 	{
@@ -224,16 +229,6 @@ public class BusList extends BusListIfc
 	public void setVoltageLevel(int ndx, VoltageLevel l)
 	{
 		setInt(_vlevs, ndx, l.getIndex());
-	}
-
-	public Station[] getStation()
-	{
-		return _stationlist.toArray(getInt(_stations));
-	}
-	
-	public void setStation(Station[] s)
-	{
-		setInt(_stations, objectNdx(s));
 	}
 
 	public VoltageLevel[] getVoltageLevels()

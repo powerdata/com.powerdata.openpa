@@ -11,7 +11,7 @@ public class PAModel implements PALists
 	protected BusList _buslist;
 	protected SwitchList _swlist;
 	protected LineList _linelist;
-	protected IslandList _islands = null;
+	protected IslandList _islands;
 	protected AreaList _areas;
 	protected OwnerList _owners;
 	protected StationList _stations;
@@ -27,8 +27,6 @@ public class PAModel implements PALists
 
 	public IslandList getIslands()
 	{
-		if (_islands == null)
-			refreshIslands();
 		return _islands;
 	}
 	

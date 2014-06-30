@@ -30,17 +30,6 @@ public class Bus extends Group
 		_list.setOwner(_ndx, o);
 	}
 	
-	/** get bus base KV */
-	public float getBaseKV()
-	{
-		return _list.getBaseKV(_ndx);
-	}
-	
-	/** set bus base KV */
-	public void setBaseKV(float kv)
-	{
-		_list.setBaseKV(_ndx, kv);
-	}
 	/** get voltage magnitude in kV */
 	public float getVM() 
 	{

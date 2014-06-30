@@ -24,10 +24,6 @@ public abstract class BusListIfc extends GroupList<Bus> {
 		super();
 	}
 
-	public abstract float getBaseKV(int ndx);
-
-	public abstract void setBaseKV(int ndx, float kv);
-
 	public abstract float getVM(int ndx);
 
 	public abstract void setVM(int ndx, float vm);
@@ -35,10 +31,6 @@ public abstract class BusListIfc extends GroupList<Bus> {
 	public abstract float getVA(int ndx);
 
 	public abstract void setVA(int ndx, float va);
-
-	public abstract float[] getBaseKV();
-
-	public abstract void setBaseKV(float[] kv);
 
 	public abstract float[] getVM();
 

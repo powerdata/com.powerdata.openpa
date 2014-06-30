@@ -14,31 +14,6 @@ public class BusSubList extends BusList
 
 	int map(int ndx) {return _ndx[ndx];}
 	
-	@Override
-	public float getBaseKV(int ndx)
-	{
-		return _src.getBaseKV(map(ndx));
-	}
-
-	@Override
-	public float[] getBaseKV()
-	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setBaseKV(int ndx, float kv)
-	{
-		_src.setBaseKV(map(ndx), kv);
-	}
-
-	@Override
-	public void setBaseKV(float[] kv)
-	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public float getVM(int ndx)

@@ -117,4 +117,10 @@ public class Group extends AbstractBaseObject implements PALists
 	{
 		return _list.getVoltageLevels(_ndx);
 	}
+
+	@Override
+	public IslandList getIslands()
+	{
+		return IslandList.Empty;
+	}
 }

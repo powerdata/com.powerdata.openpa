@@ -10,4 +10,14 @@ public class VoltageLevel extends Group
 		_list = list;
 	}
 
+	public float getBaseKV()
+	{
+		return _list.getBaseKV(_ndx);
+	}
+	
+	public void setBaseKV(float k)
+	{
+		_list.setBaseKV(_ndx, k);
+	}
+	
 }

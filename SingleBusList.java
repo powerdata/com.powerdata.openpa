@@ -27,42 +27,6 @@ public class SingleBusList extends BusListIfc
 	}
 	
 	@Override
-	public float getBaseKV(int ndx)
-	{
-		return _buses.getBaseKV(_bgmap.getTokens()[ndx]);
-	}
-
-	@Override
-	public void setBaseKV(int ndx, float kv)
-	{
-		for(Bus b : getBuses(ndx))
-			b.setBaseKV(kv);
-	}
-
-	@Override
-	public float[] getBaseKV()
-	{
-		int[] tok = _bgmap.getTokens();
-		int n = tok.length;
-		float[] rv = new float[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getBaseKV(tok[i]);
-		return rv;
-	}
-	
-	@Override
-	public void setBaseKV(float[] kv)
-	{
-		
-		int n = kv.length;
-		for(int i=0; i < n; ++i)
-		{
-			for(int b : _bgmap.map().get(i))
-				_buses.setBaseKV(b, kv[i]);
-		}
-	}
-	
-	@Override
 	public float getVM(int ndx)
 	{
 		return _buses.getVM(_bgmap.getTokens()[ndx]);

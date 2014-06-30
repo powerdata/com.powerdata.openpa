@@ -54,4 +54,6 @@ public interface PALists
 	StationList getStations();
 
 	VoltageLevelList getVoltageLevels();
+	
+	IslandList getIslands();
 }

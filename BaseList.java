@@ -55,7 +55,7 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	{
 		if (v[RO] == null && v[RW] != null)
 			v[RO] = v[RW].clone();
-		v[RW] = s;
+		v[RW] = s.clone();
 	}
 	
 	protected final void setFloat(float[][] v, int ndx, float s)
@@ -86,7 +86,7 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	{
 		if (v[RO] == null && v[RW] != null)
 			v[RO] = v[RW].clone();
-		v[RW] = s;
+		v[RW] = s.clone();
 	}
 
 	protected final void setInt(int[][] v, int ndx, int s)
@@ -117,7 +117,7 @@ public abstract class BaseList<T extends BaseObject> extends AbstractList<T>
 	{
 		if (v[RO] == null && v[RW] != null)
 			v[RO] = v[RW].clone();
-		v[RW] = s;
+		v[RW] = s.clone();
 	}
 
 	protected BaseList(PALists model, int size)
