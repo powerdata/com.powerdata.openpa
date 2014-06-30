@@ -66,20 +66,6 @@ public class Bus extends Group
 		_list.setFrequencySourcePriority(_ndx, fsp);
 	}
 	
-	/**
-	 * Bus Frequency
-	 * @return frequency at the bus, or -1 if not available
-	 */
-	public float getFrequency()
-	{
-		return _list.getFrequency(_ndx);
-	}
-	
-	public void setFrequency(float f)
-	{
-		_list.setFrequency(_ndx, f);
-	}
-	
 	public Island getIsland()
 	{
 		return _list.getIsland(_ndx);
@@ -105,13 +91,4 @@ public class Bus extends Group
 		_list.setVoltageLevel(_ndx, l);
 	}
 	
-	public boolean isEnergized()
-	{
-		return _list.isEnergized(_ndx);
-	}
-	
-	public void setEnergized(boolean state)
-	{
-		_list.setEnergized(_ndx, state);
-	}
 }

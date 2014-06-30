@@ -14,5 +14,15 @@ public class Island extends Group
 	{
 		return _list.isEnergized(_ndx);
 	}
+	
+	public float getFreq()
+	{
+		return _list.getFreq(_ndx);
+	}
+	
+	public void setFreq(float f)
+	{
+		_list.setFreq(_ndx, f);
+	}
 
 }

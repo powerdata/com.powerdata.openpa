@@ -5,7 +5,8 @@ import com.powerdata.openpa.Switch.State;
 
 public class IslandList extends GroupList<Island>
 {
-	protected boolean[] _egzd = null;
+	boolean[] _egzd = new boolean[_size];
+	float[][] _freq = IFlt();
 	
 	public static final IslandList Empty = new IslandList();
 	
@@ -63,19 +64,13 @@ public class IslandList extends GroupList<Island>
 			id[i] = String.valueOf(i+1);
 		setName(id);
 		setID(id);
+		setupEgStatus();
 	}
 	
 	@Override
 	public Island get(int index)
 	{
 		return new Island(this, index);
-	}
-	
-	public boolean[] isEnergized()
-	{
-		if (_egzd == null)
-			setupEgStatus();
-		return _egzd;
 	}
 	
 	void setupEgStatus()
@@ -99,16 +94,46 @@ public class IslandList extends GroupList<Island>
 	
 	public boolean isEnergized(int ndx)
 	{
-		return isEnergized()[ndx];
+		return _egzd[ndx];
 	}
 
+	public boolean[] isEnergized()
+	{
+		return _egzd.clone();
+	}
+	
+	public float getFreq(int ndx)
+	{
+		return getFloat(_freq, ndx);
+	}
+
+	public void setFreq(int ndx, float f)
+	{
+		setFloat(_freq, ndx, f);
+	}
+	
+	public float[] getFreq()
+	{
+		return getFloat(_freq);
+	}
+	
+	public void setFreq(float[] f)
+	{
+		setFloat(_freq, f);
+	}
+	
+	
 	public static void main(String[] args) throws Exception
 	{
-		PAModel m = PflowModelBuilder.Create("pd2cim:sdb=/run/shm/config.pddb&db=/home/chris/Documents/testmodels/public/palco/exports/cim.pddb").load();
+		PAModel m = PflowModelBuilder.Create(
+			"pd2cim:sdb=/run/shm/config.pddb&db=/home/chris/"+
+			"Documents/testmodels/public/palco/exports/cim.pddb")
+			.load();
+		
 		for(Island i : m.getIslands())
 		{
 			System.out.println(i);
 		}
 	}
-	
+
 }

@@ -50,17 +50,9 @@ public abstract class BusListIfc extends GroupList<Bus> {
 
 	public abstract void setFrequencySourcePriority(int ndx, int fsp);
 
-	public abstract float getFrequency(int ndx);
-
-	public abstract void setFrequency(int ndx, float f);
-
 	public abstract Station getStation(int ndx);
 
 	public abstract void setStation(int ndx, Station s);
-
-	public abstract boolean isEnergized(int ndx);
-
-	public abstract void setEnergized(int ndx, boolean state);
 
 	public abstract Owner getOwner(int ndx);
 

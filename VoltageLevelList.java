@@ -24,7 +24,6 @@ public class VoltageLevelList extends GroupList<VoltageLevel>
 	{
 		_bgmap = new BasicBusGrpMap(getIndexes(busref), ngrp);
 	}
-
 	
 	@Override
 	public VoltageLevel get(int index)

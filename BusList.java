@@ -177,21 +177,7 @@ public class BusList extends BusListIfc
 	}
 
 	@Override
-	public float getFrequency(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void setFrequencySourcePriority(int ndx, int fsp)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFrequency(int ndx, float f)
 	{
 		// TODO Auto-generated method stub
 		
@@ -241,18 +227,4 @@ public class BusList extends BusListIfc
 		setInt(_vlevs, objectNdx(l));
 	}
 	
-	@Override
-	public boolean isEnergized(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setEnergized(int ndx, boolean state)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
 }
