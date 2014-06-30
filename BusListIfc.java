@@ -74,4 +74,8 @@ public abstract class BusListIfc extends GroupList<Bus> {
 
 	public abstract void setOwner(int ndx, Owner o);
 
+	public abstract VoltageLevel getVoltageLevel(int _ndx);
+
+	public abstract void setVoltageLevel(int _ndx, VoltageLevel l);
+
 }

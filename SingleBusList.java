@@ -299,4 +299,18 @@ public class SingleBusList extends BusListIfc
 		
 	}
 
+	@Override
+	public VoltageLevel getVoltageLevel(int _ndx)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setVoltageLevel(int _ndx, VoltageLevel l)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

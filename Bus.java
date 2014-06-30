@@ -106,6 +106,16 @@ public class Bus extends Group
 		_list.setStation(_ndx, s);
 	}
 	
+	public VoltageLevel getVoltageLevel()
+	{
+		return _list.getVoltageLevel(_ndx);
+	}
+	
+	public void setVoltageLevel(VoltageLevel l)
+	{
+		_list.setVoltageLevel(_ndx, l);
+	}
+	
 	public boolean isEnergized()
 	{
 		return _list.isEnergized(_ndx);

@@ -15,6 +15,7 @@ public abstract class ModelBuilder
 		m._areas = loadAreas(m);
 		m._owners = loadOwners(m);
 		m._stations = loadStations(m);
+		m._vlevs = loadVoltageLevels(m);
 		m._buslist = loadBuses(m);
 		m._swlist = loadSwitches(m);
 		m._linelist = loadLines(m);
@@ -31,4 +32,5 @@ public abstract class ModelBuilder
 	protected abstract AreaList loadAreas(PAModel m) throws PAModelException;
 	protected abstract OwnerList loadOwners(PAModel m) throws PAModelException;
 	protected abstract StationList loadStations(PAModel m) throws PAModelException;
+	protected abstract VoltageLevelList loadVoltageLevels(PAModel m) throws PAModelException;
 }

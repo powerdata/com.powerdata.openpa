@@ -52,4 +52,6 @@ public interface PALists
 	
 	/** return list of Stations */
 	StationList getStations();
+
+	VoltageLevelList getVoltageLevels();
 }

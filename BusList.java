@@ -62,10 +62,11 @@ public class BusList extends BusListIfc
 //	float[] _bkv, _bkvo, _vm, _vmo, _va, _vao;
 //	int[] _areas, _areao, _owners, _ownero;
 	float[][] _bkv=IFlt(), _vm=IFlt(), _va=IFlt();
-	int[][] _areas=IInt(), _owners=IInt(), _stations=IInt();
+	int[][] _areas=IInt(), _owners=IInt(), _stations=IInt(), _vlevs=IInt();
 	AreaList _arealist;
 	OwnerList _ownerlist;
 	StationList _stationlist;
+	VoltageLevelList _vllist;
 	
 	public static final BusList Empty = new BusList();
 
@@ -77,6 +78,7 @@ public class BusList extends BusListIfc
 		_arealist = model.getAreas();
 		_ownerlist = model.getOwners();
 		_stationlist = model.getStations();
+		_vllist = model.getVoltageLevels();
 	}
 	
 	public BusList(PALists model, int size)
@@ -212,6 +214,18 @@ public class BusList extends BusListIfc
 		setInt(_stations, ndx, s.getIndex());
 	}
 	
+	@Override
+	public VoltageLevel getVoltageLevel(int ndx)
+	{
+		return _vllist.get(getInt(_vlevs, ndx));
+	}
+
+	@Override
+	public void setVoltageLevel(int ndx, VoltageLevel l)
+	{
+		setInt(_vlevs, ndx, l.getIndex());
+	}
+
 	public Station[] getStation()
 	{
 		return _stationlist.toArray(getInt(_stations));
@@ -222,6 +236,16 @@ public class BusList extends BusListIfc
 		setInt(_stations, objectNdx(s));
 	}
 
+	public VoltageLevel[] getVoltageLevels()
+	{
+		return _vllist.toArray(getInt(_vlevs));
+	}
+	
+	public void setVoltageLevel(VoltageLevel[] l)
+	{
+		setInt(_vlevs, objectNdx(l));
+	}
+	
 	@Override
 	public boolean isEnergized(int ndx)
 	{
@@ -235,4 +259,5 @@ public class BusList extends BusListIfc
 		// TODO Auto-generated method stub
 		
 	}
+
 }

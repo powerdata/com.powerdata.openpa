@@ -15,6 +15,7 @@ public class PAModel implements PALists
 	protected AreaList _areas;
 	protected OwnerList _owners;
 	protected StationList _stations;
+	protected VoltageLevelList _vlevs;
 	
 	protected PAModel(){}
 	
@@ -56,6 +57,11 @@ public class PAModel implements PALists
 		return _stations;
 	}
 	
+	public VoltageLevelList getVoltageLevels()
+	{
+		return _vlevs;
+	}
+
 	@Override
 	public BusList getBuses()
 	{
