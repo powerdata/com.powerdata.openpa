@@ -153,5 +153,16 @@ public class PAModel implements PALists
 		// TODO Auto-generated method stub
 		return SVCList.Empty;
 	}
+	
+	public OneTermDevList<? extends OneTermDev> getOneTermDevs()
+	{
+		
+		return OneTermDevList.Empty;
+	}
 
+	public TwoTermDevList<? extends TwoTermDev> getTwoTermDevs()
+	{
+		
+		return TwoTermDevList.Empty;
+	}
 }

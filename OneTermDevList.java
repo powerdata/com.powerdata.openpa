@@ -4,8 +4,17 @@ public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T>
 {
 	protected int[] _bx;
 	protected BusList _buses;
+	
+	public static final OneTermDevList<? extends OneTermDev> Empty = new OneTermDevList<OneTermDev>()
+	{
+		@Override
+		public int size()
+		{
+			// TODO Auto-generated method stub
+			return super.size();
+	}};
 
-	protected OneTermDevList() {super();}
+	public  OneTermDevList() {super();}
 
 	protected OneTermDevList(PALists model, int[] keys, int[] buskeys)
 	{

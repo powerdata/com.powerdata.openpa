@@ -2,6 +2,14 @@ package com.powerdata.openpa;
 
 public abstract class TwoTermDevList<T extends TwoTermDev> extends BaseList<T> 
 {
+	public static final TwoTermDevList<? extends TwoTermDev>	Empty	= new TwoTermDevList<TwoTermDev>()
+	{
+		@Override
+		public int size()
+		{
+			return 0;
+		}
+	};
 	protected int[] _fbx, _tbx;
 	protected BusList _buses;
 	boolean[] _insvc, _insvco;
