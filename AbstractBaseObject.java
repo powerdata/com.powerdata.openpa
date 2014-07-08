@@ -47,9 +47,6 @@ public class AbstractBaseObject implements BaseObject
 		_list.setID(_ndx, id);
 	}
 
-	// TODO: 
-	// WHat is the different between name and fullname, does it matter?
-	
 	@Override
 	public String getName()
 	{

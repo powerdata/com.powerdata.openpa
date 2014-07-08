@@ -1,12 +1,18 @@
 package com.powerdata.openpa;
 
-public class ShuntReacSubList extends ShuntReacList
+public class ShuntReacSubList extends ShuntSubList<ShuntReactor> implements ShuntReacList
 {
-	protected ShuntReacSubList(PALists model, ShuntReacList src, int[] srcndx)
+
+	public ShuntReacSubList(OneTermDevList<ShuntReactor> src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getBusKeys(srcndx));
+		super(src, ndx);
 		// TODO Auto-generated constructor stub
 	}
-	// TODO: override every method
 
+	@Override
+	public ShuntReactor get(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

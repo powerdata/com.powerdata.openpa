@@ -19,8 +19,8 @@ public abstract class ModelBuilder
 		m._buslist = loadBuses(m);
 		m._swlist = loadSwitches(m);
 		m._linelist = loadLines(m);
+		m._islands = loadIslands(m);
 		loadStop(m);
-		m.refreshIslands();
 		return m;
 	}
 
@@ -34,5 +34,6 @@ public abstract class ModelBuilder
 	protected abstract OwnerList loadOwners(PAModel m) throws PAModelException;
 	protected abstract StationList loadStations(PAModel m) throws PAModelException;
 	protected abstract VoltageLevelList loadVoltageLevels(PAModel m) throws PAModelException;
+	protected abstract IslandList loadIslands(PAModel m) throws PAModelException;
 
 }

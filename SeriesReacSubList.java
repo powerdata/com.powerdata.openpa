@@ -1,11 +1,18 @@
 package com.powerdata.openpa;
 
-public class SeriesReacSubList extends SeriesReacList
+public class SeriesReacSubList extends ACBranchSubList<SeriesReac> implements SeriesReacList
 {
-	protected SeriesReacSubList(PALists model, SeriesReacList src, int[] srcndx)
+
+	public SeriesReacSubList(SeriesReacList src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getFBusKeys(srcndx),
-				src.getTBusKeys(srcndx));
+		super(src, ndx);
+		// TODO Auto-generated constructor stub
 	}
-	// TODO: override every method
+
+	@Override
+	public SeriesReac get(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

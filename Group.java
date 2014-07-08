@@ -2,9 +2,9 @@ package com.powerdata.openpa;
 
 public class Group extends AbstractBaseObject implements PALists
 {
-	protected GroupList<? extends BaseObject> _list;
+	protected GroupList<? extends Group> _list;
 	
-	public Group(GroupList<? extends BaseObject> list, int ndx)
+	public Group(GroupList<? extends Group> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;
@@ -94,33 +94,4 @@ public class Group extends AbstractBaseObject implements PALists
 		return _list.getSVCs(_ndx);
 	}
 
-	@Override
-	public AreaList getAreas()
-	{
-		return _list.getAreas(_ndx);
-	}
-
-	@Override
-	public OwnerList getOwners()
-	{
-		return _list.getOwners(_ndx);
-	}
-
-	@Override
-	public StationList getStations()
-	{
-		return _list.getStations(_ndx);
-	}
-
-	@Override
-	public VoltageLevelList getVoltageLevels()
-	{
-		return _list.getVoltageLevels(_ndx);
-	}
-
-	@Override
-	public IslandList getIslands()
-	{
-		return IslandList.Empty;
-	}
 }

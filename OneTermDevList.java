@@ -1,138 +1,39 @@
 package com.powerdata.openpa;
 
-public abstract class OneTermDevList<T extends OneTermDev> extends BaseList<T> 
+public interface OneTermDevList<T extends OneTermDev> extends BaseList<T> 
 {
-	protected int[] _bx;
-	protected BusList _buses;
+	public static final OneTermDevList<? extends OneTermDev> Empty = new OneTermDevListI<>();
+
+	Bus getBus(int ndx);
+
+	void setBus(int ndx, Bus b);
 	
-	public static final OneTermDevList<? extends OneTermDev> Empty = new OneTermDevList<OneTermDev>()
-	{
-		@Override
-		public int size()
-		{
-			// TODO Auto-generated method stub
-			return super.size();
-	}};
-
-	public  OneTermDevList() {super();}
-
-	protected OneTermDevList(PALists model, int[] keys, int[] buskeys)
-	{
-		super(model, keys);
-		_buses = model.getBuses();
-		cvtBusKeys(buskeys);
-	}
-	protected OneTermDevList(PALists model, int size, int[] buskeys)
-	{
-		super(model, size);
-		_buses = model.getBuses();
-		cvtBusKeys(buskeys);
-	}
+	Bus[] getBus();
 	
-	public Bus getBus(int ndx)
-	{
-		return _buses.get(_bx[ndx]);
-	}
+	void setBus(Bus[] b);
 	
-	protected int[] cvtBusKeys(int[] bkeys)
-	{
-		int n = bkeys.length;
-		int[] rv = new int[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getIndex(bkeys[i]);
-		return rv;
-	}
+	float getP(int ndx);
 	
-	public int[] getBusIndexes()
-	{
-		// TODO
-		return null;
-	}
+	void setP(int ndx, float p);
+
+	float[] getP();
 	
-	public BusList getBuses()
-	{
-		return new BusSubList(_model, _buses, _bx);
-	}
+	void setP(float[] p);
 	
-	public float getP(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	float getQ(int ndx);
+
+	void setQ(int ndx, float q);
 	
-	/** Get device active power injection in MW */
-	public float[] getP()
-	{
-		//TODO
-		return null;
-	}
-
-	public float getQ(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/** Get device reactive power injection in MVAr */
-	public float[] getQ()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setP(int ndx, float p)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	/** Set device active power injection in MW */
-	public void setP(float[] p)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	public void setQ(int ndx, float q)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	/** Set device reactive power injection in MVAr */
-	public void setQ(float[] q)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	public boolean isInSvc(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/** is device in service */
-	public boolean[] isInSvc()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setInSvc(int ndx, boolean state)
-	{
-		// TODO Auto-generated method stub
-	}
-
-	/** set device in/out of service */
-	public void setInSvc(boolean[] state)
-	{
-		// TODO Auto-generated method stub
-	}
+	float[] getQ();
 	
-	protected int[] getBusKeys(int[] offsets)
-	{
-		int n = offsets.length;
-		int[] rv = new int[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = getBus(offsets[i]).getKey();
-		return rv;
-	}
+	void setQ(float[] q);
+
+	boolean isInSvc(int ndx);
+
+	void setInSvc(int ndx, boolean state);
+	
+	boolean[] isInSvc();
+	
+	void setInSvc(boolean[] state);
 
 }

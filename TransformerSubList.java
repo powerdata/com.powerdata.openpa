@@ -1,11 +1,18 @@
 package com.powerdata.openpa;
 
-public class TransformerSubList extends TransformerList
+public class TransformerSubList extends TransformerBaseSubList<Transformer> implements TransformerList
 {
-	protected TransformerSubList(PALists model, TransformerList src, int[] srcndx)
+
+	public TransformerSubList(TransformerList src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getFBusKeys(srcndx),
-				src.getTBusKeys(srcndx));
+		super(src, ndx);
+		// TODO Auto-generated constructor stub
 	}
-	// TODO: override every method
+
+	@Override
+	public Transformer get(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

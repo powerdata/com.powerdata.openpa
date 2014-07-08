@@ -1,11 +1,18 @@
 package com.powerdata.openpa;
 
-public class SeriesCapSubList extends SeriesCapList
+public class SeriesCapSubList extends ACBranchSubList<SeriesCap> implements SeriesCapList
 {
-	protected SeriesCapSubList(PALists model, SeriesCapList src, int[] srcndx)
+
+	public SeriesCapSubList(SeriesCapList src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getFBusKeys(srcndx),
-				src.getTBusKeys(srcndx));
+		super(src, ndx);
+		// TODO Auto-generated constructor stub
 	}
-	// TODO: override every method
+
+	@Override
+	public SeriesCap get(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

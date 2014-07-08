@@ -1,10 +1,17 @@
 package com.powerdata.openpa;
 
-public class ShuntCapSubList extends ShuntCapList
+public class ShuntCapSubList extends ShuntSubList<ShuntCapacitor> implements ShuntCapList
 {
-	protected ShuntCapSubList(PALists model, ShuntCapList src, int[] srcndx)
+
+	public ShuntCapSubList(ShuntList<ShuntCapacitor> src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getBusKeys(srcndx));
+		super(src, ndx);
+		// TODO Auto-generated constructor stub
 	}
-	// TODO: override every method
+
+	@Override
+	public ShuntCapacitor get(int index)
+	{
+		return new ShuntCapacitor(this, index);
+	}
 }

@@ -1,12 +1,19 @@
 package com.powerdata.openpa;
 
-public class SwitchedShuntSubList extends SwitchedShuntList
+public class SwitchedShuntSubList extends ShuntSubList<SwitchedShunt> implements SwitchedShuntList
 {
-	protected SwitchedShuntSubList(PALists model, SwitchedShuntList src,
-			int[] srcndx)
-	{
-		super(model, srcndx.length, src.getBusKeys(srcndx));
-	}
-	// TODO: override every method
 
+	public SwitchedShuntSubList(SwitchedShuntList src, int[] ndx)
+	{
+		super(src, ndx);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public SwitchedShunt get(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

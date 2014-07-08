@@ -10,12 +10,17 @@ import com.powerdata.pd3.utils.SortedIntOfsNdx;
 
 public abstract class SNdxKeyOfs 
 {
+	protected int[] _keys;
+	
+	protected SNdxKeyOfs(int[] keys) {_keys = keys;}
+	
 	public abstract int size();
 	public abstract boolean containsKey(int key);
 	/** get offset for the key, returns -1 if not available */
 	public abstract int getOffset(int key);
 	public abstract int[] getOffsets(int[] keys);
-	public abstract int[] getKeys();
+	public int[] getKeys() {return _keys;}
+	public int getKey(int ndx) {return _keys[ndx];}
 
 	public static SNdxKeyOfs Create(int[] keys)
 	{
@@ -35,10 +40,6 @@ public abstract class SNdxKeyOfs
 		// this one is reasonable for any size
 		return new SortNdx(keys);
 	}
-	public int getKey(int ndx)
-	{
-		return getKeys()[ndx];
-	}
 }
 
 
@@ -46,10 +47,10 @@ class SortNdx extends SNdxKeyOfs
 {
 	SortedIntOfsNdx _ndxToOfs;
 	int _size;
-	WeakReference<int[]> _keys = new WeakReference<>(null);
 	
 	public SortNdx(int[] keys)
 	{
+		super(keys);
 		_ndxToOfs = new SortedIntOfsNdx(keys);
 		_size = keys.length;
 	}
@@ -82,31 +83,22 @@ class SortNdx extends SNdxKeyOfs
 		return rv;
 	}
 
-	@Override
-	public int[] getKeys()
-	{
-		int[] keys = _keys.get();
-		if (keys == null)
-		{
-			keys = _ndxToOfs.getKeys();
-			_keys = new WeakReference<>(keys);
-		}
-		return keys;
-	}
-
 }
 
 class TroveNdx extends SNdxKeyOfs
 {
 	TIntIntMap _keyndx;
 	WeakReference<int[]> _ofs = new WeakReference<>(null);
+	int[] _keys;
 	
 	public TroveNdx(int[] keys)
 	{
+		super(keys);
 		int nkey = keys.length;
 		_keyndx = new TIntIntHashMap(nkey, 0.5f, -1, -1);
 		for(int i=0; i < nkey; ++i)
 			_keyndx.put(keys[i], i);
+		_keys = keys.clone();
 	}
 
 	@Override
@@ -137,22 +129,16 @@ class TroveNdx extends SNdxKeyOfs
 		return rv;
 	}
 
-	@Override
-	public int[] getKeys()
-	{
-		return _keyndx.keys();
-	}
-
 }
 
 class OfsNdx extends SNdxKeyOfs
 {
 	int _offsets[];
-	WeakReference<int[]> _keys = new WeakReference<>(null);
 	int _minkey, _len;
 	
 	public OfsNdx(int minkey, int maxkey, int keys[])
 	{
+		super(keys);
 		_minkey = minkey;
 		_len = maxkey - minkey + 1;
 		_offsets = new int[_len];
@@ -169,20 +155,6 @@ class OfsNdx extends SNdxKeyOfs
 		return (key >= _minkey && _offsets[key - _minkey] != -1);
 	}
 
-	@Override
-	public int[] getKeys()
-	{
-		int[] keys = _keys.get();
-		if (keys == null)
-		{
-			keys = new int[_len];
-			int ofs = 0;
-			for (int i=0; i < _offsets.length; ++i)
-				if (_offsets[i] != -1) keys[ofs++] = i+_minkey;
-			_keys = new WeakReference<>(keys);
-		}
-		return keys;
-	}
 
 	@Override
 	public int getOffset(int key)

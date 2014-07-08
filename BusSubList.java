@@ -1,202 +1,204 @@
 package com.powerdata.openpa;
+/**
+ * Create  a sublist of buses.  
+ * @author chris@powerdata.com
+ */
 
-public class BusSubList extends BusList
+public class BusSubList extends GroupSubList<Bus> implements BusList
 {
-	int[] _ndx;
 	BusList _src;
 	
-	public BusSubList(PALists model, BusList src, int[] srcndx)
+	public BusSubList(BusList src, int[] ndx)
 	{
-		super(model, src.getKeys(srcndx));
-		_ndx = srcndx;
+		super(src, ndx);
 		_src = src;
 	}
-
-	int map(int ndx) {return _ndx[ndx];}
-	
 
 	@Override
 	public float getVM(int ndx)
 	{
-		return _src.getVM(map(ndx));
-	}
-
-	@Override
-	public float[] getVM()
-	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return _src.getVM(_ndx[ndx]);
 	}
 
 	@Override
 	public void setVM(int ndx, float vm)
 	{
-		_src.setVM(map(ndx), vm);
+		_src.setVM(_ndx[ndx], vm);
+	}
+
+	@Override
+	public float[] getVM()
+	{
+		return mapFloat(_src.getVM());
 	}
 
 	@Override
 	public void setVM(float[] vm)
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		for(int i=0; i < _size; ++i)
+			_src.setVM(_ndx[i], vm[i]);
 	}
 
 	@Override
 	public float getVA(int ndx)
 	{
-		return _src.getVA(map(ndx));
-	}
-
-	@Override
-	public float[] getVA()
-	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return _src.getVA(_ndx[ndx]);
 	}
 
 	@Override
 	public void setVA(int ndx, float va)
 	{
-		_src.setVA(map(ndx), va);
+		_src.setVA(_ndx[ndx], va);
+	}
+
+	@Override
+	public float[] getVA()
+	{
+		return mapFloat(_src.getVA());
 	}
 
 	@Override
 	public void setVA(float[] va)
 	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		for(int i=0; i < _size; ++i)
+			_src.setVA(_ndx[i], va[i]);
 	}
 
 	@Override
-	public BusList getBuses(int ndx)
+	public int getFrequencySourcePriority(int ndx)
 	{
-		return _src.getBuses(map(ndx));
+		return _src.getFrequencySourcePriority(_ndx[ndx]);
 	}
 
 	@Override
-	public SwitchList getSwitches(int ndx)
+	public void setFrequencySourcePriority(int ndx, int fsp)
 	{
-		return _src.getSwitches(map(ndx));
+		_src.setFrequencySourcePriority(_ndx[ndx], fsp);
 	}
 
 	@Override
-	public LineList getLines(int ndx)
+	public int[] getFrequencySourcePriority()
 	{
-		return _src.getLines(map(ndx));
+		return mapInt(_src.getFrequencySourcePriority());
 	}
 
 	@Override
-	public SeriesReacList getSeriesReactors(int ndx)
+	public void setFrequencySourcePriority(int[] fsp)
 	{
-		return _src.getSeriesReactors(map(ndx));
+		for(int i=0; i < _size; ++i)
+			_src.setFrequencySourcePriority(_ndx[i], fsp[i]);
 	}
 
 	@Override
-	public SeriesCapList getSeriesCapacitors(int ndx)
+	public Island getIsland(int ndx)
 	{
-		return _src.getSeriesCapacitors(map(ndx));
+		return _src.getIsland(_ndx[ndx]);
 	}
 
 	@Override
-	public TransformerList getTransformers(int ndx)
+	public Area getArea(int ndx)
 	{
-		return _src.getTransformers(map(ndx));
+		return _src.getArea(_ndx[ndx]);
 	}
 
 	@Override
-	public PhaseShifterList getPhaseShifters(int ndx)
+	public void setArea(int ndx, Area a)
 	{
-		return _src.getPhaseShifters(map(ndx));
+		_src.setArea(_ndx[ndx], a);
 	}
 
 	@Override
-	public TwoTermDCLineList getTwoTermDCLines(int ndx)
+	public Area[] getArea()
 	{
-		return _src.getTwoTermDCLines(map(ndx));
+		return mapObject(_src.getArea());
 	}
 
 	@Override
-	public GenList getGenerators(int ndx)
+	public void setArea(Area[] a)
 	{
-		return _src.getGenerators(map(ndx));
+		for(int i=0; i < _size; ++i)
+			_src.setArea(_ndx[i], a[i]);
 	}
 
 	@Override
-	public LoadList getLoads(int ndx)
+	public Station getStation(int ndx)
 	{
-		return _src.getLoads(map(ndx));
+		return _src.getStation(_ndx[ndx]);
 	}
 
 	@Override
-	public ShuntReacList getShuntReactors(int ndx)
+	public void setStation(int ndx, Station s)
 	{
-		return _src.getShuntReactors(map(ndx));
+		_src.setStation(_ndx[ndx], s);
 	}
 
 	@Override
-	public ShuntCapList getShuntCapacitors(int ndx)
+	public Station[] getStation()
 	{
-		return _src.getShuntCapacitors(map(ndx));
+		return mapObject(_src.getStation());
 	}
 
 	@Override
-	public SwitchedShuntList getSwitchedShunts(int ndx)
+	public void setStation(Station[] s)
 	{
-		return _src.getSwitchedShunts(map(ndx));
+		for(int i=0; i < _size; ++i)
+			_src.setStation(_ndx[i], s[i]);
 	}
 
 	@Override
-	public SVCList getSVCs(int ndx)
+	public Owner getOwner(int ndx)
 	{
-		return _src.getSVCs(map(ndx));
+		return _src.getOwner(_ndx[ndx]);
 	}
 
 	@Override
-	public String getID(int ndx)
+	public void setOwner(int ndx, Owner o)
 	{
-		return _src.getID(map(ndx));
+		_src.setOwner(_ndx[ndx], o);
 	}
 
 	@Override
-	public void setID(int ndx, String id)
+	public Owner[] getOwner()
 	{
-		_src.setID(map(ndx), id);
+		return mapObject(_src.getOwner());
 	}
 
 	@Override
-	public String[] getID()
+	public void setOwner(Owner[] o)
 	{
-		return _src.getSubListIDs(_ndx);
+		for(int i=0; i < _size; ++i)
+			_src.setOwner(_ndx[i], o[i]);
 	}
 
 	@Override
-	public void setID(String[] id)
+	public VoltageLevel getVoltageLevel(int ndx)
 	{
-		_src.setSubListIDs(id, _ndx);
+		return _src.getVoltageLevel(_ndx[ndx]);
 	}
 
 	@Override
-	public String getName(int ndx)
+	public void setVoltageLevel(int ndx, VoltageLevel l)
 	{
-		return _src.getName(map(ndx));
+		_src.setVoltageLevel(_ndx[ndx], l);
 	}
 
 	@Override
-	public void setName(int ndx, String name)
+	public VoltageLevel[] getVoltageLevel()
 	{
-		_src.setName(map(ndx), name);
+		return mapObject(_src.getVoltageLevel());
 	}
 
 	@Override
-	public String[] getName()
+	public void setVoltageLevel(VoltageLevel[] l)
 	{
-		return _src.getSubListNames(_ndx);
+		for(int i=0; i < _size; ++i)
+			_src.setVoltageLevel(_ndx[i], l[i]);
 	}
 
 	@Override
-	public void setName(String[] name)
+	public Bus get(int index)
 	{
-		_src.setSubListNames(name, _ndx);
+		return new Bus(this, index);
 	}
 
 }

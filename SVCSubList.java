@@ -1,13 +1,18 @@
 package com.powerdata.openpa;
 
-public class SVCSubList extends SVCList
+public class SVCSubList extends ShuntSubList<SVC> implements SVCList
 {
-	public SVCSubList(PALists model, SVCList src, int[] srcndx)
+
+	public SVCSubList(OneTermDevList<SVC> src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getBusKeys(srcndx));
+		super(src, ndx);
 		// TODO Auto-generated constructor stub
 	}
-	// TODO: override every method
 
-
+	@Override
+	public SVC get(int index)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

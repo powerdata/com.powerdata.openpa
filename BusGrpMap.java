@@ -12,6 +12,7 @@ public interface BusGrpMap
 {
 	int size();
 
+	/** get group index for a specific bus index */
 	int getGrp(int index);
 
 	List<int[]> map();

@@ -2,9 +2,9 @@ package com.powerdata.openpa;
 
 public class Bus extends Group
 {
-	BusListIfc _list;
+	BusList _list;
 	
-	public Bus(BusListIfc list, int ndx)
+	public Bus(BusList list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

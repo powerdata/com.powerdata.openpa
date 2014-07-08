@@ -1,18 +1,20 @@
 package com.powerdata.openpa;
 
+import java.util.regex.Pattern;
+
 import com.powerdata.openpa.Switch.State;
 
 /**
- * Provide a single-bus view (closed switches removed) for study purposes
+ * Provide a single-bus view (closed switches removed)
  * 
  * @author chris@powerdata.com
  *
  */
-public class SingleBusList extends BusListIfc
+public class SingleBusList extends GroupListI<Bus> implements BusList
 {
 	BusList _buses;
 	
-	public SingleBusList(PALists model)
+	public SingleBusList(PAModel model)
 	{
 		super(model, new BusGrpMapBldr(model)
 		{
@@ -24,49 +26,123 @@ public class SingleBusList extends BusListIfc
 		}.addSwitches().getMap());
 
 		_buses = model.getBuses();
+		
+	}
+
+	@Override
+	public String getName(int ndx)
+	{
+		if(_name[RW] == null) createNames();
+		return super.getName(ndx);
 	}
 	
+	
+
+	@Override
+	public String getID(int ndx)
+	{
+		if (_id[RW] == null) createIDs();
+		return super.getID(ndx);
+	}
+
+	protected void createNames()
+	{
+		String[] nm = new String[_size];
+		for(int i=0; i < _size; ++i)
+		{
+			String s = getStation(i).getName();
+			int score = -1;
+			Bus sel = null;
+			for(Bus b : getBuses(i))
+			{
+				int ts = scoreBus(b);
+				if (ts > score)
+				{
+					score = ts;
+					sel = b;
+				}
+			}
+			StringBuilder ns = new StringBuilder();
+			String bn = sel.getName();
+			if (!bn.contains(s))
+			{
+				ns.append(s);
+				ns.append(' ');
+			}
+			ns.append(bn);
+			nm[i] = ns.toString();
+		}
+		setName(nm);
+	}
+	
+	protected void createIDs()
+	{
+		String[] id = new String[_size];
+		for(int i=0; i < _size; ++i)
+			id[i] = String.valueOf(getKey(i));
+		setID(id);
+	}
+
+	static final Pattern[] _Scores = new Pattern[] 
+	{
+		null,
+		Pattern.compile("^[a-zA-Z ]+$"),
+		Pattern.compile("^[^0-9]+.*$"),
+	};
+	
+	protected int scoreBus(Bus b)
+	{
+		int score = 0;
+		String bn = b.getName();
+		
+		for(int i=1; i < _Scores.length; ++i)
+		{
+			if(_Scores[i].matcher(bn).matches())
+				score = i;
+		}
+		return score;
+	}
+
+	@Override
+	public String[] getName()
+	{
+		if(_name[RW] == null) createNames();
+		return super.getName();
+	}
+
 	@Override
 	public float getVM(int ndx)
 	{
-		return _buses.getVM(_bgmap.getTokens()[ndx]);
+		return getBuses(ndx).getVM(0);
 	}
 
 	@Override
 	public void setVM(int ndx, float vm)
 	{
-		for(Bus b : getBuses(ndx))
+		for (Bus b : getBuses(ndx))
 			b.setVM(vm);
 	}
 
 	@Override
 	public float[] getVM()
 	{
-		int[] tok = _bgmap.getTokens();
-		int n = tok.length;
-		float[] rv = new float[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getVM(tok[i]);
+		float[] rv = new float[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getVM(i);
 		return rv;
 	}
-	
+
 	@Override
 	public void setVM(float[] vm)
 	{
-		
-		int n = vm.length;
-		for(int i=0; i < n; ++i)
-		{
-			for(int b : _bgmap.map().get(i))
-				_buses.setVM(b, vm[i]);
-		}
+		for(int i=0; i < _size; ++i)
+			setVM(i, vm[i]);
 	}
-	
 
 	@Override
 	public float getVA(int ndx)
 	{
-		return _buses.getVA(_bgmap.getTokens()[ndx]);
+		return getBuses(ndx).getVA(0);
 	}
 
 	@Override
@@ -77,176 +153,178 @@ public class SingleBusList extends BusListIfc
 	}
 
 	@Override
-	public Bus get(int index)
-	{
-		return new Bus(this, index);
-	}
-
-	@Override
 	public float[] getVA()
 	{
-		int[] tok = _bgmap.getTokens();
-		int n = tok.length;
-		float[] rv = new float[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getVA(tok[i]);
+		float[] rv = new float[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getVA(i);
 		return rv;
 	}
-	
+
 	@Override
 	public void setVA(float[] va)
 	{
-		int n = va.length;
-		for(int i=0; i < n; ++i)
-		{
-			for(int b : _bgmap.map().get(i))
-				_buses.setVA(b, va[i]);
-		}
-	}
-
-	@Override
-	public String getID(int ndx)
-	{
-		return _buses.getID(_bgmap.getTokens()[ndx]);
-	}
-
-	@Override
-	public void setID(int ndx, String id)
-	{
-		_buses.setID(_bgmap.getTokens()[ndx], id);
-	}
-
-	@Override
-	public String[] getID()
-	{
-		int[] tok = _bgmap.getTokens();
-		int n = tok.length;
-		String[] rv = new String[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getID(tok[i]);
-		return rv;
-	}
-
-	@Override
-	public void setID(String[] id)
-	{
-		int n = id.length;
-		for(int i=0; i < n; ++i)
-		{
-			for(int b : _bgmap.map().get(i))
-				_buses.setID(b, id[i]);
-		}
-	}
-
-	@Override
-	public String getName(int ndx)
-	{
-		return _buses.getName(_bgmap.getTokens()[ndx]);
-	}
-
-	@Override
-	public void setName(int ndx, String name)
-	{
-		_buses.setName(_bgmap.getTokens()[ndx], name);
-	}
-
-	@Override
-	public String[] getName()
-	{
-		int[] tok = _bgmap.getTokens();
-		int n = tok.length;
-		String[] rv = new String[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _buses.getName(tok[i]);
-		return rv;
-	}
-
-	@Override
-	public void setName(String[] name)
-	{
-		int n = name.length;
-		for(int i=0; i < n; ++i)
-		{
-			for(int b : _bgmap.map().get(i))
-				_buses.setName(b, name[i]);
-		}
-	}
-
-	@Override
-	public Island getIsland(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return null;
+		for(int i=0; i < _size; ++i)
+			setVA(i, va[i]);
 	}
 
 	@Override
 	public int getFrequencySourcePriority(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setArea(int ndx, Area a)
-	{
-		// TODO Auto-generated method stub
-		
+		return getBuses(ndx).getFrequencySourcePriority(0);
 	}
 
 	@Override
 	public void setFrequencySourcePriority(int ndx, int fsp)
 	{
-		// TODO Auto-generated method stub
-		
+		for(Bus b: getBuses(ndx))
+			b.setFrequencySourcePriority(fsp);
+	}
+
+	@Override
+	public int[] getFrequencySourcePriority()
+	{
+		int[] rv = new int[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getFrequencySourcePriority(i);
+		return rv;
+	}
+
+	@Override
+	public void setFrequencySourcePriority(int[] fsp)
+	{
+		for(int i=0; i < _size; ++i)
+			setFrequencySourcePriority(i, fsp[i]);
+	}
+
+	@Override
+	public Island getIsland(int ndx)
+	{
+		return getBuses(ndx).getIsland(0);
+	}
+
+	@Override
+	public Area getArea(int ndx)
+	{
+		return getBuses(ndx).getArea(0);
+	}
+
+	@Override
+	public void setArea(int ndx, Area a)
+	{
+		for(Bus b : getBuses(ndx))
+			b.setArea(a);
+	}
+
+	@Override
+	public Area[] getArea()
+	{
+		Area[] rv = new Area[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getArea(i);
+		return rv;
+	}
+
+	@Override
+	public void setArea(Area[] a)
+	{
+		for(int i=0; i < _size; ++i)
+			setArea(i, a[i]);
 	}
 
 	@Override
 	public Station getStation(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getBuses(ndx).getStation(0);
 	}
 
 	@Override
 	public void setStation(int ndx, Station s)
 	{
-		// TODO Auto-generated method stub
-		
+		for(Bus b : getBuses(ndx))
+			b.setStation(s);
 	}
-	
+
 	@Override
-	public Area getArea(int ndx)
+	public Station[] getStation()
 	{
-		//TODO
-		return null;
+		Station[] rv = new Station[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getStation(i);
+		return rv;
+	}
+
+	@Override
+	public void setStation(Station[] s)
+	{
+		for(int i=0; i < _size; ++i)
+			setStation(i, s[i]);
 	}
 
 	@Override
 	public Owner getOwner(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getBuses(ndx).getOwner(0);
 	}
 
 	@Override
 	public void setOwner(int ndx, Owner o)
 	{
-		// TODO Auto-generated method stub
-		
+		for(Bus b : getBuses(ndx))
+			b.setOwner(o);
 	}
 
 	@Override
-	public VoltageLevel getVoltageLevel(int _ndx)
+	public Owner[] getOwner()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Owner[] rv = new Owner[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getOwner(i);
+		return rv;
 	}
 
 	@Override
-	public void setVoltageLevel(int _ndx, VoltageLevel l)
+	public void setOwner(Owner[] o)
 	{
-		// TODO Auto-generated method stub
-		
+		for(int i=0; i < _size; ++i)
+			setOwner(i, o[i]);
 	}
 
+	@Override
+	public VoltageLevel getVoltageLevel(int ndx)
+	{
+		return getBuses(ndx).getVoltageLevel(0);
+	}
+
+	@Override
+	public void setVoltageLevel(int ndx, VoltageLevel l)
+	{
+		for(Bus b : getBuses(ndx))
+			b.setVoltageLevel(l);
+	}
+
+	@Override
+	public VoltageLevel[] getVoltageLevel()
+	{
+		VoltageLevel[] rv = new VoltageLevel[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = getVoltageLevel(i);
+		return rv;
+	}
+
+	@Override
+	public void setVoltageLevel(VoltageLevel[] l)
+	{
+		for (int i=0; i < _size; ++i)
+			setVoltageLevel(i, l[i]);
+	}
+
+	@Override
+	public Bus get(int index)
+	{
+		return new Bus(this, index);
+	}
+	
+	
+	
 }

@@ -13,10 +13,15 @@ public class Load extends OneTermDev
 	}
 
 	/** get active component of constant MVA load in MW */
-	public float getPL() throws PAModelException
+	public float getPL()
 	{
 		return _list.getPL(_ndx);
 	}
+	public void setPL(float pl)
+	{
+		_list.setPL(_ndx, pl);
+	}
+	
 	/** get the cold load MW */
 	public float getPcold()  throws PAModelException // {return _list.getPcold(_ndx);}
 	{

@@ -27,10 +27,12 @@ public class ListDumper
 						&& rtype.getPackage().getName()
 								.equals("com.powerdata.openpa"))
 				{
-					while (rtype != null && rtype != Object.class
-							&& rtype != void.class)
+//					while (rtype != null && rtype != Object.class
+//							&& rtype != void.class)
+					while(rtype.getInterfaces().length > 0)
 					{
-						if (rtype == BaseList.class
+						Class<?> ifc = rtype.getInterfaces()[0];
+						if (ifc == BaseList.class
 								&& m.getParameterTypes().length == 0)
 						{
 							String nm = m.getName();
@@ -39,9 +41,11 @@ public class ListDumper
 							BaseList<?> list = (BaseList<?>) m.invoke(model,
 								new Object[] {});
 							dumpList(nfile, list);
+							break;
 						}
-						rtype = rtype.getSuperclass();
+						rtype = ifc;
 					}
+
 				}
 			}
 		}
@@ -67,6 +71,8 @@ public class ListDumper
 						break;
 					}
 				}
+				if (!checkInterface(mclass))
+				{
 				Class<?> mcsuper = mclass.getSuperclass();
 				while (mcsuper != null && mcsuper != Object.class)
 				{
@@ -87,6 +93,7 @@ public class ListDumper
 						mname.add(nm.equals("get") ? "toString()" : nm
 								.substring(yget ? 3 : (yis ? 2 : 0)));
 					}
+				}
 				}
 			}
 		}
@@ -123,6 +130,22 @@ public class ListDumper
 		}
 	}
 	
+	private boolean checkInterface(Class<?> cl)
+	{
+		boolean rv = false;
+		Class<?>[] ifc = cl.getInterfaces();
+		for(Class<?> i : ifc)
+		{
+			if (i == BaseList.class)
+			{
+				rv = true;
+			}
+			else if (i != null)
+				rv |= checkInterface(i);
+		}
+		return rv;
+	}
+
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;

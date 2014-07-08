@@ -3,52 +3,25 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
 
-public class GenList extends OneTermDevList<Gen>
+public interface GenList extends OneTermDevList<Gen>
 {
-	public static final GenList	Empty	= new GenList();
 
-	protected GenList() {super();}
+	static final GenList Empty = new GenListI();
+
+	Type getType(int ndx);
 	
-	protected GenList(PALists model, int[] keys, int[] buskeys)
-	{
-		super(model, keys, buskeys);
-		// TODO Auto-generated constructor stub
-	}
-	protected GenList(PALists model, int size, int[] buskeys)
-	{
-		super(model, size, buskeys);
-		// TODO Auto-generated constructor stub
-	}
+	void setType(int ndx, Type t);
 
-	@Override
-	public Gen get(int index)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+	Type[] getType();
+	
+	void setType(Type[] t);
+	
+	Mode getMode(int ndx);
 
-	public Type getType(int ndx) 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setType(int ndx, Type t)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Mode getMode(int ndx) 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setMode(int ndx, Mode m) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	void setMode(int ndx, Mode m);
+	
+	Mode[] getMode();
+	
+	void setMode(Mode[] m);
 
 }

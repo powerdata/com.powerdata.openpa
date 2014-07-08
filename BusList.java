@@ -1,230 +1,71 @@
 package com.powerdata.openpa;
 
-import java.lang.ref.WeakReference;
-import java.util.AbstractList;
-import java.util.List;
-
-
-public class BusList extends BusListIfc
+/**
+ * Interface for bus List values needed by the Bus class. Makes the Bus object
+ * usable by multiple lists (i.e. connectivity and single-bus views)
+ * 
+ * @author chris@powerdata.com
+ * 
+ */
+public interface BusList extends GroupList<Bus>
 {
-	static class UnityBusGrpMap implements BusGrpMap
-	{
-		int _size;
-		WeakReference<int[]> _tok = new WeakReference<>(null);
-		
-		UnityBusGrpMap(int size)
-		{
-			_size = size;
-		}
-		@Override
-		public int getGrp(int index)
-		{
-			return index;
-		}
 
-		@Override
-		public List<int[]> map()
-		{
-			return new AbstractList<int[]>()
-			{
-				@Override
-				public int[] get(int index)
-				{
-					return new int[0];
-				}
+	float getVM(int ndx);
 
-				@Override
-				public int size()
-				{
-					return _size;
-				}};
-		}
+	void setVM(int ndx, float vm);
 
-		@Override
-		public int size()
-		{
-			return _size;
-		}
-		@Override
-		public int[] getTokens()
-		{
-			int[] rv = _tok.get();
-			if (rv == null)
-			{
-				rv = new int[_size];
-				for(int i=0; i < _size; ++i) rv[i] = i;
-				_tok = new WeakReference<>(rv);
-			}
-			return rv;
-		}
-	}
+	float[] getVM();
 
-	float[][] _vm=IFlt(), _va=IFlt();
-	int[][] _areas=IInt(), _owners=IInt(), _stations=IInt(), _vlevs=IInt();
-	AreaList _arealist;
-	OwnerList _ownerlist;
-	StationList _stationlist;
-	VoltageLevelList _vllist;
+	void setVM(float[] vm);
+
+	float getVA(int ndx);
+
+	void setVA(int ndx, float va);
+
+	float[] getVA();
+
+	void setVA(float[] va);
+
+	int getFrequencySourcePriority(int ndx);
+
+	void setFrequencySourcePriority(int ndx, int fsp);
 	
-	public static final BusList Empty = new BusList();
-
-	BusList(){super();}
+	int[] getFrequencySourcePriority();
 	
-	public BusList(PALists model, int[] keys)
-	{
-		super(model, keys, new UnityBusGrpMap(keys.length));
-		_arealist = model.getAreas();
-		_ownerlist = model.getOwners();
-		_stationlist = model.getStations();
-		_vllist = model.getVoltageLevels();
-	}
+	void setFrequencySourcePriority(int[] fsp);
+
+	Island getIsland(int ndx);
+
+	Area getArea(int ndx);
+
+	void setArea(int ndx, Area a);
 	
-	public BusList(PALists model, int size)
-	{
-		super(model, new UnityBusGrpMap(size));
-		_arealist = model.getAreas();
-	}
-
-	@Override
-	public Bus get(int index)
-	{
-		return new Bus(this, index);
-	}
+	Area[] getArea();
 	
-	@Override
-	public float getVM(int ndx) {return getFloat(_vm, ndx);}
+	void setArea(Area[] a);
 
-	public float[] getVM() {return getFloat(_vm);}
+	Station getStation(int ndx);
 
-	@Override
-	public void setVM(int ndx, float vm) {setFloat(_vm, ndx, vm);}
+	void setStation(int ndx, Station s);
 
-	public void setVM(float[] vm) {setFloat(_vm, vm);}
+	Station[] getStation();
 	
-	@Override
-	public float getVA(int ndx) {return getFloat(_va, ndx);}
-
-	public float[] getVA() {return getFloat(_va);}
-
-	@Override
-	public void setVA(int ndx, float va) {setFloat(_va, ndx, va);}
+	void setStation(Station[] s);
 	
-	public void setVA(float[] va) {setFloat(_va, va);}
+	Owner getOwner(int ndx);
 
-	@Override
-	public Area getArea(int ndx)
-	{
-		return _arealist.get(getInt(_areas, ndx));
-	}
+	void setOwner(int ndx, Owner o);
+
+	Owner[] getOwner();
 	
-	@Override
-	public void setArea(int ndx, Area a)
-	{
-		setInt(_areas, ndx, a.getIndex());
-	}
-
-	public Area[] getArea()
-	{
-		return _arealist.toArray(getInt(_areas));
-	}
-
-	public void setArea(Area[] area)
-	{
-		setInt(_areas, objectNdx(area));
-	}
+	void setOwner(Owner[] o);
 	
-	@Override
-	public Owner getOwner(int ndx)
-	{
-		return _ownerlist.get(getInt(_owners, ndx));
-	}
+	VoltageLevel getVoltageLevel(int ndx);
 
-	@Override
-	public void setOwner(int ndx, Owner o)
-	{
-		setInt(_owners, ndx, o.getIndex());
-	}
-	public Owner[] getOwner()
-	{
-		return _ownerlist.toArray(getInt(_owners));
-	}
-
-	public void setOwner(Owner[] owner)
-	{
-		setInt(_owners, objectNdx(owner));
-	}
+	void setVoltageLevel(int ndx, VoltageLevel l);
 	
-
-	@Override
-	public Island getIsland(int ndx)
-	{
-		return _model.getIslands().getByBus(get(ndx));
-	}
-
-	public Island[] getIsland()
-	{
-		Island[] rv = new Island[_size];
-		for(int i=0; i < _size; ++i)
-			rv[i] = getIsland(i);
-		return rv;
-	}
+	VoltageLevel[] getVoltageLevel();
 	
-	@Override
-	public int getFrequencySourcePriority(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	void setVoltageLevel(VoltageLevel[] l);
 
-	@Override
-	public void setFrequencySourcePriority(int ndx, int fsp)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Station getStation(int ndx)
-	{
-		return _stationlist.get(getInt(_stations, ndx));
-	}
-
-	@Override
-	public void setStation(int ndx, Station s)
-	{
-		setInt(_stations, ndx, s.getIndex());
-	}
-	
-	public Station[] getStation()
-	{
-		return _stationlist.toArray(getInt(_stations));
-	}
-	
-	public void setStation(Station[] s)
-	{
-		setInt(_stations, objectNdx(s));
-	}
-
-	@Override
-	public VoltageLevel getVoltageLevel(int ndx)
-	{
-		return _vllist.get(getInt(_vlevs, ndx));
-	}
-
-	@Override
-	public void setVoltageLevel(int ndx, VoltageLevel l)
-	{
-		setInt(_vlevs, ndx, l.getIndex());
-	}
-
-	public VoltageLevel[] getVoltageLevels()
-	{
-		return _vllist.toArray(getInt(_vlevs));
-	}
-	
-	public void setVoltageLevel(VoltageLevel[] l)
-	{
-		setInt(_vlevs, objectNdx(l));
-	}
-	
 }

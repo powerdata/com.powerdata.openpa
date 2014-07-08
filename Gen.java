@@ -19,7 +19,6 @@ public class Gen extends OneTermDev
 
 	public enum Type {Unknown, Thermal, Hydro};
 	
-	
 	public Gen(GenList list, int ndx)
 	{
 		super(list, ndx);
@@ -46,7 +45,7 @@ public class Gen extends OneTermDev
 		_list.setMode(_ndx, m);
 	}
 	
-	public float getPB() throws PAModelException // {return _list.getPB(_ndx);}
+	public float getOpMinMW() throws PAModelException // {return _list.getPB(_ndx);}
 	{
 		return 0;
 	}

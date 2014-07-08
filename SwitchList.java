@@ -2,73 +2,30 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.Switch.State;
 
-public class SwitchList extends TwoTermDevList<Switch>
+public interface SwitchList extends TwoTermDevList<Switch>
 {
-	State[] _state, _stateo;
 
-	public static final SwitchList	Empty	= new SwitchList();
+	State getState(int ndx);
 
-	protected SwitchList(){super();}
+	void setState(int ndx, State state);
 	
-	public SwitchList(PALists model, int[] keys, int[] fbuskey, int[] tbuskey)
-	{
-		super(model, keys, fbuskey, tbuskey);
-	}
-	protected SwitchList(PALists model, int size, int[] fbuskey, int[] tbuskey)
-	{
-		super(model, size, fbuskey, tbuskey);
-	}
-
-	@Override
-	public Switch get(int index)
-	{
-		return new Switch(this, index);
-	}
-
-	public State getState(int ndx)
-	{
-		return _state[ndx];
-	}
-
-	public void setState(int ndx, State state)
-	{
-		if (_stateo == null && _state != null)
-			_stateo = _state.clone();
-		_state[ndx] = state;
-	}
+	State[] getState();
 	
-	public State[] getState()
-	{
-		return _state;
-	}
+	void setState(State[] state);
+
+	boolean isOperableUnderLoad(int ndx);
+
+	void setOperableUnderLoad(int ndx, boolean op);
 	
-	public void setState(State[] state)
-	{
-		if (_state != state)
-		{
-			if (_stateo == null)
-				_stateo = _state;
-			_state = state;
-		}
-	}
-	public boolean isOperableUnderLoad(int ndx)
-	{
-		//TODO:
-		return true;
-	}
-	public void setOperableUnderLoad(int ndx, boolean op)
-	{
-		// TODO Auto-generated method stub
-	}
+	boolean[] isOperableUnderLoad();
+	
+	void setOperableUnderLoad(boolean[] op);
 
-	public boolean isEnabled(int ndx)
-	{
-		return true;
-	}
+	boolean isEnabled(int ndx);
 
-	public void setEnabled(int ndx, boolean enable)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	void setEnabled(int ndx, boolean enable);
+
+	boolean[] isEnabled();
+	
+	void setEnabled(boolean[] enable);
 }

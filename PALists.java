@@ -45,15 +45,15 @@ public interface PALists
 	SVCList getSVCs();
 	
 	/** return list of Areas */
-	AreaList getAreas();
+//	AreaList getAreas();
 
 	/** return list of Owners */
-	OwnerList getOwners();
+//	OwnerList getOwners();
 	
 	/** return list of Stations */
-	StationList getStations();
+//	StationList getStations();
 
-	VoltageLevelList getVoltageLevels();
+//	VoltageLevelList getVoltageLevels();
 	
-	IslandList getIslands();
+//	IslandList getIslands();
 }

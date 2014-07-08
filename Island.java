@@ -24,5 +24,15 @@ public class Island extends Group
 	{
 		_list.setFreq(_ndx, f);
 	}
+	
+	public Bus getFreqSrc()
+	{
+		return _list.getFreqSrc(_ndx);
+	}
+	
+	public void setFreqSrc(Bus fsrc)
+	{
+		_list.setFreqSrc(_ndx, fsrc);
+	}
 
 }

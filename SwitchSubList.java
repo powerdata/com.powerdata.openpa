@@ -2,147 +2,95 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.Switch.State;
 
-public class SwitchSubList extends SwitchList
+public class SwitchSubList extends TwoTermDevSubList<Switch> implements SwitchList
 {
-	int[] _ndx;
 	SwitchList _src;
-
-	protected SwitchSubList(PALists model, SwitchList src, int[] srcndx)
+	
+	public SwitchSubList(SwitchList src, int[] ndx)
 	{
-		super(model, srcndx.length, src.getFBusKeys(srcndx),
-			src.getTBusKeys(srcndx));
-		_ndx = srcndx;
+		super(src, ndx);
 		_src = src;
 	}
 
-	int map(int sndx) {return _ndx[sndx];}
-	
 	@Override
 	public State getState(int ndx)
 	{
-		return _src.getState(map(ndx));
+		return _src.getState(_ndx[ndx]);
 	}
 
 	@Override
 	public void setState(int ndx, State state)
 	{
-		_src.setState(map(ndx), state);
+		_src.setState(_ndx[ndx], state);
 	}
 
 	@Override
 	public State[] getState()
 	{
-		int n = size();
-		State[] rv = new State[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = _src.getState(map(i));
-		return rv;
+		return mapObject(_src.getState());
 	}
 
 	@Override
 	public void setState(State[] state)
 	{
-		int n = size();
-		for(int i=0; i < n; ++i)
-			_src.setState(map(i), state[i]);
+		for(int i=0; i < _size; ++i)
+			_src.setState(_ndx[i], state[i]);
 	}
 
 	@Override
-	public Bus getFromBus(int ndx)
+	public boolean isOperableUnderLoad(int ndx)
 	{
-		return _buses.get(_fbx[ndx]);
+		return _src.isOperableUnderLoad(_ndx[ndx]);
 	}
 
 	@Override
-	public BusList getFromBuses()
+	public void setOperableUnderLoad(int ndx, boolean op)
 	{
-		return _src.getSubListFromBuses(_ndx);
+		_src.setOperableUnderLoad(_ndx[ndx], op);
 	}
 
 	@Override
-	public Bus getToBus(int ndx)
+	public boolean[] isOperableUnderLoad()
 	{
-		return _buses.get(_tbx[ndx]);
+		return mapBool(_src.isOperableUnderLoad());
 	}
 
 	@Override
-	public BusList getToBuses()
+	public void setOperableUnderLoad(boolean[] op)
 	{
-		return _src.getSubListToBuses(_ndx);
+		for(int i=0; i < _size; ++i)
+			_src.setOperableUnderLoad(_ndx[i], op[i]);
 	}
-
-	@Override
-	public boolean isInSvc(int ndx)
-	{
-		return _src.isInSvc(map(ndx));
-	}
-
-	@Override
-	public boolean[] isInSvc()
-	{
-		return _src.getSubListInSvc(_ndx);
-	}
-
-	@Override
-	public void setInSvc(int ndx, boolean state)
-	{
-		_src.setInSvc(map(ndx), state);
-	}
-
-	@Override
-	public void setInSvc(boolean[] state)
-	{
-		_src.setSubListInSvc(state, _ndx);
-	}
-
-	@Override
-	public String getID(int ndx)
-	{
-		return _src.getID(map(ndx));
-	}
-
-	@Override
-	public void setID(int ndx, String id)
-	{
-		_src.setID(map(ndx), id);
-	}
-
-	@Override
-	public String[] getID()
-	{
-		return _src.getSubListIDs(_ndx);
-	}
-
-	@Override
-	public void setID(String[] id)
-	{
-		_src.setSubListIDs(id, _ndx);
-	}
-
-	@Override
-	public String getName(int ndx)
-	{
-		return _src.getName(map(ndx));
-	}
-
-	@Override
-	public void setName(int ndx, String name)
-	{
-		_src.setName(map(ndx), name);
-	}
-
-	@Override
-	public String[] getName()
-	{
-		return _src.getSubListNames(_ndx);
-	}
-
-	@Override
-	public void setName(String[] name)
-	{
-		_src.setSubListNames(name, _ndx);
-	}
-
 	
-	
+
+	@Override
+	public boolean isEnabled(int ndx)
+	{
+		return _src.isEnabled(_ndx[ndx]);
+	}
+
+	@Override
+	public void setEnabled(int ndx, boolean enable)
+	{
+		_src.setEnabled(_ndx[ndx], enable);
+	}
+
+	@Override
+	public boolean[] isEnabled()
+	{
+		return mapBool(_src.isEnabled());
+	}
+
+	@Override
+	public void setEnabled(boolean[] enable)
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setEnabled(_ndx[i], enable[i]);
+	}
+
+	@Override
+	public Switch get(int index)
+	{
+		return new Switch(this, index);
+	}
 }

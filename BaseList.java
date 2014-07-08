@@ -1,333 +1,93 @@
 package com.powerdata.openpa;
 
-import java.util.AbstractList;
+import java.util.List;
 
 import com.powerdata.openpa.tools.SNdxKeyOfs;
 
-/**
- * Base of the object list hierarchy
- * 
- * @author chris@powerdata.com
- * 
- */
-
-public abstract class BaseList<T extends BaseObject> extends AbstractList<T> 
+public interface BaseList<T extends BaseObject> extends List<T> 
 {
-	/** read only */
-	private static final int RO = 0;
-	/** read-write */
-	private static final int RW = 1;
-	
-	PALists     _model;
-	String[][] _id = IStr(), _name = IStr();
-	SNdxKeyOfs _keyndx = null;
-	int _size, _keys[] = null;
-	
-	protected static final String[][] IStr() {return new String[2][];}
-	protected static final float[][] IFlt() {return new float[2][];}
-	protected static final int[][] IInt() {return new int[2][];}
-	
-	protected final void setStr(String[][] v, int ndx, String s)
+	public static class SNdxNoKey extends SNdxKeyOfs
 	{
-		String[] rw = v[RW];
-		if (rw == null)
+		int _size;
+
+		public SNdxNoKey(int size) {super(null);_size = size;}
+
+		@Override
+		public int size() {return _size;}
+
+		@Override
+		public boolean containsKey(int key)
 		{
-			rw = new String[_size];
-			v[RW] = rw;
+			return key > 0 && key <= _size;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
-		rw[ndx] = s;
-	}
-	
-	protected final String[] getStr(String[][] v)
-	{
-		String[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
-		return rw;
-	}
-	
-	protected final String getStr(String[][] v, int ndx)
-	{
-		return v[RW][ndx];
-	}
-	
-	protected final void setStr(String[][] v, String[] s)
-	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
-	
-	protected final void setFloat(float[][] v, int ndx, float s)
-	{
-		float[] rw = v[RW];
-		if (rw == null)
+
+		@Override
+		public int getOffset(int key)
 		{
-			rw = new float[_size];
-			v[RW] = rw;
+			return key-1;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
-		rw[ndx] = s;
-	}
-	
-	protected final float[] getFloat(float[][] v)
-	{
-		float[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
-		return rw;
-	}
 
-	protected final float getFloat(float[][] v, int ndx)
-	{
-		return v[RW][ndx];
-	}
-
-	protected final void setFloat(float[][] v, float[] s)
-	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
-
-	protected final void setInt(int[][] v, int ndx, int s)
-	{
-		int[] rw = v[RW];
-		if (rw == null)
+		@Override
+		public int[] getOffsets(int[] keys)
 		{
-			rw = new int[_size];
-			v[RW] = rw;
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i) rv[i] = keys[i]-1;
+			return rv;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
-		rw[ndx] = s;
-	}
-	
-	protected final int[] getInt(int[][] v)
-	{
-		int[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
-		return rw;
-	}
-	
-	protected final int getInt(int[][] v, int ndx)
-	{
-		return v[RW][ndx];
-	}
 
-	protected final void setInt(int[][] v, int[] s)
-	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
-
-	protected BaseList(PALists model, int size)
-	{
-		_model = model;
-		_size = size;
-		_keys = new int[size];
-		for(int i=0; i < size; ++i)
-			_keys[i] = i+1;
-		_keyndx = new SNdxKeyOfs()
+		@Override
+		public int[] getKeys()
 		{
-			@Override
-			public int size() {return _size;}
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i) rv[i] = i+1;
+			return rv;
+		}
 
-			@Override
-			public boolean containsKey(int key)
-			{
-				return key > 0 && key <= _size;
-			}
-
-			@Override
-			public int getOffset(int key)
-			{
-				return key-1;
-			}
-
-			@Override
-			public int[] getOffsets(int[] keys)
-			{
-				int[] rv = new int[_size];
-				for(int i=0; i < _size; ++i) rv[i] = keys[i]-1;
-				return rv;
-			}
-
-			@Override
-			public int[] getKeys()
-			{
-				return _keys;
-			}};
+		@Override
+		public int getKey(int ndx)
+		{
+			return ndx+1;
+		}
 		
-	}
+		
+	};
 	
-	protected BaseList(PALists model, int[] keys)
-	{
-		_model = model;
-		_size = keys.length;
-		_keys = keys;
-		_keyndx = SNdxKeyOfs.Create(getKey());
-	}
+	int getKey(int ndx);
 	
-	protected BaseList()
-	{
-		_size = 0;
-	}
+	int[] getKeys();
 
-	@Override
-	public int size()
-	{
-		return _size;
-	}
-	
-	@Nodump
-	public T getByKey(int key)
-	{
-		return get(getIndex(key));
-	}
-	
-	@Nodump
-	public int getIndex(int key)
-	{
-		return _keyndx.getOffset(key);
-	}
-	
-	@Nodump
-	public int[] getIndexes(int[] keys)
-	{
-		return _keyndx.getOffsets(keys);
-	}
-
-	/** get unique object key */
-	public int getKey(int ndx)
-	{
-		return _keys[ndx];
-	}
-	
-	/** Return array of keys */
-	public int[] getKey()
-	{
-		return _keys;
-	}
-
-	/** get unique object ID */
-	public String getID(int ndx)
-	{
-		return getStr(_id, ndx);
-	}
-
-	/** set unique object ID */
-	public void setID(int ndx, String id)
-	{
-		setStr(_id, ndx, id);
-	}
+	String getID(int ndx);
 
 	/** return array of string object ID's */
-	public String[] getID()
-	{
-		return getStr(_id);
-	}
+	String[] getID();
+
 	/** set unique object ID */
-	public void setID(String[] id)
-	{
-		setStr(_id, id);
-	}
+	void setID(String[] id);
+
+	void setID(int ndx, String id);
+
+	String getName(int ndx);
+
+	void setName(int ndx, String name);
 
 	/** name of object */
-	public String getName(int ndx)
-	{
-		return getStr(_name, ndx);
-	}
-	/** set name of object */
-	public void setName(int ndx, String name)
-	{
-		setStr(_name, ndx, name);
-	}
-	/** name of object */
-	public String[] getName()
-	{
-		return getStr(_name);
-	}
-	/** set name of object */
-	public void setName(String[] name)
-	{
-		setStr(_name, name);
-	}
+	String[] getName();
 
-	public T[] toArray(int[] indexes)
-	{
-		T[] us = newArray(_size);
-		for(int i=0; i < _size; ++i)
-			us[i] = get(i);
-		int n = indexes.length;
-		T[] rv = newArray(n);
-		for(int i=0; i < n; ++i)
-			rv[i] = us[indexes[i]];
-		return rv;
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected T[] newArray(int size)
-	{
-		return (T[]) java.lang.reflect.Array.newInstance(get(0).getClass(), size);
-	}
-	
+	/** set name of object */
+	void setName(String[] name);
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public T get(int index)
-	{
-		return (T) new AbstractBaseObject(this, index);
-	}
+	T getByKey(int ndx);
+
+	T[] toArray(int[] indexes);
 	
-	protected int[] getKeys(int[] offsets)
-	{
-		int n = offsets.length;
-		int[] rv = new int[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = getKey(offsets[i]);
-		return rv;
-	}
-	
-	/** Name access for "sublist" subclasses to use */
-	protected String[] getSubListNames(int[] slndx)
-	{
-		int n = size();
-		String[] rv = new String[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = getName(slndx[i]);
-		return rv;
-	}
-	/** Name access for "sublist" subclasses to use */
-	protected void setSubListNames(String[] names, int[] slndx)
-	{
-		int n = size();
-		for(int i=0; i < n; ++i)
-			setName(slndx[i], names[i]);
-	}
-	
-	/** ID access for "sublist" subclasses to use */
-	protected String[] getSubListIDs(int[] slndx)
-	{
-		int n = size();
-		String[] rv = new String[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = getID(slndx[i]);
-		return rv;
-	}
-	/** ID access for "sublist" subclasses to use */
-	protected void setSubListIDs(String[] ids, int[] slndx)
-	{
-		int n = size();
-		for(int i=0; i < n; ++i)
-			setID(slndx[i], ids[i]);
-	}
-	
-	protected int[] objectNdx(BaseObject[] objects)
+	/** convert an array of objects to array of list offsets */
+	static int[] ObjectNdx(BaseObject[] objects)
 	{
 		int n = objects.length;
 		int[] s = new int[n];
 		for(int i=0; i < n; ++i) s[i] = objects[i].getIndex();
 		return s;
 	}
-
+	
+	int[] getIndexesFromKeys(int[] keys);
 }
