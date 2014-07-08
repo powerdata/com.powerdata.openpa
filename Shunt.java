@@ -10,13 +10,15 @@ public class Shunt extends OneTermDev
 		_list = list;
 	}
 
-	public float getB()
+	/** get shunt admittance setpoint in MVAr @ unity bus voltage */
+	public float getBS()
 	{
-		return _list.getB(_ndx);
+		return _list.getBS(_ndx);
 	}
 	
-	public void setB(float b)
+	/** set shunt admittance setpoint in MVAr @ unity bus voltage */
+	public void setBS(float b)
 	{
-		_list.setB(_ndx, b);
+		_list.setBS(_ndx, b);
 	}
 }

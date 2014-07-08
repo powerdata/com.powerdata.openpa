@@ -8,14 +8,25 @@ package com.powerdata.openpa;
  */
 public class PAModel implements PALists
 {
-	protected BusList _buslist;
-	protected SwitchList _swlist;
-	protected LineList _linelist;
+	protected BusList _buses;
+	protected SwitchList _switches;
+	protected LineList _lines;
 	protected IslandList _islands;
 	protected AreaList _areas;
 	protected OwnerList _owners;
 	protected StationList _stations;
 	protected VoltageLevelList _vlevs;
+	protected TransformerList _transformers;
+	protected PhaseShifterList _phshifts;
+	protected SeriesReacList _serreacs;
+	protected SeriesCapList _sercaps;
+	protected GenList _gens;
+	protected LoadList _loads;
+	protected ShuntReacList _shuntreacs;
+	protected ShuntCapList _shuntcaps;
+	protected TwoTermDCLineList _t2dclines;
+	protected SwitchedShuntList _swshunts;
+	protected SVCList _svcs;
 	
 	protected PAModel(){}
 	
@@ -60,95 +71,85 @@ public class PAModel implements PALists
 	@Override
 	public BusList getBuses()
 	{
-		return _buslist;
+		return _buses;
 	}
 
 	@Override
 	public SwitchList getSwitches()
 	{
-		return _swlist;
+		return _switches;
 	}
 
 	@Override
 	public LineList getLines()
 	{
-		return _linelist;
+		return _lines;
 	}
 
 	@Override
 	public SeriesReacList getSeriesReactors()
 	{
-		// TODO Auto-generated method stub
-		return SeriesReacList.Empty;
+		return _serreacs;
 	}
 
 	@Override
 	public SeriesCapList getSeriesCapacitors()
 	{
-		// TODO Auto-generated method stub
-		return SeriesCapList.Empty;
+		return _sercaps;
 	}
 
 	@Override
 	public TransformerList getTransformers()
 	{
-		// TODO Auto-generated method stub
-		return TransformerList.Empty;
+		return _transformers;
 	}
 
 	@Override
 	public PhaseShifterList getPhaseShifters()
 	{
-		// TODO Auto-generated method stub
-		return PhaseShifterList.Empty;
+		return _phshifts;
 	}
 
 	@Override
 	public GenList getGenerators()
 	{
-		// TODO Auto-generated method stub
-		return GenList.Empty;
+		return _gens;
 	}
 
 	@Override
 	public LoadList getLoads()
 	{
-		// TODO Auto-generated method stub
-		return LoadList.Empty;
+		return _loads;
 	}
 
 	@Override
 	public ShuntReacList getShuntReactors()
 	{
-		// TODO Auto-generated method stub
-		return ShuntReacList.Empty;
+		return _shuntreacs;
 	}
 
 	@Override
 	public ShuntCapList getShuntCapacitors()
 	{
-		// TODO Auto-generated method stub
-		return ShuntCapList.Empty;
+		return _shuntcaps;
 	}
 
 	@Override
 	public TwoTermDCLineList getTwoTermDCLines()
 	{
-		// TODO Auto-generated method stub
-		return TwoTermDCLineList.Empty;
+		return _t2dclines;
 	}
 
 	@Override
 	public SwitchedShuntList getSwitchedShunts()
 	{
-		return SwitchedShuntList.Empty;
+		return _swshunts;
 	}
 
 	@Override
 	public SVCList getSVCs()
 	{
-		// TODO Auto-generated method stub
-		return SVCList.Empty;
+		return _svcs;
 	}
 	
 	public OneTermDevList<? extends OneTermDev> getOneTermDevs()

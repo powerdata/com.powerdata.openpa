@@ -12,13 +12,24 @@ public abstract class ModelBuilder
 	{
 		PAModel m = new PAModel();
 		loadStart(m);
+		m._buses = loadBuses(m);
+		m._switches = loadSwitches(m);
+		m._lines = loadLines(m);
 		m._areas = loadAreas(m);
 		m._owners = loadOwners(m);
 		m._stations = loadStations(m);
 		m._vlevs = loadVoltageLevels(m);
-		m._buslist = loadBuses(m);
-		m._swlist = loadSwitches(m);
-		m._linelist = loadLines(m);
+		m._transformers = loadTransformers(m);
+		m._phshifts = loadPhaseShifters(m);
+		m._serreacs = loadSeriesReactors(m);
+		m._sercaps = loadSeriesCapacitors(m);
+		m._gens = loadGens(m);
+		m._loads = loadLoads(m);
+		m._shuntreacs = loadShuntReactors(m);
+		m._shuntcaps = loadShuntCapacitors(m);
+		m._t2dclines = loadTwoTermDCLines(m);
+		m._swshunts = loadSwitchedShunts(m);
+		m._svcs = loadSVCs(m);
 		m._islands = loadIslands(m);
 		loadStop(m);
 		return m;
@@ -35,5 +46,16 @@ public abstract class ModelBuilder
 	protected abstract StationList loadStations(PAModel m) throws PAModelException;
 	protected abstract VoltageLevelList loadVoltageLevels(PAModel m) throws PAModelException;
 	protected abstract IslandList loadIslands(PAModel m) throws PAModelException;
+	protected abstract SVCList loadSVCs(PAModel m);
+	protected abstract SwitchedShuntList loadSwitchedShunts(PAModel m);
+	protected abstract TwoTermDCLineList loadTwoTermDCLines(PAModel m);
+	protected abstract ShuntCapList loadShuntCapacitors(PAModel m);
+	protected abstract ShuntReacList loadShuntReactors(PAModel m);
+	protected abstract LoadList loadLoads(PAModel m);
+	protected abstract GenList loadGens(PAModel m);
+	protected abstract SeriesCapList loadSeriesCapacitors(PAModel m);
+	protected abstract SeriesReacList loadSeriesReactors(PAModel m);
+	protected abstract PhaseShifterList loadPhaseShifters(PAModel m);
+	protected abstract TransformerList loadTransformers(PAModel m);
 
 }

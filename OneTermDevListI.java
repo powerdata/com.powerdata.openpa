@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public abstract class OneTermDevListI<T extends OneTermDev> extends AbstractPAList<T> implements OneTermDevList<T> 
+public class OneTermDevListI<T extends OneTermDev> extends AbstractPAList<T> implements OneTermDevList<T> 
 {
 	int[][] _bus=IInt();
 	float[][] _p=IFlt(), _q=IFlt();
@@ -120,14 +120,11 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends AbstractPALi
 	{
 		setBool(_insvc, state);
 	}
-	
-//	protected int[] getBusKeys(int[] offsets)
-//	{
-//		int n = offsets.length;
-//		int[] rv = new int[n];
-//		for(int i=0; i < n; ++i)
-//			rv[i] = getBus(offsets[i]).getKey();
-//		return rv;
-//	}
-//
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(int index)
+	{
+		return (T) new OneTermDev(this, index);
+	}
 }

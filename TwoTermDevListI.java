@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPAList<T> implements TwoTermDevList<T> 
+public class TwoTermDevListI<T extends TwoTermDev> extends AbstractPAList<T> implements TwoTermDevList<T> 
 {
 	int[][] _fbus=IInt(), _tbus=IInt();
 	boolean[][] _insvc=IBool();
@@ -92,6 +92,13 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPALi
 	public void setInSvc(boolean[] state)
 	{
 		setBool(_insvc, state);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(int index)
+	{
+		return (T) new TwoTermDev(this, index);
 	}
 
 }

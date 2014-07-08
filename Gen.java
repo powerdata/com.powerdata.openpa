@@ -45,50 +45,67 @@ public class Gen extends OneTermDev
 		_list.setMode(_ndx, m);
 	}
 	
-	public float getOpMinMW() throws PAModelException // {return _list.getPB(_ndx);}
+	public float getOpMinP()
 	{
-		return 0;
+		return _list.getOpMinP(_ndx);
 	}
-	public void setPB(float mw) throws PAModelException
+	public void setOpMinP(float mw)
 	{
-	}
-	public void setPS(float mw) throws PAModelException //{_list.setPS(_ndx, mw);}
-	{
-	}
-	public float getPS() throws PAModelException 
-	{
-		return 0;
+		_list.setOpMinP(_ndx, mw);
 	}
 	/** max active power in MW */
-	public float getPT() throws PAModelException // {return _list.getPT(_ndx);}
+	public float getOpMaxP()
 	{
-		return 0;
+		return _list.getOpMaxP(_ndx);
 	}
 	/** max active power in MW */
-	public void setPT(float mw) throws PAModelException // {_list.setPT(_ndx, mw);}
+	public void setOpMaxP(float mw)
 	{
-		
+		_list.setOpMaxP(_ndx, mw);
 	}
-	/** Maximum generator reactive power output (MVAr) */
-	public float getQT() throws PAModelException // {return _list.getQT(_ndx);}
+	
+	/** Minimum generator reactive power output (MVAr) */
+	public float getMinQ()
 	{
-		return 0;
-	}
-	/** Maximum generator reactive power output (MVAr) */
-	public void setQT(float mvar) throws PAModelException // {_list.setQT(_ndx, mvar);}
-	{
-		
+		return _list.getMinQ(_ndx);
 	}
 	/** Minimum generator reactive power output (MVAr) */
-	public float getQB() throws PAModelException // {return _list.getQB(_ndx);}
+	public void setMinQ(float mvar)
 	{
-		return 0;
+		_list.setMinQ(_ndx, mvar);
 	}
-	/** Minimum generator reactive power output (MVAr) */
-	public void setQB(float mvar) throws PAModelException // {_list.setQB(_ndx, mvar);}
+	/** Maximum generator reactive power output (MVAr) */
+	public float getMaxQ()
 	{
-		
+		return _list.getMaxQ(_ndx);
+	}
+	/** Maximum generator reactive power output (MVAr) */
+	public void setMaxQ(float mvar)
+	{
+		_list.setMaxQ(_ndx, mvar);
 	}
 
+	/** get the active power setpoint in MW */
+	public float getPS() 
+	{
+		return _list.getPS(_ndx);
+	}
 
+	/** get the active power setpoint in MW */
+	public void setPS(float mw)
+	{
+		_list.setPS(_ndx, mw);
+	}
+	
+	/** get the reactive power setpoint when not regulating voltage (MVAr)*/
+	public float getQS()
+	{
+		return _list.getQS(_ndx);
+	}
+	
+	/** get the reactive power setpoint when not regulating voltage (MVAr)*/
+	public void setQS(float mvar)
+	{
+		_list.setQS(_ndx, mvar);
+	}
 }

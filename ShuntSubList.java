@@ -10,28 +10,28 @@ public abstract class ShuntSubList<T extends Shunt> extends OneTermDevSubList<T>
 	}
 
 	@Override
-	public float getB(int ndx)
+	public float getBS(int ndx)
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void setB(int ndx, float b)
+	public void setBS(int ndx, float b)
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public float[] getB()
+	public float[] getBS()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setB(float[] b)
+	public void setBS(float[] b)
 	{
 		// TODO Auto-generated method stub
 		
