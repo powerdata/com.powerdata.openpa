@@ -108,4 +108,39 @@ public class Gen extends OneTermDev
 	{
 		_list.setQS(_ndx, mvar);
 	}
+	
+	/** is unit regulating voltage */
+	public boolean isRegKV()
+	{
+		return _list.isRegKV(_ndx);
+	}
+	
+	/** is unit regulating voltage */
+	public void setRegKV(boolean reg)
+	{
+		_list.setRegKV(_ndx, reg);
+	}
+	
+	/** voltage setpoint in KV, used if regulating voltage */
+	public float getVS()
+	{
+		return _list.getVS(_ndx);
+	}
+	
+	/** voltage setpoint in KV, used if regulating voltage */
+	public void setVS(float kv)
+	{
+		_list.setVS(_ndx, kv);
+	}
+	
+	/** Bus where voltage is regulated */
+	public Bus getRegBus()
+	{
+		return _list.getRegBus(_ndx);
+	}
+	
+	public void setRegBus(Bus b)
+	{
+		_list.setRegBus(_ndx, b);
+	}
 }

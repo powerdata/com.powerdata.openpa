@@ -52,7 +52,7 @@ public abstract class ModelBuilder
 	protected abstract ShuntCapList loadShuntCapacitors(PAModel m);
 	protected abstract ShuntReacList loadShuntReactors(PAModel m);
 	protected abstract LoadList loadLoads(PAModel m);
-	protected abstract GenList loadGens(PAModel m);
+	protected abstract GenList loadGens(PAModel m) throws PAModelException;
 	protected abstract SeriesCapList loadSeriesCapacitors(PAModel m);
 	protected abstract SeriesReacList loadSeriesReactors(PAModel m);
 	protected abstract PhaseShifterList loadPhaseShifters(PAModel m);
