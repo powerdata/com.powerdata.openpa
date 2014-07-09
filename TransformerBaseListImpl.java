@@ -1,8 +1,10 @@
 package com.powerdata.openpa;
 
-public abstract class TransformerBaseListImpl<T extends TransformerBase>
+public class TransformerBaseListImpl<T extends TransformerBase>
 		extends ACBranchListImpl<T> implements TransformerBaseList<T>
 {
+	float[][] _b = IFlt(), _g = IFlt(), _deg=IFlt();
+	
 	protected TransformerBaseListImpl()
 	{
 		super();
@@ -19,114 +21,74 @@ public abstract class TransformerBaseListImpl<T extends TransformerBase>
 	}
 
 	@Override
-	public float getFromTap(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setFromTap(int ndx, float a)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public float[] getFromTap()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setFromTap(float[] a)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public float getToTap(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setToTap(int ndx, float a)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public float[] getToTap()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setToTap(float[] a)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public float getGmag(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_g, ndx);
 	}
 
 	@Override
 	public void setGmag(int ndx, float g)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_g, ndx, g);
 	}
 
 	@Override
 	public float[] getGmag()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_g);
 	}
 
 	@Override
 	public void setGmag(float[] g)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_g, g);
 	}
 
 	@Override
 	public float getBmag(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_b, ndx);
 	}
 
 	@Override
 	public void setBmag(int ndx, float b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_b, ndx, b);
 	}
 
 	@Override
 	public float[] getBmag()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_b);
 	}
 
 	@Override
 	public void setBmag(float[] b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_b, b);
+	}
+
+	@Override
+	public float getShift(int ndx)
+	{
+		return getFloat(_deg, ndx);
+	}
+
+	@Override
+	public void setShift(int ndx, float sdeg)
+	{
+		setFloat(_deg, ndx, sdeg);
+	}
+
+	@Override
+	public float[] getShift()
+	{
+		return getFloat(_deg);
+	}
+
+	@Override
+	public void setShift(float[] sdeg)
+	{
+		setFloat(_deg, sdeg);
 	}
 }

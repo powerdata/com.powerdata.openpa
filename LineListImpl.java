@@ -4,13 +4,15 @@ public class LineListImpl extends ACBranchListImpl<Line> implements LineList
 {
 	public static final LineList	Empty	= new LineListImpl();
 	
+	float[][] _fb = IFlt(), _tb = IFlt();	
+
 	public LineListImpl(){super();}
 	
 	public LineListImpl(PAModel model, int[] keys)
 	{
 		super(model, keys);
 	}
-	protected LineListImpl(PAModel model, int size)
+	public LineListImpl(PAModel model, int size)
 	{
 		super(model, size);
 	}
@@ -18,57 +20,50 @@ public class LineListImpl extends ACBranchListImpl<Line> implements LineList
 	@Override
 	public float getFromBchg(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_fb, ndx);
 	}
 
 	@Override
 	public void setFromBchg(int ndx, float b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_fb, ndx, b);
 	}
 
 	@Override
 	public float[] getFromBchg()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_fb);
 	}
 
 	@Override
 	public void setFromBchg(float[] b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_fb, b);
 	}
 
 	@Override
 	public float getToBchg(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_tb, ndx);
 	}
 
 	@Override
 	public void setToBchg(int ndx, float b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_tb, ndx, b);
 	}
+	
 
 	@Override
 	public float[] getToBchg()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_tb);
 	}
 
 	@Override
 	public void setToBchg(float[] b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_tb, b);
 	}
 
 	@Override

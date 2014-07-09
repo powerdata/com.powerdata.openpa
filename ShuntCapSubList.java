@@ -3,10 +3,9 @@ package com.powerdata.openpa;
 public class ShuntCapSubList extends ShuntSubList<ShuntCapacitor> implements ShuntCapList
 {
 
-	public ShuntCapSubList(ShuntList<ShuntCapacitor> src, int[] ndx)
+	public ShuntCapSubList(ShuntCapList src, int[] ndx)
 	{
 		super(src, ndx);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

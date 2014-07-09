@@ -55,7 +55,7 @@ public abstract class ModelBuilder
 	protected abstract GenList loadGens(PAModel m) throws PAModelException;
 	protected abstract SeriesCapList loadSeriesCapacitors(PAModel m) throws PAModelException;
 	protected abstract SeriesReacList loadSeriesReactors(PAModel m) throws PAModelException;
-	protected abstract PhaseShifterList loadPhaseShifters(PAModel m);
+	protected abstract PhaseShifterList loadPhaseShifters(PAModel m) throws PAModelException;
 	protected abstract TransformerList loadTransformers(PAModel m);
 
 }
