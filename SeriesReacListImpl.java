@@ -7,11 +7,11 @@ public class SeriesReacListImpl extends ACBranchListImpl<SeriesReac> implements 
 
 	protected SeriesReacListImpl() {super();}
 	
-	protected SeriesReacListImpl(PAModel model, int[] keys)
+	public SeriesReacListImpl(PAModel model, int[] keys)
 	{
 		super(model, keys);
 	}
-	protected SeriesReacListImpl(PAModel model, int size)
+	public SeriesReacListImpl(PAModel model, int size)
 	{
 		super(model, size);
 	}

@@ -4,6 +4,8 @@ public abstract class ACBranchListImpl<T extends ACBranch> extends TwoTermDevLis
 {
 	protected ACBranchListImpl(){super();}
 	
+	float[][] _r=IFlt(), _x=IFlt();
+	
 	protected ACBranchListImpl(PAModel model, int[] keys)
 	{
 		super(model, keys);
@@ -16,57 +18,49 @@ public abstract class ACBranchListImpl<T extends ACBranch> extends TwoTermDevLis
 	@Override
 	public float getR(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_r, ndx);
 	}
 
 	@Override
 	public void setR(int ndx, float r)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_r, ndx, r);
 	}
 
 	@Override
 	public float[] getR()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_r);
 	}
 
 	@Override
 	public void setR(float[] r)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_r, r);
 	}
 
 	@Override
 	public float getX(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_x, ndx);
 	}
 
 	@Override
 	public void setX(int ndx, float x)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_x, ndx, x);
 	}
 
 	@Override
 	public float[] getX()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_x);
 	}
 
 	@Override
 	public void setX(float[] x)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_x, x);
 	}
 
 }

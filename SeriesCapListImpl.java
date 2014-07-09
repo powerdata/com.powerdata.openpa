@@ -3,8 +3,6 @@ package com.powerdata.openpa;
 public class SeriesCapListImpl extends ACBranchListImpl<SeriesCap> implements SeriesCapList
 {
 
-	public static final SeriesCapList	Empty	= new SeriesCapListImpl();
-
 	public SeriesCapListImpl(PAModel model, int[] keys)
 	{
 		super(model, keys);

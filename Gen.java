@@ -49,10 +49,12 @@ public class Gen extends OneTermDev
 	{
 		return _list.getOpMinP(_ndx);
 	}
+	
 	public void setOpMinP(float mw)
 	{
 		_list.setOpMinP(_ndx, mw);
 	}
+	
 	/** max active power in MW */
 	public float getOpMaxP()
 	{

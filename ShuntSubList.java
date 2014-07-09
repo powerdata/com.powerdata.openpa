@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 public abstract class ShuntSubList<T extends Shunt> extends OneTermDevSubList<T> implements ShuntList<T>
 {
 
-	public ShuntSubList(OneTermDevList<T> src, int[] ndx)
+	public ShuntSubList(ShuntList<T> src, int[] ndx)
 	{
 		super(src, ndx);
 		// TODO Auto-generated constructor stub
