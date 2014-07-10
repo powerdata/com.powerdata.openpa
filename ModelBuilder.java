@@ -47,11 +47,11 @@ public abstract class ModelBuilder
 	protected abstract VoltageLevelList loadVoltageLevels(PAModel m) throws PAModelException;
 	protected abstract IslandList loadIslands(PAModel m) throws PAModelException;
 	protected abstract SVCList loadSVCs(PAModel m) throws PAModelException;
-	protected abstract SwitchedShuntList loadSwitchedShunts(PAModel m);
-	protected abstract TwoTermDCLineList loadTwoTermDCLines(PAModel m);
-	protected abstract ShuntCapList loadShuntCapacitors(PAModel m);
-	protected abstract ShuntReacList loadShuntReactors(PAModel m);
-	protected abstract LoadList loadLoads(PAModel m);
+	protected abstract SwitchedShuntList loadSwitchedShunts(PAModel m) throws PAModelException;
+	protected abstract TwoTermDCLineList loadTwoTermDCLines(PAModel m) throws PAModelException;
+	protected abstract ShuntCapList loadShuntCapacitors(PAModel m) throws PAModelException;
+	protected abstract ShuntReacList loadShuntReactors(PAModel m) throws PAModelException;
+	protected abstract LoadList loadLoads(PAModel m) throws PAModelException;
 	protected abstract GenList loadGens(PAModel m) throws PAModelException;
 	protected abstract SeriesCapList loadSeriesCapacitors(PAModel m) throws PAModelException;
 	protected abstract SeriesReacList loadSeriesReactors(PAModel m) throws PAModelException;
