@@ -2,39 +2,37 @@ package com.powerdata.openpa;
 
 public abstract class ShuntSubList<T extends Shunt> extends OneTermDevSubList<T> implements ShuntList<T>
 {
-
+	ShuntList<T> _src;
+	
 	public ShuntSubList(ShuntList<T> src, int[] ndx)
 	{
 		super(src, ndx);
-		// TODO Auto-generated constructor stub
+		_src = src;
 	}
 
 	@Override
-	public float getBS(int ndx)
+	public float getB(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return _src.getB(_ndx[ndx]);
 	}
 
 	@Override
-	public void setBS(int ndx, float b)
+	public void setB(int ndx, float b)
 	{
-		// TODO Auto-generated method stub
-		
+		_src.setB(_ndx[ndx], b);
 	}
 
 	@Override
-	public float[] getBS()
+	public float[] getB()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return mapFloat(_src.getB());
 	}
 
 	@Override
-	public void setBS(float[] b)
+	public void setB(float[] b)
 	{
-		// TODO Auto-generated method stub
-		
+		for(int i=0; i < _size; ++i)
+			_src.setB(_ndx[i], b[i]);
 	}
 
 }

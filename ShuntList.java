@@ -3,12 +3,12 @@ package com.powerdata.openpa;
 public interface ShuntList<T extends Shunt> extends OneTermDevList<T>
 {
 
-	float getBS(int ndx);
+	float getB(int ndx);
 
-	void setBS(int ndx, float b);
+	void setB(int ndx, float b);
 	
-	float[] getBS();
+	float[] getB();
 	
-	void setBS(float[] b);
+	void setB(float[] b);
 
 }

@@ -3,6 +3,8 @@ package com.powerdata.openpa;
 public abstract class ShuntListImpl<T extends Shunt> 
 	extends OneTermDevListI<T> implements ShuntList<T>
 {
+	float[][] _b = IFlt();
+	
 	public ShuntListImpl(PAModel model, int[] keys)
 	{
 		super(model, keys);
@@ -15,27 +17,23 @@ public abstract class ShuntListImpl<T extends Shunt>
 	public ShuntListImpl() {super();}
 	
 	@Override
-	public float getBS(int ndx)
+	public float getB(int ndx)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return getFloat(_b, ndx);
 	}
 	@Override
-	public void setBS(int ndx, float b)
+	public void setB(int ndx, float b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_b, ndx, b);
 	}
 	@Override
-	public float[] getBS()
+	public float[] getB()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getFloat(_b);
 	}
 	@Override
-	public void setBS(float[] b)
+	public void setB(float[] b)
 	{
-		// TODO Auto-generated method stub
-		
+		setFloat(_b, b);
 	}
 }
