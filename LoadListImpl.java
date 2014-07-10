@@ -2,9 +2,9 @@ package com.powerdata.openpa;
 
 public class LoadListImpl extends OneTermDevListI<Load> implements LoadList 
 {
-	public static final LoadList Empty = new LoadListImpl();
-	
 	public LoadListImpl() {super();}
+	
+	float[][] _pmx=IFlt(), _qmx=IFlt();
 
 	public LoadListImpl(PAModel model, int size)
 	{
@@ -17,37 +17,57 @@ public class LoadListImpl extends OneTermDevListI<Load> implements LoadList
 	}
 
 	@Override
-	public float getPL(int ndx)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setPL(int ndx, float pl)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public float[] getPL()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPL(float[] pl)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Load get(int index)
 	{
 		return new Load(this, index);
+	}
+
+	@Override
+	public float getMaxP(int ndx)
+	{
+		return getFloat(_pmx, ndx);
+	}
+
+	@Override
+	public void setMaxP(int ndx, float mw)
+	{
+		setFloat(_pmx, ndx, mw);
+	}
+
+	@Override
+	public float[] getMaxP()
+	{
+		return getFloat(_pmx);
+	}
+
+	@Override
+	public void setMaxP(float[] mw)
+	{
+		setFloat(_pmx, mw);
+	}
+
+	@Override
+	public float getMaxQ(int ndx)
+	{
+		return getFloat(_qmx, ndx);
+	}
+
+	@Override
+	public void setMaxQ(int ndx, float mvar)
+	{
+		setFloat(_qmx, ndx, mvar);
+	}
+
+	@Override
+	public float[] getMaxQ()
+	{
+		return getFloat(_qmx);
+	}
+
+	@Override
+	public void setMaxQ(float[] mvar)
+	{
+		setFloat(_qmx, mvar);
 	}
 
 }

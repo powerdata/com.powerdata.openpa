@@ -1,7 +1,5 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.psse.PsseModelException;
-
 public class Load extends OneTermDev 
 {
 	LoadList _list;
@@ -11,31 +9,52 @@ public class Load extends OneTermDev
 		super(list, ndx);
 		_list = list;
 	}
-
-	/** get active component of constant MVA load in MW */
-	public float getPL()
+	
+	/** Get Load MW */
+	public float getP()
 	{
-		return _list.getPL(_ndx);
-	}
-	public void setPL(float pl)
-	{
-		_list.setPL(_ndx, pl);
+		return _list.getP(_ndx);
 	}
 	
-	/** get the cold load MW */
-	public float getPcold()  throws PAModelException // {return _list.getPcold(_ndx);}
+	/** Set Load MW */
+	public void setP(float mw)
 	{
-		return 0;
+		_list.setP(_ndx, mw);
 	}
-	/** get the load MW "setpoint" */
-	public float getPS() throws PsseModelException // {return _list.getPS(_ndx);}
+	
+	/** Get Load MVAr */
+	public float getQ()
 	{
-		return 0;
+		return _list.getQ(_ndx);
 	}
-	/** set the load MW setpoint */
-	public void setPS(float mw) throws PsseModelException// {_list.setPS(_ndx, mw);}
+	
+	/** Get Load MVAr */
+	public void setQ(float mvar)
 	{
-		
+		_list.setQ(_ndx, mvar);
+	}
+	
+	/** Get Max Load MW */
+	public float getMaxP()
+	{
+		return _list.getMaxP(_ndx);
+	}
+	
+	/** Set Max Load MW */
+	public void setMaxP(float mw)
+	{
+		_list.setMaxP(_ndx, mw);
 	}
 
+	/** Get Max Load MVAr */
+	public float getMaxQ()
+	{
+		return _list.getMaxQ(_ndx);
+	}
+
+	/** Set Max Load MVAr */
+	public void setMaxQ(float mvar)
+	{
+		_list.setMaxQ(_ndx, mvar);
+	}
 }

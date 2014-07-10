@@ -5,12 +5,20 @@ public interface LoadList extends OneTermDevList<Load>
 
 	static final LoadList Empty = new LoadListImpl();
 
-	float getPL(int ndx);
+	float getMaxP(int ndx);
+
+	void setMaxP(int ndx, float mw);
+
+	float[] getMaxP();
 	
-	void setPL(int ndx, float pl);
+	void setMaxP(float[] mw);
 	
-	float[] getPL();
+	float getMaxQ(int ndx);
+
+	void setMaxQ(int ndx, float mvar);
 	
-	void setPL(float[] pl);
+	float[] getMaxQ();
 	
+	void setMaxQ(float[] mvar);
+
 }
