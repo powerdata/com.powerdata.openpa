@@ -4,7 +4,9 @@ public class TransformerBaseListImpl<T extends TransformerBase>
 		extends ACBranchListImpl<T> implements TransformerBaseList<T>
 {
 	float[][] _b = IFlt(), _g = IFlt(), _deg=IFlt();
+	float[][] _ft = IFlt(), _tt = IFlt();
 	
+
 	protected TransformerBaseListImpl()
 	{
 		super();
@@ -91,4 +93,52 @@ public class TransformerBaseListImpl<T extends TransformerBase>
 	{
 		setFloat(_deg, sdeg);
 	}
+	@Override
+	public float getFromTap(int ndx)
+	{
+		return getFloat(_ft, ndx);
+	}
+
+	@Override
+	public void setFromTap(int ndx, float a)
+	{
+		setFloat(_ft, ndx, a);
+	}
+
+	@Override
+	public float[] getFromTap()
+	{
+		return getFloat(_ft);
+	}
+
+	@Override
+	public void setFromTap(float[] a)
+	{
+		setFloat(_ft, a);
+	}
+
+	@Override
+	public float getToTap(int ndx)
+	{
+		return getFloat(_tt, ndx);
+	}
+
+	@Override
+	public void setToTap(int ndx, float a)
+	{
+		setFloat(_tt, ndx, a);
+	}
+
+	@Override
+	public float[] getToTap()
+	{
+		return getFloat(_tt);
+	}
+
+	@Override
+	public void setToTap(float[] a)
+	{
+		setFloat(_tt, a);
+	}
+
 }
