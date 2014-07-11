@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public abstract class ShuntListImpl<T extends Shunt> 
+public class ShuntListImpl<T extends Shunt> 
 	extends OneTermDevListI<T> implements ShuntList<T>
 {
 	float[][] _b = IFlt();
@@ -36,4 +36,5 @@ public abstract class ShuntListImpl<T extends Shunt>
 	{
 		setFloat(_b, b);
 	}
+	
 }
