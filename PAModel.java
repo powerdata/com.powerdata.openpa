@@ -1,5 +1,8 @@
 package com.powerdata.openpa;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Open PA model.  Provides access to power network and equipment 
  * 
@@ -8,32 +11,59 @@ package com.powerdata.openpa;
  */
 public class PAModel implements PALists
 {
-	protected BusList _buses;
-	protected SwitchList _switches;
-	protected LineList _lines;
-	protected IslandList _islands;
-	protected AreaList _areas;
-	protected OwnerList _owners;
-	protected StationList _stations;
-	protected VoltageLevelList _vlevs;
-	protected TransformerList _transformers;
-	protected PhaseShifterList _phshifts;
-	protected SeriesReacList _serreacs;
-	protected SeriesCapList _sercaps;
-	protected GenList _gens;
-	protected LoadList _loads;
-	protected ShuntReacList _shuntreacs;
-	protected ShuntCapList _shuntcaps;
-	protected TwoTermDCLineList _t2dclines;
-	protected SwitchedShuntList _swshunts;
-	protected SVCList _svcs;
+	public enum ListMetaType
+	{
+		Area, Owner, Station, VoltageLevel, Island, Bus, Switch, Line, 
+		SeriesCap, SeriesReac, Transformer, PhaseShifter, TwoTermDCLine, 
+		Gen, Load, ShuntReac, ShuntCap, SVC, SwitchedShunt
+	}
+	
+	BusList 			_buses;
+	SwitchList 			_switches;
+	LineList 			_lines;
+	IslandList 			_islands;
+	AreaList 			_areas;
+	OwnerList 			_owners;
+	StationList 		_stations;
+	VoltageLevelList 	_vlevs;
+	TransformerList 	_transformers;
+	PhaseShifterList 	_phshifts;
+	SeriesReacList 		_serreacs;
+	SeriesCapList 		_sercaps;
+	GenList 			_gens;
+	LoadList 			_loads;
+	ShuntReacList 		_shuntreacs;
+	ShuntCapList 		_shuntcaps;
+	TwoTermDCLineList 	_t2dclines;
+	SwitchedShuntList 	_swshunts;
+	SVCList 			_svcs;
+	 
 	
 	protected PAModel(){}
 	
-	/** call for an event */
-	public void processChanges(ModelEventListener l)
+	static public class PACol
 	{
 		
+	}
+	
+	static public class ListChg
+	{
+		ListMetaType _type;
+		
+	}
+	
+//	Set<ListChg<? extends BaseObject>> _chg;
+	
+	/** call for an event */
+	public Set<ListChg> getChanges()
+	{
+		//TODO:
+		return new HashSet<>(0);
+	}
+	
+	public void clearChanges()
+	{
+		//TODO: implement this
 	}
 
 	public IslandList getIslands()
