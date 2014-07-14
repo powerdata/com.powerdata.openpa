@@ -233,40 +233,8 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return rv;
 	}
 
-	
-	
-//	/** Name access for "sublist" subclasses to use */
-//	protected String[] getSubListNames(int[] slndx)
-//	{
-//		int n = size();
-//		String[] rv = new String[n];
-//		for(int i=0; i < n; ++i)
-//			rv[i] = getName(slndx[i]);
-//		return rv;
-//	}
-//	/** Name access for "sublist" subclasses to use */
-//	protected void setSubListNames(String[] names, int[] slndx)
-//	{
-//		int n = size();
-//		for(int i=0; i < n; ++i)
-//			setName(slndx[i], names[i]);
-//	}
-//	
-//	/** ID access for "sublist" subclasses to use */
-//	protected String[] getSubListIDs(int[] slndx)
-//	{
-//		int n = size();
-//		String[] rv = new String[n];
-//		for(int i=0; i < n; ++i)
-//			rv[i] = getID(slndx[i]);
-//		return rv;
-//	}
-//	/** ID access for "sublist" subclasses to use */
-//	protected void setSubListIDs(String[] ids, int[] slndx)
-//	{
-//		int n = size();
-//		for(int i=0; i < n; ++i)
-//			setID(slndx[i], ids[i]);
-//	}
-	
+	protected void clearChanges()
+	{
+		_name[RO] = null;
+	}
 }

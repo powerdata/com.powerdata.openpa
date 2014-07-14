@@ -90,4 +90,5 @@ public interface BaseList<T extends BaseObject> extends List<T>
 	}
 	
 	int[] getIndexesFromKeys(int[] keys);
+
 }

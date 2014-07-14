@@ -5,7 +5,13 @@ import com.powerdata.openpa.Gen.Type;
 
 public interface GenList extends OneTermDevList<Gen>
 {
-
+	enum Fld
+	{
+		NAME, BUS, P, Q, INSVC,
+		TYPE, MODE, OPMINP, OPMAXP, MINQ, MAXQ, PS, QS, AVR, VS, REGBUS;
+		
+	}
+	
 	static final GenList Empty = new GenListI();
 
 	Type getType(int ndx);

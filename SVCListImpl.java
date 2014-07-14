@@ -19,7 +19,7 @@ public class SVCListImpl extends ShuntListImpl<SVC> implements SVCList
 		_buses = model.getBuses();
 	}
 
-	protected SVCListImpl() {super();}
+	public SVCListImpl() {super();}
 
 	@Override
 	public SVC get(int index)

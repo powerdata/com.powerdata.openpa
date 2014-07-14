@@ -26,7 +26,8 @@ public class GenListI extends OneTermDevListI<Gen> implements GenList
 		super(model, size);
 		_buses = model.getBuses();
 	}
-
+	
+	
 	@Override
 	public Type getType(int ndx)
 	{

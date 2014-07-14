@@ -17,7 +17,7 @@ public class SwitchedShuntListImpl extends ShuntListImpl<SwitchedShunt> implemen
 		// TODO Auto-generated constructor stub
 	}
 
-	protected SwitchedShuntListImpl() {super();}
+	public SwitchedShuntListImpl() {super();}
 
 	@Override
 	public SwitchedShunt get(int index)
