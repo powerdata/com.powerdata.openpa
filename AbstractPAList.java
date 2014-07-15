@@ -1,8 +1,6 @@
 package com.powerdata.openpa;
 
 import java.lang.reflect.Array;
-import java.util.Set;
-import com.powerdata.openpa.PAModel.ColAccess;
 import com.powerdata.openpa.PAModel.HasMetaList;
 import com.powerdata.openpa.PAModel.ListMetaType;
 
@@ -20,8 +18,6 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		Enum<? extends HasMetaList> getID();
 		Enum<? extends HasMetaList> getName();
 	}
-	
-	protected abstract PAListMeta getMeta();
 	
 	/** read only */
 	protected static final int RO = 0;
@@ -44,7 +40,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected final <U> void setObj(U[][] v, int ndx, U s, Enum<? extends HasMetaList> c)
+	protected final <U> void setObj(U[][] v, int ndx, U s)
 	{
 		U[] rw = v[RW];
 		if (rw == null)
@@ -56,18 +52,16 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		rw[ndx] = s;
 	}
 	
-	protected final <U> U[] getObj(U[][] v, Enum<? extends HasMetaList> c)
+	protected final <U> U[] getObj(U[][] v)
 	{
 		U[] rw = v[RW];
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		return rw;
 	}
@@ -79,7 +73,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		v[RW] = s.clone();
 	}
 	
-	protected final void setFloat(float[][] v, int ndx, float s, Enum<? extends HasMetaList> c)
+	protected final void setFloat(float[][] v, int ndx, float s)
 	{
 		float[] rw = v[RW];
 		if (rw == null)
@@ -90,18 +84,16 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		rw[ndx] = s;
 	}
 	
-	protected final float[] getFloat(float[][] v, Enum<? extends HasMetaList> c)
+	protected final float[] getFloat(float[][] v)
 	{
 		float[] rw = v[RW];
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		return rw;
 	}
@@ -118,7 +110,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		v[RW] = s.clone();
 	}
 
-	protected final void setInt(int[][] v, int ndx, int s, Enum<? extends HasMetaList> c)
+	protected final void setInt(int[][] v, int ndx, int s)
 	{
 		int[] rw = v[RW];
 		if (rw == null)
@@ -129,18 +121,16 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		rw[ndx] = s;
 	}
 	
-	protected final int[] getInt(int[][] v, Enum<? extends HasMetaList> c)
+	protected final int[] getInt(int[][] v)
 	{
 		int[] rw = v[RW];
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		return rw;
 	}
@@ -157,7 +147,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		v[RW] = s.clone();
 	}
 
-	protected final void setBool(boolean[][] v, int ndx, boolean s, Enum<? extends HasMetaList> c)
+	protected final void setBool(boolean[][] v, int ndx, boolean s)
 	{
 		boolean[] rw = v[RW];
 		if (rw == null)
@@ -168,18 +158,16 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		rw[ndx] = s;
 	}
 	
-	protected final boolean[] getBool(boolean[][] v, Enum<? extends HasMetaList> c)
+	protected final boolean[] getBool(boolean[][] v)
 	{
 		boolean[] rw = v[RW];
 		if (v[RO] == null)
 		{
 			v[RO] = rw.clone();
-			_model.setChange(c);
 		}
 		return rw;
 	}
@@ -230,14 +218,14 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	@Override
 	public void setID(int ndx, String id)
 	{
-		setObj(_id, ndx, id, getMeta().getID());
+		setObj(_id, ndx, id);
 	}
 
 	/** return array of string object ID's */
 	@Override
 	public String[] getID()
 	{
-		return getObj(_id, getMeta().getID());
+		return getObj(_id);
 	}
 	
 	/** set unique object ID */
@@ -257,13 +245,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	@Override
 	public void setName(int ndx, String name)
 	{
-		setObj(_name, ndx, name, getMeta().getName());
+		setObj(_name, ndx, name);
 	}
 	/** name of object */
 	@Override
 	public String[] getName()
 	{
-		return getObj(_name, getMeta().getName());
+		return getObj(_name);
 	}
 	/** set name of object */
 	@Override
@@ -281,11 +269,6 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return rv;
 	}
 
-	protected void collectChanges(Set<ColAccess> rv)
-	{
-		
-		
-	}
 	
 	protected void clearChanges()
 	{
