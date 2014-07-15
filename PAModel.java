@@ -569,11 +569,6 @@ public class PAModel implements PALists
 		PAModel m = PflowModelBuilder.Create(uri).load();
 //		Map<ListMetaType, List<ColChange>> x = m.getChanges().stream().collect(Collectors.groupingBy(ColChange::getListMeta));
 
-		m.getChanges()
-				.stream()
-				.collect(Collectors.groupingBy(ColChange::getListMeta))
-				.forEach((t,l) -> {System.out.println(t);l.forEach(c -> {System.out.format("\t%s\n",c.getColMeta().toString());c.getNdxStream().map(v -> )});});
-		
 		
 	}
 }
