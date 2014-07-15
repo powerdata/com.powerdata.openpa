@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class SVCListImpl extends ShuntListImpl<SVC> implements SVCList
 {
 	BusList _buses;
@@ -125,6 +127,11 @@ public class SVCListImpl extends ShuntListImpl<SVC> implements SVCList
 	public void setRegBus(Bus[] b)
 	{
 		setInt(_rbus, BaseList.ObjectNdx(b));
+	}
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.SVC;
 	}
 
 }

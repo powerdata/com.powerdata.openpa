@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class SwitchedShuntListImpl extends ShuntListImpl<SwitchedShunt> implements SwitchedShuntList
 {
 
@@ -23,6 +25,12 @@ public class SwitchedShuntListImpl extends ShuntListImpl<SwitchedShunt> implemen
 	public SwitchedShunt get(int index)
 	{
 		return new SwitchedShunt(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.SwitchedShunt;
 	}
 	
 	

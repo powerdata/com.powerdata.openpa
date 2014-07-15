@@ -1,6 +1,7 @@
 package com.powerdata.openpa;
 
-public class OneTermDevListI<T extends OneTermDev> extends AbstractPAList<T> implements OneTermDevList<T> 
+public abstract class OneTermDevListI<T extends OneTermDev> extends
+		AbstractPAList<T> implements OneTermDevList<T>
 {
 	int[][] _bus=IInt();
 	float[][] _p=IFlt(), _q=IFlt();

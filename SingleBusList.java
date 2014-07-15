@@ -1,7 +1,7 @@
 package com.powerdata.openpa;
 
 import java.util.regex.Pattern;
-
+import com.powerdata.openpa.PAModel.ListMetaType;
 import com.powerdata.openpa.Switch.State;
 
 /**
@@ -324,7 +324,11 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	{
 		return new Bus(this, index);
 	}
-	
-	
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.AnonymousGroup;
+	}
 	
 }

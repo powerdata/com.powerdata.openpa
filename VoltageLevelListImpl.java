@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class VoltageLevelListImpl extends GroupListI<VoltageLevel> implements VoltageLevelList
 {
 	public static final VoltageLevelList Empty = new VoltageLevelListImpl();
@@ -53,6 +55,12 @@ public class VoltageLevelListImpl extends GroupListI<VoltageLevel> implements Vo
 	public VoltageLevel get(int index)
 	{
 		return new VoltageLevel(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.VoltageLevel;
 	}
 	
 	

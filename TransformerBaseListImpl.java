@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public class TransformerBaseListImpl<T extends TransformerBase>
+public abstract class TransformerBaseListImpl<T extends TransformerBase>
 		extends ACBranchListImpl<T> implements TransformerBaseList<T>
 {
 	float[][] _b = IFlt(), _g = IFlt(), _deg=IFlt();

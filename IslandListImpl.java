@@ -1,6 +1,7 @@
 package com.powerdata.openpa;
 
 import com.powerdata.openpa.Gen.Mode;
+import com.powerdata.openpa.PAModel.ListMetaType;
 import com.powerdata.openpa.Switch.State;
 
 public class IslandListImpl extends GroupListI<Island> implements IslandList
@@ -163,6 +164,12 @@ public class IslandListImpl extends GroupListI<Island> implements IslandList
 		{
 			System.out.println(i);
 		}
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Island;
 	}
 
 

@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class TransformerListImpl extends TransformerBaseListImpl<Transformer> implements TransformerList
 {
 	public static final TransformerList	Empty	= new TransformerListImpl();
@@ -19,6 +21,12 @@ public class TransformerListImpl extends TransformerBaseListImpl<Transformer> im
 	public Transformer get(int index)
 	{
 		return new Transformer(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Transformer;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class PhaseShifterListImpl extends TransformerBaseListImpl<PhaseShifter> implements PhaseShifterList
 {
 	public static final PhaseShifterList	Empty	= new PhaseShifterListImpl();
@@ -19,5 +21,10 @@ public class PhaseShifterListImpl extends TransformerBaseListImpl<PhaseShifter> 
 	public PhaseShifter get(int index)
 	{
 		return new PhaseShifter(this, index);
+	}
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.PhaseShifter;
 	}
 }

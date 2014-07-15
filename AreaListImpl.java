@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class AreaListImpl extends GroupListI<Area> implements AreaList
 {
@@ -81,4 +82,11 @@ public class AreaListImpl extends GroupListI<Area> implements AreaList
 			pw.format("\t\t%s\n", l);
 	}
 
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Area;
+	}
+
+	
 }

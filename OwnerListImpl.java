@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 
 public class OwnerListImpl extends GroupListI<Owner> implements OwnerList
 {
@@ -28,5 +30,11 @@ public class OwnerListImpl extends GroupListI<Owner> implements OwnerList
 	public Owner get(int index)
 	{
 		return new Owner(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Owner;
 	}
 }

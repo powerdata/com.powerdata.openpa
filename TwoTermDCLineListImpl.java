@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class TwoTermDCLineListImpl extends TwoTermDevListI<TwoTermDCLine> implements TwoTermDCLineList
 {
 
@@ -20,6 +22,11 @@ public class TwoTermDCLineListImpl extends TwoTermDevListI<TwoTermDCLine> implem
 	public TwoTermDCLine get(int index)
 	{
 		return new TwoTermDCLine(this, index);
+	}
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.TwoTermDCLine;
 	}
 
 }

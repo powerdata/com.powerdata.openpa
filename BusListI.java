@@ -3,6 +3,7 @@ package com.powerdata.openpa;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
+import com.powerdata.openpa.PAModel.ListMetaType;
 
 
 public class BusListI extends GroupListI<Bus> implements BusList
@@ -249,6 +250,12 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	public void setVoltageLevel(VoltageLevel[] l)
 	{
 		setInt(_vlevs, BaseList.ObjectNdx(l));
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Bus;
 	}
 	
 }

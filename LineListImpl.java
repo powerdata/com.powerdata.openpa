@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class LineListImpl extends ACBranchListImpl<Line> implements LineList
 {
 	public static final LineList	Empty	= new LineListImpl();
@@ -70,6 +72,12 @@ public class LineListImpl extends ACBranchListImpl<Line> implements LineList
 	public Line get(int index)
 	{
 		return new Line(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Line;
 	}
 
 }

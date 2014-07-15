@@ -1,5 +1,6 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
 import com.powerdata.openpa.Switch.State;
 
 public class SwitchListImpl extends TwoTermDevListI<Switch> implements SwitchList
@@ -96,6 +97,12 @@ public class SwitchListImpl extends TwoTermDevListI<Switch> implements SwitchLis
 	public Switch get(int index)
 	{
 		return new Switch(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Switch;
 	}
 
 }

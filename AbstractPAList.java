@@ -1,6 +1,10 @@
 package com.powerdata.openpa;
 
 import java.lang.reflect.Array;
+import java.util.Set;
+import com.powerdata.openpa.PAModel.ColAccess;
+import com.powerdata.openpa.PAModel.HasMetaList;
+import com.powerdata.openpa.PAModel.ListMetaType;
 
 /**
  * Base of the object list hierarchy
@@ -11,6 +15,14 @@ import java.lang.reflect.Array;
 
 public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseList<T> 
 {
+	interface PAListMeta
+	{
+		Enum<? extends HasMetaList> getID();
+		Enum<? extends HasMetaList> getName();
+	}
+	
+	protected abstract PAListMeta getMeta();
+	
 	/** read only */
 	protected static final int RO = 0;
 	/** read-write */
@@ -24,15 +36,15 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected static final int[][] IInt() {return new int[2][];}
 	protected static final boolean[][] IBool() {return new boolean[2][];}
 	
-	protected final <U> U[] getObj(U[][] v)
+	protected abstract ListMetaType getMetaType();
+	
+	protected final <U> U getObj(U[][] v, int ndx)
 	{
-		U[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
-		return rw;
+		return v[RW][ndx];
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected final <U> void setObj(U[][] v, int ndx, U s)
+	protected final <U> void setObj(U[][] v, int ndx, U s, Enum<? extends HasMetaList> c)
 	{
 		U[] rw = v[RW];
 		if (rw == null)
@@ -40,23 +52,34 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rw = (U[]) Array.newInstance(s.getClass(), _size);
 			v[RW] = rw;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
+		
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		rw[ndx] = s;
 	}
 	
-	protected final <U> U getObj(U[][] v, int ndx)
+	protected final <U> U[] getObj(U[][] v, Enum<? extends HasMetaList> c)
 	{
-		return v[RW][ndx];
+		U[] rw = v[RW];
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
+		return rw;
 	}
 	
 	protected final <U> void setObj(U[][] v, U[] s)
 	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
+//		if (v[RO] == null && v[RW] != null)
+//			v[RO] = v[RW].clone();
 		v[RW] = s.clone();
 	}
 	
-	protected final void setFloat(float[][] v, int ndx, float s)
+	protected final void setFloat(float[][] v, int ndx, float s, Enum<? extends HasMetaList> c)
 	{
 		float[] rw = v[RW];
 		if (rw == null)
@@ -64,14 +87,22 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rw = new float[_size];
 			v[RW] = rw;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		rw[ndx] = s;
 	}
 	
-	protected final float[] getFloat(float[][] v)
+	protected final float[] getFloat(float[][] v, Enum<? extends HasMetaList> c)
 	{
 		float[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		return rw;
 	}
 
@@ -87,7 +118,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		v[RW] = s.clone();
 	}
 
-	protected final void setInt(int[][] v, int ndx, int s)
+	protected final void setInt(int[][] v, int ndx, int s, Enum<? extends HasMetaList> c)
 	{
 		int[] rw = v[RW];
 		if (rw == null)
@@ -95,14 +126,22 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rw = new int[_size];
 			v[RW] = rw;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		rw[ndx] = s;
 	}
 	
-	protected final int[] getInt(int[][] v)
+	protected final int[] getInt(int[][] v, Enum<? extends HasMetaList> c)
 	{
 		int[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		return rw;
 	}
 	
@@ -118,7 +157,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		v[RW] = s.clone();
 	}
 
-	protected final void setBool(boolean[][] v, int ndx, boolean s)
+	protected final void setBool(boolean[][] v, int ndx, boolean s, Enum<? extends HasMetaList> c)
 	{
 		boolean[] rw = v[RW];
 		if (rw == null)
@@ -126,14 +165,22 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rw = new boolean[_size];
 			v[RW] = rw;
 		}
-		if (v[RO] == null) v[RO] = rw.clone();
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		rw[ndx] = s;
 	}
 	
-	protected final boolean[] getBool(boolean[][] v)
+	protected final boolean[] getBool(boolean[][] v, Enum<? extends HasMetaList> c)
 	{
 		boolean[] rw = v[RW];
-		if (v[RO] == null) v[RO] = rw.clone();
+		if (v[RO] == null)
+		{
+			v[RO] = rw.clone();
+			_model.setChange(c);
+		}
 		return rw;
 	}
 	
@@ -183,15 +230,16 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	@Override
 	public void setID(int ndx, String id)
 	{
-		setObj(_id, ndx, id);
+		setObj(_id, ndx, id, getMeta().getID());
 	}
 
 	/** return array of string object ID's */
 	@Override
 	public String[] getID()
 	{
-		return getObj(_id);
+		return getObj(_id, getMeta().getID());
 	}
+	
 	/** set unique object ID */
 	@Override
 	public void setID(String[] id)
@@ -209,13 +257,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	@Override
 	public void setName(int ndx, String name)
 	{
-		setObj(_name, ndx, name);
+		setObj(_name, ndx, name, getMeta().getName());
 	}
 	/** name of object */
 	@Override
 	public String[] getName()
 	{
-		return getObj(_name);
+		return getObj(_name, getMeta().getName());
 	}
 	/** set name of object */
 	@Override
@@ -224,7 +272,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		setObj(_name, name);
 	}
 
-	protected int[] getKeys(int[] offsets)
+	public int[] getKeys(int[] offsets)
 	{
 		int n = offsets.length;
 		int[] rv = new int[n];
@@ -233,8 +281,15 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return rv;
 	}
 
+	protected void collectChanges(Set<ColAccess> rv)
+	{
+		
+		
+	}
+	
 	protected void clearChanges()
 	{
 		_name[RO] = null;
 	}
+	
 }

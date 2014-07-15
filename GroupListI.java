@@ -3,6 +3,7 @@ package com.powerdata.openpa;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
+import com.powerdata.openpa.PAModel.ListMetaType;
 import com.powerdata.openpa.tools.GroupMap;
 
 public class GroupListI<T extends Group> extends AbstractPAList<T> implements GroupList<T>
@@ -243,6 +244,12 @@ public class GroupListI<T extends Group> extends AbstractPAList<T> implements Gr
 	public T getByBus(Bus b)
 	{
 		return get(_bgmap.getGrp(b.getIndex()));
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.AnonymousGroup;
 	}
 
 }

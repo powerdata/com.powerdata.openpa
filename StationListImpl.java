@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class StationListImpl extends GroupListI<Station> implements StationList
 {
 	public static final StationList Empty = new StationListImpl();
@@ -27,5 +29,11 @@ public class StationListImpl extends GroupListI<Station> implements StationList
 	public Station get(int index)
 	{
 		return new Station(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Station;
 	}
 }

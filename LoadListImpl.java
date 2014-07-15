@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class LoadListImpl extends OneTermDevListI<Load> implements LoadList 
 {
 	public LoadListImpl() {super();}
@@ -68,6 +70,12 @@ public class LoadListImpl extends OneTermDevListI<Load> implements LoadList
 	public void setMaxQ(float[] mvar)
 	{
 		setFloat(_qmx, mvar);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Load;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.PAModel.ListMetaType;
+
 public class ShuntReacListI extends ShuntListImpl<ShuntReactor> implements ShuntReacList
 {
 
@@ -19,6 +21,12 @@ public class ShuntReacListI extends ShuntListImpl<ShuntReactor> implements Shunt
 	public ShuntReactor get(int index)
 	{
 		return new ShuntReactor(this, index);
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.ShuntReac;
 	}
 
 }

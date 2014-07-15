@@ -2,8 +2,6 @@ package com.powerdata.openpa;
 
 public interface TwoTermDevList<T extends TwoTermDev> extends BaseList<T>
 {
-	public static final TwoTermDevList<? extends TwoTermDev> Empty = new TwoTermDevListI<>();
-
 	Bus getFromBus(int ndx);
 	
 	void setFromBus(int ndx, Bus b);

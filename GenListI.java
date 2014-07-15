@@ -2,6 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
+import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class GenListI extends OneTermDevListI<Gen> implements GenList
 {
@@ -296,6 +297,12 @@ public class GenListI extends OneTermDevListI<Gen> implements GenList
 	public void setRegBus(Bus[] b)
 	{
 		setInt(_rbus, BaseList.ObjectNdx(b));
+	}
+
+	@Override
+	protected ListMetaType getMetaType()
+	{
+		return ListMetaType.Gen;
 	}
 
 }
