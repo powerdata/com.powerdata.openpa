@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class SeriesCapListImpl extends ACBranchListImpl<SeriesCap> implements SeriesCapList
+public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCapList
 {
 	static final ACBranchEnum _PFld = new ACBranchEnum()
 	{
@@ -30,17 +30,17 @@ public class SeriesCapListImpl extends ACBranchListImpl<SeriesCap> implements Se
 		public ColumnMeta x() {return ColumnMeta.SercapX;}
 	};
 
-	public SeriesCapListImpl(PAModel model, int[] keys)
+	public SeriesCapListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
 
-	public SeriesCapListImpl(PAModel model, int size)
+	public SeriesCapListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}
 
-	public SeriesCapListImpl() {super();}
+	public SeriesCapListI() {super();}
 
 	@Override
 	public SeriesCap get(int index)

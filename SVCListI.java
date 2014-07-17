@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class SVCListImpl extends ShuntListImpl<SVC> implements SVCList
+public class SVCListI extends ShuntListI<SVC> implements SVCList
 {
 	static final ShuntEnum _PFld = new ShuntEnum()
 	{
@@ -31,18 +31,18 @@ public class SVCListImpl extends ShuntListImpl<SVC> implements SVCList
 	BoolData _avr = new BoolData(ColumnMeta.SvcAVR);
 	IntData _rbus = new IntData(ColumnMeta.SvcREGBUS);
 
-	public SVCListImpl(PAModel model, int[] keys)
+	public SVCListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 		_buses = model.getBuses();
 	}
-	public SVCListImpl(PAModel model, int size)
+	public SVCListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 		_buses = model.getBuses();
 	}
 
-	public SVCListImpl() {super();}
+	public SVCListI() {super();}
 
 	@Override
 	public SVC get(int index)

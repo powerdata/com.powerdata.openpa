@@ -40,23 +40,23 @@ public abstract class ModelBuilder
 	protected void loadStart(PAModel m) throws PAModelException {}
 
 	protected abstract BusListI loadBuses(PAModel m) throws PAModelException;
-	protected abstract SwitchListImpl loadSwitches(PAModel m) throws PAModelException;
-	protected abstract LineListImpl loadLines(PAModel m) throws PAModelException;
-	protected abstract AreaListImpl loadAreas(PAModel m) throws PAModelException;
-	protected abstract OwnerListImpl loadOwners(PAModel m) throws PAModelException;
-	protected abstract StationListImpl loadStations(PAModel m) throws PAModelException;
-	protected abstract VoltageLevelListImpl loadVoltageLevels(PAModel m) throws PAModelException;
+	protected abstract SwitchListI loadSwitches(PAModel m) throws PAModelException;
+	protected abstract LineListI loadLines(PAModel m) throws PAModelException;
+	protected abstract AreaListI loadAreas(PAModel m) throws PAModelException;
+	protected abstract OwnerListI loadOwners(PAModel m) throws PAModelException;
+	protected abstract StationListI loadStations(PAModel m) throws PAModelException;
+	protected abstract VoltageLevelListI loadVoltageLevels(PAModel m) throws PAModelException;
 	protected abstract IslandList loadIslands(PAModel m) throws PAModelException;
-	protected abstract SVCListImpl loadSVCs(PAModel m) throws PAModelException;
-	protected abstract SwitchedShuntListImpl loadSwitchedShunts(PAModel m) throws PAModelException;
-	protected abstract TwoTermDCLineListImpl loadTwoTermDCLines(PAModel m) throws PAModelException;
+	protected abstract SVCListI loadSVCs(PAModel m) throws PAModelException;
+	protected abstract SwitchedShuntListI loadSwitchedShunts(PAModel m) throws PAModelException;
+	protected abstract TwoTermDCLineListI loadTwoTermDCLines(PAModel m) throws PAModelException;
 	protected abstract ShuntCapListI loadShuntCapacitors(PAModel m) throws PAModelException;
 	protected abstract ShuntReacListI loadShuntReactors(PAModel m) throws PAModelException;
-	protected abstract LoadListImpl loadLoads(PAModel m) throws PAModelException;
+	protected abstract LoadListI loadLoads(PAModel m) throws PAModelException;
 	protected abstract GenListI loadGens(PAModel m) throws PAModelException;
-	protected abstract SeriesCapListImpl loadSeriesCapacitors(PAModel m) throws PAModelException;
-	protected abstract SeriesReacListImpl loadSeriesReactors(PAModel m) throws PAModelException;
-	protected abstract PhaseShifterListImpl loadPhaseShifters(PAModel m) throws PAModelException;
-	protected abstract TransformerListImpl loadTransformers(PAModel m) throws PAModelException;
+	protected abstract SeriesCapListI loadSeriesCapacitors(PAModel m) throws PAModelException;
+	protected abstract SeriesReacListI loadSeriesReactors(PAModel m) throws PAModelException;
+	protected abstract PhaseShifterListI loadPhaseShifters(PAModel m) throws PAModelException;
+	protected abstract TransformerListI loadTransformers(PAModel m) throws PAModelException;
 
 }

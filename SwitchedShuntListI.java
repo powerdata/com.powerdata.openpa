@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class SwitchedShuntListImpl extends ShuntListImpl<SwitchedShunt> implements SwitchedShuntList
+public class SwitchedShuntListI extends ShuntListI<SwitchedShunt> implements SwitchedShuntList
 {
 	static final ShuntEnum _PFld = new ShuntEnum()
 	{
@@ -22,17 +22,17 @@ public class SwitchedShuntListImpl extends ShuntListImpl<SwitchedShunt> implemen
 		public ColumnMeta b() {return ColumnMeta.SwshB;}
 	};
 
-	public SwitchedShuntListImpl(PAModel model, int[] keys)
+	public SwitchedShuntListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
 
-	public SwitchedShuntListImpl(PAModel model, int size)
+	public SwitchedShuntListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}
 
-	public SwitchedShuntListImpl() {super();}
+	public SwitchedShuntListI() {super();}
 
 	@Override
 	public SwitchedShunt get(int index)

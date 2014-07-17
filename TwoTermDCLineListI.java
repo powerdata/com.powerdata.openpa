@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class TwoTermDCLineListImpl extends TwoTermDevListI<TwoTermDCLine> implements TwoTermDCLineList
+public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implements TwoTermDCLineList
 {
 	static final TwoTermDevEnum _PFld = new TwoTermDevEnum()
 	{
@@ -26,16 +26,16 @@ public class TwoTermDCLineListImpl extends TwoTermDevListI<TwoTermDCLine> implem
 		public ColumnMeta tq() {return ColumnMeta.T2dcQTO;}
 	};
 
-	public TwoTermDCLineListImpl(PAModel model, int[] keys)
+	public TwoTermDCLineListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
-	public TwoTermDCLineListImpl(PAModel model, int size)
+	public TwoTermDCLineListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}
 
-	public TwoTermDCLineListImpl() {super();}
+	public TwoTermDCLineListI() {super();}
 
 	@Override
 	public TwoTermDCLine get(int index)

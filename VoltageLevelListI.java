@@ -2,7 +2,8 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class VoltageLevelListImpl extends GroupListI<VoltageLevel> implements VoltageLevelList
+public class VoltageLevelListI extends GroupListI<VoltageLevel> implements
+		VoltageLevelList
 {
 	static final PAListEnum _PFld = new PAListEnum()
 	{
@@ -14,15 +15,15 @@ public class VoltageLevelListImpl extends GroupListI<VoltageLevel> implements Vo
 
 	FloatData _bkv = new FloatData(ColumnMeta.VlevBASKV);
 	
-	public VoltageLevelListImpl() {super();}
+	public VoltageLevelListI() {super();}
 	
-	public VoltageLevelListImpl(PAModel model, int[] busref, int nowner)
+	public VoltageLevelListI(PAModel model, int[] busref, int nowner)
 	{
 		super(model, null, _PFld);
 		setupMap(busref, nowner);
 	}
 	
-	public VoltageLevelListImpl(PAModel model, int[] keys, int[] busref)
+	public VoltageLevelListI(PAModel model, int[] keys, int[] busref)
 	{
 		super(model, keys, null, _PFld);
 		setupMap(busref, keys.length);

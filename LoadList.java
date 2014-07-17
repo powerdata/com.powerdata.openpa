@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 public interface LoadList extends OneTermDevList<Load>
 {
 
-	static final LoadList Empty = new LoadListImpl();
+	static final LoadList Empty = new LoadListI();
 
 	float getMaxP(int ndx);
 

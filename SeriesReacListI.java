@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class SeriesReacListImpl extends ACBranchListImpl<SeriesReac> implements SeriesReacList
+public class SeriesReacListI extends ACBranchListI<SeriesReac> implements SeriesReacList
 {
 	static final ACBranchEnum _PFld = new ACBranchEnum()
 	{
@@ -31,13 +31,13 @@ public class SeriesReacListImpl extends ACBranchListImpl<SeriesReac> implements 
 	};
 
 
-	protected SeriesReacListImpl() {super();}
+	protected SeriesReacListI() {super();}
 	
-	public SeriesReacListImpl(PAModel model, int[] keys)
+	public SeriesReacListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
-	public SeriesReacListImpl(PAModel model, int size)
+	public SeriesReacListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}

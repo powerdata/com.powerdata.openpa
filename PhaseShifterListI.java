@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class PhaseShifterListImpl extends TransformerBaseListImpl<PhaseShifter> implements PhaseShifterList
+public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implements PhaseShifterList
 {
 	static final TransBaseEnum _PFld = new TransBaseEnum()
 	{
@@ -40,17 +40,18 @@ public class PhaseShifterListImpl extends TransformerBaseListImpl<PhaseShifter> 
 		public ColumnMeta ttap() {return ColumnMeta.PhashTAPTO;}
 	};
 
-	public PhaseShifterListImpl(PAModel model, int[] keys)
+	public PhaseShifterListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
-	public PhaseShifterListImpl(PAModel model, int size)
+	public PhaseShifterListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}
-
-	public PhaseShifterListImpl() {super();}
-
+	public PhaseShifterListI()
+	{
+		super();
+	}
 	@Override
 	public PhaseShifter get(int index)
 	{

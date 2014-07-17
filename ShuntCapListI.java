@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class ShuntCapListI extends ShuntListImpl<ShuntCapacitor> implements ShuntCapList
+public class ShuntCapListI extends ShuntListI<ShuntCapacitor> implements ShuntCapList
 {
 	static final ShuntEnum _PFld = new ShuntEnum()
 	{

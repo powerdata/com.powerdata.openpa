@@ -2,26 +2,25 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-
-public class OwnerListImpl extends GroupListI<Owner> implements OwnerList
+public class StationListI extends GroupListI<Station> implements StationList
 {
 	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override
-		public ColumnMeta id() {return ColumnMeta.OwnerID;}
+		public ColumnMeta id() {return ColumnMeta.StationID;}
 		@Override
-		public ColumnMeta name() {return ColumnMeta.OwnerNAME;}
+		public ColumnMeta name() {return ColumnMeta.StationNAME;}
 	};
+
+	public StationListI() {super();}
 	
-	public OwnerListImpl() {super();}
-	
-	public OwnerListImpl(PAModel model, int[] busref, int nowner)
+	public StationListI(PAModel model, int[] busref, int nowner)
 	{
 		super(model, null, _PFld);
 		setupMap(busref, nowner);
 	}
 	
-	public OwnerListImpl(PAModel model, int[] keys, int[] busref)
+	public StationListI(PAModel model, int[] keys, int[] busref)
 	{
 		super(model, keys, null, _PFld);
 		setupMap(busref, keys.length);
@@ -31,16 +30,16 @@ public class OwnerListImpl extends GroupListI<Owner> implements OwnerList
 	{
 		_bgmap = new BasicBusGrpMap(getIndexesFromKeys(busref), ngrp);
 	}
-
+	
 	@Override
-	public Owner get(int index)
+	public Station get(int index)
 	{
-		return new Owner(this, index);
+		return new Station(this, index);
 	}
 
 	@Override
 	protected ListMetaType getMetaType()
 	{
-		return ListMetaType.Owner;
+		return ListMetaType.Station;
 	}
 }

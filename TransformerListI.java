@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.PAModel.ListMetaType;
 
-public class TransformerListImpl extends TransformerBaseListImpl<Transformer> implements TransformerList
+public class TransformerListI extends TransformerBaseListI<Transformer> implements TransformerList
 {
 	static final TransBaseEnum _PFld = new TransBaseEnum()
 	{
@@ -40,13 +40,13 @@ public class TransformerListImpl extends TransformerBaseListImpl<Transformer> im
 		public ColumnMeta ttap() {return ColumnMeta.TfmrTAPTO;}
 	};
 
-	public TransformerListImpl() {super();}
+	public TransformerListI() {super();}
 	
-	public TransformerListImpl(PAModel model, int[] keys)
+	public TransformerListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
-	public TransformerListImpl(PAModel model, int size)
+	public TransformerListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}

@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 public interface SVCList extends ShuntList<SVC>
 {
 
-	static final SVCList Empty = new SVCListImpl();
+	static final SVCList Empty = new SVCListI();
 
 	float getMinB(int ndx);
 

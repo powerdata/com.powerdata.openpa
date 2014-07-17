@@ -21,24 +21,24 @@ public class PAModel implements PALists
 	}
 	
 	BusListI 			_buses;
-	SwitchListImpl		_switches;
-	LineListImpl		_lines;
+	SwitchListI		_switches;
+	LineListI		_lines;
 	IslandList			_islands;
-	AreaListImpl		_areas;
-	OwnerListImpl		_owners;
-	StationListImpl 	_stations;
-	VoltageLevelListImpl _vlevs;
-	TransformerListImpl	_transformers;
-	PhaseShifterListImpl 	_phshifts;
-	SeriesReacListImpl 		_serreacs;
-	SeriesCapListImpl 		_sercaps;
+	AreaListI		_areas;
+	OwnerListI		_owners;
+	StationListI 	_stations;
+	VoltageLevelListI _vlevs;
+	TransformerListI	_transformers;
+	PhaseShifterListI 	_phshifts;
+	SeriesReacListI 		_serreacs;
+	SeriesCapListI 		_sercaps;
 	GenListI 			_gens;
-	LoadListImpl 			_loads;
+	LoadListI 			_loads;
 	ShuntReacListI 		_shuntreacs;
 	ShuntCapListI 		_shuntcaps;
-	TwoTermDCLineListImpl 	_t2dclines;
-	SwitchedShuntListImpl 	_swshunts;
-	SVCListImpl 			_svcs;
+	TwoTermDCLineListI 	_t2dclines;
+	SwitchedShuntListI 	_swshunts;
+	SVCListI 			_svcs;
 	 
 	
 	protected PAModel(){}
@@ -81,7 +81,7 @@ public class PAModel implements PALists
 	@Nodump
 	public IslandList refreshIslands()
 	{
-		_islands = new IslandListImpl(this);
+		_islands = new IslandListI(this);
 		return _islands;
 	}
 	

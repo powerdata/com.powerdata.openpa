@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.PAModel.ListMetaType;
 import com.powerdata.openpa.Switch.State;
 
-public class SwitchListImpl extends TwoTermDevListI<Switch> implements SwitchList
+public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 {
 	static final TwoTermDevEnum _PFld = new TwoTermDevEnum()
 	{
@@ -31,13 +31,13 @@ public class SwitchListImpl extends TwoTermDevListI<Switch> implements SwitchLis
 	BoolData _opld = new BoolData(ColumnMeta.SwOPLD),
 			_enab = new BoolData(ColumnMeta.SwENAB);
 	
-	protected SwitchListImpl(){super();}
+	protected SwitchListI(){super();}
 	
-	public SwitchListImpl(PAModel model, int[] keys)
+	public SwitchListI(PAModel model, int[] keys)
 	{
 		super(model, keys, _PFld);
 	}
-	protected SwitchListImpl(PAModel model, int size)
+	protected SwitchListI(PAModel model, int size)
 	{
 		super(model, size, _PFld);
 	}

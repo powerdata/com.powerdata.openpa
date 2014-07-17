@@ -1,23 +1,23 @@
 package com.powerdata.openpa;
 
-public abstract class TransformerBaseListImpl<T extends TransformerBase>
-		extends ACBranchListImpl<T> implements TransformerBaseList<T>
+public abstract class TransformerBaseListI<T extends TransformerBase>
+		extends ACBranchListI<T> implements TransformerBaseList<T>
 {
 	
 	FloatData _b, _g, _deg, _ft, _tt;
 
-	protected TransformerBaseListImpl()
+	protected TransformerBaseListI()
 	{
 		super();
 	}
 
-	protected TransformerBaseListImpl(PAModel model, int[] keys, TransBaseEnum le)
+	protected TransformerBaseListI(PAModel model, int[] keys, TransBaseEnum le)
 	{
 		super(model, keys, le);
 		setFields(le);
 	}
 
-	protected TransformerBaseListImpl(PAModel model, int size, TransBaseEnum le)
+	protected TransformerBaseListI(PAModel model, int size, TransBaseEnum le)
 	{
 		super(model, size, le);
 		setFields(le);

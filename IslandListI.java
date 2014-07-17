@@ -4,23 +4,28 @@ import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.PAModel.ListMetaType;
 import com.powerdata.openpa.Switch.State;
 
-public class IslandListImpl extends GroupListI<Island> implements IslandList
+public class IslandListI extends GroupListI<Island> implements IslandList
 {
 	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override
-		public ColumnMeta id() {return ColumnMeta.IslandID;}
+		public ColumnMeta id()
+		{
+			return ColumnMeta.IslandID;
+		}
 		@Override
-		public ColumnMeta name() {return ColumnMeta.IslandNAME;}
+		public ColumnMeta name()
+		{
+			return ColumnMeta.IslandNAME;
+		}
 	};
-	
 	BoolData _egzd = new BoolData(ColumnMeta.IslandEGZSTATE);
 	FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
 	IntData _fsrc = new IntData(ColumnMeta.IslandFRQSRC);
-	
-	IslandListImpl(){};
-	
-	public IslandListImpl(PAModel model)
+	IslandListI()
+	{
+	};
+	public IslandListI(PAModel model)
 	{
 		super(model, new BusGrpMapBldr(model)
 		{
@@ -29,65 +34,56 @@ public class IslandListImpl extends GroupListI<Island> implements IslandList
 			{
 				return d.getState() == State.Closed;
 			}
-
 			@Override
 			protected boolean incLN(Line d)
 			{
 				return d.isInSvc();
 			}
-
 			@Override
 			protected boolean incSR(SeriesReac d)
 			{
 				return d.isInSvc();
 			}
-
 			@Override
 			protected boolean incSC(SeriesCap d)
 			{
 				return d.isInSvc();
 			}
-
 			@Override
 			protected boolean incTX(Transformer d)
 			{
 				return d.isInSvc();
 			}
-
 			@Override
 			protected boolean incPS(PhaseShifter d)
 			{
 				return d.isInSvc();
 			}
-
 			@Override
 			protected boolean incD2(TwoTermDCLine d)
 			{
 				return d.isInSvc();
 			}
 		}.addAll().getMap(), _PFld);
-		
 		String[] id = new String[_size];
-		for(int i=0; i < _size; ++i)
-			id[i] = String.valueOf(i+1);
+		for (int i = 0; i < _size; ++i)
+			id[i] = String.valueOf(i + 1);
 		setName(id);
 		setID(id);
 		setupEgStatus();
 	}
-	
 	@Override
 	public Island get(int index)
 	{
 		return new Island(this, index);
 	}
-	
 	void setupEgStatus()
 	{
 		int n = size();
 		boolean[] e = new boolean[_size];
-		for(int i=0; i < n; ++i)
+		for (int i = 0; i < n; ++i)
 		{
-			for(Gen g : getGenerators(i))
+			for (Gen g : getGenerators(i))
 			{
 				Mode m = g.getMode();
 				if (m != Mode.OFF && m != Mode.PMP)
@@ -99,85 +95,59 @@ public class IslandListImpl extends GroupListI<Island> implements IslandList
 			_egzd.set(e);
 		}
 	}
-	
 	@Override
 	public boolean isEnergized(int ndx)
 	{
 		return _egzd.get(ndx);
 	}
-
 	@Override
 	public boolean[] isEnergized()
 	{
 		return _egzd.get();
 	}
-	
 	@Override
 	public float getFreq(int ndx)
 	{
 		return _freq.get(ndx);
 	}
-
 	@Override
 	public void setFreq(int ndx, float f)
 	{
 		_freq.set(ndx, f);
 	}
-	
 	@Override
 	public float[] getFreq()
 	{
 		return _freq.get();
 	}
-	
 	@Override
 	public void setFreq(float[] f)
 	{
 		_freq.set(f);
 	}
-	
 	@Override
 	public Bus getFreqSrc(int ndx)
 	{
 		return _model.getBuses().get(_fsrc.get(ndx));
 	}
-
 	@Override
 	public void setFreqSrc(int ndx, Bus fsrc)
 	{
 		_fsrc.set(ndx, fsrc.getIndex());
 	}
-	
 	@Override
 	public Bus[] getFreqSrc()
 	{
 		return _model.getBuses().toArray(_fsrc.get());
 	}
-	
 	@Override
 	public void setFreqSrc(Bus[] fsrc)
 	{
 		_fsrc.set(BaseList.ObjectNdx(fsrc));
 	}
-
-	public static void main(String[] args) throws Exception
-	{
-		PAModel m = PflowModelBuilder.Create(
-			"pd2cim:sdb=/run/shm/config.pddb&db=/home/chris/"+
-			"Documents/testmodels/public/palco/exports/cim.pddb")
-			.load();
-		
-		for(Island i : m.getIslands())
-		{
-			System.out.println(i);
-		}
-	}
-
 	@Override
 	protected ListMetaType getMetaType()
 	{
 		return ListMetaType.Island;
 	}
-
-
 }

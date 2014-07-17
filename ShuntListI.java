@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public abstract class ShuntListImpl<T extends Shunt> 
+public abstract class ShuntListI<T extends Shunt> 
 	extends OneTermDevListI<T> implements ShuntList<T>
 {
 	interface ShuntEnum extends OneTermDevEnum
@@ -10,18 +10,18 @@ public abstract class ShuntListImpl<T extends Shunt>
 	
 	FloatData _b;
 	
-	public ShuntListImpl(PAModel model, int[] keys, ShuntEnum le)
+	public ShuntListI(PAModel model, int[] keys, ShuntEnum le)
 	{
 		super(model, keys, le);
 		setFields(le);
 	}
-	public ShuntListImpl(PAModel model, int size, ShuntEnum le)
+	public ShuntListI(PAModel model, int size, ShuntEnum le)
 	{
 		super(model, size, le);
 		setFields(le);
 	}
 
-	public ShuntListImpl() {super();}
+	public ShuntListI() {super();}
 	
 	private void setFields(ShuntEnum le)
 	{
