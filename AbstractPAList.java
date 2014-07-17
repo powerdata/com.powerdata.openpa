@@ -1,7 +1,14 @@
 package com.powerdata.openpa;
 
 import java.lang.reflect.Array;
-import com.powerdata.openpa.PAModel.HasMetaList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import com.powerdata.openpa.PAModel.ColChange;
+import com.powerdata.openpa.PAModel.IntColChange;
+import com.powerdata.openpa.PAModel.StringColChange;
+import com.powerdata.openpa.PAModel.FloatColChange;
+import com.powerdata.openpa.PAModel.BoolColChange;
 import com.powerdata.openpa.PAModel.ListMetaType;
 
 /**
@@ -13,187 +20,429 @@ import com.powerdata.openpa.PAModel.ListMetaType;
 
 public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseList<T> 
 {
-	interface PAListMeta
+	PAModel _model;
+	
+
+	abstract class Data
 	{
-		Enum<? extends HasMetaList> getID();
-		Enum<? extends HasMetaList> getName();
-	}
-	
-	/** read only */
-	protected static final int RO = 0;
-	/** read-write */
-	protected static final int RW = 1;
-	
-	PAModel     _model;
-	String[][] _id = IStr(), _name = IStr();
-	
-	protected static final String[][] IStr() {return new String[2][];}
-	protected static final float[][] IFlt() {return new float[2][];}
-	protected static final int[][] IInt() {return new int[2][];}
-	protected static final boolean[][] IBool() {return new boolean[2][];}
-	
-	protected abstract ListMetaType getMetaType();
-	
-	protected final <U> U getObj(U[][] v, int ndx)
-	{
-		return v[RW][ndx];
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected final <U> void setObj(U[][] v, int ndx, U s)
-	{
-		U[] rw = v[RW];
-		if (rw == null)
+		ColumnMeta _ctype;
+		boolean _nochg = true;
+
+		Data(ColumnMeta coltype)
 		{
-			rw = (U[]) Array.newInstance(s.getClass(), _size);
-			v[RW] = rw;
+			_ctype = coltype;
+			registerColumn(this);
+		}
+		ColumnMeta getColMeta() {return _ctype;}
+		void clear() {_nochg = true;}
+		abstract ColChange createChangeObj();
+		void setChange()
+		{
+			if (_nochg && _ctype != null)
+			{
+				_model.setChange(createChangeObj());
+				_nochg = false;
+			}			
+		}
+		public abstract int[] computeChanges();
+		public int[] getKeys(int[] ndxs)
+		{
+			return AbstractPAList.this.getKeys(ndxs);
+		}
+	}
+	
+	abstract class IntDataIfc extends Data
+	{
+		IntDataIfc(ColumnMeta coltype) {super(coltype);}
+		public abstract int[] getInts(int[] ndxs);
+	}
+	
+	class IntData extends IntDataIfc
+	{
+		int[] rw, ro;
+		
+		IntData(ColumnMeta coltype)
+		{
+			super(coltype);
+		}
+
+		@Override
+		void clear() {super.clear(); ro = null;}
+
+		@Override
+		ColChange createChangeObj()
+		{
+			return new IntColChange(getMetaType(), this);
 		}
 		
-		if (v[RO] == null)
+		int get(int ndx) {return rw[ndx];}
+		
+		void set(int ndx, int s)
 		{
-			v[RO] = rw.clone();
+			if (rw == null)
+				rw = new int[_size];
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			rw[ndx] = s;
 		}
-		rw[ndx] = s;
-	}
-	
-	protected final <U> U[] getObj(U[][] v)
-	{
-		U[] rw = v[RW];
-		if (v[RO] == null)
+		int[] get()
 		{
-			v[RO] = rw.clone();
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			return rw;
 		}
-		return rw;
-	}
-	
-	protected final <U> void setObj(U[][] v, U[] s)
-	{
-//		if (v[RO] == null && v[RW] != null)
-//			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
-	
-	protected final void setFloat(float[][] v, int ndx, float s)
-	{
-		float[] rw = v[RW];
-		if (rw == null)
+		
+		void set(int[] v)
 		{
-			rw = new float[_size];
-			v[RW] = rw;
+			if (v != rw)
+				rw = v.clone();
 		}
-		if (v[RO] == null)
+
+		@Override
+		public int[] computeChanges()
 		{
-			v[RO] = rw.clone();
+			if (ro == null) return new int[0];
+			int[] all = new int[_size];
+			int cnt = 0;
+			for(int i=0; i < _size; ++i)
+			{
+				if (ro[i] != rw[i])
+					all[cnt++] = i;
+			}
+			return Arrays.copyOf(all, cnt);
 		}
-		rw[ndx] = s;
-	}
-	
-	protected final float[] getFloat(float[][] v)
-	{
-		float[] rw = v[RW];
-		if (v[RO] == null)
+
+		public int[] getInts(int[] ndxs)
 		{
-			v[RO] = rw.clone();
+			int n = ndxs.length;
+			int[] rv = new int[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = rw[ndxs[i]];
+			return rv;
 		}
-		return rw;
+
 	}
 
-	protected final float getFloat(float[][] v, int ndx)
+	class FloatData extends Data
 	{
-		return v[RW][ndx];
+		float[] rw, ro;
+		
+		FloatData(ColumnMeta coltype)
+		{
+			super(coltype);
+		}
+		@Override
+		void clear() {super.clear(); ro = null;}
+		@Override
+		ColChange createChangeObj()
+		{
+			return new FloatColChange(getMetaType(), this);
+		}
+		
+		float get(int ndx) {return rw[ndx];}
+		
+		void set(int ndx, float s)
+		{
+			if (rw == null)
+				rw = new float[_size];
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			rw[ndx] = s;
+		}
+		float[] get()
+		{
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			return rw;
+		}
+		
+		void set(float[] v)
+		{
+			if (v != rw)
+				rw = v.clone();
+		}
+		
+		@Override
+		public int[] computeChanges()
+		{
+			if (ro == null) return new int[0];
+			int[] all = new int[_size];
+			int cnt = 0;
+			for(int i=0; i < _size; ++i)
+			{
+				if (ro[i] != rw[i])
+					all[cnt++] = i;
+			}
+			return Arrays.copyOf(all, cnt);
+		}
+
+		public float[] getFloats(int[] ndxs)
+		{
+			int n = ndxs.length;
+			float[] rv = new float[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = rw[ndxs[i]];
+			return rv;
+		}
+
 	}
 
-	protected final void setFloat(float[][] v, float[] s)
+	class BoolData extends Data
 	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
+		boolean[] rw, ro;
+		
+		BoolData(ColumnMeta coltype)
+		{
+			super(coltype);
+		}
+		@Override
+		void clear() {super.clear(); ro = null;}
+		@Override
+		ColChange createChangeObj()
+		{
+			return new BoolColChange(getMetaType(), this);
+		}
+		
+		boolean get(int ndx) {return rw[ndx];}
+		
+		void set(int ndx, boolean s)
+		{
+			if (rw == null)
+				rw = new boolean[_size];
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			rw[ndx] = s;
+		}
+		boolean[] get()
+		{
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			return rw;
+		}
+		
+		void set(boolean[] v)
+		{
+			if (v != rw)
+				rw = v.clone();
+		}
 
-	protected final void setInt(int[][] v, int ndx, int s)
-	{
-		int[] rw = v[RW];
-		if (rw == null)
+		@Override
+		public int[] computeChanges()
 		{
-			rw = new int[_size];
-			v[RW] = rw;
+			if (ro == null) return new int[0];
+			int[] all = new int[_size];
+			int cnt = 0;
+			for(int i=0; i < _size; ++i)
+			{
+				if (ro[i] != rw[i])
+					all[cnt++] = i;
+			}
+			return Arrays.copyOf(all, cnt);
 		}
-		if (v[RO] == null)
+		
+		public boolean[] getBools(int[] ndxs)
 		{
-			v[RO] = rw.clone();
+			int n = ndxs.length;
+			boolean[] rv = new boolean[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = rw[ndxs[i]];
+			return rv;
 		}
-		rw[ndx] = s;
+
 	}
 	
-	protected final int[] getInt(int[][] v)
+	class StringData extends Data
 	{
-		int[] rw = v[RW];
-		if (v[RO] == null)
+		String[] rw, ro;
+		
+		StringData(ColumnMeta coltype)
 		{
-			v[RO] = rw.clone();
+			super(coltype);
 		}
-		return rw;
+		@Override
+		void clear() {super.clear(); ro = null;}
+		@Override
+		ColChange createChangeObj()
+		{
+			return new StringColChange(getMetaType(), this);
+		}
+		
+		String get(int ndx) {return rw[ndx];}
+
+		void set(int ndx, String s)
+		{
+			if (rw == null)
+				rw = new String[_size];
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			rw[ndx] = s;
+		}
+
+		String[] get()
+		{
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			return rw;
+		}
+		
+		void set(String[] v)
+		{
+			if (v != rw)
+				rw = v.clone();
+		}
+		@Override
+		public int[] computeChanges()
+		{
+			if (ro == null) return new int[0];
+			int[] all = new int[_size];
+			int cnt = 0;
+			for(int i=0; i < _size; ++i)
+			{
+				if (!ro[i].equals(rw[i]))
+					all[cnt++] = i;
+			}
+			return Arrays.copyOf(all, cnt);
+		}
+		public String[] getStrings(int[] ndxs)
+		{
+			int n = ndxs.length;
+			String[] rv = new String[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = rw[ndxs[i]];
+			return rv;
+
+		}
+
 	}
 	
-	protected final int getInt(int[][] v, int ndx)
+	class EnumData<E extends Enum<?>> extends IntDataIfc
 	{
-		return v[RW][ndx];
+		E[] rw, ro;
+		
+		EnumData(ColumnMeta coltype)
+		{
+			super(coltype);
+		}
+		@Override
+		void clear() {super.clear(); ro = null;}
+		@Override
+		ColChange createChangeObj()
+		{
+			return new IntColChange(getMetaType(), this);
+		}
+		
+		E get(int ndx) {return rw[ndx];}
+
+		@SuppressWarnings("unchecked")
+		void set(int ndx, E s)
+		{
+			if (rw == null)
+			{
+				rw = (E[]) Array.newInstance(s.getClass(), _size);
+			}
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			rw[ndx] = s;
+		}
+
+		E[] get()
+		{
+			if (ro == null)
+			{
+				ro = rw.clone();
+				setChange();
+			}
+			return rw;
+		}
+		
+		void set(E[] v)
+		{
+			if (v != rw)
+				rw = v.clone();
+		}
+		@Override
+		public int[] computeChanges()
+		{
+			if (ro == null) return new int[0];
+			int[] all = new int[_size];
+			int cnt = 0;
+			for(int i=0; i < _size; ++i)
+			{
+				if (!ro[i].equals(rw[i]))
+					all[cnt++] = i;
+			}
+			return Arrays.copyOf(all, cnt);
+		}
+		
+		@Override
+		public int[] getInts(int[] ndxs)
+		{
+			int n = ndxs.length;
+			int[] rv = new int[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = rw[ndxs[i]].ordinal();
+			return rv;
+		}
 	}
 
-	protected final void setInt(int[][] v, int[] s)
+	/** interface used to let superclass manage appropriate data but
+	 * be correctly typed for leaf class
+	 */
+	protected interface PAListEnum
 	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
-
-	protected final void setBool(boolean[][] v, int ndx, boolean s)
-	{
-		boolean[] rw = v[RW];
-		if (rw == null)
-		{
-			rw = new boolean[_size];
-			v[RW] = rw;
-		}
-		if (v[RO] == null)
-		{
-			v[RO] = rw.clone();
-		}
-		rw[ndx] = s;
+		ColumnMeta id();
+		ColumnMeta name();
 	}
 	
-	protected final boolean[] getBool(boolean[][] v)
-	{
-		boolean[] rw = v[RW];
-		if (v[RO] == null)
-		{
-			v[RO] = rw.clone();
-		}
-		return rw;
-	}
-	
-	protected final boolean getBool(boolean[][] v, int ndx)
-	{
-		return v[RW][ndx];
-	}
+	StringData _id, _name;
 
-	protected final void setBool(boolean[][] v, boolean[] s)
-	{
-		if (v[RO] == null && v[RW] != null)
-			v[RO] = v[RW].clone();
-		v[RW] = s.clone();
-	}
+	List<Data> _fields = new ArrayList<>();
 
-	AbstractPAList(PAModel model, int size)
+	protected AbstractPAList(PAModel model, int size, PAListEnum le)
 	{
 		super(size);
 		_model = model;
+		setFields(le);
 	}
 	
-	protected AbstractPAList(PAModel model, int[] keys)
+	protected AbstractPAList(PAModel model, int[] keys, PAListEnum le)
 	{
 		super(keys);
 		_model = model;
+		setFields(le);
+	}
+
+	private void setFields(PAListEnum le)
+	{
+		_id = new StringData(le.id());
+		_name = new StringData(le.name());
 	}
 	
 	protected AbstractPAList()
@@ -207,57 +456,62 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return _size;
 	}
 	
+	protected void registerColumn(Data d)
+	{
+		_fields.add(d);
+	}
+	
 	/** get unique object ID */
 	@Override
 	public String getID(int ndx)
 	{
-		return getObj(_id, ndx);
+		return _id.get(ndx);
 	}
 
 	/** set unique object ID */
 	@Override
 	public void setID(int ndx, String id)
 	{
-		setObj(_id, ndx, id);
+		_id.set(ndx, id);
 	}
 
 	/** return array of string object ID's */
 	@Override
 	public String[] getID()
 	{
-		return getObj(_id);
+		return _id.get();
 	}
 	
 	/** set unique object ID */
 	@Override
 	public void setID(String[] id)
 	{
-		setObj(_id, id);
+		_id.set(id);
 	}
 
 	/** name of object */
 	@Override
 	public String getName(int ndx)
 	{
-		return getObj(_name, ndx);
+		return _name.get(ndx);
 	}
 	/** set name of object */
 	@Override
 	public void setName(int ndx, String name)
 	{
-		setObj(_name, ndx, name);
+		_name.set(ndx, name);
 	}
 	/** name of object */
 	@Override
 	public String[] getName()
 	{
-		return getObj(_name);
+		return _name.get();
 	}
 	/** set name of object */
 	@Override
 	public void setName(String[] name)
 	{
-		setObj(_name, name);
+		_name.set(name);
 	}
 
 	public int[] getKeys(int[] offsets)
@@ -269,10 +523,11 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return rv;
 	}
 
-	
-	protected void clearChanges()
+	void clearChanges()
 	{
-		_name[RO] = null;
+		_fields.forEach(o -> o.clear());
 	}
 	
+	abstract protected ListMetaType getMetaType();
+
 }

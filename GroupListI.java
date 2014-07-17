@@ -45,14 +45,28 @@ public class GroupListI<T extends Group> extends AbstractPAList<T> implements Gr
 	
 	public GroupListI(PAModel model, int[] keys, BusGrpMap busgrp)
 	{
-		super(model, keys);
+		super(model, keys, null);
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
 	public GroupListI(PAModel model, BusGrpMap busgrp)
 	{
-		super(model, busgrp.size());
+		super(model, busgrp.size(), null);
+		_bgmap = busgrp;
+		Arrays.fill(_lstref, new WeakReference<>(null));
+	}
+
+	protected GroupListI(PAModel model, int[] keys, BusGrpMap busgrp, PAListEnum pfld)
+	{
+		super(model, keys, pfld);
+		_bgmap = busgrp;
+		Arrays.fill(_lstref, new WeakReference<>(null));
+	}
+
+	protected GroupListI(PAModel model, BusGrpMap busgrp, PAListEnum pfld)
+	{
+		super(model, busgrp.size(), pfld);
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}

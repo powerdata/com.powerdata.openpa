@@ -1,18 +1,9 @@
 package com.powerdata.openpa;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.IntFunction;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Open PA model.  Provides access to power network and equipment 
@@ -198,18 +189,6 @@ public class PAModel implements PALists
 		return _svcs;
 	}
 	
-//	public OneTermDevList<? extends OneTermDev> getOneTermDevs()
-//	{
-//		
-//		return OneTermDevList.Empty;
-//	}
-//
-//	public TwoTermDevList<? extends TwoTermDev> getTwoTermDevs()
-//	{
-//		
-//		return TwoTermDevList.Empty;
-//	}
-	
 	@FunctionalInterface
 	public static interface IntFloatFunction
 	{
@@ -231,288 +210,255 @@ public class PAModel implements PALists
 	
 	public static abstract class ColChange
 	{
-		Enum<?> _cmeta;
 		ListMetaType _lmeta;
-		Supplier<int[]> _idx;
+		int[] _idx;
+		int _size;
+		private AbstractPAList<? extends BaseObject>.Data _d;
 		
-		ColChange(Enum<?> cmeta, ListMetaType lmeta, Supplier<int[]> index)
+		
+		ColChange(ListMetaType lmeta,
+				AbstractPAList<? extends BaseObject>.Data d)
 		{
-			_cmeta = cmeta;
 			_lmeta = lmeta;
-			_idx = index;
-		}
-		
-		public Enum<?> getColMeta() {return _cmeta;}
+			_d = d;
+		}		
+		public ColumnMeta getColMeta() {return _d.getColMeta();}
 		public ListMetaType getListMeta() {return _lmeta;}
-		public int[] getNdx() {return _idx.get();}
-		public IntStream getNdxStream() {return Arrays.stream(_idx.get());}
-		
-//		public abstract IntFunction<String> stringAccess();
-//		public abstract IntFloatFunction floatAccess();
-//		public abstract IntIntFunction intAccess();
-//		public abstract IntBoolFunction boolAccess();
-//		public IntFunction<Enum<?>> enumAccess()
-//		{
-//			return i -> NoEnum.Unknown;
-//		}
-		public abstract String stringAccess(int i);
-		public abstract float floatAccess(int i);
-		public abstract int intAccess(int i);
-		public abstract boolean boolAccess(int i);
-		public Enum<?> enumAccess(int i)
+		public int[] getNdxs()
 		{
-			return NoEnum.Unknown;
+			if (_idx == null)
+			{
+				_idx = _d.computeChanges();
+				_size = _idx.length;
+			}
+			return _idx;
 		}
+		
+		public int[] getKeys()
+		{
+			return _d.getKeys(getNdxs());
+		}
+		
+		public int size() {return _size;}
+		
+		public abstract String[] stringAccess();
+		public abstract float[] floatAccess();
+		public abstract int[] intAccess();
+		public abstract boolean[] boolAccess();
 
 		@Override
 		public boolean equals(Object obj)
 		{
-			return _cmeta == ((ColChange)obj)._cmeta;
+			return getColMeta() == ((ColChange)obj).getColMeta();
 		}
 	}
 	
 	public static class IntColChange extends ColChange
 	{
-		IntIntFunction _f;
+		AbstractPAList<? extends BaseObject>.IntDataIfc _d;
+		int[] _vals;
 		
-		IntColChange(Enum<?> cmeta, ListMetaType lmeta, Supplier<int[]> index, IntIntFunction f)
+		IntColChange(ListMetaType lmeta, AbstractPAList<? extends BaseObject>.IntDataIfc d)
 		{
-			super(cmeta, lmeta, index);
-			_f = f;
+			super(lmeta, d);
+			_d = d;
 		}
 
 		@Override
-		public String stringAccess(int i)
+		public String[] stringAccess()
 		{
-			return String.valueOf(_f.apply(i));
+			int[] ival = intAccess();
+			String[] rv = new String[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = String.valueOf(ival[i]);
+			return rv;
 		}
 
 		@Override
-		public float floatAccess(int i)
+		public float[] floatAccess()
 		{
-			return (float) _f.apply(i);
+			int[] ival = intAccess();
+			float[] rv = new float[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = (float) ival[i];
+			return rv;
 		}
 
 		@Override
-		public int intAccess(int i)
+		public int[] intAccess()
 		{
-			return _f.apply(i);
+			if (_vals == null)
+				_vals = _d.getInts(getNdxs());
+			return _vals;
 		}
 
 		@Override
-		public boolean boolAccess(int i)
+		public boolean[] boolAccess()
 		{
-			return _f.apply(i) != 0;
+			int[] ival = intAccess();
+			boolean[] rv = new boolean[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = ival[i] != 0;
+			return rv;
 		}
-
-
-//		@Override
-//		public IntFunction<String> stringAccess()
-//		{
-//			return i -> String.valueOf(_f.apply(i));
-//		}
-//
-//		@Override
-//		public IntFloatFunction floatAccess()
-//		{
-//			return i -> (float) _f.apply(i);
-//		}
-//
-//		@Override
-//		public IntIntFunction intAccess()
-//		{
-//			return _f;
-//		}
-//
-//		@Override
-//		public IntBoolFunction boolAccess()
-//		{
-//			return i -> _f.apply(i) != 0f;
-//		}
 	}
 
 	public static class FloatColChange extends ColChange
 	{
-		IntFloatFunction _f;
+		AbstractPAList<? extends BaseObject>.FloatData _d;
+		private float[] _vals;
 		
-		FloatColChange(Enum<?> cmeta, ListMetaType lmeta, Supplier<int[]> index, IntFloatFunction f)
+		FloatColChange(ListMetaType lmeta, AbstractPAList<? extends BaseObject>.FloatData d)
 		{
-			super(cmeta, lmeta, index);
-			_f = f;
+			super(lmeta, d);
+			_d = d;
 		}
 
 		@Override
-		public String stringAccess(int i)
+		public String[] stringAccess()
 		{
-			return String.valueOf(_f.apply(i));
+			float[] ival = floatAccess();
+			String[] rv = new String[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = String.valueOf(ival[i]);
+			return rv;
 		}
 
 		@Override
-		public float floatAccess(int i)
+		public float[] floatAccess()
 		{
-			return _f.apply(i);
+			if (_vals == null)
+				_vals = _d.getFloats(getNdxs());
+			return _vals;
 		}
 
 		@Override
-		public int intAccess(int i)
+		public int[] intAccess()
 		{
-			return Math.round(_f.apply(i));
+			float[] val = floatAccess();
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = Math.round(val[i]);
+			return rv;
 		}
 
 		@Override
-		public boolean boolAccess(int i)
+		public boolean[] boolAccess()
 		{
-			return _f.apply(i) != 0f;
+			float[] val = floatAccess();
+			boolean[] rv = new boolean[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = val[i] != 0f;
+			return rv;
 		}
 
-//		@Override
-//		public IntFunction<String> stringAccess()
-//		{
-//			return i -> String.valueOf(_f.apply(i));
-//		}
-//
-//		@Override
-//		public IntFloatFunction floatAccess()
-//		{
-//			return _f;
-//		}
-//
-//		@Override
-//		public IntIntFunction intAccess()
-//		{
-//			return i -> Math.round(_f.apply(i));
-//		}
-//
-//		@Override
-//		public IntBoolFunction boolAccess()
-//		{
-//			return i -> _f.apply(i) != 0;
-//		}
 	}
-
+	
 	public static class StringColChange extends ColChange
 	{
+		AbstractPAList<? extends BaseObject>.StringData _d;
+		private String[] _vals;
 
-		IntFunction<String> _f;
-
-		StringColChange(Enum<?> cmeta, ListMetaType lmeta, Supplier<int[]> index, IntFunction<String> f)
+		StringColChange(ListMetaType lmeta,
+				AbstractPAList<? extends BaseObject>.StringData d)
 		{
-			super(cmeta, lmeta, index);
-			_f = f;
+			super(lmeta, d);
+			_d = d;
 		}
 
 		@Override
-		public String stringAccess(int i)
+		public String[] stringAccess()
 		{
-			return _f.apply(i);
+			if (_vals == null)
+				_vals = _d.getStrings(getNdxs());
+			return _vals;
 		}
 
 		@Override
-		public float floatAccess(int i)
+		public float[] floatAccess()
 		{
-			return Float.parseFloat(_f.apply(i));
+			String[] val = stringAccess();
+			float[] rv = new float[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = Float.parseFloat(val[i]);
+			return rv;
 		}
 
 		@Override
-		public int intAccess(int i)
+		public int[] intAccess()
 		{
-			return Integer.parseInt(_f.apply(i));
+			String[] val = stringAccess();
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = Integer.parseInt(val[i]);
+			return rv;
 		}
 
 		@Override
-		public boolean boolAccess(int i)
+		public boolean[] boolAccess()
 		{
-			return Boolean.parseBoolean(_f.apply(i));
+			String[] val = stringAccess();
+			boolean[] rv = new boolean[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = Boolean.parseBoolean(val[i]);
+			return rv;
 		}
-
-//		@Override
-//		public IntFunction<String> stringAccess()
-//		{
-//			return _f;
-//		}
-//
-//		@Override
-//		public IntFloatFunction floatAccess()
-//		{
-//			return i -> Float.parseFloat(_f.apply(i));
-//		}
-//
-//		@Override
-//		public IntIntFunction intAccess()
-//		{
-//			return i -> Integer.parseInt(_f.apply(i));
-//		}
-//
-//		@Override
-//		public IntBoolFunction boolAccess()
-//		{
-//			return i -> Boolean.parseBoolean(_f.apply(i));
-//		}
-//		
+		
 	}
+
 	
-	public static class EnumColChange extends ColChange
+	
+	public static class BoolColChange extends ColChange
 	{
-
-		IntFunction<Enum<?>> _f;
-
-		EnumColChange(Enum<?> cmeta, ListMetaType lmeta, Supplier<int[]> index, IntFunction<Enum<?>> f)
-		{
-			super(cmeta, lmeta, index);
-			_f = f;
-		}
-
-		@Override
-		public String stringAccess(int i)
-		{
-			return _f.apply(i).toString();
-		}
-
-		@Override
-		public float floatAccess(int i)
-		{
-			return (float) _f.apply(i).ordinal();
-		}
-
-		@Override
-		public int intAccess(int i)
-		{
-			return _f.apply(i).ordinal();
-		}
-
-		@Override
-		public boolean boolAccess(int i)
-		{
-			throw new UnsupportedOperationException("No boolean equivalent for enumerated values");
-		}
-
+		AbstractPAList<? extends BaseObject>.BoolData _d;
+		private boolean[] _vals;
 		
+		BoolColChange(ListMetaType lmeta, AbstractPAList<? extends BaseObject>.BoolData d)
+		{
+			super(lmeta, d);
+			_d = d;
+		}
+
+		@Override
+		public String[] stringAccess()
+		{
+			boolean[] ival = boolAccess();
+			String[] rv = new String[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = String.valueOf(ival[i]);
+			return rv;
+		}
+
+		@Override
+		public float[] floatAccess()
+		{
+			boolean[] ival = boolAccess();
+			float[] rv = new float[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = ival[i] ? 1f : 0f;
+			return rv;
+		}
+
+		@Override
+		public int[] intAccess()
+		{
+			boolean[] val = boolAccess();
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i)
+				rv[i] = val[i] ? 1 : 0;
+			return rv;
+		}
+
+		@Override
+		public boolean[] boolAccess()
+		{
+			if (_vals == null)
+				_vals = _d.getBools(getNdxs());
+			return _vals;
+		}
 		
-//		@Override
-//		public IntFunction<String> stringAccess()
-//		{
-//			return i -> _f.apply(i).toString();
-//		}
-//
-//		@Override
-//		public IntFloatFunction floatAccess()
-//		{
-//			return i -> (float) _f.apply(i).ordinal();
-//		}
-//
-//		@Override
-//		public IntIntFunction intAccess()
-//		{
-//			return i -> _f.apply(i).ordinal();
-//		}
-//
-//		@Override
-//		public IntBoolFunction boolAccess()
-//		{
-//			throw new UnsupportedOperationException("No boolean equivalent for enumerated values");
-//		}
 	}
-	
+
 	Set<ColChange> _changedCols = new HashSet<>();
 	
 	protected void setChange(ColChange c)
@@ -528,22 +474,14 @@ public class PAModel implements PALists
 	
 	public void clearChanges()
 	{
-		_lists.values().stream().forEach(o -> o.clearChanges());
+		_lists.forEach((t,l) -> l.clearChanges());
+		_changedCols.clear();
 	}
 
-	public static interface HasMetaList
-	{
-		ListMetaType getListMeta();
-	}
-	
-	/** placeholder for column change class conversions */
-	public enum NoEnum {Unknown};
-	
-	
 	public static void main(String... args) throws PAModelException
 	{
 		String uri = null;
-		File outdir = new File(System.getProperty("user.dir"));
+//		File outdir = new File(System.getProperty("user.dir"));
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -554,9 +492,9 @@ public class PAModel implements PALists
 				case "uri":
 					uri = args[i++];
 					break;
-				case "outdir":
-					outdir = new File(args[i++]);
-					break;
+//				case "outdir":
+//					outdir = new File(args[i++]);
+//					break;
 			}
 		}
 		if (uri == null)
@@ -566,9 +504,33 @@ public class PAModel implements PALists
 			System.exit(1);
 		}
 		
-		PAModel m = PflowModelBuilder.Create(uri).load();
-//		Map<ListMetaType, List<ColChange>> x = m.getChanges().stream().collect(Collectors.groupingBy(ColChange::getListMeta));
+		PflowModelBuilder bldr = PflowModelBuilder.Create(uri); 
+		
+		PAModel m = bldr.load();
+		m.getBuses().stream().filter(b -> ((b.getIndex() % 2) == 0))
+				.forEach(b -> b.setVM(-1f));		
 
+		for(ColChange o : m.getChanges())
+		{
+				System.out.format("%s %s\n", o.getListMeta(), o.getColMeta());
+				int[] ndx = o.getNdxs(), keys = o.getKeys();
+				String[] v = o.stringAccess();
+				for(int i=0; i < o.size(); ++i)
+					System.out.format("\t%d %d %s\n", ndx[i], keys[i], v[i]);
+		}
+		
+		m = bldr.load();
+		m.getBuses().stream().filter(b -> ((b.getIndex() % 2) == 0))
+				.forEach(b -> b.setVM(-1f));		
+
+		for(ColChange o : m.getChanges())
+		{
+				System.out.format("%s %s\n", o.getListMeta(), o.getColMeta());
+				int[] ndx = o.getNdxs(), keys = o.getKeys();
+				String[] v = o.stringAccess();
+				for(int i=0; i < o.size(); ++i)
+					System.out.format("\t%d %d %s\n", ndx[i], keys[i], v[i]);
+		}
 		
 	}
 }

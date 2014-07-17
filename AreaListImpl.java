@@ -8,19 +8,26 @@ import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class AreaListImpl extends GroupListI<Area> implements AreaList
 {
-	public static final AreaList Empty = new AreaListImpl();
-
+	static final PAListEnum _PFld = new PAListEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.AreaID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.AreaNAME;}
+	};
+	
+	
 	public AreaListImpl() {super();}
 
 	public AreaListImpl(PAModel model, int[] busref, int narea)
 	{
-		super(model, null);
+		super(model, null, _PFld);
 		setupMap(busref, narea);
 	}
 
 	public AreaListImpl(PAModel model, int[] keys, int[] busref)
 	{
-		super(model, keys, null);
+		super(model, keys, null, _PFld);
 		setupMap(busref, keys.length);
 	}
 

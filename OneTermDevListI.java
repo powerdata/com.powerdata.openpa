@@ -3,129 +3,142 @@ package com.powerdata.openpa;
 public abstract class OneTermDevListI<T extends OneTermDev> extends
 		AbstractPAList<T> implements OneTermDevList<T>
 {
-	int[][] _bus=IInt();
-	float[][] _p=IFlt(), _q=IFlt();
-	boolean[][] _insvc=IBool();
+	IntData _bus;
+	FloatData _p, _q;
+	BoolData _insvc;
+
 	BusList _buses;
 
 	protected OneTermDevListI() {super();}
 
-	protected OneTermDevListI(PAModel model, int[] keys)
+	protected OneTermDevListI(PAModel model, int[] keys, OneTermDevEnum le)
 	{
-		super(model, keys);
+		super(model, keys, le);
 		_buses = model.getBuses();
+		setFields(le);
 	}
-	protected OneTermDevListI(PAModel model, int size)
+	protected OneTermDevListI(PAModel model, int size, OneTermDevEnum le)
 	{
-		super(model, size);
+		super(model, size, le);
 		_buses = model.getBuses();
+		setFields(le);
+	}
+	
+	private void setFields(OneTermDevEnum le)
+	{
+		 _bus = new IntData(le.bus());
+		 _p = new FloatData(le.p());
+		 _q = new FloatData(le.q());
+		 _insvc = new BoolData(le.insvc());
 	}
 	
 	@Override
 	public Bus getBus(int ndx)
 	{
-		return _buses.get(getInt(_bus, ndx));
+		return _buses.get(_bus.get(ndx));
 	}
 	
 	@Override
 	public void setBus(int ndx, Bus b)
 	{
-		setInt(_bus, ndx, b.getIndex());
+		_bus.set(ndx, b.getIndex());
 	}
 
 	@Override
 	public Bus[] getBus()
 	{
-		return _buses.toArray(getInt(_bus));
+		return _buses.toArray(_bus.get());
 	}
 
 	@Override
 	public void setBus(Bus[] b)
 	{
-		setInt(_bus, BaseList.ObjectNdx(b));
+		_bus.set(BaseList.ObjectNdx(b));
 	}
 
 	@Override
 	public float getP(int ndx)
 	{
-		return getFloat(_p, ndx);
+		return _p.get(ndx);
 	}
 	
 	@Override
 	public float[] getP()
 	{
-		return getFloat(_p);
+		return _p.get();
 	}
 
 	@Override
 	public float getQ(int ndx)
 	{
-		return getFloat(_q, ndx);
+		return _q.get(ndx);
 	}
 
 	/** Get device reactive power injection in MVAr */
 	@Override
 	public float[] getQ()
 	{
-		return getFloat(_q);
+		return _q.get();
 	}
 
 	@Override
 	public void setP(int ndx, float p)
 	{
-		setFloat(_p, ndx, p);
+		_p.set(ndx, p);
 	}
 
 	/** Set device active power injection in MW */
 	@Override
 	public void setP(float[] p)
 	{
-		setFloat(_p, p);
+		_p.set(p);
 	}
 
 	@Override
 	public void setQ(int ndx, float q)
 	{
-		setFloat(_q, ndx, q);
+		_q.set(ndx, q);
 	}
 
 	/** Set device reactive power injection in MVAr */
 	@Override
 	public void setQ(float[] q)
 	{
-		setFloat(_q, q);
+		_q.set(q);
 	}
 
 	@Override
 	public boolean isInSvc(int ndx)
 	{
-		return getBool(_insvc, ndx);
+		return _insvc.get(ndx);
 	}
 
 	/** is device in service */
 	@Override
 	public boolean[] isInSvc()
 	{
-		return getBool(_insvc);
+		return _insvc.get();
 	}
 
 	@Override
 	public void setInSvc(int ndx, boolean state)
 	{
-		setBool(_insvc, ndx, state);
+		_insvc.set(ndx, state);
 	}
 
 	/** set device in/out of service */
 	@Override
 	public void setInSvc(boolean[] state)
 	{
-		setBool(_insvc, state);
+		_insvc.set(state);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public T get(int index)
+	interface OneTermDevEnum extends PAListEnum
 	{
-		return (T) new OneTermDev(this, index);
+		ColumnMeta bus();
+		ColumnMeta p();
+		ColumnMeta q();
+		ColumnMeta insvc();
 	}
+	
 }

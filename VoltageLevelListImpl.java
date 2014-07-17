@@ -4,21 +4,27 @@ import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class VoltageLevelListImpl extends GroupListI<VoltageLevel> implements VoltageLevelList
 {
-	public static final VoltageLevelList Empty = new VoltageLevelListImpl();
+	static final PAListEnum _PFld = new PAListEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.VlevID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.VlevNAME;}
+	};
 
-	float[][] _bkv = IFlt();
+	FloatData _bkv = new FloatData(ColumnMeta.VlevBASKV);
 	
 	public VoltageLevelListImpl() {super();}
 	
 	public VoltageLevelListImpl(PAModel model, int[] busref, int nowner)
 	{
-		super(model, null);
+		super(model, null, _PFld);
 		setupMap(busref, nowner);
 	}
 	
 	public VoltageLevelListImpl(PAModel model, int[] keys, int[] busref)
 	{
-		super(model, keys, null);
+		super(model, keys, null, _PFld);
 		setupMap(busref, keys.length);
 	}
 
@@ -30,25 +36,25 @@ public class VoltageLevelListImpl extends GroupListI<VoltageLevel> implements Vo
 	@Override
 	public float getBaseKV(int ndx)
 	{
-		return getFloat(_bkv, ndx);
+		return _bkv.get(ndx);
 	}
 
 	@Override
 	public void setBaseKV(int ndx, float k)
 	{
-		setFloat(_bkv, ndx, k);
+		_bkv.set(ndx, k);
 	}
 
 	@Override
 	public float[] getBaseKV()
 	{
-		return getFloat(_bkv);
+		return _bkv.get();
 	}
 
 	@Override
 	public void setBaseKV(float[] kv)
 	{
-		setFloat(_bkv, kv);
+		_bkv.set(kv);
 	}
 
 	@Override

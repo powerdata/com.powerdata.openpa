@@ -6,11 +6,17 @@ import com.powerdata.openpa.Switch.State;
 
 public class IslandListImpl extends GroupListI<Island> implements IslandList
 {
-	boolean[] _egzd = new boolean[_size];
-	float[][] _freq = IFlt();
-	int[][] _fsrc = IInt();
+	static final PAListEnum _PFld = new PAListEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.IslandID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.IslandNAME;}
+	};
 	
-	public static final IslandList Empty = new IslandListImpl();
+	BoolData _egzd = new BoolData(ColumnMeta.IslandEGZSTATE);
+	FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
+	IntData _fsrc = new IntData(ColumnMeta.IslandFRQSRC);
 	
 	IslandListImpl(){};
 	
@@ -59,7 +65,7 @@ public class IslandListImpl extends GroupListI<Island> implements IslandList
 			{
 				return d.isInSvc();
 			}
-		}.addAll().getMap());
+		}.addAll().getMap(), _PFld);
 		
 		String[] id = new String[_size];
 		for(int i=0; i < _size; ++i)
@@ -78,7 +84,7 @@ public class IslandListImpl extends GroupListI<Island> implements IslandList
 	void setupEgStatus()
 	{
 		int n = size();
-		_egzd = new boolean[n];
+		boolean[] e = new boolean[_size];
 		for(int i=0; i < n; ++i)
 		{
 			for(Gen g : getGenerators(i))
@@ -86,71 +92,72 @@ public class IslandListImpl extends GroupListI<Island> implements IslandList
 				Mode m = g.getMode();
 				if (m != Mode.OFF && m != Mode.PMP)
 				{
-					_egzd[i] = true;
+					e[i] = true;
 					break;
 				}
 			}
+			_egzd.set(e);
 		}
 	}
 	
 	@Override
 	public boolean isEnergized(int ndx)
 	{
-		return _egzd[ndx];
+		return _egzd.get(ndx);
 	}
 
 	@Override
 	public boolean[] isEnergized()
 	{
-		return _egzd.clone();
+		return _egzd.get();
 	}
 	
 	@Override
 	public float getFreq(int ndx)
 	{
-		return getFloat(_freq, ndx);
+		return _freq.get(ndx);
 	}
 
 	@Override
 	public void setFreq(int ndx, float f)
 	{
-		setFloat(_freq, ndx, f);
+		_freq.set(ndx, f);
 	}
 	
 	@Override
 	public float[] getFreq()
 	{
-		return getFloat(_freq);
+		return _freq.get();
 	}
 	
 	@Override
 	public void setFreq(float[] f)
 	{
-		setFloat(_freq, f);
+		_freq.set(f);
 	}
 	
 	@Override
 	public Bus getFreqSrc(int ndx)
 	{
-		return _model.getBuses().get(getInt(_fsrc, ndx));
+		return _model.getBuses().get(_fsrc.get(ndx));
 	}
 
 	@Override
 	public void setFreqSrc(int ndx, Bus fsrc)
 	{
-		setInt(_fsrc, ndx, fsrc.getIndex());
+		_fsrc.set(ndx, fsrc.getIndex());
 	}
 	
 	@Override
 	public Bus[] getFreqSrc()
 	{
-		return _model.getBuses().toArray(getInt(_fsrc));
+		return _model.getBuses().toArray(_fsrc.get());
 	}
 	
 	@Override
 	public void setFreqSrc(Bus[] fsrc)
 	{
-		setInt(_fsrc, BaseList.ObjectNdx(fsrc));
+		_fsrc.set(BaseList.ObjectNdx(fsrc));
 	}
 
 	public static void main(String[] args) throws Exception

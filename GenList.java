@@ -2,23 +2,9 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
-import com.powerdata.openpa.PAModel.ListMetaType;
 
 public interface GenList extends OneTermDevList<Gen>
 {
-	enum Fld implements PAModel.HasMetaList
-	{
-		ID, NAME, BUS, P, Q, INSVC,
-		TYPE, MODE, OPMINP, OPMAXP, MINQ, MAXQ, PS, QS, AVR, VS, REGBUS;
-
-		@Override
-		public ListMetaType getListMeta()
-		{
-			return ListMetaType.Gen;
-		}
-		
-	}
-	
 	static final GenList Empty = new GenListI();
 
 	Type getType(int ndx);

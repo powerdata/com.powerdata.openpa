@@ -8,7 +8,7 @@ import com.powerdata.openpa.tools.SNdxKeyOfs;
 public abstract class AbstractBaseList<T extends BaseObject> extends AbstractList<T> implements BaseList<T>
 {
 	protected int _size;
-	private SNdxKeyOfs _keyndx;
+	protected SNdxKeyOfs _keyndx;
 
 	protected AbstractBaseList(int size)
 	{

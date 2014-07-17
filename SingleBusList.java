@@ -23,7 +23,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 			{
 				return d.getState() == State.Closed;
 			}
-		}.addSwitches().getMap());
+		}.addSwitches().getMap(), null);
 
 		_buses = model.getBuses();
 		
@@ -32,7 +32,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public String getName(int ndx)
 	{
-		if(_name[RW] == null) createNames();
+		if(_name.rw == null) createNames();
 		return super.getName(ndx);
 	}
 	
@@ -41,7 +41,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public String getID(int ndx)
 	{
-		if (_id[RW] == null) createIDs();
+		if(_id.rw == null) createIDs();
 		return super.getID(ndx);
 	}
 
@@ -106,7 +106,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public String[] getName()
 	{
-		if(_name[RW] == null) createNames();
+		if(_name.rw == null) createNames();
 		return super.getName();
 	}
 

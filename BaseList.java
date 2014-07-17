@@ -48,8 +48,6 @@ public interface BaseList<T extends BaseObject> extends List<T>
 		{
 			return ndx+1;
 		}
-		
-		
 	};
 	
 	int getKey(int ndx);

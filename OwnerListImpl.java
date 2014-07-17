@@ -5,19 +5,25 @@ import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class OwnerListImpl extends GroupListI<Owner> implements OwnerList
 {
-	public static final OwnerList Empty = new OwnerListImpl();
-
+	static final PAListEnum _PFld = new PAListEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.OwnerID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.OwnerNAME;}
+	};
+	
 	public OwnerListImpl() {super();}
 	
 	public OwnerListImpl(PAModel model, int[] busref, int nowner)
 	{
-		super(model, null);
+		super(model, null, _PFld);
 		setupMap(busref, nowner);
 	}
 	
 	public OwnerListImpl(PAModel model, int[] keys, int[] busref)
 	{
-		super(model, keys, null);
+		super(model, keys, null, _PFld);
 		setupMap(busref, keys.length);
 	}
 

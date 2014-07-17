@@ -60,21 +60,33 @@ public class BusListI extends GroupListI<Bus> implements BusList
 		}
 	}
 
-	float[][] _vm=IFlt(), _va=IFlt();
-	int[][] _areas=IInt(), _owners=IInt(), _stations=IInt(), _vlevs=IInt();
-	int[][] _fspri=IInt();
+	static final PAListEnum _PFld = new PAListEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.BusID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.BusNAME;}
+	};
+	
+	FloatData _vm = new FloatData(ColumnMeta.BusVM),
+			_va = new FloatData(ColumnMeta.BusVA);
+	
+	IntData _area = new IntData(ColumnMeta.BusAREA),
+			_own = new IntData(ColumnMeta.BusOWNER),
+			_sta = new IntData(ColumnMeta.BusSTATION),
+			_vl = new IntData(ColumnMeta.BusVLEV),
+			_fspri = new IntData(ColumnMeta.BusFREQSRCPRI);
+	
 	AreaList _arealist;
 	OwnerList _ownerlist;
 	StationList _stationlist;
 	VoltageLevelList _vllist;
 	
-	public static final BusList Empty = new BusListI();
-
 	BusListI(){super();}
 	
 	public BusListI(PAModel model, int[] keys)
 	{
-		super(model, keys, new UnityBusGrpMap(keys.length));
+		super(model, keys, new UnityBusGrpMap(keys.length), _PFld);
 		_arealist = model.getAreas();
 		_ownerlist = model.getOwners();
 		_stationlist = model.getStations();
@@ -83,7 +95,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	
 	public BusListI(PAModel model, int size)
 	{
-		super(model, new UnityBusGrpMap(size));
+		super(model, new UnityBusGrpMap(size), _PFld);
 		_arealist = model.getAreas();
 	}
 
@@ -94,74 +106,74 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	}
 	
 	@Override
-	public float getVM(int ndx) {return getFloat(_vm, ndx);}
+	public float getVM(int ndx) {return _vm.get(ndx);}
 
 	@Override
-	public float[] getVM() {return getFloat(_vm);}
+	public float[] getVM() {return _vm.get();}
 
 	@Override
-	public void setVM(int ndx, float vm) {setFloat(_vm, ndx, vm);}
+	public void setVM(int ndx, float vm) {_vm.set(ndx, vm);}
 
 	@Override
-	public void setVM(float[] vm) {setFloat(_vm, vm);}
+	public void setVM(float[] vm) {_vm.set(vm);}
 	
 	@Override
-	public float getVA(int ndx) {return getFloat(_va, ndx);}
+	public float getVA(int ndx) {return _va.get(ndx);}
 
 	@Override
-	public float[] getVA() {return getFloat(_va);}
+	public float[] getVA() {return _va.get();}
 
 	@Override
-	public void setVA(int ndx, float va) {setFloat(_va, ndx, va);}
+	public void setVA(int ndx, float va) {_va.set(ndx, va);}
 	
 	@Override
-	public void setVA(float[] va) {setFloat(_va, va);}
+	public void setVA(float[] va) {_va.set(va);}
 
 	@Override
 	public Area getArea(int ndx)
 	{
-		return _arealist.get(getInt(_areas, ndx));
+		return _arealist.get(_area.get(ndx));
 	}
 	
 	@Override
 	public void setArea(int ndx, Area a)
 	{
-		setInt(_areas, ndx, a.getIndex());
+		_area.set(ndx, a.getIndex());
 	}
 
 	@Override
 	public Area[] getArea()
 	{
-		return _arealist.toArray(getInt(_areas));
+		return _arealist.toArray(_area.get());
 	}
 
 	@Override
 	public void setArea(Area[] area)
 	{
-		setInt(_areas, BaseList.ObjectNdx(area));
+		_area.set(BaseList.ObjectNdx(area));
 	}
 	
 	@Override
 	public Owner getOwner(int ndx)
 	{
-		return _ownerlist.get(getInt(_owners, ndx));
+		return _ownerlist.get(_own.get(ndx));
 	}
 
 	@Override
 	public void setOwner(int ndx, Owner o)
 	{
-		setInt(_owners, ndx, o.getIndex());
+		_own.set(ndx, o.getIndex());
 	}
 	@Override
 	public Owner[] getOwner()
 	{
-		return _ownerlist.toArray(getInt(_owners));
+		return _ownerlist.toArray(_own.get());
 	}
 
 	@Override
 	public void setOwner(Owner[] owner)
 	{
-		setInt(_owners, BaseList.ObjectNdx(owner));
+		_own.set(BaseList.ObjectNdx(owner));
 	}
 	
 
@@ -183,73 +195,73 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	@Override
 	public int getFrequencySourcePriority(int ndx)
 	{
-		return getInt(_fspri, ndx);
+		return _fspri.get(ndx);
 	}
 
 	@Override
 	public void setFrequencySourcePriority(int ndx, int fsp)
 	{
-		setInt(_fspri, ndx, fsp);
+		_fspri.set(ndx, fsp);
 	}
 
 	@Override
 	public int[] getFrequencySourcePriority()
 	{
-		return getInt(_fspri);
+		return _fspri.get();
 	}
 	
 	@Override
 	public void setFrequencySourcePriority(int[] fsrc)
 	{
-		setInt(_fspri, fsrc);
+		_fspri.set(fsrc);
 	}
 	
 	@Override
 	public Station getStation(int ndx)
 	{
-		return _stationlist.get(getInt(_stations, ndx));
+		return _stationlist.get(_sta.get(ndx));
 	}
 
 	@Override
 	public void setStation(int ndx, Station s)
 	{
-		setInt(_stations, ndx, s.getIndex());
+		_sta.set(ndx, s.getIndex());
 	}
 	
 	@Override
 	public Station[] getStation()
 	{
-		return _stationlist.toArray(getInt(_stations));
+		return _stationlist.toArray(_sta.get());
 	}
 	
 	@Override
 	public void setStation(Station[] s)
 	{
-		setInt(_stations, BaseList.ObjectNdx(s));
+		_sta.set(BaseList.ObjectNdx(s));
 	}
 
 	@Override
 	public VoltageLevel getVoltageLevel(int ndx)
 	{
-		return _vllist.get(getInt(_vlevs, ndx));
+		return _vllist.get(_vl.get(ndx));
 	}
 
 	@Override
 	public void setVoltageLevel(int ndx, VoltageLevel l)
 	{
-		setInt(_vlevs, ndx, l.getIndex());
+		_vl.set(ndx, l.getIndex());
 	}
 
 	@Override
 	public VoltageLevel[] getVoltageLevel()
 	{
-		return _vllist.toArray(getInt(_vlevs));
+		return _vllist.toArray(_vl.get());
 	}
 	
 	@Override
 	public void setVoltageLevel(VoltageLevel[] l)
 	{
-		setInt(_vlevs, BaseList.ObjectNdx(l));
+		_vl.set(BaseList.ObjectNdx(l));
 	}
 
 	@Override

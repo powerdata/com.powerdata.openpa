@@ -4,19 +4,32 @@ import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class SwitchedShuntListImpl extends ShuntListImpl<SwitchedShunt> implements SwitchedShuntList
 {
-
-	public static final SwitchedShuntList	Empty	= new SwitchedShuntListImpl();
+	static final ShuntEnum _PFld = new ShuntEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.SwshID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.SwshNAME;}
+		@Override
+		public ColumnMeta bus() {return ColumnMeta.SwshBUS;}
+		@Override
+		public ColumnMeta p() {return ColumnMeta.SwshP;}
+		@Override
+		public ColumnMeta q() {return ColumnMeta.SwshQ;}
+		@Override
+		public ColumnMeta insvc() {return ColumnMeta.SwshINSVC;}
+		@Override
+		public ColumnMeta b() {return ColumnMeta.SwshB;}
+	};
 
 	public SwitchedShuntListImpl(PAModel model, int[] keys)
 	{
-		super(model, keys);
-		// TODO Auto-generated constructor stub
+		super(model, keys, _PFld);
 	}
 
 	public SwitchedShuntListImpl(PAModel model, int size)
 	{
-		super(model, size);
-		// TODO Auto-generated constructor stub
+		super(model, size, _PFld);
 	}
 
 	public SwitchedShuntListImpl() {super();}

@@ -3,142 +3,162 @@ package com.powerdata.openpa;
 public abstract class TransformerBaseListImpl<T extends TransformerBase>
 		extends ACBranchListImpl<T> implements TransformerBaseList<T>
 {
-	float[][] _b = IFlt(), _g = IFlt(), _deg=IFlt();
-	float[][] _ft = IFlt(), _tt = IFlt();
 	
+	FloatData _b, _g, _deg, _ft, _tt;
 
 	protected TransformerBaseListImpl()
 	{
 		super();
 	}
 
-	protected TransformerBaseListImpl(PAModel model, int[] keys)
+	protected TransformerBaseListImpl(PAModel model, int[] keys, TransBaseEnum le)
 	{
-		super(model, keys);
+		super(model, keys, le);
+		setFields(le);
 	}
 
-	protected TransformerBaseListImpl(PAModel model, int size)
+	protected TransformerBaseListImpl(PAModel model, int size, TransBaseEnum le)
 	{
-		super(model, size);
+		super(model, size, le);
+		setFields(le);
 	}
 
+	private void setFields(TransBaseEnum le)
+	{
+		_b = new FloatData(le.bmag());
+		_g = new FloatData(le.gmag());
+		_deg = new FloatData(le.shift());
+		_ft = new FloatData(le.ftap());
+		_tt = new FloatData(le.ttap());
+	}
+
+	
 	@Override
 	public float getGmag(int ndx)
 	{
-		return getFloat(_g, ndx);
+		return _g.get(ndx);
 	}
 
 	@Override
 	public void setGmag(int ndx, float g)
 	{
-		setFloat(_g, ndx, g);
+		_g.set(ndx, g);
 	}
 
 	@Override
 	public float[] getGmag()
 	{
-		return getFloat(_g);
+		return _g.get();
 	}
 
 	@Override
 	public void setGmag(float[] g)
 	{
-		setFloat(_g, g);
+		_g.set(g);
 	}
 
 	@Override
 	public float getBmag(int ndx)
 	{
-		return getFloat(_b, ndx);
+		return _b.get(ndx);
 	}
 
 	@Override
 	public void setBmag(int ndx, float b)
 	{
-		setFloat(_b, ndx, b);
+		_b.set(ndx, b);
 	}
 
 	@Override
 	public float[] getBmag()
 	{
-		return getFloat(_b);
+		return _b.get();
 	}
 
 	@Override
 	public void setBmag(float[] b)
 	{
-		setFloat(_b, b);
+		_b.set(b);
 	}
 
 	@Override
 	public float getShift(int ndx)
 	{
-		return getFloat(_deg, ndx);
+		return _deg.get(ndx);
 	}
 
 	@Override
 	public void setShift(int ndx, float sdeg)
 	{
-		setFloat(_deg, ndx, sdeg);
+		_deg.set(ndx, sdeg);
 	}
 
 	@Override
 	public float[] getShift()
 	{
-		return getFloat(_deg);
+		return _deg.get();
 	}
 
 	@Override
 	public void setShift(float[] sdeg)
 	{
-		setFloat(_deg, sdeg);
+		_deg.set(sdeg);
 	}
 	@Override
 	public float getFromTap(int ndx)
 	{
-		return getFloat(_ft, ndx);
+		return _ft.get(ndx);
 	}
 
 	@Override
 	public void setFromTap(int ndx, float a)
 	{
-		setFloat(_ft, ndx, a);
+		_ft.set(ndx, a);
 	}
 
 	@Override
 	public float[] getFromTap()
 	{
-		return getFloat(_ft);
+		return _ft.get();
 	}
 
 	@Override
 	public void setFromTap(float[] a)
 	{
-		setFloat(_ft, a);
+		_ft.set(a);
 	}
 
 	@Override
 	public float getToTap(int ndx)
 	{
-		return getFloat(_tt, ndx);
+		return _tt.get(ndx);
 	}
 
 	@Override
 	public void setToTap(int ndx, float a)
 	{
-		setFloat(_tt, ndx, a);
+		_tt.set(ndx, a);
 	}
 
 	@Override
 	public float[] getToTap()
 	{
-		return getFloat(_tt);
+		return _tt.get();
 	}
 
 	@Override
 	public void setToTap(float[] a)
 	{
-		setFloat(_tt, a);
+		_tt.set(a);
+	}
+	
+	interface TransBaseEnum extends ACBranchEnum
+	{
+		ColumnMeta gmag();
+		ColumnMeta bmag();
+		ColumnMeta shift();
+		ColumnMeta ftap();
+		ColumnMeta ttap();
 	}
 
 }

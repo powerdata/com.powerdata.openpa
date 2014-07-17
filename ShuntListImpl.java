@@ -3,38 +3,50 @@ package com.powerdata.openpa;
 public abstract class ShuntListImpl<T extends Shunt> 
 	extends OneTermDevListI<T> implements ShuntList<T>
 {
-	float[][] _b = IFlt();
-	
-	public ShuntListImpl(PAModel model, int[] keys)
+	interface ShuntEnum extends OneTermDevEnum
 	{
-		super(model, keys);
+		ColumnMeta b();
 	}
-	public ShuntListImpl(PAModel model, int size)
+	
+	FloatData _b;
+	
+	public ShuntListImpl(PAModel model, int[] keys, ShuntEnum le)
 	{
-		super(model, size);
+		super(model, keys, le);
+		setFields(le);
+	}
+	public ShuntListImpl(PAModel model, int size, ShuntEnum le)
+	{
+		super(model, size, le);
+		setFields(le);
 	}
 
 	public ShuntListImpl() {super();}
 	
+	private void setFields(ShuntEnum le)
+	{
+		_b = new FloatData(le.b());
+	}
+
 	@Override
 	public float getB(int ndx)
 	{
-		return getFloat(_b, ndx);
+		return _b.get(ndx);
 	}
 	@Override
 	public void setB(int ndx, float b)
 	{
-		setFloat(_b, ndx, b);
+		_b.set(ndx, b);
 	}
 	@Override
 	public float[] getB()
 	{
-		return getFloat(_b);
+		return _b.get();
 	}
 	@Override
 	public void setB(float[] b)
 	{
-		setFloat(_b, b);
+		_b.set(b);
 	}
 	
 }

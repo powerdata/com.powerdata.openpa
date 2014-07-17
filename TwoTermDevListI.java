@@ -2,103 +2,122 @@ package com.powerdata.openpa;
 
 public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPAList<T> implements TwoTermDevList<T> 
 {
-	int[][] _fbus=IInt(), _tbus=IInt();
-	boolean[][] _insvc=IBool();
 	BusList _buses;
+	
+	IntData _fbus, _tbus;
+	BoolData _insvc;
+	FloatData _fp, _fq, _tp, _tq;
 	
 	protected TwoTermDevListI(){super();}
 
-	protected TwoTermDevListI(PAModel model, int[] keys)
+	protected TwoTermDevListI(PAModel model, int[] keys, TwoTermDevEnum le)
 	{
-		super(model, keys);
+		super(model, keys, le);
 		_buses = model.getBuses();
+		setFields(le);
 	}
 	
-	protected TwoTermDevListI(PAModel model, int size)
+	protected TwoTermDevListI(PAModel model, int size, TwoTermDevEnum le)
 	{
-		super(model, size);
+		super(model, size, le);
 		_buses = model.getBuses();
+		setFields(le);
+	}
+
+	private void setFields(TwoTermDevEnum le)
+	{
+		_fbus = new IntData(le.fbus());
+		_tbus = new IntData(le.tbus());
+		_insvc = new BoolData(le.insvc());
+		_fp = new FloatData(le.fp());
+		_fq = new FloatData(le.fq());
+		_tp = new FloatData(le.tp());
+		_tq = new FloatData(le.tq());
+		
 	}
 
 	@Override
 	public Bus getFromBus(int ndx)
 	{
-		return _buses.get(getInt(_fbus, ndx));
+		return _buses.get(_fbus.get(ndx));
 	}
 	
 	@Override
 	public void setFromBus(int ndx, Bus b)
 	{
-		setInt(_fbus, ndx, b.getIndex());
+		_fbus.set(ndx, b.getIndex());
 	}
 
 	@Override
 	public Bus[] getFromBus()
 	{
-		return _buses.toArray(getInt(_fbus));
+		return _buses.toArray(_fbus.get());
 	}
 
 	@Override
 	public void setFromBus(Bus[] b)
 	{
-		setInt(_fbus, BaseList.ObjectNdx(b));
+		_fbus.set(BaseList.ObjectNdx(b));
 	}
 
 	@Override
 	public Bus getToBus(int ndx)
 	{
-		return _buses.get(getInt(_tbus, ndx));
+		return _buses.get(_tbus.get(ndx));
 	}
 
 	@Override
 	public void setToBus(int ndx, Bus b)
 	{
-		setInt(_tbus, ndx, b.getIndex());
+		_tbus.set(ndx, b.getIndex());
 	}
 
 	@Override
 	public Bus[] getToBus()
 	{
-		return _buses.toArray(getInt(_tbus));
+		return _buses.toArray(_tbus.get());
 	}
 
 	@Override
 	public void setToBus(Bus[] b)
 	{
-		setInt(_tbus, BaseList.ObjectNdx(b));
+		_tbus.set(BaseList.ObjectNdx(b));
 	}
 
 	@Override
 	public boolean isInSvc(int ndx)
 	{
-		return getBool(_insvc, ndx);
+		return _insvc.get(ndx);
 	}
 
 	/** is device in service */
 	@Override
 	public boolean[] isInSvc()
 	{
-		return getBool(_insvc);
+		return _insvc.get();
 	}
 
 	@Override
 	public void setInSvc(int ndx, boolean state)
 	{
-		setBool(_insvc, ndx, state);
+		_insvc.set(ndx, state);
 	}
 
 	/** set device in/out of service */
 	@Override
 	public void setInSvc(boolean[] state)
 	{
-		setBool(_insvc, state);
+		_insvc.set(state);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public T get(int index)
+	interface TwoTermDevEnum extends PAListEnum
 	{
-		return (T) new TwoTermDev(this, index);
+		ColumnMeta fbus();
+		ColumnMeta tbus();
+		ColumnMeta insvc();
+		ColumnMeta fp(); 
+		ColumnMeta fq(); 
+		ColumnMeta tp(); 
+		ColumnMeta tq(); 
 	}
-
 }

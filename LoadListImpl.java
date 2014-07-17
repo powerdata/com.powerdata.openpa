@@ -4,18 +4,35 @@ import com.powerdata.openpa.PAModel.ListMetaType;
 
 public class LoadListImpl extends OneTermDevListI<Load> implements LoadList 
 {
+	static final OneTermDevEnum _PFld = new OneTermDevEnum()
+	{
+		@Override
+		public ColumnMeta id() {return ColumnMeta.LoadID;}
+		@Override
+		public ColumnMeta name() {return ColumnMeta.LoadNAME;}
+		@Override
+		public ColumnMeta bus() {return ColumnMeta.LoadBUS;}
+		@Override
+		public ColumnMeta p() {return ColumnMeta.LoadP;}
+		@Override
+		public ColumnMeta q() {return ColumnMeta.LoadQ;}
+		@Override
+		public ColumnMeta insvc() {return ColumnMeta.LoadINSVC;}
+	};
+	
 	public LoadListImpl() {super();}
 	
-	float[][] _pmx=IFlt(), _qmx=IFlt();
+	FloatData _pmx = new FloatData(ColumnMeta.LoadPMAX),
+			_qmx = new FloatData(ColumnMeta.LoadQMAX);
 
 	public LoadListImpl(PAModel model, int size)
 	{
-		super(model, size);
+		super(model, size, _PFld);
 	}
 
 	public LoadListImpl(PAModel model, int[] keys)
 	{
-		super(model, keys);
+		super(model, keys, _PFld);
 	}
 
 	@Override
@@ -27,49 +44,49 @@ public class LoadListImpl extends OneTermDevListI<Load> implements LoadList
 	@Override
 	public float getMaxP(int ndx)
 	{
-		return getFloat(_pmx, ndx);
+		return _pmx.get(ndx);
 	}
 
 	@Override
 	public void setMaxP(int ndx, float mw)
 	{
-		setFloat(_pmx, ndx, mw);
+		_pmx.set(ndx, mw);
 	}
 
 	@Override
 	public float[] getMaxP()
 	{
-		return getFloat(_pmx);
+		return _pmx.get();
 	}
 
 	@Override
 	public void setMaxP(float[] mw)
 	{
-		setFloat(_pmx, mw);
+		_pmx.set(mw);
 	}
 
 	@Override
 	public float getMaxQ(int ndx)
 	{
-		return getFloat(_qmx, ndx);
+		return _qmx.get(ndx);
 	}
 
 	@Override
 	public void setMaxQ(int ndx, float mvar)
 	{
-		setFloat(_qmx, ndx, mvar);
+		_qmx.set(ndx, mvar);
 	}
 
 	@Override
 	public float[] getMaxQ()
 	{
-		return getFloat(_qmx);
+		return _qmx.get();
 	}
 
 	@Override
 	public void setMaxQ(float[] mvar)
 	{
-		setFloat(_qmx, mvar);
+		_qmx.set(mvar);
 	}
 
 	@Override
