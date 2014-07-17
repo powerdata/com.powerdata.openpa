@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.powerflow;
 
-import com.powerdata.openpa.tools.AbstractBaseObject;
+import com.powerdata.openpa.psse.AbstractBaseObject;
 import com.powerdata.openpa.psse.PsseModelException;
 
 public class TwoTermDCLineResult extends AbstractBaseObject

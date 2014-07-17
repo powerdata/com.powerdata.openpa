@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.util;
 
-import com.powerdata.openpa.tools.AbstractBaseObject;
+import com.powerdata.openpa.psse.AbstractBaseObject;
 import com.powerdata.openpa.psse.BusList;
 import com.powerdata.openpa.psse.BusTypeCode;
 import com.powerdata.openpa.psse.GenList;

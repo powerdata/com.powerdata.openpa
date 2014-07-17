@@ -6,8 +6,6 @@ import gnu.trove.map.hash.TIntIntHashMap;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
-import com.powerdata.pd3.utils.SortedIntOfsNdx;
-
 public abstract class SNdxKeyOfs 
 {
 	protected int[] _keys;

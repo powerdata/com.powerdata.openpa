@@ -5,8 +5,6 @@ import com.powerdata.openpa.Gen.Type;
 
 public interface GenList extends OneTermDevList<Gen>
 {
-	static final GenList Empty = new GenListI();
-
 	Type getType(int ndx);
 	
 	void setType(int ndx, Type t);

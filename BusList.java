@@ -1,13 +1,14 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.GroupListIfc;
+
 /**
- * Interface for bus List values needed by the Bus class. Makes the Bus object
- * usable by multiple lists (i.e. connectivity and single-bus views)
+ * List of Buses.
  * 
  * @author chris@powerdata.com
  * 
  */
-public interface BusList extends GroupList<Bus>
+public interface BusList extends GroupListIfc<Bus>
 {
 
 	float getVM(int ndx);

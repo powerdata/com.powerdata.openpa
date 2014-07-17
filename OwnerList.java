@@ -1,6 +1,8 @@
 package com.powerdata.openpa;
 
-public interface OwnerList extends GroupList<Owner>
+import com.powerdata.openpa.impl.GroupListIfc;
+
+public interface OwnerList extends GroupListIfc<Owner>
 {
 
 }

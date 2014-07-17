@@ -1,6 +1,8 @@
 package com.powerdata.openpa;
 
-public interface StationList extends GroupList<Station>
+import com.powerdata.openpa.impl.GroupListIfc;
+
+public interface StationList extends GroupListIfc<Station>
 {
 
 }

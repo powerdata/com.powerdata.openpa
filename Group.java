@@ -1,10 +1,13 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.AbstractBaseObject;
+import com.powerdata.openpa.impl.GroupListIfc;
+
 public class Group extends AbstractBaseObject implements PALists
 {
-	protected GroupList<? extends Group> _list;
+	protected GroupListIfc<? extends Group> _list;
 	
-	public Group(GroupList<? extends Group> list, int ndx)
+	public Group(GroupListIfc<? extends Group> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

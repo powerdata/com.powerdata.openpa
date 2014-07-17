@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.LoadListI;
+
 public interface LoadList extends OneTermDevList<Load>
 {
 

@@ -1,6 +1,8 @@
 package com.powerdata.openpa;
 
-public interface VoltageLevelList extends GroupList<VoltageLevel>
+import com.powerdata.openpa.impl.GroupListIfc;
+
+public interface VoltageLevelList extends GroupListIfc<VoltageLevel>
 {
 
 	float getBaseKV(int ndx);

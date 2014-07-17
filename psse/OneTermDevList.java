@@ -1,7 +1,5 @@
 package com.powerdata.openpa.psse;
 
-import com.powerdata.openpa.tools.AbstractBaseObject;
-import com.powerdata.openpa.tools.BaseList;
 
 public class OneTermDevList extends BaseList<OneTermDev>
 {

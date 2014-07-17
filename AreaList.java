@@ -1,6 +1,8 @@
 package com.powerdata.openpa;
 
-public interface AreaList extends GroupList<Area>
+import com.powerdata.openpa.impl.GroupListIfc;
+
+public interface AreaList extends GroupListIfc<Area>
 {
 
 }

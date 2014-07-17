@@ -1,6 +1,8 @@
 package com.powerdata.openpa;
 
-public interface IslandList extends GroupList<Island>
+import com.powerdata.openpa.impl.GroupListIfc;
+
+public interface IslandList extends GroupListIfc<Island>
 {
 
 	boolean isEnergized(int ndx);

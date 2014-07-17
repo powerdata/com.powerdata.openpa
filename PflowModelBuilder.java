@@ -2,6 +2,7 @@ package com.powerdata.openpa;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import com.powerdata.openpa.impl.ModelBuilderI;
 
 
 /**
@@ -11,7 +12,7 @@ import java.util.HashMap;
  * @author chris@powerdata.com
  * 
  */
-public abstract class PflowModelBuilder extends ModelBuilder
+public abstract class PflowModelBuilder extends ModelBuilderI
 {
 	/** static translations of scheme to input class */
 	static HashMap<String,String> _SchemeToInputClass = new HashMap<String,String>();

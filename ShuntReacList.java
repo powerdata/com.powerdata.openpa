@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.ShuntReacListI;
+
 public interface ShuntReacList extends ShuntList<ShuntReactor> 
 {
 

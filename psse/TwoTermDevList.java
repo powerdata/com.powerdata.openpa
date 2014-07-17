@@ -2,9 +2,6 @@ package com.powerdata.openpa.psse;
 
 import java.util.List;
 
-import com.powerdata.openpa.tools.AbstractBaseObject;
-import com.powerdata.openpa.tools.BaseList;
-
 public class TwoTermDevList extends BaseList<TwoTermDev>
 {
 	Object[] _twoTermDevs;

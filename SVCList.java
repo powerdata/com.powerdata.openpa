@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.SVCListI;
+
 public interface SVCList extends ShuntList<SVC>
 {
 

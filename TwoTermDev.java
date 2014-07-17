@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.AbstractBaseObject;
+
 public class TwoTermDev extends AbstractBaseObject
 {
 	TwoTermDevList<? extends TwoTermDev> _list;

@@ -1,6 +1,6 @@
 package com.powerdata.openpa.psse.powerflow;
 
-import com.powerdata.openpa.tools.BaseList;
+import com.powerdata.openpa.psse.BaseList;
 import com.powerdata.openpa.psse.PsseModelException;
 import com.powerdata.openpa.psse.TwoTermDCLineList;
 
