@@ -43,18 +43,23 @@ abstract class ColChange implements com.powerdata.openpa.ColChange
 	public int size() {return _size;}
 	
 	@Override
-	public abstract String[] stringAccess();
+	public abstract String[] stringValues();
 	@Override
-	public abstract float[] floatAccess();
+	public abstract float[] floatValues();
 	@Override
-	public abstract int[] intAccess();
+	public abstract int[] intValues();
 	@Override
-	public abstract boolean[] booleanAccess();
+	public abstract boolean[] booleanValues();
 
 	@Override
 	public boolean equals(Object obj)
 	{
-		return getColMeta() == ((ColChange)obj).getColMeta();
+		Object s = getColMeta();
+		if (obj instanceof ColumnMeta)
+		{
+			return s == obj;
+		}
+		return s == ((ColChange)obj).getColMeta();
 	}
 	
 	@Override
@@ -76,9 +81,9 @@ class BoolColChange extends ColChange
 	}
 
 	@Override
-	public String[] stringAccess()
+	public String[] stringValues()
 	{
-		boolean[] ival = booleanAccess();
+		boolean[] ival = booleanValues();
 		String[] rv = new String[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = String.valueOf(ival[i]);
@@ -86,9 +91,9 @@ class BoolColChange extends ColChange
 	}
 
 	@Override
-	public float[] floatAccess()
+	public float[] floatValues()
 	{
-		boolean[] ival = booleanAccess();
+		boolean[] ival = booleanValues();
 		float[] rv = new float[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = ival[i] ? 1f : 0f;
@@ -96,9 +101,9 @@ class BoolColChange extends ColChange
 	}
 
 	@Override
-	public int[] intAccess()
+	public int[] intValues()
 	{
-		boolean[] val = booleanAccess();
+		boolean[] val = booleanValues();
 		int[] rv = new int[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = val[i] ? 1 : 0;
@@ -106,7 +111,7 @@ class BoolColChange extends ColChange
 	}
 
 	@Override
-	public boolean[] booleanAccess()
+	public boolean[] booleanValues()
 	{
 		if (_vals == null)
 			_vals = _d.getBools(getNdxs());
@@ -127,9 +132,9 @@ class FloatColChange extends ColChange
 	}
 
 	@Override
-	public String[] stringAccess()
+	public String[] stringValues()
 	{
-		float[] ival = floatAccess();
+		float[] ival = floatValues();
 		String[] rv = new String[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = String.valueOf(ival[i]);
@@ -137,7 +142,7 @@ class FloatColChange extends ColChange
 	}
 
 	@Override
-	public float[] floatAccess()
+	public float[] floatValues()
 	{
 		if (_vals == null)
 			_vals = _d.getFloats(getNdxs());
@@ -145,9 +150,9 @@ class FloatColChange extends ColChange
 	}
 
 	@Override
-	public int[] intAccess()
+	public int[] intValues()
 	{
-		float[] val = floatAccess();
+		float[] val = floatValues();
 		int[] rv = new int[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = Math.round(val[i]);
@@ -155,9 +160,9 @@ class FloatColChange extends ColChange
 	}
 
 	@Override
-	public boolean[] booleanAccess()
+	public boolean[] booleanValues()
 	{
-		float[] val = floatAccess();
+		float[] val = floatValues();
 		boolean[] rv = new boolean[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = val[i] != 0f;
@@ -178,9 +183,9 @@ class IntColChange extends ColChange
 	}
 
 	@Override
-	public String[] stringAccess()
+	public String[] stringValues()
 	{
-		int[] ival = intAccess();
+		int[] ival = intValues();
 		String[] rv = new String[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = String.valueOf(ival[i]);
@@ -188,9 +193,9 @@ class IntColChange extends ColChange
 	}
 
 	@Override
-	public float[] floatAccess()
+	public float[] floatValues()
 	{
-		int[] ival = intAccess();
+		int[] ival = intValues();
 		float[] rv = new float[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = (float) ival[i];
@@ -198,7 +203,7 @@ class IntColChange extends ColChange
 	}
 
 	@Override
-	public int[] intAccess()
+	public int[] intValues()
 	{
 		if (_vals == null)
 			_vals = _d.getInts(getNdxs());
@@ -206,9 +211,9 @@ class IntColChange extends ColChange
 	}
 
 	@Override
-	public boolean[] booleanAccess()
+	public boolean[] booleanValues()
 	{
-		int[] ival = intAccess();
+		int[] ival = intValues();
 		boolean[] rv = new boolean[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = ival[i] != 0;
@@ -229,7 +234,7 @@ class StringColChange extends ColChange
 	}
 
 	@Override
-	public String[] stringAccess()
+	public String[] stringValues()
 	{
 		if (_vals == null)
 			_vals = _d.getStrings(getNdxs());
@@ -237,9 +242,9 @@ class StringColChange extends ColChange
 	}
 
 	@Override
-	public float[] floatAccess()
+	public float[] floatValues()
 	{
-		String[] val = stringAccess();
+		String[] val = stringValues();
 		float[] rv = new float[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = Float.parseFloat(val[i]);
@@ -247,9 +252,9 @@ class StringColChange extends ColChange
 	}
 
 	@Override
-	public int[] intAccess()
+	public int[] intValues()
 	{
-		String[] val = stringAccess();
+		String[] val = stringValues();
 		int[] rv = new int[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = Integer.parseInt(val[i]);
@@ -257,9 +262,9 @@ class StringColChange extends ColChange
 	}
 
 	@Override
-	public boolean[] booleanAccess()
+	public boolean[] booleanValues()
 	{
-		String[] val = stringAccess();
+		String[] val = stringValues();
 		boolean[] rv = new boolean[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = Boolean.parseBoolean(val[i]);

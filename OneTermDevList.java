@@ -6,8 +6,7 @@ public class OneTermDevList extends
 		SuperListMgr<OneTermDev, OneTermDevListIfc<OneTermDev>> implements
 		OneTermDevListIfc<OneTermDev>
 {
-	public OneTermDevList(PALists lists)
-			throws ReflectiveOperationException, RuntimeException
+	public OneTermDevList(PALists lists) throws PAModelException
 	{
 		super(lists, OneTermDevListIfc.class);
 	}

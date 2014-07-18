@@ -6,8 +6,7 @@ public class ACBranchList extends SuperListMgr<ACBranch, ACBranchListIfc<ACBranc
 		ACBranchListIfc<ACBranch>
 {
 
-	public ACBranchList(PALists lists) throws ReflectiveOperationException,
-			RuntimeException
+	public ACBranchList(PALists lists) throws PAModelException
 	{
 		super(lists, ACBranchListIfc.class);
 	}

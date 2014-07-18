@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PALists;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.tools.SNdxKeyOfs;
 
 public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
@@ -62,22 +62,29 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		
 	}
 	@SuppressWarnings("unchecked")
-	protected SuperListMgr(PALists lists, Class<?> clz)
-			throws ReflectiveOperationException, RuntimeException
+	protected SuperListMgr(PALists lists, Class<?> clz) throws PAModelException
 	{
-		for (Method m : lists.getClass().getDeclaredMethods())
+		try
 		{
-			Class<?> rt = m.getReturnType();
-			if (!rt.equals(this.getClass()) && testMethod(clz, rt))
+			for (Method m : lists.getClass().getDeclaredMethods())
 			{
-				U list = (U) m.invoke(lists, new Object[] {});
-				if (!list.isEmpty())
+				Class<?> rt = m.getReturnType();
+				if (!rt.equals(this.getClass()) && testMethod(clz, rt))
 				{
-					int os = _size;
-					_size += list.size();
-					_members.add(new Member(os, _size, list));
+					U list;
+					list = (U) m.invoke(lists, new Object[] {});
+					if (!list.isEmpty())
+					{
+						int os = _size;
+						_size += list.size();
+						_members.add(new Member(os, _size, list));
+					}
 				}
 			}
+		}
+		catch (ReflectiveOperationException | IllegalArgumentException e)
+		{
+			throw new PAModelException(e);
 		}
 		int[] keys = new int[_size];
 		for (Member m : _members)

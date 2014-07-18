@@ -13,13 +13,13 @@ public interface ColChange
 	/** get number of changes */
 	int size();
 	/** access changes as an array of Strings */
-	String[] stringAccess();
+	String[] stringValues();
 	/** access changes as an array of floats */
-	float[] floatAccess();
+	float[] floatValues();
 	/** access changes as an array of ints */
-	int[] intAccess();
+	int[] intValues();
 	/** access changes as an array of boolean */
-	boolean[] booleanAccess();
+	boolean[] booleanValues();
 	/** clear the cahnges */ 
 	void clear();
 }

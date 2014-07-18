@@ -240,7 +240,7 @@ public class PAModelI implements PAModel
 		{
 				System.out.format("%s %s\n", o.getListMeta(), o.getColMeta());
 				int[] ndx = o.getNdxs(), keys = o.getKeys();
-				String[] v = o.stringAccess();
+				String[] v = o.stringValues();
 				for(int i=0; i < o.size(); ++i)
 					System.out.format("\t%d %d %s\n", ndx[i], keys[i], v[i]);
 		}
@@ -253,7 +253,7 @@ public class PAModelI implements PAModel
 		{
 				System.out.format("%s %s\n", o.getListMeta(), o.getColMeta());
 				int[] ndx = o.getNdxs(), keys = o.getKeys();
-				String[] v = o.stringAccess();
+				String[] v = o.stringValues();
 				for(int i=0; i < o.size(); ++i)
 					System.out.format("\t%d %d %s\n", ndx[i], keys[i], v[i]);
 		}
@@ -267,20 +267,19 @@ public class PAModelI implements PAModel
 	}
 
 	@Override
-	public OneTermDevList getOneTermDevices()
-			throws ReflectiveOperationException, RuntimeException
+	public OneTermDevList getOneTermDevices() throws PAModelException
 	{
 		return new OneTermDevList(this);
 	}
 
 	@Override
-	public TwoTermDevList getTwoTermDevices() throws ReflectiveOperationException, RuntimeException
+	public TwoTermDevList getTwoTermDevices() throws PAModelException
 	{
 		return new TwoTermDevList(this);
 	}
 
 	@Override
-	public ACBranchList getACBranches() throws ReflectiveOperationException, RuntimeException
+	public ACBranchList getACBranches() throws PAModelException
 	{
 		return new ACBranchList(this);
 	}

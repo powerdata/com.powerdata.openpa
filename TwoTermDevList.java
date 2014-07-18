@@ -6,8 +6,7 @@ public class TwoTermDevList extends SuperListMgr<TwoTermDev,TwoTermDevListIfc<Tw
 		TwoTermDevListIfc<TwoTermDev>
 {
 
-	public TwoTermDevList(PALists lists)
-			throws ReflectiveOperationException, RuntimeException
+	public TwoTermDevList(PALists lists) throws PAModelException
 	{
 		super(lists, TwoTermDevListIfc.class);
 	}
