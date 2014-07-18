@@ -1,11 +1,28 @@
-package com.powerdata.openpa.impl;
+package com.powerdata.openpa;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
-import com.powerdata.openpa.*;
 
-abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements GroupListIfc<T>
+import com.powerdata.openpa.impl.AbstractPAList;
+import com.powerdata.openpa.impl.BusSubList;
+import com.powerdata.openpa.impl.GenSubList;
+import com.powerdata.openpa.impl.GroupMap;
+import com.powerdata.openpa.impl.LineSubList;
+import com.powerdata.openpa.impl.LoadSubList;
+import com.powerdata.openpa.impl.PAModelI;
+import com.powerdata.openpa.impl.PhaseShifterSubList;
+import com.powerdata.openpa.impl.SVCSubList;
+import com.powerdata.openpa.impl.SeriesCapSubList;
+import com.powerdata.openpa.impl.SeriesReacSubList;
+import com.powerdata.openpa.impl.ShuntCapSubList;
+import com.powerdata.openpa.impl.ShuntReacSubList;
+import com.powerdata.openpa.impl.SwitchSubList;
+import com.powerdata.openpa.impl.SwitchedShuntSubList;
+import com.powerdata.openpa.impl.TransformerSubList;
+import com.powerdata.openpa.impl.TwoTermDCLineSubList;
+
+public abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements GroupListIfc<T>
 {
 	enum EqType
 	{
@@ -40,32 +57,38 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	protected BusGrpMap _bgmap;
 	WeakReference<List<int[]>> _areamap = new WeakReference<>(null);
 
-	GroupListI() {super();}
+	protected GroupListI() {super();}
 	
-	GroupListI(PAModelI model, int[] keys, BusGrpMap busgrp)
+	PALists _lmodel;
+	
+	protected GroupListI(PALists model, int[] keys, BusGrpMap busgrp)
 	{
-		super(model, keys, null);
+		super(null, keys, null);
+		_lmodel = model;
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	GroupListI(PAModelI model, BusGrpMap busgrp)
+	protected GroupListI(PALists model, BusGrpMap busgrp)
 	{
-		super(model, busgrp.size(), null);
+		super(null, busgrp.size(), null);
+		_lmodel = model;
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	GroupListI(PAModelI model, int[] keys, BusGrpMap busgrp, PAListEnum pfld)
+	protected GroupListI(PAModelI model, int[] keys, BusGrpMap busgrp, PAListEnum pfld)
 	{
 		super(model, keys, pfld);
+		_lmodel = model;
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	GroupListI(PAModelI model, BusGrpMap busgrp, PAListEnum pfld)
+	protected GroupListI(PAModelI model, BusGrpMap busgrp, PAListEnum pfld)
 	{
 		super(model, busgrp.size(), pfld);
+		_lmodel = model;
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
@@ -85,7 +108,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 
 	/** get equipment lists for each bus */
 	protected List<int[]> getMap2T(EqType ltype,
-			TwoTermDevList<? extends TwoTermDev> list)
+			TwoTermDevListIfc<? extends TwoTermDev> list)
 	{
 		int lx = ltype.ordinal();
 		List<int[]> map = _lstref[lx].get();
@@ -98,7 +121,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	}
 
 	/** recreate the mapping if it fell out of the cache */
-	protected List<int[]> map2TList(TwoTermDevList<? extends TwoTermDev> list)
+	protected List<int[]> map2TList(TwoTermDevListIfc<? extends TwoTermDev> list)
 	{
 		int lcnt = list.size();
 		int[] fmap = new int[lcnt], tmap = new int[lcnt];
@@ -115,7 +138,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 
 	/** get equipment lists for each bus (1-terminal) */
 	protected List<int[]> getMap1T(EqType ltype,
-			OneTermDevList<? extends OneTermDev> list)
+			OneTermDevListIfc<? extends OneTermDev> list)
 	{
 		int lx = ltype.ordinal();
 		List<int[]> map = _lstref[lx].get();
@@ -127,7 +150,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 		return map;
 	}
 
-	protected List<int[]> map1TList(OneTermDevList<? extends OneTermDev> list)
+	protected List<int[]> map1TList(OneTermDevListIfc<? extends OneTermDev> list)
 	{
 		int cnt = list.size();
 		int[] map = new int[cnt];
@@ -143,27 +166,27 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	 */
 	public BusList getBuses(int ndx)
 	{
-		BusList list = _model.getBuses();
+		BusList list = _lmodel.getBuses();
 		return new BusSubList(list, _bgmap.map().get(ndx));
 	}
 	
 	/** return list of switches */
 	public SwitchList getSwitches(int ndx)
 	{
-		SwitchList list = _model.getSwitches();
+		SwitchList list = _lmodel.getSwitches();
 		return new SwitchSubList(list, getMap2T(EqType.SW, list).get(ndx));
 	}
 	/** return list of lines */
 	public LineList getLines(int ndx)
 	{
-		LineList list = _model.getLines();
+		LineList list = _lmodel.getLines();
 		return new LineSubList(list,
 			getMap2T(EqType.LN, list).get(ndx));
 	}
 	/** return list of series reactors */
 	public SeriesReacList getSeriesReactors(int ndx)
 	{
-		SeriesReacList list = _model.getSeriesReactors();
+		SeriesReacList list = _lmodel.getSeriesReactors();
 		return new SeriesReacSubList(list,
 			getMap2T(EqType.SR, list).get(ndx));
 	}
@@ -171,14 +194,14 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of series capacitors */
 	public SeriesCapList getSeriesCapacitors(int ndx)
 	{
-		SeriesCapList list = _model.getSeriesCapacitors();
+		SeriesCapList list = _lmodel.getSeriesCapacitors();
 		return new SeriesCapSubList(list,
 			getMap2T(EqType.SC, list).get(ndx));
 	}
 	/** return list of transformers */
 	public TransformerList getTransformers(int ndx)
 	{
-		TransformerList list = _model.getTransformers();
+		TransformerList list = _lmodel.getTransformers();
 		return new TransformerSubList(list,
 			getMap2T(EqType.TX, list).get(ndx));
 	}
@@ -186,7 +209,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of phase shifters */
 	public PhaseShifterList getPhaseShifters(int ndx)
 	{
-		PhaseShifterList list = _model.getPhaseShifters();
+		PhaseShifterList list = _lmodel.getPhaseShifters();
 		return new PhaseShifterSubList(list,
 			getMap2T(EqType.PS, list).get(ndx));
 	}
@@ -194,7 +217,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of two-terminal DC Lines */
 	public TwoTermDCLineList getTwoTermDCLines(int ndx)
 	{
-		TwoTermDCLineList list = _model.getTwoTermDCLines();
+		TwoTermDCLineList list = _lmodel.getTwoTermDCLines();
 		return new TwoTermDCLineSubList(list,
 			getMap2T(EqType.D2, list).get(ndx));
 	}
@@ -202,7 +225,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of generators */
 	public GenList getGenerators(int ndx)
 	{
-		GenList list = _model.getGenerators();
+		GenList list = _lmodel.getGenerators();
 		return new GenSubList(list,
 			getMap1T(EqType.GEN, list).get(ndx));
 	}
@@ -210,14 +233,14 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of loads */
 	public LoadList getLoads(int ndx)
 	{
-		LoadList list = _model.getLoads();
+		LoadList list = _lmodel.getLoads();
 		return new LoadSubList(list,
 			getMap1T(EqType.LD, list).get(ndx));
 	}
 	/** return list of shunt reactors */
 	public ShuntReacList getShuntReactors(int ndx)
 	{
-		ShuntReacList list = _model.getShuntReactors();
+		ShuntReacList list = _lmodel.getShuntReactors();
 		return new ShuntReacSubList(list,
 			getMap1T(EqType.SHR, list).get(ndx));
 	}
@@ -225,7 +248,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of shunt capacitors */
 	public ShuntCapList getShuntCapacitors(int ndx)
 	{
-		ShuntCapList list = _model.getShuntCapacitors();
+		ShuntCapList list = _lmodel.getShuntCapacitors();
 		return new ShuntCapSubList(list,
 			getMap1T(EqType.SHC, list).get(ndx));
 	}
@@ -233,7 +256,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of switched shunts */
 	public SwitchedShuntList getSwitchedShunts(int ndx)
 	{
-		SwitchedShuntList list = _model.getSwitchedShunts();
+		SwitchedShuntList list = _lmodel.getSwitchedShunts();
 		return new SwitchedShuntSubList(list,
 			getMap1T(EqType.SWSH, list).get(ndx));
 	}
@@ -241,7 +264,7 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	/** return list of SVC's */
 	public SVCList getSVCs(int ndx)
 	{
-		SVCList list = _model.getSVCs();
+		SVCList list = _lmodel.getSVCs();
 		return new SVCSubList(list,
 			getMap1T(EqType.SVC, list).get(ndx));
 	}
@@ -250,12 +273,6 @@ abstract class GroupListI<T extends Group> extends AbstractPAList<T> implements 
 	public T getByBus(Bus b)
 	{
 		return get(_bgmap.getGrp(b.getIndex()));
-	}
-
-	@Override
-	protected ListMetaType getMetaType()
-	{
-		return ListMetaType.AnonymousGroup;
 	}
 
 }

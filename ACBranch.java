@@ -9,9 +9,9 @@ package com.powerdata.openpa;
 
 public class ACBranch extends TwoTermDev
 {
-	ACBranchList<? extends ACBranch> _list;
+	ACBranchListIfc<? extends ACBranch> _list;
 	
-	public ACBranch(ACBranchList<? extends ACBranch> list, int ndx)
+	public ACBranch(ACBranchListIfc<? extends ACBranch> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

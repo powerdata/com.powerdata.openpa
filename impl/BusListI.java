@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
+
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.BaseList;
@@ -10,6 +11,7 @@ import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMap;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
+import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
@@ -97,7 +99,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	StationList _stationlist;
 	VoltageLevelList _vllist;
 	
-	BusListI(){super();}
+	public BusListI(){super();}
 	
 	public BusListI(PAModelI model, int[] keys)
 	{
@@ -280,7 +282,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Bus;
 	}

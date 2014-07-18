@@ -329,7 +329,7 @@ public class GenListI extends OneTermDevListI<Gen> implements GenList
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Gen;
 	}

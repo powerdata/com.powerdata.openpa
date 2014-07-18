@@ -4,9 +4,9 @@ import com.powerdata.openpa.impl.AbstractBaseObject;
 
 public class TwoTermDev extends AbstractBaseObject
 {
-	TwoTermDevList<? extends TwoTermDev> _list;
+	TwoTermDevListIfc<? extends TwoTermDev> _list;
 	
-	public TwoTermDev(TwoTermDevList<? extends TwoTermDev> list, int ndx)
+	public TwoTermDev(TwoTermDevListIfc<? extends TwoTermDev> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

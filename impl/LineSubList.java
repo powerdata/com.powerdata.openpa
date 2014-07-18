@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.LineList;
+import com.powerdata.openpa.ListMetaType;
 
 public class LineSubList extends ACBranchSubList<Line> implements LineList
 {
@@ -67,6 +68,12 @@ public class LineSubList extends ACBranchSubList<Line> implements LineList
 	public Line get(int index)
 	{
 		return new Line(this, index);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.Line;
 	}
 	
 }

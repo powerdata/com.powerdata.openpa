@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
 
@@ -18,5 +19,12 @@ public class TransformerSubList extends TransformerBaseSubList<Transformer> impl
 	{
 		return new Transformer(this, index);
 	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.Transformer;
+	}
+	
 
 }

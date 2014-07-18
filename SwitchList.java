@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.Switch.State;
 
-public interface SwitchList extends TwoTermDevList<Switch>
+public interface SwitchList extends TwoTermDevListIfc<Switch>
 {
 
 	State getState(int ndx);

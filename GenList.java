@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
 
-public interface GenList extends OneTermDevList<Gen>
+public interface GenList extends OneTermDevListIfc<Gen>
 {
 	Type getType(int ndx);
 	

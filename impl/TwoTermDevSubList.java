@@ -2,14 +2,14 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.TwoTermDev;
-import com.powerdata.openpa.TwoTermDevList;
+import com.powerdata.openpa.TwoTermDevListIfc;
 
-public abstract class TwoTermDevSubList<T extends TwoTermDev> extends SubList<T> implements TwoTermDevList<T>
+public abstract class TwoTermDevSubList<T extends TwoTermDev> extends SubList<T> implements TwoTermDevListIfc<T>
 {
-	TwoTermDevList<T> _src;
+	TwoTermDevListIfc<T> _src;
 
 	
-	public TwoTermDevSubList(TwoTermDevList<T> src, int[] ndx)
+	public TwoTermDevSubList(TwoTermDevListIfc<T> src, int[] ndx)
 	{
 		super(src, ndx);
 		_src = src;

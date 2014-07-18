@@ -124,7 +124,7 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Switch;
 	}

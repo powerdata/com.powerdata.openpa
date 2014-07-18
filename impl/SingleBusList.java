@@ -1,10 +1,12 @@
 package com.powerdata.openpa.impl;
 
 import java.util.regex.Pattern;
+
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
@@ -32,7 +34,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 			{
 				return d.getState() == State.Closed;
 			}
-		}.addSwitches().getMap(), null);
+		}.addSwitches().getMap(), BusListI._PFld);
 
 		_buses = model.getBuses();
 		
@@ -335,7 +337,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.AnonymousGroup;
 	}

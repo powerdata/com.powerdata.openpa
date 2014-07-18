@@ -6,7 +6,7 @@ import com.powerdata.openpa.tools.SNdxKeyOfs;
 
 public interface BaseList<T extends BaseObject> extends List<T> 
 {
-	public static class SNdxNoKey extends SNdxKeyOfs
+	static class SNdxNoKey extends SNdxKeyOfs
 	{
 		int _size;
 
@@ -88,5 +88,8 @@ public interface BaseList<T extends BaseObject> extends List<T>
 	}
 	
 	int[] getIndexesFromKeys(int[] keys);
+
+	ListMetaType getMetaType();
+
 
 }

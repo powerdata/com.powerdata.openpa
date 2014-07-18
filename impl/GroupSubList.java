@@ -4,6 +4,7 @@ import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Group;
+import com.powerdata.openpa.GroupListIfc;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.LoadList;
 import com.powerdata.openpa.PhaseShifterList;
@@ -16,6 +17,7 @@ import com.powerdata.openpa.SwitchList;
 import com.powerdata.openpa.SwitchedShuntList;
 import com.powerdata.openpa.TransformerList;
 import com.powerdata.openpa.TwoTermDCLineList;
+
 import gnu.trove.map.hash.TIntIntHashMap;
 
 public abstract class GroupSubList<T extends Group> extends SubList<T> implements GroupListIfc<T>

@@ -41,7 +41,7 @@ public class ShuntCapListI extends ShuntListI<ShuntCapacitor> implements ShuntCa
 		return new ShuntCapacitor(this, index);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.ShuntCap;
 	}

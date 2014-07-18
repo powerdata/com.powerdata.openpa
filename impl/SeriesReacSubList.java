@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SeriesReac;
 import com.powerdata.openpa.SeriesReacList;
 
@@ -17,5 +18,11 @@ public class SeriesReacSubList extends ACBranchSubList<SeriesReac> implements Se
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.SeriesReac;
 	}
 }

@@ -61,7 +61,7 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 		return new PhaseShifter(this, index);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.PhaseShifter;
 	}

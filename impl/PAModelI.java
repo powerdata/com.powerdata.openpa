@@ -195,7 +195,7 @@ public class PAModelI implements PAModel
 	
 	public void clearChanges()
 	{
-		_lists.forEach((t,l) -> l.clearChanges());
+		_changedCols.forEach(c -> c.clear());
 		_changedCols.clear();
 	}
 	
@@ -263,47 +263,31 @@ public class PAModelI implements PAModel
 	@Override
 	public BusList getSingleBus()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new SingleBusList(this);
 	}
 
 	@Override
-	public OneTermDevList<? extends OneTermDev> getOneTermDevices()
+	public OneTermDevList getOneTermDevices()
+			throws ReflectiveOperationException, RuntimeException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new OneTermDevList(this);
 	}
 
 	@Override
-	public TwoTermDevList<? extends TwoTermDev> getTwoTermDevices()
+	public TwoTermDevList getTwoTermDevices() throws ReflectiveOperationException, RuntimeException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new TwoTermDevList(this);
 	}
 
 	@Override
-	public ACBranchList<? extends ACBranch> getACBranches()
+	public ACBranchList getACBranches() throws ReflectiveOperationException, RuntimeException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new ACBranchList(this);
 	}
 
 	@Override
 	public GroupList createGroups(BusGrpMap map)
 	{
-		return new AnonGrp(map);
-	}
-	class AnonGrp extends GroupListI<Group> implements GroupList
-	{
-		public AnonGrp(BusGrpMap busgrp)
-		{
-			super(PAModelI.this, busgrp);
-		}
-
-		@Override
-		public Group get(int index)
-		{
-			return new Group(this, index);
-		}
+		return new GroupList(this, map);
 	}
 }

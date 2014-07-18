@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.ShuntCapList;
 import com.powerdata.openpa.ShuntCapacitor;
 
@@ -16,4 +17,11 @@ public class ShuntCapSubList extends ShuntSubList<ShuntCapacitor> implements Shu
 	{
 		return new ShuntCapacitor(this, index);
 	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.ShuntCap;
+	}
+	
 }

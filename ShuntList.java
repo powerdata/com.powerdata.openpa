@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public interface ShuntList<T extends Shunt> extends OneTermDevList<T>
+public interface ShuntList<T extends Shunt> extends OneTermDevListIfc<T>
 {
 
 	float getB(int ndx);

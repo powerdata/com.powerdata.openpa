@@ -5,10 +5,10 @@ import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.OneTermDev;
-import com.powerdata.openpa.OneTermDevList;
+import com.powerdata.openpa.OneTermDevListIfc;
 
 public abstract class OneTermDevListI<T extends OneTermDev> extends
-		AbstractPAList<T> implements OneTermDevList<T>
+		AbstractPAList<T> implements OneTermDevListIfc<T>
 {
 	IntData _bus;
 	FloatData _p, _q;

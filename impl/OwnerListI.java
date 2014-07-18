@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
+import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
 import com.powerdata.openpa.OwnerList;
@@ -44,7 +45,7 @@ public class OwnerListI extends GroupListI<Owner> implements OwnerList
 		return new Owner(this, index);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Owner;
 	}

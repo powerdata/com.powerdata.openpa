@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Load;
 import com.powerdata.openpa.LoadList;
 
@@ -67,5 +68,11 @@ public class LoadSubList extends OneTermDevSubList<Load> implements LoadList
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setMaxQ(_ndx[i], mvar[i]);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.Load;
 	}
 }

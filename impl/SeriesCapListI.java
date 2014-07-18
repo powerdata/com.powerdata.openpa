@@ -52,7 +52,7 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.SeriesCap;
 	}

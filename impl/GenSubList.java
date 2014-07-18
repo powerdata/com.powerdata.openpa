@@ -5,6 +5,7 @@ import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
+import com.powerdata.openpa.ListMetaType;
 
 public class GenSubList extends OneTermDevSubList<Gen> implements GenList
 {
@@ -295,5 +296,11 @@ public class GenSubList extends OneTermDevSubList<Gen> implements GenList
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setRegBus(_ndx[i], b[i]);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.Gen;
 	}
 }

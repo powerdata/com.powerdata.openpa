@@ -61,7 +61,7 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Transformer;
 	}

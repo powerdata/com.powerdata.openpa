@@ -44,7 +44,7 @@ public class SwitchedShuntListI extends ShuntListI<SwitchedShunt> implements Swi
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.SwitchedShunt;
 	}

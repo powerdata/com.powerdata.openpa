@@ -1,7 +1,11 @@
 package com.powerdata.openpa;
 
-public interface LineList extends ACBranchList<Line>
+import com.powerdata.openpa.impl.LineListI;
+
+public interface LineList extends ACBranchListIfc<Line>
 {
+
+	static LineList	Empty	= new LineListI();
 
 	float getFromBchg(int ndx);
 

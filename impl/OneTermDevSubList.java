@@ -2,13 +2,13 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.OneTermDev;
-import com.powerdata.openpa.OneTermDevList;
+import com.powerdata.openpa.OneTermDevListIfc;
 
-public abstract class OneTermDevSubList<T extends OneTermDev> extends SubList<T> implements OneTermDevList<T>
+public abstract class OneTermDevSubList<T extends OneTermDev> extends SubList<T> implements OneTermDevListIfc<T>
 {
-	OneTermDevList<T> _src;
+	OneTermDevListIfc<T> _src;
 	
-	public OneTermDevSubList(OneTermDevList<T> src, int[] ndx)
+	public OneTermDevSubList(OneTermDevListIfc<T> src, int[] ndx)
 	{
 		super(src, ndx);
 		_src = src;

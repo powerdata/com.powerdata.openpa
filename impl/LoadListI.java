@@ -100,7 +100,7 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 		_qmx.set(mvar);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Load;
 	}

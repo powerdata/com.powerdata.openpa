@@ -56,6 +56,12 @@ abstract class ColChange implements com.powerdata.openpa.ColChange
 	{
 		return getColMeta() == ((ColChange)obj).getColMeta();
 	}
+	
+	@Override
+	public void clear()
+	{
+		_d.clear();
+	}
 }
 
 class BoolColChange extends ColChange

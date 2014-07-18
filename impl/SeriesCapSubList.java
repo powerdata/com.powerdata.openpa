@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SeriesCap;
 import com.powerdata.openpa.SeriesCapList;
 
@@ -17,5 +18,11 @@ public class SeriesCapSubList extends ACBranchSubList<SeriesCap> implements Seri
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.SeriesCap;
 	}
 }

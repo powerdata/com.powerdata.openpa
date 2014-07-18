@@ -46,7 +46,7 @@ public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implement
 		return new TwoTermDCLine(this, index);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.TwoTermDCLine;
 	}

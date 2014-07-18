@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.SVCList;
 
@@ -143,6 +144,12 @@ public class SVCSubList extends ShuntSubList<SVC> implements SVCList
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setRegBus(_ndx[i], b[i]);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.SVC;
 	}
 
 }

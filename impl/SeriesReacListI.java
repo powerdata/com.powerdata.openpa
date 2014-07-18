@@ -52,7 +52,7 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.SeriesReac;
 	}

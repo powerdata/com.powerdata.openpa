@@ -1,6 +1,5 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.GroupListIfc;
 
 public interface VoltageLevelList extends GroupListIfc<VoltageLevel>
 {

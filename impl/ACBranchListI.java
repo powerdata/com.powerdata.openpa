@@ -1,11 +1,11 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ACBranch;
-import com.powerdata.openpa.ACBranchList;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.ColumnMeta;
 
 public abstract class ACBranchListI<T extends ACBranch> extends
-		TwoTermDevListI<T> implements ACBranchList<T>
+		TwoTermDevListI<T> implements ACBranchListIfc<T>
 {
 	protected ACBranchListI()
 	{

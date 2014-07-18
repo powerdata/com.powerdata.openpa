@@ -125,7 +125,7 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 		return new Line(this, index);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Line;
 	}

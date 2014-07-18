@@ -4,6 +4,7 @@ import com.powerdata.openpa.Area;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Island;
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
 import com.powerdata.openpa.Station;
 import com.powerdata.openpa.VoltageLevel;
@@ -208,6 +209,12 @@ public class BusSubList extends GroupSubList<Bus> implements BusList
 	public Bus get(int index)
 	{
 		return new Bus(this, index);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.Bus;
 	}
 
 }

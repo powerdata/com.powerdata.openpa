@@ -5,9 +5,9 @@ import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.TwoTermDev;
-import com.powerdata.openpa.TwoTermDevList;
+import com.powerdata.openpa.TwoTermDevListIfc;
 
-public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPAList<T> implements TwoTermDevList<T> 
+public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPAList<T> implements TwoTermDevListIfc<T> 
 {
 	BusList _buses;
 	

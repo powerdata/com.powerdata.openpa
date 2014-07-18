@@ -1,5 +1,11 @@
 package com.powerdata.openpa;
 
+/**
+ * Standard power system equipment lists
+ * 
+ * @author chris@powerdata.com
+ *
+ */
 public interface PALists
 {
 	/** return list of buses */
@@ -44,16 +50,4 @@ public interface PALists
 	/** return list of SVC's */
 	SVCList getSVCs();
 	
-	/** return list of Areas */
-//	AreaList getAreas();
-
-	/** return list of Owners */
-//	OwnerList getOwners();
-	
-	/** return list of Stations */
-//	StationList getStations();
-
-//	VoltageLevelList getVoltageLevels();
-	
-//	IslandList getIslands();
 }

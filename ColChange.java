@@ -20,4 +20,6 @@ public interface ColChange
 	int[] intAccess();
 	/** access changes as an array of boolean */
 	boolean[] booleanAccess();
+	/** clear the cahnges */ 
+	void clear();
 }

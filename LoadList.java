@@ -2,7 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.impl.LoadListI;
 
-public interface LoadList extends OneTermDevList<Load>
+public interface LoadList extends OneTermDevListIfc<Load>
 {
 
 	static final LoadList Empty = new LoadListI();

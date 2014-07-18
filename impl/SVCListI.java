@@ -156,7 +156,7 @@ public class SVCListI extends ShuntListI<SVC> implements SVCList
 		_rbus.set(BaseList.ObjectNdx(b));
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.SVC;
 	}

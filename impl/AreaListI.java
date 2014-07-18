@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.ColumnMeta;
+import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.ListMetaType;
 
 public class AreaListI extends GroupListI<Area> implements AreaList
@@ -44,7 +45,7 @@ public class AreaListI extends GroupListI<Area> implements AreaList
 		return new Area(this, index);
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Area;
 	}

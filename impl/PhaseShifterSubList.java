@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PhaseShifter;
 import com.powerdata.openpa.PhaseShifterList;
 
@@ -17,6 +18,12 @@ public class PhaseShifterSubList extends TransformerBaseSubList<PhaseShifter> im
 	public PhaseShifter get(int index)
 	{
 		return new PhaseShifter(this, index);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.PhaseShifter;
 	}
 
 }

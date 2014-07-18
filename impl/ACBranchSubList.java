@@ -1,13 +1,13 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ACBranch;
-import com.powerdata.openpa.ACBranchList;
+import com.powerdata.openpa.ACBranchListIfc;
 
 public abstract class ACBranchSubList<T extends ACBranch> extends TwoTermDevSubList<T> implements
-		ACBranchList<T>
+		ACBranchListIfc<T>
 {
 
-	public ACBranchSubList(ACBranchList<T> src, int[] ndx)
+	public ACBranchSubList(ACBranchListIfc<T> src, int[] ndx)
 	{
 		super(src, ndx);
 		// TODO Auto-generated constructor stub

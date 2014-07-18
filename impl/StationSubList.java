@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Station;
 import com.powerdata.openpa.StationList;
 
@@ -17,6 +18,12 @@ public class StationSubList extends GroupSubList<Station> implements
 	public Station get(int index)
 	{
 		return new Station(this, index);
+	}
+
+	@Override
+	public ListMetaType getMetaType()
+	{
+		return ListMetaType.Station;
 	}
 
 }

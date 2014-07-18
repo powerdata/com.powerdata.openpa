@@ -44,7 +44,7 @@ public class ShuntReacListI extends ShuntListI<ShuntReactor> implements ShuntRea
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.ShuntReac;
 	}

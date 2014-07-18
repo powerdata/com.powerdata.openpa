@@ -1,8 +1,8 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.ACBranchList;
+import com.powerdata.openpa.ACBranchListIfc;
 
-public interface TransformerBaseList<T extends TransformerBase> extends ACBranchList<T>
+public interface TransformerBaseList<T extends TransformerBase> extends ACBranchListIfc<T>
 {
 
 	float getGmag(int ndx);

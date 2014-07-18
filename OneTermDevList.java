@@ -1,37 +1,107 @@
 package com.powerdata.openpa;
 
-public interface OneTermDevList<T extends OneTermDev> extends BaseList<T> 
+import com.powerdata.openpa.impl.SuperListMgr;
+
+public class OneTermDevList extends
+		SuperListMgr<OneTermDev, OneTermDevListIfc<OneTermDev>> implements
+		OneTermDevListIfc<OneTermDev>
 {
-	Bus getBus(int ndx);
-
-	void setBus(int ndx, Bus b);
-	
-	Bus[] getBus();
-	
-	void setBus(Bus[] b);
-	
-	float getP(int ndx);
-	
-	void setP(int ndx, float p);
-
-	float[] getP();
-	
-	void setP(float[] p);
-	
-	float getQ(int ndx);
-
-	void setQ(int ndx, float q);
-	
-	float[] getQ();
-	
-	void setQ(float[] q);
-
-	boolean isInSvc(int ndx);
-
-	void setInSvc(int ndx, boolean state);
-	
-	boolean[] isInSvc();
-	
-	void setInSvc(boolean[] state);
-
+	public OneTermDevList(PALists lists)
+			throws ReflectiveOperationException, RuntimeException
+	{
+		super(lists, OneTermDevListIfc.class);
+	}
+	@Override
+	public Bus getBus(int ndx)
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getBus(li.ofs);
+	}
+	@Override
+	public void setBus(int ndx, Bus b)
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setBus(li.ofs, b);
+	}
+	@Override
+	public Bus[] getBus()
+	{
+		return getHelper(Bus[]::new, l -> l.getBus());
+	}
+	@Override
+	public void setBus(Bus[] b)
+	{
+		setHelper(b, Bus[]::new, (l, v) -> l.setBus(v));
+	}
+	@Override
+	public float getP(int ndx)
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getP(li.ofs);
+	}
+	@Override
+	public void setP(int ndx, float p)
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setP(li.ofs, p);
+	}
+	@Override
+	public float[] getP()
+	{
+		return getHelper(float[]::new, l -> l.getP());
+	}
+	@Override
+	public void setP(float[] p)
+	{
+		setHelper(p, float[]::new, (l,v) -> l.setP(v));
+	}
+	@Override
+	public float getQ(int ndx)
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getQ(li.ofs);
+	}
+	@Override
+	public void setQ(int ndx, float q)
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setQ(li.ofs, q);
+	}
+	@Override
+	public float[] getQ()
+	{
+		return getHelper(float[]::new, l -> l.getQ());
+	}
+	@Override
+	public void setQ(float[] q)
+	{
+		setHelper(q, float[]::new, (l, v) -> l.setQ(v));
+	}
+	@Override
+	public boolean isInSvc(int ndx)
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.isInSvc(li.ofs);
+	}
+	@Override
+	public void setInSvc(int ndx, boolean state)
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setInSvc(li.ofs, state);
+	}
+	@Override
+	public boolean[] isInSvc()
+	{
+		return getHelper(boolean[]::new, l -> l.isInSvc());
+	}
+	@Override
+	public void setInSvc(boolean[] state)
+	{
+		setHelper(state, boolean[]::new, (l,v) -> l.setInSvc(v));
+	}
+	@Override
+	public OneTermDev get(int index)
+	{
+		return new OneTermDev(this, index);
+	}
 }

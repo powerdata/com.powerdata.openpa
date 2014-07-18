@@ -23,16 +23,43 @@ public interface PAModel extends PALists
 	/** get Single Bus view of nodes interconnected by closed switches */
 	BusList getSingleBus();
 	
-	/** get all one-terminal devices as a single list */
-	OneTermDevList<? extends OneTermDev> getOneTermDevices();
-	/** get all two-terminal devices as a single list */
-	TwoTermDevList<? extends TwoTermDev> getTwoTermDevices();
-	/** get all AC Branches as a single list */
-	ACBranchList<? extends ACBranch> getACBranches();
+	/**
+	 * get all one-terminal devices as a single list
+	 * 
+	 * @throws RuntimeException
+	 *             Method uses reflection to find all one-terminal device lists
+	 * @throws ReflectiveOperationException
+	 *             Method uses reflection to find all one-terminal device lists
+	 */
+	OneTermDevList getOneTermDevices() throws ReflectiveOperationException,
+			RuntimeException;
+
+	/**
+	 * get all two-terminal devices as a single list
+	 * 
+	 * @throws RuntimeException
+	 *             Method uses reflection to find all two-terminal devices
+	 * @throws ReflectiveOperationException
+	 *             Method uses reflection to find all one-terminal device lists
+	 */
+	TwoTermDevList getTwoTermDevices() throws ReflectiveOperationException,
+			RuntimeException;
+
+	/**
+	 * get all AC Branches as a single list
+	 * 
+	 * @throws RuntimeException
+	 *             Method uses reflection to find all ACBranch devices
+	 * @throws ReflectiveOperationException
+	 *             Method uses reflection to find all ACBranch devices
+	 */
+	ACBranchList getACBranches() throws ReflectiveOperationException, RuntimeException;
 
 	/** Create arbitrary groups of buses */
 	GroupList createGroups(BusGrpMap map);
 	
 	/** get changes */
 	Set<ColChange> getChanges();
+	/** clear changes */
+	void clearChanges();
 }

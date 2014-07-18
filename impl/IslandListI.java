@@ -5,6 +5,7 @@ import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Gen;
+import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.Line;
@@ -160,7 +161,7 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 		_fsrc.set(BaseList.ObjectNdx(fsrc));
 	}
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Island;
 	}

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 
 /**
  * Base of the object list hierarchy
@@ -17,8 +16,7 @@ import com.powerdata.openpa.ListMetaType;
 
 public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseList<T> 
 {
-	PAModelI _model;
-	
+	protected PAModelI _model;
 
 	abstract class Data
 	{
@@ -54,7 +52,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		abstract int[] getInts(int[] ndxs);
 	}
 	
-	class IntData extends IntDataIfc
+	protected class IntData extends IntDataIfc
 	{
 		int[] rw, ro;
 		
@@ -126,7 +124,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 
 	}
 
-	class FloatData extends Data
+	protected class FloatData extends Data
 	{
 		float[] rw, ro;
 		
@@ -196,7 +194,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 
 	}
 
-	class BoolData extends Data
+	protected class BoolData extends Data
 	{
 		boolean[] rw, ro;
 		
@@ -266,7 +264,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 
 	}
 	
-	class StringData extends Data
+	protected class StringData extends Data
 	{
 		String[] rw, ro;
 		
@@ -336,7 +334,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 
 	}
 	
-	class EnumData<E extends Enum<?>> extends IntDataIfc
+	protected class EnumData<E extends Enum<?>> extends IntDataIfc
 	{
 		E[] rw, ro;
 		
@@ -412,13 +410,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	/** interface used to let superclass manage appropriate data but
 	 * be correctly typed for leaf class
 	 */
-	interface PAListEnum
+	protected interface PAListEnum
 	{
 		ColumnMeta id();
 		ColumnMeta name();
 	}
 	
-	StringData _id, _name;
+	protected StringData _id, _name;
 
 	List<Data> _fields = new ArrayList<>();
 
@@ -519,12 +517,5 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rv[i] = getKey(offsets[i]);
 		return rv;
 	}
-
-	public void clearChanges()
-	{
-		_fields.forEach(o -> o.clear());
-	}
-	
-	abstract protected ListMetaType getMetaType();
 
 }

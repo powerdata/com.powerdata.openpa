@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
+import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Station;
 import com.powerdata.openpa.StationList;
@@ -41,7 +42,7 @@ public class StationListI extends GroupListI<Station> implements StationList
 	}
 
 	@Override
-	protected ListMetaType getMetaType()
+	public ListMetaType getMetaType()
 	{
 		return ListMetaType.Station;
 	}

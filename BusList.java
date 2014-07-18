@@ -1,6 +1,7 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.GroupListIfc;
+import com.powerdata.openpa.impl.BusListI;
+
 
 /**
  * List of Buses.
@@ -10,6 +11,8 @@ import com.powerdata.openpa.impl.GroupListIfc;
  */
 public interface BusList extends GroupListIfc<Bus>
 {
+
+	static BusList	Empty	= new BusListI();
 
 	float getVM(int ndx);
 
