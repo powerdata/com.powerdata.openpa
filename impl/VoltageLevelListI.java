@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.GroupListI;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.VoltageLevel;
 import com.powerdata.openpa.VoltageLevelList;
 
@@ -39,25 +40,25 @@ public class VoltageLevelListI extends GroupListI<VoltageLevel> implements
 	}
 
 	@Override
-	public float getBaseKV(int ndx)
+	public float getBaseKV(int ndx) throws PAModelException
 	{
 		return _bkv.get(ndx);
 	}
 
 	@Override
-	public void setBaseKV(int ndx, float k)
+	public void setBaseKV(int ndx, float k) throws PAModelException
 	{
 		_bkv.set(ndx, k);
 	}
 
 	@Override
-	public float[] getBaseKV()
+	public float[] getBaseKV() throws PAModelException
 	{
 		return _bkv.get();
 	}
 
 	@Override
-	public void setBaseKV(float[] kv)
+	public void setBaseKV(float[] kv) throws PAModelException
 	{
 		_bkv.set(kv);
 	}
@@ -69,7 +70,7 @@ public class VoltageLevelListI extends GroupListI<VoltageLevel> implements
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.VoltageLevel;
 	}

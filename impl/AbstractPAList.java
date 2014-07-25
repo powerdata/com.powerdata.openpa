@@ -1,11 +1,11 @@
 package com.powerdata.openpa.impl;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ColumnMeta;
+import com.powerdata.openpa.PAModelException;
 
 /**
  * Base of the object list hierarchy
@@ -21,7 +21,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	abstract class Data
 	{
 		ColumnMeta _ctype;
-		boolean _nochg = true;
+		boolean _nochg = true, _notld = true;
 
 		Data(ColumnMeta coltype)
 		{
@@ -44,6 +44,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		{
 			return AbstractPAList.this.getKeys(ndxs);
 		}
+		
 	}
 	
 	abstract class IntDataIfc extends Data
@@ -61,31 +62,41 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			super(coltype);
 		}
 
+		int[] load() throws PAModelException
+		{
+			_notld = false;
+			return _model.load(getListMeta(), getColMeta(), _keys);
+		}
+
 		@Override
 		void clear() {super.clear(); ro = null;}
 
 		@Override
 		ColChange createChangeObj()
 		{
-			return new IntColChange(getMetaType(), this);
+			return new IntColChange(getListMeta(), this);
 		}
 		
-		int get(int ndx) {return rw[ndx];}
-		
-		void set(int ndx, int s)
+		int get(int ndx) throws PAModelException
 		{
-			if (rw == null)
-				rw = new int[_size];
-			if (ro == null)
+			if (_notld) rw = load();
+			return rw[ndx];
+		}
+		
+		void set(int ndx, int s) throws PAModelException
+		{
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
 			}
 			rw[ndx] = s;
 		}
-		int[] get()
+		int[] get() throws PAModelException
 		{
-			if (ro == null)
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -93,10 +104,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			return rw;
 		}
 		
-		void set(int[] v)
+		void set(int[] v) throws PAModelException
 		{
 			if (v != rw)
+			{
+				if (_notld) ro = load();
 				rw = v.clone();
+			}
 		}
 
 		@Override
@@ -121,41 +135,51 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 				rv[i] = rw[ndxs[i]];
 			return rv;
 		}
-
 	}
-
+	
 	protected class FloatData extends Data
 	{
 		float[] rw, ro;
 		
-		FloatData(ColumnMeta coltype)
+		protected FloatData(ColumnMeta coltype)
 		{
 			super(coltype);
 		}
+		protected float[] load() throws PAModelException
+		{
+			_notld = false;
+			return _model.load(getListMeta(), getColMeta(), _keys);
+		}
+
 		@Override
 		void clear() {super.clear(); ro = null;}
 		@Override
 		ColChange createChangeObj()
 		{
-			return new FloatColChange(getMetaType(), this);
+			return new FloatColChange(getListMeta(), this);
 		}
 		
-		float get(int ndx) {return rw[ndx];}
-		
-		void set(int ndx, float s)
+		float get(int ndx) throws PAModelException
 		{
-			if (rw == null)
-				rw = new float[_size];
-			if (ro == null)
+			if (_notld) rw = load();
+			return rw[ndx];
+		}
+		
+		
+		void set(int ndx, float s) throws PAModelException
+		{
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
 			}
 			rw[ndx] = s;
 		}
-		float[] get()
+		float[] get() throws PAModelException
 		{
-			if (ro == null)
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -163,10 +187,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			return rw;
 		}
 		
-		void set(float[] v)
+		void set(float[] v) throws PAModelException
 		{
 			if (v != rw)
+			{
+				if (_notld) ro = load();
 				rw = v.clone();
+			}
 		}
 		
 		@Override
@@ -202,30 +229,40 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		{
 			super(coltype);
 		}
+		boolean[] load() throws PAModelException
+		{
+			_notld = false;
+			return _model.load(getListMeta(), getColMeta(), _keys);
+		}
+
 		@Override
 		void clear() {super.clear(); ro = null;}
 		@Override
 		ColChange createChangeObj()
 		{
-			return new BoolColChange(getMetaType(), this);
+			return new BoolColChange(getListMeta(), this);
 		}
 		
-		boolean get(int ndx) {return rw[ndx];}
-		
-		void set(int ndx, boolean s)
+		boolean get(int ndx) throws PAModelException
 		{
-			if (rw == null)
-				rw = new boolean[_size];
-			if (ro == null)
+			if (_notld) rw = load();
+			return rw[ndx];
+		}
+		
+		void set(int ndx, boolean s) throws PAModelException
+		{
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
 			}
 			rw[ndx] = s;
 		}
-		boolean[] get()
+		boolean[] get() throws PAModelException
 		{
-			if (ro == null)
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -233,10 +270,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			return rw;
 		}
 		
-		void set(boolean[] v)
+		void set(boolean[] v) throws PAModelException
 		{
 			if (v != rw)
+			{
+				if (_notld) ro = load();
 				rw = v.clone();
+			}
 		}
 
 		@Override
@@ -272,21 +312,29 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		{
 			super(coltype);
 		}
+		String[] load() throws PAModelException
+		{
+			_notld = false;
+			return _model.load(getListMeta(), getColMeta(), _keys);
+		}
 		@Override
 		void clear() {super.clear(); ro = null;}
 		@Override
 		ColChange createChangeObj()
 		{
-			return new StringColChange(getMetaType(), this);
+			return new StringColChange(getListMeta(), this);
 		}
 		
-		String get(int ndx) {return rw[ndx];}
-
-		void set(int ndx, String s)
+		String get(int ndx) throws PAModelException
 		{
-			if (rw == null)
-				rw = new String[_size];
-			if (ro == null)
+			if (_notld) rw = load();
+			return rw[ndx];
+		}
+
+		void set(int ndx, String s) throws PAModelException
+		{
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -294,9 +342,10 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rw[ndx] = s;
 		}
 
-		String[] get()
+		String[] get() throws PAModelException
 		{
-			if (ro == null)
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -304,11 +353,15 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			return rw;
 		}
 		
-		void set(String[] v)
+		void set(String[] v) throws PAModelException
 		{
 			if (v != rw)
+			{
+				if (_notld) ro = load();
 				rw = v.clone();
+			}
 		}
+		
 		@Override
 		int[] computeChanges()
 		{
@@ -342,24 +395,31 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		{
 			super(coltype);
 		}
+
+		E[] load() throws PAModelException
+		{
+			_notld = false;
+			return _model.load(getListMeta(), _ctype, _keys);
+		}
+
 		@Override
 		void clear() {super.clear(); ro = null;}
 		@Override
 		ColChange createChangeObj()
 		{
-			return new IntColChange(getMetaType(), this);
+			return new IntColChange(getListMeta(), this);
 		}
 		
-		E get(int ndx) {return rw[ndx];}
-
-		@SuppressWarnings("unchecked")
-		void set(int ndx, E s)
+		E get(int ndx) throws PAModelException
 		{
-			if (rw == null)
-			{
-				rw = (E[]) Array.newInstance(s.getClass(), _size);
-			}
-			if (ro == null)
+			if (_notld) rw = load();
+			return rw[ndx];
+		}
+
+		void set(int ndx, E s) throws PAModelException
+		{
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -367,9 +427,10 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			rw[ndx] = s;
 		}
 
-		E[] get()
+		E[] get() throws PAModelException
 		{
-			if (ro == null)
+			if (_notld) rw = load();
+			if (_nochg)
 			{
 				ro = rw.clone();
 				setChange();
@@ -377,10 +438,13 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			return rw;
 		}
 		
-		void set(E[] v)
+		void set(E[] v) throws PAModelException
 		{
 			if (v != rw)
+			{
+				if (_notld) ro = load();
 				rw = v.clone();
+			}
 		}
 		@Override
 		int[] computeChanges()
@@ -458,53 +522,53 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	
 	/** get unique object ID */
 	@Override
-	public String getID(int ndx)
+	public String getID(int ndx) throws PAModelException
 	{
 		return _id.get(ndx);
 	}
 
 	/** set unique object ID */
 	@Override
-	public void setID(int ndx, String id)
+	public void setID(int ndx, String id) throws PAModelException
 	{
 		_id.set(ndx, id);
 	}
 
 	/** return array of string object ID's */
 	@Override
-	public String[] getID()
+	public String[] getID() throws PAModelException
 	{
 		return _id.get();
 	}
 	
 	/** set unique object ID */
 	@Override
-	public void setID(String[] id)
+	public void setID(String[] id) throws PAModelException
 	{
 		_id.set(id);
 	}
 
 	/** name of object */
 	@Override
-	public String getName(int ndx)
+	public String getName(int ndx) throws PAModelException
 	{
 		return _name.get(ndx);
 	}
 	/** set name of object */
 	@Override
-	public void setName(int ndx, String name)
+	public void setName(int ndx, String name) throws PAModelException
 	{
 		_name.set(ndx, name);
 	}
 	/** name of object */
 	@Override
-	public String[] getName()
+	public String[] getName() throws PAModelException
 	{
 		return _name.get();
 	}
 	/** set name of object */
 	@Override
-	public void setName(String[] name)
+	public void setName(String[] name) throws PAModelException
 	{
 		_name.set(name);
 	}

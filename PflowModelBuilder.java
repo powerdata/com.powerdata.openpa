@@ -19,7 +19,7 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	/** seed the class translations with some defaults */
 	static
 	{
-		SetSchemeInputClass("pd2cim", "com.powerdata.pa.api.PflowPD2ModelBldr");
+		SetSchemeInputClass("pd3cim", "com.powerdata.pa.api.PflowPD3ModelBldr");
 	}
 	/**
 	 * Set a scheme to input class name translation.

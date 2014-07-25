@@ -14,62 +14,62 @@ public interface BusList extends GroupListIfc<Bus>
 
 	static BusList	Empty	= new BusListI();
 
-	float getVM(int ndx);
+	float getVM(int ndx) throws PAModelException;
 
-	void setVM(int ndx, float vm);
+	void setVM(int ndx, float vm) throws PAModelException;
 
-	float[] getVM();
+	float[] getVM() throws PAModelException;
 
-	void setVM(float[] vm);
+	void setVM(float[] vm) throws PAModelException;
 
-	float getVA(int ndx);
+	float getVA(int ndx) throws PAModelException;
 
-	void setVA(int ndx, float va);
+	void setVA(int ndx, float va) throws PAModelException;
 
-	float[] getVA();
+	float[] getVA() throws PAModelException;
 
-	void setVA(float[] va);
+	void setVA(float[] va) throws PAModelException;
 
-	int getFrequencySourcePriority(int ndx);
+	int getFreqSrcPri(int ndx) throws PAModelException;
 
-	void setFrequencySourcePriority(int ndx, int fsp);
+	void setFreqSrcPri(int ndx, int fsp) throws PAModelException;
 	
-	int[] getFrequencySourcePriority();
+	int[] getFreqSrcPri() throws PAModelException;
 	
-	void setFrequencySourcePriority(int[] fsp);
+	void setFreqSrcPri(int[] fsp) throws PAModelException;
 
-	Island getIsland(int ndx);
+	Island getIsland(int ndx) throws PAModelException;
 
-	Area getArea(int ndx);
+	Area getArea(int ndx) throws PAModelException;
 
-	void setArea(int ndx, Area a);
+	void setArea(int ndx, Area a) throws PAModelException;
 	
-	Area[] getArea();
+	Area[] getArea() throws PAModelException;
 	
-	void setArea(Area[] a);
+	void setArea(Area[] a) throws PAModelException;
 
-	Station getStation(int ndx);
+	Station getStation(int ndx) throws PAModelException;
 
-	void setStation(int ndx, Station s);
+	void setStation(int ndx, Station s) throws PAModelException;
 
-	Station[] getStation();
+	Station[] getStation() throws PAModelException;
 	
-	void setStation(Station[] s);
+	void setStation(Station[] s) throws PAModelException;
 	
-	Owner getOwner(int ndx);
+	Owner getOwner(int ndx) throws PAModelException;
 
-	void setOwner(int ndx, Owner o);
+	void setOwner(int ndx, Owner o) throws PAModelException;
 
-	Owner[] getOwner();
+	Owner[] getOwner() throws PAModelException;
 	
-	void setOwner(Owner[] o);
+	void setOwner(Owner[] o) throws PAModelException;
 	
-	VoltageLevel getVoltageLevel(int ndx);
+	VoltageLevel getVoltageLevel(int ndx) throws PAModelException;
 
-	void setVoltageLevel(int ndx, VoltageLevel l);
+	void setVoltageLevel(int ndx, VoltageLevel l) throws PAModelException;
 	
-	VoltageLevel[] getVoltageLevel();
+	VoltageLevel[] getVoltageLevel() throws PAModelException;
 	
-	void setVoltageLevel(VoltageLevel[] l);
+	void setVoltageLevel(VoltageLevel[] l) throws PAModelException;
 
 }

@@ -21,7 +21,7 @@ public class TwoTermDCLineSubList extends TwoTermDevSubList<TwoTermDCLine> imple
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.TwoTermDCLine;
 	}

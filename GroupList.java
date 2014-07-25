@@ -43,7 +43,7 @@ public class GroupList extends GroupListI<Group>
 	}
 	
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.AnonymousGroup;
 	}

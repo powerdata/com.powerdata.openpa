@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import java.lang.reflect.Array;
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
+import com.powerdata.openpa.PAModelException;
 
 public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 {
@@ -28,25 +29,25 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 	}
 
 	@Override
-	public String getID(int ndx)
+	public String getID(int ndx) throws PAModelException
 	{
 		return _src.getID(_ndx[ndx]);
 	}
 
 	@Override
-	public String[] getID()
+	public String[] getID() throws PAModelException
 	{
 		return mapObject(_src.getID());
 	}	
 
 	@Override
-	public void setID(int ndx, String id)
+	public void setID(int ndx, String id) throws PAModelException
 	{
 		_src.setID(_ndx[ndx], id);
 	}
 
 	@Override
-	public void setID(String[] id)
+	public void setID(String[] id) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setID(_ndx[i], id[i]);
@@ -54,25 +55,25 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 
 
 	@Override
-	public String getName(int ndx)
+	public String getName(int ndx) throws PAModelException
 	{
 		return _src.getName(_ndx[ndx]);
 	}
 
 	@Override
-	public void setName(int ndx, String name)
+	public void setName(int ndx, String name) throws PAModelException
 	{
 		_src.setName(_ndx[ndx], name);
 	}
 
 	@Override
-	public String[] getName()
+	public String[] getName() throws PAModelException
 	{
 		return mapObject(_src.getName());
 	}
 
 	@Override
-	public void setName(String[] name)
+	public void setName(String[] name) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setName(_ndx[i], name[i]);

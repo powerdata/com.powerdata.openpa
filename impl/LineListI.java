@@ -4,6 +4,7 @@ import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 
 public class LineListI extends ACBranchListI<Line> implements LineList
 {
@@ -22,7 +23,7 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 		@Override
 		public ColumnMeta insvc()
 		{
-			return ColumnMeta.LineINSVC;
+			return ColumnMeta.LineOOS;
 		}
 		@Override
 		public ColumnMeta fp()
@@ -71,51 +72,51 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 	{
 		super();
 	}
-	public LineListI(PAModelI model, int[] keys)
+	public LineListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	public LineListI(PAModelI model, int size)
+	public LineListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
 	@Override
-	public float getFromBchg(int ndx)
+	public float getFromBchg(int ndx) throws PAModelException
 	{
 		return _fb.get(ndx);
 	}
 	@Override
-	public void setFromBchg(int ndx, float b)
+	public void setFromBchg(int ndx, float b) throws PAModelException
 	{
 		_fb.set(ndx, b);
 	}
 	@Override
-	public float[] getFromBchg()
+	public float[] getFromBchg() throws PAModelException
 	{
 		return _fb.get();
 	}
 	@Override
-	public void setFromBchg(float[] b)
+	public void setFromBchg(float[] b) throws PAModelException
 	{
 		_fb.set(b);
 	}
 	@Override
-	public float getToBchg(int ndx)
+	public float getToBchg(int ndx) throws PAModelException
 	{
 		return _tb.get(ndx);
 	}
 	@Override
-	public void setToBchg(int ndx, float b)
+	public void setToBchg(int ndx, float b) throws PAModelException
 	{
 		_tb.set(ndx, b);
 	}
 	@Override
-	public float[] getToBchg()
+	public float[] getToBchg() throws PAModelException
 	{
 		return _tb.get();
 	}
 	@Override
-	public void setToBchg(float[] b)
+	public void setToBchg(float[] b) throws PAModelException
 	{
 		_tb.set(b);
 	}
@@ -125,7 +126,7 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 		return new Line(this, index);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Line;
 	}

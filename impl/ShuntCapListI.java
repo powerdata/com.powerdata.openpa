@@ -2,10 +2,11 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.ShuntCapList;
 import com.powerdata.openpa.ShuntCapacitor;
 
-public class ShuntCapListI extends ShuntListI<ShuntCapacitor> implements ShuntCapList
+public class ShuntCapListI extends FixedShuntListI<ShuntCapacitor> implements ShuntCapList
 {
 	static final ShuntEnum _PFld = new ShuntEnum()
 	{
@@ -20,16 +21,16 @@ public class ShuntCapListI extends ShuntListI<ShuntCapacitor> implements ShuntCa
 		@Override
 		public ColumnMeta q() {return ColumnMeta.ShcapQ;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.ShcapINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.ShcapOOS;}
 		@Override
 		public ColumnMeta b() {return ColumnMeta.ShcapB;}
 	};
 	
-	public ShuntCapListI(PAModelI model, int[] keys)
+	public ShuntCapListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	public ShuntCapListI(PAModelI model, int size)
+	public ShuntCapListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -41,7 +42,7 @@ public class ShuntCapListI extends ShuntListI<ShuntCapacitor> implements ShuntCa
 		return new ShuntCapacitor(this, index);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.ShuntCap;
 	}

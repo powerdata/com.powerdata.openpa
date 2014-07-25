@@ -21,7 +21,7 @@ public class SeriesReacSubList extends ACBranchSubList<SeriesReac> implements Se
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SeriesReac;
 	}

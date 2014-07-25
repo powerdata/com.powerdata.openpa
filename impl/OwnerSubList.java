@@ -20,7 +20,7 @@ public class OwnerSubList extends GroupSubList<Owner> implements OwnerList
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Owner;
 	}

@@ -21,7 +21,7 @@ public class TransformerSubList extends TransformerBaseSubList<Transformer> impl
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Transformer;
 	}

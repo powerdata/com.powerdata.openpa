@@ -2,7 +2,9 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PhaseShifter;
+import com.powerdata.openpa.PhaseShifter.ControlMode;
 import com.powerdata.openpa.PhaseShifterList;
 
 public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implements PhaseShifterList
@@ -14,7 +16,7 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.PhashBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.PhashINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.PhashOOS;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.PhashPFROM;}
 		@Override
@@ -43,11 +45,13 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 		public ColumnMeta ttap() {return ColumnMeta.PhashTAPTO;}
 	};
 
-	public PhaseShifterListI(PAModelI model, int[] keys)
+	EnumData<ControlMode> _cmode = new EnumData<ControlMode>(ColumnMeta.PhashCTRLMODE);
+	
+	public PhaseShifterListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	public PhaseShifterListI(PAModelI model, int size)
+	public PhaseShifterListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -61,8 +65,28 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 		return new PhaseShifter(this, index);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.PhaseShifter;
+	}
+	@Override
+	public ControlMode getControlMode(int ndx) throws PAModelException
+	{
+		return _cmode.get(ndx);
+	}
+	@Override
+	public ControlMode[] getControlMode() throws PAModelException
+	{
+		return _cmode.get();
+	}
+	@Override
+	public void setControlMode(int ndx, ControlMode m) throws PAModelException
+	{
+		_cmode.set(ndx, m);
+	}
+	@Override
+	public void setControlMode(ControlMode[] m) throws PAModelException
+	{
+		_cmode.set(m);
 	}
 }

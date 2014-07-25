@@ -2,77 +2,31 @@ package com.powerdata.openpa;
 
 import java.util.List;
 
-import com.powerdata.openpa.tools.SNdxKeyOfs;
-
 public interface BaseList<T extends BaseObject> extends List<T> 
 {
-	static class SNdxNoKey extends SNdxKeyOfs
-	{
-		int _size;
-
-		public SNdxNoKey(int size) {super(null);_size = size;}
-
-		@Override
-		public int size() {return _size;}
-
-		@Override
-		public boolean containsKey(int key)
-		{
-			return key > 0 && key <= _size;
-		}
-
-		@Override
-		public int getOffset(int key)
-		{
-			return key-1;
-		}
-
-		@Override
-		public int[] getOffsets(int[] keys)
-		{
-			int[] rv = new int[_size];
-			for(int i=0; i < _size; ++i) rv[i] = keys[i]-1;
-			return rv;
-		}
-
-		@Override
-		public int[] getKeys()
-		{
-			int[] rv = new int[_size];
-			for(int i=0; i < _size; ++i) rv[i] = i+1;
-			return rv;
-		}
-
-		@Override
-		public int getKey(int ndx)
-		{
-			return ndx+1;
-		}
-	};
-	
 	int getKey(int ndx);
 	
 	int[] getKeys();
 
-	String getID(int ndx);
+	String getID(int ndx) throws PAModelException;
 
 	/** return array of string object ID's */
-	String[] getID();
+	String[] getID() throws PAModelException;
 
-	/** set unique object ID */
-	void setID(String[] id);
+	/** set unique object ID PAModelException */
+	void setID(String[] id) throws PAModelException;
 
-	void setID(int ndx, String id);
+	void setID(int ndx, String id) throws PAModelException;
 
-	String getName(int ndx);
+	String getName(int ndx) throws PAModelException;
 
-	void setName(int ndx, String name);
+	void setName(int ndx, String name) throws PAModelException;
 
 	/** name of object */
-	String[] getName();
+	String[] getName() throws PAModelException;
 
-	/** set name of object */
-	void setName(String[] name);
+	/** set name of object  */
+	void setName(String[] name) throws PAModelException;
 
 	T getByKey(int ndx);
 
@@ -89,7 +43,7 @@ public interface BaseList<T extends BaseObject> extends List<T>
 	
 	int[] getIndexesFromKeys(int[] keys);
 
-	ListMetaType getMetaType();
+	ListMetaType getListMeta();
 
 
 }

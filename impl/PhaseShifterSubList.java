@@ -1,7 +1,9 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PhaseShifter;
+import com.powerdata.openpa.PhaseShifter.ControlMode;
 import com.powerdata.openpa.PhaseShifterList;
 
 public class PhaseShifterSubList extends TransformerBaseSubList<PhaseShifter> implements PhaseShifterList
@@ -21,9 +23,34 @@ public class PhaseShifterSubList extends TransformerBaseSubList<PhaseShifter> im
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.PhaseShifter;
+	}
+
+	@Override
+	public ControlMode getControlMode(int ndx) throws PAModelException
+	{
+		return _src.getControlMode(_ndx[ndx]);
+	}
+
+	@Override
+	public ControlMode[] getControlMode() throws PAModelException
+	{
+		return mapObject(_src.getControlMode());
+	}
+
+	@Override
+	public void setControlMode(int ndx, ControlMode m) throws PAModelException
+	{
+		_src.setControlMode(_ndx[ndx], m);
+	}
+
+	@Override
+	public void setControlMode(ControlMode[] m) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setControlMode(_ndx[i], m[i]);
 	}
 
 }

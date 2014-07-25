@@ -21,7 +21,7 @@ public class SeriesCapSubList extends ACBranchSubList<SeriesCap> implements Seri
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SeriesCap;
 	}

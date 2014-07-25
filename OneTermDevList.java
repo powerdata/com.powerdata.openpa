@@ -2,6 +2,7 @@ package com.powerdata.openpa;
 
 import com.powerdata.openpa.impl.SuperListMgr;
 
+
 public class OneTermDevList extends
 		SuperListMgr<OneTermDev, OneTermDevListIfc<OneTermDev>> implements
 		OneTermDevListIfc<OneTermDev>
@@ -11,92 +12,92 @@ public class OneTermDevList extends
 		super(lists, OneTermDevListIfc.class);
 	}
 	@Override
-	public Bus getBus(int ndx)
+	public Bus getBus(int ndx) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		return li.list.getBus(li.ofs);
 	}
 	@Override
-	public void setBus(int ndx, Bus b)
+	public void setBus(int ndx, Bus b) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		li.list.setBus(li.ofs, b);
 	}
 	@Override
-	public Bus[] getBus()
+	public Bus[] getBus() throws PAModelException
 	{
 		return getHelper(Bus[]::new, l -> l.getBus());
 	}
 	@Override
-	public void setBus(Bus[] b)
+	public void setBus(Bus[] b) throws PAModelException
 	{
 		setHelper(b, Bus[]::new, (l, v) -> l.setBus(v));
 	}
 	@Override
-	public float getP(int ndx)
+	public float getP(int ndx) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		return li.list.getP(li.ofs);
 	}
 	@Override
-	public void setP(int ndx, float p)
+	public void setP(int ndx, float p) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		li.list.setP(li.ofs, p);
 	}
 	@Override
-	public float[] getP()
+	public float[] getP() throws PAModelException
 	{
 		return getHelper(float[]::new, l -> l.getP());
 	}
 	@Override
-	public void setP(float[] p)
+	public void setP(float[] p) throws PAModelException
 	{
 		setHelper(p, float[]::new, (l,v) -> l.setP(v));
 	}
 	@Override
-	public float getQ(int ndx)
+	public float getQ(int ndx) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		return li.list.getQ(li.ofs);
 	}
 	@Override
-	public void setQ(int ndx, float q)
+	public void setQ(int ndx, float q) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		li.list.setQ(li.ofs, q);
 	}
 	@Override
-	public float[] getQ()
+	public float[] getQ() throws PAModelException
 	{
 		return getHelper(float[]::new, l -> l.getQ());
 	}
 	@Override
-	public void setQ(float[] q)
+	public void setQ(float[] q) throws PAModelException
 	{
 		setHelper(q, float[]::new, (l, v) -> l.setQ(v));
 	}
 	@Override
-	public boolean isInSvc(int ndx)
+	public boolean isOutOfSvc(int ndx) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
-		return li.list.isInSvc(li.ofs);
+		return li.list.isOutOfSvc(li.ofs);
 	}
 	@Override
-	public void setInSvc(int ndx, boolean state)
+	public void setOutOfSvc(int ndx, boolean state) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
-		li.list.setInSvc(li.ofs, state);
+		li.list.setOutOfSvc(li.ofs, state);
 	}
 	@Override
-	public boolean[] isInSvc()
+	public boolean[] isOutOfSvc() throws PAModelException
 	{
-		return getHelper(boolean[]::new, l -> l.isInSvc());
+		return getHelper(boolean[]::new, l -> l.isOutOfSvc());
 	}
 	@Override
-	public void setInSvc(boolean[] state)
+	public void setOutOfSvc(boolean[] state) throws PAModelException
 	{
-		setHelper(state, boolean[]::new, (l,v) -> l.setInSvc(v));
+		setHelper(state, boolean[]::new, (l,v) -> l.setOutOfSvc(v));
 	}
 	@Override
 	public OneTermDev get(int index)

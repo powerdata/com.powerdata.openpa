@@ -10,83 +10,78 @@ public class Bus extends Group
 		_list = list;
 	}
 	
-	public Area getArea()
+	public Area getArea() throws PAModelException
 	{
 		return _list.getArea(_ndx);
 	}
 
-	public void setArea(Area a)
+	public void setArea(Area a) throws PAModelException
 	{
 		_list.setArea(_ndx, a);
 	}
 	
-	public Owner getOwner()
+	public Owner getOwner() throws PAModelException
 	{
 		return _list.getOwner(_ndx);
 	}
 
-	public void setOwner(Owner o)
+	public void setOwner(Owner o) throws PAModelException
 	{
 		_list.setOwner(_ndx, o);
 	}
 	
 	/** get voltage magnitude in kV */
-	public float getVM() 
+	public float getVM()  throws PAModelException
 	{
 		return _list.getVM(_ndx);
 	}
 	/** set voltage magnitude in kV */
-	public void setVM(float vm) 
+	public void setVM(float vm)  throws PAModelException
 	{
 		_list.setVM(_ndx, vm);
 	}
 	/** get voltage angle in degrees */
-	public float getVA() 
+	public float getVA()  throws PAModelException
 	{
 		return _list.getVA(_ndx);
 	}
 	/** set voltage angle in degrees */
-	public void setVA(float va) 
+	public void setVA(float va)  throws PAModelException
 	{
 		_list.setVA(_ndx, va);
 	}
-	public float getVMpu()
-	{
-		return 0;
-	}
-	
 	/** get frequency source priority */
-	public int getFrequencySourcePriority()
+	public int getFreqSrcPri() throws PAModelException
 	{
-		return _list.getFrequencySourcePriority(_ndx);
+		return _list.getFreqSrcPri(_ndx);
 	}
 	
-	public void setFrequencySourcePriority(int fsp)
+	public void setFreqSrcPri(int fsp) throws PAModelException
 	{
-		_list.setFrequencySourcePriority(_ndx, fsp);
+		_list.setFreqSrcPri(_ndx, fsp);
 	}
 	
-	public Island getIsland()
+	public Island getIsland() throws PAModelException
 	{
 		return _list.getIsland(_ndx);
 	}
 	
-	public Station getStation()
+	public Station getStation() throws PAModelException
 	{
 		return _list.getStation(_ndx);
 	}
 
-	public void setStation(Station s)
+	public void setStation(Station s) throws PAModelException
 	{
 		_list.setStation(_ndx, s);
 	}
 	
-	public VoltageLevel getVoltageLevel()
+	public VoltageLevel getVoltageLevel() throws PAModelException
 	{
 		return _list.getVoltageLevel(_ndx);
 	}
 	
-	public void setVoltageLevel(VoltageLevel l)
+	public void setVoltageLevel(VoltageLevel l) throws PAModelException
 	{
 		_list.setVoltageLevel(_ndx, l);
 	}

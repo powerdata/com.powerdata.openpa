@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDCLine;
 import com.powerdata.openpa.TwoTermDCLineList;
 
@@ -18,7 +19,7 @@ public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implement
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.T2dcBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.T2dcINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.T2dcOOS;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.T2dcPFROM;}
 		@Override
@@ -29,11 +30,11 @@ public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implement
 		public ColumnMeta tq() {return ColumnMeta.T2dcQTO;}
 	};
 
-	public TwoTermDCLineListI(PAModelI model, int[] keys)
+	public TwoTermDCLineListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	public TwoTermDCLineListI(PAModelI model, int size)
+	public TwoTermDCLineListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -46,7 +47,7 @@ public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implement
 		return new TwoTermDCLine(this, index);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.TwoTermDCLine;
 	}

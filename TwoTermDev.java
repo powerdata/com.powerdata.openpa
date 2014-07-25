@@ -13,26 +13,26 @@ public class TwoTermDev extends AbstractBaseObject
 	}
 
 	/** get from-side Bus */
-	public Bus getFromBus()
+	public Bus getFromBus() throws PAModelException
 	{
 		return _list.getFromBus(_ndx);
 	}
 	
 	/** get to-side bus */
-	public Bus getToBus()
+	public Bus getToBus() throws PAModelException
 	{
 		return _list.getToBus(_ndx);
 	}
 	
 	/** is device in service */
-	public boolean isInSvc()
+	public boolean isOutOfSvc() throws PAModelException
 	{
-		return _list.isInSvc(_ndx);
+		return _list.isOutOfSvc(_ndx);
 	}
 	
 	/** set device in/out of service */
-	public void setInSvc(boolean state)
+	public void setOutOfSvc(boolean state) throws PAModelException
 	{
-		_list.setInSvc(_ndx, state);
+		_list.setOutOfSvc(_ndx, state);
 	}
 }

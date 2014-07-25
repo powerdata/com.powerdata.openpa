@@ -10,50 +10,26 @@ public class Load extends OneTermDev
 		_list = list;
 	}
 	
-	/** Get Load MW */
-	public float getP()
-	{
-		return _list.getP(_ndx);
-	}
-	
-	/** Set Load MW */
-	public void setP(float mw)
-	{
-		_list.setP(_ndx, mw);
-	}
-	
-	/** Get Load MVAr */
-	public float getQ()
-	{
-		return _list.getQ(_ndx);
-	}
-	
-	/** Get Load MVAr */
-	public void setQ(float mvar)
-	{
-		_list.setQ(_ndx, mvar);
-	}
-	
 	/** Get Max Load MW */
-	public float getMaxP()
+	public float getMaxP() throws PAModelException
 	{
 		return _list.getMaxP(_ndx);
 	}
 	
 	/** Set Max Load MW */
-	public void setMaxP(float mw)
+	public void setMaxP(float mw) throws PAModelException
 	{
 		_list.setMaxP(_ndx, mw);
 	}
 
 	/** Get Max Load MVAr */
-	public float getMaxQ()
+	public float getMaxQ() throws PAModelException
 	{
 		return _list.getMaxQ(_ndx);
 	}
 
 	/** Set Max Load MVAr */
-	public void setMaxQ(float mvar)
+	public void setMaxQ(float mvar) throws PAModelException
 	{
 		_list.setMaxQ(_ndx, mvar);
 	}

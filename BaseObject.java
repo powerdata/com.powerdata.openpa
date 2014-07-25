@@ -10,13 +10,13 @@ public interface BaseObject
 	/** get Index within associated list */
 	public int getIndex();
 	/** get unique String object identifier */
-	public String getID();
+	public String getID()throws PAModelException;
 	/** set unique String object identifier */
-	public void setID(String id);
+	public void setID(String id)throws PAModelException;
 	/** get object name */
-	public String getName();
+	public String getName()throws PAModelException;
 	/** set object name */
-	public void setName(String name);
+	public void setName(String name)throws PAModelException;
 	/** unique object integer identifier */
 	public int getKey();
 }

@@ -3,15 +3,11 @@ package com.powerdata.openpa.impl;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.IntFunction;
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PALists;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.tools.SNdxKeyOfs;
 
 public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		extends AbstractBaseList<T>
@@ -29,7 +25,7 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		@Override
 		public String toString()
 		{
-			return String.format("[%s %d %d]", list.getMetaType().toString(),
+			return String.format("[%s %d %d]", list.getListMeta().toString(),
 				startidx, endidx);
 		}
 		
@@ -57,10 +53,27 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		@Override
 		public String toString()
 		{
-			return String.format("[%s %d]", list.getMetaType().toString(), ofs);
+			return String.format("[%s %d]", list.getListMeta().toString(), ofs);
 		}
 		
 	}
+	
+	@FunctionalInterface
+	interface IntFunction<V>
+	{
+		V apply(int ival) throws PAModelException;
+	}
+	@FunctionalInterface
+	interface Function<U,V>
+	{
+		V apply(U u) throws PAModelException;
+	}
+	@FunctionalInterface
+	interface BiConsumer<U,V>
+	{
+		void accept(U u, V v) throws PAModelException;
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected SuperListMgr(PALists lists, Class<?> clz) throws PAModelException
 	{
@@ -69,7 +82,7 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 			for (Method m : lists.getClass().getDeclaredMethods())
 			{
 				Class<?> rt = m.getReturnType();
-				if (!rt.equals(this.getClass()) && testMethod(clz, rt))
+				if (!rt.equals(this.getClass()) && testInterfaces(clz, rt) && testNotSuper(rt))
 				{
 					U list;
 					list = (U) m.invoke(lists, new Object[] {});
@@ -92,9 +105,21 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 			U list = m.list;
 			System.arraycopy(list.getKeys(), 0, keys, m.startidx, list.size());
 		}
-		_keyndx = SNdxKeyOfs.Create(keys);
+		setupKeys(keys);
 	}
-	protected <V> V getHelper(IntFunction<V> alloc, Function<U, V> p)
+	
+	boolean testNotSuper(Class<?> rt)
+	{
+		if (rt == null)
+			return true;
+		else if (rt.equals(SuperListMgr.class))
+			return false;
+		else if (rt.equals(BaseList.class))
+			return true;
+		else return testNotSuper(rt.getSuperclass());
+	}
+	
+	protected <V> V getHelper(IntFunction<V> alloc, Function<U, V> p) throws PAModelException
 	{
 		V rv = alloc.apply(_size);
 		for (Member m : _members)
@@ -104,7 +129,7 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		}
 		return rv;
 	}
-	protected <V> void setHelper(V upd, IntFunction<V> alloc, BiConsumer<U, V> set)
+	protected <V> void setHelper(V upd, IntFunction<V> alloc, BiConsumer<U, V> set) throws PAModelException
 	{
 		for (Member m : _members)
 		{
@@ -115,7 +140,7 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 			set.accept(list, lu);
 		}
 	}
-	private boolean testMethod(Class<?> clz, Class<?> returnType)
+	boolean testInterfaces(Class<?> clz, Class<?> returnType)
 	{
 		if (returnType.equals(clz))
 			return true;
@@ -124,10 +149,11 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		else
 		{
 			for (Class<?> pifc : returnType.getInterfaces())
-				if (testMethod(clz, pifc)) return true;
+				if (testInterfaces(clz, pifc)) return true;
 		}
 		return false;
 	}
+
 	protected ListInfo getLI(int rawidx)
 	{
 		return new ListInfo(rawidx);
@@ -138,51 +164,51 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 		return _size;
 	}
 	@Override
-	public String getID(int ndx)
+	public String getID(int ndx) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		return li.list.getID(li.ofs);
 	}
 	@Override
-	public String[] getID()
+	public String[] getID() throws PAModelException
 	{
 		return getHelper(String[]::new, l -> l.getID());
 	}
 	@Override
-	public void setID(String[] id)
+	public void setID(String[] id) throws PAModelException
 	{
 		setHelper(id, String[]::new, (l,v) -> l.setID(v));
 	}
 	@Override
-	public void setID(int ndx, String id)
+	public void setID(int ndx, String id) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		li.list.setID(li.ofs, id);
 	}
 	@Override
-	public String getName(int ndx)
+	public String getName(int ndx) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		return li.list.getName(li.ofs);
 	}
 	@Override
-	public void setName(int ndx, String name)
+	public void setName(int ndx, String name) throws PAModelException
 	{
 		ListInfo li = getLI(ndx);
 		li.list.setName(li.ofs, name);
 	}
 	@Override
-	public String[] getName()
+	public String[] getName() throws PAModelException
 	{
 		return getHelper(String[]::new, l -> l.getName());
 	}
 	@Override
-	public void setName(String[] name)
+	public void setName(String[] name) throws PAModelException
 	{
 		setHelper(name, String[]::new, (l,v) -> l.setName(v));
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SuperList;
 	}

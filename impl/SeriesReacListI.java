@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SeriesReac;
 import com.powerdata.openpa.SeriesReacList;
 
@@ -14,7 +15,7 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.SercapBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SercapINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.SercapOOS;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.SercapPFROM;}
 		@Override
@@ -36,11 +37,11 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 
 	public SeriesReacListI() {super();}
 	
-	public SeriesReacListI(PAModelI model, int[] keys)
+	public SeriesReacListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	public SeriesReacListI(PAModelI model, int size)
+	public SeriesReacListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -52,7 +53,7 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SeriesReac;
 	}

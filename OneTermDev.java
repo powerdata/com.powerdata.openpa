@@ -13,44 +13,44 @@ public class OneTermDev extends AbstractBaseObject
 	}
 
 	/** Device terminal Bus */
-	public Bus getBus()
+	public Bus getBus() throws PAModelException
 	{
 		return _list.getBus(_ndx);
 	}
 	
 	/** Get device active power in MW */
-	public float getP()
+	public float getP() throws PAModelException
 	{
 		return _list.getP(_ndx);
 	}
 	
 	/** Get device reactive power in MVAr */
-	public float getQ()
+	public float getQ() throws PAModelException
 	{
 		return _list.getQ(_ndx);
 	}
 	
 	/** Set device active power in MW */
-	public void setP(float p)
+	public void setP(float p) throws PAModelException
 	{
 		_list.setP(_ndx, p);
 	}
 	
 	/** Set device reactive power in MVAr */
-	public void setQ(float q)
+	public void setQ(float q) throws PAModelException
 	{
 		_list.setQ(_ndx, q);
 	}
 	
 	/** is device in service */
-	public boolean isInSvc()
+	public boolean isOutOfSvc() throws PAModelException
 	{
-		return _list.isInSvc(_ndx);
+		return _list.isOutOfSvc(_ndx);
 	}
 	
 	/** set device in/out of service */
-	public void setInSvc(boolean state)
+	public void setOutOfSvc(boolean state) throws PAModelException
 	{
-		_list.setInSvc(_ndx, state);
+		_list.setOutOfSvc(_ndx, state);
 	}
 }

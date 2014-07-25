@@ -42,7 +42,7 @@ public class StationListI extends GroupListI<Station> implements StationList
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Station;
 	}

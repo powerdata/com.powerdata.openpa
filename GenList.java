@@ -5,91 +5,91 @@ import com.powerdata.openpa.Gen.Type;
 
 public interface GenList extends OneTermDevListIfc<Gen>
 {
-	Type getType(int ndx);
+	Type getType(int ndx) throws PAModelException;
 	
-	void setType(int ndx, Type t);
+	void setType(int ndx, Type t) throws PAModelException;
 
-	Type[] getType();
+	Type[] getType() throws PAModelException;
 	
-	void setType(Type[] t);
+	void setType(Type[] t) throws PAModelException;
 	
-	Mode getMode(int ndx);
+	Mode getMode(int ndx) throws PAModelException;
 
-	void setMode(int ndx, Mode m);
+	void setMode(int ndx, Mode m)throws PAModelException;
 	
-	Mode[] getMode();
+	Mode[] getMode()throws PAModelException;
 	
-	void setMode(Mode[] m);
+	void setMode(Mode[] m)throws PAModelException;
 
-	float getOpMinP(int ndx);
+	float getOpMinP(int ndx)throws PAModelException;
 	
-	void setOpMinP(int ndx, float mw);
+	void setOpMinP(int ndx, float mw)throws PAModelException;
 	
-	float[] getOpMinP();
+	float[] getOpMinP()throws PAModelException;
 	
-	void setOpMinP(float[] mw);
+	void setOpMinP(float[] mw)throws PAModelException;
 
-	float getOpMaxP(int ndx);
+	float getOpMaxP(int ndx)throws PAModelException;
 
-	void setOpMaxP(int ndx, float mw);
+	void setOpMaxP(int ndx, float mw)throws PAModelException;
 
-	float[] getOpMaxP();
+	float[] getOpMaxP()throws PAModelException;
 	
-	void setOpMaxP(float[] mw);
+	void setOpMaxP(float[] mw)throws PAModelException;
 
-	float getMinQ(int ndx);
+	float getMinQ(int ndx)throws PAModelException;
 
-	void setMinQ(int ndx, float mvar);
+	void setMinQ(int ndx, float mvar)throws PAModelException;
 	
-	float[] getMinQ();
+	float[] getMinQ()throws PAModelException;
 	
-	void setMinQ(float[] mvar);
+	void setMinQ(float[] mvar)throws PAModelException;
 
-	float getMaxQ(int ndx);
+	float getMaxQ(int ndx)throws PAModelException;
 
-	void setMaxQ(int ndx, float mvar);
+	void setMaxQ(int ndx, float mvar)throws PAModelException;
 
-	float[] getMaxQ();
+	float[] getMaxQ()throws PAModelException;
 	
-	void setMaxQ(float[] mvar);
+	void setMaxQ(float[] mvar)throws PAModelException;
 
-	float getPS(int ndx);
+	float getPS(int ndx)throws PAModelException;
 
-	void setPS(int ndx, float mw);
+	void setPS(int ndx, float mw)throws PAModelException;
 	
-	float[] getPS();
+	float[] getPS()throws PAModelException;
 	
-	void setPS(float[] mw);
+	void setPS(float[] mw)throws PAModelException;
 
-	float getQS(int ndx);
+	float getQS(int ndx)throws PAModelException;
 
-	void setQS(int ndx, float mvar);
+	void setQS(int ndx, float mvar)throws PAModelException;
 	
-	float[] getQS();
+	float[] getQS()throws PAModelException;
 	
-	void setQS(float[] mvar);
+	void setQS(float[] mvar)throws PAModelException;
 
-	boolean isRegKV(int ndx);
+	boolean isRegKV(int ndx)throws PAModelException;
 
-	void setRegKV(int ndx, boolean reg);
+	void setRegKV(int ndx, boolean reg)throws PAModelException;
 	
-	boolean[] isRegKV();
+	boolean[] isRegKV()throws PAModelException;
 	
-	void setRegKV(boolean[] reg);
+	void setRegKV(boolean[] reg)throws PAModelException;
 
-	float getVS(int ndx);
+	float getVS(int ndx)throws PAModelException;
 
-	void setVS(int ndx, float kv);
+	void setVS(int ndx, float kv)throws PAModelException;
 	
-	float[] getVS();
+	float[] getVS()throws PAModelException;
 	
-	void setVS(float[] kv);
+	void setVS(float[] kv)throws PAModelException;
 
-	Bus getRegBus(int ndx);
+	Bus getRegBus(int ndx)throws PAModelException;
 
-	void setRegBus(int ndx, Bus b);
+	void setRegBus(int ndx, Bus b)throws PAModelException;
 	
-	Bus[] getRegBus();
+	Bus[] getRegBus()throws PAModelException;
 	
-	void setRegBus(Bus[] b);
+	void setRegBus(Bus[] b)throws PAModelException;
 }

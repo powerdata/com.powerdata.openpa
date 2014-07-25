@@ -10,27 +10,27 @@ public class Island extends Group
 		_list = list;
 	}
 	
-	public boolean isEnergized()
+	public boolean isEnergized() throws PAModelException
 	{
 		return _list.isEnergized(_ndx);
 	}
 	
-	public float getFreq()
+	public float getFreq() throws PAModelException
 	{
 		return _list.getFreq(_ndx);
 	}
 	
-	public void setFreq(float f)
+	public void setFreq(float f) throws PAModelException
 	{
 		_list.setFreq(_ndx, f);
 	}
 	
-	public Bus getFreqSrc()
+	public Bus getFreqSrc() throws PAModelException
 	{
 		return _list.getFreqSrc(_ndx);
 	}
 	
-	public void setFreqSrc(Bus fsrc)
+	public void setFreqSrc(Bus fsrc) throws PAModelException
 	{
 		_list.setFreqSrc(_ndx, fsrc);
 	}

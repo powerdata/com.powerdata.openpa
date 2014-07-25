@@ -4,6 +4,7 @@ import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Load;
 import com.powerdata.openpa.LoadList;
+import com.powerdata.openpa.PAModelException;
 
 public class LoadListI extends OneTermDevListI<Load> implements LoadList
 {
@@ -37,7 +38,7 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 		@Override
 		public ColumnMeta insvc()
 		{
-			return ColumnMeta.LoadINSVC;
+			return ColumnMeta.LoadOOS;
 		}
 	};
 	public LoadListI()
@@ -46,11 +47,11 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 	}
 	FloatData _pmx = new FloatData(ColumnMeta.LoadPMAX), _qmx = new FloatData(
 			ColumnMeta.LoadQMAX);
-	public LoadListI(PAModelI model, int size)
+	public LoadListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
-	public LoadListI(PAModelI model, int[] keys)
+	public LoadListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
@@ -60,47 +61,47 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 		return new Load(this, index);
 	}
 	@Override
-	public float getMaxP(int ndx)
+	public float getMaxP(int ndx) throws PAModelException
 	{
 		return _pmx.get(ndx);
 	}
 	@Override
-	public void setMaxP(int ndx, float mw)
+	public void setMaxP(int ndx, float mw) throws PAModelException
 	{
 		_pmx.set(ndx, mw);
 	}
 	@Override
-	public float[] getMaxP()
+	public float[] getMaxP() throws PAModelException
 	{
 		return _pmx.get();
 	}
 	@Override
-	public void setMaxP(float[] mw)
+	public void setMaxP(float[] mw) throws PAModelException
 	{
 		_pmx.set(mw);
 	}
 	@Override
-	public float getMaxQ(int ndx)
+	public float getMaxQ(int ndx) throws PAModelException
 	{
 		return _qmx.get(ndx);
 	}
 	@Override
-	public void setMaxQ(int ndx, float mvar)
+	public void setMaxQ(int ndx, float mvar) throws PAModelException
 	{
 		_qmx.set(ndx, mvar);
 	}
 	@Override
-	public float[] getMaxQ()
+	public float[] getMaxQ() throws PAModelException
 	{
 		return _qmx.get();
 	}
 	@Override
-	public void setMaxQ(float[] mvar)
+	public void setMaxQ(float[] mvar) throws PAModelException
 	{
 		_qmx.set(mvar);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Load;
 	}

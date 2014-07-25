@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
 
@@ -14,7 +15,7 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.TfmrBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.TfmrINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.TfmrOOS;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.TfmrPFROM;}
 		@Override
@@ -45,11 +46,11 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 
 	public TransformerListI() {super();}
 	
-	public TransformerListI(PAModelI model, int[] keys)
+	public TransformerListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	public TransformerListI(PAModelI model, int size)
+	public TransformerListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -61,7 +62,7 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Transformer;
 	}

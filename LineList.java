@@ -7,20 +7,20 @@ public interface LineList extends ACBranchListIfc<Line>
 
 	static LineList	Empty	= new LineListI();
 
-	float getFromBchg(int ndx);
+	float getFromBchg(int ndx) throws PAModelException;
 
-	void setFromBchg(int ndx, float b);
+	void setFromBchg(int ndx, float b) throws PAModelException;
 	
-	float[] getFromBchg();
+	float[] getFromBchg() throws PAModelException;
 	
-	void setFromBchg(float[] b);
+	void setFromBchg(float[] b) throws PAModelException;
 
-	float getToBchg(int ndx);
+	float getToBchg(int ndx) throws PAModelException;
 
-	void setToBchg(int ndx, float b);
+	void setToBchg(int ndx, float b) throws PAModelException;
 	
-	float[] getToBchg();
+	float[] getToBchg() throws PAModelException;
 	
-	void setToBchg(float[] b);
+	void setToBchg(float[] b) throws PAModelException;
 
 }

@@ -8,17 +8,18 @@ import java.util.Arrays;
 
 public abstract class SNdxKeyOfs 
 {
-	protected int[] _keys;
+//	protected int[] _keys;
 	
-	protected SNdxKeyOfs(int[] keys) {_keys = keys;}
+//	protected SNdxKeyOfs() {}
+//	protected SNdxKeyOfs(int[] keys) {_keys = keys;}
 	
 	public abstract int size();
 	public abstract boolean containsKey(int key);
 	/** get offset for the key, returns -1 if not available */
 	public abstract int getOffset(int key);
 	public abstract int[] getOffsets(int[] keys);
-	public int[] getKeys() {return _keys;}
-	public int getKey(int ndx) {return _keys[ndx];}
+//	public int[] getKeys() {return _keys;}
+//	public int getKey(int ndx) {return _keys[ndx];}
 
 	public static SNdxKeyOfs Create(int[] keys)
 	{
@@ -48,7 +49,6 @@ class SortNdx extends SNdxKeyOfs
 	
 	public SortNdx(int[] keys)
 	{
-		super(keys);
 		_ndxToOfs = new SortedIntOfsNdx(keys);
 		_size = keys.length;
 	}
@@ -91,7 +91,6 @@ class TroveNdx extends SNdxKeyOfs
 	
 	public TroveNdx(int[] keys)
 	{
-		super(keys);
 		int nkey = keys.length;
 		_keyndx = new TIntIntHashMap(nkey, 0.5f, -1, -1);
 		for(int i=0; i < nkey; ++i)
@@ -136,7 +135,6 @@ class OfsNdx extends SNdxKeyOfs
 	
 	public OfsNdx(int minkey, int maxkey, int keys[])
 	{
-		super(keys);
 		_minkey = minkey;
 		_len = maxkey - minkey + 1;
 		_offsets = new int[_len];
@@ -152,7 +150,6 @@ class OfsNdx extends SNdxKeyOfs
 	{
 		return (key >= _minkey && _offsets[key - _minkey] != -1);
 	}
-
 
 	@Override
 	public int getOffset(int key)

@@ -45,7 +45,7 @@ public class AreaListI extends GroupListI<Area> implements AreaList
 		return new Area(this, index);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Area;
 	}

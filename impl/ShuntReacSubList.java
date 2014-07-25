@@ -4,7 +4,7 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.ShuntReacList;
 import com.powerdata.openpa.ShuntReactor;
 
-public class ShuntReacSubList extends ShuntSubList<ShuntReactor> implements ShuntReacList
+public class ShuntReacSubList extends FixedShuntSubList<ShuntReactor> implements ShuntReacList
 {
 
 	public ShuntReacSubList(ShuntReacList src, int[] ndx)
@@ -19,7 +19,7 @@ public class ShuntReacSubList extends ShuntSubList<ShuntReactor> implements Shun
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.ShuntReac;
 	}

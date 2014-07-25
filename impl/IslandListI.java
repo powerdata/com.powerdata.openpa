@@ -10,6 +10,7 @@ import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PhaseShifter;
 import com.powerdata.openpa.SeriesCap;
 import com.powerdata.openpa.SeriesReac;
@@ -34,57 +35,70 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 			return ColumnMeta.IslandNAME;
 		}
 	};
-	BoolData _egzd = new BoolData(ColumnMeta.IslandEGZSTATE);
-	FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
-	IntData _fsrc = new IntData(ColumnMeta.IslandFRQSRC);
-	IslandListI()
+	BoolData _egzd;
+	protected FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
+	protected IntData _fsrc = new IntData(ColumnMeta.IslandFRQSRC);
+	IslandListI() {};
+	
+	class IStringData extends StringData
 	{
-	};
-	public IslandListI(PAModelI model)
+		String[] id;
+		IStringData(ColumnMeta coltype, String[] id) {super(coltype);this.id = id;}
+
+		@Override
+		String[] load() throws PAModelException
+		{
+			return id;
+		}
+
+	}
+	
+	public IslandListI(PAModelI model) throws PAModelException
 	{
 		super(model, new BusGrpMapBldr(model)
 		{
 			@Override
-			protected boolean incSW(Switch d)
+			protected boolean incSW(Switch d) throws PAModelException
 			{
 				return d.getState() == State.Closed;
 			}
 			@Override
-			protected boolean incLN(Line d)
+			protected boolean incLN(Line d) throws PAModelException
 			{
-				return d.isInSvc();
+				return d.isOutOfSvc();
 			}
 			@Override
-			protected boolean incSR(SeriesReac d)
+			protected boolean incSR(SeriesReac d) throws PAModelException
 			{
-				return d.isInSvc();
+				return d.isOutOfSvc();
 			}
 			@Override
-			protected boolean incSC(SeriesCap d)
+			protected boolean incSC(SeriesCap d) throws PAModelException
 			{
-				return d.isInSvc();
+				return d.isOutOfSvc();
 			}
 			@Override
-			protected boolean incTX(Transformer d)
+			protected boolean incTX(Transformer d) throws PAModelException
 			{
-				return d.isInSvc();
+				return d.isOutOfSvc();
 			}
 			@Override
-			protected boolean incPS(PhaseShifter d)
+			protected boolean incPS(PhaseShifter d) throws PAModelException
 			{
-				return d.isInSvc();
+				return d.isOutOfSvc();
 			}
 			@Override
-			protected boolean incD2(TwoTermDCLine d)
+			protected boolean incD2(TwoTermDCLine d) throws PAModelException
 			{
-				return d.isInSvc();
+				return d.isOutOfSvc();
 			}
 		}.addAll().getMap(), _PFld);
 		String[] id = new String[_size];
 		for (int i = 0; i < _size; ++i)
 			id[i] = String.valueOf(i + 1);
-		setName(id);
-		setID(id);
+		
+		_id = new IStringData(ColumnMeta.IslandID, id);
+		_name = new IStringData(ColumnMeta.IslandNAME, id);
 		setupEgStatus();
 	}
 	@Override
@@ -92,7 +106,7 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 	{
 		return new Island(this, index);
 	}
-	void setupEgStatus()
+	void setupEgStatus() throws PAModelException
 	{
 		int n = size();
 		boolean[] e = new boolean[_size];
@@ -107,61 +121,68 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 					break;
 				}
 			}
-			_egzd.set(e);
 		}
+		_egzd = new BoolData(ColumnMeta.IslandEGZSTATE)
+		{
+			@Override
+			boolean[] load() throws PAModelException
+			{
+				return e;
+			}
+		};
 	}
 	@Override
-	public boolean isEnergized(int ndx)
+	public boolean isEnergized(int ndx) throws PAModelException
 	{
 		return _egzd.get(ndx);
 	}
 	@Override
-	public boolean[] isEnergized()
+	public boolean[] isEnergized() throws PAModelException
 	{
 		return _egzd.get();
 	}
 	@Override
-	public float getFreq(int ndx)
+	public float getFreq(int ndx) throws PAModelException
 	{
 		return _freq.get(ndx);
 	}
 	@Override
-	public void setFreq(int ndx, float f)
+	public void setFreq(int ndx, float f) throws PAModelException
 	{
 		_freq.set(ndx, f);
 	}
 	@Override
-	public float[] getFreq()
+	public float[] getFreq() throws PAModelException
 	{
 		return _freq.get();
 	}
 	@Override
-	public void setFreq(float[] f)
+	public void setFreq(float[] f) throws PAModelException
 	{
 		_freq.set(f);
 	}
 	@Override
-	public Bus getFreqSrc(int ndx)
+	public Bus getFreqSrc(int ndx) throws PAModelException
 	{
 		return _model.getBuses().get(_fsrc.get(ndx));
 	}
 	@Override
-	public void setFreqSrc(int ndx, Bus fsrc)
+	public void setFreqSrc(int ndx, Bus fsrc) throws PAModelException
 	{
 		_fsrc.set(ndx, fsrc.getIndex());
 	}
 	@Override
-	public Bus[] getFreqSrc()
+	public Bus[] getFreqSrc() throws PAModelException
 	{
 		return _model.getBuses().toArray(_fsrc.get());
 	}
 	@Override
-	public void setFreqSrc(Bus[] fsrc)
+	public void setFreqSrc(Bus[] fsrc) throws PAModelException
 	{
 		_fsrc.set(BaseList.ObjectNdx(fsrc));
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Island;
 	}

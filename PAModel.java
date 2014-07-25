@@ -4,24 +4,28 @@ import java.util.Set;
 
 public interface PAModel extends PALists
 {
-	/** Get a generic representation of a list based on its enumerated type */
-	BaseList<? extends BaseObject> getList(ListMetaType type);
+	/** Get a generic representation of a list based on its enumerated type 
+	 * @throws PAModelException */
+	BaseList<? extends BaseObject> getList(ListMetaType type) throws PAModelException;
 
-	/** return the islands */
-	IslandList getIslands();
-	/** refresh the island list to reflect changes to topology or generator state */
-	IslandList refreshIslands();
+	/** return list of switched shunts */
+	SwitchedShuntList getSwitchedShunts() throws PAModelException;
+	
+	/** return the islands */ 
+	IslandList getIslands() throws PAModelException;
+	/** refresh the island list to reflect changes to topology or generator state */ 
+	IslandList refreshIslands() throws PAModelException;
 	/** get Areas */
-	AreaList getAreas();
+	AreaList getAreas() throws PAModelException;
 	/** get owners */
-	OwnerList getOwners();
+	OwnerList getOwners() throws PAModelException;
 	/** get Substations */
-	StationList getStations();
+	StationList getStations() throws PAModelException;
 	/** get Voltage Levels */
-	VoltageLevelList getVoltageLevels();
+	VoltageLevelList getVoltageLevels() throws PAModelException;
 
 	/** get Single Bus view of nodes interconnected by closed switches */
-	BusList getSingleBus();
+	BusList getSingleBus() throws PAModelException;
 	
 	/**
 	 * get all one-terminal devices as a single list

@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
+import com.powerdata.openpa.PAModelException;
 
 /**
  * Starting point of the base object hierarchy
@@ -39,24 +40,24 @@ public class AbstractBaseObject implements BaseObject
 	}
 
 	@Override
-	public String getID()
+	public String getID() throws PAModelException
 	{
 		return _list.getID(_ndx);
 	}
 
 	@Override
-	public void setID(String id)
+	public void setID(String id) throws PAModelException
 	{
 		_list.setID(_ndx, id);
 	}
 
 	@Override
-	public String getName()
+	public String getName() throws PAModelException
 	{
 		return _list.getName(_ndx);
 	}
 	@Override
-	public void setName(String name)
+	public void setName(String name) throws PAModelException
 	{
 		_list.setName(_ndx, name);
 	}

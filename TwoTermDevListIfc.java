@@ -2,28 +2,28 @@ package com.powerdata.openpa;
 
 public interface TwoTermDevListIfc<T extends TwoTermDev> extends BaseList<T>
 {
-	Bus getFromBus(int ndx);
+	Bus getFromBus(int ndx) throws PAModelException;
 	
-	void setFromBus(int ndx, Bus b);
+	void setFromBus(int ndx, Bus b) throws PAModelException;
 	
-	Bus[] getFromBus();
+	Bus[] getFromBus() throws PAModelException;
 	
-	void setFromBus(Bus[] b);
+	void setFromBus(Bus[] b) throws PAModelException;
 
-	Bus getToBus(int ndx);
+	Bus getToBus(int ndx) throws PAModelException;
 	
-	void setToBus(int ndx, Bus b);
+	void setToBus(int ndx, Bus b) throws PAModelException;
 	
-	Bus[] getToBus();
+	Bus[] getToBus() throws PAModelException;
 	
-	void setToBus(Bus[] b);
+	void setToBus(Bus[] b) throws PAModelException;
 
-	boolean isInSvc(int ndx);
+	boolean isOutOfSvc(int ndx) throws PAModelException;
 
-	void setInSvc(int ndx, boolean state);
+	void setOutOfSvc(int ndx, boolean state) throws PAModelException;
 	
-	boolean[] isInSvc();
+	boolean[] isOutOfSvc() throws PAModelException;
 	
-	void setInSvc(boolean[] state);
+	void setOutOfSvc(boolean[] state) throws PAModelException;
 
 }

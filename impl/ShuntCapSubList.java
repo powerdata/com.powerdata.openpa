@@ -4,7 +4,7 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.ShuntCapList;
 import com.powerdata.openpa.ShuntCapacitor;
 
-public class ShuntCapSubList extends ShuntSubList<ShuntCapacitor> implements ShuntCapList
+public class ShuntCapSubList extends FixedShuntSubList<ShuntCapacitor> implements ShuntCapList
 {
 
 	public ShuntCapSubList(ShuntCapList src, int[] ndx)
@@ -19,7 +19,7 @@ public class ShuntCapSubList extends ShuntSubList<ShuntCapacitor> implements Shu
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.ShuntCap;
 	}

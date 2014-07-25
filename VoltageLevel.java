@@ -10,12 +10,12 @@ public class VoltageLevel extends Group
 		_list = list;
 	}
 
-	public float getBaseKV()
+	public float getBaseKV() throws PAModelException
 	{
 		return _list.getBaseKV(_ndx);
 	}
 	
-	public void setBaseKV(float k)
+	public void setBaseKV(float k) throws PAModelException
 	{
 		_list.setBaseKV(_ndx, k);
 	}

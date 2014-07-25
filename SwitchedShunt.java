@@ -1,6 +1,8 @@
 package com.powerdata.openpa;
 
-public class SwitchedShunt extends Shunt
+import com.powerdata.openpa.impl.AbstractBaseObject;
+
+public class SwitchedShunt extends AbstractBaseObject
 {
 	public SwitchedShunt(SwitchedShuntList list, int ndx)
 	{

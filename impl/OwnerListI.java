@@ -45,7 +45,7 @@ public class OwnerListI extends GroupListI<Owner> implements OwnerList
 		return new Owner(this, index);
 	}
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Owner;
 	}

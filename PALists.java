@@ -9,45 +9,42 @@ package com.powerdata.openpa;
 public interface PALists
 {
 	/** return list of buses */
-	BusList getBuses();
+	BusList getBuses() throws PAModelException;
 	
 	/** return list of switches */
-	SwitchList getSwitches();
+	SwitchList getSwitches() throws PAModelException;
 
 	/** return list of lines */
-	LineList getLines();
+	LineList getLines() throws PAModelException;
 
 	/** return list of series reactors */
-	SeriesReacList getSeriesReactors();
+	SeriesReacList getSeriesReactors() throws PAModelException;
 	
 	/** return list of series capacitors */
-	SeriesCapList getSeriesCapacitors();
+	SeriesCapList getSeriesCapacitors() throws PAModelException;
 	
 	/** return list of transformers */
-	TransformerList getTransformers();
+	TransformerList getTransformers() throws PAModelException;
 	
 	/** return list of phase shifters */
-	PhaseShifterList getPhaseShifters();
+	PhaseShifterList getPhaseShifters() throws PAModelException;
 	
 	/** return list of two-terminal DC Lines */
-	TwoTermDCLineList getTwoTermDCLines();
+	TwoTermDCLineList getTwoTermDCLines() throws PAModelException;
 	
 	/** return list of generators */
-	GenList getGenerators();
+	GenList getGenerators() throws PAModelException;
 	
 	/** return list of loads */
-	LoadList getLoads();
+	LoadList getLoads() throws PAModelException;
 	
 	/** return list of shunt reactors */
-	ShuntReacList getShuntReactors();
+	ShuntReacList getShuntReactors() throws PAModelException;
 	
 	/** return list of shunt capacitors */
-	ShuntCapList getShuntCapacitors();
+	ShuntCapList getShuntCapacitors() throws PAModelException;
 
-	/** return list of switched shunts */
-	SwitchedShuntList getSwitchedShunts();
-	
 	/** return list of SVC's */
-	SVCList getSVCs();
+	SVCList getSVCs() throws PAModelException;
 	
 }

@@ -29,24 +29,24 @@ public class Switch extends TwoTermDev
 		super(list, ndx);
 		_list = list;
 	}
-	public State getState() {return _list.getState(_ndx);} 
-	public void setState(State state)
+	public State getState() throws PAModelException {return _list.getState(_ndx);} 
+	public void setState(State state) throws PAModelException
 	{
 		_list.setState(_ndx, state);
 	}
-	public boolean isOperableUnderLoad()
+	public boolean isOperableUnderLoad() throws PAModelException
 	{
 		return _list.isOperableUnderLoad(_ndx);
 	}
-	public void setOperableUnderLoad(boolean op)
+	public void setOperableUnderLoad(boolean op) throws PAModelException
 	{
 		_list.setOperableUnderLoad(_ndx, op);
 	}
-	public boolean isEnabled()
+	public boolean isEnabled() throws PAModelException
 	{
 		return _list.isEnabled(_ndx);
 	}
-	public void setEnabled(boolean enable)
+	public void setEnabled(boolean enable) throws PAModelException
 	{
 		_list.setEnabled(_ndx, enable);
 	}

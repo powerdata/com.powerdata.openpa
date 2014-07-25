@@ -3,8 +3,8 @@ package com.powerdata.openpa.impl;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SwitchedShunt;
 import com.powerdata.openpa.SwitchedShuntList;
-/* TODO:  move this out of the "PSR" or one-term device category */
-public class SwitchedShuntSubList extends ShuntSubList<SwitchedShunt> implements SwitchedShuntList
+
+public class SwitchedShuntSubList extends SubList<SwitchedShunt> implements SwitchedShuntList
 {
 
 	public SwitchedShuntSubList(SwitchedShuntList src, int[] ndx)
@@ -21,7 +21,7 @@ public class SwitchedShuntSubList extends ShuntSubList<SwitchedShunt> implements
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SwitchedShunt;
 	}

@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.OneTermDevListIfc;
+import com.powerdata.openpa.PAModelException;
 
 public abstract class OneTermDevSubList<T extends OneTermDev> extends SubList<T> implements OneTermDevListIfc<T>
 {
@@ -15,103 +16,103 @@ public abstract class OneTermDevSubList<T extends OneTermDev> extends SubList<T>
 	}
 
 	@Override
-	public Bus getBus(int ndx)
+	public Bus getBus(int ndx) throws PAModelException
 	{
 		return _src.getBus(_ndx[ndx]);
 	}
 
 	@Override
-	public void setBus(int ndx, Bus b)
+	public void setBus(int ndx, Bus b) throws PAModelException
 	{
 		_src.setBus(_ndx[ndx], b);
 	}
 
 	@Override
-	public Bus[] getBus()
+	public Bus[] getBus() throws PAModelException
 	{
 		return mapObject(_src.getBus());
 	}
 
 	@Override
-	public void setBus(Bus[] b)
+	public void setBus(Bus[] b) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setBus(_ndx[i], b[i]);
 	}
 
 	@Override
-	public float getP(int ndx)
+	public float getP(int ndx) throws PAModelException
 	{
 		return _src.getP(_ndx[ndx]);
 	}
 
 	@Override
-	public void setP(int ndx, float p)
+	public void setP(int ndx, float p) throws PAModelException
 	{
 		_src.setP(_ndx[ndx], p);
 	}
 
 	@Override
-	public float[] getP()
+	public float[] getP() throws PAModelException
 	{
 		return mapFloat(_src.getP());
 	}
 
 	@Override
-	public void setP(float[] p)
+	public void setP(float[] p) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setP(_ndx[i], p[i]);
 	}
 
 	@Override
-	public float getQ(int ndx)
+	public float getQ(int ndx) throws PAModelException
 	{
 		return _src.getQ(_ndx[ndx]);
 	}
 
 	@Override
-	public void setQ(int ndx, float q)
+	public void setQ(int ndx, float q) throws PAModelException
 	{
 		_src.setQ(_ndx[ndx], q);
 	}
 
 	@Override
-	public float[] getQ()
+	public float[] getQ() throws PAModelException
 	{
 		return mapFloat(_src.getQ());
 	}
 
 	@Override
-	public void setQ(float[] q)
+	public void setQ(float[] q) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setQ(_ndx[i], q[i]);
 	}
 
 	@Override
-	public boolean isInSvc(int ndx)
+	public boolean isOutOfSvc(int ndx) throws PAModelException
 	{
-		return _src.isInSvc(_ndx[ndx]);
+		return _src.isOutOfSvc(_ndx[ndx]);
 	}
 
 	@Override
-	public void setInSvc(int ndx, boolean state)
+	public void setOutOfSvc(int ndx, boolean state) throws PAModelException
 	{
-		_src.setInSvc(_ndx[ndx], state);
+		_src.setOutOfSvc(_ndx[ndx], state);
 	}
 
 	@Override
-	public boolean[] isInSvc()
+	public boolean[] isOutOfSvc() throws PAModelException
 	{
-		return mapBool(_src.isInSvc());
+		return mapBool(_src.isOutOfSvc());
 	}
 
 	@Override
-	public void setInSvc(boolean[] state)
+	public void setOutOfSvc(boolean[] state) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
-			_src.setInSvc(_ndx[i], state[i]);
+			_src.setOutOfSvc(_ndx[i], state[i]);
 	}
 
 }

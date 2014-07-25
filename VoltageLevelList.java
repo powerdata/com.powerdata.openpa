@@ -4,12 +4,12 @@ package com.powerdata.openpa;
 public interface VoltageLevelList extends GroupListIfc<VoltageLevel>
 {
 
-	float getBaseKV(int ndx);
+	float getBaseKV(int ndx) throws PAModelException;
 
-	void setBaseKV(int ndx, float k);
+	void setBaseKV(int ndx, float k) throws PAModelException;
 	
-	float[] getBaseKV();
+	float[] getBaseKV() throws PAModelException;
 	
-	void setBaseKV(float[] kv);
+	void setBaseKV(float[] kv) throws PAModelException;
 
 }

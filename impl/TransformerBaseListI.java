@@ -1,6 +1,8 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
+import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.TransformerBaseList;
 
 public abstract class TransformerBaseListI<T extends TransformerBase>
 		extends ACBranchListI<T> implements TransformerBaseList<T>
@@ -13,13 +15,13 @@ public abstract class TransformerBaseListI<T extends TransformerBase>
 		super();
 	}
 
-	protected TransformerBaseListI(PAModelI model, int[] keys, TransBaseEnum le)
+	protected TransformerBaseListI(PAModelI model, int[] keys, TransBaseEnum le) throws PAModelException
 	{
 		super(model, keys, le);
 		setFields(le);
 	}
 
-	protected TransformerBaseListI(PAModelI model, int size, TransBaseEnum le)
+	protected TransformerBaseListI(PAModelI model, int size, TransBaseEnum le) throws PAModelException
 	{
 		super(model, size, le);
 		setFields(le);
@@ -36,120 +38,120 @@ public abstract class TransformerBaseListI<T extends TransformerBase>
 
 	
 	@Override
-	public float getGmag(int ndx)
+	public float getGmag(int ndx) throws PAModelException
 	{
 		return _g.get(ndx);
 	}
 
 	@Override
-	public void setGmag(int ndx, float g)
+	public void setGmag(int ndx, float g) throws PAModelException
 	{
 		_g.set(ndx, g);
 	}
 
 	@Override
-	public float[] getGmag()
+	public float[] getGmag() throws PAModelException
 	{
 		return _g.get();
 	}
 
 	@Override
-	public void setGmag(float[] g)
+	public void setGmag(float[] g) throws PAModelException
 	{
 		_g.set(g);
 	}
 
 	@Override
-	public float getBmag(int ndx)
+	public float getBmag(int ndx) throws PAModelException
 	{
 		return _b.get(ndx);
 	}
 
 	@Override
-	public void setBmag(int ndx, float b)
+	public void setBmag(int ndx, float b) throws PAModelException
 	{
 		_b.set(ndx, b);
 	}
 
 	@Override
-	public float[] getBmag()
+	public float[] getBmag() throws PAModelException
 	{
 		return _b.get();
 	}
 
 	@Override
-	public void setBmag(float[] b)
+	public void setBmag(float[] b) throws PAModelException
 	{
 		_b.set(b);
 	}
 
 	@Override
-	public float getShift(int ndx)
+	public float getShift(int ndx) throws PAModelException
 	{
 		return _deg.get(ndx);
 	}
 
 	@Override
-	public void setShift(int ndx, float sdeg)
+	public void setShift(int ndx, float sdeg) throws PAModelException
 	{
 		_deg.set(ndx, sdeg);
 	}
 
 	@Override
-	public float[] getShift()
+	public float[] getShift() throws PAModelException
 	{
 		return _deg.get();
 	}
 
 	@Override
-	public void setShift(float[] sdeg)
+	public void setShift(float[] sdeg) throws PAModelException
 	{
 		_deg.set(sdeg);
 	}
 	@Override
-	public float getFromTap(int ndx)
+	public float getFromTap(int ndx) throws PAModelException
 	{
 		return _ft.get(ndx);
 	}
 
 	@Override
-	public void setFromTap(int ndx, float a)
+	public void setFromTap(int ndx, float a) throws PAModelException
 	{
 		_ft.set(ndx, a);
 	}
 
 	@Override
-	public float[] getFromTap()
+	public float[] getFromTap() throws PAModelException
 	{
 		return _ft.get();
 	}
 
 	@Override
-	public void setFromTap(float[] a)
+	public void setFromTap(float[] a) throws PAModelException
 	{
 		_ft.set(a);
 	}
 
 	@Override
-	public float getToTap(int ndx)
+	public float getToTap(int ndx) throws PAModelException
 	{
 		return _tt.get(ndx);
 	}
 
 	@Override
-	public void setToTap(int ndx, float a)
+	public void setToTap(int ndx, float a) throws PAModelException
 	{
 		_tt.set(ndx, a);
 	}
 
 	@Override
-	public float[] getToTap()
+	public float[] getToTap() throws PAModelException
 	{
 		return _tt.get();
 	}
 
 	@Override
-	public void setToTap(float[] a)
+	public void setToTap(float[] a) throws PAModelException
 	{
 		_tt.set(a);
 	}

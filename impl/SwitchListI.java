@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.SwitchList;
 import com.powerdata.openpa.Switch.State;
@@ -19,7 +20,7 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.SwBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SwINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.SwOOS;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.SwPFROM;}
 		@Override
@@ -30,89 +31,89 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 		public ColumnMeta tq() {return ColumnMeta.SwQTO;}
 	};
 	
-	EnumData<State> _state =  new EnumData<>(ColumnMeta.SwSTATE);
+	EnumData<State> _state =  new EnumData<State>(ColumnMeta.SwSTATE);
 	BoolData _opld = new BoolData(ColumnMeta.SwOPLD),
 			_enab = new BoolData(ColumnMeta.SwENAB);
 	
 	protected SwitchListI(){super();}
 	
-	public SwitchListI(PAModelI model, int[] keys)
+	public SwitchListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
-	protected SwitchListI(PAModelI model, int size)
+	public SwitchListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
 
 	@Override
-	public State getState(int ndx)
+	public State getState(int ndx) throws PAModelException
 	{
 		return _state.get(ndx);
 	}
 
 	@Override
-	public void setState(int ndx, State state)
+	public void setState(int ndx, State state) throws PAModelException
 	{
 		_state.set(ndx, state);
 	}
 
 	@Override
-	public State[] getState()
+	public State[] getState() throws PAModelException
 	{
 		return _state.get();
 	}
 
 	@Override
-	public void setState(State[] state)
+	public void setState(State[] state) throws PAModelException
 	{
 		_state.set(state);
 	}
 
 	@Override
-	public boolean isOperableUnderLoad(int ndx)
+	public boolean isOperableUnderLoad(int ndx) throws PAModelException
 	{
 		return _opld.get(ndx);
 	}
 
 	@Override
-	public void setOperableUnderLoad(int ndx, boolean op)
+	public void setOperableUnderLoad(int ndx, boolean op) throws PAModelException
 	{
 		_opld.set(ndx, op);
 	}
 
 	@Override
-	public boolean[] isOperableUnderLoad()
+	public boolean[] isOperableUnderLoad() throws PAModelException
 	{
 		return _opld.get();
 	}
 	
 	@Override
-	public void setOperableUnderLoad(boolean[] op)
+	public void setOperableUnderLoad(boolean[] op) throws PAModelException
 	{
 		_opld.set(op);
 	}
 
 	@Override
-	public boolean isEnabled(int ndx)
+	public boolean isEnabled(int ndx) throws PAModelException
 	{
 		return _enab.get(ndx);
 	}
 
 	@Override
-	public void setEnabled(int ndx, boolean enable)
+	public void setEnabled(int ndx, boolean enable) throws PAModelException
 	{
 		_enab.set(ndx, enable);
 	}
 
 	@Override
-	public boolean[] isEnabled()
+	public boolean[] isEnabled() throws PAModelException
 	{
 		return _enab.get();
 	}
 
 	@Override
-	public void setEnabled(boolean[] enable)
+	public void setEnabled(boolean[] enable) throws PAModelException
 	{
 		_enab.set(enable);
 	}
@@ -124,7 +125,7 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Switch;
 	}

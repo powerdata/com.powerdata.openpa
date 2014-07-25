@@ -7,36 +7,36 @@ public interface OneTermDevListIfc<T extends OneTermDev> extends BaseList<T>
 	 * @param ndx offset within this list
 	 * @return Connected Bus object
 	 */
-	Bus getBus(int ndx);
+	Bus getBus(int ndx) throws PAModelException;
 
-	void setBus(int ndx, Bus b);
+	void setBus(int ndx, Bus b) throws PAModelException;
 	
-	Bus[] getBus();
+	Bus[] getBus() throws PAModelException;
 	
-	void setBus(Bus[] b);
+	void setBus(Bus[] b) throws PAModelException;
 	
-	float getP(int ndx);
+	float getP(int ndx) throws PAModelException;
 	
-	void setP(int ndx, float p);
+	void setP(int ndx, float p) throws PAModelException;
 
-	float[] getP();
+	float[] getP() throws PAModelException;
 	
-	void setP(float[] p);
+	void setP(float[] p) throws PAModelException;
 	
-	float getQ(int ndx);
+	float getQ(int ndx) throws PAModelException;
 
-	void setQ(int ndx, float q);
+	void setQ(int ndx, float q) throws PAModelException;
 	
-	float[] getQ();
+	float[] getQ() throws PAModelException;
 	
-	void setQ(float[] q);
+	void setQ(float[] q) throws PAModelException;
 
-	boolean isInSvc(int ndx);
+	boolean isOutOfSvc(int ndx) throws PAModelException;
 
-	void setInSvc(int ndx, boolean state);
+	void setOutOfSvc(int ndx, boolean state) throws PAModelException;
 	
-	boolean[] isInSvc();
+	boolean[] isOutOfSvc() throws PAModelException;
 	
-	void setInSvc(boolean[] state);
+	void setOutOfSvc(boolean[] state) throws PAModelException;
 
 }

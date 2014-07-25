@@ -5,24 +5,14 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SwitchedShunt;
 import com.powerdata.openpa.SwitchedShuntList;
 
-public class SwitchedShuntListI extends ShuntListI<SwitchedShunt> implements SwitchedShuntList
+public class SwitchedShuntListI extends AbstractPAList<SwitchedShunt> implements SwitchedShuntList
 {
-	static final ShuntEnum _PFld = new ShuntEnum()
+	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override
 		public ColumnMeta id() {return ColumnMeta.SwshID;}
 		@Override
 		public ColumnMeta name() {return ColumnMeta.SwshNAME;}
-		@Override
-		public ColumnMeta bus() {return ColumnMeta.SwshBUS;}
-		@Override
-		public ColumnMeta p() {return ColumnMeta.SwshP;}
-		@Override
-		public ColumnMeta q() {return ColumnMeta.SwshQ;}
-		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SwshINSVC;}
-		@Override
-		public ColumnMeta b() {return ColumnMeta.SwshB;}
 	};
 
 	public SwitchedShuntListI(PAModelI model, int[] keys)
@@ -44,7 +34,7 @@ public class SwitchedShuntListI extends ShuntListI<SwitchedShunt> implements Swi
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SwitchedShunt;
 	}

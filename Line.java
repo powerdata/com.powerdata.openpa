@@ -18,28 +18,26 @@ public class Line extends ACBranch
 
 	/** get from-side charging susceptance */
 	@Override
-	public float getFromBchg()
+	public float getFromBchg() throws PAModelException
 	{
 		return _list.getFromBchg(_ndx);
 	}
 	/** set from-side charging susceptance */
 	@Override
-	public void setFromBchg(float b)
+	public void setFromBchg(float b) throws PAModelException
 	{
 		_list.setFromBchg(_ndx, b);
 	}
 	/** get to-side charging susceptance */
 	@Override
-	public float getToBchg()
+	public float getToBchg() throws PAModelException
 	{
 		return _list.getToBchg(_ndx);
 	}
 	/** set to-side charging susceptance */
 	@Override
-	public void setToBchg(float b)
+	public void setToBchg(float b) throws PAModelException
 	{
 		_list.setToBchg(_ndx, b);
 	}
-
-	public float getMVAPercent()	{	return 0;	}
 }

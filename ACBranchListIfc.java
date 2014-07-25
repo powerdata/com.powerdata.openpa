@@ -3,19 +3,19 @@ package com.powerdata.openpa;
 public interface ACBranchListIfc<T extends ACBranch> extends TwoTermDevListIfc<T>
 {
 
-	float getR(int ndx);
+	float getR(int ndx) throws PAModelException;
 
-	void setR(int ndx, float r);
+	void setR(int ndx, float r) throws PAModelException;
 	
-	float[] getR();
+	float[] getR() throws PAModelException;
 	
-	void setR(float[] r);
+	void setR(float[] r) throws PAModelException;
 
-	float getX(int ndx);
+	float getX(int ndx) throws PAModelException;
 	
-	void setX(int ndx, float x);
+	void setX(int ndx, float x) throws PAModelException;
 
-	float[] getX();
+	float[] getX() throws PAModelException;
 	
-	void setX(float[] x);
+	void setX(float[] x) throws PAModelException;
 }

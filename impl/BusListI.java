@@ -3,7 +3,6 @@ package com.powerdata.openpa.impl;
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
-
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.BaseList;
@@ -17,6 +16,7 @@ import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
 import com.powerdata.openpa.OwnerList;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Station;
 import com.powerdata.openpa.StationList;
 import com.powerdata.openpa.VoltageLevel;
@@ -101,7 +101,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	
 	public BusListI(){super();}
 	
-	public BusListI(PAModelI model, int[] keys)
+	public BusListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, new UnityBusGrpMap(keys.length), _PFld);
 		_arealist = model.getAreas();
@@ -110,10 +110,13 @@ public class BusListI extends GroupListI<Bus> implements BusList
 		_vllist = model.getVoltageLevels();
 	}
 	
-	public BusListI(PAModelI model, int size)
+	public BusListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, new UnityBusGrpMap(size), _PFld);
 		_arealist = model.getAreas();
+		_ownerlist = model.getOwners();
+		_stationlist = model.getStations();
+		_vllist = model.getVoltageLevels();
 	}
 
 	@Override
@@ -123,84 +126,84 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	}
 	
 	@Override
-	public float getVM(int ndx) {return _vm.get(ndx);}
+	public float getVM(int ndx) throws PAModelException {return _vm.get(ndx);}
 
 	@Override
-	public float[] getVM() {return _vm.get();}
+	public float[] getVM() throws PAModelException {return _vm.get();}
 
 	@Override
-	public void setVM(int ndx, float vm) {_vm.set(ndx, vm);}
+	public void setVM(int ndx, float vm) throws PAModelException {_vm.set(ndx, vm);}
 
 	@Override
-	public void setVM(float[] vm) {_vm.set(vm);}
+	public void setVM(float[] vm) throws PAModelException {_vm.set(vm);}
 	
 	@Override
-	public float getVA(int ndx) {return _va.get(ndx);}
+	public float getVA(int ndx) throws PAModelException {return _va.get(ndx);}
 
 	@Override
-	public float[] getVA() {return _va.get();}
+	public float[] getVA() throws PAModelException {return _va.get();}
 
 	@Override
-	public void setVA(int ndx, float va) {_va.set(ndx, va);}
+	public void setVA(int ndx, float va) throws PAModelException {_va.set(ndx, va);}
 	
 	@Override
-	public void setVA(float[] va) {_va.set(va);}
+	public void setVA(float[] va) throws PAModelException {_va.set(va);}
 
 	@Override
-	public Area getArea(int ndx)
+	public Area getArea(int ndx) throws PAModelException 
 	{
 		return _arealist.get(_area.get(ndx));
 	}
 	
 	@Override
-	public void setArea(int ndx, Area a)
+	public void setArea(int ndx, Area a) throws PAModelException 
 	{
 		_area.set(ndx, a.getIndex());
 	}
 
 	@Override
-	public Area[] getArea()
+	public Area[] getArea() throws PAModelException
 	{
 		return _arealist.toArray(_area.get());
 	}
 
 	@Override
-	public void setArea(Area[] area)
+	public void setArea(Area[] area) throws PAModelException
 	{
 		_area.set(BaseList.ObjectNdx(area));
 	}
 	
 	@Override
-	public Owner getOwner(int ndx)
+	public Owner getOwner(int ndx) throws PAModelException
 	{
 		return _ownerlist.get(_own.get(ndx));
 	}
 
 	@Override
-	public void setOwner(int ndx, Owner o)
+	public void setOwner(int ndx, Owner o) throws PAModelException
 	{
 		_own.set(ndx, o.getIndex());
 	}
 	@Override
-	public Owner[] getOwner()
+	public Owner[] getOwner() throws PAModelException
 	{
 		return _ownerlist.toArray(_own.get());
 	}
 
 	@Override
-	public void setOwner(Owner[] owner)
+	public void setOwner(Owner[] owner) throws PAModelException
 	{
 		_own.set(BaseList.ObjectNdx(owner));
 	}
 	
 
 	@Override
-	public Island getIsland(int ndx)
+	public Island getIsland(int ndx) throws PAModelException
 	{
 		return _model.getIslands().getByBus(get(ndx));
 	}
 
-	public Island[] getIsland()
+	public Island[] getIsland() throws PAModelException
 	{
 		IslandList islands = _model.getIslands();
 		Island[] rv = new Island[_size];
@@ -210,79 +213,79 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	}
 	
 	@Override
-	public int getFrequencySourcePriority(int ndx)
+	public int getFreqSrcPri(int ndx) throws PAModelException
 	{
 		return _fspri.get(ndx);
 	}
 
 	@Override
-	public void setFrequencySourcePriority(int ndx, int fsp)
+	public void setFreqSrcPri(int ndx, int fsp) throws PAModelException
 	{
 		_fspri.set(ndx, fsp);
 	}
 
 	@Override
-	public int[] getFrequencySourcePriority()
+	public int[] getFreqSrcPri() throws PAModelException
 	{
 		return _fspri.get();
 	}
 	
 	@Override
-	public void setFrequencySourcePriority(int[] fsrc)
+	public void setFreqSrcPri(int[] fsrc) throws PAModelException
 	{
 		_fspri.set(fsrc);
 	}
 	
 	@Override
-	public Station getStation(int ndx)
+	public Station getStation(int ndx) throws PAModelException
 	{
 		return _stationlist.get(_sta.get(ndx));
 	}
 
 	@Override
-	public void setStation(int ndx, Station s)
+	public void setStation(int ndx, Station s) throws PAModelException
 	{
 		_sta.set(ndx, s.getIndex());
 	}
 	
 	@Override
-	public Station[] getStation()
+	public Station[] getStation() throws PAModelException
 	{
 		return _stationlist.toArray(_sta.get());
 	}
 	
 	@Override
-	public void setStation(Station[] s)
+	public void setStation(Station[] s) throws PAModelException
 	{
 		_sta.set(BaseList.ObjectNdx(s));
 	}
 
 	@Override
-	public VoltageLevel getVoltageLevel(int ndx)
+	public VoltageLevel getVoltageLevel(int ndx) throws PAModelException
 	{
 		return _vllist.get(_vl.get(ndx));
 	}
 
 	@Override
-	public void setVoltageLevel(int ndx, VoltageLevel l)
+	public void setVoltageLevel(int ndx, VoltageLevel l) throws PAModelException
 	{
 		_vl.set(ndx, l.getIndex());
 	}
 
 	@Override
-	public VoltageLevel[] getVoltageLevel()
+	public VoltageLevel[] getVoltageLevel() throws PAModelException
 	{
 		return _vllist.toArray(_vl.get());
 	}
 	
 	@Override
-	public void setVoltageLevel(VoltageLevel[] l)
+	public void setVoltageLevel(VoltageLevel[] l) throws PAModelException
 	{
 		_vl.set(BaseList.ObjectNdx(l));
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Bus;
 	}

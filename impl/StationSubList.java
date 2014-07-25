@@ -21,7 +21,7 @@ public class StationSubList extends GroupSubList<Station> implements
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.Station;
 	}

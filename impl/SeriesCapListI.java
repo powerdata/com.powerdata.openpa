@@ -2,6 +2,7 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SeriesCap;
 import com.powerdata.openpa.SeriesCapList;
 
@@ -14,7 +15,7 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.SercapBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SercapINSVC;}
+		public ColumnMeta insvc() {return ColumnMeta.SercapOOS;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.SercapPFROM;}
 		@Override
@@ -33,12 +34,12 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 		public ColumnMeta x() {return ColumnMeta.SercapX;}
 	};
 
-	public SeriesCapListI(PAModelI model, int[] keys)
+	public SeriesCapListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
 
-	public SeriesCapListI(PAModelI model, int size)
+	public SeriesCapListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -52,7 +53,7 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 	}
 
 	@Override
-	public ListMetaType getMetaType()
+	public ListMetaType getListMeta()
 	{
 		return ListMetaType.SeriesCap;
 	}
