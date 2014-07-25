@@ -5,14 +5,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.Line;
+import com.powerdata.openpa.OneTermDev;
+import com.powerdata.openpa.OneTermDevList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.SwitchList;
+import com.powerdata.openpa.TwoTermDev;
+import com.powerdata.openpa.TwoTermDevList;
 
 public class TestModel
 {
@@ -22,31 +26,10 @@ public class TestModel
 		_m = m;
 	}
 	
-	void dumpTopNodes(File file) throws IOException, PAModelException
-	{
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-		BusList buses = _m.getSingleBus();
-		for(Bus b : buses)
-		{
-			out.format("%d %d %s\n", b.getIndex(), b.getKey(), b);
-			out.format("\tBuses:\n");
-			for(Bus b1 : b.getBuses())
-				out.format("\t\t%d %d %s\n", b1.getIndex(), b1.getKey(), b1);
-			out.format("\tSwitches:\n");
-			for(Switch b1 : b.getSwitches())
-				out.format("\t\t%d %d %s\n", b1.getIndex(), b1.getKey(), b1);
-//			out.format("\tLines:\n");
-//			for(Line b1 : b.getLines())
-//				out.format("\t\t%s\n", b1);
-			out.println();
-		}
-		out.close();
-	}
 
-	public void dumpBusLists(File fout) throws IOException, PAModelException
+	public void dumpBusLists(BusList buses, File fout) throws IOException, PAModelException
 	{
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fout)));
-		BusList buses = _m.getBuses();
 		for(Bus b : buses)
 		{
 			out.format("%05d %05d %s\n", b.getIndex(), b.getKey(), b.toString());
@@ -54,29 +37,27 @@ public class TestModel
 			for(Bus b1 : b.getBuses())
 				out.format("\t\t%d %d %s\n", b1.getIndex(), b1.getKey(), b1.getName());
 
-			out.format("\tSwitches:\n");
-			for(Switch s : b.getSwitches())
-				out.format("\t\t%d %d %s\n", s.getIndex(), s.getKey(), s.getName());
-			
-//			out.format("\tLines:\n");
-//			for(Line s : b.getLines())
-//				out.format("\t\t%s\n", s);
+			out.format("\tTwo-Term Devs:\n");
+			for(TwoTermDev b1 : new TwoTermDevList(b))
+			{
+				Bus f = b1.getFromBus(), t = b1.getToBus();
+				out.format("\t\t%d %d %s %d %d %s %d %d %s\n", b1.getIndex(), b1.getKey(), b1,
+					f.getIndex(), f.getKey(), f, t.getIndex(), t.getKey(), t);
+			}
+			out.println();
+			out.format("\tOne-Term Devs:\n");
+			for(OneTermDev b1 : new OneTermDevList(b))
+			{
+				Bus ob = b1.getBus();
+				out.format("\t\t%d %d %s %d %d %s\n", b1.getIndex(), b1.getKey(), b1,
+					ob.getIndex(), ob.getKey(), ob);
+			}
+			out.println();
 		}
 		
 		out.close();
 	}
 
-	public void dumpSwitches(File fout) throws IOException, PAModelException
-	{
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fout)));
-		SwitchList switches = _m.getSwitches();
-		for(Switch b : switches)
-		{
-			out.format("%05d %05d %s\n", b.getIndex(), b.getKey(), b.toString());
-		}
-		out.close();
-	}
-	
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;
@@ -105,9 +86,8 @@ public class TestModel
 		
 		PAModel m = PflowModelBuilder.Create(uri).load();
 		TestModel tm = new TestModel(m);
-		tm.dumpBusLists(new File(outdir, "buses.txt"));
-		tm.dumpSwitches(new File(outdir, "switches.txt"));
-		tm.dumpTopNodes(new File(outdir, "tnode.txt"));
+		tm.dumpBusLists(m.getBuses(), new File(outdir, "buses.txt"));
+		tm.dumpBusLists(m.getSingleBus(), new File(outdir, "tnode.txt"));
 		
 	}
 

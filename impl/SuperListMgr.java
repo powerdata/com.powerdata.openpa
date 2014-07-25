@@ -79,7 +79,7 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 	{
 		try
 		{
-			for (Method m : lists.getClass().getDeclaredMethods())
+			for (Method m : lists.getClass().getMethods())
 			{
 				Class<?> rt = m.getReturnType();
 				if (!rt.equals(this.getClass()) && testInterfaces(clz, rt) && testNotSuper(rt))
