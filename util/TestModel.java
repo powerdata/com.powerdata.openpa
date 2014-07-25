@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.PAModel;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.SwitchList;
@@ -20,7 +22,7 @@ public class TestModel
 		_m = m;
 	}
 	
-	void dumpTopNodes(File file) throws IOException
+	void dumpTopNodes(File file) throws IOException, PAModelException
 	{
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 		BusList buses = _m.getSingleBus();
@@ -41,7 +43,7 @@ public class TestModel
 		out.close();
 	}
 
-	public void dumpBusLists(File fout) throws IOException
+	public void dumpBusLists(File fout) throws IOException, PAModelException
 	{
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fout)));
 		BusList buses = _m.getBuses();
@@ -64,7 +66,7 @@ public class TestModel
 		out.close();
 	}
 
-	public void dumpSwitches(File fout) throws IOException
+	public void dumpSwitches(File fout) throws IOException, PAModelException
 	{
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fout)));
 		SwitchList switches = _m.getSwitches();

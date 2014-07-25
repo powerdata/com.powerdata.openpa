@@ -65,32 +65,32 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 			@Override
 			protected boolean incLN(Line d) throws PAModelException
 			{
-				return d.isOutOfSvc();
+				return !d.isOutOfSvc();
 			}
 			@Override
 			protected boolean incSR(SeriesReac d) throws PAModelException
 			{
-				return d.isOutOfSvc();
+				return !d.isOutOfSvc();
 			}
 			@Override
 			protected boolean incSC(SeriesCap d) throws PAModelException
 			{
-				return d.isOutOfSvc();
+				return !d.isOutOfSvc();
 			}
 			@Override
 			protected boolean incTX(Transformer d) throws PAModelException
 			{
-				return d.isOutOfSvc();
+				return !d.isOutOfSvc();
 			}
 			@Override
 			protected boolean incPS(PhaseShifter d) throws PAModelException
 			{
-				return d.isOutOfSvc();
+				return !d.isOutOfSvc();
 			}
 			@Override
 			protected boolean incD2(TwoTermDCLine d) throws PAModelException
 			{
-				return d.isOutOfSvc();
+				return !d.isOutOfSvc();
 			}
 		}.addAll().getMap(), _PFld);
 		String[] id = new String[_size];
