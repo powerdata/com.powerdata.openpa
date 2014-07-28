@@ -1,14 +1,14 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.FixedShunt;
-import com.powerdata.openpa.FixedShuntList;
+import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.PAModelException;
 
-public abstract class FixedShuntSubList<T extends FixedShunt> extends OneTermDevSubList<T> implements FixedShuntList<T>
+public abstract class FixedShuntSubList<T extends FixedShunt> extends OneTermDevSubList<T> implements FixedShuntListIfc<T>
 {
-	FixedShuntList<T> _src;
+	FixedShuntListIfc<T> _src;
 	
-	public FixedShuntSubList(FixedShuntList<T> src, int[] ndx)
+	public FixedShuntSubList(FixedShuntListIfc<T> src, int[] ndx)
 	{
 		super(src, ndx);
 		_src = src;

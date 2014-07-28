@@ -2,9 +2,9 @@ package com.powerdata.openpa;
 
 public class FixedShunt extends OneTermDev
 {
-	FixedShuntList<? extends FixedShunt> _list;
+	FixedShuntListIfc<? extends FixedShunt> _list;
 	
-	public FixedShunt(FixedShuntList<? extends FixedShunt> list, int ndx)
+	public FixedShunt(FixedShuntListIfc<? extends FixedShunt> list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

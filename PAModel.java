@@ -50,6 +50,8 @@ public interface PAModel extends PALists
 	 *             Method uses reflection to find all ACBranch devices
 	 */
 	ACBranchList getACBranches() throws PAModelException;
+	
+	FixedShuntList getFixedShunts() throws PAModelException;
 
 	/** Create arbitrary groups of buses */
 	GroupList createGroups(BusGrpMap map);

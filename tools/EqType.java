@@ -16,7 +16,9 @@ public enum EqType
 	PHASESHIFTER(7),
 	SHUNT(8),
 	SWITCH(9),
-	TRANSFORMER(10);
+	TRANSFORMER(10),
+	SERIESCAP(11),
+	SERIESREAC(12);
 
 	private byte _id;
 	private EqType(int id) { _id = (byte)id; }
@@ -36,6 +38,9 @@ public enum EqType
 			case 8 : return SHUNT;
 			case 9 : return SWITCH;
 			case 10: return TRANSFORMER;
+			case 11: return SERIESCAP;
+			case 12: return SERIESREAC;
+			
 		}
 		return null;
 	}
@@ -45,16 +50,20 @@ public enum EqType
 		switch(type)
 		{
 			case UNKNOWN:		eq = null;
-			//case SVC:			eq = mdl.getSvcs().get(ndx); break;
-			//case AREA:			eq = mdl.getAreas().get(ndx); break;
+			case SVC:			eq = mdl.getSVCs().get(ndx); break;
+			case AREA:			eq = mdl.getAreas().get(ndx); break;
 			case BUS:			eq = mdl.getBuses().get(ndx); break;
 			case GEN:			eq = mdl.getGenerators().get(ndx); break;
 			case LINE:			eq = mdl.getLines().get(ndx); break;
 			case LOAD:			eq = mdl.getLoads().get(ndx); break;
 			case PHASESHIFTER:	eq = mdl.getPhaseShifters().get(ndx); break;
-			//case SHUNT:			eq = mdl.getShunts().get(ndx); break;
+			case SHUNT:			eq = mdl.getFixedShunts().get(ndx); break;
 			case SWITCH:		eq = mdl.getSwitches().get(ndx); break;
 			case TRANSFORMER:	eq = mdl.getTransformers().get(ndx); break;
+			case SERIESCAP:		eq = mdl.getSeriesCapacitors().get(ndx); break;
+			case SERIESREAC:	eq = mdl.getSeriesReactors().get(ndx); break;
+			default:
+				break;
 		}
 		return eq;
 	}

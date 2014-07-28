@@ -2,11 +2,11 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.FixedShunt;
-import com.powerdata.openpa.FixedShuntList;
+import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.PAModelException;
 
 public abstract class FixedShuntListI<T extends FixedShunt> 
-	extends OneTermDevListI<T> implements FixedShuntList<T>
+	extends OneTermDevListI<T> implements FixedShuntListIfc<T>
 {
 	interface ShuntEnum extends OneTermDevEnum
 	{

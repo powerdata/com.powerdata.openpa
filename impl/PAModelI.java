@@ -272,5 +272,11 @@ public class PAModelI implements PAModel
 	{
 		return _bldr.load(ltype, ctype, keys);
 	}
+
+	@Override
+	public FixedShuntList getFixedShunts() throws PAModelException
+	{
+		return new FixedShuntList(this);
+	}
 	
 }
