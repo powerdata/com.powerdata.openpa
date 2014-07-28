@@ -1,11 +1,12 @@
 package com.powerdata.openpa.impl;
 
+import com.powerdata.openpa.ACBranch;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.TransformerBaseList;
 
-public abstract class TransformerBaseListI<T extends TransformerBase>
-		extends ACBranchListI<T> implements TransformerBaseList<T>
+public abstract class TransformerBaseListI<T extends ACBranch>
+		extends ACBranchListI<T> implements ACBranchListIfc<T>
 {
 	
 	FloatData _b, _g, _deg, _ft, _tt;

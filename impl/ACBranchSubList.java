@@ -2,71 +2,243 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchListIfc;
+import com.powerdata.openpa.PAModelException;
 
 public abstract class ACBranchSubList<T extends ACBranch> extends TwoTermDevSubList<T> implements
 		ACBranchListIfc<T>
 {
+	
+	ACBranchListIfc<T> _src;
 
 	public ACBranchSubList(ACBranchListIfc<T> src, int[] ndx)
 	{
 		super(src, ndx);
-		// TODO Auto-generated constructor stub
+		_src = src;
 	}
 
 	@Override
-	public float getR(int ndx)
+	public float getR(int ndx) throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return _src.getR(_ndx[ndx]);
 	}
 
 	@Override
-	public void setR(int ndx, float r)
+	public void setR(int ndx, float r) throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		
+		_src.setR(_ndx[ndx], r);
 	}
 
 	@Override
-	public float[] getR()
+	public float[] getR() throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return mapFloat(_src.getR());
 	}
 
 	@Override
-	public void setR(float[] r)
+	public void setR(float[] r) throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		
+		for(int i=0; i < _size; ++i)
+			_src.setR(_ndx[i], r[i]);
 	}
 
 	@Override
-	public float getX(int ndx)
+	public float getX(int ndx) throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return _src.getX(_ndx[ndx]);
 	}
 
 	@Override
-	public void setX(int ndx, float x)
+	public void setX(int ndx, float x) throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		
+		_src.setX(_ndx[ndx], x);
 	}
 
 	@Override
-	public float[] getX()
+	public float[] getX() throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return  mapFloat(_src.getX());
 	}
 
 	@Override
-	public void setX(float[] x)
+	public void setX(float[] x) throws PAModelException
 	{
-		// TODO Auto-generated method stub
-		
+		for(int i=0; i < _size; ++i)
+			_src.setX(_ndx[i], x[i]);
+	}
+
+	@Override
+	public float getFromTap(int ndx) throws PAModelException
+	{
+		return _src.getFromTap(_ndx[ndx]);
+	}
+
+	@Override
+	public void setFromTap(int ndx, float a) throws PAModelException
+	{
+		_src.setFromTap(_ndx[ndx], a);
+	}
+
+	@Override
+	public float[] getFromTap() throws PAModelException
+	{
+		return mapFloat(_src.getFromTap());
+	}
+
+	@Override
+	public void setFromTap(float[] a) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setFromTap(_ndx[i], a[i]);
+	}
+
+	@Override
+	public float getToTap(int ndx) throws PAModelException
+	{
+		return _src.getToTap(_ndx[ndx]);
+	}
+
+	@Override
+	public void setToTap(int ndx, float a) throws PAModelException
+	{
+		_src.setToTap(_ndx[ndx], a);
+	}
+
+	@Override
+	public float[] getToTap() throws PAModelException
+	{
+		return mapFloat(_src.getToTap());
+	}
+
+	@Override
+	public void setToTap(float[] a) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setToTap(_ndx[i], a[i]);
+	}
+
+	@Override
+	public float getGmag(int ndx) throws PAModelException
+	{
+		return _src.getGmag(_ndx[ndx]);
+	}
+
+	@Override
+	public void setGmag(int ndx, float g) throws PAModelException
+	{
+		_src.setGmag(_ndx[ndx], g);
+	}
+
+	@Override
+	public float[] getGmag() throws PAModelException
+	{
+		return mapFloat(_src.getGmag());
+	}
+
+	@Override
+	public void setGmag(float[] g) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setGmag(_ndx[i], g[i]);
+	}
+
+	@Override
+	public float getBmag(int ndx) throws PAModelException
+	{
+		return _src.getBmag(_ndx[ndx]);
+	}
+
+	@Override
+	public void setBmag(int ndx, float b) throws PAModelException
+	{
+		_src.setBmag(_ndx[ndx], b);
+	}
+
+	@Override
+	public float[] getBmag() throws PAModelException
+	{
+		return mapFloat(_src.getBmag());
+	}
+
+	@Override
+	public void setBmag(float[] b) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setBmag(_ndx[i], b[i]);
+	}
+
+	@Override
+	public float getFromBchg(int ndx) throws PAModelException
+	{
+		return _src.getFromBchg(_ndx[ndx]);
+	}
+
+	@Override
+	public void setFromBchg(int ndx, float b) throws PAModelException
+	{
+		_src.setFromBchg(_ndx[ndx], b);
+	}
+
+	@Override
+	public float[] getFromBchg() throws PAModelException
+	{
+		return mapFloat(_src.getFromBchg());
+	}
+
+	@Override
+	public void setFromBchg(float[] b) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setFromBchg(_ndx[i], b[i]);
+	}
+
+	@Override
+	public float getToBchg(int ndx) throws PAModelException
+	{
+		return _src.getToBchg(_ndx[ndx]);
+	}
+
+	@Override
+	public void setToBchg(int ndx, float b) throws PAModelException
+	{
+		_src.setToBchg(_ndx[ndx], b);
+	}
+
+	@Override
+	public float[] getToBchg() throws PAModelException
+	{
+		return mapFloat(_src.getToBchg());
+	}
+
+	@Override
+	public void setToBchg(float[] b) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setToBchg(_ndx[i], b[i]);
+	}
+
+	@Override
+	public float getShift(int ndx) throws PAModelException
+	{
+		return _src.getShift(_ndx[ndx]);
+	}
+
+	@Override
+	public void setShift(int ndx, float sdeg) throws PAModelException
+	{
+		_src.setShift(_ndx[ndx], sdeg);
+	}
+
+	@Override
+	public float[] getShift() throws PAModelException
+	{
+		return mapFloat(_src.getShift());
+	}
+
+	@Override
+	public void setShift(float[] sdeg) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setShift(_ndx[i], sdeg[i]);
 	}
 
 }

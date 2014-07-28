@@ -40,71 +40,71 @@ public class ACBranch extends TwoTermDev
 	/** get from-side off-nominal tap ratio p.u. on 100MVA base and bus base KV */
 	public float getFromTap() throws PAModelException
 	{
-		return 1f;
+		return _list.getFromTap(_ndx);
 	}
 	/** set from-side off-nominal tap ratio p.u. on 100MVA base and bus base KV */
 	public void setFromTap(float a) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setFromTap(_ndx, a);
 	}
 	/** get to-side off-nominal tap ratio p.u on 100MVA base and bus base KV */
 	public float getToTap() throws PAModelException
 	{
-		return 1f;
+		return _list.getToTap(_ndx);
 	}
 	/** set to-side off-nominal tap ratio p.u on 100MVA base and bus base KV */
 	public void setToTap(float a) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setToTap(_ndx, a);
 	}
 	/** get transformer magnetizing conductance p.u. on 100MVA base */
 	public float getGmag() throws PAModelException
 	{
-		return 0f;
+		return _list.getGmag(_ndx);
 	}
 	/** set transformer magnetizing conductance p.u. on 100MVA base */
 	public void setGmag(float g) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setGmag(_ndx, g);
 	}
 	/** get transformer magnetizing susceptance p.u. on 100 MVA base */
 	public float getBmag() throws PAModelException
 	{
-		return 0f;
+		return _list.getBmag(_ndx);
 	}
 	/** set transformer magnetizing susceptance p.u. on 100 MVA base */
 	public void setBmag(float b) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setBmag(_ndx, b);
 	}
 	/** get from-side charging susceptance */
 	public float getFromBchg() throws PAModelException
 	{
-		return 0f;
+		return _list.getFromBchg(_ndx);
 	}
 	/** set from-side charging susceptance */
 	public void setFromBchg(float b) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setFromBchg(_ndx, b);
 	}
 	/** get to-side charging susceptance */
 	public float getToBchg() throws PAModelException
 	{
-		return 0f;
+		return _list.getToBchg(_ndx);
 	}
 	/** set to-side charging susceptance */
 	public void setToBchg(float b) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setToBchg(_ndx, b);
 	}
 	/** get phase shift through branch in Degrees */
 	public float getShift() throws PAModelException
 	{
-		return 0f;
+		return _list.getShift(_ndx);
 	}
 	/** set phase shift through branch in Degrees */
 	public void setShift(float sdeg) throws PAModelException
 	{
-		// defaults to no operation
+		_list.setShift(_ndx, sdeg);
 	}
 }

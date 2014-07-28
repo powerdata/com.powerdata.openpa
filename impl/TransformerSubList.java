@@ -4,7 +4,7 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
 
-public class TransformerSubList extends TransformerBaseSubList<Transformer> implements TransformerList
+public class TransformerSubList extends ACBranchSubList<Transformer> implements TransformerList
 {
 	TransformerList _src;
 	

@@ -6,7 +6,7 @@ import com.powerdata.openpa.PhaseShifter;
 import com.powerdata.openpa.PhaseShifter.ControlMode;
 import com.powerdata.openpa.PhaseShifterList;
 
-public class PhaseShifterSubList extends TransformerBaseSubList<PhaseShifter> implements PhaseShifterList
+public class PhaseShifterSubList extends ACBranchSubList<PhaseShifter> implements PhaseShifterList
 {
 	PhaseShifterList _src;
 	

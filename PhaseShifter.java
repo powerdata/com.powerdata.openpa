@@ -1,8 +1,6 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.TransformerBase;
-
-public class PhaseShifter extends TransformerBase
+public class PhaseShifter extends ACBranch
 {
 	PhaseShifterList _list;
 	

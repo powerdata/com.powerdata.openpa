@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.PhaseShifter.ControlMode;
 import com.powerdata.openpa.impl.PhaseShifterListI;
 
-public interface PhaseShifterList extends TransformerBaseList<PhaseShifter>
+public interface PhaseShifterList extends ACBranchListIfc<PhaseShifter>
 {
 
 	static final PhaseShifterList Empty = new PhaseShifterListI();

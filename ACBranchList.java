@@ -147,4 +147,187 @@ public class ACBranchList extends SuperListMgr<ACBranch, ACBranchListIfc<ACBranc
 	{
 		return new ACBranch(this, index);
 	}
+
+	@Override
+	public float getFromTap(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getFromTap(li.ofs);
+	}
+
+	@Override
+	public void setFromTap(int ndx, float a) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setFromTap(li.ofs, a);
+	}
+
+	@Override
+	public float[] getFromTap() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getFromTap());
+	}
+
+	@Override
+	public void setFromTap(float[] a) throws PAModelException
+	{
+		setHelper(a, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
+	@Override
+	public float getToTap(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getToTap(li.ofs);
+	}
+
+	@Override
+	public void setToTap(int ndx, float a) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setToTap(li.ofs, a);
+	}
+
+	@Override
+	public float[] getToTap() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getToTap());		
+	}
+
+	@Override
+	public void setToTap(float[] a) throws PAModelException
+	{
+		setHelper(a, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
+	@Override
+	public float getGmag(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getGmag(li.ofs);
+	}
+
+	@Override
+	public void setGmag(int ndx, float g) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setGmag(li.ofs, g);		
+	}
+
+	@Override
+	public float[] getGmag() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getGmag());		
+	}
+
+	@Override
+	public void setGmag(float[] g) throws PAModelException
+	{
+		setHelper(g, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
+	@Override
+	public float getBmag(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getBmag(li.ofs);
+	}
+
+	@Override
+	public void setBmag(int ndx, float b) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setBmag(li.ofs, b);		
+	}
+
+	@Override
+	public float[] getBmag() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getBmag());		
+	}
+
+	@Override
+	public void setBmag(float[] b) throws PAModelException
+	{
+		setHelper(b, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
+	@Override
+	public float getFromBchg(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getFromBchg(li.ofs);	
+	}
+
+	@Override
+	public void setFromBchg(int ndx, float b) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setFromBchg(li.ofs, b);		
+	}
+
+	@Override
+	public float[] getFromBchg() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getFromBchg());		
+	}
+
+	@Override
+	public void setFromBchg(float[] b) throws PAModelException
+	{
+		setHelper(b, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
+	@Override
+	public float getToBchg(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getToBchg(li.ofs);
+	}
+
+	@Override
+	public void setToBchg(int ndx, float b) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setToBchg(li.ofs, b);		
+	}
+
+	@Override
+	public float[] getToBchg() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getToBchg());		
+	}
+
+	@Override
+	public void setToBchg(float[] b) throws PAModelException
+	{
+		setHelper(b, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
+	@Override
+	public float getShift(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getShift(li.ofs);
+	}
+
+	@Override
+	public void setShift(int ndx, float sdeg) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setShift(li.ofs, sdeg);		
+	}
+
+	@Override
+	public float[] getShift() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getShift());		
+	}
+
+	@Override
+	public void setShift(float[] sdeg) throws PAModelException
+	{
+		setHelper(sdeg, float[]::new, (l,v) -> l.setFromTap(v));
+	}
+
 }
