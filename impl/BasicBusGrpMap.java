@@ -48,20 +48,20 @@ public class BasicBusGrpMap implements BusGrpMap
 		return _ngrp;
 	}
 
-	@Override
-	public int[] getTokens()
-	{
-		int[] rv = _tokens.get();
-		int n = size();
-		if (rv == null)
-		{
-			rv = new int[n];
-			List<int[]> l = map();
-			for(int i=0; i < n; ++i)
-			{
-				rv[i] = l.get(i)[0];
-			}
-		}
-		return rv;
-	}
+//	@Override
+//	public int[] getTokens()
+//	{
+//		int[] rv = _tokens.get();
+//		int n = size();
+//		if (rv == null)
+//		{
+//			rv = new int[n];
+//			List<int[]> l = map();
+//			for(int i=0; i < n; ++i)
+//			{
+//				rv[i] = l.get(i)[0];
+//			}
+//		}
+//		return rv;
+//	}
 }

@@ -17,8 +17,8 @@ public interface BusGrpMap
 
 	List<int[]> map();
 	
-	/** get a representative element from each group */
-	int[] getTokens();
+//	/** get a representative element from each group */
+//	int[] getTokens();
 	
 	public static BusGrpMap Empty = new BusGrpMap()
 	{
@@ -31,7 +31,7 @@ public interface BusGrpMap
 		@Override
 		public List<int[]> map() {return null;}
 
-		@Override
-		public int[] getTokens() {return null;}
+//		@Override
+//		public int[] getTokens() {return null;}
 	};
 }

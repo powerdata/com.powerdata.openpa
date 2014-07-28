@@ -7,7 +7,7 @@ package com.powerdata.openpa;
  */
 public interface BaseObject
 {
-	/** get Index within associated list */
+	/** get Index within master list owned by PAModel */
 	public int getIndex();
 	/** get unique String object identifier */
 	public String getID()throws PAModelException;
