@@ -105,7 +105,6 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 			U list = m.list;
 			System.arraycopy(list.getKeys(), 0, keys, m.startidx, list.size());
 		}
-		setupKeys(keys);
 	}
 	
 	boolean testNotSuper(Class<?> rt)
@@ -212,5 +211,50 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 	{
 		return ListMetaType.SuperList;
 	}
+
+	public ListMetaType getListMeta(int ndx)
+	{
+		return getLI(ndx).list.getListMeta();
+	}
+	
+	@Override
+	public int getKey(int ndx)
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getKey(li.ofs);
+	}
+
+	@Override
+	public int[] getKeys()
+	{
+		int[] rv = new int[_size];
+		for(Member m : _members)
+		{
+			U list = m.list;
+			System.arraycopy(list.getKeys(), 0, rv, m.startidx, list.size());
+		}
+		return rv;
+	}
+
+	@Override
+	@Nodump
+	public T getByKey(int key)
+	{
+		for(Member m : _members)
+		{
+			T obj = m.list.getByKey(key);
+			if (obj != null) return obj;
+		}
+		return null;
+	}
+
+	@Override
+	public int getIndex(int ndx)
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getIndex(li.ofs);
+	}
+	
+	
 	
 }

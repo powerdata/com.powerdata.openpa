@@ -1,6 +1,5 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.AbstractBaseObject;
 
 public class Group extends AbstractBaseObject implements PALists
 {

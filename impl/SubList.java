@@ -13,21 +13,12 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 	
 	public SubList(BaseList<T> src, int[] ndx)
 	{
-		super(makeKeys(src, ndx));
+		super(ndx.length);
 		_src = src;
 		_ndx = ndx;
 		_size = ndx.length;
 	}
 	
-	private static <U extends BaseObject> int[] makeKeys(BaseList<U> src, int[] ndx)
-	{
-		int size = ndx.length;
-		int[] newkeys = new int[size];
-		for(int i=0; i < size; ++i)
-			newkeys[i] = src.getKey(ndx[i]);
-		return newkeys;
-	}
-
 	@Override
 	public String getID(int ndx) throws PAModelException
 	{
@@ -52,7 +43,6 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 		for(int i=0; i < _size; ++i)
 			_src.setID(_ndx[i], id[i]);
 	}
-
 
 	@Override
 	public String getName(int ndx) throws PAModelException
@@ -112,4 +102,34 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 		return rv;
 	}
 
+	@Override
+	public int getKey(int ndx)
+	{
+		return _src.getKey(_ndx[ndx]);
+	}
+
+	@Override
+	public int[] getKeys()
+	{
+		int[] rv = new int[_size];
+		for(int i=0; i < _size; ++i)
+			rv[i] = _src.getKey(_ndx[i]);
+		return rv;
+	}
+
+	@Override
+	@Nodump
+	public T getByKey(int key)
+	{
+		return _src.getByKey(key);
+	}
+
+	@Override
+	public int getIndex(int ndx)
+	{
+		return _src.getIndex(_ndx[ndx]);
+	}
+
+	
+	
 }

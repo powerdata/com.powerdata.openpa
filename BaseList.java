@@ -28,22 +28,16 @@ public interface BaseList<T extends BaseObject> extends List<T>
 	/** set name of object  */
 	void setName(String[] name) throws PAModelException;
 
-	T getByKey(int ndx);
+	T getByKey(int key);
 
-	T[] toArray(int[] indexes);
-	
-	/** convert an array of objects to array of list offsets */
-	static int[] ObjectNdx(BaseObject[] objects)
-	{
-		int n = objects.length;
-		int[] s = new int[n];
-		for(int i=0; i < n; ++i) s[i] = objects[i].getIndex();
-		return s;
-	}
-	
-	int[] getIndexesFromKeys(int[] keys);
+//	T[] toArray(int[] indexes);
+//	
+//	
+//	int[] getIndexesFromKeys(int[] keys);
 
 	ListMetaType getListMeta();
+
+	int getIndex(int ndx);
 
 
 }

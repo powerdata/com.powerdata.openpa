@@ -1,11 +1,13 @@
 package com.powerdata.openpa.impl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.tools.SNdxKeyOfs;
 
 /**
  * Base of the object list hierarchy
@@ -17,7 +19,76 @@ import com.powerdata.openpa.PAModelException;
 public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseList<T> 
 {
 	protected PAModelI _model;
+	protected SNdxKeyOfs _keyndx;
+	protected int[] _keys;
+	protected KeyMgr _km;
 
+	interface KeyMgr
+	{
+		int key(int ndx);
+		int[] keys();
+	}
+	
+	class NoKeyMgr implements KeyMgr
+	{
+		@Override
+		public int[] keys()
+		{
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i) rv[i] = i+1;
+			return rv;
+		}
+
+		@Override
+		public int key(int ndx)
+		{
+			return ndx+1;
+		}
+	}
+	
+	class YesKeyMgr implements KeyMgr
+	{
+		@Override
+		public int key(int ndx)
+		{
+			return _keys[ndx];
+		}
+
+		@Override
+		public int[] keys()
+		{
+			return _keys;
+		}
+	}
+
+	class SNdxNoKey extends SNdxKeyOfs
+	{
+		@Override
+		public int size() {return _size;}
+
+		@Override
+		public boolean containsKey(int key)
+		{
+			return key > 0 && key <= _size;
+		}
+
+		@Override
+		public int getOffset(int key)
+		{
+			return key-1;
+		}
+
+		@Override
+		public int[] getOffsets(int[] keys)
+		{
+			int[] rv = new int[_size];
+			for(int i=0; i < _size; ++i) rv[i] = keys[i]-1;
+			return rv;
+		}
+
+	};
+
+	
 	abstract class Data
 	{
 		ColumnMeta _ctype;
@@ -42,7 +113,11 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		abstract int[] computeChanges();
 		public int[] getKeys(int[] ndxs)
 		{
-			return AbstractPAList.this.getKeys(ndxs);
+			int n = ndxs.length;
+			int[] rv = new int[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = getKey(ndxs[i]);
+			return rv;
 		}
 		
 	}
@@ -488,13 +563,16 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	{
 		super(size);
 		_model = model;
+		_km = new NoKeyMgr();
 		setFields(le);
 	}
 	
 	protected AbstractPAList(PAModelI model, int[] keys, PAListEnum le)
 	{
-		super(keys);
+		super(keys.length);
 		_model = model;
+		_keys = keys;
+		_km = new YesKeyMgr();
 		setFields(le);
 	}
 
@@ -506,19 +584,58 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	
 	protected AbstractPAList()
 	{
-		_size = 0;
+		super();
+	}
+	
+	protected AbstractPAList(int size)
+	{
+		super(size);
 	}
 
-	@Override
-	public int size()
+	protected AbstractPAList(int[] keys)
 	{
-		return _size;
 	}
 	
 	protected void registerColumn(Data d)
 	{
 		_fields.add(d);
 	}
+	
+	/** Set up keys in the event that the "key" constructor isn't used */
+	void setupKeys(int[] keys)
+	{
+		_size = keys.length;
+		_keys = keys;
+		_km = new YesKeyMgr();
+	}
+
+	@Override
+	@Nodump
+	public T getByKey(int key)
+	{
+		if (_keyndx == null) mkKeyNdx();
+		return get(_keyndx.getOffset(key));
+	}
+	
+	void mkKeyNdx()
+	{
+		_keyndx = (_keys == null) ? new SNdxNoKey() : SNdxKeyOfs.Create(_keys);
+	}
+
+	/** get unique object key */
+	@Override
+	public int getKey(int ndx)
+	{
+		return _km.key(ndx);
+	}
+	
+	@Override
+	public int[] getKeys()
+	{
+		return _km.keys();
+	}
+
+
 	
 	/** get unique object ID */
 	@Override
@@ -573,13 +690,43 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		_name.set(name);
 	}
 
-	public int[] getKeys(int[] offsets)
+	@Override
+	public int getIndex(int ndx)
 	{
-		int n = offsets.length;
-		int[] rv = new int[n];
-		for(int i=0; i < n; ++i)
-			rv[i] = getKey(offsets[i]);
-		return rv;
+		return ndx;
 	}
 
+	public int[] getIndexesFromKeys(int[] keys)
+	{
+		if (_keyndx == null) mkKeyNdx();
+		return _keyndx.getOffsets(keys);
+	}
+
+	public T[] toArray(int[] indexes)
+	{
+		T[] us = newArray(_size);
+		for(int i=0; i < _size; ++i)
+			us[i] = get(i);
+		int n = indexes.length;
+		T[] rv = newArray(n);
+		for(int i=0; i < n; ++i)
+			rv[i] = us[indexes[i]];
+		return rv;
+	}
+	
+	@SuppressWarnings("unchecked")
+	T[] newArray(int size)
+	{
+		return (T[]) Array.newInstance(get(0).getClass(), size);
+	}
+
+	protected int[] getIndexes(T[] objects)
+	{
+		int n = objects.length;
+		int[] keys = new int[n];
+		for(int i=0; i < n; ++i)
+			keys[i] = objects[i].getKey();
+		return _keyndx.getOffsets(keys);
+	}
+	
 }

@@ -1,6 +1,5 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.ColumnMeta;
@@ -38,7 +37,9 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 	BoolData _egzd;
 	protected FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
 	protected IntData _fsrc = new IntData(ColumnMeta.IslandFRQSRC);
-	IslandListI() {};
+	BusListI _buses;
+	
+//	IslandListI() {};
 	
 	class IStringData extends StringData
 	{
@@ -99,6 +100,7 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 		
 		_id = new IStringData(ColumnMeta.IslandID, id);
 		_name = new IStringData(ColumnMeta.IslandNAME, id);
+		_buses = model.getBuses();
 		setupEgStatus();
 	}
 	@Override
@@ -179,7 +181,7 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 	@Override
 	public void setFreqSrc(Bus[] fsrc) throws PAModelException
 	{
-		_fsrc.set(BaseList.ObjectNdx(fsrc));
+		_fsrc.set(_buses.getIndexes(fsrc));
 	}
 	@Override
 	public ListMetaType getListMeta()

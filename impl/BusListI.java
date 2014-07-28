@@ -4,8 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
 import com.powerdata.openpa.Area;
-import com.powerdata.openpa.AreaList;
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMap;
 import com.powerdata.openpa.BusList;
@@ -15,12 +13,9 @@ import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
-import com.powerdata.openpa.OwnerList;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Station;
-import com.powerdata.openpa.StationList;
 import com.powerdata.openpa.VoltageLevel;
-import com.powerdata.openpa.VoltageLevelList;
 
 
 public class BusListI extends GroupListI<Bus> implements BusList
@@ -94,10 +89,10 @@ public class BusListI extends GroupListI<Bus> implements BusList
 			_vl = new IntData(ColumnMeta.BusVLEV),
 			_fspri = new IntData(ColumnMeta.BusFREQSRCPRI);
 	
-	AreaList _arealist;
-	OwnerList _ownerlist;
-	StationList _stationlist;
-	VoltageLevelList _vllist;
+	AreaListI _arealist;
+	OwnerListI _ownerlist;
+	StationListI _stationlist;
+	VoltageLevelListI _vllist;
 	
 	public BusListI(){super();}
 	
@@ -170,7 +165,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	@Override
 	public void setArea(Area[] area) throws PAModelException
 	{
-		_area.set(BaseList.ObjectNdx(area));
+		_area.set(_arealist.getIndexes(area));
 	}
 	
 	@Override
@@ -193,7 +188,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	@Override
 	public void setOwner(Owner[] owner) throws PAModelException
 	{
-		_own.set(BaseList.ObjectNdx(owner));
+		_own.set(_ownerlist.getIndexes(owner));
 	}
 	
 
@@ -257,7 +252,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	@Override
 	public void setStation(Station[] s) throws PAModelException
 	{
-		_sta.set(BaseList.ObjectNdx(s));
+		_sta.set(_stationlist.getIndexes(s));
 	}
 
 	@Override
@@ -281,7 +276,7 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	@Override
 	public void setVoltageLevel(VoltageLevel[] l) throws PAModelException
 	{
-		_vl.set(BaseList.ObjectNdx(l));
+		_vl.set(_vllist.getIndexes(l));
 	}
 
 	@Override

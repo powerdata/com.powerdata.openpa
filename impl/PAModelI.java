@@ -91,35 +91,35 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	public AreaList getAreas() throws PAModelException
+	public AreaListI getAreas() throws PAModelException
 	{
 		if (_areas == null) _areas = _bldr.loadAreas();
 		return _areas;
 	}
 	
 	@Override
-	public OwnerList getOwners() throws PAModelException
+	public OwnerListI getOwners() throws PAModelException
 	{
 		if (_owners == null) _owners = _bldr.loadOwners();
 		return _owners;
 	}
 	
 	@Override
-	public StationList getStations() throws PAModelException
+	public StationListI getStations() throws PAModelException
 	{
 		if (_stations == null) _stations = _bldr.loadStations();
 		return _stations;
 	}
 	
 	@Override
-	public VoltageLevelList getVoltageLevels() throws PAModelException
+	public VoltageLevelListI getVoltageLevels() throws PAModelException
 	{
 		if (_vlevs == null) _vlevs = _bldr.loadVoltageLevels();
 		return _vlevs;
 	}
 
 	@Override
-	public BusList getBuses() throws PAModelException
+	public BusListI getBuses() throws PAModelException
 	{
 		if (_buses == null) _buses = _bldr.loadBuses();
 		return _buses;

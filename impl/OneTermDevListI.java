@@ -1,8 +1,6 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.OneTermDevListIfc;
@@ -15,7 +13,7 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 	FloatData _p, _q;
 	BoolData _oos;
 
-	BusList _buses;
+	BusListI _buses;
 
 	protected OneTermDevListI() {super();}
 
@@ -61,7 +59,7 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 	@Override
 	public void setBus(Bus[] b) throws PAModelException
 	{
-		_bus.set(BaseList.ObjectNdx(b));
+		_bus.set(_buses.getIndexes(b));
 	}
 
 	@Override

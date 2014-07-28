@@ -1,16 +1,15 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.TwoTermDevListIfc;
 
-public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPAList<T> implements TwoTermDevListIfc<T> 
+public abstract class TwoTermDevListI<T extends TwoTermDev> extends
+		AbstractPAList<T> implements TwoTermDevListIfc<T>
 {
-	BusList _buses;
+	BusListI _buses;
 	
 	IntData _fbus, _tbus;
 	BoolData _insvc;
@@ -65,7 +64,7 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPALi
 	@Override
 	public void setFromBus(Bus[] b) throws PAModelException
 	{
-		_fbus.set(BaseList.ObjectNdx(b));
+		_fbus.set(_buses.getIndexes(b));
 	}
 
 	@Override
@@ -89,7 +88,7 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends AbstractPALi
 	@Override
 	public void setToBus(Bus[] b) throws PAModelException
 	{
-		_tbus.set(BaseList.ObjectNdx(b));
+		_tbus.set(_buses.getIndexes(b));
 	}
 
 	@Override

@@ -1,8 +1,5 @@
-package com.powerdata.openpa.impl;
+package com.powerdata.openpa;
 
-import com.powerdata.openpa.BaseList;
-import com.powerdata.openpa.BaseObject;
-import com.powerdata.openpa.PAModelException;
 
 /**
  * Starting point of the base object hierarchy
@@ -31,8 +28,10 @@ public class AbstractBaseObject implements BaseObject
 	}
 
 	@Override
-	public int getIndex() {return _ndx;}
-
+	public int getIndex()
+	{
+		return _list.getIndex(_ndx);
+	}
 	@Override
 	public int getKey()
 	{

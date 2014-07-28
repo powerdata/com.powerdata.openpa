@@ -1,8 +1,6 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
@@ -27,7 +25,7 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 		public ColumnMeta insvc() {return ColumnMeta.SvcOOS;}
 	};
 
-	BusList _buses;
+	BusListI _buses;
 
 	FloatData _minb = new FloatData(ColumnMeta.SvcBMIN),
 			_maxb = new FloatData(ColumnMeta.SvcBMAX),
@@ -153,7 +151,7 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 	@Override
 	public void setRegBus(Bus[] b) throws PAModelException
 	{
-		_rbus.set(BaseList.ObjectNdx(b));
+		_rbus.set(_buses.getIndexes(b));
 	}
 	@Override
 	public ListMetaType getListMeta()
