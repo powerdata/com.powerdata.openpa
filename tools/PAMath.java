@@ -45,4 +45,9 @@ public class PAMath
 		return (mvabase==100F)?zval:new Complex(zval.re()*ratio, zval.im()*ratio);
 	}
 
+	public static float calcMVA(float mw, float mvar)
+	{
+		return (float) Math.sqrt(mw * mw + mvar * mvar);
+	}
+	
 }
