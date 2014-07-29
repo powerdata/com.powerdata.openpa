@@ -37,19 +37,6 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 	protected FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
 	BusListI _buses;
 	
-	class IStringData extends StringData
-	{
-		String[] id;
-		IStringData(ColumnMeta coltype, String[] id) {super(coltype);this.id = id;}
-
-		@Override
-		String[] load() throws PAModelException
-		{
-			return id;
-		}
-
-	}
-	
 	public IslandListI(PAModelI model) throws PAModelException
 	{
 		super(model, new BusGrpMapBldr(model)
@@ -90,12 +77,6 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 				return !d.isOutOfSvc();
 			}
 		}.addAll().getMap(), _PFld);
-		String[] id = new String[_size];
-		for (int i = 0; i < _size; ++i)
-			id[i] = String.valueOf(i + 1);
-		
-		_id = new IStringData(ColumnMeta.IslandID, id);
-		_name = new IStringData(ColumnMeta.IslandNAME, id);
 		_buses = model.getBuses();
 		setupEgStatus();
 	}

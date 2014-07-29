@@ -20,7 +20,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 {
 	protected PAModelI _model;
 	protected SNdxKeyOfs _keyndx;
-	protected int[] _keys;
+	private int[] _keys;
 	protected KeyMgr _km;
 
 	interface KeyMgr
@@ -140,7 +140,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		int[] load() throws PAModelException
 		{
 			_notld = false;
-			return _model.load(getListMeta(), getColMeta(), _keys);
+			return _model.load(getListMeta(), getColMeta(), AbstractPAList.this.getKeys());
 		}
 
 		@Override
@@ -223,7 +223,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		protected float[] load() throws PAModelException
 		{
 			_notld = false;
-			return _model.load(getListMeta(), getColMeta(), _keys);
+			return _model.load(getListMeta(), getColMeta(), AbstractPAList.this.getKeys());
 		}
 
 		@Override
@@ -307,7 +307,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		boolean[] load() throws PAModelException
 		{
 			_notld = false;
-			return _model.load(getListMeta(), getColMeta(), _keys);
+			return _model.load(getListMeta(), getColMeta(), AbstractPAList.this.getKeys());
 		}
 
 		@Override
@@ -390,7 +390,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		String[] load() throws PAModelException
 		{
 			_notld = false;
-			return _model.load(getListMeta(), getColMeta(), _keys);
+			return _model.load(getListMeta(), getColMeta(), AbstractPAList.this.getKeys());
 		}
 		@Override
 		void clear() {super.clear(); ro = null;}
@@ -474,7 +474,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		E[] load() throws PAModelException
 		{
 			_notld = false;
-			return _model.load(getListMeta(), _ctype, _keys);
+			return _model.load(getListMeta(), _ctype, AbstractPAList.this.getKeys());
 		}
 
 		@Override
@@ -635,8 +635,6 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return _km.keys();
 	}
 
-
-	
 	/** get unique object ID */
 	@Override
 	public String getID(int ndx) throws PAModelException

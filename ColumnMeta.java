@@ -121,7 +121,6 @@ public enum ColumnMeta
 	/** Island ID */ 									IslandID,
 	/** Island Name */ 									IslandNAME,
 	/** Island Frequency */ 							IslandFREQ,
-	/** Island Frequency source */ 						IslandFRQSRC,
 	/** Island energization status */ 					IslandEGZSTATE,
 
 	/*

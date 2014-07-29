@@ -197,7 +197,13 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public int getFreqSrcPri(int ndx) throws PAModelException
 	{
-		return getBuses(ndx).getFreqSrcPri(0);
+		int rv = Integer.MIN_VALUE;
+		for(Bus b : getBuses(ndx))
+		{
+			int p = b.getFreqSrcPri();
+			if (rv < p) rv = p;
+		}
+		return rv;
 	}
 
 	@Override
