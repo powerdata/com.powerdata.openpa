@@ -90,5 +90,105 @@ public abstract class TwoTermDevSubList<T extends TwoTermDev> extends SubList<T>
 		for(int i=0; i < _size; ++i)
 			_src.setOutOfSvc(_ndx[i], state[i]);
 	}
+	@Override
+	public float getFromP(int ndx) throws PAModelException
+	{
+		return _src.getFromP(_ndx[ndx]);
+	}
+
+	@Override
+	public void setFromP(int ndx, float mw) throws PAModelException
+	{
+		_src.setFromP(_ndx[ndx], mw);
+	}
+
+	@Override
+	public float[] getFromP() throws PAModelException
+	{
+		return mapFloat(_src.getFromP());
+	}
+
+	@Override
+	public void setFromP(float[] mw) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setFromP(_ndx[i], mw[i]);
+	}
+
+	@Override
+	public float getFromQ(int ndx) throws PAModelException
+	{
+		return _src.getFromQ(_ndx[ndx]);
+	}
+
+	@Override
+	public void setFromQ(int ndx, float mvar) throws PAModelException
+	{
+		_src.setFromQ(_ndx[ndx], mvar);
+	}
+
+	@Override
+	public float[] getFromQ() throws PAModelException
+	{
+		return mapFloat(_src.getFromQ());
+	}
+
+	@Override
+	public void setFromQ(float[] mvar) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setFromQ(_ndx[i], mvar[i]);
+	}
+
+	@Override
+	public float getToP(int ndx) throws PAModelException
+	{
+		return _src.getToP(_ndx[ndx]);
+	}
+
+	@Override
+	public void setToP(int ndx, float mw) throws PAModelException
+	{
+		_src.setToP(_ndx[ndx], mw);
+	}
+
+	@Override
+	public float[] getToP() throws PAModelException
+	{
+		return mapFloat(_src.getToP());
+	}
+
+	@Override
+	public void setToP(float[] mw) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setToP(_ndx[i], mw[i]);
+	}
+
+	@Override
+	public float getToQ(int ndx) throws PAModelException
+	{
+		return _src.getToQ(_ndx[ndx]);
+	}
+
+	@Override
+	public void setToQ(int ndx, float mvar) throws PAModelException
+	{
+		_src.setToQ(_ndx[ndx], mvar);
+	}
+
+	@Override
+	public float[] getToQ() throws PAModelException
+	{
+		return mapFloat(_src.getToQ());
+	}
+
+	@Override
+	public void setToQ(float[] mvar) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setToQ(_ndx[i], mvar[i]);
+	}
+
 
 }

@@ -14,6 +14,7 @@ public abstract class ACBranchListI<T extends ACBranch> extends
 		super();
 	}
 	FloatData _r, _x;
+	
 	protected ACBranchListI(PAModelI model, int[] keys, ACBranchEnum le) throws PAModelException
 	{
 		super(model, keys, le);

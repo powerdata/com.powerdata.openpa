@@ -330,4 +330,108 @@ public class ACBranchList extends SuperListMgr<ACBranch, ACBranchListIfc<ACBranc
 		setHelper(sdeg, float[]::new, (l,v) -> l.setFromTap(v));
 	}
 
+	@Override
+	public float getFromP(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getFromP(li.ofs);
+	}
+
+	@Override
+	public void setFromP(int ndx, float mw) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setFromP(li.ofs, mw);
+	}
+
+	@Override
+	public float getFromQ(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getFromQ(li.ofs);
+	}
+
+	@Override
+	public void setFromQ(int ndx, float mvar) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setFromQ(li.ofs, mvar);
+	}
+
+	@Override
+	public float getToP(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getToP(li.ofs);
+	}
+
+	@Override
+	public void setToP(int ndx, float mw) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setToP(li.ofs, mw);
+	}
+
+	@Override
+	public float getToQ(int ndx) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		return li.list.getToQ(li.ofs);
+	}
+
+	@Override
+	public void setToQ(int ndx, float mvar) throws PAModelException
+	{
+		ListInfo li = getLI(ndx);
+		li.list.setToQ(li.ofs, mvar);
+	}
+
+	@Override
+	public float[] getFromP() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getFromP());
+	}
+
+	@Override
+	public void setFromP(float[] mw) throws PAModelException
+	{
+		setHelper(mw, float[]::new, (l,v) -> l.setFromP(v));
+	}
+
+	@Override
+	public float[] getFromQ() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getFromQ());
+	}
+
+	@Override
+	public void setFromQ(float[] mvar) throws PAModelException
+	{
+		setHelper(mvar, float[]::new, (l,v) -> l.setFromQ(v));
+	}
+
+	@Override
+	public float[] getToP() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getToP());
+	}
+
+	@Override
+	public void setToP(float[] mw) throws PAModelException
+	{
+		setHelper(mw, float[]::new, (l,v) -> l.setToP(v));
+	}
+
+	@Override
+	public float[] getToQ() throws PAModelException
+	{
+		return getHelper(float[]::new, l -> l.getToQ());
+	}
+
+	@Override
+	public void setToQ(float[] mvar) throws PAModelException
+	{
+		setHelper(mvar, float[]::new, (l,v) -> l.setToQ(v));
+	}
+
 }

@@ -117,6 +117,86 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 		_insvc.set(state);
 	}
 
+	@Override
+	public float getFromP(int ndx) throws PAModelException
+	{
+		return _fp.get(ndx);
+	}
+	@Override
+	public void setFromP(int ndx, float mw) throws PAModelException
+	{
+		_fp.set(ndx, mw);
+	}
+	@Override
+	public float[] getFromP() throws PAModelException
+	{
+		return _fp.get();
+	}
+	@Override
+	public void setFromP(float[] mw) throws PAModelException
+	{
+		_fp.set(mw);
+	}
+	@Override
+	public float getFromQ(int ndx) throws PAModelException
+	{
+		return _fq.get(ndx);
+	}
+	@Override
+	public void setFromQ(int ndx, float mvar) throws PAModelException
+	{
+		_fq.set(ndx, mvar);
+	}
+	@Override
+	public float[] getFromQ() throws PAModelException
+	{
+		return _fq.get();
+	}
+	@Override
+	public void setFromQ(float[] mvar) throws PAModelException
+	{
+		_fq.set(mvar);
+	}
+	@Override
+	public float getToP(int ndx) throws PAModelException
+	{
+		return _tp.get(ndx);
+	}
+	@Override
+	public void setToP(int ndx, float mw) throws PAModelException
+	{
+		_tp.set(ndx, mw);
+	}
+	@Override
+	public float[] getToP() throws PAModelException
+	{
+		return _tp.get();
+	}
+	@Override
+	public void setToP(float[] mw) throws PAModelException
+	{
+		_tp.set(mw);
+	}
+	@Override
+	public float getToQ(int ndx) throws PAModelException
+	{
+		return _tq.get(ndx);
+	}
+	@Override
+	public void setToQ(int ndx, float mvar) throws PAModelException
+	{
+		_tq.set(ndx, mvar);
+	}
+	@Override
+	public float[] getToQ() throws PAModelException
+	{
+		return _tq.get();
+	}
+	@Override
+	public void setToQ(float[] mvar) throws PAModelException
+	{
+		_tq.set(mvar);
+	}
 	interface TwoTermDevEnum extends PAListEnum
 	{
 		ColumnMeta fbus();
