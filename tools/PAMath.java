@@ -1,5 +1,8 @@
 package com.powerdata.openpa.tools;
 
+import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.PAModelException;
+
 /**
  * Power Applications conversions 
  * 
@@ -23,8 +26,24 @@ public class PAMath
 	
 	/** convert degrees to radians */
 	public static float deg2rad(float deg) {return deg*D2R;}
+	public static float[] deg2rad(float[] deg)
+	{
+		int n = deg.length;
+		float[] rv = new float[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = deg[i]*D2R;
+		return rv;
+	}
 	/** convert radians to degrees */
 	public static float rad2deg(float rad) {return rad/D2R;}
+	public static float[] rad2deg(float[] rad)
+	{
+		int n = rad.length;
+		float[] rv = new float[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = rad[i]/D2R;
+		return rv;
+	}
 
 	/* methods to convert per-unit on 100MVA base */
 	
@@ -48,6 +67,14 @@ public class PAMath
 	public static float calcMVA(float mw, float mvar)
 	{
 		return (float) Math.sqrt(mw * mw + mvar * mvar);
+	}
+	public static float[] vmpu(BusList buses) throws PAModelException
+	{
+		int n = buses.size();
+		float[] rv = new float[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = buses.getVM(i)/buses.getVoltageLevel(i).getBaseKV();
+		return rv;
 	}
 	
 }
