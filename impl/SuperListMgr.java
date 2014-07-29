@@ -59,17 +59,17 @@ public abstract class SuperListMgr<T extends BaseObject, U extends BaseList<T>>
 	}
 	
 	@FunctionalInterface
-	interface IntFunction<V>
+	protected interface IntFunction<V>
 	{
 		V apply(int ival) throws PAModelException;
 	}
 	@FunctionalInterface
-	interface Function<U,V>
+	protected interface Function<U,V>
 	{
 		V apply(U u) throws PAModelException;
 	}
 	@FunctionalInterface
-	interface BiConsumer<U,V>
+	protected interface BiConsumer<U,V>
 	{
 		void accept(U u, V v) throws PAModelException;
 	}
