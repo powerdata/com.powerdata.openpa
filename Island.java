@@ -25,14 +25,4 @@ public class Island extends Group
 		_list.setFreq(_ndx, f);
 	}
 	
-	public Bus getFreqSrc() throws PAModelException
-	{
-		return _list.getFreqSrc(_ndx);
-	}
-	
-	public void setFreqSrc(Bus fsrc) throws PAModelException
-	{
-		_list.setFreqSrc(_ndx, fsrc);
-	}
-
 }
