@@ -15,39 +15,32 @@ import com.powerdata.openpa.tools.PAMath;
 
 public class ACBranchFlow
 {
+	public static final float SBASE = 100f;
 	PAModel _model;
 	BusList _buses;
 	ACBranchList _branches;
 	int[] _f, _t;
 	float[] _fp, _fq, _tp, _tq;
 	float[] _fbch, _tbch, _bmag;
-	ComplexList _z;
+	ComplexList _y;
 	
 	public ACBranchFlow(PAModel m) throws PAModelException
 	{
 		_model = m;
 		_buses = m.getBuses();
 		_branches = m.getACBranches();
-		setup();
+		setup(BusRefIndex.CreateBusIndex());
 	}
 	
-	public ACBranchFlow(PAModel m, BusList buses) throws PAModelException
+	public ACBranchFlow(PAModel m, BusRefIndex bndx, ACBranchList branches) throws PAModelException
 	{
 		_model = m;
-		_buses = buses;
-		_branches = m.getACBranches();
-		setup();
-	}
-	
-	public ACBranchFlow(PAModel m, BusList buses, ACBranchList branches) throws PAModelException
-	{
-		_model = m;
-		_buses = buses;
+		_buses = bndx.getBuses();
 		_branches = branches;
-		setup();
+		setup(bndx);
 	}
 
-	void setup() throws PAModelException
+	void setup(BusRefIndex bndx) throws PAModelException
 	{
 		int n = _branches.size();
 		_f = new int[n];
@@ -58,7 +51,10 @@ public class ACBranchFlow
 			_t[i] = _buses.getByBus(_branches.getToBus(i)).getIndex();
 		}
 		
-		_z = new ComplexList(_branches.getR(), _branches.getX());
+		ComplexList zlist = new ComplexList(_branches.getR(), _branches.getX());
+		_y = new ComplexList(n, true);
+		for(int i=0; i < n; ++i)
+			_y.set(i, zlist.get(i).inv());
 		_fbch = _branches.getFromBchg();
 		_tbch = _branches.getToBchg();
 		_bmag = _branches.getBmag();
@@ -94,17 +90,17 @@ public class ACBranchFlow
 				float tvmq2 = tvm * tvm / (tt * tt);
 				float ctvmpq = tvmpq * (float) Math.cos(sh);
 				float stvmpq = tvmpq * (float) Math.sin(sh);
-				Complex y = _z.get(i).inv();
+				Complex y = _y.get(i);
 				float gcos = ctvmpq * y.re();
 				float bcos = ctvmpq * y.im();
 				float gsin = stvmpq * y.re();
 				float bsin = stvmpq * y.im();
 				float bmag = _bmag[i];
 
-				_fp[i] = -gcos - bsin + tvmp2 * y.re();
-				_fq[i] = -gsin + bcos - tvmp2 * (y.im() + bmag + _fbch[i]);
-				_tp[i] = -gcos + bsin + tvmq2 * y.re();
-				_tq[i] = gsin + bcos - tvmq2 * (y.im() + bmag + _tbch[i]);
+				_fp[i] = (-gcos - bsin + tvmp2 * y.re())*SBASE;
+				_fq[i] = (-gsin + bcos - tvmp2 * (y.im() + bmag + _fbch[i]))*SBASE;
+				_tp[i] = (-gcos + bsin + tvmq2 * y.re())*SBASE;
+				_tq[i] = (gsin + bcos - tvmq2 * (y.im() + bmag + _tbch[i]))*SBASE;
 			}
 		}
 		
@@ -141,9 +137,12 @@ public class ACBranchFlow
 			System.exit(1);
 		}
 		
-		PAModel m = PflowModelBuilder.Create(uri).load();
+		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
+		bldr.enableFlatVoltage(true);
+		PAModel m = bldr.load();
 		ACBranchList branches = m.getACBranches();
-		ACBranchFlow bc = new ACBranchFlow(m, m.getBuses(), branches);
+//		ACBranchFlow bc = new ACBranchFlow(m, m.getBuses(), branches);
+		ACBranchFlow bc = new ACBranchFlow(m, m.getSingleBus(), branches);
 		bc.calc();
 		
 		float[] fp = bc.getFromP(), fq = bc.getFromQ(),
@@ -151,12 +150,14 @@ public class ACBranchFlow
 		
 		int n = fp.length;
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir,"acbranchflow.csv"))));
-		pw.println("ID,FromMW,FromMVAr,ToMW,ToMVAr");
+		pw.println("ID,FromBus,FromMW,FromMVAr,ToBus,ToMW,ToMVAr");
 		for(int i=0; i < n; ++i)
 		{
-			pw.format("%s,%f,%f,%f,%f\n",
-				branches.getID(i), fp[i]*100f, fq[i]*100f, tp[i]*100f,
-				tq[i]*100f);
+			pw.format("%s,%s,%f,%f,%s,%f,%f\n", branches.getID(i), 
+				m.getSingleBus().getByBus(branches.getFromBus(i)).getName(),
+				fp[i], fq[i], 
+				m.getSingleBus().getByBus(branches.getToBus(i)).getName(),
+				tp[i], tq[i]);
 		}
 		pw.close();
 	}

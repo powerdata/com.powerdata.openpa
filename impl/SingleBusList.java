@@ -362,5 +362,5 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	{
 		return ListMetaType.AnonymousGroup;
 	}
-	
+
 }

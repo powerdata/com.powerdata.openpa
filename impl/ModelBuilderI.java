@@ -37,9 +37,12 @@ public abstract class ModelBuilderI implements com.powerdata.openpa.ModelBuilder
 	@Override
 	public PAModel load() throws PAModelException
 	{
+		loadPrep();
 		_m = new PAModelI(this);
 		return _m;
 	}
+
+	protected abstract void loadPrep();
 
 	protected abstract BusListI loadBuses() throws PAModelException;
 	protected abstract SwitchListI loadSwitches() throws PAModelException;

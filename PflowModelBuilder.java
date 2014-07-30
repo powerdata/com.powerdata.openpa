@@ -32,7 +32,7 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	}
 
 	
-	boolean	_flat	= false;
+	protected boolean	_flat	= false;
 	float	_leastx	= 0;
 	boolean	_doos	= false;
 	boolean	_genregterm;

@@ -72,8 +72,9 @@ public class PAMath
 	{
 		int n = buses.size();
 		float[] rv = new float[n];
+		float[] vm = buses.getVM();
 		for(int i=0; i < n; ++i)
-			rv[i] = buses.getVM(i)/buses.getVoltageLevel(i).getBaseKV();
+			rv[i] = vm[i]/buses.getVoltageLevel(i).getBaseKV();
 		return rv;
 	}
 	
