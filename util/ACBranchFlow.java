@@ -29,7 +29,7 @@ public class ACBranchFlow
 		_model = m;
 		_buses = m.getBuses();
 		_branches = m.getACBranches();
-		setup(BusRefIndex.CreateBusIndex());
+		setup(BusRefIndex.CreateFromConnectivityBus(m));
 	}
 	
 	public ACBranchFlow(PAModel m, BusRefIndex bndx, ACBranchList branches) throws PAModelException
@@ -43,13 +43,9 @@ public class ACBranchFlow
 	void setup(BusRefIndex bndx) throws PAModelException
 	{
 		int n = _branches.size();
-		_f = new int[n];
-		_t = new int[n];
-		for(int i=0; i < n; ++i)
-		{
-			_f[i] = _buses.getByBus(_branches.getFromBus(i)).getIndex();
-			_t[i] = _buses.getByBus(_branches.getToBus(i)).getIndex();
-		}
+		int[][] nmap = bndx.get2TBus(_branches);
+		_f = nmap[0];
+		_t = nmap[1];
 		
 		ComplexList zlist = new ComplexList(_branches.getR(), _branches.getX());
 		_y = new ComplexList(n, true);
@@ -138,11 +134,11 @@ public class ACBranchFlow
 		}
 		
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
-		bldr.enableFlatVoltage(true);
+		bldr.enableFlatVoltage(false);
 		PAModel m = bldr.load();
 		ACBranchList branches = m.getACBranches();
-//		ACBranchFlow bc = new ACBranchFlow(m, m.getBuses(), branches);
-		ACBranchFlow bc = new ACBranchFlow(m, m.getSingleBus(), branches);
+		BusRefIndex bri = BusRefIndex.CreateFromSingleBus(m);
+		ACBranchFlow bc = new ACBranchFlow(m, bri, branches);
 		bc.calc();
 		
 		float[] fp = bc.getFromP(), fq = bc.getFromQ(),
@@ -151,12 +147,13 @@ public class ACBranchFlow
 		int n = fp.length;
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir,"acbranchflow.csv"))));
 		pw.println("ID,FromBus,FromMW,FromMVAr,ToBus,ToMW,ToMVAr");
+		
 		for(int i=0; i < n; ++i)
 		{
 			pw.format("%s,%s,%f,%f,%s,%f,%f\n", branches.getID(i), 
-				m.getSingleBus().getByBus(branches.getFromBus(i)).getName(),
+				bri.getBuses().getByBus(branches.getFromBus(i)).getName(),
 				fp[i], fq[i], 
-				m.getSingleBus().getByBus(branches.getToBus(i)).getName(),
+				bri.getBuses().getByBus(branches.getToBus(i)).getName(),
 				tp[i], tq[i]);
 		}
 		pw.close();

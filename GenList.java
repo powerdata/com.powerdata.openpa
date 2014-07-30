@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
 
-public interface GenList extends OneTermDevListIfc<Gen>
+public interface GenList extends OneTermDevListIfc<Gen>, BusRegulator
 {
 	Type getType(int ndx) throws PAModelException;
 	
@@ -84,8 +84,6 @@ public interface GenList extends OneTermDevListIfc<Gen>
 	float[] getVS()throws PAModelException;
 	
 	void setVS(float[] kv)throws PAModelException;
-
-	Bus getRegBus(int ndx)throws PAModelException;
 
 	void setRegBus(int ndx, Bus b)throws PAModelException;
 	

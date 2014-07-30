@@ -176,7 +176,8 @@ public class ListDumper
 					+ "[ --outdir output_directory (deft to $CWD ]\n");
 			System.exit(1);
 		}
-		
-		new ListDumper().dump(PflowModelBuilder.Create(uri).load(), outdir);
+		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
+		bldr.enableFlatVoltage(false);
+		new ListDumper().dump(bldr.load(), outdir);
 	}
 }
