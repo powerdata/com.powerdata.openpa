@@ -56,12 +56,13 @@ public class ACBranchFlow
 		_bmag = _branches.getBmag();
 	}
 
-	public void calc() throws PAModelException
+	public ACBranchFlow calc() throws PAModelException
 	{
 		calc(PAMath.vmpu(_buses), PAMath.deg2rad(_buses.getVA()));
+		return this;
 	}
 
-	public void calc(float[] vmpu, float[] varad) throws PAModelException
+	public ACBranchFlow calc(float[] vmpu, float[] varad) throws PAModelException
 	{
 		int n = _branches.size();
 		_fp = new float[n];
@@ -99,7 +100,7 @@ public class ACBranchFlow
 				_tq[i] = (gsin + bcos - tvmq2 * (y.im() + bmag + _tbch[i]))*SBASE;
 			}
 		}
-		
+		return this;
 	}
 	
 	public float[] getFromP() {return _fp;}
@@ -107,6 +108,14 @@ public class ACBranchFlow
 	public float[] getToP() {return _tp;}
 	public float[] getToQ() {return _tq;}
 
+	public void update() throws PAModelException
+	{
+		_branches.setFromP(_fp);
+		_branches.setFromQ(_fq);
+		_branches.setToP(_tp);
+		_branches.setToQ(_tq);
+	}
+	
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;

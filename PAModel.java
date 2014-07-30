@@ -57,15 +57,8 @@ public interface PAModel extends PALists
 	GroupList createGroups(BusGrpMap map);
 	
 	/**
-	 * <p>
 	 * Get a set of changes made to the model
-	 * </p>
-	 * <p>
-	 * The {@link ColChange} object overrides equals to allow for comparison
-	 * directly with a {@link ColumnMeta}. This allows the caller to use
-	 * contains() or get() directly on the returned set rather than requiring
-	 * iteration.
-	 * 
+	 *
 	 * @return Set of ColChange objects representing changes to the model
 	 */
 	Set<ColChange> getChanges();
