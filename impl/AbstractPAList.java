@@ -578,8 +578,8 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 
 	private void setFields(PAListEnum le)
 	{
-		_id = new StringData(le.id());
-		_name = new StringData(le.name());
+		_id = new StringData((le == null)?null:le.id());
+		_name = new StringData((le == null)?null:le.name());
 	}
 	
 	protected AbstractPAList()
