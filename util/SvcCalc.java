@@ -92,7 +92,7 @@ public class SvcCalc extends CalcBase
 				else
 				{
 					_state[i] = SVCState.Normal;
-					_b[i] = 1f/s;
+					_b[i] = -1f/s;
 				}
 			}
 			else
