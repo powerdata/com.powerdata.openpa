@@ -11,7 +11,7 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.tools.PAMath;
 
-public class FixedShuntCalc
+public class FixedShuntCalc extends CalcBase
 {
 	PAModel _m;
 	int[] _busndx;
@@ -41,12 +41,15 @@ public class FixedShuntCalc
 		_b = _shunts.getB();
 	}
 
-	public FixedShuntCalc calc(float[] vmpu)
+	public FixedShuntCalc calc(float[] vmpu) throws PAModelException
 	{
-		int n = _shunts.size();
-		_q = new float[n];
-		for(int i=0; i < n; ++i)
+		int nfsh = _shunts.size();
+		_q = new float[nfsh];
+		int[] insvc = getInSvc(_shunts);
+		int nsvc = insvc.length;
+		for(int in=0; in < nsvc; ++in)
 		{
+			int i = insvc[in];
 			float v = vmpu[_busndx[i]];
 			_q[i] = _b[i] * v * v; 
 		}

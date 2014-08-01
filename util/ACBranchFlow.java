@@ -13,7 +13,7 @@ import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.PAMath;
 
-public class ACBranchFlow
+public class ACBranchFlow extends CalcBase
 {
 	public static final float SBASE = 100f;
 	PAModel _model;
@@ -64,41 +64,40 @@ public class ACBranchFlow
 
 	public ACBranchFlow calc(float[] vmpu, float[] varad) throws PAModelException
 	{
-		int n = _branches.size();
-		_fp = new float[n];
-		_tp = new float[n];
-		_fq = new float[n];
-		_tq = new float[n];
+		int nbr = _branches.size();
+		_fp = new float[nbr];
+		_tp = new float[nbr];
+		_fq = new float[nbr];
+		_tq = new float[nbr];
 		float[] ftap = _branches.getFromTap(), ttap = _branches.getToTap();
 		float[] shift = _branches.getShift();
-		boolean[] oos = _branches.isOutOfSvc();
 		
-		for(int i=0; i < n; ++i)
+		int[] insvc = getInSvc(_branches);
+		int ninsvc = insvc.length;
+		
+		for (int in = 0; in < ninsvc; ++in)
 		{
+			int i = insvc[in];
 			int f = _f[i], t = _t[i];
-			if(!oos[i])
-			{
-				float fvm = vmpu[f], tvm = vmpu[t],
-						fva = varad[f], tva = varad[t];
-				float sh = fva - tva - shift[i];
-				float ft = ftap[i], tt = ttap[i];
-				float tvmpq = fvm * tvm / (ft * tt);
-				float tvmp2 = fvm * fvm / (ft * ft);
-				float tvmq2 = tvm * tvm / (tt * tt);
-				float ctvmpq = tvmpq * (float) Math.cos(sh);
-				float stvmpq = tvmpq * (float) Math.sin(sh);
-				Complex y = _y.get(i);
-				float gcos = ctvmpq * y.re();
-				float bcos = ctvmpq * y.im();
-				float gsin = stvmpq * y.re();
-				float bsin = stvmpq * y.im();
-				float bmag = _bmag[i];
-
-				_fp[i] = (-gcos - bsin + tvmp2 * y.re())*SBASE;
-				_fq[i] = (-gsin + bcos - tvmp2 * (y.im() + bmag + _fbch[i]))*SBASE;
-				_tp[i] = (-gcos + bsin + tvmq2 * y.re())*SBASE;
-				_tq[i] = (gsin + bcos - tvmq2 * (y.im() + bmag + _tbch[i]))*SBASE;
-			}
+			float fvm = vmpu[f], tvm = vmpu[t], fva = varad[f], tva = varad[t];
+			float sh = fva - tva - shift[i];
+			float ft = ftap[i], tt = ttap[i];
+			float tvmpq = fvm * tvm / (ft * tt);
+			float tvmp2 = fvm * fvm / (ft * ft);
+			float tvmq2 = tvm * tvm / (tt * tt);
+			float ctvmpq = tvmpq * (float) Math.cos(sh);
+			float stvmpq = tvmpq * (float) Math.sin(sh);
+			Complex y = _y.get(i);
+			float gcos = ctvmpq * y.re();
+			float bcos = ctvmpq * y.im();
+			float gsin = stvmpq * y.re();
+			float bsin = stvmpq * y.im();
+			float bmag = _bmag[i];
+			_fp[i] = (-gcos - bsin + tvmp2 * y.re()) * SBASE;
+			_fq[i] = (-gsin + bcos - tvmp2 * (y.im() + bmag + _fbch[i]))
+					* SBASE;
+			_tp[i] = (-gcos + bsin + tvmq2 * y.re()) * SBASE;
+			_tq[i] = (gsin + bcos - tvmq2 * (y.im() + bmag + _tbch[i])) * SBASE;
 		}
 		return this;
 	}

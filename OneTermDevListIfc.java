@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public interface OneTermDevListIfc<T extends OneTermDev> extends BaseList<T> 
+public interface OneTermDevListIfc<T extends OneTermDev> extends BaseList<T>,OutOfService
 {
 	/**
 	 * Return the connected Bus object

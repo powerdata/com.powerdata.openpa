@@ -4,6 +4,8 @@ public class SVC extends OneTermDev
 {
 	SVCList _list;
 	
+	public enum SVCState {Off,CapacitorLimit,ReactorLimit,Normal,FixedMVAr;}
+	
 	public SVC(SVCList list, int ndx)
 	{
 		super(list, ndx);
@@ -11,27 +13,27 @@ public class SVC extends OneTermDev
 	}
 	
 	/** get minimum susceptance (MVAr @ unity voltage) */
-	public float getMinB() throws PAModelException
+	public float getMinQ() throws PAModelException
 	{
-		return _list.getMinB(_ndx);
+		return _list.getMinQ(_ndx);
 	}
 	
 	/** set minimum susceptance (MVAr @ unity voltage) */
-	public void setMinB(float b) throws PAModelException
+	public void setMinQ(float mvar) throws PAModelException
 	{
-		_list.setMinB(_ndx, b);
+		_list.setMinQ(_ndx, mvar);
 	}
 
 	/** get maximum susceptance (MVAr @ unity voltage) */
-	public float getMaxB() throws PAModelException
+	public float getMaxQ() throws PAModelException
 	{
-		return _list.getMaxB(_ndx);
+		return _list.getMaxQ(_ndx);
 	}
 
 	/** set maximum susceptance (MVAr @ unity voltage) */
-	public void setMaxB(float b) throws PAModelException
+	public void setMaxQ(float mvar) throws PAModelException
 	{
-		_list.setMaxB(_ndx, b);
+		_list.setMaxQ(_ndx, mvar);
 	}
 	
 	/** is regulating voltage */
@@ -81,4 +83,27 @@ public class SVC extends OneTermDev
 		_list.setSlope(_ndx, slope);
 	}
 
+	/** get SVC output operating mode */
+	public SVCState getOutputMode() throws PAModelException
+	{
+		return _list.getOutputMode(_ndx);
+	}
+	
+	/** set SVC output operating mode */
+	public void setOutputMode(SVCState m) throws PAModelException
+	{
+		_list.setOutputMode(_ndx, m);
+	}
+	
+	/** get MVAr setpoint used if AVR is off */
+	public float getQS() throws PAModelException
+	{
+		return _list.getQS(_ndx);
+	}
+
+	/** set MVAr setpoint used if AVR is off */
+	public void setQS(float mvar) throws PAModelException
+	{
+		_list.setQS(_ndx, mvar);
+	}
 }

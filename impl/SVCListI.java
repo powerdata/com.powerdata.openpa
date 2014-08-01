@@ -5,6 +5,7 @@ import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
+import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
 
 public class SVCListI extends OneTermDevListI<SVC> implements SVCList
@@ -34,6 +35,7 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 	
 	BoolData _avr = new BoolData(ColumnMeta.SvcAVR);
 	IntData _rbus = new IntData(ColumnMeta.SvcREGBUS);
+	EnumData<SVC.SVCState> _omode = new EnumData<>(ColumnMeta.SvcOMODE);
 
 	public SVCListI(PAModelI model, int[] keys) throws PAModelException
 	{
@@ -54,42 +56,42 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 		return new SVC(this, index);
 	}
 	@Override
-	public float getMinB(int ndx) throws PAModelException
+	public float getMinQ(int ndx) throws PAModelException
 	{
 		return _minb.get(ndx);
 	}
 	@Override
-	public void setMinB(int ndx, float b) throws PAModelException
+	public void setMinQ(int ndx, float b) throws PAModelException
 	{
 		_minb.set(ndx, b);
 	}
 	@Override
-	public float[] getMinB() throws PAModelException
+	public float[] getMinQ() throws PAModelException
 	{
 		return _minb.get();
 	}
 	@Override
-	public void setMinB(float[] b) throws PAModelException
+	public void setMinQ(float[] b) throws PAModelException
 	{
 		_minb.set(b);
 	}
 	@Override
-	public float getMaxB(int ndx) throws PAModelException
+	public float getMaxQ(int ndx) throws PAModelException
 	{
 		return _maxb.get(ndx);
 	}
 	@Override
-	public void setMaxB(int ndx, float b) throws PAModelException
+	public void setMaxQ(int ndx, float b) throws PAModelException
 	{
 		_maxb.set(ndx, b);
 	}
 	@Override
-	public float[] getMaxB() throws PAModelException
+	public float[] getMaxQ() throws PAModelException
 	{
 		return _maxb.get();
 	}
 	@Override
-	public void setMaxB(float[] b) throws PAModelException
+	public void setMaxQ(float[] b) throws PAModelException
 	{
 		_maxb.set(b);
 	}
@@ -177,6 +179,26 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 	public void setSlope(float[] slope) throws PAModelException
 	{
 		_slope.set(slope);
+	}
+	@Override
+	public SVCState getOutputMode(int ndx) throws PAModelException
+	{
+		return _omode.get(ndx);
+	}
+	@Override
+	public SVCState[] getOutputMode() throws PAModelException
+	{
+		return _omode.get();
+	}
+	@Override
+	public void setOutputMode(int ndx, SVCState m) throws PAModelException
+	{
+		_omode.set(ndx, m);
+	}
+	@Override
+	public void setOutputMode(SVCState[] m) throws PAModelException
+	{
+		_omode.set(m);
 	}
 	
 }

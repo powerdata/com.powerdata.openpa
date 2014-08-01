@@ -1,5 +1,6 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.impl.SVCListI;
 
 public interface SVCList extends OneTermDevListIfc<SVC>, BusRegulator
@@ -7,21 +8,21 @@ public interface SVCList extends OneTermDevListIfc<SVC>, BusRegulator
 
 	static final SVCList Empty = new SVCListI();
 
-	float getMinB(int ndx) throws PAModelException;
+	float getMinQ(int ndx) throws PAModelException;
 
-	void setMinB(int ndx, float b) throws PAModelException;
+	void setMinQ(int ndx, float mvar) throws PAModelException;
 	
-	float[] getMinB() throws PAModelException;
+	float[] getMinQ() throws PAModelException;
 	
-	void setMinB(float[] b) throws PAModelException;
+	void setMinQ(float[] mvar) throws PAModelException;
 
-	float getMaxB(int ndx) throws PAModelException;
+	float getMaxQ(int ndx) throws PAModelException;
 
-	void setMaxB(int ndx, float b) throws PAModelException;
+	void setMaxQ(int ndx, float mvar) throws PAModelException;
 	
-	float[] getMaxB() throws PAModelException;
+	float[] getMaxQ() throws PAModelException;
 	
-	void setMaxB(float[] b) throws PAModelException;
+	void setMaxQ(float[] mvar) throws PAModelException;
 
 	boolean isRegKV(int ndx) throws PAModelException;
 
@@ -57,4 +58,27 @@ public interface SVCList extends OneTermDevListIfc<SVC>, BusRegulator
 	/** set slope (kV/MVAr per-cent on largest magnitude admittance limit) */
 	void setSlope(float[] slope) throws PAModelException;
 
+	/** get SVC output operating mode */
+	SVCState getOutputMode(int ndx)throws PAModelException;
+
+	/** get SVC output operating mode */
+	SVCState[] getOutputMode()throws PAModelException;
+	
+	/** set SVC output operating mode */
+	void setOutputMode(int ndx, SVCState m)throws PAModelException;
+
+	/** set SVC output operating mode */
+	void setOutputMode(SVCState[] m)throws PAModelException;
+
+	/** get MVAr setpoint used if AVR is off */
+	float getQS(int _ndx);
+
+	/** get MVAr setpoint used if AVR is off */
+	float[] getQS();
+	
+	/** set MVAr setpoint used if AVR is off */
+	void setQS(int _ndx, float mvar);
+
+	/** set MVAr setpoint used if AVR is off */
+	void setQS(float[] mvar);
 }

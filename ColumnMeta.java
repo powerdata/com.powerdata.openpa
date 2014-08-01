@@ -91,6 +91,7 @@ public enum ColumnMeta
 	/** Svc voltage setpoint */ 						SvcVS,
 	/** Svc Slope */									SvcSLOPE,
 	/** Svc regulated bus */ 							SvcREGBUS,
+	/** Svc output mode */								SvcOMODE,
 	
 	/*
 	 * Shunt Reactor
