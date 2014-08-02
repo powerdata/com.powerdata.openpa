@@ -28,10 +28,11 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 
 	BusListI _buses;
 
-	FloatData _minb = new FloatData(ColumnMeta.SvcBMIN),
-			_maxb = new FloatData(ColumnMeta.SvcBMAX),
+	FloatData _minq = new FloatData(ColumnMeta.SvcQMIN),
+			_maxq = new FloatData(ColumnMeta.SvcQMAX),
 			_vs = new FloatData(ColumnMeta.SvcVS),
-			_slope = new FloatData(ColumnMeta.SvcSLOPE);
+			_slope = new FloatData(ColumnMeta.SvcSLOPE),
+			_qs = new FloatData(ColumnMeta.SvcQS);
 	
 	BoolData _avr = new BoolData(ColumnMeta.SvcAVR);
 	IntData _rbus = new IntData(ColumnMeta.SvcREGBUS);
@@ -58,42 +59,42 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 	@Override
 	public float getMinQ(int ndx) throws PAModelException
 	{
-		return _minb.get(ndx);
+		return _minq.get(ndx);
 	}
 	@Override
 	public void setMinQ(int ndx, float b) throws PAModelException
 	{
-		_minb.set(ndx, b);
+		_minq.set(ndx, b);
 	}
 	@Override
 	public float[] getMinQ() throws PAModelException
 	{
-		return _minb.get();
+		return _minq.get();
 	}
 	@Override
 	public void setMinQ(float[] b) throws PAModelException
 	{
-		_minb.set(b);
+		_minq.set(b);
 	}
 	@Override
 	public float getMaxQ(int ndx) throws PAModelException
 	{
-		return _maxb.get(ndx);
+		return _maxq.get(ndx);
 	}
 	@Override
 	public void setMaxQ(int ndx, float b) throws PAModelException
 	{
-		_maxb.set(ndx, b);
+		_maxq.set(ndx, b);
 	}
 	@Override
 	public float[] getMaxQ() throws PAModelException
 	{
-		return _maxb.get();
+		return _maxq.get();
 	}
 	@Override
 	public void setMaxQ(float[] b) throws PAModelException
 	{
-		_maxb.set(b);
+		_maxq.set(b);
 	}
 	@Override
 	public boolean isRegKV(int ndx) throws PAModelException
@@ -200,5 +201,24 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 	{
 		_omode.set(m);
 	}
-	
+	@Override
+	public float getQS(int ndx) throws PAModelException
+	{
+		return _qs.get(ndx);
+	}
+	@Override
+	public float[] getQS() throws PAModelException
+	{
+		return _qs.get();
+	}
+	@Override
+	public void setQS(int ndx, float mvar) throws PAModelException
+	{
+		_qs.set(ndx, mvar);
+	}
+	@Override
+	public void setQS(float[] mvar) throws PAModelException
+	{
+		_qs.set(mvar);
+	}
 }

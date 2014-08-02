@@ -204,4 +204,29 @@ public class SVCSubList extends OneTermDevSubList<SVC> implements SVCList
 			_src.setOutputMode(_ndx[i], m[i]);
 	}
 
+	@Override
+	public float getQS(int ndx) throws PAModelException
+	{
+		return _src.getQS(_ndx[ndx]);
+	}
+
+	@Override
+	public float[] getQS() throws PAModelException
+	{
+		return mapFloat(_src.getQS());
+	}
+
+	@Override
+	public void setQS(int ndx, float mvar) throws PAModelException
+	{
+		_src.setQS(_ndx[ndx], mvar);
+	}
+
+	@Override
+	public void setQS(float[] mvar) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setQS(_ndx[i], mvar[i]);
+	}
+
 }

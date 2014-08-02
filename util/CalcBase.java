@@ -20,7 +20,7 @@ public class CalcBase
 			for(int i=0; i < n; ++i)
 				map[i] = oos[i]?1:0;
 			GroupMap gm = new GroupMap(map,2);
-			rv = gm.get(1);
+			rv = gm.get(0);
 			_oosndx = new WeakReference<>(rv);
 		}
 		return rv;

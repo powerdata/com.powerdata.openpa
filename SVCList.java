@@ -71,14 +71,14 @@ public interface SVCList extends OneTermDevListIfc<SVC>, BusRegulator
 	void setOutputMode(SVCState[] m)throws PAModelException;
 
 	/** get MVAr setpoint used if AVR is off */
-	float getQS(int _ndx);
+	float getQS(int ndx)throws PAModelException;
 
 	/** get MVAr setpoint used if AVR is off */
-	float[] getQS();
+	float[] getQS()throws PAModelException;
 	
 	/** set MVAr setpoint used if AVR is off */
-	void setQS(int _ndx, float mvar);
+	void setQS(int ndx, float mvar)throws PAModelException;
 
 	/** set MVAr setpoint used if AVR is off */
-	void setQS(float[] mvar);
+	void setQS(float[] mvar)throws PAModelException;
 }
