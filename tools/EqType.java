@@ -1,7 +1,5 @@
 package com.powerdata.openpa.tools;
 
-import java.util.Arrays;
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
@@ -9,28 +7,12 @@ import com.powerdata.openpa.BaseObject;
 
 public class EqType
 {
-	@FunctionalInterface
-	private interface BaseObjSupplier
-	{
-		BaseObject getObj(BaseList<? extends BaseObject> list, int ndx)
-				throws PAModelException;
-	}
-	
 	static ListMetaType[] _Ltypes = ListMetaType.values();
-	static BaseObjSupplier[] _Map;
-	static
-	{
-		BaseObjSupplier s = (l, i) -> l.get(i), n = (l,i) -> null;
-		_Map = new BaseObjSupplier[_Ltypes.length];
-		Arrays.fill(_Map, s);
-		_Map[ListMetaType.AnonymousGroup.ordinal()] = n;
-		_Map[ListMetaType.Unknown.ordinal()] = n;
-	}
 
 	public static BaseObject getObject(PAModel mdl, ListMetaType type, int ndx)
 			throws PAModelException
 	{ 	
-		return _Map[type.ordinal()].getObj(mdl.getList(type), ndx);
+		return mdl.getList(type).get(ndx);
 	}
 
 	public static BaseObject getObject(PAModel mdl, long id) throws PAModelException
