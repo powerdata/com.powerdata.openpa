@@ -28,30 +28,30 @@ public interface PAModel extends PALists
 	BusList getSingleBus() throws PAModelException;
 	
 	/**
-	 * get all one-terminal devices as a single list
+	 * get all one-terminal devices 
 	 * 
 	 * @throws PAModelException
 	 *             Method uses reflection to find all one-terminal device lists
 	 */
-	OneTermDevList getOneTermDevices() throws PAModelException;
+	Set<OneTermDevList> getOneTermDevices() throws PAModelException;
 
 	/**
-	 * get all two-terminal devices as a single list
+	 * get all two-terminal devices
 	 * 
 	 * @throws PAModelException
 	 *             Method uses reflection to find all two-terminal devices
 	 */
-	TwoTermDevList getTwoTermDevices() throws PAModelException;
+	Set<TwoTermDevList> getTwoTermDevices() throws PAModelException;
 
 	/**
-	 * get all AC Branches as a single list
+	 * get all AC Branches
 	 * 
 	 * @throws PAModelException
 	 *             Method uses reflection to find all ACBranch devices
 	 */
-	ACBranchList getACBranches() throws PAModelException;
+	Set<ACBranchList> getACBranches() throws PAModelException;
 	
-	FixedShuntList getFixedShunts() throws PAModelException;
+	Set<FixedShuntList> getFixedShunts() throws PAModelException;
 
 	/** Create arbitrary groups of buses */
 	GroupList createGroups(BusGrpMap map);

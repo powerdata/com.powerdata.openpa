@@ -19,4 +19,6 @@ public interface BaseObject
 	public void setName(String name)throws PAModelException;
 	/** unique object integer identifier */
 	public int getKey();
+	/** return the list */
+	public BaseList<? extends BaseObject> getList();
 }

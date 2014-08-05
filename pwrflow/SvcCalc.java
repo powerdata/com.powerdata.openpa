@@ -1,4 +1,4 @@
-package com.powerdata.openpa.util;
+package com.powerdata.openpa.pwrflow;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +11,6 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
-import com.powerdata.openpa.VoltageLevel;
 import com.powerdata.openpa.tools.PAMath;
 
 public class SvcCalc extends CalcBase

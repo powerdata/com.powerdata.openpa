@@ -1,95 +1,53 @@
 package com.powerdata.openpa.tools;
 
+import java.util.Arrays;
+import com.powerdata.openpa.BaseList;
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.BaseObject;
 
-public enum EqType
+public class EqType
 {
-	UNKNOWN(0),
-	SVC(1),
-	AREA(2),
-	BUS(3),
-	GEN(4),
-	LINE(5),
-	LOAD(6),
-	PHASESHIFTER(7),
-	SHUNT(8),
-	SWITCH(9),
-	TRANSFORMER(10),
-	SERIESCAP(11),
-	SERIESREAC(12);
+	@FunctionalInterface
+	private interface BaseObjSupplier
+	{
+		BaseObject getObj(BaseList<? extends BaseObject> list, int ndx)
+				throws PAModelException;
+	}
+	
+	static ListMetaType[] _Ltypes = ListMetaType.values();
+	static BaseObjSupplier[] _Map;
+	static
+	{
+		BaseObjSupplier s = (l, i) -> l.get(i), n = (l,i) -> null;
+		_Map = new BaseObjSupplier[_Ltypes.length];
+		Arrays.fill(_Map, s);
+		_Map[ListMetaType.AnonymousGroup.ordinal()] = n;
+		_Map[ListMetaType.Unknown.ordinal()] = n;
+	}
 
-	private byte _id;
-	private EqType(int id) { _id = (byte)id; }
-	public byte getCode() { return _id; }
-	public static EqType valueOf(int id)
-	{
-		switch(id)
-		{
-			case 0 : return UNKNOWN;
-			case 1 : return SVC;
-			case 2 : return AREA;
-			case 3 : return BUS;
-			case 4 : return GEN;
-			case 5 : return LINE;
-			case 6 : return LOAD;
-			case 7 : return PHASESHIFTER;
-			case 8 : return SHUNT;
-			case 9 : return SWITCH;
-			case 10: return TRANSFORMER;
-			case 11: return SERIESCAP;
-			case 12: return SERIESREAC;
-			
-		}
-		return null;
+	public static BaseObject getObject(PAModel mdl, ListMetaType type, int ndx)
+			throws PAModelException
+	{ 	
+		return _Map[type.ordinal()].getObj(mdl.getList(type), ndx);
 	}
-	public static BaseObject getObject(PAModel mdl, EqType type, int ndx) throws PAModelException
-	{
-		BaseObject eq = null;
-		switch(type)
-		{
-			case UNKNOWN:		eq = null;
-			case SVC:			eq = mdl.getSVCs().get(ndx); break;
-			case AREA:			eq = mdl.getAreas().get(ndx); break;
-			case BUS:			eq = mdl.getBuses().get(ndx); break;
-			case GEN:			eq = mdl.getGenerators().get(ndx); break;
-			case LINE:			eq = mdl.getLines().get(ndx); break;
-			case LOAD:			eq = mdl.getLoads().get(ndx); break;
-			case PHASESHIFTER:	eq = mdl.getPhaseShifters().get(ndx); break;
-			case SHUNT:			eq = mdl.getFixedShunts().get(ndx); break;
-			case SWITCH:		eq = mdl.getSwitches().get(ndx); break;
-			case TRANSFORMER:	eq = mdl.getTransformers().get(ndx); break;
-			case SERIESCAP:		eq = mdl.getSeriesCapacitors().get(ndx); break;
-			case SERIESREAC:	eq = mdl.getSeriesReactors().get(ndx); break;
-			default:
-				break;
-		}
-		return eq;
-	}
+
 	public static BaseObject getObject(PAModel mdl, long id) throws PAModelException
 	{
-		EqType t = valueOf((int)(id >> 32));
+		ListMetaType t = _Ltypes[(int)(id >> 32)];
 		int ndx  = (int)(id & 0xFFFFFFFF);
 		return getObject(mdl,t,ndx);
 	}
-	public static EqType GetType(BaseObject obj)
+	
+	public static ListMetaType GetType(BaseObject obj)
 	{
-		if (obj instanceof com.powerdata.openpa.psse.Bus) return BUS;
-		if (obj instanceof com.powerdata.openpa.psse.Switch) return SWITCH;
-		if (obj instanceof com.powerdata.openpa.psse.Line) return LINE;
-		if (obj instanceof com.powerdata.openpa.psse.Load) return LOAD;
-		if (obj instanceof com.powerdata.openpa.psse.Gen) return GEN;
-		if (obj instanceof com.powerdata.openpa.psse.Transformer) return TRANSFORMER;
-		if (obj instanceof com.powerdata.openpa.psse.Shunt) return SHUNT;
-		if (obj instanceof com.powerdata.openpa.psse.PhaseShifter) return PHASESHIFTER;
-		if (obj instanceof com.powerdata.openpa.psse.SVC) return SVC;
-		if (obj instanceof com.powerdata.openpa.psse.Area) return AREA;
-		return UNKNOWN;
+		return obj.getList().getListMeta();
 	}
+	
 	public static long GetID(BaseObject dev)
 	{
-		long type = GetType(dev).getCode();
+		long type = GetType(dev).ordinal();
 		long ndx  = dev.getIndex();
 		long id = (type << 32) | ndx;
 		return id;		

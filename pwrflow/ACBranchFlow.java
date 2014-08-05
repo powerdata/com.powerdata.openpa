@@ -1,4 +1,4 @@
-package com.powerdata.openpa.util;
+package com.powerdata.openpa.pwrflow;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +22,9 @@ public class ACBranchFlow extends CalcBase
 	int[] _f, _t;
 	float[] _fp, _fq, _tp, _tq;
 	float[] _fbch, _tbch, _bmag;
-	ComplexList _y;
+	float[] _yg, _yb;
+	
+	float[] _ftap, _ttap, _shift;
 	
 	public ACBranchFlow(PAModel m) throws PAModelException
 	{
@@ -32,14 +34,15 @@ public class ACBranchFlow extends CalcBase
 		setup(BusRefIndex.CreateFromConnectivityBus(m));
 	}
 	
-	public ACBranchFlow(PAModel m, BusRefIndex bndx, ACBranchList branches) throws PAModelException
+	public ACBranchFlow(PAModel m, BusRefIndex bndx, ACBranchList branches)
+			throws PAModelException
 	{
 		_model = m;
 		_buses = bndx.getBuses();
 		_branches = branches;
 		setup(bndx);
 	}
-
+	
 	void setup(BusRefIndex bndx) throws PAModelException
 	{
 		int n = _branches.size();
@@ -48,12 +51,21 @@ public class ACBranchFlow extends CalcBase
 		_t = nmap[1];
 		
 		ComplexList zlist = new ComplexList(_branches.getR(), _branches.getX());
-		_y = new ComplexList(n, true);
+		_yg = new float[n];
+		_yb = new float[n];
 		for(int i=0; i < n; ++i)
-			_y.set(i, zlist.get(i).inv());
+		{
+			Complex y = zlist.get(i).inv();
+			_yg[i] = y.re();
+			_yb[i] = y.im();
+		}
+		
 		_fbch = _branches.getFromBchg();
 		_tbch = _branches.getToBchg();
 		_bmag = _branches.getBmag();
+		_ftap = _branches.getFromTap();
+		_ttap = _branches.getToTap();
+		_shift = _branches.getShift();
 	}
 
 	public ACBranchFlow calc() throws PAModelException
@@ -69,8 +81,6 @@ public class ACBranchFlow extends CalcBase
 		_tp = new float[nbr];
 		_fq = new float[nbr];
 		_tq = new float[nbr];
-		float[] ftap = _branches.getFromTap(), ttap = _branches.getToTap();
-		float[] shift = _branches.getShift();
 		
 		int[] insvc = getInSvc(_branches);
 		int ninsvc = insvc.length;
@@ -80,24 +90,25 @@ public class ACBranchFlow extends CalcBase
 			int i = insvc[in];
 			int f = _f[i], t = _t[i];
 			float fvm = vmpu[f], tvm = vmpu[t], fva = varad[f], tva = varad[t];
-			float sh = fva - tva - shift[i];
-			float ft = ftap[i], tt = ttap[i];
+			float sh = fva - tva - _shift[i];
+			float ft = _ftap[i], tt = _ttap[i];
 			float tvmpq = fvm * tvm / (ft * tt);
 			float tvmp2 = fvm * fvm / (ft * ft);
 			float tvmq2 = tvm * tvm / (tt * tt);
 			float ctvmpq = tvmpq * (float) Math.cos(sh);
 			float stvmpq = tvmpq * (float) Math.sin(sh);
-			Complex y = _y.get(i);
-			float gcos = ctvmpq * y.re();
-			float bcos = ctvmpq * y.im();
-			float gsin = stvmpq * y.re();
-			float bsin = stvmpq * y.im();
+			float yg = _yg[i]; 
+			float yb = _yb[i];
+			float gcos = ctvmpq * yg;
+			float bcos = ctvmpq * yb;
+			float gsin = stvmpq * yg;
+			float bsin = stvmpq * yb;
 			float bmag = _bmag[i];
-			_fp[i] = (-gcos - bsin + tvmp2 * y.re()) * SBASE;
-			_fq[i] = (-gsin + bcos - tvmp2 * (y.im() + bmag + _fbch[i]))
+			_fp[i] = (-gcos - bsin + tvmp2 * yg) * SBASE;
+			_fq[i] = (-gsin + bcos - tvmp2 * (yb + bmag + _fbch[i]))
 					* SBASE;
-			_tp[i] = (-gcos + bsin + tvmq2 * y.re()) * SBASE;
-			_tq[i] = (gsin + bcos - tvmq2 * (y.im() + bmag + _tbch[i])) * SBASE;
+			_tp[i] = (-gcos + bsin + tvmq2 * yg) * SBASE;
+			_tq[i] = (gsin + bcos - tvmq2 * (yb + bmag + _tbch[i])) * SBASE;
 		}
 		return this;
 	}
@@ -147,7 +158,10 @@ public class ACBranchFlow extends CalcBase
 		ACBranchList branches = m.getACBranches();
 		BusRefIndex bri = BusRefIndex.CreateFromSingleBus(m);
 		ACBranchFlow bc = new ACBranchFlow(m, bri, branches);
-		bc.calc();
+		BusList sbus = m.getSingleBus();
+		float[] vm = PAMath.vmpu(sbus);
+		float[] va = PAMath.deg2rad(sbus.getVA());
+		bc.calc(vm, va);
 		
 		float[] fp = bc.getFromP(), fq = bc.getFromQ(),
 				tp = bc.getToP(), tq = bc.getToQ();
@@ -165,5 +179,15 @@ public class ACBranchFlow extends CalcBase
 				tp[i], tq[i]);
 		}
 		pw.close();
+		
+		long ts = System.currentTimeMillis();
+		int niter = 1000;
+		for(int i=0; i < niter; ++i)
+		{
+//			ACBranchFlow bc2 = new ACBranchFlow(m, bri, branches);
+			bc.calc(vm, va);
+		}
+		long te = System.currentTimeMillis() - ts;
+		System.out.format("%d iter in %d ms\n", niter, te);
 	}
 }

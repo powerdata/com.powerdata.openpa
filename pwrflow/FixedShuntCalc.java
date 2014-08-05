@@ -1,4 +1,4 @@
-package com.powerdata.openpa.util;
+package com.powerdata.openpa.pwrflow;
 
 import java.io.BufferedWriter;
 import java.io.File;

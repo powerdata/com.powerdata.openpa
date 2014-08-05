@@ -75,4 +75,10 @@ public class AbstractBaseObject implements BaseObject
 			return sb.append(_ndx).toString();
 		}
 	}
+
+	@Override
+	public BaseList<? extends BaseObject> getList()
+	{
+		return _list;
+	}
 }

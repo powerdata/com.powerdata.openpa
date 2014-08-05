@@ -1,5 +1,6 @@
 package com.powerdata.openpa.impl;
 
+import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -245,21 +246,21 @@ public class PAModelI implements PAModel
 	}
 
 	@Override
-	public OneTermDevList getOneTermDevices() throws PAModelException
+	public Set<OneTermDevList> getOneTermDevices() throws PAModelException
 	{
-		return new OneTermDevList(this);
+		return getSet(OneTermDevList.class);
 	}
 
 	@Override
-	public TwoTermDevList getTwoTermDevices() throws PAModelException
+	public Set<TwoTermDevList> getTwoTermDevices() throws PAModelException
 	{
-		return new TwoTermDevList(this);
+		return getSet(TwoTermDevList.class);
 	}
 
 	@Override
-	public ACBranchList getACBranches() throws PAModelException
+	public Set<ACBranchList> getACBranches() throws PAModelException
 	{
-		return new ACBranchList(this);
+		return getSet(ACBranchList.class);
 	}
 
 	@Override
@@ -274,9 +275,48 @@ public class PAModelI implements PAModel
 	}
 
 	@Override
-	public FixedShuntList getFixedShunts() throws PAModelException
+	public Set<FixedShuntList> getFixedShunts() throws PAModelException
 	{
-		return new FixedShuntList(this);
+		return getSet(FixedShuntList.class);
 	}
 	
+	@SuppressWarnings("unchecked")
+	<T extends BaseList<? extends BaseObject>> Set<T> getSet(Class<T> clz) throws PAModelException
+	{
+		Set<T> rv = new HashSet<>();
+		try
+		{
+			for (Method m : getClass().getMethods())
+			{
+				Class<?> rt = m.getReturnType();
+				if (!rt.equals(this.getClass()) && testInterfaces(clz, rt))
+				{
+					T list;
+					list = (T) m.invoke(this, new Object[] {});
+					if (!list.isEmpty())
+						rv.add(list);
+				}
+			}
+		}
+		catch (ReflectiveOperationException | IllegalArgumentException e)
+		{
+			throw new PAModelException(e);
+		}
+		return rv;
+	}
+	
+	boolean testInterfaces(Class<?> clz, Class<?> returnType)
+	{
+		if (returnType.equals(clz))
+			return true;
+		else if (returnType.equals(BaseList.class))
+			return false;
+		else
+		{
+			for (Class<?> pifc : returnType.getInterfaces())
+				if (testInterfaces(clz, pifc)) return true;
+		}
+		return false;
+	}
+
 }
