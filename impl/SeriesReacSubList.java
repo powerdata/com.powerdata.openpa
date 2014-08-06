@@ -6,18 +6,18 @@ import com.powerdata.openpa.SeriesReacList;
 
 public class SeriesReacSubList extends ACBranchSubList<SeriesReac> implements SeriesReacList
 {
-
+	SeriesReacList _src;
+	
 	public SeriesReacSubList(SeriesReacList src, int[] ndx)
 	{
 		super(src, ndx);
-		// TODO Auto-generated constructor stub
+		_src = src;
 	}
 
 	@Override
 	public SeriesReac get(int index)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new SeriesReac(this, index);
 	}
 
 	@Override

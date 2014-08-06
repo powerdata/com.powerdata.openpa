@@ -7,14 +7,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
-import com.powerdata.openpa.Line;
 import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.OneTermDevList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
-import com.powerdata.openpa.Switch;
-import com.powerdata.openpa.SwitchList;
 import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.TwoTermDevList;
 
@@ -25,7 +22,6 @@ public class TestModel
 	{
 		_m = m;
 	}
-	
 
 	public void dumpBusLists(BusList buses, File fout) throws IOException, PAModelException
 	{
@@ -38,19 +34,26 @@ public class TestModel
 				out.format("\t\t%d %d %s\n", b1.getIndex(), b1.getKey(), b1.getName());
 
 			out.format("\tTwo-Term Devs:\n");
-			for(TwoTermDev b1 : new TwoTermDevList(b))
+			
+			for(TwoTermDevList b1list : b.getTwoTermDevices())
 			{
-				Bus f = b1.getFromBus(), t = b1.getToBus();
-				out.format("\t\t%d %d %s %d %d %s %d %d %s\n", b1.getIndex(), b1.getKey(), b1,
-					f.getIndex(), f.getKey(), f, t.getIndex(), t.getKey(), t);
+				for(TwoTermDev b1 : b1list)
+				{
+					Bus f = b1.getFromBus(), t = b1.getToBus();
+					out.format("\t\t%d %d %s %d %d %s %d %d %s\n", b1.getIndex(), b1.getKey(), b1,
+						f.getIndex(), f.getKey(), f, t.getIndex(), t.getKey(), t);
+				}
 			}
 			out.println();
 			out.format("\tOne-Term Devs:\n");
-			for(OneTermDev b1 : new OneTermDevList(b))
+			for (OneTermDevList b1list : b.getOneTermDevices())
 			{
-				Bus ob = b1.getBus();
-				out.format("\t\t%d %d %s %d %d %s\n", b1.getIndex(), b1.getKey(), b1,
-					ob.getIndex(), ob.getKey(), ob);
+				for (OneTermDev b1 : b1list)
+				{
+					Bus ob = b1.getBus();
+					out.format("\t\t%d %d %s %d %d %s\n", b1.getIndex(),
+						b1.getKey(), b1, ob.getIndex(), ob.getKey(), ob);
+				}
 			}
 			out.println();
 		}

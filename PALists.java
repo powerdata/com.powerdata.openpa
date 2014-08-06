@@ -1,5 +1,7 @@
 package com.powerdata.openpa;
 
+import java.util.Set;
+
 /**
  * Standard power system equipment lists
  * 
@@ -47,4 +49,32 @@ public interface PALists
 	/** return list of SVC's */
 	SVCList getSVCs() throws PAModelException;
 	
+	/**
+	 * get all one-terminal devices 
+	 * 
+	 * @throws PAModelException
+	 *             Method uses reflection to find all one-terminal device lists
+	 */
+	Set<OneTermDevList> getOneTermDevices() throws PAModelException;
+
+	/**
+	 * get all two-terminal devices
+	 * 
+	 * @throws PAModelException
+	 *             Method uses reflection to find all two-terminal devices
+	 */
+	Set<TwoTermDevList> getTwoTermDevices() throws PAModelException;
+
+	/**
+	 * get all AC Branches
+	 * 
+	 * @throws PAModelException
+	 *             Method uses reflection to find all ACBranch devices
+	 */
+	Set<ACBranchList> getACBranches() throws PAModelException;
+	
+	Set<FixedShuntList> getFixedShunts() throws PAModelException;
+
+	/** Create arbitrary groups of buses */
+
 }

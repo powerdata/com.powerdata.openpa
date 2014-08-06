@@ -6,18 +6,18 @@ import com.powerdata.openpa.SeriesCapList;
 
 public class SeriesCapSubList extends ACBranchSubList<SeriesCap> implements SeriesCapList
 {
-
+	SeriesCapList _src;
+	
 	public SeriesCapSubList(SeriesCapList src, int[] ndx)
 	{
 		super(src, ndx);
-		// TODO Auto-generated constructor stub
+		_src = src;
 	}
 
 	@Override
 	public SeriesCap get(int index)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new SeriesCap(this, index);
 	}
 
 	@Override

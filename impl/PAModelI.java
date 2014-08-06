@@ -1,6 +1,5 @@
 package com.powerdata.openpa.impl;
 
-import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -60,6 +59,8 @@ public class PAModelI implements PAModel
 		_lists.put(ListMetaType.SVC, () -> getSVCs());
 		_lists.put(ListMetaType.SwitchedShunt, () -> getSwitchedShunts());
 	}
+
+	SuperList _slist = new SuperList(this);
 	
 	@FunctionalInterface
 	interface ListConsumer<T extends BaseList<? extends BaseObject>>
@@ -248,21 +249,27 @@ public class PAModelI implements PAModel
 	@Override
 	public Set<OneTermDevList> getOneTermDevices() throws PAModelException
 	{
-		return getSet(OneTermDevList.class);
+		return _slist.getOneTermDevs();
 	}
 
 	@Override
 	public Set<TwoTermDevList> getTwoTermDevices() throws PAModelException
 	{
-		return getSet(TwoTermDevList.class);
+		return _slist.getTwoTermDevs();
 	}
 
 	@Override
 	public Set<ACBranchList> getACBranches() throws PAModelException
 	{
-		return getSet(ACBranchList.class);
+		return _slist.getACBranches();
 	}
 
+	@Override
+	public Set<FixedShuntList> getFixedShunts() throws PAModelException
+	{
+		return _slist.getFixedShunts();
+	}
+	
 	@Override
 	public GroupList createGroups(BusGrpMap map)
 	{
@@ -272,51 +279,6 @@ public class PAModelI implements PAModel
 	<R> R load(ListMetaType ltype, ColumnMeta ctype, int[] keys) throws PAModelException
 	{
 		return _bldr.load(ltype, ctype, keys);
-	}
-
-	@Override
-	public Set<FixedShuntList> getFixedShunts() throws PAModelException
-	{
-		return getSet(FixedShuntList.class);
-	}
-	
-	@SuppressWarnings("unchecked")
-	<T extends BaseList<? extends BaseObject>> Set<T> getSet(Class<T> clz) throws PAModelException
-	{
-		Set<T> rv = new HashSet<>();
-		try
-		{
-			for (Method m : getClass().getMethods())
-			{
-				Class<?> rt = m.getReturnType();
-				if (!rt.equals(this.getClass()) && testInterfaces(clz, rt))
-				{
-					T list;
-					list = (T) m.invoke(this, new Object[] {});
-					if (!list.isEmpty())
-						rv.add(list);
-				}
-			}
-		}
-		catch (ReflectiveOperationException | IllegalArgumentException e)
-		{
-			throw new PAModelException(e);
-		}
-		return rv;
-	}
-	
-	boolean testInterfaces(Class<?> clz, Class<?> returnType)
-	{
-		if (returnType.equals(clz))
-			return true;
-		else if (returnType.equals(BaseList.class))
-			return false;
-		else
-		{
-			for (Class<?> pifc : returnType.getInterfaces())
-				if (testInterfaces(clz, pifc)) return true;
-		}
-		return false;
 	}
 
 }

@@ -1,9 +1,14 @@
 package com.powerdata.openpa;
 
+import java.util.Set;
+import com.powerdata.openpa.impl.SuperList;
+
 
 public class Group extends AbstractBaseObject implements PALists
 {
 	protected GroupListIfc<? extends Group> _list;
+	
+	SuperList _slist = new SuperList(this);
 	
 	public Group(GroupListIfc<? extends Group> list, int ndx)
 	{
@@ -87,6 +92,30 @@ public class Group extends AbstractBaseObject implements PALists
 	public SVCList getSVCs() throws PAModelException
 	{
 		return _list.getSVCs(_ndx);
+	}
+
+	@Override
+	public Set<OneTermDevList> getOneTermDevices() throws PAModelException
+	{
+		return _slist.getOneTermDevs();
+	}
+
+	@Override
+	public Set<TwoTermDevList> getTwoTermDevices() throws PAModelException
+	{
+		return _slist.getTwoTermDevs();
+	}
+
+	@Override
+	public Set<ACBranchList> getACBranches() throws PAModelException
+	{
+		return _slist.getACBranches();
+	}
+
+	@Override
+	public Set<FixedShuntList> getFixedShunts() throws PAModelException
+	{
+		return _slist.getFixedShunts();
 	}
 
 }

@@ -360,7 +360,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public ListMetaType getListMeta()
 	{
-		return ListMetaType.AnonymousGroup;
+		return null;
 	}
 
 }
