@@ -100,7 +100,7 @@ public class BusRefIndex
 		return i.get();
 	}	
 
-	public int[][] get2TBus(TwoTermDevListIfc<? extends TwoTermDev> t2list) throws PAModelException
+	public <T extends TwoTermDevListIfc<? extends TwoTermDev>> int[][] get2TBus(T t2list) throws PAModelException
 	{
 		ListIndex2T i = _map2t.get(t2list);
 		if (i == null)

@@ -74,7 +74,4 @@ public interface PALists
 	Set<ACBranchList> getACBranches() throws PAModelException;
 	
 	Set<FixedShuntList> getFixedShunts() throws PAModelException;
-
-	/** Create arbitrary groups of buses */
-
 }

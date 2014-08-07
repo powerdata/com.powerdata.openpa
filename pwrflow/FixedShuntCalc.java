@@ -4,8 +4,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntList;
+import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
@@ -17,24 +21,27 @@ public class FixedShuntCalc extends CalcBase
 	int[] _busndx;
 	float[] _b, _q;
 	BusList _buses;
-	FixedShuntList _shunts;
+	FixedShuntListIfc<? extends FixedShunt> _shunts;
 	
-	public FixedShuntCalc(PAModel m) throws PAModelException
+	public FixedShuntCalc(PAModel m,
+			FixedShuntListIfc<? extends FixedShunt> shunts)
+			throws PAModelException
 	{
 		_m = m;
 		_buses = m.getBuses();
-		_shunts = _m.getFixedShunts();
+		_shunts = shunts;
 		setup(BusRefIndex.CreateFromConnectivityBus(m));
 	}
 
-	public FixedShuntCalc(PAModel m, BusRefIndex bndx, FixedShuntList fshunts) throws PAModelException
+	public FixedShuntCalc(PAModel m, BusRefIndex bndx,
+			FixedShuntListIfc<? extends FixedShunt> fshunts)
+			throws PAModelException
 	{
 		_m = m;
 		_buses = bndx.getBuses();
 		_shunts = fshunts;
 		setup(bndx);
 	}
-
 	private void setup(BusRefIndex bref) throws PAModelException
 	{
 		_busndx = bref.get1TBus(_shunts);
@@ -65,6 +72,8 @@ public class FixedShuntCalc extends CalcBase
 	{
 		return _q;
 	}
+	
+	public FixedShuntListIfc<? extends FixedShunt> getList() {return _shunts;}
 
 	public static void main(String[] args) throws Exception
 	{
@@ -94,24 +103,46 @@ public class FixedShuntCalc extends CalcBase
 		
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		PAModel m = bldr.load();
-		FixedShuntList fshunts = m.getFixedShunts();
-		BusRefIndex bri = BusRefIndex.CreateFromConnectivityBus(m);
-		FixedShuntCalc fsc = new FixedShuntCalc(m, bri, fshunts);
-		fsc.calc();
 		
-		float[] q = fsc.getQ();
-		int n = q.length;
+		BusRefIndex bri = BusRefIndex.CreateFromConnectivityBus(m);
+		Set<FixedShuntCalc> fsc = new HashSet<>();
+		for(FixedShuntList s : m.getFixedShunts())
+			fsc.add(new FixedShuntCalc(m, bri, s));
+		
+		final float[] vm = PAMath.vmpu(m.getBuses());
+		
+		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir,"fixedshuntq.csv"))));
 		pw.println("ID,Bus,MW");
-		
-		for(int i=0; i < n; ++i)
+		for(FixedShuntCalc c : fsc)
 		{
-			pw.format("%s,%s,%f\n", fshunts.getID(i), 
-				bri.getBuses().getByBus(fshunts.getBus(i)).getName(),
-				q[i]);
+			c.calc(vm);
+			float[] q = c.getQ();
+			int n = q.length;
+			for (int i = 0; i < n; ++i)
+			{
+				pw.format("%s,%s,%f\n", c.getList().getID(i), bri.getBuses()
+						.getByBus(c.getList().getBus(i)).getName(), q[i]);
+			}
 		}
 		pw.close();
 
+		int niter = 1000;
+		long ts = System.currentTimeMillis();
+		for(int i=0; i < niter; ++i)
+		{
+			for(FixedShuntCalc c : fsc) c.calc(vm);
+		}
+		long te = System.currentTimeMillis() - ts;
+		System.out.format("single-threaded %d iter in %d ms\n", niter, te);
+
+		ts = System.currentTimeMillis();
+		for(int i=0; i < niter; ++i)
+		{
+			fsc.parallelStream().forEach(c -> {try{c.calc(vm);}catch(PAModelException e){}});
+		}
+		te = System.currentTimeMillis() - ts;
+		System.out.format("multi-threaded %d iter in %d ms\n", niter, te);
 
 	}
 

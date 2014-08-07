@@ -2,7 +2,8 @@ package com.powerdata.openpa;
 
 import java.util.AbstractList;
 
-public class TwoTermDevList extends AbstractList<TwoTermDev> implements TwoTermDevListIfc<TwoTermDev>
+public class TwoTermDevList extends AbstractList<TwoTermDev> implements
+		TwoTermDevListIfc<TwoTermDev>
 {
 	TwoTermDevListIfc<? extends TwoTermDev> _src;
 

@@ -39,5 +39,4 @@ public interface BaseList<T extends BaseObject> extends List<T>
 
 	int getIndex(int ndx);
 
-
 }
