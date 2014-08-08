@@ -1,13 +1,28 @@
 com.powerdata.openpa
 ====================
+
 Java classes sub-module for Open Source Power Apps and Utilities
 
 The goal of the API is to make model access simple and fast regardless of the back-end being used.
 
 For details please check the [Javadoc](http://powerdata.github.io/com.powerdata.openpa) Reference.
 
+Data source formats
+------
+
+OpenPA Models can be loaded from multiple sources.  The primary source we use is the PowerSimulator Model and Case format.
+
+[Download PowerSimulator Model Format Specification](http://powerdata.github.io/com.powerdata.openpa/PowerSimulatorModelFormats.pdf)
+
+[Download PowerSimulator Case Format Specification](http://powerdata.github.io/com.powerdata.openpa/PowerSimulatorCaseFormats.pdf)
+
+Converters from other formats such as PSS/e and PSLF to the PowerSimulator formats will be available in the future.
+
 PAModel Usage
 -----
+
+* Note that OpenPA is currently under heavy development and the following sections will undergo major revisions soon (7 August, 2014) *
+
 A PAModel provides access to the power system network and equipment
 
 To open a model use the *PAModel.Open()* function.  The parameter to this function is a URI that
