@@ -158,11 +158,6 @@ public class ACBranchFlow extends CalcBase
 		float[] vm = PAMath.vmpu(sbus);
 		float[] va = PAMath.deg2rad(sbus.getVA());
 
-//		HashSet<BrInfo> brset = new HashSet<>();
-//		for(ACBranchList l : m.getACBranches())
-//			brset.add(new BrInfo(l, new ACBranchFlow(m, bri, l)));
-//		
-
 		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
 			new File(outdir, "acbranchflow.csv"))));
