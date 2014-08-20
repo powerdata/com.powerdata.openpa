@@ -46,7 +46,7 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	}
 
 	/** get case shunt susceptance */
-	public float getCaseB(int ndx) throws PsseModelException {return PAMath.mvar2pu(getBINIT(ndx));}
+	public float getCaseB(int ndx) throws PsseModelException {return PAMath.mva2pu(getBINIT(ndx), _model.getSBASE());}
 	
 	/* raw methods */
 
@@ -74,10 +74,10 @@ public abstract class SwitchedShuntList extends PsseBaseList<SwitchedShunt>
 	public float getQ(int ndx) throws PsseModelException {return 0f;}
 	public void setP(int ndx, float mw) throws PsseModelException {}
 	public void setQ(int ndx, float mvar) throws PsseModelException {}
-	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
-	public void setPpu(int ndx, float p) throws PsseModelException {setP(ndx, PAMath.pu2mw(p));}
-	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
-	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, PAMath.mvar2pu(q));}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getP(ndx), _model.getSBASE());}
+	public void setPpu(int ndx, float p) throws PsseModelException {setP(ndx, PAMath.pu2mva(p, _model.getSBASE()));}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getQ(ndx), _model.getSBASE());}
+	public void setQpu(int ndx, float q) throws PsseModelException {setQ(ndx, PAMath.mva2pu(q, _model.getSBASE()));}
 	public boolean isInSvc(int ndx) throws PsseModelException {return true;}
 	public void setInSvc(int ndx, boolean state) throws PsseModelException {}
 	public SwitchedShuntBlock[] getBlocks(int ndx) throws PsseModelException

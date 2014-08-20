@@ -13,27 +13,23 @@ import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.tools.PAMath;
 
+
+// TODO:  Make sure we are setting the SVC to a PV bus if slope is 0.
+
 public class SvcCalc extends CalcBase
 {
-	PAModel _m;
 	int[] _busndx;
+	float _sbase;
 	BusList _buses;
 	SVCList _svcs;
 	float[] _b, _q;
 	float[] _qmin, _qmax, _slope, _basekv;
 	SVCState[] _state;
 	
-	public SvcCalc(PAModel m) throws PAModelException
+	public SvcCalc(float sbase, BusRefIndex bndx, SVCList svcs) throws PAModelException
 	{
-		_m = m;
-		_buses = m.getBuses();
-		_svcs = _m.getSVCs();
-		setup(BusRefIndex.CreateFromConnectivityBus(m));
-	}
-
-	public SvcCalc(PAModel m, BusRefIndex bndx, SVCList svcs) throws PAModelException
-	{
-		_m = m;
+		super(svcs);
+		_sbase = sbase;
 		_buses = bndx.getBuses();
 		_svcs = svcs;
 		setup(bndx);
@@ -42,8 +38,8 @@ public class SvcCalc extends CalcBase
 	private void setup(BusRefIndex bref) throws PAModelException
 	{
 		_busndx = bref.get1TBus(_svcs);
-		_qmin = _svcs.getMinQ();
-		_qmax = _svcs.getMaxQ();
+		_qmin = PAMath.mva2pu(_svcs.getMinQ(), _sbase);
+		_qmax = PAMath.mva2pu(_svcs.getMaxQ(), _sbase);
 		_slope = _svcs.getSlope();
 		
 		int n = _svcs.size();
@@ -56,71 +52,74 @@ public class SvcCalc extends CalcBase
 		}
 	}
 
-	public SvcCalc calc() throws PAModelException
+	public void calc() throws PAModelException
 	{
-		return calc(PAMath.vmpu(_buses));
+		calc(null, PAMath.vmpu(_buses));
 	}
-	
-	public SvcCalc calc(float[] vmpu) throws PAModelException
+
+	@Override
+	public void calc(float[] varad, float[] vmpu)
 	{
-		boolean[] isregkv = _svcs.isRegKV();
-		float[] vs = _svcs.getVS(),
-				qs = _svcs.getQS();
-		int[] insvc = getInSvc(_svcs);
-		int ninsvc = insvc.length, nsvc = _svcs.size();
-		
-		_state = new SVCState[nsvc];
-		_b = new float[nsvc];
-		_q = new float[nsvc];
-		Arrays.fill(_state, SVCState.Off);
-		
-		for(int in=0; in < ninsvc; ++in)
+		try
 		{
-			int i = insvc[in];
-			float qmax = _qmax[i], qmin = _qmin[i];
-			float s = _slope[i];
-			float vmsc = vs[i]/_basekv[i]; 
-			float vmin = vmsc - s * qmax;
-			float vmax = vmsc - s * qmin;
-			float vm = vmpu[_busndx[i]];
-			float vmsq = vm * vm;
-			float bcap = qmax / (vmin*vmin); 
-			float breac = qmin / (vmax * vmax);
-			if (isregkv[i])
+			boolean[] isregkv = _svcs.isRegKV();
+			float[] vs = _svcs.getVS(), qs = _svcs.getQS();
+			int[] insvc = getInSvc();
+			int ninsvc = insvc.length, nsvc = _svcs.size();
+			_state = new SVCState[nsvc];
+			_b = new float[nsvc];
+			_q = new float[nsvc];
+			Arrays.fill(_state, SVCState.Off);
+			for (int in = 0; in < ninsvc; ++in)
 			{
-				if (vm < vmin)
+				int i = insvc[in];
+				float qmax = _qmax[i], qmin = _qmin[i];
+				float s = _slope[i];
+				float vmsc = vs[i] / _basekv[i];
+				float vmin = vmsc - s * qmax;
+				float vmax = vmsc - s * qmin;
+				float vm = vmpu[_busndx[i]];
+				float vmsq = vm * vm;
+				float bcap = qmax / (vmin * vmin);
+				float breac = qmin / (vmax * vmax);
+				if (isregkv[i])
 				{
-					_b[i] = bcap;
-					_q[i] = bcap * vmsq;
-					_state[i] = SVCState.CapacitorLimit;
-					
-				}
-				else if (vm > vmax)
-				{
-					_b[i] = breac;
-					_q[i] = breac * vmsq;
-					_state[i] = SVCState.ReactorLimit;
+					if (vm < vmin)
+					{
+						_b[i] = bcap;
+						_q[i] = bcap * vmsq;
+						_state[i] = SVCState.CapacitorLimit;
+					}
+					else if (vm > vmax)
+					{
+						_b[i] = breac;
+						_q[i] = breac * vmsq;
+						_state[i] = SVCState.ReactorLimit;
+					}
+					else
+					{
+						_state[i] = SVCState.Normal;
+						_q[i] = (vmsc - vm) / s;
+						_b[i] = -1f / s;
+					}
 				}
 				else
 				{
-					_state[i] = SVCState.Normal;
-					_q[i] = (vmsc - vm)/s;
-					_b[i] = -1f/s;
+					_state[i] = SVCState.FixedMVAr;
+					float q = qs[i];
+					if (q > 0f)
+						q = Math.min(q, bcap * vmsq);
+					else
+						q = Math.max(q, breac * vmsq);
+					_q[i] = q;
 				}
-			}
-			else
-			{
-				_state[i] = SVCState.FixedMVAr;
-				float q = qs[i];
-				if (q > 0f)
-					q = Math.min(q, bcap * vmsq);
-				else
-					q = Math.max(q, breac * vmsq);
-				_q[i] = q;
 			}
 		}
-		
-		return this;
+		catch (PAModelException e)
+		{
+			_e = e;
+			return;
+		}
 	}
 	
 	/** get solved MVAr's */
@@ -155,19 +154,20 @@ public class SvcCalc extends CalcBase
 					+ "[ --outdir output_directory (deft to $CWD ]\n");
 			System.exit(1);
 		}
-		
+
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(false);
 		PAModel m = bldr.load();
 		SVCList svcs = m.getSVCs();
 		BusRefIndex bri = BusRefIndex.CreateFromSingleBus(m);
-		SvcCalc sc = new SvcCalc(m, bri, svcs);
+		SvcCalc sc = new SvcCalc(m.getSBASE(), bri, svcs);
 		sc.calc();
 		
 		float[] q = sc.getQ();
 		
 		int n = q.length;
-		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir,"svccalc.csv"))));
+		PrintWriter pw = new PrintWriter(new BufferedWriter(
+			new FileWriter(new File(outdir,"svccalc.csv"))));
 		pw.println("ID,Bus,MVAr");
 		
 		for(int i=0; i < n; ++i)
@@ -177,5 +177,21 @@ public class SvcCalc extends CalcBase
 				q[i]); 
 		}
 		pw.close();
+	}
+
+	public int[] getBus() {return _busndx;}
+
+	public SVCState[] getState() {return _state;}
+
+	@Override
+	public void applyMismatches(float[] pmm, float[] qmm)
+	{
+		for(int bx : getInSvc())
+			qmm[_busndx[bx]] -= _q[bx];
+	}
+
+	public void update() throws PAModelException
+	{
+		_svcs.setQ(PAMath.pu2mva(_q, _sbase));
 	}
 }

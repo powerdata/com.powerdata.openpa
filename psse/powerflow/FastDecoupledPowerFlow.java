@@ -493,9 +493,9 @@ public class FastDecoupledPowerFlow
 				String.valueOf(psol.getConverged()),
 				psol.getIterationCount(),
 				(psol.getWorstPbus() == -1)?" -- ":topbus.get(psol.getWorstPbus()).getObjectName(),
-				PAMath.pu2mw(psol.getWorstPmm()),
+				PAMath.pu2mva(psol.getWorstPmm(), model.getSBASE()),
 				(psol.getWorstQbus() == -1)?" -- ":topbus.get(psol.getWorstQbus()).getObjectName(),
-				PAMath.pu2mvar(psol.getWorstQmm()), ld, gn);
+				PAMath.pu2mva(psol.getWorstQmm(), model.getSBASE()), ld, gn);
 		}
 		/*
 		 * TODO:  results should probably be for the switched model, not the topological view

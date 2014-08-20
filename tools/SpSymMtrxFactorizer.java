@@ -61,17 +61,16 @@ public abstract class SpSymMtrxFactorizer
 
 	protected abstract void setup(LinkNet matrix);
 
-	public void eliminate(LinkNet matrix, int[] save)
+	public void eliminate(LinkNet matrix, int[][] save)
 	{
 		matrix = matrix.clone();
 		setup(matrix);
 		int nmbr = matrix.getBranchCount();
 		int cap = nmbr*3;
-		int avail = cap - nmbr;
 		matrix.ensureCapacity(0, cap);
 		ensureCapacity(cap);
 		int[] ccnt = matrix.getConnectionCounts();
-		for(int b : save) ccnt[b] = 0;
+		for(int[] s : save) for (int b : s) ccnt[b] = 0;
 		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
 		int elimbus = bcq.poll();
 		int[] elimndorder = new int[matrix.getMaxBusNdx()];

@@ -77,15 +77,16 @@ public class PsseExample
 		/*
 		 * report results
 		 */
+		float sbase = _model.getSBASE();
 		out.println("Line                          FromMW  FromMVAr  ToMW  ToMVAr");
 		for (Line l : lines)
 		{
 			int i = l.getIndex();
 			out.format("%-30s %6.2f %6.2f %6.2f %6.2f\n", 
-					l.getObjectName(), PAMath.pu2mw(pfrom[i]),
-					PAMath.pu2mvar(qfrom[i]),
-					PAMath.pu2mw(pto[i]),
-					PAMath.pu2mvar(qto[i]));
+					l.getObjectName(), PAMath.pu2mva(pfrom[i], sbase),
+					PAMath.pu2mva(qfrom[i], sbase),
+					PAMath.pu2mva(pto[i], sbase),
+					PAMath.pu2mva(qto[i], sbase));
 		}
 		out.flush();
 	}

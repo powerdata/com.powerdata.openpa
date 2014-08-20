@@ -75,4 +75,9 @@ public class FactorizedBMatrix
 	{
 		return backwardSubstitution(forwardReduction(mm));
 	}
+
+	public int[] getElimBus()
+	{
+		return _elimbusord;
+	}
 }

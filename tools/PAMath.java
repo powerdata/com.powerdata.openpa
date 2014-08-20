@@ -47,14 +47,29 @@ public class PAMath
 
 	/* methods to convert per-unit on 100MVA base */
 	
-	/** convert MW to per-unit */
-	public static float mw2pu(float mw) {return mw/100F;}
-	/** convert pu active power fo MW */
-	public static float pu2mw(float pwr) {return pwr*100F;}
-	/** convert MVAr to per-unit */
-	public static float mvar2pu(float mvar) {return mvar/100F;}
-	/** convert pu active power fo MVAr */
-	public static float pu2mvar(float pwr) {return pwr*100F;}
+	/** convert MVA to per-unit */
+	public static float mva2pu(float mva, float mvabase) {return mva/mvabase;}
+	public static float[] mva2pu(float[] mva, float mvabase)
+	{
+		int n = mva.length;
+		float[] pu = new float[n];
+		for(int i=0; i < n; ++i)
+			pu[i] = mva[i] / mvabase;
+		return pu;
+	}
+	/** convert per-unit to MVA */
+	public static float pu2mva(float pu, float mvabase) {return pu*mvabase;}
+	
+	public static float[] pu2mva(float[] pu, float mvabase)
+	{
+		int n = pu.length;
+		float[] rv = new float[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = pu[i] * mvabase;
+		return rv;
+	}
+
+
 	/** convert p.u. impedance to 100 MVA base */
 	public static float rebaseZ100(float zval, float mvabase) {return (mvabase==100F)?zval:zval*100F/mvabase;}
 	/** convert p.u. impedance to 100 MVA base */

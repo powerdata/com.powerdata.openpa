@@ -17,27 +17,18 @@ import com.powerdata.openpa.tools.PAMath;
 
 public class FixedShuntCalc extends CalcBase
 {
-	PAModel _m;
+	float _sbase;
 	int[] _busndx;
 	float[] _b, _q;
 	BusList _buses;
 	FixedShuntListIfc<? extends FixedShunt> _shunts;
 	
-	public FixedShuntCalc(PAModel m,
-			FixedShuntListIfc<? extends FixedShunt> shunts)
-			throws PAModelException
-	{
-		_m = m;
-		_buses = m.getBuses();
-		_shunts = shunts;
-		setup(BusRefIndex.CreateFromConnectivityBus(m));
-	}
-
-	public FixedShuntCalc(PAModel m, BusRefIndex bndx,
+	public FixedShuntCalc(float sbase, BusRefIndex bndx,
 			FixedShuntListIfc<? extends FixedShunt> fshunts)
 			throws PAModelException
 	{
-		_m = m;
+		super(fshunts);
+		_sbase = sbase;
 		_buses = bndx.getBuses();
 		_shunts = fshunts;
 		setup(bndx);
@@ -45,33 +36,45 @@ public class FixedShuntCalc extends CalcBase
 	private void setup(BusRefIndex bref) throws PAModelException
 	{
 		_busndx = bref.get1TBus(_shunts);
-		_b = _shunts.getB();
+		_b = PAMath.mva2pu(_shunts.getB(), _sbase);
 	}
 
-	public FixedShuntCalc calc(float[] vmpu) throws PAModelException
+	@Override
+	public void calc(float[] varad, float[] vmpu)
 	{
 		int nfsh = _shunts.size();
 		_q = new float[nfsh];
-		int[] insvc = getInSvc(_shunts);
+		int[] insvc;
+		insvc = getInSvc();
 		int nsvc = insvc.length;
-		for(int in=0; in < nsvc; ++in)
+		for (int in = 0; in < nsvc; ++in)
 		{
 			int i = insvc[in];
 			float v = vmpu[_busndx[i]];
-			_q[i] = _b[i] * v * v; 
+			_q[i] = _b[i] * v * v;
 		}
-		return this;
 	}
 	
-	public FixedShuntCalc calc() throws PAModelException
+	public void calc() throws PAModelException
 	{
-		return calc(PAMath.vmpu(_buses));
+		calc(null, PAMath.vmpu(_buses));
 	}
 
 	public float[] getQ()
 	{
 		return _q;
 	}
+	
+	@Override
+	public void applyMismatches(float[] pmm, float[] qmm)
+	{
+		for (int ix : getInSvc())
+			qmm[_busndx[ix]] -= _q[ix];
+	}
+
+	public float[] getB() {return _b;}
+	
+	public int[] getBus() {return _busndx;}
 	
 	public FixedShuntListIfc<? extends FixedShunt> getList() {return _shunts;}
 
@@ -107,16 +110,17 @@ public class FixedShuntCalc extends CalcBase
 		BusRefIndex bri = BusRefIndex.CreateFromConnectivityBus(m);
 		Set<FixedShuntCalc> fsc = new HashSet<>();
 		for(FixedShuntList s : m.getFixedShunts())
-			fsc.add(new FixedShuntCalc(m, bri, s));
+			fsc.add(new FixedShuntCalc(m.getSBASE(), bri, s));
 		
 		final float[] vm = PAMath.vmpu(m.getBuses());
 		
 		
-		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir,"fixedshuntq.csv"))));
+		PrintWriter pw = new PrintWriter(new BufferedWriter(
+			new FileWriter(new File(outdir,"fixedshuntq.csv"))));
 		pw.println("ID,Bus,MW");
 		for(FixedShuntCalc c : fsc)
 		{
-			c.calc(vm);
+			c.calc(null, vm);
 			float[] q = c.getQ();
 			int n = q.length;
 			for (int i = 0; i < n; ++i)
@@ -131,7 +135,7 @@ public class FixedShuntCalc extends CalcBase
 		long ts = System.currentTimeMillis();
 		for(int i=0; i < niter; ++i)
 		{
-			for(FixedShuntCalc c : fsc) c.calc(vm);
+			for(FixedShuntCalc c : fsc) c.calc(null, vm);
 		}
 		long te = System.currentTimeMillis() - ts;
 		System.out.format("single-threaded %d iter in %d ms\n", niter, te);
@@ -139,11 +143,15 @@ public class FixedShuntCalc extends CalcBase
 		ts = System.currentTimeMillis();
 		for(int i=0; i < niter; ++i)
 		{
-			fsc.parallelStream().forEach(c -> {try{c.calc(vm);}catch(PAModelException e){}});
+			fsc.parallelStream().forEach(c -> c.calc(null, vm));
 		}
 		te = System.currentTimeMillis() - ts;
 		System.out.format("multi-threaded %d iter in %d ms\n", niter, te);
 
 	}
-
+	
+	public void update() throws PAModelException
+	{
+		_shunts.setQ(PAMath.pu2mva(_q, _sbase));
+	}
 }

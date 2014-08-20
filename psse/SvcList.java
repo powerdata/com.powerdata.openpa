@@ -56,9 +56,9 @@ public abstract class SvcList extends PsseBaseList<SVC>
 	public float getQ(int ndx) throws PsseModelException {return 0f;} 
 	public void setP(int ndx, float mw) throws PsseModelException {}
 	public void setQ(int ndx, float mvar) throws PsseModelException {} 
-	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getP(ndx), _model.getSBASE());}
 	public void setPpu(int ndx, float p) throws PsseModelException {}
-	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getQ(ndx), _model.getSBASE());}
 	public void setQpu(int ndx, float q) throws PsseModelException {}
 
 	public int getMODSW(int ndx) throws PsseModelException {return 1;}

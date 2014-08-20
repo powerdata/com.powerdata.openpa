@@ -200,6 +200,7 @@ public class PowerCalculator
 				qmm[bndx] -= l.getQpu();
 			}
 		}
+		float sbase = _model.getSBASE();
 		for(Gen g : genlist)
 		{
 			BusGroup b = _tn.findGroup(g.getBus());
@@ -207,9 +208,9 @@ public class PowerCalculator
 			if (g.isInSvc())
 			{
 				int bndx = b.getIndex();
-				pmm[bndx] += PAMath.mw2pu(g.getPS());
+				pmm[bndx] += PAMath.mva2pu(g.getPS(), sbase);
 				if (btc == BusTypeCode.Load)
-					qmm[bndx] += PAMath.mw2pu(g.getQS());
+					qmm[bndx] += PAMath.mva2pu(g.getQS(), sbase);
 			}
 			//TODO: should not be converting to per-unit here
 		}
@@ -380,6 +381,7 @@ public class PowerCalculator
 		float[] imw = new float[nl];
 		float[] imvar = new float[nl];
 		
+		float sbase = _model.getSBASE();
 		for (int i=0; i < nl; ++i)
 		{
 			TwoTermDCLine dcl = lines.get(i);
@@ -393,12 +395,12 @@ public class PowerCalculator
 				float[] iresult = calc2TDInv(dcl, isp, vdi, vm[ibus]);
 				alpha[i] = rresult[0];
 				rtap[i] = rresult[1];
-				rmw[i] = PAMath.mw2pu(-rresult[2]);
-				rmvar[i] = PAMath.mvar2pu(-rresult[3]);
+				rmw[i] = PAMath.mva2pu(-rresult[2], sbase);
+				rmvar[i] = PAMath.mva2pu(-rresult[3], sbase);
 				gamma[i] = iresult[0];
 				itap[i] = iresult[1];
-				imw[i] = PAMath.mw2pu(iresult[2]);
-				imvar[i] = PAMath.mvar2pu(-iresult[3]);
+				imw[i] = PAMath.mva2pu(iresult[2], sbase);
+				imvar[i] = PAMath.mva2pu(-iresult[3], sbase);
 			}
 		}
 		if (_dbg != null)

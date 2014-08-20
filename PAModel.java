@@ -4,6 +4,8 @@ import java.util.Set;
 
 public interface PAModel extends PALists
 {
+	float getSBASE() throws PAModelException;
+	
 	/** Get a generic representation of a list based on its enumerated type 
 	 * @throws PAModelException */
 	BaseList<? extends BaseObject> getList(ListMetaType type) throws PAModelException;

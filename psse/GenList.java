@@ -66,14 +66,16 @@ public abstract class GenList extends PsseBaseList<Gen>
 	/** reactive power limits */
 	public Limits getReactiveLimits(int ndx) throws PsseModelException
 	{
-		return new Limits(PAMath.mvar2pu(getQB(ndx)),
-				PAMath.mvar2pu(getQT(ndx)));
+		float sbase = _model.getSBASE();
+		return new Limits(PAMath.mva2pu(getQB(ndx), sbase),
+				PAMath.mva2pu(getQT(ndx), sbase));
 	}
 
 	/** active power limits */
 	public Limits getActiveLimits(int ndx) throws PsseModelException
 	{
-		return new Limits(PAMath.mw2pu(getPB(ndx)), PAMath.mw2pu(getPT(ndx)));
+		float sbase = _model.getSBASE();
+		return new Limits(PAMath.mva2pu(getPB(ndx), sbase), PAMath.mva2pu(getPT(ndx), sbase));
 	}
 	public boolean isInSvc(int ndx) throws PsseModelException {return getSTAT(ndx) == 1;}
 	@Override
@@ -82,9 +84,9 @@ public abstract class GenList extends PsseBaseList<Gen>
 		return getBus(ndx).getObjectName()+":"+getID(ndx);
 	}
 	public void setMode(int ndx, GenMode mode) throws PsseModelException {}
-	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getP(ndx), _model.getSBASE());}
 	public void setPpu(int ndx, float p) throws PsseModelException {}
-	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getQ(ndx), _model.getSBASE());}
 	public void setQpu(int ndx, float q) throws PsseModelException {}
 
 	/* raw methods */

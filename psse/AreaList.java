@@ -36,9 +36,9 @@ public abstract class AreaList extends PsseBaseList<Area>
 		return _model.getBus(getISW(ndx));
 	}
 	/** Desired net interchange (PDES) leaving the area entered p.u. */
-	public float getIntExport(int ndx) throws PsseModelException {return PAMath.mw2pu(getPDES(ndx));}
+	public float getIntExport(int ndx) throws PsseModelException {return PAMath.mva2pu(getPDES(ndx), _model.getSBASE());}
 	/** Interchange tolerance bandwidth (PTOL) in p.u. */
-	public float getIntTol(int ndx) throws PsseModelException {return PAMath.mw2pu(getPTOL(ndx));}
+	public float getIntTol(int ndx) throws PsseModelException {return PAMath.mva2pu(getPTOL(ndx), _model.getSBASE());}
 	
 	/* Raw values */
 	/** Area number */

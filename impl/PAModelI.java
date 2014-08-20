@@ -281,4 +281,10 @@ public class PAModelI implements PAModel
 		return _bldr.load(ltype, ctype, keys);
 	}
 
+	@Override
+	public float getSBASE() throws PAModelException
+	{
+		return 100f;
+	}
+
 }

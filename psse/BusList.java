@@ -61,7 +61,8 @@ public abstract class BusList extends PsseBaseList<Bus>
 	/** get complex shunt admittance to ground */
 	public Complex getShuntY(int ndx) throws PsseModelException
 	{
-		return new Complex(PAMath.mw2pu(getGL(ndx)), PAMath.mvar2pu(getBL(ndx)));
+		float sbase = _model.getSBASE();
+		return new Complex(PAMath.mva2pu(getGL(ndx), sbase), PAMath.mva2pu(getBL(ndx), sbase));
 	}
 
 	@Override

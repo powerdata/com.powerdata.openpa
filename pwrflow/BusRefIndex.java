@@ -124,7 +124,6 @@ public class BusRefIndex
 		return i.get();
 	}
 	
-	
 	public static BusRefIndex CreateFromConnectivityBus(PAModel m) throws PAModelException
 	{
 		return new BusRefIndex(m, m.getBuses(), (l,b) -> b);

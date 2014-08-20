@@ -132,7 +132,7 @@ public class MismatchReport
 				i, b.getObjectID(), b.getDebugName(),
 				island.isEnergized() ? "true" : "false", island.getIndex(), 
 				b.getBusType(), PAMath.rad2deg(_va[i]), _vm[i], 
-				PAMath.pu2mw(_pmm[i]), PAMath.pu2mvar(_qmm[i]), mmm);
+				PAMath.pu2mva(_pmm[i], _model.getSBASE()), PAMath.pu2mva(_qmm[i], _model.getSBASE()), mmm);
 
 		for(int ttdev : branches)
 		{
@@ -160,7 +160,7 @@ public class MismatchReport
 			}
 			out.print(btmp);
 			out.format("\"%s\",\"%s\",%f,%f\n", ttd.getObjectID(),
-					ttd.getObjectName(), PAMath.pu2mw(pp), PAMath.pu2mvar(qq));
+					ttd.getObjectName(), PAMath.pu2mva(pp, _model.getSBASE()), PAMath.pu2mva(qq, _model.getSBASE()));
 
 		}
 		
@@ -181,29 +181,30 @@ public class MismatchReport
 		{
 			Gen god = _model.getGenerators().get(otdev);
 			od = god;
-			pval = !isener ? 0f : PAMath.mw2pu(god.getPS());
-			qval = (isener && btype == BusTypeCode.Load) ? PAMath.mvar2pu(god.getQS()) : 0f;
+			pval = !isener ? 0f : PAMath.mva2pu(god.getPS(), _model.getSBASE());
+			qval = (isener && btype == BusTypeCode.Load) ? PAMath.mva2pu(god.getQS(), _model.getSBASE()) : 0f;
 			float pb = god.getPB(), pt = god.getPT(), qb = god.getQB(), qt = god.getQT();
 			pmax = String.format("%f", pt);
 			pmin = String.format("%f", pb);
 			qmax = String.format("%f", qt);
 			qmin = String.format("%f", qb);
 			float pvmm = pval + pmm, qvmm = qval + qmm;
-			if ((pvmm+0.005f) < PAMath.mw2pu(pb))
+			float sbase = _model.getSBASE();
+			if ((pvmm+0.005f) < PAMath.mva2pu(pb, _model.getSBASE()))
 			{
-				atplim = String.format("%f", PAMath.pu2mw(pvmm) - pb);
+				atplim = String.format("%f", PAMath.pu2mva(pvmm, sbase) - pb);
 			}
-			else if ((pvmm-0.005f) > PAMath.mw2pu(pt))
+			else if ((pvmm-0.005f) > PAMath.mva2pu(pt, sbase))
 			{
-				atplim = String.format("%f", PAMath.pu2mw(pvmm) - pt);
+				atplim = String.format("%f", PAMath.pu2mva(pvmm, sbase) - pt);
 			}
-			if ((qvmm+0.005f) < PAMath.mw2pu(qb))
+			if ((qvmm+0.005f) < PAMath.mva2pu(qb, sbase))
 			{
-				atqlim = String.format("%f", PAMath.pu2mw(qvmm) - qb);
+				atqlim = String.format("%f", PAMath.pu2mva(qvmm, sbase) - qb);
 			}
-			else if ((qvmm-0.005f) > PAMath.mw2pu(qt))
+			else if ((qvmm-0.005f) > PAMath.mva2pu(qt, sbase))
 			{
-				atqlim = String.format("%f", PAMath.pu2mw(qvmm) - qt);
+				atqlim = String.format("%f", PAMath.pu2mva(qvmm, sbase) - qt);
 			}
 			
 		}
@@ -227,8 +228,9 @@ public class MismatchReport
 			qval = _svcq[otdev];
 		}
 
+		float sbase = _model.getSBASE();
 		out.format("\"%s\",\"%s\",%f,%f,%s,%s,%s,%s,%s,%s\n",
-				od.getObjectID(), od.getDebugName(), PAMath.pu2mw(pval), PAMath.pu2mvar(qval),
+				od.getObjectID(), od.getDebugName(), PAMath.pu2mva(pval, sbase), PAMath.pu2mva(qval, sbase),
 				pmin, pmax, qmin, qmax, atplim, atqlim);
 
 	}

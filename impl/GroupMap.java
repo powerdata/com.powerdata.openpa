@@ -9,6 +9,8 @@ public class GroupMap extends AbstractList<int[]>
 	protected int[] start, next, cnt;
 	protected int ngrp, nxtsz=0, lstcnt;
 
+	protected GroupMap(){}
+	
 	/**
 	 * Set up a group map
 	 * @param map Array containing the group of each item at its offset
@@ -50,6 +52,7 @@ public class GroupMap extends AbstractList<int[]>
 			++nxtsz;
 		}
 	}
+	
 	public GroupMap(int[] fmap, int[] tmap, int ngrp)
 	{
 		lstcnt = fmap.length;

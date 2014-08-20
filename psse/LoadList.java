@@ -87,9 +87,9 @@ public abstract class LoadList extends PsseBaseList<Load>
 	/** index of related OWNER record.  Defaults to same owner as bus I */
 	public int getOWNER(int ndx) throws PsseModelException {return getBus(ndx).getOWNER();}
 	
-	public float getPpu(int ndx) throws PsseModelException {return PAMath.mw2pu(getP(ndx));}
+	public float getPpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getP(ndx), _model.getSBASE());}
 	public void setPpu(int ndx, float p) throws PsseModelException {}
-	public float getQpu(int ndx) throws PsseModelException {return PAMath.mvar2pu(getQ(ndx));}
+	public float getQpu(int ndx) throws PsseModelException {return PAMath.mva2pu(getQ(ndx), _model.getSBASE());}
 	public void setQpu(int ndx, float q) throws PsseModelException {}
 	public float getPS(int ndx) throws PsseModelException {return getP(ndx);}
 	public void setPS(int ndx, float mw) throws PsseModelException {}
