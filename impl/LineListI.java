@@ -65,6 +65,11 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 		{
 			return ColumnMeta.LineX;
 		}
+		@Override
+		public ColumnMeta ratLT()
+		{
+			return ColumnMeta.LineRATLT;
+		}
 	};
 	FloatData _fb = new FloatData(ColumnMeta.LineBFROM), _tb = new FloatData(
 			ColumnMeta.LineBTO);

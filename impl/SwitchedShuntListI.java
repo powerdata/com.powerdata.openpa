@@ -1,9 +1,7 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.ListMetaType;
-import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SwitchedShunt;
 import com.powerdata.openpa.SwitchedShuntList;
 
@@ -41,12 +39,4 @@ public class SwitchedShuntListI extends AbstractPAList<SwitchedShunt> implements
 		return ListMetaType.SwitchedShunt;
 	}
 
-	@Override
-	public Bus getRegBus(int ndx) throws PAModelException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 }

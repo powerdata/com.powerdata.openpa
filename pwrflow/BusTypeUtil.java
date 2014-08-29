@@ -48,7 +48,7 @@ public class BusTypeUtil
 		
 		for(Island i : model.getIslands())
 		{
-			configureTypes(i, bri, ybbus);
+			if (i.isEnergized()) configureTypes(i, bri, ybbus);
 		}
 	}
 	
@@ -129,6 +129,16 @@ public class BusTypeUtil
 			_imap = new WeakReference<>(m);
 		}
 		return m.get(calcigrp(island, type.ordinal()));
+	}
+
+	public BusType[] getTypes()
+	{
+		BusType[] src = BusType.values();
+		int n = _type.length;
+		BusType[] rv = new BusType[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = src[_type[i]];
+		return rv;
 	}
 	
 }

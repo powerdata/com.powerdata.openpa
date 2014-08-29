@@ -12,25 +12,25 @@ public class SVC extends OneTermDev
 		_list = list;
 	}
 	
-	/** get minimum susceptance (MVAr @ unity voltage) */
+	/** get minimum MVAr */
 	public float getMinQ() throws PAModelException
 	{
 		return _list.getMinQ(_ndx);
 	}
 	
-	/** set minimum susceptance (MVAr @ unity voltage) */
+	/** set minimum MVAr */
 	public void setMinQ(float mvar) throws PAModelException
 	{
 		_list.setMinQ(_ndx, mvar);
 	}
 
-	/** get maximum susceptance (MVAr @ unity voltage) */
+	/** get maximum MVAr */
 	public float getMaxQ() throws PAModelException
 	{
 		return _list.getMaxQ(_ndx);
 	}
 
-	/** set maximum susceptance (MVAr @ unity voltage) */
+	/** set maximum MVAr */
 	public void setMaxQ(float mvar) throws PAModelException
 	{
 		_list.setMaxQ(_ndx, mvar);

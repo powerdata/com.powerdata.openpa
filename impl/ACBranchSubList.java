@@ -241,4 +241,29 @@ public abstract class ACBranchSubList<T extends ACBranch> extends TwoTermDevSubL
 			_src.setShift(_ndx[i], sdeg[i]);
 	}
 
+	@Override
+	public float getLTRating(int ndx) throws PAModelException
+	{
+		return _src.getLTRating(_ndx[ndx]);
+	}
+
+	@Override
+	public float[] getLTRating() throws PAModelException
+	{
+		return mapFloat(_src.getLTRating());
+	}
+
+	@Override
+	public void setLTRating(int ndx, float mva) throws PAModelException
+	{
+		_src.setLTRating(ndx, mva);
+	}
+
+	@Override
+	public void setLTRating(float[] mva) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setLTRating(_ndx[i], mva[i]);
+	}
+
 }

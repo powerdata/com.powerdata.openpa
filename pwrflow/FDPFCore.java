@@ -75,7 +75,7 @@ public class FDPFCore
 	
 	BusTypeUtil _btypes;
 	
-	float[] _vm, _va;
+	float[] _vm, _vmc, _va;
 	
 	/** track info for each branch type */
 	static class BranchRec
@@ -146,8 +146,8 @@ public class FDPFCore
 		
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
-		bPrimeHook(bp);
 		_bp = bp.factorize();
+		bPrimeHook(bp);
 		_mbpp = new BDblPrime(mb);
 	}
 
@@ -254,9 +254,9 @@ public class FDPFCore
 		{
 			try
 			{
-			return String.format("Island %d %d iters, pconv=%s qconv=%s worstp=%f at %s, worstq=%f at %s",
+			return String.format("Island %d %d iters, pconv=%s qconv=%s worstp=%f MW at %s, worstq=%f MVAr at %s",
 				_island, _iter, String.valueOf(_pconv), String.valueOf(_qconv), 
-				_wpmm, _buses.get(_worstp).getName(), _wqmm, _buses.get(_worstq).getName());
+				_wpmm*100f, _buses.get(_worstp).getName(), _wqmm*100f, _buses.get(_worstq).getName());
 			}
 			catch(PAModelException e)
 			{
@@ -277,11 +277,11 @@ public class FDPFCore
 			this.mm = mm;
 			this.state = state;
 		}
-		void apply()
+		void apply(float[] vm)
 		{
 			FactorizedBMatrix mtrx = bm.get();
 			int[] belim = mtrx.getElimBus();
-			for(int b : belim) mm[b] /= _vm[b];
+			for(int b : belim) mm[b] /= vm[b];
 			float[] t = mtrx.solve(mm);
 			for(int b : belim) state[b] -= t[b];
 		}
@@ -301,7 +301,7 @@ public class FDPFCore
 		HashSet<CorrectionsProc> corr = new HashSet<>();
 		corr.add(new CorrectionsProc(() -> getBp(), pmm, _va)); 
 		corr.add(new CorrectionsProc(() -> getBpp(), qmm, _vm));
-		Runnable rcorr = () -> corr.parallelStream().forEach(j -> j.apply());
+		Runnable rcorr = () -> corr.stream().forEach(j -> j.apply(_vmc));
 
 		/* runnable to calculate system flows based on current state */
 		Runnable calc = () -> _cset.parallelStream().forEach(
@@ -322,7 +322,6 @@ public class FDPFCore
 
 			/* apply mismatches from calculated and boundary values */
 			applyMismatches(pmm, qmm, _va, _vm);
-			mismatchHook(pmm, qmm);
 			
 			/* calculate convergence */
 			_pool.execute(rconv);
@@ -334,6 +333,7 @@ public class FDPFCore
 			// update voltage and angles
 			if (nconv)
 			{
+				_vmc = _vm.clone();
 				_pool.execute(rcorr);
 				_pool.awaitQuiescence(1, TimeUnit.DAYS);
 			}			
@@ -353,7 +353,8 @@ public class FDPFCore
 			if (rkv[i])
 			{
 				int gb = _genbus[i];
-				_vm[gb] = vs[i] / _buses.get(gb).getVoltageLevel().getBaseKV();
+				if (_buses.getIsland(gb).isEnergized())
+					_vm[gb] = vs[i] / _buses.get(gb).getVoltageLevel().getBaseKV();
 			}
 			 
 		}
@@ -371,7 +372,7 @@ public class FDPFCore
 	}
 
 	/** call back when the mismatches are updated */
-	protected void mismatchHook(float[] pmm, float[] qmm)
+	protected void mismatchHook(float[] vm, float[] va, BusType[] type, float[] pmm, float[] qmm)
 	{
 		// Default is no action
 	}
@@ -393,6 +394,8 @@ public class FDPFCore
 			c.applyMismatches(pmm, qmm);
 		applyLoads(pmm, qmm, vm);
 		applyGens(pmm, qmm);
+		mismatchHook(vm, va, _btypes.getTypes(), pmm, qmm);
+
 	}
 	
 	void applyLoads(float[] pmm, float[] qmm, float[] vm) 
@@ -708,16 +711,29 @@ public class FDPFCore
 		final File outdir = poutdir;
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
+		bldr.setLeastX(0.0001f);
 		PAModel m = bldr.load();
-		
-		ArrayList<float[][]> mmlist = new ArrayList<>();
-		
+		class mminfo
+		{
+			float[] vm, va, pmm, qmm;
+			BusType[] type;
+			mminfo(float[] vm, float[] va, float[] pmm, float[] qmm, BusType[] type)
+			{
+				this.vm = vm;
+				this.va = va;
+				this.pmm = pmm;
+				this.qmm = qmm;
+				this.type = type;
+			}
+		}
+		ArrayList<mminfo> mmlist = new ArrayList<>();
+		System.err.println("Load PF");
 		FDPFCore pf = new FDPFCore(m)
 		{
 			@Override
-			protected void mismatchHook(float[] pmm, float[] qmm)
+			protected void mismatchHook(float[] vm, float[] va, BusType[] type, float[] pmm, float[] qmm)
 			{
-				mmlist.add(new float[][]{pmm.clone(), qmm.clone()});
+				mmlist.add(new mminfo(vm.clone(), va.clone(), pmm.clone(), qmm.clone(), type));
 			}
 
 			@Override
@@ -729,6 +745,11 @@ public class FDPFCore
 						new FileWriter(new File(outdir, "bp.csv"))));
 					dumpMatrix(bp, bpdbg);
 					bpdbg.close();
+
+					PrintWriter fbpdbg = new PrintWriter(new BufferedWriter(
+						new FileWriter(new File(outdir, "fbp.csv"))));
+					dumpFactMatrix(_bp, fbpdbg);
+					fbpdbg.close();
 				} catch (IOException ioe) {ioe.printStackTrace();}
 			}
 
@@ -749,28 +770,53 @@ public class FDPFCore
 						new FileWriter(new File(outdir, "bpp.csv"))));
 					dumpMatrix(bpp, bpdbg);
 					bpdbg.close();
+					
+					PrintWriter fbpdbg = new PrintWriter(new BufferedWriter(
+						new FileWriter(new File(outdir, "fbpp.csv"))));
+					dumpFactMatrix(_bpp, fbpdbg);
+					fbpdbg.close();
+					
 				} catch(IOException ioe) {ioe.printStackTrace();}
+			}
+
+			private void dumpFactMatrix(FactorizedBMatrix bp, PrintWriter pw)
+			{
+				try
+				{
+					bp.dump(_buses.getName(), pw);
+				}
+				catch (PAModelException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		};
+//		FDPFCore pf = new FDPFCore(m);
+		System.err.println("Run PF");
 		IslandConv[] conv = pf.runPF();
+		System.err.println("Done");
 		pf.updateResults();
 		new ListDumper().dump(m, outdir);
 		
 		PrintWriter mmdbg = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outdir, "mismatch.csv"))));
-		mmdbg.print("Bus");
+		mmdbg.print("Bus,Island");
 		for(int i=0; i < mmlist.size(); ++i)
-			mmdbg.format(",'P %d','Q %d'", i, i);
+			mmdbg.format(",'T %d','VA %d','VM %d','P %d','Q %d'", i, i, i, i, i);
 		mmdbg.println();
 		
 		for(int b=0; b < pf._buses.size(); ++b)
 		{
-			mmdbg.format("'%s'", pf._buses.getName(b));
+			mmdbg.format("'%s',%d", pf._buses.getName(b), pf._buses.getIsland(b).getIndex());
 			for(int i=0; i < mmlist.size(); ++i)
 			{
-				float[][] mm = mmlist.get(i);
-				mmdbg.format(",%f,%f", mm[0][b], mm[1][b]);
+				mminfo mm = mmlist.get(i);
+				mmdbg.format(",%s,%f,%f,%f,%f", mm.type[b].toString(),
+					PAMath.rad2deg(mm.va[b]), mm.vm[b],
+					PAMath.pu2mva(mm.pmm[b], 100f),
+					PAMath.pu2mva(mm.qmm[b], 100f));
 			}
 			mmdbg.println();
 		}

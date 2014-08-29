@@ -484,5 +484,29 @@ public class ACBranchList extends AbstractList<ACBranch> implements ACBranchList
 	{
 		return _src.size();
 	}
+
+	@Override
+	public float getLTRating(int ndx) throws PAModelException
+	{
+		return _src.getLTRating(ndx);
+	}
+
+	@Override
+	public float[] getLTRating() throws PAModelException
+	{
+		return _src.getLTRating();
+	}
+
+	@Override
+	public void setLTRating(int ndx, float mva) throws PAModelException
+	{
+		_src.setLTRating(ndx, mva);
+	}
+
+	@Override
+	public void setLTRating(float[] mva) throws PAModelException
+	{
+		_src.setLTRating(mva);
+	}
 	
 }

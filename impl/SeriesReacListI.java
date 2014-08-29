@@ -32,6 +32,8 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 		public ColumnMeta r() {return ColumnMeta.SercapR;}
 		@Override
 		public ColumnMeta x() {return ColumnMeta.SercapX;}
+		@Override
+		public ColumnMeta ratLT() {return ColumnMeta.SercapRATLT;}
 	};
 
 

@@ -1,5 +1,6 @@
 package com.powerdata.openpa.tools;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 /**
@@ -79,5 +80,17 @@ public class FactorizedBMatrix
 	public int[] getElimBus()
 	{
 		return _elimbusord;
+	}
+	
+	public void dump(String[] busname, PrintWriter pw)
+	{
+		pw.println("ElimBus,Bself1,ElimFarBus,Bself2,Btrans/Bself");
+		int n = _p.length;
+		for(int i=0; i < n; ++i)
+		{
+			int p = _p[i], q = _q[i];
+			pw.format("'%s',%f,'%s',%f,%f\n",
+				busname[p], _bd[p], busname[q], _bd[q], _adjbo[i]);
+		}
 	}
 }

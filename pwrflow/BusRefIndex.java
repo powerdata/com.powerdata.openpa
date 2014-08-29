@@ -4,7 +4,6 @@ import java.util.HashMap;
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.BusRegulator;
 import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.OneTermDevListIfc;
 import com.powerdata.openpa.PAModel;
@@ -16,7 +15,7 @@ import com.powerdata.openpa.TwoTermDevListIfc;
 public class BusRefIndex
 {
 	@FunctionalInterface
-	private interface BusFunction<T>
+	public interface BusFunction<T>
 	{
 		Bus apply(T list, int index) throws PAModelException;
 	}
@@ -76,7 +75,7 @@ public class BusRefIndex
 	HashMap<OneTermDevListIfc<? extends OneTermDev>,
 		ListIndex<OneTermDevListIfc<? extends OneTermDev>>> _map1t = new HashMap<>();
 	HashMap<TwoTermDevListIfc<? extends TwoTermDev>, ListIndex2T> _map2t = new HashMap<>();
-	HashMap<BusRegulator, ListIndex<?>> _mapreg;
+//	HashMap<BaseList<? extends BaseObject>, ListIndex<BaseList<? extends BaseObject>>> _mapreg = new HashMap<>();
 	BusGroupResolver _idx;
 	
 	BusList _buses;
@@ -111,17 +110,11 @@ public class BusRefIndex
 		return i.getTwoTerm();
 	}
 	
-	public <T extends BaseList<? extends BaseObject> & BusRegulator> 
-		int[] getRegBus(T rlist) throws PAModelException
+	public <T extends BaseList<? extends BaseObject>> 
+		int[] mapBusFcn(T rlist, BusFunction<T> bfc) throws PAModelException
 	{
-		@SuppressWarnings("unchecked")
-		ListIndex<T> i = (ListIndex<T>) _mapreg.get(rlist);
-		if (i == null) 
-		{
-			i = new ListIndex<T>(rlist, BusRegulator::getRegBus);
-			_mapreg.put(rlist, i);
-		}
-		return i.get();
+		ListIndex<T> lit = new ListIndex<T>(rlist, bfc);
+		return lit.get();
 	}
 	
 	public static BusRefIndex CreateFromConnectivityBus(PAModel m) throws PAModelException

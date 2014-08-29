@@ -171,6 +171,7 @@ public enum ColumnMeta
 	/** Series Cap to-side MVAr */ 						SercapQTO, 
 	/** Series Cap resistance */ 						SercapR, 
 	/** Series Cap reactance*/ 							SercapX, 
+	/** Series Cap MVA long-term Rating */				SercapRATLT,
 
 	/*
 	 * Series Reactor 
@@ -187,6 +188,7 @@ public enum ColumnMeta
 	/** Series Reac to-side MVAr */ 					SerreacQTO, 
 	/** Series Reac resistance */ 						SerreacR, 
 	/** Series Reac reactance*/ 						SerreacX, 
+	/** Series Reac MVA long-term Rating */				SerreacRATLT,
 
 	/*
 	 * Phase Shifter 
@@ -209,6 +211,7 @@ public enum ColumnMeta
 	/** Phase Shifter from-side off-nom turns ratio  */ PhashTAPFROM,
 	/** Phase Shifter from-side off-nom turns ratio  */ PhashTAPTO,
 	/** Phase Shifter control mode */					PhashCTRLMODE,
+	/** Phase Shifter MVA long-term Rating */			PhashRATLT,
 	
 	/*
 	 * Transformer 
@@ -230,6 +233,7 @@ public enum ColumnMeta
 	/** Transformer angle  */ 							TfmrANG,
 	/** Transformer from-side off-nom turns ratio  */ 	TfmrTAPFROM,
 	/** Transformer from-side off-nom turns ratio  */	TfmrTAPTO,
+	/** Transformer MVA long-term Rating */				TfmrRATLT,
 	/*
 	 * Switch 
 	 */

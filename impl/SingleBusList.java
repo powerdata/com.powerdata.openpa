@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import java.util.regex.Pattern;
-
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
@@ -48,19 +47,18 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 		if(_name.rw == null) createNames();
 		return super.getName(ndx);
 	}
-	
-	
 
 	@Override
 	public String getID(int ndx) throws PAModelException
 	{
-		if(_id.rw == null) createIDs();
+		if(_id.rw == null) createNames();
 		return super.getID(ndx);
 	}
 
 	protected void createNames() throws PAModelException
 	{
 		String[] nm = new String[_size];
+		String[] id = new String[_size];
 		for(int i=0; i < _size; ++i)
 		{
 			String s = getStation(i).getName();
@@ -77,6 +75,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 			}
 			StringBuilder ns = new StringBuilder();
 			String bn = sel.getName();
+			id[i] = sel.getID();
 			if (!bn.contains(s))
 			{
 				ns.append(s);
@@ -92,13 +91,6 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 			{
 				return nm;
 			}};
-	}
-	
-	protected void createIDs() throws PAModelException
-	{
-		String[] id = new String[_size];
-		for(int i=0; i < _size; ++i)
-			id[i] = String.valueOf(getKey(i));
 		_id = new StringData(ColumnMeta.BusID)
 		{
 			@Override
@@ -108,7 +100,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 			}
 		};
 	}
-
+	
 	static final Pattern[] _Scores = new Pattern[] 
 	{
 		null,

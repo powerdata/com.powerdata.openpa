@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.impl.SVCListI;
 
-public interface SVCList extends OneTermDevListIfc<SVC>, BusRegulator
+public interface SVCList extends OneTermDevListIfc<SVC>
 {
 
 	static final SVCList Empty = new SVCListI();
@@ -41,6 +41,8 @@ public interface SVCList extends OneTermDevListIfc<SVC>, BusRegulator
 	void setVS(float[] kv) throws PAModelException;
 
 	void setRegBus(int ndx, Bus b) throws PAModelException;
+	
+	Bus getRegBus(int ndx) throws PAModelException;
 	
 	Bus[] getRegBus() throws PAModelException;
 	

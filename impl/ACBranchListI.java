@@ -13,7 +13,7 @@ public abstract class ACBranchListI<T extends ACBranch> extends
 	{
 		super();
 	}
-	FloatData _r, _x;
+	FloatData _r, _x, _ratlt;
 	
 	protected ACBranchListI(PAModelI model, int[] keys, ACBranchEnum le) throws PAModelException
 	{
@@ -29,6 +29,7 @@ public abstract class ACBranchListI<T extends ACBranch> extends
 	{
 		_r = new FloatData(le.r());
 		_x = new FloatData(le.x());
+		_ratlt = new FloatData(le.ratLT());
 	}
 	@Override
 	public float getR(int ndx) throws PAModelException
@@ -75,6 +76,7 @@ public abstract class ACBranchListI<T extends ACBranch> extends
 	{
 		ColumnMeta r();
 		ColumnMeta x();
+		ColumnMeta  ratLT();
 	}
 
 	@Override
@@ -224,5 +226,25 @@ public abstract class ACBranchListI<T extends ACBranch> extends
 	public void setShift(float[] sdeg) throws PAModelException
 	{
 		// do nothing here
+	}
+	@Override
+	public float getLTRating(int ndx) throws PAModelException
+	{
+		return _ratlt.get(ndx);
+	}
+	@Override
+	public float[] getLTRating() throws PAModelException
+	{
+		return _ratlt.get();
+	}
+	@Override
+	public void setLTRating(int ndx, float mva) throws PAModelException
+	{
+		_ratlt.set(ndx, mva);
+	}
+	@Override
+	public void setLTRating(float[] mva) throws PAModelException
+	{
+		_ratlt.set(mva);
 	}
 }

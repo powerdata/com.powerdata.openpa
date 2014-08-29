@@ -74,4 +74,12 @@ public interface ACBranchListIfc<T extends ACBranch> extends TwoTermDevListIfc<T
 	float[] getShift() throws PAModelException;
 	
 	void setShift(float[] sdeg) throws PAModelException;
+
+	float getLTRating(int ndx) throws PAModelException;
+	
+	float[] getLTRating() throws PAModelException;
+
+	void setLTRating(int ndx, float mva) throws PAModelException;
+	
+	void setLTRating(float[] mva) throws PAModelException;
 }

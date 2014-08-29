@@ -107,4 +107,17 @@ public class ACBranch extends TwoTermDev
 	{
 		_list.setShift(_ndx, sdeg);
 	}
+	
+	/** get long-term branch rating MVA */
+	public float getLTRating() throws PAModelException
+	{
+		return _list.getLTRating(_ndx);
+	}
+	
+	/** set long-term branch rating MVA */
+	public void setLTRating(float mva) throws PAModelException
+	{
+		_list.setLTRating(_ndx, mva);
+	}
+	
 }

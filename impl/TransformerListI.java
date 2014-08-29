@@ -42,6 +42,8 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 		public ColumnMeta ftap() {return ColumnMeta.TfmrTAPFROM;}
 		@Override
 		public ColumnMeta ttap() {return ColumnMeta.TfmrTAPTO;}
+		@Override
+		public ColumnMeta ratLT() {return ColumnMeta.TfmrRATLT;}
 	};
 
 	public TransformerListI() {super();}

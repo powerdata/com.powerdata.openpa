@@ -54,6 +54,8 @@ public abstract class SpSymMtrxFactorizer
 			int os = _elimbrorder.length;
 			_elimbrorder = Arrays.copyOf(_elimbrorder, newsize);
 			Arrays.fill(_elimbrorder, os, newsize, -1);
+			Arrays.fill(_ep, os, newsize, -1);
+			Arrays.fill(_eq, os, newsize, -1);
 		}
 		return newsize;
 	}
@@ -69,8 +71,15 @@ public abstract class SpSymMtrxFactorizer
 		int cap = nmbr*3;
 		matrix.ensureCapacity(0, cap);
 		ensureCapacity(cap);
+		for (int[] s : save)
+		{
+			for (int b : s)
+			{
+				for(int br : matrix.findConnections(b)[1])
+					matrix.eliminateBranch(br, true);
+			}
+		}
 		int[] ccnt = matrix.getConnectionCounts();
-		for(int[] s : save) for (int b : s) ccnt[b] = 0;
 		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
 		int elimbus = bcq.poll();
 		int[] elimndorder = new int[matrix.getMaxBusNdx()];
@@ -132,6 +141,24 @@ public abstract class SpSymMtrxFactorizer
 			elimStop();
 			elimndorder[_iord++] = elimbus;
 			elimbus = bcq.poll();
+			if (elimbus == -1)
+			{
+				/*
+				 * Handle buses at the end that get eliminated radially - make
+				 * sure it gets added to elimndorder
+				 */
+				for(int i=0; i < nbus; ++i)
+				{
+					int b = cbus[i];
+					if (ccnt[b] == 0)
+					{
+						int[] empty = new int[0];
+						elimStart(elimbus, empty, empty);
+						elimStop();
+						elimndorder[_iord++] = b;
+					}
+				}
+			}
 		}
 		_elimndorder = elimndorder;
 		finish();

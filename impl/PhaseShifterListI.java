@@ -43,6 +43,8 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 		public ColumnMeta ftap() {return ColumnMeta.PhashTAPFROM;}
 		@Override
 		public ColumnMeta ttap() {return ColumnMeta.PhashTAPTO;}
+		@Override
+		public ColumnMeta ratLT() {return ColumnMeta.PhashRATLT;}
 	};
 
 	EnumData<ControlMode> _cmode = new EnumData<ControlMode>(ColumnMeta.PhashCTRLMODE);

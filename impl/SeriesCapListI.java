@@ -32,6 +32,8 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 		public ColumnMeta r() {return ColumnMeta.SercapR;}
 		@Override
 		public ColumnMeta x() {return ColumnMeta.SercapX;}
+		@Override
+		public ColumnMeta ratLT() {return ColumnMeta.SercapRATLT;}
 	};
 
 	public SeriesCapListI(PAModelI model, int[] keys) throws PAModelException
