@@ -16,6 +16,11 @@ OpenPA Models can be loaded from multiple sources.  The primary source we use is
 
 [Download PowerSimulator Case Format Specification](http://powerdata.github.io/com.powerdata.openpa/PowerSimulatorCaseFormats.pdf)
 
+Two sample models are available:
+
+[PALCO single-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmdl/palco.zip)
+[CASCADIA single-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmdl/cascadia.zip)
+
 Converters from other formats such as PSS/e and PSLF to the PowerSimulator formats will be available in the future.
 
 PAModel Usage
