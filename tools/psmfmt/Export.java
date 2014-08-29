@@ -31,12 +31,11 @@ abstract class Export
 
 	void printData(PrintWriter pw)
 	{
-		printData(pw, getFmtInfo());
+		printData(pw, getFmtInfo(), getCount());
 	}
 	
-	protected void printData(PrintWriter pw, FmtInfo[] fi)
+	protected void printData(PrintWriter pw, FmtInfo[] fi, int n)
 	{
-		int n  = getCount();
 		for(int i=0; i < n; ++i)
 		{
 			boolean first = true;

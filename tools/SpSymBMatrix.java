@@ -42,7 +42,8 @@ public class SpSymBMatrix
 		@Override
 		protected void mutual(int imut, int adjbr, int targbr)
 		{
-			bo[targbr] += temp[imut] * bo[adjbr];
+			if (targbr != -1) 
+				bo[targbr] += temp[imut] * bo[adjbr];
 		}
 
 		@Override

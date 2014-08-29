@@ -433,7 +433,7 @@ public class FDPFCore
 	
 	protected FactorizedBMatrix getBpp()
 	{
-		if (_mbpp.processSVCs())  //indicates minor refactor
+		if (_mbpp.processSVCs() || _bpp == null)  //indicates minor refactor
 		{
 			_bpp = _mbpp.factorize();
 			bDblPrimeHook(_mbpp);

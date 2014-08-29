@@ -9,6 +9,7 @@ import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TransformerList;
 import com.powerdata.openpa.pwrflow.BusRefIndex;
+import com.powerdata.openpa.tools.psmfmt.ExportOpenPA.StringWrap;
 
 public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 {
@@ -29,7 +30,7 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 		assign(RatioTapChanger.ID, i -> String.format("\"%s_%ctap\"", _list.getID(i), side));
 		assign(RatioTapChanger.TapNode, new StringWrap(i -> bri.getBuses().get(tnode[i]).getID()));
 		assign(RatioTapChanger.TransformerWinding,
-			i -> String.format("\"%s_%cwnd\"", _list.getID(i), side));
+			new StringWrap(i -> _list.getID(i)+"_wnd"));
 	}
 
 
@@ -39,7 +40,7 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 		PrintWriter pw = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outputdir, getPsmFmtName()+".csv"))));
 		printHeader(pw);
-		printData(pw, _lfi);
+		printData(pw, _lfi, getCount());
 		printData(pw);
 		pw.close();
 

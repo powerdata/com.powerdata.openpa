@@ -71,15 +71,16 @@ public abstract class SpSymMtrxFactorizer
 		int cap = nmbr*3;
 		matrix.ensureCapacity(0, cap);
 		ensureCapacity(cap);
+		int[] ccnt = matrix.getConnectionCounts();
 		for (int[] s : save)
 		{
 			for (int b : s)
 			{
-				for(int br : matrix.findConnections(b)[1])
-					matrix.eliminateBranch(br, true);
+//				for(int br : matrix.findConnections(b)[1])
+//					matrix.eliminateBranch(br, true);
+				ccnt[b] = 0;
 			}
 		}
-		int[] ccnt = matrix.getConnectionCounts();
 		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
 		int elimbus = bcq.poll();
 		int[] elimndorder = new int[matrix.getMaxBusNdx()];
@@ -112,13 +113,17 @@ public abstract class SpSymMtrxFactorizer
 				for (int j = i + 1; j < nbus; ++j)
 				{
 					int busj = cbus[j];
-					int br = matrix.findBranch(busi, busj);
-					if (br == -1)
+					int br = -1;
+					if (ccnt[busi] > 0 && ccnt[busj] > 0)
 					{
-						br = matrix.addBranch(busi, busj);
-						ensureCapacity(++nmbr);
-						++incc[i];
-						++incc[j];
+						br = matrix.findBranch(busi, busj);
+						if (br == -1)
+						{
+							br = matrix.addBranch(busi, busj);
+							ensureCapacity(++nmbr);
+							++incc[i];
+							++incc[j];
+						}
 					}
 					mutual(i, cbr[j], br);
 				}
