@@ -60,6 +60,7 @@ public class PsmFmtExport
 		new CaseRatioTapChangerOPA(_model).export(odir);
 		new TransformerOPA(_model).export(odir);
 		new TransformerWindingOPA(_model, _bri).export(odir);
+		new CaseSwitchOPA(_model).export(odir);
 	}
 	
 	void exportMeta(File odir) throws IOException
