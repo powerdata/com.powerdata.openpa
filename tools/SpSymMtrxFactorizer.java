@@ -71,17 +71,18 @@ public abstract class SpSymMtrxFactorizer
 		int cap = nmbr*3;
 		matrix.ensureCapacity(0, cap);
 		ensureCapacity(cap);
-		int[] ccnt = matrix.getConnectionCounts();
+//		int[] ccnt = matrix.getConnectionCounts();
 		for (int[] s : save)
 		{
 			for (int b : s)
 			{
-//				for(int br : matrix.findConnections(b)[1])
-//					matrix.eliminateBranch(br, true);
-				ccnt[b] = 0;
+				for(int br : matrix.findConnections(b)[1])
+					matrix.eliminateBranch(br, true);
+//				ccnt[b] = 0;
 			}
 		}
-		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
+		int[] ccnt = matrix.getConnectionCounts();
+	BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
 		int elimbus = bcq.poll();
 		int[] elimndorder = new int[matrix.getMaxBusNdx()];
 		Arrays.fill(elimndorder, -1);

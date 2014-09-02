@@ -169,7 +169,7 @@ public class SpSymBMatrix
 
 	public void dump(String[] name, PrintWriter pw)
 	{
-		pw.println("Bus,Bself,Far,Btran");
+		pw.println("BusIndex,BusName,Bself,FarIndex,FarName,Btran");
 		int nbus = _bdiag.length;
 		for(int i=0; i < nbus; ++i)
 		{
@@ -180,13 +180,13 @@ public class SpSymBMatrix
 				int n = nd.length;
 				for(int j=0; j < n; ++j)
 				{
-					pw.format("'%s',%f,'%s',%f\n",
-						name[i], _bdiag[i], name[nd[j]], _boffdiag[br[j]]);
+					pw.format("%d,'%s',%f,%d,'%s',%f\n",
+						i, name[i], _bdiag[i], nd[j], name[nd[j]], _boffdiag[br[j]]);
 				}
 			}
 			else
 			{
-				pw.format("'%s',%f\n",name[i], _bdiag[i]);
+				pw.format("%d,'%s',%f\n",i, name[i], _bdiag[i]);
 			}
 		}
 	}

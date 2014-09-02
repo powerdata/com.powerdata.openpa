@@ -5,13 +5,24 @@ import java.util.Arrays;
 import java.util.Set;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchList;
+import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.GenList;
+import com.powerdata.openpa.GroupList;
 import com.powerdata.openpa.Island;
+import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.PhaseShifter;
+import com.powerdata.openpa.SeriesCap;
+import com.powerdata.openpa.SeriesReac;
+import com.powerdata.openpa.Switch;
+import com.powerdata.openpa.Switch.State;
+import com.powerdata.openpa.Transformer;
+import com.powerdata.openpa.TwoTermDCLine;
 import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.LinkNet;
 
 
 public class BusTypeUtil
@@ -46,9 +57,23 @@ public class BusTypeUtil
 		
 		float[] ybbus = new float[nbus];
 		
+		GroupList glist = new GroupList(model, new BusGrpMapBldr(model)
+		{
+			@Override
+			protected boolean incSW(Switch d) throws PAModelException
+			{
+				return !d.isOutOfSvc() && d.getState() == State.Closed;
+			}}
+			.addPhaseShifters()
+			.addSeriesCap()
+			.addSeriesReac()
+			.addSwitches()
+			.addTransformers()
+			.addTwoTermDCLines().getMap());
+		
 		for(Island i : model.getIslands())
 		{
-			if (i.isEnergized()) configureTypes(i, bri, ybbus);
+			if (i.isEnergized()) configureTypes(i, bri, ybbus, glist);
 		}
 	}
 	
@@ -57,7 +82,7 @@ public class BusTypeUtil
 		return t + NGRP * i;
 	}
 	
-	void configureTypes(Island island, BusRefIndex bri, float[] ybbus) throws PAModelException
+	void configureTypes(Island island, BusRefIndex bri, float[] ybbus, GroupList net) throws PAModelException
 	{
 		float maxy = 0f;
 		int maxb = -1;
@@ -75,7 +100,7 @@ public class BusTypeUtil
 				float yb = ybbus[bx];
 				if (yb == 0f)
 				{
-					yb = computeYB(buses.get(bx).getACBranches());
+					yb = computeYB(buses.get(bx).getLines());
 					ybbus[bx] = yb;
 				}
 				if (maxy < yb)
@@ -96,15 +121,12 @@ public class BusTypeUtil
 	}
 
 
-	float computeYB(Set<ACBranchList> acBranches) throws PAModelException
+	float computeYB(LineList lines) throws PAModelException
 	{
 		Complex ysum = new Complex(0,0);
-		for(ACBranchList list : acBranches)
+		for(ACBranch b : lines)
 		{
-			for(ACBranch b : list)
-			{
-				ysum = ysum.add(new Complex(b.getR(), b.getX()).inv());
-			}
+			ysum = ysum.add(new Complex(b.getR(), b.getX()).inv());
 		}
 		return ysum.abs();
 	}

@@ -207,7 +207,7 @@ public class FDPFCore
 		int _iter = 0, _island;
 		int _worstp, _worstq;
 		float _wpmm=0f, _wqmm=0f;
-		boolean _pconv=false, _qconv=false;
+		boolean _pconv=false, _qconv=false, _fail=false;
 		
 		public IslandConv(int island, int[] pq, int[] pv)
 		{
@@ -225,7 +225,13 @@ public class FDPFCore
 			{
 				for(int p : pqpv)
 				{
-					float pm = Math.abs(pmm[p]);
+					float pm = pmm[p];
+					if (!Float.isFinite(pm))
+					{
+						_fail = true;
+						return;
+					}
+					pm = Math.abs(pm);
 					if (_wpmm < pm)
 					{
 						_worstp = p;
@@ -236,7 +242,13 @@ public class FDPFCore
 			
 			for(int pq : _pq)
 			{
-				float qm = Math.abs(qmm[pq]);
+				float qm = qmm[pq];
+				if (!Float.isFinite(qm))
+				{
+					_fail = true;
+					return;
+				}
+				qm = Math.abs(qm);
 				if (_wqmm < qm)
 				{
 					_worstq = pq;
@@ -248,15 +260,20 @@ public class FDPFCore
 		}
 		public boolean pConv() {return _pconv;}
 		public boolean qConv() {return _qconv;}
+		public boolean fail() {return _fail;}
 
 		@Override
 		public String toString()
 		{
 			try
 			{
-			return String.format("Island %d %d iters, pconv=%s qconv=%s worstp=%f MW at %s, worstq=%f MVAr at %s",
-				_island, _iter, String.valueOf(_pconv), String.valueOf(_qconv), 
-				_wpmm*100f, _buses.get(_worstp).getName(), _wqmm*100f, _buses.get(_worstq).getName());
+				return String.format(
+					"%sIsland %d %d iters, pconv=%s qconv=%s worstp=%f MW at %s, worstq=%f MVAr at %s",
+					_fail?"[FAIL] ":"",
+					_island, _iter, String.valueOf(_pconv), 
+					String.valueOf(_qconv), _wpmm * 100f,
+					_buses.get(_worstp).getName(), _wqmm * 100f, 
+					_buses.get(_worstq).getName());
 			}
 			catch(PAModelException e)
 			{
@@ -294,7 +311,7 @@ public class FDPFCore
 		int nhi = _eindx.length, nbus = _va.length;
 		IslandConv[] convstat = new IslandConv[nhi];
 		setupConvInfo(convstat);
-		boolean nconv = true;
+		boolean nconv = true, nfail = true;
 		float[] pmm = new float[nbus], qmm = new float[nbus];
 		
 		/* set up runnable to process voltage and angle corrections */
@@ -311,7 +328,7 @@ public class FDPFCore
 				.parallel()
 				.forEach(j -> j.test(pmm, qmm));
 		
-		for(int i=0; nconv && i < _niter; ++i)
+		for(int i=0; nconv && nfail && i < _niter; ++i)
 		{
 			/* Calculate flows */
 			_pool.execute(calc);
@@ -328,10 +345,13 @@ public class FDPFCore
 			_pool.awaitQuiescence(1,  TimeUnit.DAYS);
 			nconv = true;
 			for(IslandConv ic : convstat)
+			{
+				nfail &= !ic.fail();
 				nconv &= !(ic.pConv() && ic.qConv());
+			}
 			
 			// update voltage and angles
-			if (nconv)
+			if (nconv && nfail)
 			{
 				_vmc = _vm.clone();
 				_pool.execute(rcorr);

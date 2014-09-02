@@ -55,6 +55,10 @@ public class FactorizedBMatrix
 		float[] dx = new float[ds.length];
 		for(int bus : _elimbusord)
 		{
+			if (bus == 22)
+			{
+				int xxx = 5;
+			}
 			dx[bus] = ds[bus] / _bd[bus];
 		}
 		for (int i = nbr - 1; i >= 0; --i)
@@ -84,13 +88,13 @@ public class FactorizedBMatrix
 	
 	public void dump(String[] busname, PrintWriter pw)
 	{
-		pw.println("ElimBus,Bself1,ElimFarBus,Bself2,Btrans/Bself");
+		pw.println("ElimBus,EBNdx,Bself1,ElimFarBus,FBNdx,Bself2,Btrans/Bself");
 		int n = _p.length;
 		for(int i=0; i < n; ++i)
 		{
 			int p = _p[i], q = _q[i];
-			pw.format("'%s',%f,'%s',%f,%f\n",
-				busname[p], _bd[p], busname[q], _bd[q], _adjbo[i]);
+			pw.format("'%s',%d,%f,'%s',%d,%f,%f\n",
+				busname[p], p, _bd[p], busname[q],q, _bd[q], _adjbo[i]);
 		}
 	}
 }
