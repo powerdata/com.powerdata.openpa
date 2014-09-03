@@ -71,18 +71,20 @@ public abstract class SpSymMtrxFactorizer
 		int cap = nmbr*3;
 		matrix.ensureCapacity(0, cap);
 		ensureCapacity(cap);
-//		int[] ccnt = matrix.getConnectionCounts();
+		int[] ccnt = matrix.getConnectionCounts();
 		for (int[] s : save)
 		{
 			for (int b : s)
 			{
-				for(int br : matrix.findConnections(b)[1])
-					matrix.eliminateBranch(br, true);
-//				ccnt[b] = 0;
+//				for(int br : matrix.findConnections(b)[1])
+//					matrix.eliminateBranch(br, true);
+				ccnt[b] = 0;
 			}
 		}
-		int[] ccnt = matrix.getConnectionCounts();
-	BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
+//		int[] ccnt = matrix.getConnectionCounts();
+		int[] last = new int[(matrix.getMaxBusNdx()+1)/2];
+		int nlast = 0;
+		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
 		int elimbus = bcq.poll();
 		int[] elimndorder = new int[matrix.getMaxBusNdx()];
 		Arrays.fill(elimndorder, -1);
@@ -135,7 +137,7 @@ public abstract class SpSymMtrxFactorizer
 				int n = cbus[i], c = incc[i];
 				while (c < 0)
 				{
-					bcq.dec(n);
+					if (bcq.dec(n)) last[nlast++] = n;
 					++c;
 				}
 				while (c > 0)
@@ -147,24 +149,31 @@ public abstract class SpSymMtrxFactorizer
 			elimStop();
 			elimndorder[_iord++] = elimbus;
 			elimbus = bcq.poll();
-			if (elimbus == -1)
-			{
-				/*
-				 * Handle buses at the end that get eliminated radially - make
-				 * sure it gets added to elimndorder
-				 */
-				for(int i=0; i < nbus; ++i)
-				{
-					int b = cbus[i];
-					if (ccnt[b] == 0)
-					{
-						int[] empty = new int[0];
-						elimStart(elimbus, empty, empty);
-						elimStop();
-						elimndorder[_iord++] = b;
-					}
-				}
-			}
+//			if (elimbus == -1)
+//			{
+//				/*
+//				 * Handle buses at the end that get eliminated radially - make
+//				 * sure it gets added to elimndorder
+//				 */
+//				for(int i=0; i < nbus; ++i)
+//				{
+//					int b = cbus[i];
+//					if (ccnt[b] == 0)
+//					{
+//						int[] empty = new int[0];
+//						elimStart(elimbus, empty, empty);
+//						elimStop();
+//						elimndorder[_iord++] = b;
+//					}
+//				}
+//			}
+		}
+		int[] empty = new int[0];
+		for(int i=0; i < nlast; ++i)
+		{
+			elimStart(-1, empty, empty);
+			elimStop();
+			elimndorder[_iord++] = last[i];
 		}
 		_elimndorder = elimndorder;
 		finish();
@@ -337,13 +346,14 @@ class BusConnectionsPriQ
 	 * 
 	 * @param bus
 	 *            bus to decrement the number of connections
+	 * @return true if decrement caused a removal (new count is 0)
 	 */
-	public void dec(int bus)
+	public boolean dec(int bus)
 	{
 		int ocnt = _conncnt[bus];
 		if (ocnt <= 0)
-			return;
-		--_conncnt[bus];
+			return false;
+		boolean rv = --_conncnt[bus] == 0;
 		/* see if the sorted index needs adjustment */
 		int sloc = _rndx[bus];
 		/*
@@ -354,5 +364,6 @@ class BusConnectionsPriQ
 		if (swloc != sloc)
 			swap(sloc, swloc, bus);
 		++_sublist[ocnt];
+		return rv;
 	}
 }

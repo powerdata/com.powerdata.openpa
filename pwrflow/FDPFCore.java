@@ -645,7 +645,7 @@ public class FDPFCore
 		BDblPrime(MtrxBldr bldr) throws PAModelException
 		{
 			super(bldr.net, bldr.bppself, bldr.bpptran, 
-				_btypes.getBuses(BusType.Reference),
+//				_btypes.getBuses(BusType.Reference),
 				_btypes.getBuses(BusType.PV));
 			
 			_pat.eliminate(_net, _save);
