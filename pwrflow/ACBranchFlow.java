@@ -151,6 +151,7 @@ public class ACBranchFlow extends CalcBase
 		float[] vm = PAMath.vmpu(sbus);
 		float[] va = PAMath.deg2rad(sbus.getVA());
 
+		if (!outdir.exists()) outdir.mkdirs();
 		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
 			new File(outdir, "acbranchflow.csv"))));

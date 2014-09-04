@@ -178,6 +178,7 @@ public class ListDumper
 		}
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
+		bldr.setLeastX(0.0001f);
 		new ListDumper().dump(bldr.load(), outdir);
 	}
 }

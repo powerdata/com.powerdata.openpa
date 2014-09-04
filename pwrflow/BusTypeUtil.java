@@ -8,6 +8,7 @@ import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Group;
 import com.powerdata.openpa.GroupList;
@@ -139,18 +140,16 @@ public class BusTypeUtil
 		
 		for(int i=0; i < ngen; ++i)
 		{
-			if (!gens.isOutOfSvc(i) && gens.isRegKV(i))
+			Gen.Mode mode = gens.getMode(i);
+			if (!gens.isOutOfSvc(i) && gens.isRegKV(i) && mode != Gen.Mode.OFF && mode != Gen.Mode.PMP)
 			{
 				int bx = gbx[i];
 				_type[bx] = PV;
 				_itype[bx] = calcigrp(indx, PV); 
 			}
 		}
-
-		
 		
 	}
-
 
 	float computeYB(LineList lines) throws PAModelException
 	{

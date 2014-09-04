@@ -13,6 +13,7 @@ import com.powerdata.openpa.OutOfService;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.impl.GroupMap;
+import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.ComplexList;
 
 public abstract class CalcBase
@@ -35,9 +36,17 @@ public abstract class CalcBase
 	{
 		int nbr = list.size();
 		ComplexList y = new ComplexList(nbr, true);
-		ComplexList z = new ComplexList(list.getR(), list.getX());
+//		ComplexList z = new ComplexList(list.getR(), list.getX());
+		float[] r = list.getR(), x = list.getX();
 		for(int i=0; i < nbr; ++i)
-			y.set(i, z.get(i).inv());
+		{
+			float tr = r[i], tx = x[i];
+			float om = (float) Math.log10(tr/tx);
+			if (om >= 0.5f)
+				tr /= ((float) Math.pow(10, Math.round(om)));
+//			y.set(i, z.get(i).inv());
+			y.set(i, new Complex(tr, tx).inv());
+		}
 		return y;
 		
 	}

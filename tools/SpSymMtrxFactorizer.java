@@ -117,7 +117,7 @@ public abstract class SpSymMtrxFactorizer
 				{
 					int busj = cbus[j];
 					int br = -1;
-					if (ccnt[busi] > 0 && ccnt[busj] > 0)
+					if (ccnt[busi] > 0 || ccnt[busj] > 0)
 					{
 						br = matrix.findBranch(busi, busj);
 						if (br == -1)
@@ -168,13 +168,13 @@ public abstract class SpSymMtrxFactorizer
 //				}
 //			}
 		}
-		int[] empty = new int[0];
-		for(int i=0; i < nlast; ++i)
-		{
-			elimStart(-1, empty, empty);
-			elimStop();
-			elimndorder[_iord++] = last[i];
-		}
+//		int[] empty = new int[0];
+//		for(int i=0; i < nlast; ++i)
+//		{
+//			elimStart(-1, empty, empty);
+//			elimStop();
+//			elimndorder[_iord++] = last[i];
+//		}
 		_elimndorder = elimndorder;
 		finish();
 		_elimbrcnt = brord;

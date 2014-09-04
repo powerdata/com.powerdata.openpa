@@ -29,6 +29,8 @@ import com.powerdata.openpa.impl.GenSubList;
 import com.powerdata.openpa.impl.LoadSubList;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
+import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
@@ -346,8 +348,8 @@ public class FDPFCore
 			nconv = true;
 			for(IslandConv ic : convstat)
 			{
-				nfail &= !ic.fail();
-				nconv &= !(ic.pConv() && ic.qConv());
+				nfail |= !ic.fail();
+				nconv |= !(ic.pConv() && ic.qConv());
 			}
 			
 			// update voltage and angles
@@ -729,6 +731,7 @@ public class FDPFCore
 			System.exit(1);
 		}
 		final File outdir = poutdir;
+		if (!outdir.exists()) outdir.mkdirs();
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
 		bldr.setLeastX(0.0001f);
@@ -818,7 +821,7 @@ public class FDPFCore
 		IslandConv[] conv = pf.runPF();
 		System.err.println("Done");
 		pf.updateResults();
-		new ListDumper().dump(m, outdir);
+//		new ListDumper().dump(m, outdir);
 		
 		PrintWriter mmdbg = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outdir, "mismatch.csv"))));
