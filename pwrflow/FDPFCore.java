@@ -345,7 +345,7 @@ public class FDPFCore
 			/* calculate convergence */
 			_pool.execute(rconv);
 			_pool.awaitQuiescence(1,  TimeUnit.DAYS);
-			nconv = true;
+			nconv = false;
 			for(IslandConv ic : convstat)
 			{
 				nfail |= !ic.fail();
