@@ -2,31 +2,22 @@ package com.powerdata.openpa.pwrflow;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
-import java.util.Set;
 import com.powerdata.openpa.ACBranch;
-import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
-import com.powerdata.openpa.Group;
 import com.powerdata.openpa.GroupList;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.PhaseShifter;
-import com.powerdata.openpa.SeriesCap;
-import com.powerdata.openpa.SeriesReac;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.Switch.State;
-import com.powerdata.openpa.Transformer;
-import com.powerdata.openpa.TwoTermDCLine;
 import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.LinkNet;
 
 
 public class BusTypeUtil
@@ -94,7 +85,7 @@ public class BusTypeUtil
 			float ty = computeYB(glist.getLines(i));
 			Bus tn = selectBus(glist.getBuses(i), sbuses);
 			int isl = islands.getByBus(tn.getBuses().get(0)).getIndex();
-			if (ymax[isl] < ty)
+			if (ymax[isl] < ty || imax[isl] == -1)
 			{
 				ymax[isl] = ty;
 				imax[isl] = tn.getIndex();

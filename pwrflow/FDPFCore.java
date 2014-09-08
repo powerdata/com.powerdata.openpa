@@ -29,8 +29,6 @@ import com.powerdata.openpa.impl.GenSubList;
 import com.powerdata.openpa.impl.LoadSubList;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.ComplexList;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
@@ -171,7 +169,7 @@ public class FDPFCore
 				bpf = nor;
 				break;
 			case BX:
-				bppf = nor; //TODO: Don't think this is correct.  Seems like shunts should be included
+				bppf = nor;
 				break;
 			default:
 		}
@@ -206,12 +204,12 @@ public class FDPFCore
 	class IslandConv
 	{
 		int[] _pq, _pv;
-		int _iter = 0, _island;
-		int _worstp, _worstq;
+		int _iter = -1, _island;
+		int _worstp=-1, _worstq=-1;
 		float _wpmm=0f, _wqmm=0f;
 		boolean _pconv=false, _qconv=false, _fail=false;
 		
-		public IslandConv(int island, int[] pq, int[] pv)
+		public IslandConv(int island, int[] pq, int[] pv) throws PAModelException
 		{
 			_pq = pq;
 			_pv = pv;
@@ -274,8 +272,8 @@ public class FDPFCore
 					_fail?"[FAIL] ":"",
 					_island, _iter, String.valueOf(_pconv), 
 					String.valueOf(_qconv), _wpmm * 100f,
-					_buses.get(_worstp).getName(), _wqmm * 100f, 
-					_buses.get(_worstq).getName());
+					(_worstp == -1) ? "[Not Solved]" : _buses.get(_worstp).getName(), _wqmm * 100f, 
+					(_worstq == -1) ? "[Not Solved]" : _buses.get(_worstq).getName());
 			}
 			catch(PAModelException e)
 			{
@@ -333,18 +331,22 @@ public class FDPFCore
 		for(int i=0; nconv && nfail && i < _niter; ++i)
 		{
 			/* Calculate flows */
-			_pool.execute(calc);
+//			_pool.execute(calc);
+			_cset.stream().forEach(
+				j -> j.calc(_va, _vm));
 			Arrays.fill(pmm, 0f);
 			Arrays.fill(qmm, 0f);
-			_pool.awaitQuiescence(1, TimeUnit.DAYS); //infinite wait
+//			_pool.awaitQuiescence(1, TimeUnit.DAYS); //infinite wait
 			
 
 			/* apply mismatches from calculated and boundary values */
 			applyMismatches(pmm, qmm, _va, _vm);
-			
 			/* calculate convergence */
-			_pool.execute(rconv);
-			_pool.awaitQuiescence(1,  TimeUnit.DAYS);
+			
+//			_pool.execute(rconv);
+//			_pool.awaitQuiescence(1,  TimeUnit.DAYS);
+			Arrays.stream(convstat)
+			.forEach(j -> j.test(pmm, qmm));			
 			nconv = false;
 			for(IslandConv ic : convstat)
 			{
@@ -356,9 +358,10 @@ public class FDPFCore
 			if (nconv && nfail)
 			{
 				_vmc = _vm.clone();
-				_pool.execute(rcorr);
-				_pool.awaitQuiescence(1, TimeUnit.DAYS);
-			}			
+				corr.stream().sequential().forEach(j -> j.apply(_vmc));
+//				_pool.execute(rcorr);
+//				_pool.awaitQuiescence(1, TimeUnit.DAYS);
+			}
 		}
 		
 		return convstat;
@@ -399,13 +402,14 @@ public class FDPFCore
 		// Default is no action
 	}
 
-	void setupConvInfo(IslandConv[] convstat)
+	void setupConvInfo(IslandConv[] convstat) throws PAModelException
 	{
 		int n = convstat.length;
 		for(int i=0; i < n; ++i)
 		{
-			convstat[i] = new IslandConv(i, _btypes.getBuses(BusType.PQ, i),
-					_btypes.getBuses(BusType.PV, i));
+			int ei = _eindx[i];
+			convstat[i] = new IslandConv(ei, _btypes.getBuses(BusType.PQ, ei),
+					_btypes.getBuses(BusType.PV, ei)	);
 		}
 	}
 	
@@ -608,6 +612,8 @@ public class FDPFCore
 				for(int i=0; i < n; ++i)
 				{
 					int f = fn[i], t = tn[i];
+					if (f != t)
+					{
 					DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
 
 					int brx = net.findBranch(f, t);
@@ -623,6 +629,11 @@ public class FDPFCore
 					bppself[f] += bpp.getFromBself();
 					bppself[t] += bpp.getToBself();
 					bpptran[brx] += bpp.getBtran();
+					}
+					else
+					{
+						lndx[i] = -1;
+					}
 				}
 			}
 		}
@@ -734,7 +745,10 @@ public class FDPFCore
 		if (!outdir.exists()) outdir.mkdirs();
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
-		bldr.setLeastX(0.0001f);
+		bldr.setLeastX(0.001f);
+		bldr.enableRCorrection(true);
+//		bldr.enableMagYCorrection(true);
+		bldr.setUnitRegOverride(true);
 		PAModel m = bldr.load();
 		class mminfo
 		{
@@ -821,7 +835,11 @@ public class FDPFCore
 		IslandConv[] conv = pf.runPF();
 		System.err.println("Done");
 		pf.updateResults();
-//		new ListDumper().dump(m, outdir);
+		ListDumper ld = new ListDumper();
+
+		for(ACBranchList list : m.getACBranches())
+			ld.dumpList(new File(outdir, list.getListMeta().toString()+".csv"), list);
+		ld.dumpList(new File(outdir, "Gen.csv"), m.getGenerators());
 		
 		PrintWriter mmdbg = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outdir, "mismatch.csv"))));

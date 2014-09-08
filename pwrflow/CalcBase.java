@@ -36,16 +36,16 @@ public abstract class CalcBase
 	{
 		int nbr = list.size();
 		ComplexList y = new ComplexList(nbr, true);
-//		ComplexList z = new ComplexList(list.getR(), list.getX());
-		float[] r = list.getR(), x = list.getX();
+		ComplexList z = new ComplexList(list.getR(), list.getX());
+//		float[] r = list.getR(), x = list.getX();
 		for(int i=0; i < nbr; ++i)
 		{
-			float tr = r[i], tx = x[i];
-			float om = (float) Math.log10(tr/tx);
-			if (om >= 0.5f)
-				tr /= ((float) Math.pow(10, Math.round(om)));
-//			y.set(i, z.get(i).inv());
-			y.set(i, new Complex(tr, tx).inv());
+//			float tr = r[i], tx = x[i];
+//			float om = (float) Math.log10(tr/tx);
+//			if (om >= 0.1f)
+//				tr /= ((float) Math.pow(10, Math.round(om)+1));
+			y.set(i, z.get(i).inv());
+//			y.set(i, new Complex(tr, tx).inv());
 		}
 		return y;
 		

@@ -34,6 +34,8 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	
 	protected boolean	_flat	= false;
 	float	_leastx	= 0;
+	boolean _correctR = false;
+	boolean _correctMagY = false;
 	boolean	_doos	= false;
 	boolean	_genregterm;
 
@@ -49,6 +51,14 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 		_flat = useflat;
 	}
 
+	public boolean correctMagY() {return _correctMagY;}
+	
+	public void enableMagYCorrection(boolean e) {_correctMagY = e;}
+	
+	public boolean correctRVal(){return _correctR;}
+	
+	public void enableRCorrection(boolean e) {_correctR = e;}
+	
 	/**
 	 * limit the branch reactance minimum magnitude, abs(X) > minx, defaults to
 	 * 0 (no limit)
