@@ -170,4 +170,10 @@ public abstract class TransformerList extends PsseBaseList<Transformer>
 	
 	public float getFromMVA(int ndx) throws PsseModelException {return 0f;}
 	public float getToMVA(int ndx) throws PsseModelException {return 0f;}
+	
+	public float getFromMW(int ndx) throws PsseModelException {return 0f;}
+	public float getToMW(int ndx) throws PsseModelException {return 0f;}
+	
+	public float getFromMVAr(int ndx) throws PsseModelException {return 0f;}
+	public float getToMVAr(int ndx) throws PsseModelException {return 0f;}
 }	
