@@ -169,25 +169,18 @@ public class SpSymBMatrix
 
 	public void dump(String[] name, PrintWriter pw)
 	{
-		pw.println("BusIndex,BusName,Bself,FarIndex,FarName,Btran");
-		int nbus = _bdiag.length;
-		for(int i=0; i < nbus; ++i)
+		pw.println("BranchNdx,Btran,FromNdx,FromName,FromBself,ToNdx,ToName,ToBself");
+		int nbr = _net.getBranchCount();
+		for(int i=0; i < nbr; ++i)
 		{
-			if(_net.getConnectionCount(i) > 0)
-			{
-				int[][] conn = _net.findConnections(i);
-				int[] nd = conn[0], br = conn[1];
-				int n = nd.length;
-				for(int j=0; j < n; ++j)
-				{
-					pw.format("%d,'%s',%f,%d,'%s',%f\n",
-						i, name[i], _bdiag[i], nd[j], name[nd[j]], _boffdiag[br[j]]);
-				}
-			}
-			else
-			{
-				pw.format("%d,'%s',%f\n",i, name[i], _bdiag[i]);
-			}
+			int[] nd = _net.getBusesForBranch(i);
+			int f = nd[0], t = nd[1];
+			pw.format("%d,%f,%d,'%s',%f,%d,'%s',%f\n",
+				i, _boffdiag[i],
+				f, name[f], _bdiag[f],
+				t, name[t], _bdiag[t]);
+				
 		}
+		
 	}
 }
