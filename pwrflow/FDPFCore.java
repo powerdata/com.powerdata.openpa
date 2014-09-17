@@ -41,7 +41,7 @@ public class FDPFCore
 	Variant _variant = Variant.XB;
 	float _sbase;
 	
-	int _niter = 40;
+	int _niter = 100;
 	float _ptol = 0.005f, _qtol = 0.005f;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
@@ -144,11 +144,12 @@ public class FDPFCore
 		
 		configureBranchY();
 		
+		int[] ref = _btypes.getBuses(BusType.Reference);
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
-		_bp = bp.factorize();
+		_bp = bp.factorize(ref);
 		bPrimeHook(bp);
-		_mbpp = new BDblPrime(mb);
+		_mbpp = new BDblPrime(mb, ref);
 	}
 
 	@FunctionalInterface
@@ -644,10 +645,9 @@ public class FDPFCore
 	{
 		BPrime(MtrxBldr bldr)
 		{
-			super(bldr.net, bldr.bpself, bldr.bptran, 
-				_btypes.getBuses(BusType.Reference));			
+			super(bldr.net, bldr.bpself, bldr.bptran);			
 		}
-	}
+	}	
 	
 	class BDblPrime extends SpSymBMatrix
 	{
@@ -655,13 +655,11 @@ public class FDPFCore
 		float[] _bsvc;
 		SVCState[] _state;
 		
-		BDblPrime(MtrxBldr bldr) throws PAModelException
+		BDblPrime(MtrxBldr bldr, int[] ref) throws PAModelException
 		{
-			super(bldr.net, bldr.bppself, bldr.bpptran, 
-//				_btypes.getBuses(BusType.Reference),
-				_btypes.getBuses(BusType.PV));
+			super(bldr.net, bldr.bppself, bldr.bpptran); 
 			
-			_pat.eliminate(_net, _save);
+			_pat.eliminate(_net, ref);
 			
 			int nsvc = _csvc.getBus().length;
 			_bsvc = new float[_csvc.getBus().length];
@@ -669,8 +667,14 @@ public class FDPFCore
 			Arrays.fill(_state, SVCState.Off);
 			
 			processFixedShunts(_fsh.get(ListMetaType.ShuntCap));
+			processPVBuses();
 		}
 
+		void processPVBuses()
+		{
+			int[] pv = _btypes.getBuses(BusType.PV);
+			for(int p : pv) _bdiag[p] += 1000000f;
+		}
 
 		void processFixedShunts(FixedShuntComposite comp) throws PAModelException
 		{
@@ -708,7 +712,6 @@ public class FDPFCore
 			return rv;
 		}
 
-		@Override
 		public FactorizedBMatrix factorize()
 		{
 			return super.factorize(_pat);

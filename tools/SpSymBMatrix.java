@@ -88,18 +88,17 @@ public class SpSymBMatrix
 	protected int[][] _save;
 	protected LinkNet _net;
 	
-	public SpSymBMatrix(LinkNet net, float[] bdiag, float[] boffdiag, int[] ... save)
+	public SpSymBMatrix(LinkNet net, float[] bdiag, float[] boffdiag)
 	{
-		_save = save;
 		_net = net;
 		_bdiag = bdiag.clone();
 		_boffdiag = boffdiag.clone();
 	}
 
-	public FactorizedBMatrix factorize()
+	public FactorizedBMatrix factorize(int[] ref)
 	{
 		Factorizer f = new Factorizer(_bdiag, _boffdiag);
-		f.eliminate(_net, _save);
+		f.eliminate(_net, ref);
 		return new FactorizedBMatrix(f.getBDiag(), f.getBOffDiag(),
 				f.getElimFromNode(), f.getElimToNode(), f.getElimNdOrder(),
 				f.getElimNdCount(), f.getElimBrOrder(), f.getElimBranchCount());
