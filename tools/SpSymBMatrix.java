@@ -87,22 +87,34 @@ public class SpSymBMatrix
 	protected float[] _bdiag, _boffdiag;
 	protected int[][] _save;
 	protected LinkNet _net;
+	SpSymMtrxFactPattern _pat;
 	
-	public SpSymBMatrix(LinkNet net, float[] bdiag, float[] boffdiag, int[] ... save)
+	public SpSymBMatrix(LinkNet net, float[] bdiag, float[] boffdiag)
 	{
-		_save = save;
 		_net = net;
 		_bdiag = bdiag.clone();
 		_boffdiag = boffdiag.clone();
 	}
 
-	public FactorizedBMatrix factorize()
+	public FactorizedBMatrix factorize(int[] ref)
 	{
 		Factorizer f = new Factorizer(_bdiag, _boffdiag);
-		f.eliminate(_net, _save);
+		f.eliminate(_net, ref);
 		return new FactorizedBMatrix(f.getBDiag(), f.getBOffDiag(),
 				f.getElimFromNode(), f.getElimToNode(), f.getElimNdOrder(),
 				f.getElimNdCount(), f.getElimBrOrder(), f.getElimBranchCount());
+	}
+	
+	public SpSymMtrxFactPattern savePattern(int[] ref)
+	{
+		_pat = new SpSymMtrxFactPattern();
+		_pat.eliminate(_net, ref);
+		return _pat;
+	}
+	
+	public void savePattern(SpSymMtrxFactPattern pattern)
+	{
+		_pat = pattern;
 	}
 	
 	/** modify susceptance entry */
@@ -131,8 +143,6 @@ public class SpSymBMatrix
 	 * 
 	 * Neither the pattern nor susceptance arrays are modified
 	 * 
-	 * @param pattern
-	 *            Existing factorizer
 	 * @param bdiag
 	 *            diagonal susceptance values (array with size equal to number
 	 *            of buses)
@@ -143,12 +153,12 @@ public class SpSymBMatrix
 	 * @return factorized susceptance matrix
 	 * 
 	 */
-	public FactorizedBMatrix factorize(SpSymMtrxFactPattern pattern)
+	public FactorizedBMatrix factorizeFromPattern()
 	{
 		Factorizer f = new Factorizer(_bdiag, _boffdiag);
-		f.ensureCapacity(pattern.getElimBranchCount());
+		f.ensureCapacity(_pat.getElimBranchCount());
 		/* fake out the factorize, but use the same equations for B */
-		for (EliminatedBus ebusr : pattern.getEliminatedBuses())
+		for (EliminatedBus ebusr : _pat.getEliminatedBuses())
 		{
 			int[] cbus = ebusr.getRemainingNodes();
 			int[] cbr = ebusr.getElimBranches();
@@ -162,9 +172,9 @@ public class SpSymBMatrix
 			}
 		}
 		return new FactorizedBMatrix(f.getBDiag(), f.getBOffDiag(),
-				pattern.getElimFromNode(), pattern.getElimToNode(),
-				pattern.getElimNdOrder(), pattern.getElimNdCount(),
-				pattern.getElimBrOrder(), pattern.getElimBranchCount());
+				_pat.getElimFromNode(), _pat.getElimToNode(),
+				_pat.getElimNdOrder(), _pat.getElimNdCount(),
+				_pat.getElimBrOrder(), _pat.getElimBranchCount());
 	}
 
 	public void dump(String[] name, PrintWriter pw)

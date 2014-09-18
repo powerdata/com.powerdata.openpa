@@ -144,11 +144,14 @@ public class FDPFCore
 		
 		configureBranchY();
 		
+		int[] ref = _btypes.getBuses(BusType.Reference);
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
-		_bp = bp.factorize();
+		SpSymMtrxFactPattern p = bp.savePattern(ref);
+		_bp = bp.factorizeFromPattern();
 		bPrimeHook(bp);
-		_mbpp = new BDblPrime(mb);
+		_mbpp = new BDblPrime(mb, ref);
+		_mbpp.savePattern(p);
 	}
 
 	@FunctionalInterface
@@ -461,7 +464,7 @@ public class FDPFCore
 	{
 		if (_mbpp.processSVCs() || _bpp == null)  //indicates minor refactor
 		{
-			_bpp = _mbpp.factorize();
+			_bpp = _mbpp.factorizeFromPattern();
 			bDblPrimeHook(_mbpp);
 		}
 		return _bpp;
@@ -609,26 +612,21 @@ public class FDPFCore
 				
 				BranchMtrxBldr bldrbp = brec.getBp(), bldrbpp = brec.getBpp();
 				
-				for(int i=0; i < n; ++i)
+				for (int i = 0; i < n; ++i)
 				{
 					int f = fn[i], t = tn[i];
 					if (f != t)
 					{
-					DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
-
-					int brx = net.findBranch(f, t);
-					if (brx == -1)
-						brx = net.addBranch(f, t);
-					
-					lndx[i] = brx;
-
-					bpself[f] += bp.getFromBself();
-					bpself[t] += bp.getToBself();
-					bptran[brx] += bp.getBtran();
-					
-					bppself[f] += bpp.getFromBself();
-					bppself[t] += bpp.getToBself();
-					bpptran[brx] += bpp.getBtran();
+						DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
+						int brx = net.findBranch(f, t);
+						if (brx == -1) brx = net.addBranch(f, t);
+						lndx[i] = brx;
+						bpself[f] += bp.getFromBself();
+						bpself[t] += bp.getToBself();
+						bptran[brx] += bp.getBtran();
+						bppself[f] += bpp.getFromBself();
+						bppself[t] += bpp.getToBself();
+						bpptran[brx] += bpp.getBtran();
 					}
 					else
 					{
@@ -644,24 +642,20 @@ public class FDPFCore
 	{
 		BPrime(MtrxBldr bldr)
 		{
-			super(bldr.net, bldr.bpself, bldr.bptran, 
-				_btypes.getBuses(BusType.Reference));			
+			super(bldr.net, bldr.bpself, bldr.bptran);
 		}
-	}
+	}	
 	
 	class BDblPrime extends SpSymBMatrix
 	{
-		SpSymMtrxFactPattern _pat = new SpSymMtrxFactPattern();
 		float[] _bsvc;
 		SVCState[] _state;
 		
-		BDblPrime(MtrxBldr bldr) throws PAModelException
+		BDblPrime(MtrxBldr bldr, int[] ref) throws PAModelException
 		{
-			super(bldr.net, bldr.bppself, bldr.bpptran, 
-//				_btypes.getBuses(BusType.Reference),
-				_btypes.getBuses(BusType.PV));
+			super(bldr.net, bldr.bppself, bldr.bpptran); 
 			
-			_pat.eliminate(_net, _save);
+//			_pat.eliminate(_net, ref);
 			
 			int nsvc = _csvc.getBus().length;
 			_bsvc = new float[_csvc.getBus().length];
@@ -669,8 +663,14 @@ public class FDPFCore
 			Arrays.fill(_state, SVCState.Off);
 			
 			processFixedShunts(_fsh.get(ListMetaType.ShuntCap));
+			processPVBuses();
 		}
 
+		void processPVBuses()
+		{
+			int[] pv = _btypes.getBuses(BusType.PV);
+			for(int p : pv) _bdiag[p] += 1000000f;
+		}
 
 		void processFixedShunts(FixedShuntComposite comp) throws PAModelException
 		{
@@ -708,12 +708,6 @@ public class FDPFCore
 			return rv;
 		}
 
-		@Override
-		public FactorizedBMatrix factorize()
-		{
-			return super.factorize(_pat);
-		}
-		
 	}
 	
 	public static void main(String...args) throws Exception

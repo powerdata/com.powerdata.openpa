@@ -311,6 +311,7 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
+	@Nodump
 	public BusList getSingleBus() throws PAModelException
 	{
 		return new SingleBusList(this);
