@@ -119,7 +119,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 				rv[i] = getKey(ndxs[i]);
 			return rv;
 		}
-		
+		abstract void reset();
 	}
 	
 	abstract class IntDataIfc extends Data
@@ -145,6 +145,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 
 		@Override
 		void clear() {super.clear(); ro = null;}
+		
+		@Override
+		void reset() { rw = null; ro = null;  _notld = true;}
 
 		@Override
 		ColChange createChangeObj()
@@ -227,7 +230,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		}
 
 		@Override
-		void clear() {super.clear(); ro = null;}
+		void clear() {super.clear(); ro = null;}		
+		@Override
+		void reset() { rw = null; ro = null; _notld = true;}
 		@Override
 		ColChange createChangeObj()
 		{
@@ -311,7 +316,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		}
 
 		@Override
-		void clear() {super.clear(); ro = null;}
+		void clear() {super.clear(); ro = null;}		
+		@Override
+		void reset() { rw = null; ro = null; _notld = true;}
 		@Override
 		ColChange createChangeObj()
 		{
@@ -393,7 +400,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			return _model.load(getListMeta(), getColMeta(), AbstractPAList.this.getKeys());
 		}
 		@Override
-		void clear() {super.clear(); ro = null;}
+		void clear() {super.clear(); ro = null;}		
+		@Override
+		void reset() { rw = null; ro = null; _notld = true;}
 		@Override
 		ColChange createChangeObj()
 		{
@@ -478,7 +487,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		}
 
 		@Override
-		void clear() {super.clear(); ro = null;}
+		void clear() {super.clear(); ro = null;}		
+		@Override
+		void reset() { rw = null; ro = null; _notld = true;}
 		@Override
 		ColChange createChangeObj()
 		{
@@ -599,6 +610,15 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected void registerColumn(Data d)
 	{
 		_fields.add(d);
+	}
+	/**
+	 * This function is used by the refresh function to make sure 
+	 * any data access from now on will have just "new" data
+	 */
+	public void reset()
+	{
+		// clear all the columns
+		for(Data d : _fields) { d.reset(); }
 	}
 	
 	/** Set up keys in the event that the "key" constructor isn't used */
