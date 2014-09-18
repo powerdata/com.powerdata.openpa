@@ -41,7 +41,7 @@ public class FDPFCore
 	Variant _variant = Variant.XB;
 	float _sbase;
 	
-	int _niter = 100;
+	int _niter = 40;
 	float _ptol = 0.005f, _qtol = 0.005f;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
@@ -147,9 +147,11 @@ public class FDPFCore
 		int[] ref = _btypes.getBuses(BusType.Reference);
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
-		_bp = bp.factorize(ref);
+		SpSymMtrxFactPattern p = bp.savePattern(ref);
+		_bp = bp.factorizeFromPattern();
 		bPrimeHook(bp);
 		_mbpp = new BDblPrime(mb, ref);
+		_mbpp.savePattern(p);
 	}
 
 	@FunctionalInterface
@@ -462,7 +464,7 @@ public class FDPFCore
 	{
 		if (_mbpp.processSVCs() || _bpp == null)  //indicates minor refactor
 		{
-			_bpp = _mbpp.factorize();
+			_bpp = _mbpp.factorizeFromPattern();
 			bDblPrimeHook(_mbpp);
 		}
 		return _bpp;
@@ -610,26 +612,21 @@ public class FDPFCore
 				
 				BranchMtrxBldr bldrbp = brec.getBp(), bldrbpp = brec.getBpp();
 				
-				for(int i=0; i < n; ++i)
+				for (int i = 0; i < n; ++i)
 				{
 					int f = fn[i], t = tn[i];
 					if (f != t)
 					{
-					DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
-
-					int brx = net.findBranch(f, t);
-					if (brx == -1)
-						brx = net.addBranch(f, t);
-					
-					lndx[i] = brx;
-
-					bpself[f] += bp.getFromBself();
-					bpself[t] += bp.getToBself();
-					bptran[brx] += bp.getBtran();
-					
-					bppself[f] += bpp.getFromBself();
-					bppself[t] += bpp.getToBself();
-					bpptran[brx] += bpp.getBtran();
+						DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
+						int brx = net.findBranch(f, t);
+						if (brx == -1) brx = net.addBranch(f, t);
+						lndx[i] = brx;
+						bpself[f] += bp.getFromBself();
+						bpself[t] += bp.getToBself();
+						bptran[brx] += bp.getBtran();
+						bppself[f] += bpp.getFromBself();
+						bppself[t] += bpp.getToBself();
+						bpptran[brx] += bpp.getBtran();
 					}
 					else
 					{
@@ -645,13 +642,12 @@ public class FDPFCore
 	{
 		BPrime(MtrxBldr bldr)
 		{
-			super(bldr.net, bldr.bpself, bldr.bptran);			
+			super(bldr.net, bldr.bpself, bldr.bptran);
 		}
 	}	
 	
 	class BDblPrime extends SpSymBMatrix
 	{
-		SpSymMtrxFactPattern _pat = new SpSymMtrxFactPattern();
 		float[] _bsvc;
 		SVCState[] _state;
 		
@@ -659,7 +655,7 @@ public class FDPFCore
 		{
 			super(bldr.net, bldr.bppself, bldr.bpptran); 
 			
-			_pat.eliminate(_net, ref);
+//			_pat.eliminate(_net, ref);
 			
 			int nsvc = _csvc.getBus().length;
 			_bsvc = new float[_csvc.getBus().length];
@@ -712,11 +708,6 @@ public class FDPFCore
 			return rv;
 		}
 
-		public FactorizedBMatrix factorize()
-		{
-			return super.factorize(_pat);
-		}
-		
 	}
 	
 	public static void main(String...args) throws Exception
