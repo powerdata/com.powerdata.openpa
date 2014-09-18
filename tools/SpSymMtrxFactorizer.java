@@ -63,7 +63,7 @@ public abstract class SpSymMtrxFactorizer
 
 	protected abstract void setup(LinkNet matrix);
 
-	public void eliminate(LinkNet matrix, int[][] save)
+	public void eliminate(LinkNet matrix, int[] ref)
 	{
 		matrix = matrix.clone();
 		setup(matrix);
@@ -72,16 +72,7 @@ public abstract class SpSymMtrxFactorizer
 		matrix.ensureCapacity(0, cap);
 		ensureCapacity(cap);
 		int[] ccnt = matrix.getConnectionCounts();
-		for (int[] s : save)
-		{
-			for (int b : s)
-			{
-//				for(int br : matrix.findConnections(b)[1])
-//					matrix.eliminateBranch(br, true);
-				ccnt[b] = 0;
-			}
-		}
-//		int[] ccnt = matrix.getConnectionCounts();
+		for(int r : ref) ccnt[r] = 0;
 		int[] last = new int[(matrix.getMaxBusNdx()+1)/2];
 		int nlast = 0;
 		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
