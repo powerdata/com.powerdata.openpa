@@ -11,6 +11,7 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
+import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.tools.PAMath;
 
 
@@ -35,6 +36,22 @@ public class SvcCalc extends CalcBase
 		setup(bndx);
 	}
 
+	/**
+	 *	Same constructor, but add a mapping to designate which SVCs's should not
+	 *  calculated because they are calculated elsewhere (i.e., behave like a PV bus
+	 *  in a power flow) 
+	 */
+	public SvcCalc(float sbase, BusRefIndex bndx, int[] insvc, SVCList svcs)
+			throws PAModelException
+	{
+		super(svcs);
+		_sbase = sbase;
+		_buses = bndx.getBuses();
+		_svcs = svcs;
+		setup(bndx);
+		_oosndx = insvc;
+	}
+	
 	private void setup(BusRefIndex bref) throws PAModelException
 	{
 		_busndx = bref.get1TBus(_svcs);

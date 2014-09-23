@@ -6,6 +6,7 @@ import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Group;
@@ -37,11 +38,22 @@ public class BusTypeUtil
 	public BusTypeUtil(PAModel model, BusRefIndex bri) throws PAModelException
 	{
 		_model = model;
+		setup(bri, null);
+	}
+	
+	public BusTypeUtil(PAModel model, BusRefIndex bri, int[] svcpv) throws PAModelException
+	{
+		_model = model;
+		setup(bri, svcpv);
+	}
+	
+	void setup(BusRefIndex bri, int[] svcpv) throws PAModelException
+	{
 		BusList buses = bri.getBuses();
 		int nbus = buses.size();
 		_type = new int[nbus];
 		_itype = new int[nbus];
-		IslandList islands = model.getIslands();
+		IslandList islands = _model.getIslands();
 		_nisland = islands.size();
 		_nigrp = _nisland * NGRP;
 		
@@ -52,7 +64,7 @@ public class BusTypeUtil
 			_itype[i] = calcigrp(buses.getIsland(i).getIndex(), PQ);
 		}
 		
-		GroupList glist = new GroupList(model, new BusGrpMapBldr(model)
+		GroupList glist = new GroupList(_model, new BusGrpMapBldr(_model)
 		{
 			@Override
 			protected boolean incSW(Switch d) throws PAModelException
@@ -69,7 +81,7 @@ public class BusTypeUtil
 		float[] pmax = new float[nbus];
 		for(Island i : islands)
 		{
-			if (i.isEnergized()) configureTypes(i, bri, pmax);
+			if (i.isEnergized()) configureTypes(i, bri, pmax, svcpv);
 		}
 		findWidestPaths(glist, buses, islands, pmax);
 	}
@@ -163,7 +175,7 @@ public class BusTypeUtil
 		return t + NGRP * i;
 	}
 	
-	void configureTypes(Island island, BusRefIndex bri, float[] pmax) throws PAModelException
+	void configureTypes(Island island, BusRefIndex bri, float[] pmax, int[] svcpv) throws PAModelException
 	{
 		GenList gens = island.getGenerators();
 		int indx = island.getIndex();
@@ -182,6 +194,18 @@ public class BusTypeUtil
 			}
 		}
 		
+		if (svcpv != null)
+		{
+			SVCList svcs = island.getSVCs();
+			int[] sbx = bri.get1TBus(svcs);
+			int nsvc = svcpv.length;
+			for (int i = 0; i < nsvc; ++i)
+			{
+				int bx = sbx[svcpv[i]];
+				_type[bx] = PV;
+				_itype[bx] = calcigrp(indx, PV);
+			}
+		}
 	}
 
 	float computeYB(LineList lines) throws PAModelException

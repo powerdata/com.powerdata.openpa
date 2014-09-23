@@ -38,7 +38,13 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	boolean _correctMagY = false;
 	boolean	_doos	= false;
 	boolean	_genregterm;
+	/** disable branches with bad Z values */
+	float _badXLimit = Float.MAX_VALUE;
 
+	/** disable branches with bad Z values */
+	public float getBadXLimit() {return _badXLimit;}
+	public void setBadXLimit(float badx) {_badXLimit = badx;}
+	
 	/** ignore case voltage and set flat. Sets VM to 1 and VA to 0 if true */
 	public boolean useFlatVoltage()
 	{

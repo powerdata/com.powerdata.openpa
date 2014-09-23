@@ -124,7 +124,6 @@ public abstract class CalcBase
 		_oosndx = GetInService(baseList);
 	}
 	
-//	protected abstract OutOfService getBaseList();
 	public abstract void applyMismatches(float[] pmm, float[] qmm);
 	public abstract void calc(float[] va, float[] vm);
 	
