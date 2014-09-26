@@ -8,6 +8,7 @@ import com.powerdata.openpa.TwoTermDCLineList;
 
 public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implements TwoTermDCLineList
 {
+	public final static TwoTermDCLineListI Empty = new TwoTermDCLineListI();
 	static final TwoTermDevEnum _PFld = new TwoTermDevEnum()
 	{
 		@Override

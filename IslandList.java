@@ -1,8 +1,13 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.impl.BusListI;
+import com.powerdata.openpa.impl.IslandListI;
+
 
 public interface IslandList extends GroupListIfc<Island>
 {
+	//static BusList	Empty	= new BusListI();
+	static IslandList Empty = new IslandListI();
 
 	boolean isEnergized(int ndx) throws PAModelException;
 	

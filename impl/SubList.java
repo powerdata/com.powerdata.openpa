@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import java.lang.reflect.Array;
+
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.PAModelException;
@@ -17,6 +18,12 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 		_src = src;
 		_ndx = ndx;
 		_size = ndx.length;
+	}
+	
+	@Override
+	public T getByID(String id) throws PAModelException 
+	{
+		return _src.getByID(id);
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import com.powerdata.openpa.StationList;
 
 public class StationListI extends GroupListI<Station> implements StationList
 {
+	public final static StationListI Empty = new StationListI();
 	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override

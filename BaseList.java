@@ -29,6 +29,8 @@ public interface BaseList<T extends BaseObject> extends List<T>
 	void setName(String[] name) throws PAModelException;
 
 	T getByKey(int key);
+	
+	T getByID(String id) throws PAModelException;
 
 //	T[] toArray(int[] indexes);
 //	

@@ -8,6 +8,7 @@ import com.powerdata.openpa.ListMetaType;
 
 public class AreaListI extends GroupListI<Area> implements AreaList
 {
+	public final static AreaListI Empty = new AreaListI();
 	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override

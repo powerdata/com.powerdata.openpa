@@ -1,9 +1,16 @@
 package com.powerdata.openpa.impl;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
@@ -22,7 +29,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected SNdxKeyOfs _keyndx;
 	private int[] _keys;
 	protected KeyMgr _km;
-
+	//HashMap<String, T> _idMap;
+	TObjectIntMap<String> _idMap;
+	
 	interface KeyMgr
 	{
 		int key(int ndx);
@@ -562,6 +571,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected AbstractPAList(PAModelI model, int size, PAListEnum le)
 	{
 		super(size);
+		System.out.println("[AbstractPAList.java]");
 		_model = model;
 		_km = new NoKeyMgr();
 		setFields(le);
@@ -629,6 +639,23 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return _km.key(ndx);
 	}
 	
+	@Override
+	public T getByID(String id) throws PAModelException 
+	{
+		if(_idMap == null) mapIDs();
+		return get(_idMap.get(id));
+	}
+	
+	void mapIDs() throws PAModelException
+	{
+		String[] ids = getID();
+		_idMap = new TObjectIntHashMap<>(_size);
+		for(int i = 0; i < _size; ++i)
+		{
+			_idMap.put(ids[i], i);
+		}
+	}
+
 	@Override
 	public int[] getKeys()
 	{
@@ -700,6 +727,23 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return _keyndx.getOffsets(keys);
 	}
 
+	public int[] getIndexesFromIDs(String[] ids) throws PAModelException
+	{
+		int size = ids.length;
+		int[] indexes = new int[size];
+		
+		if (_idMap == null) mapIDs();
+		
+		for(int i = 0; i < size; ++i)
+		{
+//			System.out.println("\n------\nid: "+ids[i]);
+//			System.out.println("_idMap: "+_idMap.get(ids[i]));
+			indexes[i] = _idMap.get(ids[i]);
+		}
+		
+		return indexes;
+	}
+	
 	public T[] toArray(int[] indexes)
 	{
 		T[] us = newArray(_size);

@@ -7,6 +7,7 @@ import com.powerdata.openpa.SwitchedShuntList;
 
 public class SwitchedShuntListI extends AbstractPAList<SwitchedShunt> implements SwitchedShuntList
 {
+	public final static SwitchedShuntListI Empty = new SwitchedShuntListI();
 	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override

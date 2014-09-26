@@ -91,6 +91,13 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		_bgmap = busgrp;
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
+	
+	protected GroupListI(PAModelI model, int size, PAListEnum pfld)
+	{
+		super(model, size, pfld);
+		_lmodel = model;
+		Arrays.fill(_lstref, new WeakReference<>(null));
+	}
 
 	@SuppressWarnings("unchecked")
 	WeakReference<List<int[]>>[] _lstref =

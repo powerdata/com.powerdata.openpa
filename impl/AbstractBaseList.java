@@ -10,6 +10,7 @@ public abstract class AbstractBaseList<T extends BaseObject> extends AbstractLis
 	
 	protected AbstractBaseList(int size)
 	{
+		System.out.println("[AbstractBaseList.java]");
 		_size = size;
 	}
 	
