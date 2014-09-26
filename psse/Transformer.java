@@ -84,6 +84,17 @@ public class Transformer extends PsseBaseObject implements ACBranch
 	public float getNOMV1() throws PsseModelException {return _list.getNOMV1(_ndx);}
 	/** winding 1 phase shift (DEG) */
 	public float getANG1() throws PsseModelException {return _list.getANG1(_ndx);}
+	/** From MVA */
+	public float getFromMVA() throws PsseModelException {return _list.getFromMVA(_ndx);}
+	/** To MVA */
+	public float getToMVA() throws PsseModelException {return _list.getToMVA(_ndx);}
+	
+	/** To Test (FPC) */
+	public float getFromMW() throws PsseModelException	{		return _list.getFromMW(_ndx);	}
+	public float getToMW() throws PsseModelException 	{		return _list.getToMW(_ndx);	}
+	public float getFromMVAr() throws PsseModelException 	{		return _list.getFromMVAr(_ndx);	}
+	public float getToMVAr() throws PsseModelException 	{		return _list.getToMVAr(_ndx);	}
+	
 	/** winding 1 rating A in MVA */
 	public float getRATA1() throws PsseModelException {return _list.getRATA1(_ndx);}
 	/** winding 1 rating B in MVA */

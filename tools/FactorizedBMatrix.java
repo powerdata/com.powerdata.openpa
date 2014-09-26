@@ -55,10 +55,6 @@ public class FactorizedBMatrix
 		float[] dx = new float[ds.length];
 		for(int bus : _elimbusord)
 		{
-			if (bus == 22)
-			{
-				int xxx = 5;
-			}
 			dx[bus] = ds[bus] / _bd[bus];
 		}
 		for (int i = nbr - 1; i >= 0; --i)

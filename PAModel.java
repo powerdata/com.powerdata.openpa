@@ -39,4 +39,6 @@ public interface PAModel extends PALists
 	Set<ColChange> getChanges();
 	/** clear changes */
 	void clearChanges();
+	// TODO: Check if this is really what we want to do 
+	long refresh() throws PAModelException;
 }

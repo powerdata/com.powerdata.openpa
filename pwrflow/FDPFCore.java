@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.BusList;
@@ -25,7 +24,9 @@ import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SVC.SVCState;
+import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.impl.GenSubList;
+import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.impl.LoadSubList;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
@@ -41,7 +42,7 @@ public class FDPFCore
 	Variant _variant = Variant.XB;
 	float _sbase;
 	
-	int _niter = 100;
+	int _niter = 10;
 	float _ptol = 0.005f, _qtol = 0.005f;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
@@ -129,10 +130,13 @@ public class FDPFCore
 
 		_brc.values().forEach(i -> _cset.add(i.getComp().getCalc()));
 		_fsh.values().forEach(i -> _cset.add(i.getCalc()));
+
+		GroupMap svcpv = configureSVC();
+		int[] svcpvb = svcpv.get(1), oos = svcpv.get(0);
 		
-		_csvc = new SvcCalc(m.getSBASE(), bri, m.getSVCs());
+		_csvc = new SvcCalc(m.getSBASE(), bri, oos, m.getSVCs());
 		_cset.add(_csvc);
-		_btypes = new BusTypeUtil(m, bri);
+		_btypes = new BusTypeUtil(m, bri, svcpvb);
 
 		GenList allgens = m.getGenerators();
 		LoadList allloads = m.getLoads();
@@ -147,9 +151,24 @@ public class FDPFCore
 		int[] ref = _btypes.getBuses(BusType.Reference);
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
-		_bp = bp.factorize(ref);
+		SpSymMtrxFactPattern p = bp.savePattern(ref);
+		_bp = bp.factorizeFromPattern();
 		bPrimeHook(bp);
 		_mbpp = new BDblPrime(mb, ref);
+		_mbpp.savePattern(p);
+	}
+
+	GroupMap configureSVC() throws PAModelException
+	{
+		SVCList svcs = _model.getSVCs();
+		int nsvc = svcs.size();
+		int[] map = new int[nsvc];
+		for(int i=0; i < nsvc; ++i)
+		{
+			if (!svcs.isOutOfSvc(i) && svcs.getSlope(i) <= 0f)
+				map[i] = 1;
+		}
+		return new GroupMap(map, 2);
 	}
 
 	@FunctionalInterface
@@ -462,7 +481,7 @@ public class FDPFCore
 	{
 		if (_mbpp.processSVCs() || _bpp == null)  //indicates minor refactor
 		{
-			_bpp = _mbpp.factorize();
+			_bpp = _mbpp.factorizeFromPattern();
 			bDblPrimeHook(_mbpp);
 		}
 		return _bpp;
@@ -508,6 +527,7 @@ public class FDPFCore
 			_buses.setVA(i, PAMath.rad2deg(_va[i]));
 		}
 	}
+
 
 	static class DeviceB
 	{
@@ -610,26 +630,21 @@ public class FDPFCore
 				
 				BranchMtrxBldr bldrbp = brec.getBp(), bldrbpp = brec.getBpp();
 				
-				for(int i=0; i < n; ++i)
+				for (int i = 0; i < n; ++i)
 				{
 					int f = fn[i], t = tn[i];
 					if (f != t)
 					{
-					DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
-
-					int brx = net.findBranch(f, t);
-					if (brx == -1)
-						brx = net.addBranch(f, t);
-					
-					lndx[i] = brx;
-
-					bpself[f] += bp.getFromBself();
-					bpself[t] += bp.getToBself();
-					bptran[brx] += bp.getBtran();
-					
-					bppself[f] += bpp.getFromBself();
-					bppself[t] += bpp.getToBself();
-					bpptran[brx] += bpp.getBtran();
+						DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
+						int brx = net.findBranch(f, t);
+						if (brx == -1) brx = net.addBranch(f, t);
+						lndx[i] = brx;
+						bpself[f] += bp.getFromBself();
+						bpself[t] += bp.getToBself();
+						bptran[brx] += bp.getBtran();
+						bppself[f] += bpp.getFromBself();
+						bppself[t] += bpp.getToBself();
+						bpptran[brx] += bpp.getBtran();
 					}
 					else
 					{
@@ -645,21 +660,18 @@ public class FDPFCore
 	{
 		BPrime(MtrxBldr bldr)
 		{
-			super(bldr.net, bldr.bpself, bldr.bptran);			
+			super(bldr.net, bldr.bpself, bldr.bptran);
 		}
 	}	
 	
 	class BDblPrime extends SpSymBMatrix
 	{
-		SpSymMtrxFactPattern _pat = new SpSymMtrxFactPattern();
 		float[] _bsvc;
 		SVCState[] _state;
 		
 		BDblPrime(MtrxBldr bldr, int[] ref) throws PAModelException
 		{
 			super(bldr.net, bldr.bppself, bldr.bpptran); 
-			
-			_pat.eliminate(_net, ref);
 			
 			int nsvc = _csvc.getBus().length;
 			_bsvc = new float[_csvc.getBus().length];
@@ -672,8 +684,8 @@ public class FDPFCore
 
 		void processPVBuses()
 		{
-			int[] pv = _btypes.getBuses(BusType.PV);
-			for(int p : pv) _bdiag[p] += 1000000f;
+			for(int p : _btypes.getBuses(BusType.PV))
+				_bdiag[p] += 1e+06f;
 		}
 
 		void processFixedShunts(FixedShuntComposite comp) throws PAModelException
@@ -711,12 +723,6 @@ public class FDPFCore
 			}
 			return rv;
 		}
-
-		public FactorizedBMatrix factorize()
-		{
-			return super.factorize(_pat);
-		}
-		
 	}
 	
 	public static void main(String...args) throws Exception
@@ -750,8 +756,8 @@ public class FDPFCore
 		bldr.enableFlatVoltage(true);
 		bldr.setLeastX(0.001f);
 		bldr.enableRCorrection(true);
-//		bldr.enableMagYCorrection(true);
 		bldr.setUnitRegOverride(true);
+		bldr.setBadXLimit(2f);
 		PAModel m = bldr.load();
 		class mminfo
 		{
@@ -843,6 +849,7 @@ public class FDPFCore
 		for(ACBranchList list : m.getACBranches())
 			ld.dumpList(new File(outdir, list.getListMeta().toString()+".csv"), list);
 		ld.dumpList(new File(outdir, "Gen.csv"), m.getGenerators());
+		ld.dumpList(new File(outdir, "SVC.csv"), m.getSVCs());
 		
 		PrintWriter mmdbg = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outdir, "mismatch.csv"))));

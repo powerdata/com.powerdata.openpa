@@ -76,7 +76,7 @@ public abstract class SpSymMtrxFactorizer
 		int[] last = new int[(matrix.getMaxBusNdx()+1)/2];
 		int nlast = 0;
 		BusConnectionsPriQ bcq = new BusConnectionsPriQ(ccnt);
-		int elimbus = bcq.poll();
+		int elimbus = bcq.peek();
 		int[] elimndorder = new int[matrix.getMaxBusNdx()];
 		Arrays.fill(elimndorder, -1);
 		int brord=0;
@@ -139,7 +139,7 @@ public abstract class SpSymMtrxFactorizer
 			}
 			elimStop();
 			elimndorder[_iord++] = elimbus;
-			elimbus = bcq.poll();
+			elimbus = bcq.peek();
 //			if (elimbus == -1)
 //			{
 //				/*
@@ -270,7 +270,7 @@ class BusConnectionsPriQ
 	 * @return Bus with the lowest (but nonzero) number of connections. Return
 	 *         -1 if queue is empty (all buses have a 0 count)
 	 */
-	public int poll()
+	public int peek()
 	{
 		int nnd = _conncnt.length;
 		for (int i = 2; i < _sublist.length; ++i)
