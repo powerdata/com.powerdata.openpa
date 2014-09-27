@@ -622,7 +622,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _lineCSV.getFloats("X");
 		case LineBFROM:
 		case LineBTO:
-			return null;
+			return (R) returnZero(_lineCSV.getRowCount());
 		case LineRATLT:
 			return (R) _lineCSV.getFloats("NormalOperatingLimit");
 		//Series Capacitor
@@ -635,6 +635,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SercapBUSTO:
 			return (R) getBusesById(_seriesCapCSV.get("Node2"));
 		case SercapOOS:
+			return (R) returnFalse(_seriesCapCSV.getRowCount());
 		case SercapPFROM:
 		case SercapQFROM:
 		case SercapPTO:
