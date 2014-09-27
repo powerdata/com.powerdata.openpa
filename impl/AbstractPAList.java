@@ -582,7 +582,6 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected AbstractPAList(PAModelI model, int size, PAListEnum le)
 	{
 		super(size);
-		System.out.println("[AbstractPAList.java]");
 		_model = model;
 		_km = new NoKeyMgr();
 		setFields(le);
