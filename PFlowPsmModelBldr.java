@@ -2,9 +2,11 @@ package com.powerdata.openpa;
 
 
 import gnu.trove.impl.hash.TObjectHash;
+import gnu.trove.map.TFloatIntMap;
 import gnu.trove.map.TIntFloatMap;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TFloatIntHashMap;
 import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -94,7 +96,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _synchMap;
 	TObjectIntMap<String> _genToSynchMap;
 	TObjectIntMap<String> _genToSynchCaseMap;
-	TIntIntMap _vlevMap;
+	TFloatIntMap _vlevMap;
 	TObjectIntMap<String> _tfmrRatioTapMap;
 	TObjectIntMap<String> _tfmrPhaseTapMap;
 	TObjectIntMap<String> _transformerMap;
@@ -105,7 +107,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _switchCaseMap;
 	
 	//Arrays
-	int[] _vlev;
+	int[] _vlevInt;
 	float[] _vlevFloat;
 	String[] _transformerIDs;
 	String[] _phaseShifterIDs;
@@ -232,14 +234,14 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 
 		//(PAModelI model, int[] busref, int nvl)
 		
-		if(_vlev == null || _vlevMap == null) buildVlev();
+		if(_vlevInt == null || _vlevMap == null) buildVlev();
 		
-		System.out.println("[loadVoltageLevels] built vlev with length of "+_vlev.length);
+		System.out.println("[loadVoltageLevels] built vlev with length of "+_vlevInt.length);
 		System.out.println("[loadVoltageLevels] _vlevMap.size = "+_vlevMap.size());
 		
-		for(int i = 0; i < _vlev.length; ++i)
+		for(int i = 0; i < _vlevInt.length; ++i)
 		{
-			System.out.println("[loadVoltageLevel] _vlev["+i+"] = "+_vlev[i]);
+			System.out.println("[loadVoltageLevel] _vlev["+i+"] = "+_vlevInt[i]);
 		}
 		
 		//return new VoltageLevelListI(_m, _vlev, _vlevMap.size());
@@ -597,7 +599,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) returnAsString(_vlevMap.keys());
 		case VlevBASKV:
 			System.out.println("[VlevBASKV]");
-			return (R) _vlevFloat;
+			return (R) _vlevMap.keys();
 		//Line
 		case LineID:
 			return (R) _lineCSV.get("ID");
@@ -776,13 +778,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
-	private String[] returnAsString(int[] data)
+	private String[] returnAsString(float[] fs)
 	{
-		String[] asString = new String[data.length];
+		String[] asString = new String[fs.length];
 		
-		for(int i = 0; i < data.length; ++i)
+		for(int i = 0; i < fs.length; ++i)
 		{
-			asString[i] = ""+data[i];
+			asString[i] = ""+fs[i];
 		}
 		
 		return asString;
@@ -790,7 +792,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private void buildVlev() throws PAModelException
 	{
-		_vlevMap = new TIntIntHashMap();
+		_vlevMap = new TFloatIntHashMap();
 		TIntFloatMap tempMap = new TIntFloatHashMap();
 		
 		if(_busCSV == null) System.out.println("[buildVlev] _busCSV is null");
@@ -811,13 +813,16 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		//Now that we know how many voltage levels there are we can create proper maps & arrays.
 		//This is probably quite poorly done so please remind me to fix it!
-		_vlev = new int[offset-1];
+		_vlevInt = new int[offset-1];
 		_vlevFloat = new float[offset-1];
 		for(int i = 0; i < offset-1; ++i)
 		{
-			_vlev[i] = (int)tempMap.get(i);
+			_vlevInt[i] = (int)tempMap.get(i);
 			_vlevFloat[i] = tempMap.get(i);
-			_vlevMap.put((int)tempMap.get(i), i);
+			_vlevMap.put(tempMap.get(i), i);
+			System.out.println("[buildVlev] _vlevInt["+i+"] = "+_vlevInt[i]);
+			System.out.println("[buildVlev] _vlevFloat["+i+"] = "+_vlevFloat[i]);
+			System.out.println("[buildVlev] _vlevMap.put("+tempMap.get(i)+", "+i+")");
 		}
 	}
 	
@@ -830,7 +835,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		for(int i = 0; i < busVlev.length; ++i)
 		{
-			busVlev[i] = _vlev[_vlevMap.get((int)kv[i])];
+			busVlev[i] = _vlevInt[_vlevMap.get((int)kv[i])];
 		}
 		
 		return busVlev;
