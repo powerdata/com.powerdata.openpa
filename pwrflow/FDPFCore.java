@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 import com.powerdata.openpa.ACBranchList;
+import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.IslandList;
@@ -25,6 +26,9 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
+import com.powerdata.openpa.Transformer;
+import com.powerdata.openpa.TransformerList;
+import com.powerdata.openpa.TwoTermDev.Side;
 import com.powerdata.openpa.impl.GenSubList;
 import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.impl.LoadSubList;
@@ -42,13 +46,16 @@ public class FDPFCore
 	Variant _variant = Variant.XB;
 	float _sbase;
 	
-	int _niter = 10;
-	float _ptol = 0.005f, _qtol = 0.005f;
+	int _niter = 60;
+	float _ptol = 0.005f, _qtol = 0.005f, _taptol = 0.05f;
+	/** tap adjustment damping factor, set to 0 to disable adjustment */
+	float _tapdampfact = 0f;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
 	
 	/** index into energized Islands */
 	int[] _eindx;
+	
 
 	public int getMaxIterations() {return _niter;}
 	public void setMaxIterations(int niter) {_niter = niter;}
@@ -78,6 +85,11 @@ public class FDPFCore
 	
 	float[] _vm, _vmc, _va;
 	
+	/** list of adjustable taps */
+	TapAdj[] _tadj;
+	/** keep handle of transformers */
+	TransformerRec _tlist;
+	
 	/** track info for each branch type */
 	static class BranchRec
 	{
@@ -87,13 +99,56 @@ public class FDPFCore
 		}
 		BranchComposite _comp;
 		int[] _netndx;
-		BranchMtrxBldr _bp, _bpp;
+		BranchElemBldr _bp, _bpp;
 		public BranchComposite getComp() {return _comp;}
-		public void setBp(MtrxBldrBp mbp) {_bp = mbp;}
-		public void setBpp(MtrxBldrBpp mbpp) {_bpp = mbpp;}
+		public void setBp(ElemBldrBp mbp) {_bp = mbp;}
+		public void setBpp(ElemBldrBpp mbpp) {_bpp = mbpp;}
 		public void setBranchIndex(int[] lndx) {_netndx = lndx;}
-		public BranchMtrxBldr getBp() {return _bp;}
-		public BranchMtrxBldr getBpp() {return _bpp;}
+		public int[] getBranchIndex() {return _netndx;}
+		public BranchElemBldr getBp() {return _bp;}
+		public BranchElemBldr getBpp() {return _bpp;}
+		
+		public void saveBpp(DeviceB bppelem, int index){};
+		public DeviceB diffBpp(DeviceB newelem, int index){return null;} 
+	}
+	
+	class TransformerRec extends BranchRec
+	{
+		float[] _btran, _bsf, _bst;
+		int[] _regbus;
+		
+		public TransformerRec(BranchComposite comp, BusRefIndex bri) throws PAModelException
+		{
+			super(comp);
+			TransformerList tlist = _model.getTransformers();
+			int n = tlist.size();
+			_btran = new float[n];
+			_bsf = new float[n];
+			_bst = new float[n];
+			_regbus = bri.mapBusFcn(tlist, (i,j) -> i.getRegBus(j));
+		}
+
+		@Override
+		public void saveBpp(DeviceB bbr, int index)
+		{
+			_btran[index] = bbr.getBtran();
+			_bsf[index] = bbr.getFromBself();
+			_bst[index] = bbr.getToBself();
+		}
+
+		@Override
+		public DeviceB diffBpp(DeviceB newb, int index)
+		{
+			DeviceB rv = new DeviceBTx(_btran[index]-newb.getBtran(),
+				_bsf[index] - newb.getFromBself(),
+				_bst[index] - newb.getToBself());
+			_btran[index] += rv.getBtran();
+			_bsf[index] += rv.getFromBself();
+			_bst[index] += rv.getToBself();
+			return rv;
+		}
+		
+		public int[] getRegBus() {return _regbus;}
 	}
 	
 	/** branch info by type */
@@ -121,7 +176,20 @@ public class FDPFCore
 		
 		for (Entry<ListMetaType, BranchComposite> e : CalcBase
 				.getBranchComposite(m, bri).entrySet())
-			_brc.put(e.getKey(), new BranchRec(e.getValue()));
+		{
+			BranchComposite c = e.getValue();
+			BranchRec v = null;
+			switch (e.getKey())
+			{
+				case Transformer:
+					_tlist = new TransformerRec(c, bri);
+					v = _tlist;
+					break;
+				default:
+					v = new BranchRec(c);
+			}
+			_brc.put(e.getKey(),v); 
+		}
 		
 		_fsh = CalcBase.getFixedShuntComposite(m, bri);
 		
@@ -156,8 +224,32 @@ public class FDPFCore
 		bPrimeHook(bp);
 		_mbpp = new BDblPrime(mb, ref);
 		_mbpp.savePattern(p);
+		
+		if (_tapdampfact > 0f) buildTapAdj();
+		
 	}
 
+	void buildTapAdj() throws PAModelException
+	{
+		int[] rbus = _tlist.getRegBus();
+		TransformerList tfms = _model.getTransformers();
+		TapAdj[] res = new TapAdj[tfms.size()];
+		Arrays.fill(res, TapAdj.NoAdj);
+		int[] txinsvc = _tlist.getComp().getCalc().getInSvc();
+		int cnt = 0, svccnt=txinsvc.length;
+		for(int i=0; i < svccnt; ++i)
+		{
+			Transformer t = tfms.get(txinsvc[i]);
+			if (t.hasLTC() && t.isRegEnabled())
+			{
+				int r = rbus[t.getIndex()];
+				res[cnt++] = (t.getRegSide() == Side.From) ?
+					new TapAdjFrom(t, r) :
+					new TapAdjTo(t, r);
+			}
+		}
+		_tadj = Arrays.copyOf(res, cnt);
+	}
 	GroupMap configureSVC() throws PAModelException
 	{
 		SVCList svcs = _model.getSVCs();
@@ -197,8 +289,8 @@ public class FDPFCore
 		for(BranchRec brec : _brc.values())
 		{
 			BranchComposite comp = brec.getComp();
-			brec.setBp(new MtrxBldrBp(comp, bpf.calc(comp)));
-			brec.setBpp(new MtrxBldrBpp(comp, bppf.calc(comp)));
+			brec.setBp(new ElemBldrBp(comp, bpf.calc(comp)));
+			brec.setBpp(new ElemBldrBpp(comp, bppf.calc(comp)));
 		}
 	}
 	
@@ -223,25 +315,24 @@ public class FDPFCore
 
 	class IslandConv
 	{
-		int[] _pq, _pv;
 		int _iter = -1, _island;
 		int _worstp=-1, _worstq=-1;
 		float _wpmm=0f, _wqmm=0f;
 		boolean _pconv=false, _qconv=false, _fail=false;
 		
-		public IslandConv(int island, int[] pq, int[] pv) throws PAModelException
+		public IslandConv(int island) throws PAModelException
 		{
-			_pq = pq;
-			_pv = pv;
 			_island = island;
 		}
 		
 		public void test(float[] pmm, float[] qmm)
 		{
+			int[] pq = _btypes.getBuses(BusType.PQ, _island),
+				pv = _btypes.getBuses(BusType.PV, _island);
 			++_iter;
 			_wpmm = 0f;
 			_wqmm = 0f;
-			for(int[] pqpv : new int[][]{_pq, _pv})
+			for(int[] pqpv : new int[][]{pq, pv})
 			{
 				for(int p : pqpv)
 				{
@@ -260,9 +351,9 @@ public class FDPFCore
 				}
 			}
 			
-			for(int pq : _pq)
+			for(int bpq : pq)
 			{
-				float qm = qmm[pq];
+				float qm = qmm[bpq];
 				if (!Float.isFinite(qm))
 				{
 					_fail = true;
@@ -271,7 +362,7 @@ public class FDPFCore
 				qm = Math.abs(qm);
 				if (_wqmm < qm)
 				{
-					_worstq = pq;
+					_worstq = bpq;
 					_wqmm = qm;
 				}
 			}
@@ -281,6 +372,10 @@ public class FDPFCore
 		public boolean pConv() {return _pconv;}
 		public boolean qConv() {return _qconv;}
 		public boolean fail() {return _fail;}
+		public int getWorstP() {return _worstp;}
+		public int getWorstQ() {return _worstq;}
+		public float getWorstPmm() {return _wpmm;}
+		public float getWorstQmm() {return _wqmm;}
 
 		@Override
 		public String toString()
@@ -377,6 +472,7 @@ public class FDPFCore
 			// update voltage and angles
 			if (nconv && nfail)
 			{
+				if (_tapdampfact > 0f) adjustTransformerTaps(convstat);
 				_vmc = _vm.clone();
 				corr.stream().sequential().forEach(j -> j.apply(_vmc));
 //				_pool.execute(rcorr);
@@ -427,9 +523,7 @@ public class FDPFCore
 		int n = convstat.length;
 		for(int i=0; i < n; ++i)
 		{
-			int ei = _eindx[i];
-			convstat[i] = new IslandConv(ei, _btypes.getBuses(BusType.PQ, ei),
-					_btypes.getBuses(BusType.PV, ei)	);
+			convstat[i] = new IslandConv(_eindx[i]);
 		}
 	}
 	
@@ -441,7 +535,134 @@ public class FDPFCore
 		applyLoads(pmm, qmm, vm);
 		applyGens(pmm, qmm);
 		mismatchHook(vm, va, _btypes.getTypes(), pmm, qmm);
+	}
+	
+	interface TapAdj
+	{
+		boolean adjust() throws PAModelException;
+		int getIsland();
+		static public final TapAdj NoAdj = new TapAdj()
+		{
+			@Override
+			public boolean adjust() throws PAModelException
+			{
+				return false;
+			}
 
+			@Override
+			public int getIsland()
+			{
+				return -1;
+			}
+		};
+	}
+	
+	abstract class TapAdjBase implements TapAdj
+	{
+		int _tx, _rbus;
+		int _fbus, _tbus;
+		int _island;
+		TapAdjBase(Transformer t, int rbus) throws PAModelException
+		{
+			_tx = t.getIndex();
+			_rbus = rbus;
+			Bus b = _buses.get(rbus);
+			_island = _eindx[b.getIsland().getIndex()];
+			ACBranchFlow bc = _tlist.getComp().getCalc();
+			_fbus = bc.getFromBus()[_tx];
+			_tbus = bc.getToBus()[_tx];
+		}
+		@Override
+		public int getIsland()
+		{
+			return _island;
+		}
+		
+	}
+
+	class TapAdjFrom extends TapAdjBase
+	{
+		float _step = 0f;
+		TapAdjFrom(Transformer t, int rbus) throws PAModelException
+		{
+			super(t, rbus);
+			_step = t.getFromStepSize();
+		}
+
+		@Override
+		public boolean adjust() throws PAModelException
+		{
+			float adj = 0, vm = _vm[_rbus];
+			Transformer t = _model.getTransformers().get(_tx);
+//				BranchElemBldr bpp = _tlist.getBpp();
+			if (vm < t.getMinKV()) adj = _step;
+			if (vm > t.getMaxKV()) adj = -_step;
+			float a = t.getFromTap()/*, b = t.getToTap()*/;
+			float nval = a + adj,
+				ntap = t.getFromMinTap(),
+				xtap = t.getFromMaxTap();
+			if (nval < ntap) nval = ntap;
+			if (nval > xtap) nval = xtap;
+			if (a != nval)
+			{
+				System.out.format("ftap: %f -> %f\n", t.getFromTap(), nval);
+				t.setFromTap(nval);
+				return true;
+			}
+				//				DeviceB diff = _tlist.diffBpp(bpp.getB(_tx), _tx);
+//				_mbpp.incBoffdiag(_tlist.getBranchIndex()[_tx], diff.getBtran());
+//				_mbpp.incBdiag(_tbus, diff.getToBself());
+			return false;
+		}
+		
+	}
+	
+	class TapAdjTo extends TapAdjBase
+	{
+		float _step = 0f;
+		TapAdjTo(Transformer t, int rbus) throws PAModelException
+		{
+			super(t, rbus);
+			_step = t.getToStepSize();
+		}
+
+		@Override
+		public boolean adjust() throws PAModelException
+		{
+			float adj = 0, vm = _vm[_rbus];
+			Transformer t = _model.getTransformers().get(_tx);
+//				BranchElemBldr bpp = _tlist.getBpp();
+			if (vm < t.getMinKV()) adj = _step;
+			if (vm > t.getMaxKV()) adj = -_step;
+			float a = t.getFromTap()/*, b = t.getToTap()*/;
+			float nval = a + adj,
+				ntap = t.getFromMinTap(),
+				xtap = t.getFromMaxTap();
+			if (nval < ntap) nval = ntap;
+			if (nval > xtap) nval = xtap;
+			if (a != nval)
+			{
+				System.out.format("ftap: %f -> %f\n", t.getFromTap(), nval);
+				t.setFromTap(nval);
+				return true;
+			}
+//				DeviceB diff = _tlist.diffBpp(bpp.getB(_tx), _tx);
+//				_mbpp.incBoffdiag(_tlist.getBranchIndex()[_tx], diff.getBtran());
+//				_mbpp.incBdiag(_fbus, diff.getFromBself());
+			return false;
+		}
+		
+	}
+	
+	
+	void adjustTransformerTaps(IslandConv[] convstat) throws PAModelException
+	{
+		// TODO:  organized TapAdj by island and that should trim down the compares
+		for(TapAdj ta : _tadj)
+		{
+			if (convstat[ta.getIsland()].getWorstQmm() < _taptol)
+				ta.adjust();
+		}
 	}
 	
 	void applyLoads(float[] pmm, float[] qmm, float[] vm) 
@@ -479,7 +700,7 @@ public class FDPFCore
 	
 	protected FactorizedBMatrix getBpp()
 	{
-		if (_mbpp.processSVCs() || _bpp == null)  //indicates minor refactor
+		if (_mbpp.processSVCs() || _bpp == null)
 		{
 			_bpp = _mbpp.factorizeFromPattern();
 			bDblPrimeHook(_mbpp);
@@ -528,33 +749,54 @@ public class FDPFCore
 		}
 	}
 
-
-	static class DeviceB
+	interface DeviceB
+	{
+		float getBtran();
+		float getFromBself();
+		float getToBself();
+	}
+	
+	static class DeviceBLn implements DeviceB
+	{
+		float _y;
+		public DeviceBLn(float y) {_y = y;}
+		@Override
+		public float getBtran() {return -_y;}
+		@Override
+		public float getFromBself() {return _y;}
+		@Override
+		public float getToBself() {return _y;}
+	}
+	
+	static class DeviceBTx implements DeviceB
 	{
 		float _btran, _bfself, _btself;
-		DeviceB(float btran, float bfself, float btself)
+		DeviceBTx(float btran, float bfself, float btself)
 		{
 			_btran = btran;
 			_bfself = bfself;
 			_btself = btself;
 		}
+		@Override
 		public float getBtran() {return _btran;}
+		@Override
 		public float getFromBself() {return _bfself;}
+		@Override
 		public float getToBself() {return _btself;}
 	}
 	
-	/** get the admittance matrix for a branch device */
-	interface BranchMtrxBldr
+	/** build branch admittance matrix elements */
+	interface BranchElemBldr
 	{
 		DeviceB getB(int ndx);
 	}
 
 	
-	static abstract class MtrxBldrBase implements BranchMtrxBldr
+	static abstract class ElemBldrBase implements BranchElemBldr
 	{
 		float[] _y;
 		BranchComposite _c;
-		MtrxBldrBase(BranchComposite c, float[] y)
+		ElemBldrBase(BranchComposite c, float[] y)
 		{
 			_c = c;
 			_y = y;
@@ -562,24 +804,24 @@ public class FDPFCore
 	}
 	
 	/** build B' (ignoring phase shifts) */
-	static class MtrxBldrBp extends MtrxBldrBase
+	static class ElemBldrBp extends ElemBldrBase
 	{
-		MtrxBldrBp(BranchComposite c, float[] y) {super(c,y);}
+		ElemBldrBp(BranchComposite c, float[] y) {super(c,y);}
 
 		@Override
 		public DeviceB getB(int ndx)
 		{
 			float y = _y[ndx];
-			return new DeviceB(-y, y, y);
+			return new DeviceBLn(y);
 		}
 	}
 
 	/** build B'' */
-	static class MtrxBldrBpp extends MtrxBldrBase
+	static class ElemBldrBpp extends ElemBldrBase
 	{
 		float[] _fbch, _tbch, _ftap, _ttap, _bmag;
 		
-		MtrxBldrBpp(BranchComposite c, float[] y) throws PAModelException
+		ElemBldrBpp(BranchComposite c, float[] y) throws PAModelException
 		{
 			super(c, y);
 			ACBranchList l = c.getBranches();
@@ -594,7 +836,7 @@ public class FDPFCore
 		public DeviceB getB(int ndx)
 		{
 			float y = _y[ndx], bm = _bmag[ndx], a = _ftap[ndx], b = _ttap[ndx];
-			return new DeviceB(-y/(a*b), y/(b*b) - bm - _fbch[ndx],
+			return new DeviceBTx(-y/(a*b), y/(b*b) - bm - _fbch[ndx],
 				y/(a*a) - bm - _tbch[ndx]);
 		}
 		
@@ -628,7 +870,7 @@ public class FDPFCore
 				int[] lndx = new int[n];
 				brec.setBranchIndex(lndx);
 				
-				BranchMtrxBldr bldrbp = brec.getBp(), bldrbpp = brec.getBpp();
+				BranchElemBldr bldrbp = brec.getBp(), bldrbpp = brec.getBpp();
 				
 				for (int i = 0; i < n; ++i)
 				{
@@ -636,6 +878,7 @@ public class FDPFCore
 					if (f != t)
 					{
 						DeviceB bp = bldrbp.getB(i), bpp = bldrbpp.getB(i);
+						brec.saveBpp(bpp, i);
 						int brx = net.findBranch(f, t);
 						if (brx == -1) brx = net.addBranch(f, t);
 						lndx[i] = brx;
@@ -723,6 +966,7 @@ public class FDPFCore
 			}
 			return rv;
 		}
+		
 	}
 	
 	public static void main(String...args) throws Exception
@@ -776,67 +1020,67 @@ public class FDPFCore
 		System.err.println("Load PF");
 		FDPFCore pf = new FDPFCore(m)
 		{
-			@Override
-			protected void mismatchHook(float[] vm, float[] va, BusType[] type, float[] pmm, float[] qmm)
-			{
-				mmlist.add(new mminfo(vm.clone(), va.clone(), pmm.clone(), qmm.clone(), type));
-			}
+//			@Override
+//			protected void mismatchHook(float[] vm, float[] va, BusType[] type, float[] pmm, float[] qmm)
+//			{
+//				mmlist.add(new mminfo(vm.clone(), va.clone(), pmm.clone(), qmm.clone(), type));
+//			}
 
-			@Override
-			protected void bPrimeHook(BPrime bp)
-			{
-				try
-				{
-					PrintWriter bpdbg = new PrintWriter(new BufferedWriter(
-						new FileWriter(new File(outdir, "bp.csv"))));
-					dumpMatrix(bp, bpdbg);
-					bpdbg.close();
-
-					PrintWriter fbpdbg = new PrintWriter(new BufferedWriter(
-						new FileWriter(new File(outdir, "fbp.csv"))));
-					dumpFactMatrix(_bp, fbpdbg);
-					fbpdbg.close();
-				} catch (IOException ioe) {ioe.printStackTrace();}
-			}
-
-			private void dumpMatrix(SpSymBMatrix bp, PrintWriter pw)
-			{
-				try
-				{
-					bp.dump(_buses.getName(), pw);
-				} catch(PAModelException ex) {ex.printStackTrace();}
-			}
-
-			@Override
-			protected void bDblPrimeHook(BDblPrime bpp)
-			{
-				try
-				{
-					PrintWriter bpdbg = new PrintWriter(new BufferedWriter(
-						new FileWriter(new File(outdir, "bpp.csv"))));
-					dumpMatrix(bpp, bpdbg);
-					bpdbg.close();
-					
-					PrintWriter fbpdbg = new PrintWriter(new BufferedWriter(
-						new FileWriter(new File(outdir, "fbpp.csv"))));
-					dumpFactMatrix(_bpp, fbpdbg);
-					fbpdbg.close();
-					
-				} catch(IOException ioe) {ioe.printStackTrace();}
-			}
-
-			private void dumpFactMatrix(FactorizedBMatrix bp, PrintWriter pw)
-			{
-				try
-				{
-					bp.dump(_buses.getName(), pw);
-				}
-				catch (PAModelException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+//			@Override
+//			protected void bPrimeHook(BPrime bp)
+//			{
+//				try
+//				{
+//					PrintWriter bpdbg = new PrintWriter(new BufferedWriter(
+//						new FileWriter(new File(outdir, "bp.csv"))));
+//					dumpMatrix(bp, bpdbg);
+//					bpdbg.close();
+//
+//					PrintWriter fbpdbg = new PrintWriter(new BufferedWriter(
+//						new FileWriter(new File(outdir, "fbp.csv"))));
+//					dumpFactMatrix(_bp, fbpdbg);
+//					fbpdbg.close();
+//				} catch (IOException ioe) {ioe.printStackTrace();}
+//			}
+//
+//			private void dumpMatrix(SpSymBMatrix bp, PrintWriter pw)
+//			{
+//				try
+//				{
+//					bp.dump(_buses.getName(), pw);
+//				} catch(PAModelException ex) {ex.printStackTrace();}
+//			}
+//
+//			@Override
+//			protected void bDblPrimeHook(BDblPrime bpp)
+//			{
+//				try
+//				{
+//					PrintWriter bpdbg = new PrintWriter(new BufferedWriter(
+//						new FileWriter(new File(outdir, "bpp.csv"))));
+//					dumpMatrix(bpp, bpdbg);
+//					bpdbg.close();
+//					
+//					PrintWriter fbpdbg = new PrintWriter(new BufferedWriter(
+//						new FileWriter(new File(outdir, "fbpp.csv"))));
+//					dumpFactMatrix(_bpp, fbpdbg);
+//					fbpdbg.close();
+//					
+//				} catch(IOException ioe) {ioe.printStackTrace();}
+//			}
+//
+//			private void dumpFactMatrix(FactorizedBMatrix bp, PrintWriter pw)
+//			{
+//				try
+//				{
+//					bp.dump(_buses.getName(), pw);
+//				}
+//				catch (PAModelException e)
+//				{
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
 			
 		};
 //		FDPFCore pf = new FDPFCore(m);

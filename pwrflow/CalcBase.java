@@ -72,7 +72,6 @@ public abstract class CalcBase
 		@Override
 		public ACBranchFlow getCalc() {return _calc;}
 		public ComplexList getY() {return _y;}
-		
 	}
 
 	public static class FixedShuntComposite implements Composite

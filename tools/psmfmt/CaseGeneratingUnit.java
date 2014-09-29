@@ -5,5 +5,5 @@ public enum CaseGeneratingUnit implements VersionedDoc
 	ID, MW, MWSetPoint, GeneratorOperatingMode;
 
 	@Override
-	public String getVersion() {return "1.7";}
+	public String getVersion() {return "1.9";}
 }

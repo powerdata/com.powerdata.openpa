@@ -1,8 +1,8 @@
 package com.powerdata.openpa.tools.psmfmt;
 
-public enum CasePhaseTapChanger implements VersionedDoc
+public enum CaseSeriesCapacitor implements VersionedDoc
 {
-	ID, ControlStatus, PhaseShift;
+	ID, FromMW, FromMVAr, ToMW, ToMVAr;
 
 	@Override
 	public String getVersion() {return "1.9";}

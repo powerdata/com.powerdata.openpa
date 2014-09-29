@@ -39,6 +39,8 @@ public class PAModelI implements PAModel
 	 
 	ModelBuilderI _bldr;
 	
+	public ModelBuilderI getBuilder() {return _bldr;}
+	
 	PAModelI(ModelBuilderI bldr)
 	{
 		_bldr = bldr;

@@ -75,7 +75,6 @@ public class BusRefIndex
 	HashMap<OneTermDevListIfc<? extends OneTermDev>,
 		ListIndex<OneTermDevListIfc<? extends OneTermDev>>> _map1t = new HashMap<>();
 	HashMap<TwoTermDevListIfc<? extends TwoTermDev>, ListIndex2T> _map2t = new HashMap<>();
-//	HashMap<BaseList<? extends BaseObject>, ListIndex<BaseList<? extends BaseObject>>> _mapreg = new HashMap<>();
 	BusGroupResolver _idx;
 	
 	BusList _buses;

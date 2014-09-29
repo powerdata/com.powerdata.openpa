@@ -61,6 +61,10 @@ public class PsmFmtExport
 		new TransformerOPA(_model).export(odir);
 		new TransformerWindingOPA(_model, _bri).export(odir);
 		new CaseSwitchOPA(_model).export(odir);
+		new CaseLineOPA(_model).export(odir);
+		new CaseTransformerWindingOPA(_model).export(odir);
+		new CaseSeriesCapacitorOPA(_model).export(odir);
+		new CaseSeriesReactorOPA(_model).export(odir);
 	}
 	
 	void exportMeta(File odir) throws IOException

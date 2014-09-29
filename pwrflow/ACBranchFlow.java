@@ -80,17 +80,16 @@ public class ACBranchFlow extends CalcBase
 				float tvmq2 = tvm * tvm / (tt * tt);
 				float ctvmpq = tvmpq * (float) Math.cos(sh);
 				float stvmpq = tvmpq * (float) Math.sin(sh);
-				float yg = ygbr[i]; 
-				float yb = ybbr[i];
+				float yg = ygbr[i], yb = ybbr[i];
 				float gcos = ctvmpq * yg;
 				float bcos = ctvmpq * yb;
 				float gsin = stvmpq * yg;
 				float bsin = stvmpq * yb;
-				float bmag = bmagl[i];
+				float ybmag = yb + bmagl[i];
 				_fp[i] = -gcos - bsin + tvmp2 * yg;
-				_fq[i] = -gsin + bcos - tvmp2 * (yb + bmag + fbch[i]);
+				_fq[i] = -gsin + bcos - tvmp2 * (ybmag + fbch[i]);
 				_tp[i] = -gcos + bsin + tvmq2 * yg;
-				_tq[i] = gsin + bcos - tvmq2 * (yb + bmag + tbch[i]);
+				_tq[i] = gsin + bcos - tvmq2 * (ybmag + tbch[i]);
 			}
 		}
 		catch(PAModelException e)

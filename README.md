@@ -18,9 +18,9 @@ OpenPA Models can be loaded from multiple sources.  The primary source we use is
 
 Two sample models are available:
 
-[PALCO single-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/palco.zip)
+[PALCO model (contains switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/palco.zip)
 
-[CASCADIA single-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia.zip)
+[CASCADIA model (contains switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia.zip)
 
 Converters from other formats such as PSS/e and PSLF to the PowerSimulator formats will be available in the future.
 

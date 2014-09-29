@@ -234,6 +234,20 @@ public enum ColumnMeta
 	/** Transformer from-side off-nom turns ratio  */ 	TfmrTAPFROM,
 	/** Transformer from-side off-nom turns ratio  */	TfmrTAPTO,
 	/** Transformer MVA long-term Rating */				TfmrRATLT,
+	/** Transformer Minimum regulating KV */			TfmrMINREGKV,
+	/** Transformer Maximum regulating KV */			TfmrMAXREGKV,
+	/** Transformer Regulated Bus */					TfmrREGBUS,
+	/** Transformer Tap Side */							TfmrREGSIDE,
+	/** Transformer voltage regulation enabled */		TfmrREGENAB,
+	/** transformer can regulate voltage */				TfmrHASREG,
+	/** transformer min tap ratio from-side*/			TfmrMNTPFROM,
+	/** transformer max tap ratio from-side*/			TfmrMXTPFROM,
+	/** transformer min tap ratio to-side*/				TfmrMNTPTO,
+	/** transformer max tap ratio to-side*/				TfmrMXTPTO,
+	/** transformer step size from-side */				TfmrSTEPFROM,
+	/** transformer step size to-side */				TfmrSTEPTO,
+	
+	
 	/*
 	 * Switch 
 	 */
