@@ -75,6 +75,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _ratioTapChgCaseCSV;
 	SimpleCSV _phaseTapChgCaseCSV;
 	SimpleCSV _switchCaseCSV;
+	SimpleCSV _lineCaseCSV;
 	
 	
 	//Not yet importing
@@ -105,6 +106,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _wdgInRatioMap;
 	TObjectIntMap<String> _wdgToTfmrMap;
 	TObjectIntMap<String> _switchCaseMap;
+	TObjectIntMap<String> _lineMap;
 	
 	//Arrays
 	int[] _vlevInt;
@@ -174,6 +176,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		try
 		{
 			_lineCSV = new SimpleCSV(new File(_dir, "Line.csv"));
+			_lineCaseCSV = new SimpleCSV(new File(_dir, "PsmCaseLine.csv"));
 			return new LineListI(_m, _lineCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -610,10 +613,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case LineOOS:
 			return (R) returnFalse(_lineCSV.getRowCount());
 		case LinePFROM:
+			return (R) getLineCaseData("FromMW");
 		case LineQFROM:
+			return (R) getLineCaseData("FromMVAr");
 		case LinePTO:
+			return (R) getLineCaseData("ToMW");
 		case LineQTO:
-			return (R) returnZero(_lineCSV.getRowCount());
+			return (R) getLineCaseData("ToMVAr");
 		case LineR:
 			return (R) _lineCSV.getFloats("R");
 		case LineX:
@@ -1018,6 +1024,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
+	private float[] getLineCaseData(String col)
+	{
+		if(_lineMap == null) buildLineMap();
+	
+		String[] ids = _lineCSV.get("ID");
+		float[] unsortedData = _lineCaseCSV.getFloats(col);
+		float[] data = new float[unsortedData.length];
+		
+		for(int i = 0; i < ids.length; ++i)
+		{
+			data[i] = unsortedData[_lineMap.get(ids[i])];
+		}
+		
+		return data;
+	}
+	
 	private String[] getTransformerDataStrings(String col, String csv)
 	{
 		//Build maps if they don't exist
@@ -1246,6 +1268,17 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
 			_shuntCapMap.put(caseIDs[i], i);
+		}
+	}
+	
+	private void buildLineMap()
+	{
+		String[] lineIDs = _lineCaseCSV.get("ID");
+		
+		_lineMap = new TObjectIntHashMap<>(lineIDs.length);
+		for(int i = 0; i < lineIDs.length; ++i)
+		{
+			_lineMap.put(lineIDs[i], i);
 		}
 	}
 	
