@@ -223,4 +223,11 @@ public class FixedShuntList extends AbstractList<FixedShunt> implements FixedShu
 	{
 		return _src.size();
 	}
+
+
+	@Override
+	public FixedShunt getByID(String id) throws PAModelException
+	{
+		return _src.getByID(id);
+	}
 }

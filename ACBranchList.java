@@ -508,5 +508,11 @@ public class ACBranchList extends AbstractList<ACBranch> implements ACBranchList
 	{
 		_src.setLTRating(mva);
 	}
+
+	@Override
+	public ACBranch getByID(String id) throws PAModelException
+	{
+		return _src.getByID(id);
+	}
 	
 }
