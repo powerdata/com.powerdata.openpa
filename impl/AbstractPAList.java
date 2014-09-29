@@ -1,14 +1,11 @@
 package com.powerdata.openpa.impl;
 
-import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import com.powerdata.openpa.BaseObject;
@@ -29,7 +26,6 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected SNdxKeyOfs _keyndx;
 	private int[] _keys;
 	protected KeyMgr _km;
-	//HashMap<String, T> _idMap;
 	TObjectIntMap<String> _idMap;
 	
 	interface KeyMgr

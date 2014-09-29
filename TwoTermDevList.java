@@ -269,4 +269,10 @@ public class TwoTermDevList extends AbstractList<TwoTermDev> implements
 	{
 		return _src.size();
 	}
+
+	@Override
+	public TwoTermDev getByID(String id) throws PAModelException
+	{
+		return _src.getByID(id);
+	}
 }

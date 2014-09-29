@@ -195,4 +195,10 @@ public class OneTermDevList extends AbstractList<OneTermDev> implements OneTermD
 	{
 		return _src.size();
 	}
+
+	@Override
+	public OneTermDev getByID(String id) throws PAModelException
+	{
+		return _src.getByID(id);
+	}
 }
