@@ -435,8 +435,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		// TODO In progress
 		
-		//Planning on using getRowCount to see if keys.length = numRows.
-		//If they aren't the same then I'll have to loop through the keys and build the array myself
 		switch(ctype)
 		{
 		//Bus
@@ -702,11 +700,12 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrBUSTO:
 			return (R) getBusesById(getTransformerDataStrings("Node2", "winding"));
 		case TfmrOOS:
+			return (R) returnFalse(_transformerIDs.length);
 		case TfmrPFROM:
 		case TfmrQFROM:
 		case TfmrPTO:
 		case TfmrQTO:
-			return null;
+			return (R) returnZero(_transformerIDs.length);
 		case TfmrR:
 			return (R) getTransformerDataFloats("R", "winding");
 		case TfmrX:
