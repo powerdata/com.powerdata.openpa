@@ -5,5 +5,5 @@ public enum CaseLoad implements VersionedDoc
 	ID, MW, MVAr;
 
 	@Override
-	public String getVersion() {return "1.7";}
+	public String getVersion() {return "1.9";}
 }

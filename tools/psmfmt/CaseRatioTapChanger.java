@@ -5,5 +5,5 @@ public enum CaseRatioTapChanger implements VersionedDoc
 	ID, Ratio;
 
 	@Override
-	public String getVersion() {return "1.8";}
+	public String getVersion() {return "1.9";}
 }

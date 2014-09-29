@@ -5,6 +5,8 @@ public class TwoTermDev extends AbstractBaseObject
 {
 	TwoTermDevListIfc<? extends TwoTermDev> _list;
 	
+	public enum Side {From,To};
+	
 	public TwoTermDev(TwoTermDevListIfc<? extends TwoTermDev> list, int ndx)
 	{
 		super(list, ndx);

@@ -27,7 +27,7 @@ public class BasicBusGrpMap implements BusGrpMap
 	@Override
 	public int getGrp(int index)
 	{
-		return _map[index];
+		return (index == -1) ? -1 : _map[index];
 	}
 
 	@Override
