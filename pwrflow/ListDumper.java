@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PflowModelBuilder;
@@ -122,10 +124,26 @@ public class ListDumper
 				{
 					/* output cell */
 					if (j>0) pw.print(Dlm);
-					Object v = ometh.get(j).invoke(list, i);
+					Object v = null;
+					try
+					{
+						v = ometh.get(j).invoke(list, i);	
+					}
+					catch(InvocationTargetException e)
+					{
+						v = "<null>";
+					}
 					boolean isstr = !Number.class.isInstance(v);
 					if (isstr) pw.print('\'');
-					String vs = v == null ? null : v.toString();
+					String vs = null;
+					try
+					{
+						vs = v == null ? null : v.toString();
+					}
+					catch(NullPointerException e)
+					{
+						vs = "<null>";
+					}
 					pw.print((vs==null)?"<null>":vs);
 					if (isstr) pw.print('\'');
 				}

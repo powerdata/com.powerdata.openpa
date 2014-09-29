@@ -94,7 +94,7 @@ public enum ColumnMeta
 	/** Svc output mode */								SvcOMODE,
 	
 	/*
-	 * Shunt Reactor
+	 * Switched Shunt
 	 */
 	
 	/** Switched Shunt ID */ 							SwshID,

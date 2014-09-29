@@ -80,6 +80,10 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 		_buses = model.getBuses();
 		setupEgStatus();
 	}
+	public IslandListI() 
+	{
+		super();
+	};
 	@Override
 	public Island get(int index)
 	{
