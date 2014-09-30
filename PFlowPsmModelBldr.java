@@ -1,21 +1,16 @@
 package com.powerdata.openpa;
 
 
-import gnu.trove.impl.hash.TObjectHash;
 import gnu.trove.map.TFloatIntMap;
 import gnu.trove.map.TIntFloatMap;
-import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TFloatIntHashMap;
 import gnu.trove.map.hash.TIntFloatHashMap;
-import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-
 import com.powerdata.openpa.Gen.Type;
 import com.powerdata.openpa.tools.QueryString;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -25,7 +20,6 @@ import com.powerdata.openpa.impl.GenListI;
 import com.powerdata.openpa.impl.LineListI;
 import com.powerdata.openpa.impl.LoadListI;
 import com.powerdata.openpa.impl.OwnerListI;
-import com.powerdata.openpa.impl.PAModelI;
 import com.powerdata.openpa.impl.PhaseShifterListI;
 import com.powerdata.openpa.impl.SVCListI;
 import com.powerdata.openpa.impl.SeriesCapListI;
@@ -38,8 +32,6 @@ import com.powerdata.openpa.impl.SwitchedShuntListI;
 import com.powerdata.openpa.impl.TransformerListI;
 import com.powerdata.openpa.impl.TwoTermDCLineListI;
 import com.powerdata.openpa.impl.VoltageLevelListI;
-import com.powerdata.pd3.PDDB;
-import com.powerdata.pd3.PDDBException;
 
 public class PFlowPsmModelBldr extends PflowModelBuilder 
 {

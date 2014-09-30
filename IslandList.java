@@ -1,6 +1,5 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.BusListI;
 import com.powerdata.openpa.impl.IslandListI;
 
 
