@@ -25,7 +25,6 @@ public class VoltageLevelListI extends GroupListI<VoltageLevel> implements
 	public VoltageLevelListI(PAModelI model, int[] busref, int nvl)
 	{
 		super(model, nvl, _PFld);
-		System.out.println("[VoltageLevelListI] Created");
 		setupMap(busref, nvl);
 	}
 	

@@ -141,7 +141,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		try 
 		{
-			System.out.println("Loading buses");
 			if(_busCSV == null) _busCSV = new SimpleCSV(new File(_dir, "Node.csv"));
 			return new BusListI(_m, _busCSV.getRowCount());
 		} 
@@ -592,13 +591,10 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _stationCSV.get("Name");
 		//Voltage Level - No csv
 		case VlevID:
-			System.out.println("[VlevID]");
 			return (R) returnAsString(_vlevMap.keys());
 		case VlevNAME:
-			System.out.println("[VlevNAME]");
 			return (R) returnAsString(_vlevMap.keys());
 		case VlevBASKV:
-			System.out.println("[VlevBASKV]");
 			return (R) _vlevMap.keys();
 		//Line
 		case LineID:
@@ -823,7 +819,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(!tempMap.containsValue(kv[i]))
 			{
 				//New level found, add it to the map
-				System.out.println("[buildVlev] tempMap.put("+offset+", "+kv[i]+")");
+//				System.out.println("[buildVlev] tempMap.put("+offset+", "+kv[i]+")");
 				tempMap.put(offset, kv[i]);
 				offset++;
 			}
@@ -836,8 +832,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_vlevFloat[i] = tempMap.get(i);
 			_vlevMap.put(tempMap.get(i), i);
-			System.out.println("[buildVlev] _vlevFloat["+i+"] = "+_vlevFloat[i]);
-			System.out.println("[buildVlev] _vlevMap.put("+tempMap.get(i)+", "+i+")");
+//			System.out.println("[buildVlev] _vlevFloat["+i+"] = "+_vlevFloat[i]);
+//			System.out.println("[buildVlev] _vlevMap.put("+tempMap.get(i)+", "+i+")");
 		}
 	}
 	
@@ -851,7 +847,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		for(int i = 0; i < busVlev.length; ++i)
 		{
 			busVlev[i] = _vlevMap.get((int)kv[i]);
-			System.out.println("\n[getBusVlev] busVlev["+i+"] = "+busVlev[i]);
+//			System.out.println("\n[getBusVlev] busVlev["+i+"] = "+busVlev[i]);
 		}
 		
 		return busVlev;
