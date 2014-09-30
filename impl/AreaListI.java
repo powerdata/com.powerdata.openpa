@@ -28,7 +28,7 @@ public class AreaListI extends GroupListI<Area> implements AreaList
 	}
 	public AreaListI(PAModelI model, int[] busref, int narea)
 	{
-		super(model, null, _PFld);
+		super(model, narea, _PFld);
 		setupMap(busref, narea);
 	}
 	public AreaListI(PAModelI model, int[] keys, int[] busref)
