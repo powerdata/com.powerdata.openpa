@@ -107,7 +107,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _windingCaseMap;
 	
 	//Arrays / Lists
-	int[] _vlevInt;
 	float[] _vlevFloat;
 	List<String> _transformerIDs;
 	List<String> _phaseShifterIDs;
@@ -235,7 +234,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 
 		//(PAModelI model, int[] busref, int nvl)
 		
-		if(_vlevInt == null || _vlevMap == null) buildVlev();
+		if(_vlevFloat == null || _vlevMap == null) buildVlev();
 		
 //		System.out.println("[loadVoltageLevels] built vlev with length of "+_vlevInt.length);
 //		System.out.println("[loadVoltageLevels] _vlevMap.size = "+_vlevMap.size());
@@ -449,7 +448,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return null;
 		case BusFREQSRCPRI:
 			return (R) _busCSV.getInts("FrequencySourcePriority");
-		case BusAREA: //Returns area object 
+		case BusAREA:
+			return (R) getBusAreas();
 		case BusOWNER:
 		case BusSTATION:
 			return null;
@@ -768,6 +768,16 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}
 	}
 	
+	private Area[] getBusAreas()
+	{
+		//Get list of buses
+		String[] busIDs = _busCSV.get("ID");
+		//Get their substations
+		//get the control area of the substation
+		
+		return null;
+	}
+	
 	private float[] returnZero(int size)
 	{
 		float[] data = new float[size];
@@ -803,7 +813,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		_vlevMap = new TFloatIntHashMap();
 		TIntFloatMap tempMap = new TIntFloatHashMap();
 		
-		if(_busCSV == null) System.out.println("[buildVlev] _busCSV is null");
+//		if(_busCSV == null) System.out.println("[buildVlev] _busCSV is null");
 		float[] kv = _busCSV.getFloats("NominalKV");
 		int offset = 0;
 		
@@ -813,7 +823,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(!tempMap.containsValue(kv[i]))
 			{
 				//New level found, add it to the map
-//				System.out.println("[buildVlev] tempMap.put("+offset+", "+kv[i]+")");
+				System.out.println("[buildVlev] tempMap.put("+offset+", "+kv[i]+")");
 				tempMap.put(offset, kv[i]);
 				offset++;
 			}
@@ -821,16 +831,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		//Now that we know how many voltage levels there are we can create proper maps & arrays.
 		//This is probably quite poorly done so please remind me to fix it!
-		_vlevInt = new int[offset-1];
 		_vlevFloat = new float[offset-1];
 		for(int i = 0; i < offset-1; ++i)
 		{
-			_vlevInt[i] = (int)tempMap.get(i);
 			_vlevFloat[i] = tempMap.get(i);
 			_vlevMap.put(tempMap.get(i), i);
-//			System.out.println("[buildVlev] _vlevInt["+i+"] = "+_vlevInt[i]);
-//			System.out.println("[buildVlev] _vlevFloat["+i+"] = "+_vlevFloat[i]);
-//			System.out.println("[buildVlev] _vlevMap.put("+tempMap.get(i)+", "+i+")");
+			System.out.println("[buildVlev] _vlevFloat["+i+"] = "+_vlevFloat[i]);
+			System.out.println("[buildVlev] _vlevMap.put("+tempMap.get(i)+", "+i+")");
 		}
 	}
 	
@@ -843,7 +850,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		for(int i = 0; i < busVlev.length; ++i)
 		{
-			busVlev[i] = _vlevInt[_vlevMap.get((int)kv[i])];
+			busVlev[i] = _vlevMap.get((int)kv[i]);
+			System.out.println("\n[getBusVlev] busVlev["+i+"] = "+busVlev[i]);
 		}
 		
 		return busVlev;
@@ -1114,9 +1122,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			//Have tfmr/phase ID. Need to winding ID.
 			//Using the winding ID we'll get the case offset which will give us the float from unsorted date
-			System.out.println("\n============\n[getWindingCaseData] Col: "+col+"\n[getWindingCaseData] IDs["+i+"/"+ids.size()+" | "+_ratioTapChgCSV.getRowCount()+"] = "+ids.get(i));
-			System.out.println("[getWindingCaseData] wdgIDs["+_wdgToTfmrMap.get(ids.get(i))+"] = "+wdgIDs[_wdgToTfmrMap.get(ids.get(i))]);
-			System.out.println("[getWindingCaseData] data["+_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])+"] = "+unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])]);
+//			System.out.println("\n============\n[getWindingCaseData] Col: "+col+"\n[getWindingCaseData] IDs["+i+"/"+ids.size()+" | "+_ratioTapChgCSV.getRowCount()+"] = "+ids.get(i));
+//			System.out.println("[getWindingCaseData] wdgIDs["+_wdgToTfmrMap.get(ids.get(i))+"] = "+wdgIDs[_wdgToTfmrMap.get(ids.get(i))]);
+//			System.out.println("[getWindingCaseData] data["+_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])+"] = "+unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])]);
 			data[i] = unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])];
 		}
 		
@@ -1208,6 +1216,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 	}
 	
+	private void buildBusMap()
+	{
+		String[] busSub = _busCSV.get("Substation");
+		
+	}
 	
 	private void buildGeneratorMaps()
 	{
