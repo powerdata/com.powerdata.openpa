@@ -583,10 +583,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case IslandID:
 		case IslandNAME:
 			String[] ids = new String[_m.getIslands().size()];
-			for(int i = 0; i < ids.length; ++i)
-			{
-				ids[i] = ""+i;
-			}
+			for(int i = 0; i < ids.length; ++i) { ids[i] = ""+i; }
 			return (R) ids;
 		case IslandFREQ:
 			return (R) returnZero(_m.getIslands().size());
@@ -681,33 +678,47 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(_transformerMap == null) buildTransformerMaps();
 			return (R) _phaseShifterIDs;
 		case PhashNAME:
+			return (R) getTransformerDataStrings("Name", "transformer", false);
 		case PhashBUSFROM:
+			return (R) getBusesById(getTransformerDataStrings("Node1", "winding", false));
 		case PhashBUSTO:
+			return (R) getBusesById(getTransformerDataStrings("Node2", "winding", false));
 		case PhashOOS:
+			return (R) returnFalse(_phaseShifterIDs.size());
 		case PhashPFROM:
+			return (R) getWindingCaseData("FromMW", false);
 		case PhashQFROM:
+			return (R) getWindingCaseData("FromMVAr", false);
 		case PhashPTO:
+			return (R) getWindingCaseData("ToMW", false);
 		case PhashQTO:
+			return (R) getWindingCaseData("ToMVAr", false);
 		case PhashR:
+			return (R) getTransformerDataFloats("R", "winding", false);
 		case PhashX:
+			return (R) getTransformerDataFloats("X", "winding", false);
 		case PhashGMAG:
+			return null;
 		case PhashBMAG:
+			return (R) getTransformerDataFloats("Bmag", "winding", false);
 		case PhashANG:
 		case PhashTAPFROM:
 		case PhashTAPTO:
 		case PhashCTRLMODE:
 			return null;
+		case PhashRATLT:
+			return (R) getTransformerDataFloats("NormalOperatingLimit", "winding", false);
 		//Transformer
 		case TfmrID:
 			//Build maps if they don't exist
 			if(_transformerMap == null) buildTransformerMaps();
 			return (R) _transformerIDs;
 		case TfmrNAME:
-			return (R) getTransformerDataStrings("Name", "transformer");
+			return (R) getTransformerDataStrings("Name", "transformer", true);
 		case TfmrBUSFROM:
-			return (R) getBusesById(getTransformerDataStrings("Node1", "winding"));
+			return (R) getBusesById(getTransformerDataStrings("Node1", "winding", true));
 		case TfmrBUSTO:
-			return (R) getBusesById(getTransformerDataStrings("Node2", "winding"));
+			return (R) getBusesById(getTransformerDataStrings("Node2", "winding", true));
 		case TfmrOOS:
 			return (R) returnFalse(_transformerIDs.size());
 		case TfmrPFROM:
@@ -719,19 +730,19 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrQTO:
 			return (R) getWindingCaseData("ToMVAr", true);
 		case TfmrR:
-			return (R) getTransformerDataFloats("R", "winding");
+			return (R) getTransformerDataFloats("R", "winding", true);
 		case TfmrX:
-			return (R) getTransformerDataFloats("X", "winding");
+			return (R) getTransformerDataFloats("X", "winding", true);
 		case TfmrGMAG:
 			return null;
 		case TfmrBMAG:
-			return (R) getTransformerDataFloats("Bmag", "winding");
+			return (R) getTransformerDataFloats("Bmag", "winding", true);
 		case TfmrANG:
 		case TfmrTAPFROM:
 		case TfmrTAPTO:
 			return null;
 		case TfmrRATLT:
-			return (R) getTransformerDataFloats("NormalOperatingLimit", "winding");
+			return (R) getTransformerDataFloats("NormalOperatingLimit", "winding", true);
 		//Switch
 		case SwID:
 			return (R) _switchCSV.get("ID");
@@ -1088,56 +1099,88 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
-	private String[] getTransformerDataStrings(String col, String csv)
+//	private String[] getTransformerDataStrings(String col, String csv)
+//	{
+//		//Build maps if they don't exist
+//		if(_transformerMap == null) buildTransformerMaps();
+//		
+//		String[] data = new String[_transformerIDs.size()];
+//		String[] unsortedData;
+//		
+//		if(csv.toLowerCase().equals("transformer"))
+//		{
+//			unsortedData = _transformerCSV.get(col);
+//			for(int i = 0; i < _transformerIDs.size(); ++i)
+//			{
+//				data[i] = unsortedData[_transformerMap.get(_transformerIDs.get(i))];
+//			}
+//		}
+//		else if(csv.toLowerCase().equals("winding"))
+//		{
+//			unsortedData = _tfmrWindingCSV.get(col);
+//			for(int i = 0; i < _transformerIDs.size(); ++i)
+//			{
+//				data[i] = unsortedData[_wdgToTfmrMap.get(_transformerIDs.get(i))];
+//			}
+//		}
+//		
+//		return data;
+//	}
+	
+	private String[] getTransformerDataStrings(String col, String csv, boolean isTfmr)
 	{
 		//Build maps if they don't exist
 		if(_transformerMap == null) buildTransformerMaps();
+		List<String> ids = (isTfmr)?_transformerIDs:_phaseShifterIDs;
 		
-		String[] data = new String[_transformerIDs.size()];
+		
+		
+		String[] data = new String[ids.size()];
 		String[] unsortedData;
 		
 		if(csv.toLowerCase().equals("transformer"))
 		{
 			unsortedData = _transformerCSV.get(col);
-			for(int i = 0; i < _transformerIDs.size(); ++i)
+			for(int i = 0; i < ids.size(); ++i)
 			{
-				data[i] = unsortedData[_transformerMap.get(_transformerIDs.get(i))];
+				data[i] = unsortedData[_transformerMap.get(ids.get(i))];
 			}
 		}
 		else if(csv.toLowerCase().equals("winding"))
 		{
 			unsortedData = _tfmrWindingCSV.get(col);
-			for(int i = 0; i < _transformerIDs.size(); ++i)
+			for(int i = 0; i < ids.size(); ++i)
 			{
-				data[i] = unsortedData[_wdgToTfmrMap.get(_transformerIDs.get(i))];
+				data[i] = unsortedData[_wdgToTfmrMap.get(ids.get(i))];
 			}
 		}
 		
 		return data;
 	}
 	
-	private float[] getTransformerDataFloats(String col, String csv)
+	private float[] getTransformerDataFloats(String col, String csv, boolean isTfmr)
 	{
 		//Build maps if they don't exist
 		if(_transformerMap == null) buildTransformerMaps();
+		List<String> ids = (isTfmr)?_transformerIDs:_phaseShifterIDs;
 		
-		float[] data = new float[_transformerIDs.size()];
+		float[] data = new float[ids.size()];
 		float[] unsortedData;
 		
 		if(csv.toLowerCase().equals("transformer"))
 		{
 			unsortedData = _transformerCSV.getFloats(col);
-			for(int i = 0; i < _transformerIDs.size(); ++i)
+			for(int i = 0; i < ids.size(); ++i)
 			{
-				data[i] = unsortedData[_transformerMap.get(_transformerIDs.get(i))];
+				data[i] = unsortedData[_transformerMap.get(ids.get(i))];
 			}
 		}
 		else if(csv.toLowerCase().equals("winding"))
 		{
 			unsortedData = _tfmrWindingCSV.getFloats(col);
-			for(int i = 0; i < _transformerIDs.size(); ++i)
+			for(int i = 0; i < ids.size(); ++i)
 			{
-				data[i] = unsortedData[_wdgToTfmrMap.get(_transformerIDs.get(i))];
+				data[i] = unsortedData[_wdgToTfmrMap.get(ids.get(i))];
 			}
 		}
 		
