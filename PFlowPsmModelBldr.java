@@ -444,7 +444,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R)_busCSV.get("Name");
 		case BusVM: //Returns float
 		case BusVA:	//Returns float
-			return null;
+			return (R) returnZero(_busCSV.getRowCount());
 		case BusFREQSRCPRI:
 			return (R) _busCSV.getInts("FrequencySourcePriority");
 		case BusAREA:
