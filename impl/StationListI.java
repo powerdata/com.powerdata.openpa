@@ -19,10 +19,10 @@ public class StationListI extends GroupListI<Station> implements StationList
 
 	public StationListI() {super();}
 	
-	public StationListI(PAModelI model, int[] busref, int nowner)
+	public StationListI(PAModelI model, int[] busref, int nstation)
 	{
-		super(model, null, _PFld);
-		setupMap(busref, nowner);
+		super(model, nstation, _PFld);
+		setupMap(busref, nstation);
 	}
 	
 	public StationListI(PAModelI model, int[] keys, int[] busref)

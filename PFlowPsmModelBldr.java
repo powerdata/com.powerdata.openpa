@@ -21,6 +21,7 @@ import com.powerdata.openpa.tools.SimpleCSV;
 import com.powerdata.openpa.impl.AreaListI;
 import com.powerdata.openpa.impl.BusListI;
 import com.powerdata.openpa.impl.GenListI;
+import com.powerdata.openpa.impl.IslandListI;
 import com.powerdata.openpa.impl.LineListI;
 import com.powerdata.openpa.impl.LoadListI;
 import com.powerdata.openpa.impl.OwnerListI;
@@ -110,6 +111,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	//Arrays / Lists
 	int[] _busAreaIndex;
+	int[] _busStationIndex;
 	float[] _vlevFloat;
 	List<String> _transformerIDs;
 	List<String> _phaseShifterIDs;
@@ -193,7 +195,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_areaCSV = new SimpleCSV(new File(_dir, "ControlArea.csv"));
 			//AreaListI(PAModelI model, int[] busref, int narea)
-			if(_busAreaIndex == null) buildBusAreaOffsets();
+			if(_busAreaIndex == null) buildBusAreaIndex();
 			return new AreaListI(_m, _busAreaIndex, _areaCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -218,7 +220,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		try
 		{
 			_substationCSV = new SimpleCSV(new File(_dir, "Substation.csv"));
-			return StationListI.Empty;
+			if(_busStationIndex == null) buildBusStationIndex();
+			return new StationListI(_m, _busStationIndex, _busStationIndex.length);
 		}
 		catch (IOException e) 
 		{
@@ -246,9 +249,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	protected IslandList loadIslands() throws PAModelException 
 	{
 		// TODO Incomplete
-		//Didn't see an island csv in the document
-		// PD3ModelBldr looks like it creates a view using bus keys 
-		return IslandList.Empty;
+		
+		IslandList islands = new IslandListI(_m);
+		
+		
+		return islands;
 	}
 
 	@Override
@@ -446,7 +451,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _busAreaIndex;
 		case BusOWNER:
 		case BusSTATION:
-			return null;
+			if(_busStationIndex == null) buildBusStationIndex();
+			return (R) _busStationIndex;
 		case BusVLEV:
 			return (R) getBusVlev();
 		//Gen
@@ -576,7 +582,14 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		//Island - No csv
 		case IslandID:
 		case IslandNAME:
+			String[] ids = new String[_m.getIslands().size()];
+			for(int i = 0; i < ids.length; ++i)
+			{
+				ids[i] = ""+i;
+			}
+			return (R) ids;
 		case IslandFREQ:
+			return (R) returnZero(_m.getIslands().size());
 		case IslandEGZSTATE:
 			return null;
 		//Station
@@ -832,7 +845,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}	
 	}
 	
-	private void buildBusAreaOffsets() throws PAModelException
+	private void buildBusAreaIndex() throws PAModelException
 	{
 		if(_areaMap == null) buildAreaMap();
 		if(_stationOffsetMap == null) buildSubstationMap();
@@ -849,6 +862,19 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 //			System.out.println("[getBusAreaOffsets] _areaMap.get("+areaIDs[_stationOffsetMap.get(stationIDs[i])]+") = "+_areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]));
 
 			_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+		}
+	}
+	private void buildBusStationIndex() throws PAModelException
+	{
+		if(_stationOffsetMap == null) buildSubstationMap();
+		if(_busCSV == null) loadBuses();
+		String[] substationIDs = _busCSV.get("Substation");
+		_busStationIndex = new int[substationIDs.length];
+		
+		
+		for(int i = 0; i < substationIDs.length; ++i)
+		{
+			_busStationIndex[i] = _stationOffsetMap.get(substationIDs[i]);
 		}
 	}
 	
@@ -900,9 +926,10 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return isOperable;
 	}
 	
-	private Gen.Mode[] getGenMode()
+	private Gen.Mode[] getGenMode() throws PAModelException
 	{
-		String[] gens = _genCSV.get("genControlMode");
+		if(_genCSV == null) loadGens();
+		String[] gens = _genCSV.get("GenControlMode");
 		Gen.Mode genModes[] = new Gen.Mode[gens.length];
 		
 		for(int i = 0; i < gens.length; ++i)
