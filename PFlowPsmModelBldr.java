@@ -450,6 +450,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case BusAREA:
 			return (R) _busAreaIndex;
 		case BusOWNER:
+			return null;
 		case BusSTATION:
 			if(_busStationIndex == null) buildBusStationIndex();
 			return (R) _busStationIndex;
@@ -484,12 +485,17 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _genCSV.getFloats("MaxOperatingMW");
 		case GenMINQ:
 		case GenMAXQ:
+			return (R) returnZero(_genCSV.getRowCount());
 		case GenPS:
+			return (R) getGenDataFloat("MWSetPoint", "gencase");
 		case GenQS:
+			return (R) getGenDataFloat("MVArSetpoint", "synchcase");
 		case GenAVR: 
+			return (R) getAVRMode();
 		case GenVS:
+			return (R) getGenDataFloat("KVSetPoint", "synchcase");
 		case GenREGBUS:
-			return null;
+			return (R) getGenRegBus();
 		//Load
 		case LoadID:
 			return	(R) _loadCSV.get("ID");
@@ -940,34 +946,62 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	private Gen.Mode[] getGenMode() throws PAModelException
 	{
 		if(_genCSV == null) loadGens();
-		String[] gens = _genCSV.get("GenControlMode");
-		Gen.Mode genModes[] = new Gen.Mode[gens.length];
-		
-		for(int i = 0; i < gens.length; ++i)
+		String[] opMode = _genCSV.get("GenControlMode");
+		Gen.Mode genModes[] = new Gen.Mode[opMode.length];
+		if(opMode.equals(null))
 		{
-			genModes[i] = null;
+			System.err.println("[PFlowPsmModelBldr] Error generator column \"GenControlMode\". Does it exist in the CSV?");
+			Arrays.fill(genModes, null);
+		}
+		else
+		{
+			for(int i = 0; i < opMode.length; ++i)
+			{
+				genModes[i] = Gen.Mode.valueOf(opMode[i].toUpperCase());
+			}
 		}
 		
 		return genModes;
 	}
 	
+	private boolean[] getAVRMode() throws PAModelException
+	{
+		String[] genAVR = getGenDataString("AVRMode","synchcase");
+		boolean[] avr = new boolean[genAVR.length];
+		
+		for(int i = 0; i < genAVR.length; ++i)
+		{
+			avr[i] = (genAVR[i].toLowerCase().equals("off"))?false:true;
+		}
+		
+		return avr;
+	}
+	
 	private float[] getLoadCaseData(String col)
 	{
 		String[] loadIDs = _loadCSV.get("ID");
-		float[] caseData = _loadCaseCSV.getFloats(col);
 		float[] data = new float[loadIDs.length];
-		//check to see if the hashmap has been created yet;
-		if(_loadMap == null) buildLoadMap();
-		
-		for(int i = 0; i < data.length; ++i)
+		float[] caseData = _loadCaseCSV.getFloats(col);
+		if(caseData == null) 
 		{
-			//Debugging
-//			System.out.println("\n=========\nCol: "+col);
-//			System.out.println("loadIDs["+i+"]: "+loadIDs[i]);
-//			System.out.println("_loadMap: "+_loadMap.get(loadIDs[i]));
-//			System.out.println("caseData: "+caseData[_loadMap.get(loadIDs[i])]);
+			System.err.println("[PFlowPsmModelBldr] Error loading load case column \"\""+col+"\"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
+		else
+		{
+			//check to see if the hashmap has been created yet;
+			if(_loadMap == null) buildLoadMap();
 			
-			data[i] = caseData[_loadMap.get(loadIDs[i])];
+			for(int i = 0; i < data.length; ++i)
+			{
+				//Debugging
+	//			System.out.println("\n=========\nCol: "+col);
+	//			System.out.println("loadIDs["+i+"]: "+loadIDs[i]);
+	//			System.out.println("_loadMap: "+_loadMap.get(loadIDs[i]));
+	//			System.out.println("caseData: "+caseData[_loadMap.get(loadIDs[i])]);
+				
+				data[i] = caseData[_loadMap.get(loadIDs[i])];
+			}
 		}
 		
 		return data;
@@ -981,9 +1015,14 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		//check to see if the hashmap has been created yet;
 		if(_shuntReacMap == null) buildShuntReacMap();
 		
+		if(caseData == null) 
+		{
+			System.err.println("[PFlowPsmModelBldr] Error loading shunt reactor case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
 		
 		//NOT FINISHED!
-		return null;
+		return data;
 	}
 	
 	private float[] getShuntCapData(String col)
@@ -994,8 +1033,33 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		//check to see if the hashmap has been created yet;
 		if(_shuntCapMap == null) buildShuntCapMap();
 		
+		if(caseData == null) 
+		{
+			System.err.println("[PFlowPsmModelBldr] Error loading shunt capacitor case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
+		
 		//NOT FINISHED!
-		return null;
+		return data;
+	}
+	
+	private int[] getGenRegBus() throws PAModelException
+	{
+		String[] genIDs = _synchMachineCSV.get("GeneratingUnit");
+		String[] unsortedBuses = _synchMachineCSV.get("RegulatedNode");
+		String[] busIDs = new String[genIDs.length];
+		
+		if(unsortedBuses == null)
+		{
+			unsortedBuses = _synchMachineCSV.get("Node");
+		}
+		
+		for(int i = 0; i < genIDs.length; ++i)
+		{
+			busIDs[_genMap.get(genIDs[i])] = unsortedBuses[i];
+		}
+		
+		return getBusesById(busIDs);
 	}
 	
 	private float[] getGenDataFloat(String col, String csv)
@@ -1011,28 +1075,50 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(csv.toLowerCase().equals("synch"))
 		{
 			unsortedData = _synchMachineCSV.getFloats(col);
-			
-			for (int i = 0; i < genIDs.length; ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_genToSynchMap.get(genIDs[i])];
+				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, 0);
+			}
+			else
+			{
+				for (int i = 0; i < genIDs.length; ++i)
+				{
+					data[i] = unsortedData[_genToSynchMap.get(genIDs[i])];
+				}
 			}
 		}
 		else if(csv.toLowerCase().equals("synchcase"))
 		{
 			String[] synchIDs = _synchMachineCSV.get("ID");
 			unsortedData = _synchCaseCSV.getFloats(col);
-			for(int i = 0; i < genIDs.length; ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_synchMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
+				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, 0);
+			}
+			else
+			{
+				for(int i = 0; i < genIDs.length; ++i)
+				{
+					data[i] = unsortedData[_synchMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
+				}
 			}
 		}
 		else if(csv.toLowerCase().equals("gencase"))
 		{
 			unsortedData = _genCaseCSV.getFloats(col);
-			
-			for (int i = 0; i < genIDs.length; ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_genMap.get(genIDs[i])];
+				System.err.println("[PFlowPsmModelBldr] Error loading generator case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, 0);
+			}
+			else
+			{
+				for (int i = 0; i < genIDs.length; ++i)
+				{
+					data[i] = unsortedData[_genMap.get(genIDs[i])];
+				}
 			}
 		}
 		else return null;
@@ -1053,29 +1139,51 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(csv.toLowerCase().equals("synch"))
 		{
 			unsortedData = _synchMachineCSV.get(col);
-			
-			for (int i = 0; i < genIDs.length; ++i)
+			if(unsortedData == null)
 			{
-				//System.out.println("data["+i+"]: "+unsortedData[_genToSynchMap.get(genIDs[i])]);
-				data[i] = unsortedData[_genToSynchMap.get(genIDs[i])];
+				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "");
+			}
+			else
+			{
+				for (int i = 0; i < genIDs.length; ++i)
+				{
+					//System.out.println("data["+i+"]: "+unsortedData[_genToSynchMap.get(genIDs[i])]);
+					data[i] = unsortedData[_genToSynchMap.get(genIDs[i])];
+				}				
 			}
 		}
 		else if(csv.toLowerCase().equals("synchcase"))
 		{
 			String[] synchIDs = _synchMachineCSV.get("ID");
 			unsortedData = _synchCaseCSV.get(col);
-			for(int i = 0; i < genIDs.length; ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_synchMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
+				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "");
+			}
+			else
+			{				
+				for(int i = 0; i < genIDs.length; ++i)
+				{
+					data[i] = unsortedData[_synchMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
+				}
 			}
 		}
 		else if(csv.toLowerCase().equals("gencase"))
 		{
 			unsortedData = _genCaseCSV.get(col);
-			
-			for (int i = 0; i < genIDs.length; ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_genMap.get(genIDs[i])];
+				System.err.println("[PFlowPsmModelBldr] Error loading generator case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "");
+			}
+			else
+			{
+				for (int i = 0; i < genIDs.length; ++i)
+				{
+					data[i] = unsortedData[_genMap.get(genIDs[i])];
+				}				
 			}
 		}
 		else return null;
@@ -1089,43 +1197,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 		String[] ids = _lineCSV.get("ID");
 		float[] unsortedData = _lineCaseCSV.getFloats(col);
-		float[] data = new float[unsortedData.length];
-		
-		for(int i = 0; i < ids.length; ++i)
+		float[] data = new float[ids.length];
+		if(unsortedData == null) 
 		{
-			data[i] = unsortedData[_lineMap.get(ids[i])];
+			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
+		else
+		{
+			for(int i = 0; i < ids.length; ++i)
+			{
+				data[i] = unsortedData[_lineMap.get(ids[i])];
+			}
 		}
 		
 		return data;
 	}
-	
-//	private String[] getTransformerDataStrings(String col, String csv)
-//	{
-//		//Build maps if they don't exist
-//		if(_transformerMap == null) buildTransformerMaps();
-//		
-//		String[] data = new String[_transformerIDs.size()];
-//		String[] unsortedData;
-//		
-//		if(csv.toLowerCase().equals("transformer"))
-//		{
-//			unsortedData = _transformerCSV.get(col);
-//			for(int i = 0; i < _transformerIDs.size(); ++i)
-//			{
-//				data[i] = unsortedData[_transformerMap.get(_transformerIDs.get(i))];
-//			}
-//		}
-//		else if(csv.toLowerCase().equals("winding"))
-//		{
-//			unsortedData = _tfmrWindingCSV.get(col);
-//			for(int i = 0; i < _transformerIDs.size(); ++i)
-//			{
-//				data[i] = unsortedData[_wdgToTfmrMap.get(_transformerIDs.get(i))];
-//			}
-//		}
-//		
-//		return data;
-//	}
 	
 	private String[] getTransformerDataStrings(String col, String csv, boolean isTfmr)
 	{
@@ -1141,17 +1228,33 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(csv.toLowerCase().equals("transformer"))
 		{
 			unsortedData = _transformerCSV.get(col);
-			for(int i = 0; i < ids.size(); ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_transformerMap.get(ids.get(i))];
+				System.err.println("[PFlowPsmModelBldr] Error loading transformer column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "");
+			}
+			else
+			{
+				for(int i = 0; i < ids.size(); ++i)
+				{
+					data[i] = unsortedData[_transformerMap.get(ids.get(i))];
+				}
 			}
 		}
 		else if(csv.toLowerCase().equals("winding"))
 		{
 			unsortedData = _tfmrWindingCSV.get(col);
-			for(int i = 0; i < ids.size(); ++i)
+			if(unsortedData == null)
 			{
-				data[i] = unsortedData[_wdgToTfmrMap.get(ids.get(i))];
+				System.err.println("[PFlowPsmModelBldr] Error loading winding column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "");
+			}
+			else
+			{
+				for(int i = 0; i < ids.size(); ++i)
+				{
+					data[i] = unsortedData[_wdgToTfmrMap.get(ids.get(i))];
+				}
 			}
 		}
 		
@@ -1170,17 +1273,33 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(csv.toLowerCase().equals("transformer"))
 		{
 			unsortedData = _transformerCSV.getFloats(col);
-			for(int i = 0; i < ids.size(); ++i)
+			if(unsortedData == null)
 			{
-				data[i] = unsortedData[_transformerMap.get(ids.get(i))];
+				System.err.println("[PFlowPsmModelBldr] Error loading transformer column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, 0);
+			}
+			else
+			{
+				for(int i = 0; i < ids.size(); ++i)
+				{
+					data[i] = unsortedData[_transformerMap.get(ids.get(i))];
+				}				
 			}
 		}
 		else if(csv.toLowerCase().equals("winding"))
 		{
 			unsortedData = _tfmrWindingCSV.getFloats(col);
-			for(int i = 0; i < ids.size(); ++i)
+			if(unsortedData == null) 
 			{
-				data[i] = unsortedData[_wdgToTfmrMap.get(ids.get(i))];
+				System.err.println("[PFlowPsmModelBldr] Error loading winding column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, 0);
+			}
+			else
+			{
+				for(int i = 0; i < ids.size(); ++i)
+				{
+					data[i] = unsortedData[_wdgToTfmrMap.get(ids.get(i))];
+				}				
 			}
 		}
 		
@@ -1193,15 +1312,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		List<String> ids = (isTfmr)?_transformerIDs:_phaseShifterIDs;
 		String[] wdgIDs = _tfmrWindingCSV.get("ID");
 		float[] data = new float[ids.size()];
-		
-		for(int i = 0; i < ids.size(); ++i)
+		if(unsortedData == null) 
 		{
-			//Have tfmr/phase ID. Need to winding ID.
-			//Using the winding ID we'll get the case offset which will give us the float from unsorted date
-//			System.out.println("\n============\n[getWindingCaseData] Col: "+col+"\n[getWindingCaseData] IDs["+i+"/"+ids.size()+" | "+_ratioTapChgCSV.getRowCount()+"] = "+ids.get(i));
+			System.err.println("[PFlowPsmModelBldr] Error loading winding case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
+		else
+		{
+			for(int i = 0; i < ids.size(); ++i)
+			{
+				//Have tfmr/phase ID. Need to winding ID.
+				//Using the winding ID we'll get the case offset which will give us the float from unsorted date
+//			System.out.println("\n============\n[getWindingCaseData] Col: \""+col+"\"\n[getWindingCaseData] IDs["+i+"/"+ids.size()+" | "+_ratioTapChgCSV.getRowCount()+"] = "+ids.get(i));
 //			System.out.println("[getWindingCaseData] wdgIDs["+_wdgToTfmrMap.get(ids.get(i))+"] = "+wdgIDs[_wdgToTfmrMap.get(ids.get(i))]);
 //			System.out.println("[getWindingCaseData] data["+_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])+"] = "+unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])]);
-			data[i] = unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])];
+				data[i] = unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])];
+			}			
 		}
 		
 		return data;
@@ -1286,7 +1412,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			}
 			else
 			{
-				System.out.println("[buildTransformerMaps] ID not found: "+windingIDs[i]);
+				System.err.println("[buildTransformerMaps] ID not found: "+windingIDs[i]);
 			}
 		}
 		
