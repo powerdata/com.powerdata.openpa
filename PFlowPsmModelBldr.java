@@ -74,6 +74,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _switchCaseCSV;
 	SimpleCSV _lineCaseCSV;
 	SimpleCSV _windingCaseCSV;
+	SimpleCSV _svcCaseCSV;
 	
 	
 	//Not yet importing
@@ -108,6 +109,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _lineMap;
 	TObjectIntMap<String> _windingCaseMap;
 	TObjectIntMap<String> _stationOffsetMap;
+	TObjectIntMap<String> _svcCaseMap;
 	
 	//Arrays / Lists
 	int[] _busAreaIndex;
@@ -262,6 +264,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		try
 		{
 			_svcCSV = new SimpleCSV(new File(_dir, "SVC.csv"));
+			_svcCaseCSV = new SimpleCSV(new File(_dir, "PsmCaseSVC.csv"));
 			return new SVCListI(_m, _svcCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -556,16 +559,18 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SvcOOS:
 			return (R) returnFalse(_svcCSV.getRowCount());
 		case SvcQS:
-			return null;
+			return (R) getSVCData("MVArSetpoint");
 		case SvcQMIN:
 			return (R) _svcCSV.getFloats("MinMVAr");
 		case SvcQMAX:
 			return (R) _svcCSV.getFloats("MaxMVAr");
 		case SvcAVR:
+			return (R) getSVCData("VoltageSetpoint");
 		case SvcVS:
 		case SvcSLOPE: // float
 			return (R) _svcCSV.getFloats("Slope");
 		case SvcREGBUS:
+			return (R) getBusesById(_svcCSV.get("Node"));
 		case SvcOMODE:
 			return null;
 		//Switched Shunt
@@ -1214,6 +1219,29 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
+	private float[] getSVCData(String col)
+	{
+		//Build maps if they don't exist
+		if(_svcCaseMap == null) buildSVCMap();
+		String[] ids = _svcCaseCSV.get("ID");
+		float[] unsortedData = _svcCaseCSV.getFloats(col);
+		float[] data = new float[ids.length];
+		if(unsortedData == null) 
+		{
+			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
+		else
+		{
+			for(int i = 0; i < ids.length; ++i)
+			{
+				data[i] = unsortedData[_svcCaseMap.get(ids[i])];
+			}
+		}
+		
+		return data;
+	}
+	
 	private String[] getTransformerDataStrings(String col, String csv, boolean isTfmr)
 	{
 		//Build maps if they don't exist
@@ -1470,6 +1498,17 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
 			_switchCaseMap.put(caseIDs[i], i);
+		}
+	}
+	
+	private void buildSVCMap()
+	{
+		String[] caseIDs = _svcCaseCSV.get("ID");
+		_svcCaseMap = new TObjectIntHashMap<>(caseIDs.length);
+		
+		for(int i = 0; i < caseIDs.length; ++i)
+		{
+			_svcCaseMap.put(caseIDs[i], i);
 		}
 	}
 	
