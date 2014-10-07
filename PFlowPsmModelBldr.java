@@ -93,8 +93,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	//Hashmaps
 	TObjectIntMap<String> _loadMap;
-	TObjectIntMap<String> _shuntReacMap;
-	TObjectIntMap<String> _shuntCapMap;
+	TObjectIntMap<String> _shuntReacCaseMap;
+	TObjectIntMap<String> _shuntCapCaseMap;
 	TObjectIntMap<String> _genMap;
 	TObjectIntMap<String> _synchMap;
 	TObjectIntMap<String> _genToSynchMap;
@@ -1052,33 +1052,46 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	private float[] getShuntReacData(String col)
 	{
 		String[] shuntIDs = _shuntReacCSV.get("ID");
-		float[] caseData = _shuntReacCaseCSV.getFloats(col);
+		float[] unsortedData = _shuntReacCaseCSV.getFloats(col);
 		float[] data = new float[shuntIDs.length];
 		//check to see if the hashmap has been created yet;
-		if(_shuntReacMap == null) buildShuntReacMap();
+		if(_shuntReacCaseMap == null) buildShuntReacMap();
 		
-		if(caseData == null) 
+		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading shunt reactor case column \""+col+"\". Does it exist in the CSV?");
 			Arrays.fill(data, 0);
 		}
-		
-		//NOT FINISHED!
+		else
+		{
+			for(int i = 0; i < shuntIDs.length; ++i)
+			{
+				data[i] = unsortedData[_shuntReacCaseMap.get(shuntIDs[i])];
+			}
+		}
+
 		return data;
 	}
 	
 	private float[] getShuntCapData(String col)
 	{
 		String[] shuntIDs = _shuntCapCSV.get("ID");
-		float[] caseData = _shuntCapCaseCSV.getFloats(col);
+		float[] unsortedData = _shuntCapCaseCSV.getFloats(col);
 		float[] data = new float[shuntIDs.length];
 		//check to see if the hashmap has been created yet;
-		if(_shuntCapMap == null) buildShuntCapMap();
+		if(_shuntCapCaseMap == null) buildShuntCapMap();
 		
-		if(caseData == null) 
+		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading shunt capacitor case column \""+col+"\". Does it exist in the CSV?");
 			Arrays.fill(data, 0);
+		}
+		else
+		{
+			for(int i = 0; i < shuntIDs.length; ++i)
+			{
+				data[i] = unsortedData[_shuntCapCaseMap.get(shuntIDs[i])];
+			}
 		}
 		
 		//NOT FINISHED!
@@ -1776,11 +1789,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		String[] caseIDs = _shuntReacCaseCSV.get("ID");
 		
-		_shuntReacMap = new TObjectIntHashMap<>(caseIDs.length);
+		_shuntReacCaseMap = new TObjectIntHashMap<>(caseIDs.length);
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
 			System.out.println("");
-			_shuntReacMap.put(caseIDs[i], i);
+			_shuntReacCaseMap.put(caseIDs[i], i);
 		}
 	}
 	
@@ -1788,10 +1801,10 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		String[] caseIDs = _shuntCapCaseCSV.get("ID");
 		
-		_shuntCapMap = new TObjectIntHashMap<>(caseIDs.length);
+		_shuntCapCaseMap = new TObjectIntHashMap<>(caseIDs.length);
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
-			_shuntCapMap.put(caseIDs[i], i);
+			_shuntCapCaseMap.put(caseIDs[i], i);
 		}
 	}
 	
