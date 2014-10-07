@@ -78,12 +78,12 @@ public class BusTypeUtil
 			.addTransformers()
 			.addTwoTermDCLines().getMap());
 
-		float[] pmax = new float[nbus];
+		float[] pmax = new float[nbus], qmax = new float[nbus];
 		for(Island i : islands)
 		{
-			if (i.isEnergized()) configureTypes(i, bri, pmax, svcpv);
+			if (i.isEnergized()) configureTypes(i, bri, pmax, qmax, svcpv);
 		}
-		findWidestPaths(glist, buses, islands, pmax);
+		findWidestPaths(glist, buses, islands, pmax, qmax);
 	}
 	
 	private static class Score
@@ -103,7 +103,8 @@ public class BusTypeUtil
 		
 	}
 	
-	void findWidestPaths(GroupList glist, BusList sbuses, IslandList islands, float[] pmax) throws PAModelException
+	void findWidestPaths(GroupList glist, BusList sbuses, IslandList islands,
+			float[] pmax, float[] qmax) throws PAModelException
 	{
 		int ni = islands.size();
 		int[] imax = new int[ni], smax = new int[ni];
@@ -112,7 +113,7 @@ public class BusTypeUtil
 		for(int i=0; i < ng; ++i)
 		{
 			Group g = glist.get(i);
-			Score score = mkScore(g, computeYB(g.getLines()), sbuses, pmax);
+			Score score = mkScore(g, computeYB(g.getLines()), sbuses, pmax, qmax);
 			if (score != null)
 			{
 				int isl = score.bus.getIsland().getIndex();
@@ -137,23 +138,24 @@ public class BusTypeUtil
 	
 	
 
-	Score mkScore(Group g, float yb, BusList sbuses, float[] pmax) throws PAModelException
+	Score mkScore(Group g, float yb, BusList sbuses, float[] pmax, float[] qmax)
+			throws PAModelException
 	{
-		float pm = 0f;
+		float qm = 0f;
 		Bus br = null;
 		
 		for (Bus b : g.getBuses())
 		{
 			Bus sb = sbuses.getByBus(b);
-			float tpm = pmax[sb.getIndex()];
-			if (pm < tpm)
+			float tqm = qmax[sb.getIndex()];
+			if (qm < tqm)
 			{
-				pm = tpm;
+				qm = tqm;
 				br = sb;
 			}
 			
 		}
-		return (br == null) ? null : new Score(Math.round(yb + pm), br);
+		return (br == null) ? null : new Score(Math.round(yb + pmax[br.getIndex()] + qm), br);
 	}
 
 //	Bus selectBus(BusList gbuses, BusList sbuses) throws PAModelException
@@ -175,7 +177,8 @@ public class BusTypeUtil
 		return t + NGRP * i;
 	}
 	
-	void configureTypes(Island island, BusRefIndex bri, float[] pmax, int[] svcpv) throws PAModelException
+	void configureTypes(Island island, BusRefIndex bri, float[] pmax, float[] qmax, int[] svcpv)
+			throws PAModelException
 	{
 		GenList gens = island.getGenerators();
 		int indx = island.getIndex();
@@ -190,6 +193,7 @@ public class BusTypeUtil
 				int bx = gbx[i];
 				_type[bx] = PV;
 				pmax[bx] += gens.getOpMaxP(i);
+				qmax[bx] += gens.getMaxQ(i) - gens.getMinQ(i);
 				_itype[bx] = calcigrp(indx, PV); 
 			}
 		}

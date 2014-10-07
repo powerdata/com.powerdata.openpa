@@ -3,13 +3,13 @@ package com.powerdata.openpa.pwrflow;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.AbstractList;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
@@ -24,6 +25,7 @@ import com.powerdata.openpa.LoadList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
+import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.Transformer;
@@ -32,6 +34,7 @@ import com.powerdata.openpa.TwoTermDev.Side;
 import com.powerdata.openpa.impl.GenSubList;
 import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.impl.LoadSubList;
+import com.powerdata.openpa.psse.GenMode;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
@@ -47,9 +50,8 @@ public class FDPFCore
 	float _sbase;
 	
 	int _niter = 60;
-	float _ptol = 0.005f, _qtol = 0.005f, _taptol = 0.05f;
-	/** tap adjustment damping factor, set to 0 to disable adjustment */
-	float _tapdampfact = 0f;
+	float _ptol = 0.005f, _qtol = 0.005f;
+	boolean _enatapadj = false;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
 	
@@ -156,7 +158,6 @@ public class FDPFCore
 	/** shunt info by type */
 	Map<ListMetaType, FixedShuntComposite> _fsh; 
 	
-	
 	public FDPFCore(PAModel m) throws PAModelException
 	{
 		_model = m;
@@ -225,7 +226,7 @@ public class FDPFCore
 		_mbpp = new BDblPrime(mb, ref);
 		_mbpp.savePattern(p);
 		
-		if (_tapdampfact > 0f) buildTapAdj();
+		if (_enatapadj) buildTapAdj();
 		
 	}
 
@@ -243,13 +244,16 @@ public class FDPFCore
 			if (t.hasLTC() && t.isRegEnabled())
 			{
 				int r = rbus[t.getIndex()];
-				res[cnt++] = (t.getRegSide() == Side.From) ?
-					new TapAdjFrom(t, r) :
-					new TapAdjTo(t, r);
+				if (_buses.getIsland(r).isEnergized())
+				{
+					res[cnt++] = (t.getRegSide() == Side.From) ? new TapAdjFrom(
+							t, r) : new TapAdjTo(t, r);
+				}
 			}
 		}
 		_tadj = Arrays.copyOf(res, cnt);
 	}
+	
 	GroupMap configureSVC() throws PAModelException
 	{
 		SVCList svcs = _model.getSVCs();
@@ -472,7 +476,8 @@ public class FDPFCore
 			// update voltage and angles
 			if (nconv && nfail)
 			{
-				if (_tapdampfact > 0f) adjustTransformerTaps(convstat);
+				if (_enatapadj && i > 0) adjustTransformerTaps(convstat);
+//				checkUnitVars();
 				_vmc = _vm.clone();
 				corr.stream().sequential().forEach(j -> j.apply(_vmc));
 //				_pool.execute(rcorr);
@@ -562,6 +567,7 @@ public class FDPFCore
 		int _tx, _rbus;
 		int _fbus, _tbus;
 		int _island;
+		float _minkv, _maxkv;
 		TapAdjBase(Transformer t, int rbus) throws PAModelException
 		{
 			_tx = t.getIndex();
@@ -571,6 +577,9 @@ public class FDPFCore
 			ACBranchFlow bc = _tlist.getComp().getCalc();
 			_fbus = bc.getFromBus()[_tx];
 			_tbus = bc.getToBus()[_tx];
+			float rbase = b.getVoltageLevel().getBaseKV();
+			_minkv = t.getMinKV()/rbase;
+			_maxkv = t.getMaxKV()/rbase;
 		}
 		@Override
 		public int getIsland()
@@ -594,20 +603,22 @@ public class FDPFCore
 		{
 			float adj = 0, vm = _vm[_rbus];
 			Transformer t = _model.getTransformers().get(_tx);
-//				BranchElemBldr bpp = _tlist.getBpp();
-			if (vm < t.getMinKV()) adj = _step;
-			if (vm > t.getMaxKV()) adj = -_step;
-			float a = t.getFromTap()/*, b = t.getToTap()*/;
-			float nval = a + adj,
-				ntap = t.getFromMinTap(),
-				xtap = t.getFromMaxTap();
-			if (nval < ntap) nval = ntap;
-			if (nval > xtap) nval = xtap;
-			if (a != nval)
+			// BranchElemBldr bpp = _tlist.getBpp();
+			if (vm < _minkv) adj = _step;
+			if (vm > _maxkv) adj = -_step;
+			if (adj != 0f)
 			{
-				System.out.format("ftap: %f -> %f\n", t.getFromTap(), nval);
-				t.setFromTap(nval);
-				return true;
+				float a = t.getFromTap()/* , b = t.getToTap() */;
+				float nval = a + adj, ntap = t.getFromMinTap(), xtap = t
+						.getFromMaxTap();
+				if (nval < ntap) nval = ntap;
+				if (nval > xtap) nval = xtap;
+				if (a != nval)
+				{
+					System.out.format("ftap %s: %f -> %f\n", t.getName(), t.getFromTap(), nval);
+					t.setFromTap(nval);
+					return true;
+				}
 			}
 				//				DeviceB diff = _tlist.diffBpp(bpp.getB(_tx), _tx);
 //				_mbpp.incBoffdiag(_tlist.getBranchIndex()[_tx], diff.getBtran());
@@ -631,22 +642,24 @@ public class FDPFCore
 		{
 			float adj = 0, vm = _vm[_rbus];
 			Transformer t = _model.getTransformers().get(_tx);
-//				BranchElemBldr bpp = _tlist.getBpp();
-			if (vm < t.getMinKV()) adj = _step;
-			if (vm > t.getMaxKV()) adj = -_step;
-			float a = t.getFromTap()/*, b = t.getToTap()*/;
-			float nval = a + adj,
-				ntap = t.getFromMinTap(),
-				xtap = t.getFromMaxTap();
-			if (nval < ntap) nval = ntap;
-			if (nval > xtap) nval = xtap;
-			if (a != nval)
+			// BranchElemBldr bpp = _tlist.getBpp();
+			if (vm < _minkv) adj = _step;
+			if (vm > _maxkv) adj = -_step;
+			if (adj != 0f)
 			{
-				System.out.format("ftap: %f -> %f\n", t.getFromTap(), nval);
-				t.setFromTap(nval);
-				return true;
+				float a = t.getFromTap()/* , b = t.getToTap() */;
+				float nval = a + adj, ntap = t.getFromMinTap(), xtap = t
+						.getFromMaxTap();
+				if (nval < ntap) nval = ntap;
+				if (nval > xtap) nval = xtap;
+				if (a != nval)
+				{
+					System.out.format("ftap %s: %f -> %f\n", t.getName(), t.getFromTap(), nval);
+					t.setFromTap(nval);
+					return true;
+				}
 			}
-//				DeviceB diff = _tlist.diffBpp(bpp.getB(_tx), _tx);
+			//				DeviceB diff = _tlist.diffBpp(bpp.getB(_tx), _tx);
 //				_mbpp.incBoffdiag(_tlist.getBranchIndex()[_tx], diff.getBtran());
 //				_mbpp.incBdiag(_fbus, diff.getFromBself());
 			return false;
@@ -657,11 +670,9 @@ public class FDPFCore
 	
 	void adjustTransformerTaps(IslandConv[] convstat) throws PAModelException
 	{
-		// TODO:  organized TapAdj by island and that should trim down the compares
 		for(TapAdj ta : _tadj)
 		{
-			if (convstat[ta.getIsland()].getWorstQmm() < _taptol)
-				ta.adjust();
+			ta.adjust();
 		}
 	}
 	
@@ -969,6 +980,7 @@ public class FDPFCore
 		
 	}
 	
+	
 	public static void main(String...args) throws Exception
 	{
 		String uri = null;
@@ -998,10 +1010,10 @@ public class FDPFCore
 		if (!outdir.exists()) outdir.mkdirs();
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
-		bldr.setLeastX(0.001f);
+		bldr.setLeastX(0.0001f);
 		bldr.enableRCorrection(true);
 		bldr.setUnitRegOverride(true);
-		bldr.setBadXLimit(2f);
+//		bldr.setBadXLimit(2f);
 		PAModel m = bldr.load();
 		class mminfo
 		{
@@ -1020,11 +1032,11 @@ public class FDPFCore
 		System.err.println("Load PF");
 		FDPFCore pf = new FDPFCore(m)
 		{
-//			@Override
-//			protected void mismatchHook(float[] vm, float[] va, BusType[] type, float[] pmm, float[] qmm)
-//			{
-//				mmlist.add(new mminfo(vm.clone(), va.clone(), pmm.clone(), qmm.clone(), type));
-//			}
+			@Override
+			protected void mismatchHook(float[] vm, float[] va, BusType[] type, float[] pmm, float[] qmm)
+			{
+				mmlist.add(new mminfo(vm.clone(), va.clone(), pmm.clone(), qmm.clone(), type));
+			}
 
 //			@Override
 //			protected void bPrimeHook(BPrime bp)
@@ -1122,5 +1134,6 @@ public class FDPFCore
 	}
 	
 }
+
 
 
