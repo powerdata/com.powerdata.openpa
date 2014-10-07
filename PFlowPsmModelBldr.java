@@ -567,8 +567,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SvcBUS:
 			return (R) getBusesById(_svcCSV.get("Node"));
 		case SvcP:
+			return (R) getSVCData("MW");
 		case SvcQ:
-			return (R) returnZero(_svcCSV.getRowCount());
+			return (R) getSVCData("MVAr");
 		case SvcOOS:
 			return (R) returnFalse(_svcCSV.getRowCount());
 		case SvcQS:
@@ -856,7 +857,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		_vlevMap = new TFloatIntHashMap();
 		TIntFloatMap tempMap = new TIntFloatHashMap();
 		
-//		if(_busCSV == null) System.out.println("[buildVlev] _busCSV is null");
 		float[] kv = _busCSV.getFloats("NominalKV");
 		int offset = 0;
 		
@@ -866,14 +866,12 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(!tempMap.containsValue(kv[i]))
 			{
 				//New level found, add it to the map
-//				System.out.println("[buildVlev] tempMap.put("+offset+", "+kv[i]+")");
 				tempMap.put(offset, kv[i]);
 				offset++;
 			}
 		}
 		
 		//Now that we know how many voltage levels there are we can create proper maps & arrays.
-		//This is probably quite poorly done so please remind me to fix it!
 		_vlevFloat = new float[offset-1];
 		for(int i = 0; i < offset-1; ++i)
 		{
@@ -1011,9 +1009,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		for(int i = 0; i < lineB.length; ++i)
 		{
-//			System.out.println("\n[getLineB] lineB["+i+"] = "+lineB[i]);
 			data[i] = lineB[i] / 2f;
-//			System.out.println("[getLineB] data["+i+"] = "+data[i]);
 		}
 		
 		return data;
@@ -1035,13 +1031,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(_loadMap == null) buildLoadMap();
 			
 			for(int i = 0; i < data.length; ++i)
-			{
-				//Debugging
-	//			System.out.println("\n=========\nCol: "+col);
-	//			System.out.println("loadIDs["+i+"]: "+loadIDs[i]);
-	//			System.out.println("_loadMap: "+_loadMap.get(loadIDs[i]));
-	//			System.out.println("caseData: "+caseData[_loadMap.get(loadIDs[i])]);
-				
+			{		
 				data[i] = caseData[_loadMap.get(loadIDs[i])];
 			}
 		}
