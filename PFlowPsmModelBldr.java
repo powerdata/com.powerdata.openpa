@@ -63,6 +63,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _ratioTapChgCSV;
 	SimpleCSV _reacCapCurveCSV;
 	SimpleCSV _phaseCaseCSV;
+	SimpleCSV _orgCSV;
+
 	
 	//Case CSV files
 	SimpleCSV _loadCaseCSV;
@@ -87,7 +89,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _freqRelayCSV;
 	SimpleCSV _loadAreaCSV;
 	SimpleCSV _modelParmsCSV;
-	SimpleCSV _orgCSV;
 	SimpleCSV _primeMoverCSV;
 	SimpleCSV _relayOperateCSV;
 	
@@ -101,6 +102,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _genToSynchCaseMap;
 	TFloatIntMap _vlevMap;
 	TObjectIntMap<String> _areaMap;
+	TObjectIntMap<String> _ownerMap;
 	TObjectIntMap<String> _tfmrRatioTapMap;
 	TObjectIntMap<String> _tfmrPhaseTapMap;
 	TObjectIntMap<String> _transformerMap;
@@ -120,6 +122,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	//Arrays / Lists
 	int[] _busAreaIndex;
 	int[] _busStationIndex;
+	int[] _busOwnerIndex;
 	float[] _vlevFloat;
 	List<String> _transformerIDs;
 	List<String> _phaseShifterIDs;
@@ -203,7 +206,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_areaCSV = new SimpleCSV(new File(_dir, "ControlArea.csv"));
 			//AreaListI(PAModelI model, int[] busref, int narea)
-			if(_busAreaIndex == null) buildBusAreaIndex();
+			if(_busAreaIndex == null) buildBusIndexes();
 			return new AreaListI(_m, _busAreaIndex, _areaCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -216,15 +219,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	protected OwnerListI loadOwners() throws PAModelException 
 	{
 		// TODO Incomplete
-		// Couldn't find a csv for this one in the document
-		return OwnerListI.Empty;
+		try 
+		{
+			_orgCSV = new SimpleCSV(new File(_dir, "Organization.csv"));
+			if(_busOwnerIndex == null) buildBusIndexes();
+			return new OwnerListI(_m, _busOwnerIndex, _orgCSV.getRowCount());
+			//return OwnerListI.Empty;
+		} 
+		catch (IOException e) 
+		{
+			throw new PAModelException(e);
+		}
 	}
 
 	@Override
 	protected StationListI loadStations() throws PAModelException 
 	{
-		//TODO Incomplete
-		//Don't currently have all the necessary data
 		try
 		{
 			_substationCSV = new SimpleCSV(new File(_dir, "Substation.csv"));
@@ -463,9 +473,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case BusFREQSRCPRI:
 			return (R) _busCSV.getInts("FrequencySourcePriority");
 		case BusAREA:
+			if(_busAreaIndex == null) loadAreas();
 			return (R) _busAreaIndex;
 		case BusOWNER:
-			return null;
+			if(_busOwnerIndex == null) loadOwners();
+			return (R) _busOwnerIndex;
 		case BusSTATION:
 			if(_busStationIndex == null) buildBusStationIndex();
 			return (R) _busStationIndex;
@@ -603,8 +615,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _areaCSV.get("Name");
 		//Owner - No csv
 		case OwnerID:
+			return (R) _orgCSV.get("ID");
 		case OwnerNAME:
-			return null;
+			return (R) _orgCSV.get("Name");
 		//Island - No csv
 		case IslandID:
 		case IslandNAME:
@@ -881,9 +894,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}
 	}
 	
-	private void buildAreaMap()
+	private void buildOwnerMap() throws PAModelException
 	{
-		if(_areaCSV == null)System.out.println("[buildAreaMap] _areaCSV is null");
+		if(_orgCSV == null) loadOwners();
+		String[] ownerIDs = _orgCSV.get("ID");
+		_ownerMap = new TObjectIntHashMap<>(ownerIDs.length);
+		
+		for(int i = 0; i < ownerIDs.length; ++i)
+		{
+			_ownerMap.put(ownerIDs[i], i);
+		}
+			
+	}
+	
+	private void buildAreaMap() throws PAModelException
+	{
+		if(_areaCSV == null)loadAreas();
 		String[] areaIDs = _areaCSV.get("ID");
 		_areaMap = new TObjectIntHashMap<>(areaIDs.length);
 		
@@ -893,20 +919,38 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}	
 	}
 	
-	private void buildBusAreaIndex() throws PAModelException
+	private void buildBusIndexes() throws PAModelException
 	{
 		if(_areaMap == null) buildAreaMap();
+		if(_ownerMap == null) buildOwnerMap();
 		if(_stationOffsetMap == null) buildSubstationMap();
 		if(_busCSV == null) loadBuses();
+		
 		String[] stationIDs = _busCSV.get("Substation");
 		String[] areaIDs = _substationCSV.get("ControlArea");
+		String[] ownerIDs = _substationCSV.get("Organization");
 		_busAreaIndex = new int[stationIDs.length];
+		_busOwnerIndex = new int[stationIDs.length];
 		
-		for(int i = 0; i < stationIDs.length; ++i)
+		if(ownerIDs == null)
 		{
-			_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+			System.err.println("[PFlowPsmModelBldr] Substation column \"Organization\" returned null from Substation.csv");
+			for(int i = 0; i < stationIDs.length; ++i)
+			{
+				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+				_busOwnerIndex[i] = 0;
+			}
+		}
+		else
+		{
+			for(int i = 0; i < stationIDs.length; ++i)
+			{
+				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+				_busOwnerIndex[i] = _ownerMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]);
+			}
 		}
 	}
+	
 	private void buildBusStationIndex() throws PAModelException
 	{
 		if(_stationOffsetMap == null) buildSubstationMap();
