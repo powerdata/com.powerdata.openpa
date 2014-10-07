@@ -15,6 +15,7 @@ public class GeneratingUnitOPA extends ExportOpenPA<GenList>
 		assign(GeneratingUnit.MinOperatingMW, i -> String.valueOf(_list.getOpMinP(i)));
 		assign(GeneratingUnit.MaxOperatingMW, i -> String.valueOf(_list.getOpMaxP(i)));
 		assign(GeneratingUnit.GeneratingUnitType, new StringWrap(i -> _list.getType(i).toString()));
+		assign(GeneratingUnit.GenControlMode, new StringWrap(i -> _list.getMode(i).toString()));
 	}
 
 	@Override

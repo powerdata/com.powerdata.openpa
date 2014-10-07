@@ -11,6 +11,7 @@ public class SubstationOPA extends ExportOpenPA<StationList>
 		super(m.getStations(), Substation.values().length);
 		assign(Substation.ID, new StringWrap(i -> _list.getID(i)));
 		assign(Substation.Name, new StringWrap(i -> _list.getName(i)));
+		assign(Substation.ControlArea, new StringWrap(i -> _list.getBuses(i).getArea(0).getID()));
 	}
 	
 	@Override

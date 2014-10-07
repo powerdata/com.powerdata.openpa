@@ -14,7 +14,7 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 		int[] bx = bri.get1TBus(_list);
 		int[] rx = bri.mapBusFcn(_list, GenList::getRegBus);
 		BusList buses = bri.getBuses();
-		assign(SynchronousMachine.ID, new StringWrap(i -> _list.getID(i)));
+		assign(SynchronousMachine.ID, i -> String.format("\"%s_sm\"", _list.get(i)));
 		assign(SynchronousMachine.Name, new StringWrap(i -> _list.getName(i)));
 		assign(SynchronousMachine.Node, new StringWrap(i -> buses.get(bx[i]).getID()));
 		assign(SynchronousMachine.GeneratingUnit, new StringWrap(i -> _list.getID(i)));

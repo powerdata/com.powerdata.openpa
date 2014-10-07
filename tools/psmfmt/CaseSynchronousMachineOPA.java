@@ -19,7 +19,7 @@ public class CaseSynchronousMachineOPA extends ExportOpenPA<GenList>
 	public CaseSynchronousMachineOPA(PAModel m) throws PAModelException
 	{
 		super(m.getGenerators(), CaseSynchronousMachine.values().length);
-		assign(CaseSynchronousMachine.ID, new StringWrap(i -> _list.getID(i)));
+		assign(CaseSynchronousMachine.ID, i -> String.format("\"%s_sm\"", _list.get(i)));
 		assign(CaseSynchronousMachine.AVRMode, i -> _list.isRegKV(i)?"ON":"OFF");
 		assign(CaseSynchronousMachine.SynchronousMachineOperatingMode,
 			i -> _GenMode.getOrDefault(_list.getMode(i), "GEN"));
