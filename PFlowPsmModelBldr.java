@@ -464,6 +464,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _busCSV.getInts("FrequencySourcePriority");
 		case BusAREA:
 			if(_busAreaIndex == null) loadAreas();
+//			System.out.println("[BusAREA] _busAreaIndex.length = "+_busAreaIndex.length);
+//			for(int i = 0; i < _busAreaIndex.length; ++i)
+//			{
+//				System.out.println("_busAreaIndex["+i+"] = "+_busAreaIndex[i]+" | ");
+//			}
 			return (R) _busAreaIndex;
 		case BusOWNER:
 			if(_busOwnerIndex == null) loadOwners();
@@ -625,11 +630,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _substationCSV.get("Name");
 		//Voltage Level - No csv
 		case VlevID:
-			return (R) returnAsString(_vlevMap.keys());
+			return (R) returnAsString(_vlevFloat);
 		case VlevNAME:
-			return (R) returnAsString(_vlevMap.keys());
+			return (R) returnAsString(_vlevFloat);
 		case VlevBASKV:
-			return (R) _vlevMap.keys();
+			return (R) _vlevFloat;
 		//Line
 		case LineID:
 			return (R) _lineCSV.get("ID");
@@ -882,14 +887,15 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(!tempMap.containsValue(kv[i]))
 			{
 				//New level found, add it to the map
+				System.out.println("[buildVlev] ("+offset+", "+kv[i]+")");
 				tempMap.put(offset, kv[i]);
 				offset++;
 			}
 		}
 		
 		//Now that we know how many voltage levels there are we can create proper maps & arrays.
-		_vlevFloat = new float[offset-1];
-		for(int i = 0; i < offset-1; ++i)
+		_vlevFloat = new float[offset];
+		for(int i = 0; i < offset; ++i)
 		{
 			_vlevFloat[i] = tempMap.get(i);
 			_vlevMap.put(tempMap.get(i), i);
@@ -976,8 +982,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		for(int i = 0; i < busVlev.length; ++i)
 		{
-			busVlev[i] = _vlevMap.get((int)kv[i]);
-//			System.out.println("\n[getBusVlev] busVlev["+i+"] = "+busVlev[i]);
+			busVlev[i] = _vlevMap.get(kv[i]);
+			System.out.println("[getBusVlev] busVlev["+i+"] = "+busVlev[i]+" ("+kv[i]+")");
 		}
 		
 		return busVlev;
