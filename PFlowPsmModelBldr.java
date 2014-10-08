@@ -200,12 +200,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	@Override
 	protected AreaListI loadAreas() throws PAModelException 
 	{
-		//TODO Incomplete
-		//Don't currently have all the necessary data
 		try
 		{
 			_areaCSV = new SimpleCSV(new File(_dir, "ControlArea.csv"));
-			//AreaListI(PAModelI model, int[] busref, int narea)
 			if(_busAreaIndex == null) buildBusIndexes();
 			return new AreaListI(_m, _busAreaIndex, _areaCSV.getRowCount());
 		}
@@ -218,7 +215,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	@Override
 	protected OwnerListI loadOwners() throws PAModelException 
 	{
-		// TODO Incomplete
 		try 
 		{
 			_orgCSV = new SimpleCSV(new File(_dir, "Organization.csv"));
@@ -252,11 +248,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		if(_busCSV == null) 
 		{
-//			System.out.println("[loadVoltageLevels] _busCSV is null");
 			loadBuses();
 		}
-
-		//(PAModelI model, int[] busref, int nvl)
 		
 		if(_vlevFloat == null || _vlevMap == null) buildVlev();
 		
@@ -266,10 +259,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	@Override
 	protected IslandList loadIslands() throws PAModelException 
 	{
-		// TODO Incomplete
-		
-		IslandList islands = new IslandListI(_m);
-		
+		IslandList islands = new IslandListI(_m);	
 		
 		return islands;
 	}
@@ -555,7 +545,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case ShcapOOS:
 			return (R) returnFalse(_shuntCapCSV.getRowCount());
 		case ShcapB:
-			return (R) _shuntCapCSV.get("MVAr");
+			return (R) _shuntCapCSV.getFloats("MVAr");
 		//Shunt Reactor
 		case ShreacID:
 			return (R) _shuntReacCSV.get("ID");
@@ -722,7 +712,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case PhashID:
 			//Build maps if they don't exist
 			if(_transformerMap == null) buildTransformerMaps();
-			return (R) _phaseShifterIDs;
+			return (R) listToArray(_phaseShifterIDs);
 		case PhashNAME:
 			return (R) getTransformerDataStrings("Name", "transformer", false);
 		case PhashBUSFROM:
@@ -761,7 +751,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrID:
 			//Build maps if they don't exist
 			if(_transformerMap == null) buildTransformerMaps();
-			return (R) _transformerIDs;
+			return (R) listToArray(_transformerIDs);
 		case TfmrNAME:
 			return (R) getTransformerDataStrings("Name", "transformer", true);
 		case TfmrBUSFROM:
@@ -844,6 +834,18 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		Arrays.fill(data, 0);
 		
 		return data;
+	}
+	
+	private String[] listToArray(List<String> l)
+	{
+		String[] sArray = new String[l.size()];
+		
+		for(int i = 0; i < sArray.length; ++i)
+		{
+			sArray[i] = l.get(i);
+		}
+		
+		return sArray;
 	}
 	
 	private boolean[] returnFalse(int size)
