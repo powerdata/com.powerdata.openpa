@@ -118,11 +118,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _seriesReacCaseMap;
 	TObjectIntMap<String> _seriesCapCaseMap;
 	TObjectIntMap<String> _synchToCurveMap;
+	TObjectIntMap<String> _switchTypeMap;
 	
 	//Arrays / Lists
 	int[] _busAreaIndex;
 	int[] _busStationIndex;
 	int[] _busOwnerIndex;
+	boolean[] _typeIsOperable;
 	float[] _vlevFloat;
 	List<String> _transformerIDs;
 	List<String> _phaseShifterIDs;
@@ -204,6 +206,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_areaCSV = new SimpleCSV(new File(_dir, "ControlArea.csv"));
 			if(_busAreaIndex == null) buildBusIndexes();
+//			System.out.println("[loadAreas] _busAreaIndex.length = "+_busAreaIndex.length);
+//			System.out.println("[loadAreas] _areaCSV.getRowCount() = "+_areaCSV.getRowCount());
 			return new AreaListI(_m, _busAreaIndex, _areaCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -464,11 +468,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _busCSV.getInts("FrequencySourcePriority");
 		case BusAREA:
 			if(_busAreaIndex == null) loadAreas();
-//			System.out.println("[BusAREA] _busAreaIndex.length = "+_busAreaIndex.length);
-//			for(int i = 0; i < _busAreaIndex.length; ++i)
-//			{
-//				System.out.println("_busAreaIndex["+i+"] = "+_busAreaIndex[i]+" | ");
-//			}
+//			System.out.println("[BusArea] _busAreaIndex.length = "+_busAreaIndex.length);
 			return (R) _busAreaIndex;
 		case BusOWNER:
 			if(_busOwnerIndex == null) loadOwners();
@@ -605,15 +605,17 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return null;
 		//Area
 		case AreaID:
+//			System.out.println("[AreaID] = "+_areaCSV.get("ID"));
 			return (R) _areaCSV.get("ID");
 		case AreaNAME:
+//			System.out.println("[AreaName] = "+_areaCSV.get("Name"));
 			return (R) _areaCSV.get("Name");
-		//Owner - No csv
+		//Owner
 		case OwnerID:
 			return (R) _orgCSV.get("ID");
 		case OwnerNAME:
 			return (R) _orgCSV.get("Name");
-		//Island - No csv
+		//Island
 		case IslandID:
 		case IslandNAME:
 			String[] ids = new String[_m.getIslands().size()];
@@ -955,6 +957,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			{
 				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
 				_busOwnerIndex[i] = _ownerMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]);
+//				System.out.println("[buildBusIndexes] _busAreaIndex["+i+"] = "+_areaMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]));
 			}
 		}
 	}
@@ -989,32 +992,31 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return busVlev;
 	}
 	
+//	private void getSwitchType()
+//	{
+//		
+//	}
+	
 	private boolean[] operableUnderLoad()
 	{
-		boolean[] isOperable = new boolean[_switchCSV.getRowCount()];
-		String switchTypeID, open, close = null;
-		String[] switchIDList = _switchCSV.get("ID");
+		//INCOMPLETE
+		//Will be looking at OpenUnderLoad/CloseUnderLoad from its switchtype
+		//Since we only have operable under load, it will only be operable under load if it can be both opened and closed under load
 		
-		for(int i = 0; i < isOperable.length; ++i)
+		if(_switchTypeMap == null) buildSwitchMaps();
+		boolean[] isOperable = new boolean[_switchCSV.getRowCount()];
+		String[] typeIDs = _switchCSV.get("SwitchType");
+		
+		if(typeIDs == null)
 		{
-			switchTypeID = _switchCSV.get("SwitchType", i);
-			//Figure out if Switch type id is given in the switch csv
-			if(!switchTypeID.equals(null))
+			System.err.println("[PFlowPsmModelBldr] Could not load column \"SwitchType\" from Switch.csv");
+			Arrays.fill(isOperable, false);
+		}
+		else
+		{
+			for(int i = 0; i < typeIDs.length; ++i)
 			{
-				//Switch Type exists, find it in the SwitchType csv
-				for(int j = 0; j < switchIDList.length; ++j)
-				{
-					if(switchIDList[j].equals(switchTypeID))
-					{
-						open = _switchTypeCSV.get("OpenUnderLoad", j).toLowerCase();
-						close = _switchTypeCSV.get("CloseUnderLoad", j).toLowerCase();
-						isOperable[i] = (open.equals("true") && close.equals("true"))?true:false;
-					}
-				}
-			}
-			else
-			{
-				isOperable[i] = false;
+				isOperable[i] = _typeIsOperable[_switchTypeMap.get(typeIDs[i])];
 			}
 		}
 		
@@ -1176,7 +1178,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private float[] getSwitchData(String col)
 	{
-		if(_switchCaseMap == null) buildSwitchMap();
+		if(_switchCaseMap == null) buildSwitchMaps();
 		
 		String[] switchIDs = _switchCSV.get("ID");
 		float[] unsortedData = _switchCaseCSV.getFloats(col);
@@ -1184,7 +1186,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(unsortedData == null)
 		{
-			System.err.println("[PFlowPsmModelBldr] Error loading switch case column \""+col+"\". Does it exist in the CSV?");
+			System.err.println("[PFlowPsmModelBldr] Unable to load column \""+col+"\" from PsmCaseSwitch.csv");
 			Arrays.fill(data, 0);
 		}
 		else
@@ -1817,14 +1819,26 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}
 	}
 	
-	private void buildSwitchMap()
+	private void buildSwitchMaps()
 	{
 		String[] caseIDs = _switchCaseCSV.get("ID");
+		String[] typeIDs = _switchTypeCSV.get("ID");
+		String[] open = _switchTypeCSV.get("OpenUnderLoad");
+		String[] close = _switchTypeCSV.get("CloseUnderLoad");
+		_typeIsOperable = new boolean[typeIDs.length];
 		_switchCaseMap = new TObjectIntHashMap<>(caseIDs.length);
+		_switchTypeMap = new TObjectIntHashMap<>(_switchTypeCSV.getRowCount());
 		
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
 			_switchCaseMap.put(caseIDs[i], i);
+		}
+		
+		for(int i = 0; i < typeIDs.length; ++i)
+		{
+			_switchTypeMap.put(typeIDs[i], i);
+			//Build a boolean array at this time to figure out if a switch with this type is operable under load
+			_typeIsOperable[i] = (open[i].toLowerCase().equals("true") && close[i].toLowerCase().equals("true"))?true:false;
 		}
 	}
 	
@@ -1841,7 +1855,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private Switch.State[] getSwitchState()
 	{
-		if (_switchCaseMap == null) buildSwitchMap();
+		if (_switchCaseMap == null) buildSwitchMaps();
 		String[] unsortedData = _switchCaseCSV.get("SwitchPosition");
 		String[] ids = _switchCSV.get("ID");
 		Switch.State[] state = new Switch.State[ids.length];
