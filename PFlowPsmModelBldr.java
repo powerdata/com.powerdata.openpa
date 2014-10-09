@@ -63,6 +63,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _ratioTapChgCSV;
 	SimpleCSV _reacCapCurveCSV;
 	SimpleCSV _phaseCaseCSV;
+	SimpleCSV _orgCSV;
+
 	
 	//Case CSV files
 	SimpleCSV _loadCaseCSV;
@@ -87,20 +89,20 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _freqRelayCSV;
 	SimpleCSV _loadAreaCSV;
 	SimpleCSV _modelParmsCSV;
-	SimpleCSV _orgCSV;
 	SimpleCSV _primeMoverCSV;
 	SimpleCSV _relayOperateCSV;
 	
 	//Hashmaps
-	TObjectIntMap<String> _loadMap;
+	TObjectIntMap<String> _loadCaseMap;
 	TObjectIntMap<String> _shuntReacCaseMap;
 	TObjectIntMap<String> _shuntCapCaseMap;
-	TObjectIntMap<String> _genMap;
-	TObjectIntMap<String> _synchMap;
+	TObjectIntMap<String> _genCaseMap;
+	TObjectIntMap<String> _syncCasehMap;
 	TObjectIntMap<String> _genToSynchMap;
 	TObjectIntMap<String> _genToSynchCaseMap;
 	TFloatIntMap _vlevMap;
 	TObjectIntMap<String> _areaMap;
+	TObjectIntMap<String> _ownerMap;
 	TObjectIntMap<String> _tfmrRatioTapMap;
 	TObjectIntMap<String> _tfmrPhaseTapMap;
 	TObjectIntMap<String> _transformerMap;
@@ -109,17 +111,20 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _wdgInRatioMap;
 	TObjectIntMap<String> _wdgToTfmrMap;
 	TObjectIntMap<String> _switchCaseMap;
-	TObjectIntMap<String> _lineMap;
+	TObjectIntMap<String> _lineCaseMap;
 	TObjectIntMap<String> _windingCaseMap;
 	TObjectIntMap<String> _stationOffsetMap;
 	TObjectIntMap<String> _svcCaseMap;
 	TObjectIntMap<String> _seriesReacCaseMap;
 	TObjectIntMap<String> _seriesCapCaseMap;
 	TObjectIntMap<String> _synchToCurveMap;
+	TObjectIntMap<String> _switchTypeMap;
 	
 	//Arrays / Lists
 	int[] _busAreaIndex;
 	int[] _busStationIndex;
+	int[] _busOwnerIndex;
+	boolean[] _typeIsOperable;
 	float[] _vlevFloat;
 	List<String> _transformerIDs;
 	List<String> _phaseShifterIDs;
@@ -197,13 +202,12 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	@Override
 	protected AreaListI loadAreas() throws PAModelException 
 	{
-		//TODO Incomplete
-		//Don't currently have all the necessary data
 		try
 		{
 			_areaCSV = new SimpleCSV(new File(_dir, "ControlArea.csv"));
-			//AreaListI(PAModelI model, int[] busref, int narea)
-			if(_busAreaIndex == null) buildBusAreaIndex();
+			if(_busAreaIndex == null) buildBusIndexes();
+//			System.out.println("[loadAreas] _busAreaIndex.length = "+_busAreaIndex.length);
+//			System.out.println("[loadAreas] _areaCSV.getRowCount() = "+_areaCSV.getRowCount());
 			return new AreaListI(_m, _busAreaIndex, _areaCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -215,16 +219,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	@Override
 	protected OwnerListI loadOwners() throws PAModelException 
 	{
-		// TODO Incomplete
-		// Couldn't find a csv for this one in the document
-		return OwnerListI.Empty;
+		try 
+		{
+			_orgCSV = new SimpleCSV(new File(_dir, "Organization.csv"));
+			if(_busOwnerIndex == null) buildBusIndexes();
+			return new OwnerListI(_m, _busOwnerIndex, _orgCSV.getRowCount());
+			//return OwnerListI.Empty;
+		} 
+		catch (IOException e) 
+		{
+			throw new PAModelException(e);
+		}
 	}
 
 	@Override
 	protected StationListI loadStations() throws PAModelException 
 	{
-		//TODO Incomplete
-		//Don't currently have all the necessary data
 		try
 		{
 			_substationCSV = new SimpleCSV(new File(_dir, "Substation.csv"));
@@ -242,11 +252,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		if(_busCSV == null) 
 		{
-//			System.out.println("[loadVoltageLevels] _busCSV is null");
 			loadBuses();
 		}
-
-		//(PAModelI model, int[] busref, int nvl)
 		
 		if(_vlevFloat == null || _vlevMap == null) buildVlev();
 		
@@ -256,10 +263,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	@Override
 	protected IslandList loadIslands() throws PAModelException 
 	{
-		// TODO Incomplete
-		
-		IslandList islands = new IslandListI(_m);
-		
+		IslandList islands = new IslandListI(_m);	
 		
 		return islands;
 	}
@@ -463,9 +467,12 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case BusFREQSRCPRI:
 			return (R) _busCSV.getInts("FrequencySourcePriority");
 		case BusAREA:
+			if(_busAreaIndex == null) loadAreas();
+//			System.out.println("[BusArea] _busAreaIndex.length = "+_busAreaIndex.length);
 			return (R) _busAreaIndex;
 		case BusOWNER:
-			return null;
+			if(_busOwnerIndex == null) loadOwners();
+			return (R) _busOwnerIndex;
 		case BusSTATION:
 			if(_busStationIndex == null) buildBusStationIndex();
 			return (R) _busStationIndex;
@@ -507,7 +514,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case GenQS:
 			return (R) getGenDataFloat("MVArSetpoint", "synchcase");
 		case GenAVR: 
-			return (R) getAVRMode();
+			return (R) getGenAVRMode();
 		case GenVS:
 			return (R) getGenDataFloat("KVSetPoint", "synchcase");
 		case GenREGBUS:
@@ -543,7 +550,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case ShcapOOS:
 			return (R) returnFalse(_shuntCapCSV.getRowCount());
 		case ShcapB:
-			return (R) _shuntCapCSV.get("MVAr");
+			return (R) _shuntCapCSV.getFloats("MVAr");
 		//Shunt Reactor
 		case ShreacID:
 			return (R) _shuntReacCSV.get("ID");
@@ -567,21 +574,21 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SvcBUS:
 			return (R) getBusesById(_svcCSV.get("Node"));
 		case SvcP:
-			return (R) getSVCData("MW");
+			return (R) getSVCDataFloats("MW");
 		case SvcQ:
-			return (R) getSVCData("MVAr");
+			return (R) getSVCDataFloats("MVAr");
 		case SvcOOS:
 			return (R) returnFalse(_svcCSV.getRowCount());
 		case SvcQS:
-			return (R) getSVCData("MVArSetpoint");
+			return (R) getSVCDataFloats("MVArSetpoint");
 		case SvcQMIN:
 			return (R) _svcCSV.getFloats("MinMVAr");
 		case SvcQMAX:
 			return (R) _svcCSV.getFloats("MaxMVAr");
 		case SvcAVR:
-			return (R) returnFalse(_svcCSV.getRowCount());
+			return (R) getSvcAVR();
 		case SvcVS:
-			return (R) getSVCData("VoltageSetpoint");
+			return (R) getSVCDataFloats("VoltageSetpoint");
 		case SvcSLOPE: // float
 			return (R) _svcCSV.getFloats("Slope");
 		case SvcREGBUS:
@@ -598,14 +605,17 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return null;
 		//Area
 		case AreaID:
+//			System.out.println("[AreaID] = "+_areaCSV.get("ID"));
 			return (R) _areaCSV.get("ID");
 		case AreaNAME:
+//			System.out.println("[AreaName] = "+_areaCSV.get("Name"));
 			return (R) _areaCSV.get("Name");
-		//Owner - No csv
+		//Owner
 		case OwnerID:
+			return (R) _orgCSV.get("ID");
 		case OwnerNAME:
-			return null;
-		//Island - No csv
+			return (R) _orgCSV.get("Name");
+		//Island
 		case IslandID:
 		case IslandNAME:
 			String[] ids = new String[_m.getIslands().size()];
@@ -622,11 +632,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _substationCSV.get("Name");
 		//Voltage Level - No csv
 		case VlevID:
-			return (R) returnAsString(_vlevMap.keys());
+			return (R) returnAsString(_vlevFloat);
 		case VlevNAME:
-			return (R) returnAsString(_vlevMap.keys());
+			return (R) returnAsString(_vlevFloat);
 		case VlevBASKV:
-			return (R) _vlevMap.keys();
+			return (R) _vlevFloat;
 		//Line
 		case LineID:
 			return (R) _lineCSV.get("ID");
@@ -709,7 +719,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case PhashID:
 			//Build maps if they don't exist
 			if(_transformerMap == null) buildTransformerMaps();
-			return (R) _phaseShifterIDs;
+			return (R) listToArray(_phaseShifterIDs);
 		case PhashNAME:
 			return (R) getTransformerDataStrings("Name", "transformer", false);
 		case PhashBUSFROM:
@@ -748,7 +758,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrID:
 			//Build maps if they don't exist
 			if(_transformerMap == null) buildTransformerMaps();
-			return (R) _transformerIDs;
+			return (R) listToArray(_transformerIDs);
 		case TfmrNAME:
 			return (R) getTransformerDataStrings("Name", "transformer", true);
 		case TfmrBUSFROM:
@@ -775,7 +785,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrBMAG:
 			return (R) getTransformerDataFloats("Bmag", "winding", true);
 		case TfmrANG:
-			return (R) getTransformerDataFloats("Ratio", "ratiocase", true);
+			return (R) returnZero(_transformerIDs.size());
+			//return (R) getTransformerDataFloats("Ratio", "ratiocase", true);
 		case TfmrTAPFROM:
 		case TfmrTAPTO:
 			return null;
@@ -832,6 +843,18 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
+	private String[] listToArray(List<String> l)
+	{
+		String[] sArray = new String[l.size()];
+		
+		for(int i = 0; i < sArray.length; ++i)
+		{
+			sArray[i] = l.get(i);
+		}
+		
+		return sArray;
+	}
+	
 	private boolean[] returnFalse(int size)
 	{
 		boolean[] data = new boolean[size];
@@ -866,23 +889,37 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(!tempMap.containsValue(kv[i]))
 			{
 				//New level found, add it to the map
+//				System.out.println("[buildVlev] ("+offset+", "+kv[i]+")");
 				tempMap.put(offset, kv[i]);
 				offset++;
 			}
 		}
 		
 		//Now that we know how many voltage levels there are we can create proper maps & arrays.
-		_vlevFloat = new float[offset-1];
-		for(int i = 0; i < offset-1; ++i)
+		_vlevFloat = new float[offset];
+		for(int i = 0; i < offset; ++i)
 		{
 			_vlevFloat[i] = tempMap.get(i);
 			_vlevMap.put(tempMap.get(i), i);
 		}
 	}
 	
-	private void buildAreaMap()
+	private void buildOwnerMap() throws PAModelException
 	{
-		if(_areaCSV == null)System.out.println("[buildAreaMap] _areaCSV is null");
+		if(_orgCSV == null) loadOwners();
+		String[] ownerIDs = _orgCSV.get("ID");
+		_ownerMap = new TObjectIntHashMap<>(ownerIDs.length);
+		
+		for(int i = 0; i < ownerIDs.length; ++i)
+		{
+			_ownerMap.put(ownerIDs[i], i);
+		}
+			
+	}
+	
+	private void buildAreaMap() throws PAModelException
+	{
+		if(_areaCSV == null)loadAreas();
 		String[] areaIDs = _areaCSV.get("ID");
 		_areaMap = new TObjectIntHashMap<>(areaIDs.length);
 		
@@ -892,20 +929,39 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}	
 	}
 	
-	private void buildBusAreaIndex() throws PAModelException
+	private void buildBusIndexes() throws PAModelException
 	{
 		if(_areaMap == null) buildAreaMap();
+		if(_ownerMap == null) buildOwnerMap();
 		if(_stationOffsetMap == null) buildSubstationMap();
 		if(_busCSV == null) loadBuses();
+		
 		String[] stationIDs = _busCSV.get("Substation");
 		String[] areaIDs = _substationCSV.get("ControlArea");
+		String[] ownerIDs = _substationCSV.get("Organization");
 		_busAreaIndex = new int[stationIDs.length];
+		_busOwnerIndex = new int[stationIDs.length];
 		
-		for(int i = 0; i < stationIDs.length; ++i)
+		if(ownerIDs == null)
 		{
-			_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+			System.err.println("[PFlowPsmModelBldr] Substation column \"Organization\" returned null from Substation.csv");
+			for(int i = 0; i < stationIDs.length; ++i)
+			{
+				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+				_busOwnerIndex[i] = 0;
+			}
+		}
+		else
+		{
+			for(int i = 0; i < stationIDs.length; ++i)
+			{
+				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
+				_busOwnerIndex[i] = _ownerMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]);
+//				System.out.println("[buildBusIndexes] _busAreaIndex["+i+"] = "+_areaMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]));
+			}
 		}
 	}
+	
 	private void buildBusStationIndex() throws PAModelException
 	{
 		if(_stationOffsetMap == null) buildSubstationMap();
@@ -929,39 +985,38 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		for(int i = 0; i < busVlev.length; ++i)
 		{
-			busVlev[i] = _vlevMap.get((int)kv[i]);
-//			System.out.println("\n[getBusVlev] busVlev["+i+"] = "+busVlev[i]);
+			busVlev[i] = _vlevMap.get(kv[i]);
+//			System.out.println("[getBusVlev] busVlev["+i+"] = "+busVlev[i]+" ("+kv[i]+")");
 		}
 		
 		return busVlev;
 	}
 	
+//	private void getSwitchType()
+//	{
+//		
+//	}
+	
 	private boolean[] operableUnderLoad()
 	{
-		boolean[] isOperable = new boolean[_switchCSV.getRowCount()];
-		String switchTypeID, open, close = null;
-		String[] switchIDList = _switchCSV.get("ID");
+		//INCOMPLETE
+		//Will be looking at OpenUnderLoad/CloseUnderLoad from its switchtype
+		//Since we only have operable under load, it will only be operable under load if it can be both opened and closed under load
 		
-		for(int i = 0; i < isOperable.length; ++i)
+		if(_switchTypeMap == null) buildSwitchMaps();
+		boolean[] isOperable = new boolean[_switchCSV.getRowCount()];
+		String[] typeIDs = _switchCSV.get("SwitchType");
+		
+		if(typeIDs == null)
 		{
-			switchTypeID = _switchCSV.get("SwitchType", i);
-			//Figure out if Switch type id is given in the switch csv
-			if(!switchTypeID.equals(null))
+			System.err.println("[PFlowPsmModelBldr] Could not load column \"SwitchType\" from Switch.csv");
+			Arrays.fill(isOperable, false);
+		}
+		else
+		{
+			for(int i = 0; i < typeIDs.length; ++i)
 			{
-				//Switch Type exists, find it in the SwitchType csv
-				for(int j = 0; j < switchIDList.length; ++j)
-				{
-					if(switchIDList[j].equals(switchTypeID))
-					{
-						open = _switchTypeCSV.get("OpenUnderLoad", j).toLowerCase();
-						close = _switchTypeCSV.get("CloseUnderLoad", j).toLowerCase();
-						isOperable[i] = (open.equals("true") && close.equals("true"))?true:false;
-					}
-				}
-			}
-			else
-			{
-				isOperable[i] = false;
+				isOperable[i] = _typeIsOperable[_switchTypeMap.get(typeIDs[i])];
 			}
 		}
 		
@@ -989,7 +1044,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return genModes;
 	}
 	
-	private boolean[] getAVRMode() throws PAModelException
+	private boolean[] getGenAVRMode() throws PAModelException
 	{
 		String[] genAVR = getGenDataString("AVRMode","synchcase");
 		boolean[] avr = new boolean[genAVR.length];
@@ -997,6 +1052,20 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		for(int i = 0; i < genAVR.length; ++i)
 		{
 			avr[i] = (genAVR[i].toLowerCase().equals("off"))?false:true;
+		}
+		
+		return avr;
+	}
+	
+	private boolean[] getSvcAVR()
+	{
+		//MVAR mode = false
+		String[] svcAVR = getSVCDataStrings("Mode");
+		boolean[] avr = new boolean[svcAVR.length];
+		
+		for(int i = 0; i < svcAVR.length; ++i)
+		{
+			avr[i] = svcAVR[i].toLowerCase().equals("volt")?true:false;
 		}
 		
 		return avr;
@@ -1028,11 +1097,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		else
 		{
 			//check to see if the hashmap has been created yet;
-			if(_loadMap == null) buildLoadMap();
+			if(_loadCaseMap == null) buildLoadMap();
 			
 			for(int i = 0; i < data.length; ++i)
 			{		
-				data[i] = caseData[_loadMap.get(loadIDs[i])];
+				data[i] = caseData[_loadCaseMap.get(loadIDs[i])];
 			}
 		}
 		
@@ -1101,7 +1170,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		for(int i = 0; i < genIDs.length; ++i)
 		{
-			busIDs[_genMap.get(genIDs[i])] = unsortedBuses[i];
+			busIDs[_genCaseMap.get(genIDs[i])] = unsortedBuses[i];
 		}
 		
 		return getBusesById(busIDs);
@@ -1109,7 +1178,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private float[] getSwitchData(String col)
 	{
-		if(_switchCaseMap == null) buildSwitchMap();
+		if(_switchCaseMap == null) buildSwitchMaps();
 		
 		String[] switchIDs = _switchCSV.get("ID");
 		float[] unsortedData = _switchCaseCSV.getFloats(col);
@@ -1117,7 +1186,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(unsortedData == null)
 		{
-			System.err.println("[PFlowPsmModelBldr] Error loading switch case column \""+col+"\". Does it exist in the CSV?");
+			System.err.println("[PFlowPsmModelBldr] Unable to load column \""+col+"\" from PsmCaseSwitch.csv");
 			Arrays.fill(data, 0);
 		}
 		else
@@ -1138,7 +1207,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		float[] data = new float[_genCaseCSV.getRowCount()];
 		
 		//Build maps if they are empty
-		if(_genMap == null || _genToSynchMap == null) buildGeneratorMaps();
+		if(_genCaseMap == null || _genToSynchMap == null) buildGeneratorMaps();
 		
 		//Figure out what csv we are dealing with
 		if(csv.toLowerCase().equals("synch"))
@@ -1170,7 +1239,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			{
 				for(int i = 0; i < genIDs.length; ++i)
 				{
-					data[i] = unsortedData[_synchMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
+					data[i] = unsortedData[_syncCasehMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
 				}
 			}
 		}
@@ -1186,7 +1255,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			{
 				for (int i = 0; i < genIDs.length; ++i)
 				{
-					data[i] = unsortedData[_genMap.get(genIDs[i])];
+					data[i] = unsortedData[_genCaseMap.get(genIDs[i])];
 				}
 			}
 		}
@@ -1225,7 +1294,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		String[] data = new String[_genCaseCSV.getRowCount()];
 		
 		//Build maps if they are empty
-		if(_genMap == null || _genToSynchMap == null) buildGeneratorMaps();
+		if(_genCaseMap == null || _genToSynchMap == null) buildGeneratorMaps();
 		
 		//Figure out what csv we are dealing with
 		if(csv.toLowerCase().equals("synch"))
@@ -1258,7 +1327,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			{				
 				for(int i = 0; i < genIDs.length; ++i)
 				{
-					data[i] = unsortedData[_synchMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
+					data[i] = unsortedData[_syncCasehMap.get(synchIDs[_genToSynchMap.get(genIDs[i])])];
 				}
 			}
 		}
@@ -1274,7 +1343,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			{
 				for (int i = 0; i < genIDs.length; ++i)
 				{
-					data[i] = unsortedData[_genMap.get(genIDs[i])];
+					data[i] = unsortedData[_genCaseMap.get(genIDs[i])];
 				}				
 			}
 		}
@@ -1285,7 +1354,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private float[] getLineCaseData(String col)
 	{
-		if(_lineMap == null) buildLineMap();
+		if(_lineCaseMap == null) buildLineMap();
 	
 		String[] ids = _lineCSV.get("ID");
 		float[] unsortedData = _lineCaseCSV.getFloats(col);
@@ -1299,7 +1368,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			for(int i = 0; i < ids.length; ++i)
 			{
-				data[i] = unsortedData[_lineMap.get(ids[i])];
+				data[i] = unsortedData[_lineCaseMap.get(ids[i])];
 			}
 		}
 		
@@ -1352,13 +1421,36 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
-	private float[] getSVCData(String col)
+	private float[] getSVCDataFloats(String col)
 	{
 		//Build maps if they don't exist
 		if(_svcCaseMap == null) buildSVCMap();
 		String[] ids = _svcCaseCSV.get("ID");
 		float[] unsortedData = _svcCaseCSV.getFloats(col);
 		float[] data = new float[ids.length];
+		if(unsortedData == null) 
+		{
+			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, 0);
+		}
+		else
+		{
+			for(int i = 0; i < ids.length; ++i)
+			{
+				data[i] = unsortedData[_svcCaseMap.get(ids[i])];
+			}
+		}
+		
+		return data;
+	}
+	
+	private String[] getSVCDataStrings(String col)
+	{
+		//Build maps if they don't exist
+		if(_svcCaseMap == null) buildSVCMap();
+		String[] ids = _svcCaseCSV.get("ID");
+		String[] unsortedData = _svcCaseCSV.get(col);
+		String[] data = new String[ids.length];
 		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
@@ -1712,29 +1804,41 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		String[] reacSynchIDs = _reacCapCurveCSV.get("SynchronousMachine");
 		
 		
-		_genMap = new TObjectIntHashMap<>(genCaseIDs.length);
-		_synchMap = new TObjectIntHashMap<>(synchCaseIDs.length);
+		_genCaseMap = new TObjectIntHashMap<>(genCaseIDs.length);
+		_syncCasehMap = new TObjectIntHashMap<>(synchCaseIDs.length);
 		_genToSynchMap = new TObjectIntHashMap<>(genCaseIDs.length);
 		_genToSynchCaseMap = new TObjectIntHashMap<>(genCaseIDs.length);
 		_synchToCurveMap = new TObjectIntHashMap<>(synchCaseIDs.length);
 		
 		for(int i = 0; i < genCaseIDs.length; ++i)
 		{
-			_genMap.put(genCaseIDs[i], i); // Takes generating unit ID
-			_synchMap.put(synchCaseIDs[i], i); // Takes synch machine ID
-			_genToSynchMap.put(synchGenIDs[i], i); //Take generating ID
-			_synchToCurveMap.put(reacSynchIDs[i], i);
+			_genCaseMap.put(genCaseIDs[i], i); // Takes generating unit ID
+			_syncCasehMap.put(synchCaseIDs[i], i); // Takes synch machine ID
+			_genToSynchMap.put(synchGenIDs[i], i); //Takes generating ID
+			_synchToCurveMap.put(reacSynchIDs[i], i); //Takes synch machine ID
 		}
 	}
 	
-	private void buildSwitchMap()
+	private void buildSwitchMaps()
 	{
 		String[] caseIDs = _switchCaseCSV.get("ID");
+		String[] typeIDs = _switchTypeCSV.get("ID");
+		String[] open = _switchTypeCSV.get("OpenUnderLoad");
+		String[] close = _switchTypeCSV.get("CloseUnderLoad");
+		_typeIsOperable = new boolean[typeIDs.length];
 		_switchCaseMap = new TObjectIntHashMap<>(caseIDs.length);
+		_switchTypeMap = new TObjectIntHashMap<>(_switchTypeCSV.getRowCount());
 		
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
 			_switchCaseMap.put(caseIDs[i], i);
+		}
+		
+		for(int i = 0; i < typeIDs.length; ++i)
+		{
+			_switchTypeMap.put(typeIDs[i], i);
+			//Build a boolean array at this time to figure out if a switch with this type is operable under load
+			_typeIsOperable[i] = (open[i].toLowerCase().equals("true") && close[i].toLowerCase().equals("true"))?true:false;
 		}
 	}
 	
@@ -1751,7 +1855,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private Switch.State[] getSwitchState()
 	{
-		if (_switchCaseMap == null) buildSwitchMap();
+		if (_switchCaseMap == null) buildSwitchMaps();
 		String[] unsortedData = _switchCaseCSV.get("SwitchPosition");
 		String[] ids = _switchCSV.get("ID");
 		Switch.State[] state = new Switch.State[ids.length];
@@ -1767,10 +1871,10 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		String[] caseIDs = _loadCaseCSV.get("ID");
 		
-		_loadMap = new TObjectIntHashMap<>(caseIDs.length);
+		_loadCaseMap = new TObjectIntHashMap<>(caseIDs.length);
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
-			_loadMap.put(caseIDs[i], i);
+			_loadCaseMap.put(caseIDs[i], i);
 		}
 
 	}
@@ -1800,22 +1904,19 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private void buildLineMap()
 	{
-		String[] lineIDs = _lineCaseCSV.get("ID");
+		String[] caseIDs = _lineCaseCSV.get("ID");
 		
-		_lineMap = new TObjectIntHashMap<>(lineIDs.length);
-		for(int i = 0; i < lineIDs.length; ++i)
+		_lineCaseMap = new TObjectIntHashMap<>(caseIDs.length);
+		for(int i = 0; i < caseIDs.length; ++i)
 		{
-			_lineMap.put(lineIDs[i], i);
+			_lineCaseMap.put(caseIDs[i], i);
 		}
 	}
 	
 	private int[] getBusesById(String[] ids) throws PAModelException 
 	{
 		int[] indexes = _m.getBuses().getIndexesFromIDs(ids);
-//		for(int i = 0; i < ids.length; ++i)
-//		{
-//			System.out.println("Bus Index["+i+"]: "+indexes[i]);
-//		}
+
 		return indexes;
 	}
 

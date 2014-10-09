@@ -27,7 +27,7 @@ public class OwnerListI extends GroupListI<Owner> implements OwnerList
 	}
 	public OwnerListI(PAModelI model, int[] busref, int nowner)
 	{
-		super(model, null, _PFld);
+		super(model, nowner, _PFld);
 		setupMap(busref, nowner);
 	}
 	public OwnerListI(PAModelI model, int[] keys, int[] busref)
