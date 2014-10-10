@@ -944,7 +944,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(ownerIDs == null)
 		{
-			System.err.println("[PFlowPsmModelBldr] Substation column \"Organization\" returned null from Substation.csv");
+			//System.err.println("[PFlowPsmModelBldr] Substation column \"Organization\" returned null from Substation.csv");
 			for(int i = 0; i < stationIDs.length; ++i)
 			{
 				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
