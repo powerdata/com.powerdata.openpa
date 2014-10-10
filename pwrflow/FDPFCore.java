@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.AbstractList;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
@@ -34,7 +33,6 @@ import com.powerdata.openpa.TwoTermDev.Side;
 import com.powerdata.openpa.impl.GenSubList;
 import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.impl.LoadSubList;
-import com.powerdata.openpa.psse.GenMode;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
@@ -49,7 +47,7 @@ public class FDPFCore
 	Variant _variant = Variant.XB;
 	float _sbase;
 	
-	int _niter = 60;
+	int _niter = 65;
 	float _ptol = 0.005f, _qtol = 0.005f;
 	boolean _enatapadj = false;
 	FactorizedBMatrix _bp, _bpp;
@@ -157,7 +155,8 @@ public class FDPFCore
 	Map<ListMetaType,BranchRec> _brc = new HashMap<>();
 	/** shunt info by type */
 	Map<ListMetaType, FixedShuntComposite> _fsh; 
-	
+	FDPFVoltageRegList _monitors;
+
 	public FDPFCore(PAModel m) throws PAModelException
 	{
 		_model = m;
@@ -207,10 +206,9 @@ public class FDPFCore
 		_cset.add(_csvc);
 		_btypes = new BusTypeUtil(m, bri, svcpvb);
 
-		GenList allgens = m.getGenerators();
 		LoadList allloads = m.getLoads();
 		
-		_gens = new GenSubList(allgens, CalcBase.GetInService(allgens));
+		findOperatingGenerators();
 		_loads = new LoadSubList(allloads, CalcBase.GetInService(allloads));
 		_ldbus = bri.get1TBus(_loads);
 		_genbus = bri.get1TBus(_gens);
@@ -218,16 +216,34 @@ public class FDPFCore
 		configureBranchY();
 		
 		int[] ref = _btypes.getBuses(BusType.Reference);
+		int[] pv = _btypes.getBuses(BusType.PV);
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
 		SpSymMtrxFactPattern p = bp.savePattern(ref);
 		_bp = bp.factorizeFromPattern();
 		bPrimeHook(bp);
-		_mbpp = new BDblPrime(mb, ref);
+		_mbpp = new BDblPrime(mb, ref, pv);
 		_mbpp.savePattern(p);
 		
 		if (_enatapadj) buildTapAdj();
 		
+		_monitors = new FDPFVoltageRegList(pv, ref);
+		
+	}
+	
+	void findOperatingGenerators() throws PAModelException
+	{
+		GenList list = _model.getGenerators();
+		int n = list.size();
+		int[] x = new int[n];
+		int cnt = 0;
+		for(int i=0; i < n; ++i)
+		{
+			Gen g = list.get(i);
+			if (!g.isOutOfSvc() && g.getMode() != Gen.Mode.OFF)
+				x[cnt++] = i;
+		}
+		_gens = new GenSubList(list, Arrays.copyOf(x, cnt));
 	}
 
 	void buildTapAdj() throws PAModelException
@@ -477,7 +493,7 @@ public class FDPFCore
 			if (nconv && nfail)
 			{
 				if (_enatapadj && i > 0) adjustTransformerTaps(convstat);
-//				checkUnitVars();
+				if (i > 0) _monitors.monitor(qmm);
 				_vmc = _vm.clone();
 				corr.stream().sequential().forEach(j -> j.apply(_vmc));
 //				_pool.execute(rcorr);
@@ -695,12 +711,17 @@ public class FDPFCore
 	{
 		int ngen = _gens.size();
 		float[] ps = PAMath.mva2pu(_gens.getPS(), _sbase);
-		boolean[] rkv = _gens.isRegKV();
 		for (int i=0; i < ngen; ++i)
 		{
 			int bx = _genbus[i];
 			pmm[bx] -= ps[i];
-			if (!rkv[i]) qmm[bx] -= PAMath.mva2pu(_gens.getQS(i), _sbase); 
+			if (_btypes.getType(bx) == BusType.PQ)
+			{
+				float qmmt = PAMath.mva2pu(_gens.getQS(i), _sbase);
+				System.err.format("Load QS of %f from %s (%s mode %s)\n", qmmt, _buses.get(bx).getName(),
+					_gens.getName(i), _gens.getMode(i).toString());
+				qmm[bx] -= PAMath.mva2pu(_gens.getQS(i), _sbase);
+			}
 		}
 	}
 	
@@ -909,7 +930,6 @@ public class FDPFCore
 		}
 	}
 	
-
 	class BPrime extends SpSymBMatrix
 	{
 		BPrime(MtrxBldr bldr)
@@ -922,8 +942,10 @@ public class FDPFCore
 	{
 		float[] _bsvc;
 		SVCState[] _state;
+		/** keep track of the original diagonal values for monitored buses*/
+		float[] _orgdiag;
 		
-		BDblPrime(MtrxBldr bldr, int[] ref) throws PAModelException
+		BDblPrime(MtrxBldr bldr, int[] ref, int[] pv) throws PAModelException
 		{
 			super(bldr.net, bldr.bppself, bldr.bpptran); 
 			
@@ -932,14 +954,8 @@ public class FDPFCore
 			_state = new SVCState[nsvc];
 			Arrays.fill(_state, SVCState.Off);
 			
+			processPVBuses(pv);
 			processFixedShunts(_fsh.get(ListMetaType.ShuntCap));
-			processPVBuses();
-		}
-
-		void processPVBuses()
-		{
-			for(int p : _btypes.getBuses(BusType.PV))
-				_bdiag[p] += 1e+06f;
 		}
 
 		void processFixedShunts(FixedShuntComposite comp) throws PAModelException
@@ -978,8 +994,131 @@ public class FDPFCore
 			return rv;
 		}
 		
+		void processPVBuses(int[] monitoredBuses)
+		{
+			int n = monitoredBuses.length;
+			_orgdiag = new float[n];
+			for(int i=0; i < n; ++i)
+			{
+				int p = monitoredBuses[i];
+				_orgdiag[i] = _bdiag[p];
+				_bdiag[p] = 1e+06f;
+			}
+		}
+
+		/** convert monitored bus type */
+		public void convertToPQ(int iMon, int bus)
+		{
+			_bdiag[bus] = _orgdiag[iMon];
+			_bpp = null;
+		}
+		
+		/** restore to PV behavior */
+		public void restoreToPV(int bus)
+		{
+			_bdiag[bus] = 1e+06f;
+			_bpp = null;
+		}
+
 	}
 	
+	private interface FloatFunction<R>
+	{
+		R apply(float val);
+	}
+	class FDPFVoltageRegList extends ReactiveMonitorList
+	{
+		VoltRegAction _deft = new VoltRegAction()
+		{
+			@Override
+			public VoltRegAction monitor(float qmm, int i) throws PAModelException
+			{
+				if (qmm < _minq[i])
+					return procViol(i, MonitorBelow::new);
+				else if (qmm > _maxq[i])
+					return procViol(i, MonitorAbove::new);
+				return null;
+			}
+			
+			VoltRegAction procViol(int i, FloatFunction<VoltRegAction> ctr) throws PAModelException
+			{
+				int b = _bus[i];
+				_btypes.changeType(BusType.PQ, b, _buses.getIsland(b).getIndex());
+				_mbpp.convertToPQ(i, b);
+				return ctr.apply(_vm[b]);
+			}
+		};
+		
+		class MonitorBelow implements VoltRegAction
+		{
+			float _lowvm;
+			MonitorBelow(float vmviol)
+			{
+				_lowvm = vmviol;
+			}
+			@Override
+			public VoltRegAction monitor(float qmm, int i) throws PAModelException
+			{
+				int b = _bus[i];
+				if (_vm[b] > _lowvm)
+				{
+					_btypes.changeType(BusType.PV, b, _buses.getIsland(b).getIndex());
+					_mbpp.restoreToPV(b);
+					return _deft;
+				}
+				return null;
+			}
+		}
+		
+		class MonitorAbove implements VoltRegAction
+		{
+			float _hivm;
+			MonitorAbove(float vmviol)
+			{
+				_hivm = vmviol;
+			}
+			@Override
+			public VoltRegAction monitor(float qmm, int i) throws PAModelException
+			{
+				int b = _bus[i];
+				if (_vm[_bus[i]] < _hivm)
+				{
+					_btypes.changeType(BusType.PV, b, _buses.getIsland(b).getIndex());
+					_mbpp.restoreToPV(b);
+					return _deft;
+				}
+				return null;
+			}
+		}
+		
+		FDPFVoltageRegList(int[] pv, int[] ref) throws PAModelException
+		{
+			super();
+			configure(_buses, pv, ref);
+		}
+
+		@Override
+		protected VoltRegAction loadAction(Gen gen)
+		{
+			return _deft;
+		}
+
+		@Override
+		protected VoltRegAction loadAction(SVC svc)
+		{
+			return _deft;
+		}
+		
+		public void monitor(float[] qmm) throws PAModelException
+		{
+			int n = size();
+			for(int i=0; i < n; ++i)
+			{
+				_action[i].monitor(qmm[_bus[i]], i);
+			}
+		}
+
+	}
 	
 	public static void main(String...args) throws Exception
 	{

@@ -8,20 +8,18 @@ import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
 
-public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.VoltageRegList.VoltageReg>
+public abstract class ReactiveMonitorList extends AbstractList<com.powerdata.openpa.pwrflow.ReactiveMonitorList.VoltageReg>
 {
-	public interface VoltRegAction
+	interface VoltRegAction
 	{
-		boolean test();
-		void take();
+		VoltRegAction monitor(float val, int ndx) throws PAModelException;
 	}
-
 
 	public static class VoltageReg
 	{
-		VoltageRegList _list;
+		ReactiveMonitorList _list;
 		int _ndx;
-		VoltageReg(VoltageRegList list, int index)
+		VoltageReg(ReactiveMonitorList list, int index)
 		{
 			_list = list;
 			_ndx = index;
@@ -31,18 +29,17 @@ public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.Vo
 
 	float[] _vsp, _minq, _maxq;
 	int[] _bus;
-	VoltRegAction[][] _action;
+	VoltRegAction[] _action;
 	
-	VoltageRegList(BusList buses, BusTypeUtil btypes) throws PAModelException
+	public void configure(BusList buses, int[] pv, int[] slk) throws PAModelException
 	{
-		int[] pv = btypes.getBuses(BusType.PV);
-		int[] slk = btypes.getBuses(BusType.Reference);
 		int npv = pv.length, nslk = slk.length, n = npv+nslk;
 		_bus = Arrays.copyOf(pv, n);
 		System.arraycopy(slk, 0, _bus, npv, nslk);
 		_vsp = new float[n];
 		_minq = new float[n];
 		_maxq = new float[n];
+		_action = new VoltRegAction[n];
 		
 		for(int i=0; i < n; ++i)
 		{
@@ -56,6 +53,7 @@ public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.Vo
 					_minq[i] += g.getMinQ();
 					_maxq[i] += g.getMaxQ();
 					vsp += g.getVS();
+					_action[i] = loadAction(g);
 					++ngen;
 				}
 			}
@@ -66,6 +64,7 @@ public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.Vo
 					_minq[i] += s.getMinQ();
 					_maxq[i] += s.getMaxQ();
 					vsp += s.getVS();
+					_action[i] = loadAction(s);
 					++ngen;
 				}
 			}
@@ -73,6 +72,9 @@ public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.Vo
 		}
 		
 	}
+	
+	abstract protected VoltRegAction loadAction(Gen gen);
+	abstract protected VoltRegAction loadAction(SVC svc);
 	
 	@Override
 	public VoltageReg get(int index) {return new VoltageReg(this, index);}
