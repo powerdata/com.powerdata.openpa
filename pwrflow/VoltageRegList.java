@@ -7,15 +7,14 @@ import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
+import com.powerdata.openpa.tools.PAMath;
 
-public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.VoltageRegList.VoltageReg>
+public abstract class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.VoltageRegList.VoltageReg>
 {
-	public interface VoltRegAction
+	interface Monitor
 	{
-		boolean test();
-		void take();
+		Monitor monitor(float val, int ndx) throws PAModelException;
 	}
-
 
 	public static class VoltageReg
 	{
@@ -26,58 +25,64 @@ public class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.Vo
 			_list = list;
 			_ndx = index;
 		}
+		
+		Monitor getMonitor() {return _list.getMonitor(_ndx);}
 	}
 	
 
-	float[] _vsp, _minq, _maxq;
+	float[] _minq, _maxq;
 	int[] _bus;
-	VoltRegAction[][] _action;
+	Monitor[] _action;
 	
-	VoltageRegList(BusList buses, BusTypeUtil btypes) throws PAModelException
+	public Monitor getMonitor(int ndx) {return _action[ndx];}
+	
+	public void configure(BusList buses, int[] pv, int[] slk) throws PAModelException
 	{
-		int[] pv = btypes.getBuses(BusType.PV);
-		int[] slk = btypes.getBuses(BusType.Reference);
 		int npv = pv.length, nslk = slk.length, n = npv+nslk;
 		_bus = Arrays.copyOf(pv, n);
 		System.arraycopy(slk, 0, _bus, npv, nslk);
-		_vsp = new float[n];
+//		_vsp = new float[n];
 		_minq = new float[n];
 		_maxq = new float[n];
+		_action = new Monitor[n];
 		
 		for(int i=0; i < n; ++i)
 		{
 			Bus b = buses.get(_bus[i]);
-			float vsp = 0f;
-			int ngen = 0;
+//			float vsp = 0f;
+//			int ngen = 0;
 			for(Gen g : b.getGenerators())
 			{
 				if (unitInAVr(g))
 				{
-					_minq[i] += g.getMinQ();
-					_maxq[i] += g.getMaxQ();
-					vsp += g.getVS();
-					++ngen;
+					_minq[i] += PAMath.mva2pu(g.getMinQ(), 100f);
+					_maxq[i] += PAMath.mva2pu(g.getMaxQ(), 100f);
+//					vsp += g.getVS();
+//					++ngen;
 				}
 			}
 			for(SVC s : b.getSVCs())
 			{
 				if (svcInAVr(s))
 				{
-					_minq[i] += s.getMinQ();
-					_maxq[i] += s.getMaxQ();
-					vsp += s.getVS();
-					++ngen;
+					_minq[i] += PAMath.mva2pu(s.getMinQ(), 100f);
+					_maxq[i] += PAMath.mva2pu(s.getMaxQ(), 100f);
+//					vsp += s.getVS();
+//					++ngen;
 				}
 			}
-			_vsp[i] = vsp / (float) ngen;
+//			_vsp[i] = vsp / (((float) ngen)*b.getVoltageLevel().getBaseKV());
+			_action[i] = (i < npv) ? loadActionPV(i) : loadActionRef(i);
 		}
-		
 	}
+	
+	abstract protected Monitor loadActionPV(int index);
+	abstract protected Monitor loadActionRef(int index);
 	
 	@Override
 	public VoltageReg get(int index) {return new VoltageReg(this, index);}
 	@Override
-	public int size() {return _vsp.length;}
+	public int size() {return _minq.length;}
 
 	static boolean unitInAVr(Gen g) throws PAModelException
 	{

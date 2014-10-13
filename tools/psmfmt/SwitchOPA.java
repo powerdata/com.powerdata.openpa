@@ -17,6 +17,8 @@ public class SwitchOPA extends ExportOpenPA<SwitchList>
 		assign(Switch.Name, new StringWrap(i -> _list.getName(i)));
 		assign(Switch.Node1, new StringWrap(i -> buses.get(bx[0][i]).getID()));
 		assign(Switch.Node2, new StringWrap(i -> buses.get(bx[1][i]).getID()));
+		assign(Switch.SwitchType, 
+			new StringWrap(i -> _list.isOperableUnderLoad(i)?"Type_Breaker":"Type_Disconnect"));
 	}
 	
 	@Override

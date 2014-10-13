@@ -955,8 +955,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(stationOwnerIDs == null)
 		{
+<<<<<<< HEAD
 			//Create station indexes
 			for(int i = 0; i < stationAreaIDs.length; ++i)
+=======
+			//System.err.println("[PFlowPsmModelBldr] Substation column \"Organization\" returned null from Substation.csv");
+			for(int i = 0; i < stationIDs.length; ++i)
+>>>>>>> 8bb9c2f251aa619bee5c83c74639b1e27d84d9fc
 			{
 				_stationAreaIndex[i] = _areaMap.get(stationAreaIDs[i]);
 				_stationOwnerIndex[i] = 0;

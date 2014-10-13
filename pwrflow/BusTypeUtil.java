@@ -255,9 +255,22 @@ public class BusTypeUtil
 		return rv;
 	}
 	
+	public BusType getType(int ndx)
+	{
+		return BusType.values()[_type[ndx]];
+	}
+	
 	public int[] getTypesOrdinal()
 	{
 		return _type;
+	}
+
+	public void changeType(BusType ntype, int bus, int busisland)
+	{
+		_imap = new WeakReference<>(null);
+		_tmap = new WeakReference<>(null);
+		_itype[bus] = calcigrp(busisland, ntype.ordinal());
+		_type[bus] = ntype.ordinal();
 	}
 	
 }

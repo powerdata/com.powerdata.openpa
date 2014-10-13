@@ -52,6 +52,7 @@ public class PsmFmtExport
 		}
 		else
 			new SwitchOPA(_model, _bri).export(odir);
+		new SwitchTypeOPA().export(odir);
 		new CaseLoadOPA(_model).export(odir);
 		new CaseGeneratingUnitOPA(_model).export(odir);
 		new CaseSynchronousMachineOPA(_model).export(odir);
