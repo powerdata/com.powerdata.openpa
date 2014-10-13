@@ -9,6 +9,7 @@ import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,9 +122,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _switchTypeMap;
 	
 	//Arrays / Lists
+	int[] _stationAreaIndex;
 	int[] _busAreaIndex;
-	int[] _busStationIndex;
 	int[] _busOwnerIndex;
+	int[] _busStationIndex;
+	int[] _stationOwnerIndex;
 	boolean[] _typeIsOperable;
 	float[] _vlevFloat;
 	List<String> _transformerIDs;
@@ -162,7 +165,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(_busCSV == null) _busCSV = new SimpleCSV(new File(_dir, "Node.csv"));
 			return new BusListI(_m, _busCSV.getRowCount());
 		} 
-		catch (IOException e) 
+		catch (IOException e)
 		{
 			throw new PAModelException(e);
 		}
@@ -206,9 +209,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_areaCSV = new SimpleCSV(new File(_dir, "ControlArea.csv"));
 			if(_busAreaIndex == null) buildBusIndexes();
-//			System.out.println("[loadAreas] _busAreaIndex.length = "+_busAreaIndex.length);
-//			System.out.println("[loadAreas] _areaCSV.getRowCount() = "+_areaCSV.getRowCount());
-			return new AreaListI(_m, _busAreaIndex, _areaCSV.getRowCount());
+			return new AreaListI(_m, offsetsToKeys(_busAreaIndex), _areaCSV.getRowCount());
 		}
 		catch (IOException e) 
 		{
@@ -223,8 +224,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_orgCSV = new SimpleCSV(new File(_dir, "Organization.csv"));
 			if(_busOwnerIndex == null) buildBusIndexes();
-			return new OwnerListI(_m, _busOwnerIndex, _orgCSV.getRowCount());
-			//return OwnerListI.Empty;
+			return new OwnerListI(_m, offsetsToKeys(_busOwnerIndex), _orgCSV.getRowCount());
 		} 
 		catch (IOException e) 
 		{
@@ -239,7 +239,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_substationCSV = new SimpleCSV(new File(_dir, "Substation.csv"));
 			if(_busStationIndex == null) buildBusStationIndex();
-			return new StationListI(_m, _busStationIndex, _busStationIndex.length);
+			
+			return new StationListI(_m, offsetsToKeys(_busStationIndex), _substationCSV.getRowCount());
 		}
 		catch (IOException e) 
 		{
@@ -257,7 +258,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(_vlevFloat == null || _vlevMap == null) buildVlev();
 		
-		return new VoltageLevelListI(_m, getBusVlev(), _vlevMap.size());
+		return new VoltageLevelListI(_m, offsetsToKeys(getBusVlev()), _vlevMap.size());
 	}
 
 	@Override
@@ -463,15 +464,14 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R)_busCSV.get("Name");
 		case BusVM: //Returns float
 		case BusVA:	//Returns float
-			return (R) returnZero(_busCSV.getRowCount());
+			return (R) returnFalseNumber(_busCSV.getRowCount());
 		case BusFREQSRCPRI:
 			return (R) _busCSV.getInts("FrequencySourcePriority");
 		case BusAREA:
 			if(_busAreaIndex == null) loadAreas();
-//			System.out.println("[BusArea] _busAreaIndex.length = "+_busAreaIndex.length);
 			return (R) _busAreaIndex;
 		case BusOWNER:
-			if(_busOwnerIndex == null) loadOwners();
+			if(_stationOwnerIndex == null) loadOwners();
 			return (R) _busOwnerIndex;
 		case BusSTATION:
 			if(_busStationIndex == null) buildBusStationIndex();
@@ -513,7 +513,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) getGenDataFloat("MWSetPoint", "gencase");
 		case GenQS:
 			return (R) getGenDataFloat("MVArSetpoint", "synchcase");
-		case GenAVR: 
+		case GenAVR:
 			return (R) getGenAVRMode();
 		case GenVS:
 			return (R) getGenDataFloat("KVSetPoint", "synchcase");
@@ -605,10 +605,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return null;
 		//Area
 		case AreaID:
-//			System.out.println("[AreaID] = "+_areaCSV.get("ID"));
 			return (R) _areaCSV.get("ID");
 		case AreaNAME:
-//			System.out.println("[AreaName] = "+_areaCSV.get("Name"));
 			return (R) _areaCSV.get("Name");
 		//Owner
 		case OwnerID:
@@ -622,7 +620,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			for(int i = 0; i < ids.length; ++i) { ids[i] = ""+i; }
 			return (R) ids;
 		case IslandFREQ:
-			return (R) returnZero(_m.getIslands().size());
+			return (R) returnFalseNumber(_m.getIslands().size());
 		case IslandEGZSTATE:
 			return null;
 		//Station
@@ -630,7 +628,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) _substationCSV.get("ID");
 		case StationNAME:
 			return (R) _substationCSV.get("Name");
-		//Voltage Level - No csv
+		//Voltage Level
 		case VlevID:
 			return (R) returnAsString(_vlevFloat);
 		case VlevNAME:
@@ -742,7 +740,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) getTransformerDataFloats("X", "winding", false);
 		case PhashGMAG:
 			if(_transformerMap == null) buildTransformerMaps();
-			return (R) returnZero(_phaseShifterIDs.size());
+			return (R) returnFalseNumber(_phaseShifterIDs.size());
 		case PhashBMAG:
 			return (R) getTransformerDataFloats("Bmag", "winding", false);
 		case PhashANG:
@@ -781,12 +779,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) getTransformerDataFloats("X", "winding", true);
 		case TfmrGMAG:
 			if(_transformerMap == null) buildTransformerMaps();
-			return (R) returnZero(_transformerIDs.size());
+			return (R) returnFalseNumber(_transformerIDs.size());
 		case TfmrBMAG:
 			return (R) getTransformerDataFloats("Bmag", "winding", true);
 		case TfmrANG:
-			return (R) returnZero(_transformerIDs.size());
-			//return (R) getTransformerDataFloats("Ratio", "ratiocase", true);
+			return (R) returnFalseNumber(_transformerIDs.size());
 		case TfmrTAPFROM:
 		case TfmrTAPTO:
 			return null;
@@ -835,12 +832,25 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}
 	}
 	
-	private float[] returnZero(int size)
+	private float[] returnFalseNumber(int size)
 	{
 		float[] data = new float[size];
-		Arrays.fill(data, 0);
+		Arrays.fill(data, -999);
 		
 		return data;
+	}
+	
+	private int[] offsetsToKeys(int[] offsets)
+	{
+		int size = offsets.length;
+		int[] keys = new int[size];
+		
+		for(int i = 0; i < size; ++i)
+		{
+			keys[i] = offsets[i] + 1;
+		}
+		
+		return keys;
 	}
 	
 	private String[] listToArray(List<String> l)
@@ -889,7 +899,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(!tempMap.containsValue(kv[i]))
 			{
 				//New level found, add it to the map
-//				System.out.println("[buildVlev] ("+offset+", "+kv[i]+")");
 				tempMap.put(offset, kv[i]);
 				offset++;
 			}
@@ -936,30 +945,45 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(_stationOffsetMap == null) buildSubstationMap();
 		if(_busCSV == null) loadBuses();
 		
-		String[] stationIDs = _busCSV.get("Substation");
-		String[] areaIDs = _substationCSV.get("ControlArea");
-		String[] ownerIDs = _substationCSV.get("Organization");
-		_busAreaIndex = new int[stationIDs.length];
-		_busOwnerIndex = new int[stationIDs.length];
+		String[] busStationIDs = _busCSV.get("Substation");
+		String[] stationAreaIDs = _substationCSV.get("ControlArea");
+		String[] stationOwnerIDs = _substationCSV.get("Organization");
+		_stationAreaIndex = new int[stationAreaIDs.length];
+		_stationOwnerIndex = new int[stationAreaIDs.length];
+		_busAreaIndex = new int[busStationIDs.length];
+		_busOwnerIndex = new int[busStationIDs.length];
 		
-		if(ownerIDs == null)
+		if(stationOwnerIDs == null)
 		{
-			System.err.println("[PFlowPsmModelBldr] Substation column \"Organization\" returned null from Substation.csv");
-			for(int i = 0; i < stationIDs.length; ++i)
+			//Create station indexes
+			for(int i = 0; i < stationAreaIDs.length; ++i)
 			{
-				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
-				_busOwnerIndex[i] = 0;
+				_stationAreaIndex[i] = _areaMap.get(stationAreaIDs[i]);
+				_stationOwnerIndex[i] = 0;
+			}
+			//Create bus indexes
+			for(int i = 0; i < busStationIDs.length; ++i)
+			{
+				_busAreaIndex[i] = _stationAreaIndex[_stationOffsetMap.get(busStationIDs[i])];
+				_busOwnerIndex[i] = 1;
 			}
 		}
 		else
 		{
-			for(int i = 0; i < stationIDs.length; ++i)
+			//Create station indexes
+			for(int i = 0; i < stationAreaIDs.length; ++i)
 			{
-				_busAreaIndex[i] = _areaMap.get(areaIDs[_stationOffsetMap.get(stationIDs[i])]);
-				_busOwnerIndex[i] = _ownerMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]);
-//				System.out.println("[buildBusIndexes] _busAreaIndex["+i+"] = "+_areaMap.get(ownerIDs[_stationOffsetMap.get(stationIDs[i])]));
+				_stationAreaIndex[i] = _areaMap.get(stationAreaIDs[i]);
+				_stationOwnerIndex[i] = _ownerMap.get(stationOwnerIDs[i]);
+			}
+			//Create bus indexes
+			for(int i = 0; i < busStationIDs.length; ++i)
+			{
+				_busAreaIndex[i] = _stationAreaIndex[_stationOffsetMap.get(busStationIDs[i])];
+				_busOwnerIndex[i] = _stationOwnerIndex[_stationOffsetMap.get(busStationIDs[i])];;
 			}
 		}
+		
 	}
 	
 	private void buildBusStationIndex() throws PAModelException
@@ -968,7 +992,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(_busCSV == null) loadBuses();
 		String[] substationIDs = _busCSV.get("Substation");
 		_busStationIndex = new int[substationIDs.length];
-		
 		
 		for(int i = 0; i < substationIDs.length; ++i)
 		{
@@ -986,23 +1009,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		for(int i = 0; i < busVlev.length; ++i)
 		{
 			busVlev[i] = _vlevMap.get(kv[i]);
-//			System.out.println("[getBusVlev] busVlev["+i+"] = "+busVlev[i]+" ("+kv[i]+")");
 		}
 		
 		return busVlev;
 	}
 	
-//	private void getSwitchType()
-//	{
-//		
-//	}
-	
 	private boolean[] operableUnderLoad()
-	{
-		//INCOMPLETE
-		//Will be looking at OpenUnderLoad/CloseUnderLoad from its switchtype
-		//Since we only have operable under load, it will only be operable under load if it can be both opened and closed under load
-		
+	{	
 		if(_switchTypeMap == null) buildSwitchMaps();
 		boolean[] isOperable = new boolean[_switchCSV.getRowCount()];
 		String[] typeIDs = _switchCSV.get("SwitchType");
@@ -1059,7 +1072,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private boolean[] getSvcAVR()
 	{
-		//MVAR mode = false
 		String[] svcAVR = getSVCDataStrings("Mode");
 		boolean[] avr = new boolean[svcAVR.length];
 		
@@ -1092,7 +1104,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(caseData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading load case column \"\""+col+"\"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1119,7 +1131,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading shunt reactor case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1143,7 +1155,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading shunt capacitor case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1153,7 +1165,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			}
 		}
 		
-		//NOT FINISHED!
 		return data;
 	}
 	
@@ -1186,8 +1197,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(unsortedData == null)
 		{
-			System.err.println("[PFlowPsmModelBldr] Unable to load column \""+col+"\" from PsmCaseSwitch.csv");
-			Arrays.fill(data, 0);
+//			System.err.println("[PFlowPsmModelBldr] Unable to load column \""+col+"\" from PsmCaseSwitch.csv");
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1215,8 +1226,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			unsortedData = _synchMachineCSV.getFloats(col);
 			if(unsortedData == null) 
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+//				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1232,8 +1243,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			unsortedData = _synchCaseCSV.getFloats(col);
 			if(unsortedData == null) 
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+//				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1248,8 +1259,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			unsortedData = _genCaseCSV.getFloats(col);
 			if(unsortedData == null) 
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading generator case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+//				System.err.println("[PFlowPsmModelBldr] Error loading generator case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1266,8 +1277,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			
 			if(unsortedData == null) 
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading reactive capability curve column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+//				System.err.println("[PFlowPsmModelBldr] Error loading reactive capability curve column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1280,7 +1291,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}
 		else
 		{
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 			return data;
 		}
 		
@@ -1302,14 +1313,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			unsortedData = _synchMachineCSV.get(col);
 			if(unsortedData == null)
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+//				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "null");
 			}
 			else
 			{
 				for (int i = 0; i < genIDs.length; ++i)
 				{
-					//System.out.println("data["+i+"]: "+unsortedData[_genToSynchMap.get(genIDs[i])]);
 					data[i] = unsortedData[_genToSynchMap.get(genIDs[i])];
 				}				
 			}
@@ -1320,8 +1330,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			unsortedData = _synchCaseCSV.get(col);
 			if(unsortedData == null) 
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+//				System.err.println("[PFlowPsmModelBldr] Error loading synchronous machine case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "null");
 			}
 			else
 			{				
@@ -1336,8 +1346,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			unsortedData = _genCaseCSV.get(col);
 			if(unsortedData == null) 
 			{
-				System.err.println("[PFlowPsmModelBldr] Error loading generator case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+//				System.err.println("[PFlowPsmModelBldr] Error loading generator case column \""+col+"\". Does it exist in the CSV?");
+				Arrays.fill(data, "null");
 			}
 			else
 			{
@@ -1361,8 +1371,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		float[] data = new float[ids.length];
 		if(unsortedData == null) 
 		{
-			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+//			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1384,8 +1394,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		
 		if(unsortedData == null)
 		{
-			System.err.println("[PFlowPsmModelBldr] Error loading series reactor case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+//			System.err.println("[PFlowPsmModelBldr] Error loading series reactor case column \""+col+"\". Does it exist in the CSV?");
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1408,7 +1418,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(unsortedData == null)
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading series capacitor case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1431,7 +1441,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1454,7 +1464,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1484,7 +1494,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null) 
 			{
 				System.err.println("[PFlowPsmModelBldr] Error loading transformer column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+				Arrays.fill(data, "null");
 			}
 			else
 			{
@@ -1500,7 +1510,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null)
 			{
 				System.err.println("[PFlowPsmModelBldr] Error loading winding column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+				Arrays.fill(data, "null");
 			}
 			else
 			{
@@ -1517,7 +1527,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null)
 			{
 				System.err.println("[PFlowPsmModelBldr] Error phase shifter case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+				Arrays.fill(data, "null");
 			}
 			else
 			{
@@ -1534,7 +1544,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null)
 			{
 				System.err.println("[PFlowPsmModelBldr] Error ratio tap change case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, "");
+				Arrays.fill(data, "null");
 			}
 			else
 			{
@@ -1547,7 +1557,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		else
 		{
 			System.err.println("[PFlowPsmModelBldr] No functionality setup for csv \""+csv+"\"");
-			Arrays.fill(data, "");
+			Arrays.fill(data, "null");
 		}
 		
 		return data;
@@ -1581,7 +1591,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null)
 			{
 				System.err.println("[PFlowPsmModelBldr] Error loading transformer column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1598,7 +1608,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null)
 			{
 				System.err.println("[PFlowPsmModelBldr] Error phase shifter case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1615,7 +1625,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null)
 			{
 				System.err.println("[PFlowPsmModelBldr] Error ratio tap change case column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1631,7 +1641,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			if(unsortedData == null) 
 			{
 				System.err.println("[PFlowPsmModelBldr] Error loading winding column \""+col+"\". Does it exist in the CSV?");
-				Arrays.fill(data, 0);
+				Arrays.fill(data, -999);
 			}
 			else
 			{
@@ -1657,7 +1667,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(unsortedData == null) 
 		{
 			System.err.println("[PFlowPsmModelBldr] Error loading winding case column \""+col+"\". Does it exist in the CSV?");
-			Arrays.fill(data, 0);
+			Arrays.fill(data, -999);
 		}
 		else
 		{
@@ -1886,7 +1896,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		_shuntReacCaseMap = new TObjectIntHashMap<>(caseIDs.length);
 		for(int i = 0; i < caseIDs.length; ++i)
 		{
-			System.out.println("");
 			_shuntReacCaseMap.put(caseIDs[i], i);
 		}
 	}

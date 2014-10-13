@@ -86,8 +86,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		@Override
 		public int[] getOffsets(int[] keys)
 		{
-			int[] rv = new int[_size];
-			for(int i=0; i < _size; ++i) rv[i] = keys[i]-1;
+			int size = keys.length;
+			int[] rv = new int[size];
+			for(int i=0; i < size; ++i) rv[i] = keys[i]-1;
 			return rv;
 		}
 

@@ -46,6 +46,7 @@ abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> extends Ex
 					try
 					{
 						rv = f.get(value);
+//						System.out.println("[ExportOpenPA] rv: "+rv);
 					}
 					catch(PAModelException e)
 					{

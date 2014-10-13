@@ -108,7 +108,7 @@ public class BusSubList extends GroupSubList<Bus> implements BusList
 
 	@Override
 	public Area getArea(int ndx) throws PAModelException
-	{
+	{	
 		return _src.getArea(_ndx[ndx]);
 	}
 
