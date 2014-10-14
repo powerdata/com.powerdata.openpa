@@ -3,6 +3,7 @@ package com.powerdata.openpa.pwrflow;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
+import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.LoadList;
@@ -35,12 +37,14 @@ import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.impl.LoadSubList;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
+import com.powerdata.openpa.pwrflow.GenVarMonitors.BusConverter;
 import com.powerdata.openpa.pwrflow.VoltageRegList.Monitor;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SpSymBMatrix;
 import com.powerdata.openpa.tools.SpSymMtrxFactPattern;
+import com.powerdata.openpa.pwrflow.RemoteVoltageMonitors.SetpointMgr;
 
 public class FDPFCore
 {
@@ -48,9 +52,9 @@ public class FDPFCore
 	Variant _variant = Variant.XB;
 	float _sbase;
 	
-	int _niter = 40;
+	int _niter = 100;
 	float _ptol = 0.005f, _qtol = 0.005f;
-	boolean _enatapadj = false;
+	boolean _enatapadj = false, _enavarmon=true;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
 	
@@ -155,8 +159,44 @@ public class FDPFCore
 	/** branch info by type */
 	Map<ListMetaType,BranchRec> _brc = new HashMap<>();
 	/** shunt info by type */
-	Map<ListMetaType, FixedShuntComposite> _fsh; 
-	FDPFVoltageRegList _monitors;
+	Map<ListMetaType, FixedShuntComposite> _fsh;
+	/** regulation monitors for unit/ SVC vars */
+	GenVarMonitors _varmon;
+	/** voltage setpoints for remote monitored buses */
+	BusSetMonitor _rmtvs;
+	@FunctionalInterface
+	private interface GetFloat<T>
+	{
+		float get(T o) throws PAModelException;
+	}
+	BusConverter _convpq = new BusConverter()
+	{
+		@Override
+		public void cvtType(int bus, int i, float qmm) throws PAModelException
+		{
+			_btypes.changeType(BusType.PQ, bus, _buses.getIsland(bus).getIndex());
+			_mbpp.convertToPQ(i, bus);
+			GetFloat<Gen> fv = (qmm > 0f) ? j -> j.getMaxQ() : j -> j.getMinQ();
+			System.err.format("Converting to PQ %s\n", _buses.getName(bus));
+
+			for(Gen g : _buses.getGenerators(bus))
+			{
+				g.setQS(fv.get(g));
+			}
+		}
+	};
+	
+	BusConverter _convpv = new BusConverter()
+	{
+		@Override
+		public void cvtType(int bus, int i, float qmm) throws PAModelException
+		{
+			_btypes.changeType(BusType.PV, bus, _buses.getIsland(bus).getIndex());
+			_mbpp.restoreToPV(bus);
+			_vm[bus] = _vsp[i];
+			System.err.format("Converting back to PV %s\n", _buses.getName(bus));
+		}
+	};
 
 	public FDPFCore(PAModel m) throws PAModelException
 	{
@@ -218,20 +258,55 @@ public class FDPFCore
 		
 		int[] ref = _btypes.getBuses(BusType.Reference);
 		int[] pv = _btypes.getBuses(BusType.PV);
+		BusRegQuantities breg = setupBusMonitors(pv, ref, bri);
 		MtrxBldr mb = new MtrxBldr(_buses.size());
 		BPrime bp = new BPrime(mb);
 		SpSymMtrxFactPattern p = bp.savePattern(ref);
 		_bp = bp.factorizeFromPattern();
 		bPrimeHook(bp);
-		_mbpp = new BDblPrime(mb, ref, pv);
+		_mbpp = new BDblPrime(mb, breg.getMonBus(), breg.getMonRefNdx());
 		_mbpp.savePattern(p);
 		
 		if (_enatapadj) buildTapAdj();
 		
-		_monitors = new FDPFVoltageRegList(pv, ref);
 		testGens(bri);
 	}
 	
+	BusRegQuantities setupBusMonitors(int[] pv, int[] ref, BusRefIndex bri) throws PAModelException
+	{
+		BusRegQuantities breg = new BusRegQuantities(_model, bri, _eindx, pv, ref);
+		_vsp = breg.getLclVS();
+		
+		Supplier<float[]> vm = () -> _vm;
+	
+		_rmtvs = new RemoteVoltageMonitors(breg, _btypes, _eindx.length, vm, new SetpointMgr()
+		{
+			@Override
+			public void adjust(int isp, int bus, float dvs)
+			{
+				_vsp[isp] += dvs;
+				_vm[bus] = _vsp[isp];
+//				try
+//				{
+//					System.err.format("remote adjust bus %s by %f\n", _buses.get(bus).getName(), dvs);
+//				}
+//				catch (PAModelException e)
+//				{
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			}
+		});
+		
+		_varmon = new GenVarMonitors(breg, _eindx.length,
+			_convpv, _convpq);
+		
+		_varmon.setVM(vm);
+		_varmon.setVSP(()->_vsp);
+		return breg;
+
+	}
+
 	void testGens(BusRefIndex bri) throws PAModelException
 	{
 		int n = _gens.size();
@@ -305,7 +380,12 @@ public class FDPFCore
 	{
 		R calc(T t) throws PAModelException;
 	}
-	
+	@FunctionalInterface
+	private interface PABulkData<R>
+	{
+		R get() throws PAModelException;
+	}
+
 	void configureBranchY() throws PAModelException
 	{
 		PAFunction<float[], BranchComposite> 
@@ -465,6 +545,7 @@ public class FDPFCore
 		setupConvInfo(convstat);
 		boolean nconv = true, nfail = true;
 		float[] pmm = new float[nbus], qmm = new float[nbus];
+		_varmon.setQMM(()->qmm);
 		
 		/* set up runnable to process voltage and angle corrections */
 		HashSet<CorrectionsProc> corr = new HashSet<>();
@@ -472,7 +553,7 @@ public class FDPFCore
 		corr.add(new CorrectionsProc(() -> getBpp(), qmm, _vm));
 		Runnable rcorr = () -> corr.stream().forEach(j -> j.apply(_vmc));
 
-		/* runnable to calculate system flows based on current state */
+		/* runnable to calculate system flows based on	 current state */
 		Runnable calc = () -> _cset.parallelStream().forEach(
 			j -> j.calc(_va, _vm));
 		
@@ -492,6 +573,7 @@ public class FDPFCore
 			
 
 			/* apply mismatches from calculated and boundary values */
+			_rmtvs.monitor();
 			applyMismatches(pmm, qmm, _va, _vm);
 			/* calculate convergence */
 			
@@ -509,16 +591,18 @@ public class FDPFCore
 			// update voltage and angles
 			if (nconv && nfail)
 			{
-//				float wqmm = convstat[0].getWorstQmm(); 
-//				if (wqmm <= 0.1f)
-//				{
-//					if (_enatapadj) adjustTransformerTaps(convstat);
-//					if (_monitors.monitor(qmm))
-//					{
-//						System.err.println("Refernce bus ran out of vars");
-//						return (convstat);
-//					}
-//				}
+//				if (_enatapadj && convstat[0].getWorstQmm() < 0.05f)
+//					adjustTransformerTaps();
+				for(int hi=0; hi < nhi; ++hi)
+				{
+					float wqmm = convstat[hi].getWorstQmm();
+					if (_enavarmon)
+					{
+//						_varmon.monitorTransition();
+						if (wqmm <= 0.1f) _varmon.monitor(hi);
+					}
+				}
+
 				_vmc = _vm.clone();
 				corr.stream().sequential().forEach(j -> j.apply(_vmc));
 //				_pool.execute(rcorr);
@@ -532,7 +616,10 @@ public class FDPFCore
 	void setupVM() throws PAModelException
 	{
 		_vm = PAMath.vmpu(_buses);
-
+		int[] monbus = _varmon.getBuses();
+		int nmon = monbus.length;
+		for(int i=0; i < nmon; ++i)
+			_vm[monbus[i]] = _vsp[i];
 	}
 	/** call back when b' is updated */
 	protected void bPrimeHook(BPrime bp)
@@ -697,8 +784,9 @@ public class FDPFCore
 	}
 	
 	
-	void adjustTransformerTaps(IslandConv[] convstat) throws PAModelException
+	void adjustTransformerTaps() throws PAModelException
 	{
+		//TODO:  put this into a monitor subclass
 		for(TapAdj ta : _tadj)
 		{
 			ta.adjust();
@@ -955,7 +1043,7 @@ public class FDPFCore
 		/** keep track of the original diagonal values for monitored buses*/
 		float[] _orgdiag;
 		
-		BDblPrime(MtrxBldr bldr, int[] ref, int[] pv) throws PAModelException
+		BDblPrime(MtrxBldr bldr, int[] monbus, int[] refx) throws PAModelException
 		{
 			super(bldr.net, bldr.bppself, bldr.bpptran); 
 			
@@ -964,7 +1052,7 @@ public class FDPFCore
 			_state = new SVCState[nsvc];
 			Arrays.fill(_state, SVCState.Off);
 			
-			processPVBuses(pv);
+			processPVBuses(monbus, refx);
 			processFixedShunts(_fsh.get(ListMetaType.ShuntCap));
 		}
 
@@ -984,6 +1072,7 @@ public class FDPFCore
 		
 		public boolean processSVCs()
 		{
+			//TODO:  this logic belongs in the var monitors
 			SVCState[] state = _csvc.getState();
 			int[] nd = _csvc.getBus();
 			float[] b = _csvc.getBpp();
@@ -1004,15 +1093,27 @@ public class FDPFCore
 			return rv;
 		}
 		
-		void processPVBuses(int[] monitoredBuses)
+		void processPVBuses(int[] monitoredBuses, int[] refx)
 		{
-			int n = monitoredBuses.length;
+			int n = monitoredBuses.length,
+				nref = refx.length;
+			boolean[] pv = new boolean[n];
+			Arrays.fill(pv, true);
+			
+			for(int i=0; i < nref; ++i)
+			{
+				pv[refx[i]] = false;
+			}
+			
 			_orgdiag = new float[n];
-			for(int i=0; i < n; ++i)
+			for (int i = 0; i < n; ++i)
 			{
 				int p = monitoredBuses[i];
 				_orgdiag[i] = _bdiag[p];
-				_bdiag[p] = 1e+06f;
+				if (pv[i])
+				{
+					_bdiag[p] = 1e+06f;
+				}
 			}
 		}
 
@@ -1032,129 +1133,6 @@ public class FDPFCore
 
 	}
 	
-	class FDPFVoltageRegList extends VoltageRegList
-	{
-		Monitor _deft = new Monitor()
-		{
-			@Override
-			public Monitor monitor(float qmm, int i) throws PAModelException
-			{
-				if (qmm < _minq[i])
-					return procViol(i, MonitorLowTrans::new);
-				else if (qmm > _maxq[i])
-					return procViol(i, MonitorHighTrans::new);
-				return null;
-			}
-			
-			Monitor procViol(int i, Supplier<Monitor> ctr) throws PAModelException
-			{
-				int b = _bus[i];
-				_btypes.changeType(BusType.PQ, b, _buses.getIsland(b).getIndex());
-				_mbpp.convertToPQ(i, b);
-				return ctr.get();
-			}
-		};
-		
-		Monitor _refdeft = new Monitor()
-		{
-			@Override
-			public Monitor monitor(float qmm, int i) throws PAModelException
-			{
-//				if (qmm < _minq[i] || qmm > _maxq[i])
-//					_reset = true;
-				return null;
-			}
-		};
-		
-		class MonitorLowTrans implements Monitor
-		{
-			@Override
-			public Monitor monitor(float qmm, int i) throws PAModelException
-			{
-				return new MonitorBelow(_vm[_bus[i]]);
-			}
-		}
-		
-		class MonitorHighTrans implements Monitor
-		{
-			@Override
-			public Monitor monitor(float qmm, int i) throws PAModelException
-			{
-				return new MonitorAbove(_vm[_bus[i]]);
-			}
-		}
-		
-		class MonitorBelow implements Monitor
-		{
-			float _vmviol;
-			MonitorBelow(float vmviol)
-			{
-				_vmviol = vmviol;
-			}
-			@Override
-			public Monitor monitor(float qmm, int i) throws PAModelException
-			{
-				int b = _bus[i];
-				if (_vm[b] < _vmviol)
-				{
-					_btypes.changeType(BusType.PV, b, _buses.getIsland(b).getIndex());
-					_mbpp.restoreToPV(b);
-					_vm[b] = _vsp[i];
-					return _deft;
-				}
-				return null;
-			}
-		}
-		
-		class MonitorAbove implements Monitor
-		{
-			float _vmviol;
-			MonitorAbove(float vmviol)
-			{
-				_vmviol = vmviol;
-			}
-			@Override
-			public Monitor monitor(float qmm, int i) throws PAModelException
-			{
-				int b = _bus[i];
-				if (_vm[b] > _vmviol)
-				{
-					_btypes.changeType(BusType.PV, b, _buses.getIsland(b).getIndex());
-					_mbpp.restoreToPV(b);
-					_vm[b] = _vsp[i];
-					return _deft;
-				}
-				return null;
-			}
-		}
-		
-		boolean _reset = false;
-		
-		FDPFVoltageRegList(int[] pv, int[] ref) throws PAModelException
-		{
-			super();
-			configure(_buses, pv, ref);
-		}
-
-		public boolean monitor(float[] qmm) throws PAModelException
-		{
-			int n = size();
-			for(int i=0; !_reset && i < n; ++i)
-			{
-				Monitor r = _action[i].monitor(qmm[_bus[i]], i);
-				if (r != null) _action[i] = r;
-			}
-			return _reset;
-		}
-
-		@Override
-		protected Monitor loadActionPV(int index) {return _deft;}
-		@Override
-		protected Monitor loadActionRef(int index) {return _refdeft;}
-
-		boolean reset() {return _reset;}
-		
-	}
 	
 	public static void main(String...args) throws Exception
 	{
@@ -1187,7 +1165,7 @@ public class FDPFCore
 		bldr.enableFlatVoltage(true);
 		bldr.setLeastX(0.0001f);
 		bldr.enableRCorrection(true);
-//		bldr.setUnitRegOverride(true);
+//		bldr.setUwnitRegOverride(true);
 //		bldr.setBadXLimit(2f);
 		PAModel m = bldr.load();
 		
@@ -1269,7 +1247,7 @@ public class FDPFCore
 //					e.printStackTrace();
 //				}
 //			}
-			
+//			
 		};
 //		FDPFCore pf = new FDPFCore(m);
 		System.err.println("Run PF");
@@ -1282,6 +1260,8 @@ public class FDPFCore
 			ld.dumpList(new File(outdir, list.getListMeta().toString()+".csv"), list);
 		ld.dumpList(new File(outdir, "Gen.csv"), m.getGenerators());
 		ld.dumpList(new File(outdir, "SVC.csv"), m.getSVCs());
+		ld.dumpList(new File(outdir, "ShuntCap.csv"), m.getShuntCapacitors());
+		ld.dumpList(new File(outdir, "ShuntReac.csv"), m.getShuntReactors());
 		
 		PrintWriter mmdbg = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outdir, "mismatch.csv"))));

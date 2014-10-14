@@ -155,7 +155,8 @@ public class BusTypeUtil
 			}
 			
 		}
-		return (br == null) ? null : new Score(Math.round(yb + pmax[br.getIndex()] + qm), br);
+		return (br == null) ? null : new Score(Math.round(yb/2f + pmax[br.getIndex()] + qm), br);
+//		return (br == null) ? null : new Score(Math.round(qm), br);
 	}
 
 //	Bus selectBus(BusList gbuses, BusList sbuses) throws PAModelException

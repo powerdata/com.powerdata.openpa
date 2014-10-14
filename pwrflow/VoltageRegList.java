@@ -46,34 +46,36 @@ public abstract class VoltageRegList extends AbstractList<com.powerdata.openpa.p
 		_maxq = new float[n];
 		_action = new Monitor[n];
 		
-		for(int i=0; i < n; ++i)
-		{
-			Bus b = buses.get(_bus[i]);
-//			float vsp = 0f;
-//			int ngen = 0;
-			for(Gen g : b.getGenerators())
-			{
-				if (unitInAVr(g))
-				{
-					_minq[i] += PAMath.mva2pu(g.getMinQ(), 100f);
-					_maxq[i] += PAMath.mva2pu(g.getMaxQ(), 100f);
-//					vsp += g.getVS();
-//					++ngen;
-				}
-			}
-			for(SVC s : b.getSVCs())
-			{
-				if (svcInAVr(s))
-				{
-					_minq[i] += PAMath.mva2pu(s.getMinQ(), 100f);
-					_maxq[i] += PAMath.mva2pu(s.getMaxQ(), 100f);
-//					vsp += s.getVS();
-//					++ngen;
-				}
-			}
-//			_vsp[i] = vsp / (((float) ngen)*b.getVoltageLevel().getBaseKV());
-			_action[i] = (i < npv) ? loadActionPV(i) : loadActionRef(i);
-		}
+//		for(int i=0; i < n; ++i)
+//		{
+//			Bus b = buses.get(_bus[i]);
+////			float vsp = 0f;
+////			int ngen = 0;
+//			for(Gen g : b.getGenerators())
+//			{
+//				if (unitInAVr(g))
+//				{
+//					_minq[i] += PAMath.mva2pu(g.getMinQ(), 100f);
+//					_maxq[i] += PAMath.mva2pu(g.getMaxQ(), 100f);
+////					vsp += g.getVS();
+////					++ngen;
+//				}
+//			}
+//			for(SVC s : b.getSVCs())
+//			{
+//				if (svcInAVr(s))
+//				{
+//					//TODO:  logic not yet tested
+//					_minq[i] += PAMath.mva2pu(s.getMinQ(), 100f);
+//					_maxq[i] += PAMath.mva2pu(s.getMaxQ(), 100f);
+////					vsp += s.getVS();
+////					++ngen;
+//				}
+//			}
+//			//_vsp[i] = vsp / (((float) ngen)*b.getVoltageLevel().getBaseKV());
+//			_action[i] = (i < npv) ? loadActionPV(i) : loadActionRef(i);
+//		}
+		
 	}
 	
 	abstract protected Monitor loadActionPV(int index);
@@ -84,16 +86,4 @@ public abstract class VoltageRegList extends AbstractList<com.powerdata.openpa.p
 	@Override
 	public int size() {return _minq.length;}
 
-	static boolean unitInAVr(Gen g) throws PAModelException
-	{
-		Gen.Mode m = g.getMode();
-		return !g.isOutOfSvc() && g.isRegKV() && m != Gen.Mode.PMP && m != Gen.Mode.OFF;
-		
-	}
-	
-	static boolean svcInAVr(SVC c) throws PAModelException
-	{
-		return !c.isOutOfSvc() && c.isRegKV() && c.getSlope() == 0f;
-	}
-	
 }
