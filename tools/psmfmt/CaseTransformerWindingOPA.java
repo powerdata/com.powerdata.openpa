@@ -1,26 +1,58 @@
 package com.powerdata.openpa.tools.psmfmt;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import com.powerdata.openpa.ACBranch;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.PhaseShifterList;
 import com.powerdata.openpa.TransformerList;
-import com.powerdata.openpa.tools.psmfmt.ExportOpenPA.StringWrap;
 
 public class CaseTransformerWindingOPA extends ExportOpenPA<TransformerList>
 {
-
-	CaseTransformerWindingOPA(PAModel m) throws PAModelException
-	{
-		super(m.getTransformers(), CaseTransformerWinding.values().length);
-		assign(TransformerWinding.ID, new StringWrap(i -> _list.getID(i)+"_wnd"));
-		assign(CaseTransformerWinding.FromMW, i -> String.valueOf(_list.getFromP(i)));
-		assign(CaseTransformerWinding.FromMVAr, i -> String.valueOf(_list.getFromQ(i)));
-		assign(CaseTransformerWinding.ToMW, i -> String.valueOf(_list.getToP(i)));
-		assign(CaseTransformerWinding.ToMVAr, i -> String.valueOf(_list.getToQ(i)));
-	}
 
 	@Override
 	protected String getPsmFmtName()
 	{
 		return "PsmCase" + PsmCaseFmtObject.TransformerWinding.toString();
 	}
+	
+	int _ntx, _nps;
+	FmtInfo[] _txi;
+	public CaseTransformerWindingOPA(PAModel m) throws PAModelException
+	{
+		super(null, TransformerWinding.values().length);
+		TransformerList tlist = m.getTransformers();
+		PhaseShifterList plist = m.getPhaseShifters();
+		_ntx = tlist.size();
+		_nps = plist.size();
+		assign(tlist);
+		_txi = _finfo.clone();
+		assign(plist);
+	}
+
+	void assign(ACBranchListIfc<? extends ACBranch> list) throws PAModelException
+	{
+		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+"_wnd"));
+		assign(CaseTransformerWinding.FromMW, i -> String.valueOf(list.getFromP(i)));
+		assign(CaseTransformerWinding.FromMVAr, i -> String.valueOf(list.getFromQ(i)));
+		assign(CaseTransformerWinding.ToMW, i -> String.valueOf(list.getToP(i)));
+		assign(CaseTransformerWinding.ToMVAr, i -> String.valueOf(list.getToQ(i)));
+	}
+
+	@Override
+	void export(File outputdir) throws PAModelException, IOException
+	{
+		PrintWriter pw = new PrintWriter(new BufferedWriter(
+			new FileWriter(new File(outputdir, getPsmFmtName()+".csv"))));
+		printHeader(pw);
+		printData(pw, _txi, _ntx);
+		printData(pw, _finfo, _nps);
+		pw.close();
+	}
+
 }
