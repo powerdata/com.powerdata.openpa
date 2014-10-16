@@ -29,7 +29,14 @@ abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> extends Ex
 		@Override
 		public String get(int i) throws PAModelException
 		{
-			return String.format("\"%s\"", _base.get(i));
+			String rv = "";
+			try
+			{rv = String.format("\"%s\"", _base.get(i));}
+			catch(ArrayIndexOutOfBoundsException x)
+			{
+				rv = "";
+			}
+			return rv;
 		}
 	}
 	
