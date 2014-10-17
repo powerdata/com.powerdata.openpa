@@ -11,29 +11,29 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 	static final ACBranchEnum _PFld = new ACBranchEnum()
 	{
 		@Override
-		public ColumnMeta fbus() {return ColumnMeta.SercapBUSFROM;}
+		public ColumnMeta fbus() {return ColumnMeta.SerreacBUSFROM;}
 		@Override
-		public ColumnMeta tbus() {return ColumnMeta.SercapBUSTO;}
+		public ColumnMeta tbus() {return ColumnMeta.SerreacBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SercapOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.SerreacOOS;}
 		@Override
-		public ColumnMeta fp() {return ColumnMeta.SercapPFROM;}
+		public ColumnMeta fp() {return ColumnMeta.SerreacPFROM;}
 		@Override
-		public ColumnMeta fq() {return ColumnMeta.SercapQFROM;}
+		public ColumnMeta fq() {return ColumnMeta.SerreacQFROM;}
 		@Override
-		public ColumnMeta tp() {return ColumnMeta.SercapPTO;}
+		public ColumnMeta tp() {return ColumnMeta.SerreacPTO;}
 		@Override
-		public ColumnMeta tq() {return ColumnMeta.SercapQTO;}
+		public ColumnMeta tq() {return ColumnMeta.SerreacQTO;}
 		@Override
-		public ColumnMeta id() {return ColumnMeta.SercapID;}
+		public ColumnMeta id() {return ColumnMeta.SerreacID;}
 		@Override
-		public ColumnMeta name() {return ColumnMeta.SercapNAME;}
+		public ColumnMeta name() {return ColumnMeta.SerreacNAME;}
 		@Override
-		public ColumnMeta r() {return ColumnMeta.SercapR;}
+		public ColumnMeta r() {return ColumnMeta.SerreacR;}
 		@Override
-		public ColumnMeta x() {return ColumnMeta.SercapX;}
+		public ColumnMeta x() {return ColumnMeta.SerreacX;}
 		@Override
-		public ColumnMeta ratLT() {return ColumnMeta.SercapRATLT;}
+		public ColumnMeta ratLT() {return ColumnMeta.SerreacRATLT;}
 	};
 
 
