@@ -11,6 +11,7 @@ public class SeriesReactorOPA extends ExportOpenPA<SeriesReacList>
 	public SeriesReactorOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
 		super(m.getSeriesReactors(), SeriesReactor.values().length);
+		System.out.println("[SeriesReactorOPA]");
 		int[][] bx = bri.get2TBus(_list);
 		BusList buses = bri.getBuses();
 		assign(SeriesCapacitor.ID, new StringWrap(i -> _list.getID(i)));

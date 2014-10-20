@@ -164,6 +164,9 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		int get(int ndx) throws PAModelException
 		{
 			if (_notld) rw = load();
+			System.out.println("[AbstractPAList] rw.length = "+rw.length);
+			System.out.println("[AbstractPAList] ndx = "+ndx);
+			System.out.println("[AbstractPAList] rw[] = "+rw[ndx]);
 			return rw[ndx];
 		}
 		

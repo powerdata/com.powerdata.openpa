@@ -371,9 +371,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		try
 		{
-			_seriesReacCSV = new SimpleCSV(new File(_dir, "SeriesReactor.csv"));
-			_seriesReacCaseCSV = new SimpleCSV(new File(_dir, "PsmCaseSeriesReactor.csv"));
-			return new SeriesCapListI(_m, _seriesReacCSV.getRowCount());
+			_seriesCapCSV = new SimpleCSV(new File(_dir, "SeriesCapacitor.csv"));
+			_seriesCapCaseCSV = new SimpleCSV(new File(_dir, "PsmCaseSeriesCapacitor.csv"));
+			return new SeriesCapListI(_m, _seriesCapCSV.getRowCount());
 		}
 		catch (IOException e) 
 		{
@@ -387,7 +387,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		try
 		{
 			_seriesReacCSV = new SimpleCSV(new File(_dir, "SeriesReactor.csv"));
-			_seriesCapCaseCSV = new SimpleCSV(new File(_dir, "PsmCaseSeriesCapacitor.csv"));
+			_seriesReacCaseCSV = new SimpleCSV(new File(_dir, "PsmCaseSeriesReactor.csv"));
 			return new SeriesReacListI(_m, _seriesReacCSV.getRowCount());
 		}
 		catch (IOException e) 
@@ -671,6 +671,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SercapBUSFROM:
 			return (R) getBusesById(_seriesCapCSV.get("Node1"));
 		case SercapBUSTO:
+			System.out.println("_seriesCapCSV: "+_seriesCapCSV.getRowCount());
 			return (R) getBusesById(_seriesCapCSV.get("Node2"));
 		case SercapOOS:
 			return (R) returnFalse(_seriesCapCSV.getRowCount());
@@ -694,8 +695,10 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SerreacNAME:
 			return (R) _seriesReacCSV.get("Name");
 		case SerreacBUSFROM:
+			System.out.println("[SerreacBUSFROM] ");
 			return (R) getBusesById(_seriesReacCSV.get("Node1"));
 		case SerreacBUSTO:
+			System.out.println("[SerreacBUSTO]");
 			return (R) getBusesById(_seriesReacCSV.get("Node2"));
 		case SerreacOOS:
 			return (R) returnFalse(_seriesReacCSV.getRowCount());
@@ -747,7 +750,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) getTransformerDataFloats("PhaseShift", "phasecase", false);
 		case PhashTAPFROM:
 		case PhashTAPTO:
-			return null;
+			return (R) returnFalseNumber(_phaseShifterIDs.size());
 		case PhashCTRLMODE:
 			return (R) getTransformerDataBools("ControlStatus", "phaseCase", false);
 		case PhashRATLT:
@@ -783,10 +786,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrBMAG:
 			return (R) getTransformerDataFloats("Bmag", "winding", true);
 		case TfmrANG:
-			return (R) returnFalseNumber(_transformerIDs.size());
 		case TfmrTAPFROM:
 		case TfmrTAPTO:
-			return null;
+			return (R) returnFalseNumber(_transformerIDs.size());
 		case TfmrRATLT:
 			return (R) getTransformerDataFloats("NormalOperatingLimit", "winding", true);
 		//Switch
@@ -1720,8 +1722,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			_windingMap.put(windingIDs[i], i);
 			_wdgToTfmrMap.put(tfmrInWdgIDs[i], i);
-			_windingCaseMap.put(wdgCaseIDs[i], i);
 //			System.out.println("[buildTransformerMaps] _windingCaseMap.put("+wdgCaseIDs[i]+", "+i+")");
+			_windingCaseMap.put(wdgCaseIDs[i], i);
 		}
 		
 		//Build maps based only on Phase Tap
@@ -1924,8 +1926,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private int[] getBusesById(String[] ids) throws PAModelException 
 	{
+		if(_busCSV == null) loadBuses();
 		int[] indexes = _m.getBuses().getIndexesFromIDs(ids);
-
+		System.out.println("[getBusesById] indexes.length = "+indexes.length);
 		return indexes;
 	}
 

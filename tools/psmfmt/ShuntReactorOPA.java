@@ -11,6 +11,7 @@ public class ShuntReactorOPA extends ExportOpenPA<ShuntReacList>
 	{
 		super(m.getShuntReactors(), ShuntReactor.values().length);
 		int[] bx = bri.get1TBus(_list);
+		System.out.println("[ShuntReactorOP] bx.length = "+bx.length);
 		assign(ShuntReactor.ID, new StringWrap(i -> _list.getID(i)));
 		assign(ShuntReactor.Name, new StringWrap(i -> _list.getName(i)));
 		assign(ShuntReactor.Node, new StringWrap(i -> bri.getBuses().get(bx[i]).getID()));
