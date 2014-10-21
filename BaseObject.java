@@ -8,17 +8,17 @@ package com.powerdata.openpa;
 public interface BaseObject
 {
 	/** get Index within master list owned by PAModel */
-	public int getIndex();
+	int getIndex();
 	/** get unique String object identifier */
-	public String getID()throws PAModelException;
+	String getID()throws PAModelException;
 	/** set unique String object identifier */
-	public void setID(String id)throws PAModelException;
+	void setID(String id)throws PAModelException;
 	/** get object name */
-	public String getName()throws PAModelException;
+	String getName()throws PAModelException;
 	/** set object name */
-	public void setName(String name)throws PAModelException;
+	void setName(String name)throws PAModelException;
 	/** unique object integer identifier */
-	public int getKey();
+	int getKey();
 	/** return the list */
-	public BaseList<? extends BaseObject> getList();
+	BaseList<? extends BaseObject> getList();
 }

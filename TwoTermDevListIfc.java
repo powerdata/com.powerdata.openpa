@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public interface TwoTermDevListIfc<T extends TwoTermDev> extends BaseList<T>, OutOfService
+public interface TwoTermDevListIfc<T extends TwoTermDev> extends OutOfServiceList<T>
 {
 	Bus getFromBus(int ndx) throws PAModelException;
 	
@@ -17,14 +17,6 @@ public interface TwoTermDevListIfc<T extends TwoTermDev> extends BaseList<T>, Ou
 	Bus[] getToBus() throws PAModelException;
 	
 	void setToBus(Bus[] b) throws PAModelException;
-
-	boolean isOutOfSvc(int ndx) throws PAModelException;
-
-	void setOutOfSvc(int ndx, boolean state) throws PAModelException;
-	
-	boolean[] isOutOfSvc() throws PAModelException;
-	
-	void setOutOfSvc(boolean[] state) throws PAModelException;
 
 	float getFromP(int ndx) throws PAModelException;
 

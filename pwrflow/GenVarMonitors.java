@@ -91,10 +91,6 @@ public class GenVarMonitors extends BusSetMonitor
 		public Monitor monitor(int bus, int i) throws PAModelException
 		{
 			float qmm = _qmm.get()[bus];
-			if (bus == 140)
-			{
-				int xxx = 5;
-			}
 			if (qmm < _minq[i])
 			{
 				_pqcnv.cvtType(bus, i, qmm);

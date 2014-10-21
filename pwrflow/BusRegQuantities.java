@@ -24,7 +24,7 @@ public class BusRegQuantities
 	}
 	
 	
-	public BusRegQuantities(PAModel m, BusRefIndex bri, int[] eindx, int[] pv, 
+	BusRegQuantities(PAModel m, BusRefIndex bri, int[] eindx, int[] pv, 
 			int[] ref) throws PAModelException
 	{
 		int[] rvisland = new int[m.getIslands().size()];

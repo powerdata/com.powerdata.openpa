@@ -7,12 +7,10 @@ import com.powerdata.openpa.OneTermDevListIfc;
 import com.powerdata.openpa.PAModelException;
 
 public abstract class OneTermDevListI<T extends OneTermDev> extends
-		AbstractPAList<T> implements OneTermDevListIfc<T>
+		OutOfServiceListI<T> implements OneTermDevListIfc<T>
 {
 	IntData _bus;
 	FloatData _p, _q;
-	BoolData _oos;
-
 	BusListI _buses;
 
 	protected OneTermDevListI() {super();}
@@ -35,7 +33,6 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 		 _bus = new IntData(le.bus());
 		 _p = new FloatData(le.p());
 		 _q = new FloatData(le.q());
-		 _oos = new BoolData(le.insvc());
 	}
 	
 	@Override
@@ -113,38 +110,11 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 		_q.set(q);
 	}
 
-	@Override
-	public boolean isOutOfSvc(int ndx) throws PAModelException
-	{
-		return _oos.get(ndx);
-	}
-
-	/** is device in service */
-	@Override
-	public boolean[] isOutOfSvc() throws PAModelException
-	{
-		return _oos.get();
-	}
-
-	@Override
-	public void setOutOfSvc(int ndx, boolean state) throws PAModelException
-	{
-		_oos.set(ndx, state);
-	}
-
-	/** set device in/out of service */
-	@Override
-	public void setOutOfSvc(boolean[] state) throws PAModelException
-	{
-		_oos.set(state);
-	}
-
-	interface OneTermDevEnum extends PAListEnum
+	interface OneTermDevEnum extends OutOfServiceEnum
 	{
 		ColumnMeta bus();
 		ColumnMeta p();
 		ColumnMeta q();
-		ColumnMeta insvc();
 	}
 	
 }

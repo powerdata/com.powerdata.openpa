@@ -5,6 +5,6 @@ import com.powerdata.openpa.impl.SwitchedShuntListI;
 public interface SwitchedShuntList extends BaseList<SwitchedShunt>
 {
 
-	static final SwitchedShuntList Empty = new SwitchedShuntListI();
+	static public final SwitchedShuntList Empty = new SwitchedShuntListI();
 
 }

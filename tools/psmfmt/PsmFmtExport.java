@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.EnumSet;
+import com.powerdata.openpa.CloneModelBuilder;
+import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
@@ -133,9 +136,15 @@ public class PsmFmtExport
 		}
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
-		PsmFmtExport exp = new PsmFmtExport(bldr.load(), useSingleBus);
+		PAModel m = bldr.load();
+		PsmFmtExport exp = new PsmFmtExport(m, useSingleBus);
 		exp.setModelName(mdlname);
 		exp.export(outdir);
+		
+		CloneModelBuilder clm = new CloneModelBuilder(m, EnumSet.noneOf(ColumnMeta.class));
+		PsmFmtExport exp2 = new PsmFmtExport(clm.load(), useSingleBus);
+		exp2.setModelDescription(mdlname+"COMP");
+		exp2.export(new File("/run/shm/compare"));
 	}
 
 }

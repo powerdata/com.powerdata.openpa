@@ -3,7 +3,6 @@ package com.powerdata.openpa.pwrflow;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +25,6 @@ import com.powerdata.openpa.LoadList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
-import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.Transformer;
@@ -38,7 +36,6 @@ import com.powerdata.openpa.impl.LoadSubList;
 import com.powerdata.openpa.pwrflow.CalcBase.BranchComposite;
 import com.powerdata.openpa.pwrflow.CalcBase.FixedShuntComposite;
 import com.powerdata.openpa.pwrflow.GenVarMonitors.BusConverter;
-import com.powerdata.openpa.pwrflow.VoltageRegList.Monitor;
 import com.powerdata.openpa.tools.FactorizedBMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
@@ -54,6 +51,8 @@ public class FDPFCore
 	
 	int _niter = 100;
 	float _ptol = 0.005f, _qtol = 0.005f;
+	//TODO:  make configurable
+	float _minv = 0.5f, _maxv = 2f;
 	boolean _enatapadj = false, _enavarmon=true;
 	FactorizedBMatrix _bp, _bpp;
 	BDblPrime _mbpp;
@@ -177,7 +176,7 @@ public class FDPFCore
 			_btypes.changeType(BusType.PQ, bus, _buses.getIsland(bus).getIndex());
 			_mbpp.convertToPQ(i, bus);
 			GetFloat<Gen> fv = (qmm > 0f) ? j -> j.getMaxQ() : j -> j.getMinQ();
-			System.err.format("Converting to PQ %s\n", _buses.getName(bus));
+//			System.err.format("Converting to PQ %s\n", _buses.getName(bus));
 
 			for(Gen g : _buses.getGenerators(bus))
 			{
@@ -194,7 +193,7 @@ public class FDPFCore
 			_btypes.changeType(BusType.PV, bus, _buses.getIsland(bus).getIndex());
 			_mbpp.restoreToPV(bus);
 			_vm[bus] = _vsp[i];
-			System.err.format("Converting back to PV %s\n", _buses.getName(bus));
+//			System.err.format("Converting back to PV %s\n", _buses.getName(bus));
 		}
 	};
 
@@ -337,6 +336,8 @@ public class FDPFCore
 		}
 		_gens = new GenSubList(list, Arrays.copyOf(x, cnt));
 	}
+	
+	public BusList getBuses() {return _buses;}
 
 	void buildTapAdj() throws PAModelException
 	{
@@ -430,25 +431,23 @@ public class FDPFCore
 		return rv;
 	}
 
-	class IslandConv
+	public class PFIslandConv extends IslandConv
 	{
-		int _iter = -1, _island;
-		int _worstp=-1, _worstq=-1;
-		float _wpmm=0f, _wqmm=0f;
-		boolean _pconv=false, _qconv=false, _fail=false;
-		
-		public IslandConv(int island) throws PAModelException
+		PFIslandConv(Island island) throws PAModelException
 		{
-			_island = island;
+			super(island, FDPFCore.this._buses);
 		}
-		
+
+		@Override
 		public void test(float[] pmm, float[] qmm)
 		{
-			int[] pq = _btypes.getBuses(BusType.PQ, _island),
-				pv = _btypes.getBuses(BusType.PV, _island);
+			if (_fail || (_pconv && _qconv)) return;
 			++_iter;
+			int[] pq = _btypes.getBuses(BusType.PQ, _island.getIndex()),
+				pv = _btypes.getBuses(BusType.PV, _island.getIndex());
 			_wpmm = 0f;
 			_wqmm = 0f;
+			_hv = 1f; _lv = 1f;
 			for(int[] pqpv : new int[][]{pq, pv})
 			{
 				for(int p : pqpv)
@@ -457,6 +456,7 @@ public class FDPFCore
 					if (!Float.isFinite(pm))
 					{
 						_fail = true;
+						_bxfail = p;
 						return;
 					}
 					pm = Math.abs(pm);
@@ -474,7 +474,19 @@ public class FDPFCore
 				if (!Float.isFinite(qm))
 				{
 					_fail = true;
+					_bxfail = bpq;
 					return;
+				}
+				float v = _vm[bpq];
+				if (v < _lv)
+				{
+					_lv = v;
+					_bxlowv = bpq;
+				}
+				if (v > _hv)
+				{
+					_hv = v;
+					_bxhiv = bpq;
 				}
 				qm = Math.abs(qm);
 				if (_wqmm < qm)
@@ -483,34 +495,10 @@ public class FDPFCore
 					_wqmm = qm;
 				}
 			}
+			_lvfail = _lv < _minv;
+			_hvfail = _lv > _maxv;
 			_pconv = _wpmm < _ptol;
 			_qconv = _wqmm < _qtol;
-		}
-		public boolean pConv() {return _pconv;}
-		public boolean qConv() {return _qconv;}
-		public boolean fail() {return _fail;}
-		public int getWorstP() {return _worstp;}
-		public int getWorstQ() {return _worstq;}
-		public float getWorstPmm() {return _wpmm;}
-		public float getWorstQmm() {return _wqmm;}
-
-		@Override
-		public String toString()
-		{
-			try
-			{
-				return String.format(
-					"%sIsland %d %d iters, pconv=%s qconv=%s worstp=%f MW at %s, worstq=%f MVAr at %s",
-					_fail?"[FAIL] ":"",
-					_island, _iter, String.valueOf(_pconv), 
-					String.valueOf(_qconv), _wpmm * 100f,
-					(_worstp == -1) ? "[Not Solved]" : _buses.get(_worstp).getName(), _wqmm * 100f, 
-					(_worstq == -1) ? "[Not Solved]" : _buses.get(_worstq).getName());
-			}
-			catch(PAModelException e)
-			{
-				return "err: "+e;
-			}
 		}
 	}
 
@@ -543,7 +531,7 @@ public class FDPFCore
 		int nhi = _eindx.length, nbus = _va.length;
 		IslandConv[] convstat = new IslandConv[nhi];
 		setupConvInfo(convstat);
-		boolean nconv = true, nfail = true;
+		boolean nconv = true, nfail = true, nv=true;
 		float[] pmm = new float[nbus], qmm = new float[nbus];
 		_varmon.setQMM(()->qmm);
 		
@@ -561,7 +549,7 @@ public class FDPFCore
 				.parallel()
 				.forEach(j -> j.test(pmm, qmm));
 		
-		for(int i=0; nconv && nfail && i < _niter; ++i)
+		for(int i=0; nconv && nfail && nv && i < _niter; ++i)
 		{
 			/* Calculate flows */
 //			_pool.execute(calc);
@@ -584,12 +572,13 @@ public class FDPFCore
 			nconv = false;
 			for(IslandConv ic : convstat)
 			{
-				nfail |= !ic.fail();
+				nfail &= !ic.fail();
 				nconv |= !(ic.pConv() && ic.qConv());
+				nv &= (!ic.hvFail() && !ic.lvFail());
 			}
 			
 			// update voltage and angles
-			if (nconv && nfail)
+			if (nconv && nfail && nv)
 			{
 //				if (_enatapadj && convstat[0].getWorstQmm() < 0.05f)
 //					adjustTransformerTaps();
@@ -609,6 +598,8 @@ public class FDPFCore
 //				_pool.awaitQuiescence(1, TimeUnit.DAYS);
 			}
 		}
+		
+		for(IslandConv c : convstat) c.complete();
 		
 		return convstat;
 	}
@@ -641,10 +632,11 @@ public class FDPFCore
 
 	void setupConvInfo(IslandConv[] convstat) throws PAModelException
 	{
+		IslandList islands = _model.getIslands();
 		int n = convstat.length;
 		for(int i=0; i < n; ++i)
 		{
-			convstat[i] = new IslandConv(_eindx[i]);
+			convstat[i] = new PFIslandConv(islands.get(_eindx[i]));
 		}
 	}
 	
@@ -996,13 +988,14 @@ public class FDPFCore
 
 				ACBranchFlow calc = brec.getComp().getCalc();
 				int[] fn = calc.getFromBus(), tn = calc.getToBus();
-				int n = fn.length;
-				int[] lndx = new int[n];
+				int nlist = fn.length;
+				int[] lndx = new int[nlist];
 				brec.setBranchIndex(lndx);
 				
 				BranchElemBldr bldrbp = brec.getBp(), bldrbpp = brec.getBpp();
 				
-				for (int i = 0; i < n; ++i)
+//				for (int i = 0; i < nlist; ++i)
+				for(int i : calc.getInSvc())
 				{
 					int f = fn[i], t = tn[i];
 					if (f != t)
@@ -1249,7 +1242,7 @@ public class FDPFCore
 //			}
 //			
 		};
-//		FDPFCore pf = new FDPFCore(m);
+
 		System.err.println("Run PF");
 		IslandConv[] conv = pf.runPF();
 		System.err.println("Done");

@@ -7,12 +7,11 @@ import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.TwoTermDevListIfc;
 
 public abstract class TwoTermDevListI<T extends TwoTermDev> extends
-		AbstractPAList<T> implements TwoTermDevListIfc<T>
+		OutOfServiceListI<T> implements TwoTermDevListIfc<T>
 {
 	BusListI _buses;
 	
 	IntData _fbus, _tbus;
-	BoolData _insvc;
 	FloatData _fp, _fq, _tp, _tq;
 	
 	protected TwoTermDevListI(){super();}
@@ -35,7 +34,6 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 	{
 		_fbus = new IntData(le.fbus());
 		_tbus = new IntData(le.tbus());
-		_insvc = new BoolData(le.insvc());
 		_fp = new FloatData(le.fp());
 		_fq = new FloatData(le.fq());
 		_tp = new FloatData(le.tp());
@@ -89,32 +87,6 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 	public void setToBus(Bus[] b) throws PAModelException
 	{
 		_tbus.set(_buses.getIndexes(b));
-	}
-
-	@Override
-	public boolean isOutOfSvc(int ndx) throws PAModelException
-	{
-		return _insvc.get(ndx);
-	}
-
-	/** is device in service */
-	@Override
-	public boolean[] isOutOfSvc() throws PAModelException
-	{
-		return _insvc.get();
-	}
-
-	@Override
-	public void setOutOfSvc(int ndx, boolean state) throws PAModelException
-	{
-		_insvc.set(ndx, state);
-	}
-
-	/** set device in/out of service */
-	@Override
-	public void setOutOfSvc(boolean[] state) throws PAModelException
-	{
-		_insvc.set(state);
 	}
 
 	@Override
@@ -197,11 +169,10 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 	{
 		_tq.set(mvar);
 	}
-	interface TwoTermDevEnum extends PAListEnum
+	interface TwoTermDevEnum extends OutOfServiceEnum
 	{
 		ColumnMeta fbus();
 		ColumnMeta tbus();
-		ColumnMeta insvc();
 		ColumnMeta fp(); 
 		ColumnMeta fq(); 
 		ColumnMeta tp(); 

@@ -6,6 +6,8 @@ import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.Line;
+import com.powerdata.openpa.PhaseShifter;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
@@ -16,8 +18,12 @@ import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.SeriesCap;
+import com.powerdata.openpa.SeriesReac;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.Switch.State;
+import com.powerdata.openpa.Transformer;
+import com.powerdata.openpa.TwoTermDCLine;
 import com.powerdata.openpa.impl.GroupMap;
 import com.powerdata.openpa.tools.Complex;
 
@@ -70,6 +76,42 @@ public class BusTypeUtil
 			protected boolean incSW(Switch d) throws PAModelException
 			{
 				return d.getState() == State.Closed;
+			}
+
+			@Override
+			protected boolean incLN(Line d) throws PAModelException
+			{
+				return !d.isOutOfSvc();
+			}
+
+			@Override
+			protected boolean incSR(SeriesReac d) throws PAModelException
+			{
+				return !d.isOutOfSvc();
+			}
+
+			@Override
+			protected boolean incSC(SeriesCap d) throws PAModelException
+			{
+				return !d.isOutOfSvc();
+			}
+
+			@Override
+			protected boolean incTX(Transformer d) throws PAModelException
+			{
+				return !d.isOutOfSvc();
+			}
+
+			@Override
+			protected boolean incPS(PhaseShifter d) throws PAModelException
+			{
+				return !d.isOutOfSvc();
+			}
+
+			@Override
+			protected boolean incD2(TwoTermDCLine d) throws PAModelException
+			{
+				return !d.isOutOfSvc();
 			}}
 			.addPhaseShifters()
 			.addSeriesCap()
@@ -128,7 +170,7 @@ public class BusTypeUtil
 		for(int i=0; i < ni; ++i)
 		{
 			int bx = imax[i];
-			if (bx != -1)
+			if (bx != -1 && _type[bx] == PV)
 			{
 				_type[bx] = REF;
 				_itype[bx] = calcigrp(i, REF);
@@ -147,13 +189,13 @@ public class BusTypeUtil
 		for (Bus b : g.getBuses())
 		{
 			Bus sb = sbuses.getByBus(b);
-			float tqm = qmax[sb.getIndex()];
+			int sbndx = sb.getIndex();
+			float tqm = qmax[sbndx];
 			if (qm < tqm)
 			{
 				qm = tqm;
 				br = sb;
 			}
-			
 		}
 		return (br == null) ? null : new Score(Math.round(yb/2f + pmax[br.getIndex()] + qm), br);
 //		return (br == null) ? null : new Score(Math.round(qm), br);
@@ -206,9 +248,12 @@ public class BusTypeUtil
 			int nsvc = svcpv.length;
 			for (int i = 0; i < nsvc; ++i)
 			{
-				int bx = sbx[svcpv[i]];
-				_type[bx] = PV;
-				_itype[bx] = calcigrp(indx, PV);
+				if (!svcs.isOutOfSvc(i))
+				{
+					int bx = sbx[svcpv[i]];
+					_type[bx] = PV;
+					_itype[bx] = calcigrp(indx, PV);
+				}
 			}
 		}
 	}

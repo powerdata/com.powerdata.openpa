@@ -1,7 +1,7 @@
 package com.powerdata.openpa;
 
 
-public class TwoTermDev extends AbstractBaseObject
+public class TwoTermDev extends OutOfService
 {
 	TwoTermDevListIfc<? extends TwoTermDev> _list;
 	
@@ -73,15 +73,4 @@ public class TwoTermDev extends AbstractBaseObject
 		_list.setToQ(_ndx, mvar);
 	}
 
-	/** is device in service */
-	public boolean isOutOfSvc() throws PAModelException
-	{
-		return _list.isOutOfSvc(_ndx);
-	}
-	
-	/** set device in/out of service */
-	public void setOutOfSvc(boolean state) throws PAModelException
-	{
-		_list.setOutOfSvc(_ndx, state);
-	}
 }

@@ -5,7 +5,7 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.TwoTermDevListIfc;
 
-public abstract class TwoTermDevSubList<T extends TwoTermDev> extends SubList<T> implements TwoTermDevListIfc<T>
+public abstract class TwoTermDevSubList<T extends TwoTermDev> extends OutOfServiceSubList<T> implements TwoTermDevListIfc<T>
 {
 	TwoTermDevListIfc<T> _src;
 
@@ -66,30 +66,6 @@ public abstract class TwoTermDevSubList<T extends TwoTermDev> extends SubList<T>
 			_src.setToBus(_ndx[i], b[i]);
 	}
 
-	@Override
-	public boolean isOutOfSvc(int ndx) throws PAModelException
-	{
-		return _src.isOutOfSvc(_ndx[ndx]);
-	}
-
-	@Override
-	public void setOutOfSvc(int ndx, boolean state) throws PAModelException
-	{
-		_src.setOutOfSvc(_ndx[ndx], state);
-	}
-
-	@Override
-	public boolean[] isOutOfSvc() throws PAModelException
-	{
-		return mapBool(_src.isOutOfSvc());
-	}
-
-	@Override
-	public void setOutOfSvc(boolean[] state) throws PAModelException
-	{
-		for(int i=0; i < _size; ++i)
-			_src.setOutOfSvc(_ndx[i], state[i]);
-	}
 	@Override
 	public float getFromP(int ndx) throws PAModelException
 	{
