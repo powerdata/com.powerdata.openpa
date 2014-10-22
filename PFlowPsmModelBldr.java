@@ -110,6 +110,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	TObjectIntMap<String> _windingMap;
 	TObjectIntMap<String> _wdgInPhaseMap;
 	TObjectIntMap<String> _wdgInRatioMap;
+	TObjectIntMap<String> _ratioCaseMap;
 	TObjectIntMap<String> _wdgToTfmrMap;
 	TObjectIntMap<String> _switchCaseMap;
 	TObjectIntMap<String> _lineCaseMap;
@@ -527,9 +528,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case LoadBUS:
 			return (R) getBusesById(_loadCSV.get("Node"));
 		case LoadP:
-			return (R) getLoadCaseData("MW");
+			return (R) invertValues(getLoadCaseData("MW"));
 		case LoadQ:
-			return (R) getLoadCaseData("MVAr");
+			return (R) invertValues(getLoadCaseData("MVAr"));
 		case LoadOOS:
 			return (R) returnFalse(_loadCSV.getRowCount());
 		case LoadPMAX:
@@ -580,7 +581,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SvcOOS:
 			return (R) returnFalse(_svcCSV.getRowCount());
 		case SvcQS:
-			return (R) getSVCDataFloats("MVArSetpoint");
+			return (R) getSVCDataFloats("MVArSetPoint");
 		case SvcQMIN:
 			return (R) _svcCSV.getFloats("MinMVAr");
 		case SvcQMAX:
@@ -671,7 +672,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SercapBUSFROM:
 			return (R) getBusesById(_seriesCapCSV.get("Node1"));
 		case SercapBUSTO:
-			System.out.println("_seriesCapCSV: "+_seriesCapCSV.getRowCount());
 			return (R) getBusesById(_seriesCapCSV.get("Node2"));
 		case SercapOOS:
 			return (R) returnFalse(_seriesCapCSV.getRowCount());
@@ -695,10 +695,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SerreacNAME:
 			return (R) _seriesReacCSV.get("Name");
 		case SerreacBUSFROM:
-			System.out.println("[SerreacBUSFROM] ");
 			return (R) getBusesById(_seriesReacCSV.get("Node1"));
 		case SerreacBUSTO:
-			System.out.println("[SerreacBUSTO]");
 			return (R) getBusesById(_seriesReacCSV.get("Node2"));
 		case SerreacOOS:
 			return (R) returnFalse(_seriesReacCSV.getRowCount());
@@ -752,7 +750,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case PhashTAPTO:
 			return (R) returnFalseNumber(_phaseShifterIDs.size());
 		case PhashCTRLMODE:
-			return (R) getTransformerDataBools("ControlStatus", "phaseCase", false);
+			return (R) getPhaseCtrlMode();
 		case PhashRATLT:
 			return (R) getTransformerDataFloats("NormalOperatingLimit", "winding", false);
 		//Transformer
@@ -782,13 +780,16 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) getTransformerDataFloats("X", "winding", true);
 		case TfmrGMAG:
 			if(_transformerMap == null) buildTransformerMaps();
+			System.out.println("[TfmrGMAG] called");
 			return (R) returnFalseNumber(_transformerIDs.size());
 		case TfmrBMAG:
 			return (R) getTransformerDataFloats("Bmag", "winding", true);
 		case TfmrANG:
-		case TfmrTAPFROM:
-		case TfmrTAPTO:
 			return (R) returnFalseNumber(_transformerIDs.size());
+		case TfmrTAPFROM:
+			return (R) getTransformerRatios(false);
+		case TfmrTAPTO:
+			return (R) getTransformerRatios(true);
 		case TfmrRATLT:
 			return (R) getTransformerDataFloats("NormalOperatingLimit", "winding", true);
 		//Switch
@@ -885,6 +886,19 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			asString[i] = ""+fs[i];
 		}
 		return asString;
+	}
+	
+	private float[] invertValues(float[] origData)
+	{
+		int size = origData.length;
+		float[] data = new float[size];
+		
+		for(int i = 0; i < size; ++i)
+		{
+			data[i] = origData[i] * -1;
+		}
+		
+		return data;
 	}
 	
 	private void buildVlev() throws PAModelException
@@ -1442,7 +1456,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		float[] data = new float[ids.length];
 		if(unsortedData == null) 
 		{
-			System.err.println("[PFlowPsmModelBldr] Error loading line case column \""+col+"\". Does it exist in the CSV?");
+			System.err.println("[PFlowPsmModelBldr] Error loading svc case column \""+col+"\". Does it exist in the CSV?");
 			Arrays.fill(data, -999);
 		}
 		else
@@ -1473,6 +1487,29 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			for(int i = 0; i < ids.length; ++i)
 			{
 				data[i] = unsortedData[_svcCaseMap.get(ids[i])];
+			}
+		}
+		
+		return data;
+	}
+	
+	private float[] getTransformerRatios(boolean isTo)
+	{
+		float[] data = new float[_transformerIDs.size()];
+		float[] ratios = _ratioTapChgCaseCSV.getFloats("Ratio");
+		String[] ratioIDs = _ratioTapChgCSV.get("ID");
+		String[] wdgIDs = _ratioTapChgCSV.get("TransformerWinding");
+		String[] tfmrIDs = _tfmrWindingCSV.get("Transformer");
+		String[] tapNodeIDs = _ratioTapChgCSV.get("TapNode");
+		String nodeCol = isTo ? "Node2":"Node1";
+		String[] tfmrNode = _tfmrWindingCSV.get(nodeCol);
+		
+		for(int i = 0; i < ratios.length; ++i)
+		{
+			//check if the current tapNodeIDs is the to or from node
+			if(tfmrNode[_windingMap.get(wdgIDs[i])].equals(tapNodeIDs[i]))
+			{
+				data[_transformerMap.get(tfmrIDs[_windingMap.get(wdgIDs[i])])] = ratios[_ratioCaseMap.get(ratioIDs[i])];
 			}
 		}
 		
@@ -1566,7 +1603,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	}
 	
 	private boolean[] getTransformerDataBools(String col, String csv, boolean isTfmr)
-	{
+	{	
 		String[] unsortedData = getTransformerDataStrings(col, csv, isTfmr);
 		boolean[] data = new boolean[unsortedData.length];
 		
@@ -1579,7 +1616,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	}
 	
 	private float[] getTransformerDataFloats(String col, String csv, boolean isTfmr)
-	{
+	{	
 		//Build maps if they don't exist
 		if(_transformerMap == null) buildTransformerMaps();
 		List<String> ids = (isTfmr)?_transformerIDs:_phaseShifterIDs;
@@ -1660,6 +1697,19 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		return data;
 	}
 	
+	private PhaseShifter.ControlMode[] getPhaseCtrlMode()
+	{
+		boolean[] baseData = getTransformerDataBools("ControlStatus", "phaseCase", false);
+		PhaseShifter.ControlMode[] data = new PhaseShifter.ControlMode[baseData.length];
+		
+		for(int i = 0; i < data.length; ++i)
+		{
+			data[i] = baseData[i] ? PhaseShifter.ControlMode.FixedMW:PhaseShifter.ControlMode.FixedAngle;
+		}
+		
+		return data;
+	}
+	
 	private float[] getWindingCaseData(String col, boolean isTfmr)
 	{
 		float[] unsortedData = _windingCaseCSV.getFloats(col);
@@ -1689,7 +1739,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	private void buildTransformerMaps()
 	{	
-//		String[] ratioCaseIDs 	= _ratioTapChgCaseCSV.get("ID");
+		String[] ratioCaseIDs 	= _ratioTapChgCaseCSV.get("ID");
 		String[] ratioTapIDs 	= _ratioTapChgCSV.get("ID");
 		String[] wdgInRatioIDs 	= _ratioTapChgCSV.get("TransformerWinding");
 		String[] tfmrInWdgIDs 	= _tfmrWindingCSV.get("Transformer");
@@ -1703,10 +1753,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		_windingMap			= new TObjectIntHashMap<>(windingIDs.length);
 		_windingCaseMap		= new TObjectIntHashMap<>(windingIDs.length);
 		_tfmrRatioTapMap 	= new TObjectIntHashMap<>(wdgInRatioIDs.length); //Key = Transformer, Value = Ratio Tap Offset
+		_wdgInRatioMap		= new TObjectIntHashMap<>(wdgInRatioIDs.length);
 		_wdgInPhaseMap 		= new TObjectIntHashMap<>(phaseTapIDs.length);
-		_wdgInRatioMap 		= new TObjectIntHashMap<>(ratioTapIDs.length);
 		_wdgToTfmrMap		= new TObjectIntHashMap<>(windingIDs.length); //Key = transformer, value = Winding Offset
 		_tfmrPhaseTapMap	= new TObjectIntHashMap<>(phaseTapIDs.length);
+		_ratioCaseMap 		= new TObjectIntHashMap<>(ratioTapIDs.length);
 		
 		if(_transformerIDs == null) _transformerIDs = new ArrayList<String>();
 		if(_phaseShifterIDs == null) _phaseShifterIDs = new ArrayList<String>();
@@ -1739,6 +1790,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 //			System.out.println("[buildTransformerMaps] wdgInRationIDs["+i+"/"+ratioTapIDs.length+"] = "+wdgInRatioIDs[i]);
 			_wdgInRatioMap.put(wdgInRatioIDs[i], i);
+			_ratioCaseMap.put(ratioCaseIDs[i], i);
 		}
 		
 		//Array of transformers and phase shifters ?
@@ -1928,7 +1980,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		if(_busCSV == null) loadBuses();
 		int[] indexes = _m.getBuses().getIndexesFromIDs(ids);
-		System.out.println("[getBusesById] indexes.length = "+indexes.length);
 		return indexes;
 	}
 
