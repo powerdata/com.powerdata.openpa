@@ -489,6 +489,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		E[] load() throws PAModelException
 		{
 			_notld = false;
+			
 			return _model.load(getListMeta(), _ctype, AbstractPAList.this.getKeys());
 		}
 
@@ -602,6 +603,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	protected AbstractPAList()
 	{
 		super();
+		_km = new NoKeyMgr();
 	}
 	
 	protected AbstractPAList(int size)

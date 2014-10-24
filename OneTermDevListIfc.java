@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public interface OneTermDevListIfc<T extends OneTermDev> extends BaseList<T>,OutOfService
+public interface OneTermDevListIfc<T extends OutOfService> extends OutOfServiceList<T>
 {
 	/**
 	 * Return the connected Bus object
@@ -30,13 +30,5 @@ public interface OneTermDevListIfc<T extends OneTermDev> extends BaseList<T>,Out
 	float[] getQ() throws PAModelException;
 	
 	void setQ(float[] q) throws PAModelException;
-
-	boolean isOutOfSvc(int ndx) throws PAModelException;
-
-	void setOutOfSvc(int ndx, boolean state) throws PAModelException;
-	
-	boolean[] isOutOfSvc() throws PAModelException;
-	
-	void setOutOfSvc(boolean[] state) throws PAModelException;
 
 }

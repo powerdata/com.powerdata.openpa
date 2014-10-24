@@ -81,4 +81,19 @@ public class AbstractBaseObject implements BaseObject
 	{
 		return _list;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		BaseObject bo = (BaseObject) obj;
+		return getList().getListMeta() == bo.getList().getListMeta() && getIndex() == bo.getIndex();
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return getIndex();
+	}
+	
+	
 }

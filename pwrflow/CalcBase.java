@@ -9,7 +9,7 @@ import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntList;
 import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.ListMetaType;
-import com.powerdata.openpa.OutOfService;
+import com.powerdata.openpa.OutOfServiceList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.impl.GroupMap;
@@ -21,7 +21,7 @@ public abstract class CalcBase
 	int[] _oosndx;
 	PAModelException _e = null;
 	
-	public static int[] GetInService(OutOfService list) throws PAModelException
+	public static int[] GetInService(OutOfServiceList list) throws PAModelException
 	{
 		boolean[] oos = list.isOutOfSvc();
 		int n = oos.length;
@@ -118,7 +118,7 @@ public abstract class CalcBase
 		return _oosndx;
 	}
 	
-	protected CalcBase(OutOfService baseList) throws PAModelException
+	protected CalcBase(OutOfServiceList baseList) throws PAModelException
 	{
 		_oosndx = GetInService(baseList);
 	}

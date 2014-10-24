@@ -63,8 +63,6 @@ public class SvcCalc extends CalcBase
 		_basekv = new float[n];
 		for(int i=0; i < n; ++i)
 		{
-			float base = Math.max(_qmax[i], -_qmin[i]);
-			_slope[i] /= (100f * base);
 			_basekv[i] = _buses.getVoltageLevel(_busndx[i]).getBaseKV();
 		}
 	}
