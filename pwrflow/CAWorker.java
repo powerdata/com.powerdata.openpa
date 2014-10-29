@@ -1,10 +1,11 @@
 package com.powerdata.openpa.pwrflow;
 
-import gnu.trove.list.array.TIntArrayList;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
@@ -20,14 +21,28 @@ import com.powerdata.openpa.tools.PAMath;
 
 public class CAWorker
 {
+	public static class Overload
+	{
+		int _ndx;
+		float _ovr;
+		public Overload(int ndx, float ovrld)
+		{
+			_ndx = ndx;
+			_ovr = ovrld;
+		}
+		public int getIndex() {return _ndx;}
+		public float getOverPct() {return _ovr;}
+		
+	}
+	
 	public static class Results
 	{
 		Set<Status> _status;
-		Map<ListMetaType,int[]> _overloads;
+		Map<ListMetaType,List<Overload>> _overloads;
 		Set<VoltViol> _vv;
 		float _ldrop;
 		
-		Results(Set<Status> s, Map<ListMetaType, int[]> ovl, float ldrop, Set<VoltViol> vv)
+		Results(Set<Status> s, Map<ListMetaType, List<Overload>> ovl, float ldrop, Set<VoltViol> vv)
 		{
 			_status = s;
 			_overloads = ovl;
@@ -36,7 +51,7 @@ public class CAWorker
 		}
 		
 		public Set<Status> getStatus() {return _status;}
-		public Map<ListMetaType,int[]> getOverloads() {return _overloads;}
+		public Map<ListMetaType, List<Overload>> getOverloads() {return _overloads;}
 		/** get the pct system load dropped / 100 */
 		public float getLoadDropped() {return _ldrop;}
 		public Set<VoltViol> getVoltViol() {return _vv;}
@@ -49,7 +64,14 @@ public class CAWorker
 	}
 	public enum Status
 	{
-		Success, LoadLoss, IslandSplit, Overloads, VoltageCollapse, HighVoltage;
+		Success(5), LoadLoss(1), IslandSplit(3), Overloads(2), VoltageCollapse(0), HighVoltage(4);
+		static final Status[] StatusByCode = new Status[]{
+			VoltageCollapse, LoadLoss, Overloads, IslandSplit, HighVoltage, Success
+		};
+		Status(int dbcode) {_dbcode = dbcode;}
+		int _dbcode;
+		public int getCode() {return _dbcode;}
+		public static Status fromCode(int code) {return StatusByCode[code];}
 	}
 	
 	PAModel _m;
@@ -138,8 +160,8 @@ public class CAWorker
 		
 		
 		
-		Map<ListMetaType,int[]> ovl = getOverloads(collapsed);
-		int novl = 0; for(int[] l : ovl.values()) novl += l.length;
+		Map<ListMetaType,List<Overload>> ovl = getOverloads(collapsed);
+		int novl = 0; for(List<Overload> l : ovl.values()) novl += l.size();
 		if (novl > 0)
 			rv.add(Status.Overloads);
 
@@ -148,12 +170,12 @@ public class CAWorker
 		return new Results(rv, ovl, 1f-pct, vv);
 	}
 	
-	Map<ListMetaType,int[]> getOverloads(Set<Island> collapsed) throws PAModelException
+	Map<ListMetaType,List<Overload>> getOverloads(Set<Island> collapsed) throws PAModelException
 	{
-		Map<ListMetaType,int[]> rv = new EnumMap<>(ListMetaType.class);
+		Map<ListMetaType,List<Overload>> rv = new EnumMap<>(ListMetaType.class);
 		for(ACBranchList list : _m.getACBranches())
 		{
-			TIntArrayList r = new TIntArrayList();
+			ArrayList<Overload> r = new ArrayList<>();
 			for(ACBranch d : list)
 			{
 				if (!d.isOutOfSvc()
@@ -162,10 +184,11 @@ public class CAWorker
 				{
 					float mva = Math.max(
 						PAMath.calcMVA(d.getFromP(), d.getFromQ()),
-						PAMath.calcMVA(d.getToP(), d.getToQ()));
-					if (mva > d.getLTRating()) r.add(d.getIndex());
+						PAMath.calcMVA(d.getToP(), d.getToQ())),
+						mrat = d.getLTRating();
+					if (mva > mrat) r.add(new Overload(d.getIndex(), mva/mrat));//r.add(d.getIndex());
 				}
-				rv.put(list.getListMeta(), r.toArray());
+				rv.put(list.getListMeta(), r);
 			}
 		}
 		
