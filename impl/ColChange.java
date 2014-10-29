@@ -40,7 +40,7 @@ abstract class ColChange implements com.powerdata.openpa.ColChange
 	}
 	
 	@Override
-	public int size() {return _size;}
+	public int size() {getNdxs(); return _size;}
 	
 	@Override
 	public abstract String[] stringValues();
