@@ -21,6 +21,7 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 		/** execute the contingency against the given model */
 		void execute(PAModel cmodel) throws PAModelException;
 		String getName();
+		OutOfService getContObj();
 	}
 	
 	@FunctionalInterface 
@@ -77,6 +78,11 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 			}
 			return rv;
 		}
+		@Override
+		public OutOfService getContObj()
+		{
+			return _cobj;
+		}
 	}
 
 	
@@ -115,7 +121,8 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	
 	public ContingencySet(PAModel m) throws PAModelException
 	{
-		mapContingencies(m.getGenerators());
+//		mapContingencies(m.getGenerators());
+		//TODO:  Add in distributed slack to power flow before adding generators
 		for(ACBranchList brlist : m.getACBranches())
 			mapContingencies(brlist);
 	}

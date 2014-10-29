@@ -38,7 +38,29 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 		}.addSwitches().getMap(), BusListI._PFld);
 
 		_buses = model.getBuses();
+		setupKeys(mkKeys());
 		
+	}
+
+	private int[] mkKeys() throws PAModelException
+	{
+		int[] rv = new int[_size];
+		for(int i=0; i < _size; ++i)
+		{
+			int score = -1;
+			Bus sel = null;
+			for(Bus b : getBuses(i))
+			{
+				int ts = scoreBus(b);
+				if (ts > score)
+				{
+					score = ts;
+					sel = b;
+				}
+			}
+			rv[i] = sel.getKey();
+		}
+		return rv;
 	}
 
 	@Override
@@ -62,18 +84,8 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 		for(int i=0; i < _size; ++i)
 		{
 			String s = getStation(i).getName();
-			int score = -1;
-			Bus sel = null;
-			for(Bus b : getBuses(i))
-			{
-				int ts = scoreBus(b);
-				if (ts > score)
-				{
-					score = ts;
-					sel = b;
-				}
-			}
 			StringBuilder ns = new StringBuilder();
+			Bus sel = _buses.getByKey(getKey(i));
 			String bn = sel.getName();
 			id[i] = sel.getID();
 			if (!bn.contains(s))
