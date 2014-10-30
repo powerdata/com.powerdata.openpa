@@ -4,12 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
+import com.powerdata.openpa.pwrflow.CAWorker.Overload;
 import com.powerdata.openpa.pwrflow.CAWorker.Results;
 import com.powerdata.openpa.pwrflow.CAWorker.Status;
 import com.powerdata.openpa.pwrflow.CAWorker.VoltViol;
@@ -44,14 +46,14 @@ public class CATest extends BasicContingencyManager
 		}		
 		if (stat.contains(Status.Overloads))
 		{
-			for (Entry<ListMetaType, int[]> oe : r.getOverloads().entrySet())
+			for (Entry<ListMetaType, List<Overload>> oe : r.getOverloads().entrySet())
 			{
-				if (oe.getValue().length > 0)
+				if (oe.getValue().size() > 0)
 				{
 					_pw.format("\t%s: ", oe.getKey().toString());
-					for (int i : oe.getValue())
+					for (Overload i : oe.getValue())
 					{
-						_pw.format("%s, ", _model.getList(oe.getKey()).getName(i));
+						_pw.format("%s, ", _model.getList(oe.getKey()).getName(i.getIndex()));
 					}
 					_pw.println();
 				}
