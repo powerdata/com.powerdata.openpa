@@ -11,7 +11,7 @@ import com.powerdata.openpa.pwrflow.ContingencySet.Contingency;
 
 public abstract class ContingencyManager
 {
-	PAModel _model;
+	protected PAModel _model;
 	
 	public ContingencyManager(PAModel m)
 	{
