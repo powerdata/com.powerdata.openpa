@@ -630,7 +630,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	}
 	
 	/** Set up keys in the event that the "key" constructor isn't used */
-	void setupKeys(int[] keys)
+	protected void setupKeys(int[] keys)
 	{
 		_size = keys.length;
 		_keys = keys;
