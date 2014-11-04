@@ -2,10 +2,8 @@ package com.powerdata.openpa.pwrflow;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
@@ -23,26 +21,41 @@ public class CAWorker
 {
 	public static class Overload
 	{
-		int _ndx;
-		float _ovr;
-		public Overload(int ndx, float ovrld)
+		private final ListMetaType _type;
+		private final int _ndx;
+		private float _ovr;
+		public Overload(ListMetaType type, int ndx, float ovrld)
 		{
+			_type = type;
 			_ndx = ndx;
 			_ovr = ovrld;
 		}
+		public ListMetaType getType() {return _type;}
 		public int getIndex() {return _ndx;}
 		public float getOverPct() {return _ovr;}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			Overload o = (Overload) obj;
+			return _type == o._type && _ndx == o._ndx;
+		}
+		@Override
+		public int hashCode()
+		{
+			return 31 * _type.ordinal() + 7*_ndx;
+		}
 		
 	}
 	
 	public static class Results
 	{
 		Set<Status> _status;
-		Map<ListMetaType,List<Overload>> _overloads;
+		Map<ListMetaType, Set<Overload>> _overloads;
 		Set<VoltViol> _vv;
 		float _ldrop;
 		
-		Results(Set<Status> s, Map<ListMetaType, List<Overload>> ovl, float ldrop, Set<VoltViol> vv)
+		Results(Set<Status> s, Map<ListMetaType, Set<Overload>> ovl, float ldrop, Set<VoltViol> vv)
 		{
 			_status = s;
 			_overloads = ovl;
@@ -51,7 +64,7 @@ public class CAWorker
 		}
 		
 		public Set<Status> getStatus() {return _status;}
-		public Map<ListMetaType, List<Overload>> getOverloads() {return _overloads;}
+		public Map<ListMetaType, Set<Overload>> getOverloads() {return _overloads;}
 		/** get the pct system load dropped / 100 */
 		public float getLoadDropped() {return _ldrop;}
 		public Set<VoltViol> getVoltViol() {return _vv;}
@@ -64,9 +77,9 @@ public class CAWorker
 	}
 	public enum Status
 	{
-		Success(5), LoadLoss(1), IslandSplit(3), Overloads(2), VoltageCollapse(0), HighVoltage(4);
+		Success(6), LoadLoss(1), IslandSplit(3), Overloads(2), VoltageCollapse(0), HighVoltage(4), OvrldMute(5);
 		static final Status[] StatusByCode = new Status[]{
-			VoltageCollapse, LoadLoss, Overloads, IslandSplit, HighVoltage, Success
+			VoltageCollapse, LoadLoss, Overloads, IslandSplit, HighVoltage, OvrldMute, Success
 		};
 		Status(int dbcode) {_dbcode = dbcode;}
 		int _dbcode;
@@ -127,6 +140,8 @@ public class CAWorker
 		public float getV() {return _v;}
 	}
 	
+	public IslandConv[] getPFResults() {return _pfres;}
+	
 	public Results getResults(IslandConv[] orig) throws PAModelException
 	{
 		EnumSet<Status> rv = EnumSet.noneOf(Status.class);
@@ -160,8 +175,8 @@ public class CAWorker
 		
 		
 		
-		Map<ListMetaType,List<Overload>> ovl = getOverloads(collapsed);
-		int novl = 0; for(List<Overload> l : ovl.values()) novl += l.size();
+		Map<ListMetaType,Set<Overload>> ovl = getOverloads(collapsed);
+		int novl = 0; for(Set<Overload> l : ovl.values()) novl += l.size();
 		if (novl > 0)
 			rv.add(Status.Overloads);
 
@@ -170,14 +185,15 @@ public class CAWorker
 		return new Results(rv, ovl, 1f-pct, vv);
 	}
 	
-	Map<ListMetaType,List<Overload>> getOverloads(Set<Island> collapsed) throws PAModelException
+	public Map<ListMetaType,Set<Overload>> getOverloads(Set<Island> collapsed) throws PAModelException
 	{
-		Map<ListMetaType,List<Overload>> rv = new EnumMap<>(ListMetaType.class);
+		Map<ListMetaType,Set<Overload>> rv = new EnumMap<>(ListMetaType.class);
 		for(ACBranchList list : _m.getACBranches())
 		{
-			ArrayList<Overload> r = new ArrayList<>();
+			Set<Overload> r = new HashSet<>();
 			for(ACBranch d : list)
 			{
+				ListMetaType t = list.getListMeta();
 				if (!d.isOutOfSvc()
 						&& !collapsed.contains(d.getFromBus().getIsland())
 						&& !collapsed.contains(d.getToBus().getIsland()))
@@ -186,9 +202,9 @@ public class CAWorker
 						PAMath.calcMVA(d.getFromP(), d.getFromQ()),
 						PAMath.calcMVA(d.getToP(), d.getToQ())),
 						mrat = d.getLTRating();
-					if (mva > mrat) r.add(new Overload(d.getIndex(), mva/mrat));//r.add(d.getIndex());
+					if (mva > mrat) r.add(new Overload(t, d.getIndex(), mva/mrat));
 				}
-				rv.put(list.getListMeta(), r);
+				rv.put(t, r);
 			}
 		}
 		

@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import com.powerdata.openpa.ListMetaType;
@@ -46,7 +45,7 @@ public class CATest extends BasicContingencyManager
 		}		
 		if (stat.contains(Status.Overloads))
 		{
-			for (Entry<ListMetaType, List<Overload>> oe : r.getOverloads().entrySet())
+			for (Entry<ListMetaType, Set<Overload>> oe : r.getOverloads().entrySet())
 			{
 				if (oe.getValue().size() > 0)
 				{
