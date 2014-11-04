@@ -1,7 +1,6 @@
 package com.powerdata.openpa.pwrflow;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -27,7 +26,7 @@ public abstract class BasicContingencyManager extends ContingencyManager
 		public CAWorkerNoRat(PAModel model, String cname) {super(model, cname);}
 
 		@Override
-		Map<ListMetaType, List<Overload>> getOverloads(Set<Island> collapsed) {return new EnumMap<>(ListMetaType.class);}
+		public Map<ListMetaType, Set<Overload>> getOverloads(Set<Island> collapsed) {return new EnumMap<>(ListMetaType.class);}
 	}
 	
 	static BiFunction<PAModel, String, CAWorker> _useratings = CAWorker::new,

@@ -1,7 +1,6 @@
 package com.powerdata.openpa;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
