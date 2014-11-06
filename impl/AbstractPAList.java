@@ -2,12 +2,11 @@ package com.powerdata.openpa.impl;
 
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
@@ -787,5 +786,5 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 			keys[i] = objects[i].getKey();
 		return _keyndx.getOffsets(keys);
 	}
-	
+
 }

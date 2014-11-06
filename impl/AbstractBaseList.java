@@ -24,5 +24,17 @@ public abstract class AbstractBaseList<T extends BaseObject> extends AbstractLis
 		return _size;
 	}
 	
+	@Override
+	public boolean objEquals(int ndx, Object obj)
+	{
+		BaseObject o = (BaseObject) obj;
+		return getListMeta().equals(o.getList().getListMeta()) && getKey(ndx) == o.getKey();
+	}
 
+	@Override
+	public int objHash(int ndx)
+	{
+		return BaseList.CalcListHash(getListMeta(), getKey(ndx));
+	}
+	
 }
