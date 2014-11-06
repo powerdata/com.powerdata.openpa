@@ -1,5 +1,6 @@
 package com.powerdata.openpa.pwrflow;
 
+import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.Island;
@@ -31,12 +32,14 @@ public abstract class IslandConv
 	public float getWorstQmm() {return _wqmm;}
 	public float getGenMW() {return _genmw;}
 	public float getLoadMW() {return _ldmw;}
-	public int lvBus() {return _bxlowv;}
-	public int hvBus() {return _bxhiv;}
+	public Bus lvBus() {return _buses.get(_bxlowv);}
+	public Bus hvBus() {return _buses.get(_bxhiv);}
 	public float lowestV() {return _lv;}
 	public float highestV() {return _hv;}
 	public boolean lvFail() {return _lvfail;}
 	public boolean hvFail() {return _hvfail;}
+	/** Method to give a single "thumbs up/down" response to "did this island solve?" */
+	public boolean solved() {return !_fail && !_lvfail && !_hvfail && _pconv && _qconv;}
 	
 	public Island getIsland() {return _island;}
 

@@ -272,5 +272,19 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	{
 		return ListMetaType.Bus;
 	}
+
+	@Override
+	public Bus getByBus(Bus b)
+	{
+		/* since we are the "unity" bus list, the typical
+		 * lookup by bus (similar to all other group instances)
+		 * doesn't make sense.  
+		 * 
+		 *  However, it seems like a lookup by key would be reasonable
+		 *  here.
+		 */
+		return getByKey(b.getKey());
+	}
+	
 	
 }

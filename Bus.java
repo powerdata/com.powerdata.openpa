@@ -85,5 +85,4 @@ public class Bus extends Group
 	{
 		_list.setVoltageLevel(_ndx, l);
 	}
-	
 }

@@ -364,7 +364,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public ListMetaType getListMeta()
 	{
-		return null;
+		return ListMetaType.Bus;
 	}
 
 }

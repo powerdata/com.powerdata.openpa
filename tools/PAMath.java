@@ -1,5 +1,6 @@
 package com.powerdata.openpa.tools;
 
+import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.PAModelException;
 
@@ -91,6 +92,11 @@ public class PAMath
 		for(int i=0; i < n; ++i)
 			rv[i] = vm[i]/buses.getVoltageLevel(i).getBaseKV();
 		return rv;
+	}
+	
+	public static float vmpu(Bus bus) throws PAModelException
+	{
+		return bus.getVM()/bus.getVoltageLevel().getBaseKV();
 	}
 	
 }

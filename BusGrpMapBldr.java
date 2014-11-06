@@ -40,11 +40,11 @@ public class BusGrpMapBldr
 		return this;
 	}
 
-	void addDev2T(TwoTermDev d) throws PAModelException
+	int addDev2T(TwoTermDev d) throws PAModelException
 	{
 		int fb = d.getFromBus().getIndex();
 		int tb = d.getToBus().getIndex();
-		_lnet.addBranch(fb, tb);
+		return _lnet.addBranch(fb, tb);
 	}
 
 	public BusGrpMapBldr addLines() throws PAModelException
@@ -158,7 +158,7 @@ public class BusGrpMapBldr
 		int[][] grps = _lnet.findGroups();
 		return new BBusGrpMap(grps, _nbus);
 	}
-
+	
 	static class FixedGrpMap extends AbstractList<int[]>
 	{
 		int[][] _grps;
