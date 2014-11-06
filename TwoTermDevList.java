@@ -275,4 +275,16 @@ public class TwoTermDevList extends AbstractList<TwoTermDev> implements
 	{
 		return _src.getByID(id);
 	}
+	@Override
+	public boolean objEquals(int ndx, Object obj)
+	{
+		return _src.objEquals(ndx, obj);
+	}
+
+	@Override
+	public int objHash(int ndx)
+	{
+		return _src.objHash(ndx);
+	}
+
 }
