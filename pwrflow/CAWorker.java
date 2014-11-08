@@ -160,10 +160,13 @@ public class CAWorker
 	{
 		FDPFCore pf = null;
 		PFMismatchDbg d = null;
+		File dir = null;
 		if (_dbg)
 		{
 			// TODO: make this configurable
-			d = new PFMismatchDbg(new File(new File("/run/shm/pfdbg"), _cname));
+			dir = new File(String.format("/run/shm/contingency/%s", _cname));
+			if (!dir.exists()) dir.mkdirs();
+			d = new PFMismatchDbg(dir);
 			pf = d.getPF(_m);
 		}
 		else
@@ -175,8 +178,9 @@ public class CAWorker
 		if (_dbg) try
 		{
 			d.write();
+			new ListDumper().dump(_m, dir);
 		}
-		catch (IOException e)
+		catch (IOException |ReflectiveOperationException e)
 		{
 			throw new PAModelException(e);
 		}
