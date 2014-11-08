@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.powerdata.openpa.psse.PsseModelException;
+import com.powerdata.openpa.psse.util.TransformerRaw;
+import com.powerdata.openpa.tools.Complex;
+import com.powerdata.openpa.tools.DeltaNetwork;
+
 public class Psse2PsmFmt extends PsseProcessor 
 {
 	
@@ -119,14 +124,16 @@ public class Psse2PsmFmt extends PsseProcessor
 class PssePSMWriter implements PsseRecWriter
 {
 	static final int _invalidOffset = -1;
+	static final String _invalidData = "";
 	
 	protected TObjectIntMap<String> _writerMap;
 	protected TObjectIntMap<String> _busMap;
 	protected TObjectIntMap<String> _loadMap;
 	protected TObjectIntMap<String> _genMap;
 	protected TObjectIntMap<String> _areaMap;
+	protected TObjectIntMap<String> _lineMap;
 	protected TObjectIntMap<String> _tfmrMap;
-	
+
 	protected List<PrintWriter> _writers;
 	protected File _outdir;
 
@@ -140,57 +147,63 @@ class PssePSMWriter implements PsseRecWriter
 			throws PsseProcException 
 	{	
 		List<PsseField[]> lines = pclass.getLines();
+
+		//Debugging messages
+//		for(int i = 0; i < lines.size(); ++i)
+//		{
+//			System.out.println("\n[writeRecord] pclass = "+pclass.getClassName());
+//			for(int j = 0; j < lines.get(i).length; ++j)
+//			{
+//				System.out.println("[writeRecord] lines.get("+i+")["+j+"] = "+lines.get(i)[j].getName());
+//			}
+//		}
+//		System.out.println("\n[writeRecord] pclass = "+pclass.getClassName());
+//		for(int i = 0; i < record.length; ++i)
+//		{
+//			System.out.println("[writeRecord] record["+i+"/"+record.length+"] = "+record[i]);
+//		}
+		
 		int n = lines.size();
 		try
 		{
 			switch(pclass.getClassName().toLowerCase())
 			{
 			case "bus":
-				for(int i = 0; i < n; ++i)
-				{
-//					System.out.println("[writRecord] bus "+i+"/"+n);
-					processBus(lines.get(i), record);
-				}
+				processBus(lines.get(0), record);
 				break;
 			case "load":
-				for(int i = 0; i < n; ++i)
-				{
-//					System.out.println("[writRecord] load "+i+"/"+n);
-					processLoad(lines.get(i), record);
-				}
+				processLoad(lines.get(0), record);
 				break;
 			case "generator":
 			{
-				for(int i = 0; i < n; ++i)
-				{
-//					System.out.println("[writRecord] load "+i+"/"+n);
-					processGenerator(lines.get(i), record);
-				}
+				processGenerator(lines.get(0), record);
 				break;
 			}
 			case "areainterchange":
 			{
 				for(int i = 0; i < n; ++i)
 				{
-					processArea(lines.get(i), record);
+					processArea(lines.get(0), record);
 				}
 				break;
 			}
 			case "transformer":
 			{
-				for(int i = 0; i < n; ++i)
-				{
-					processTransformer(lines.get(i), record);
-				}
+				processTransformer(lines, record);
 				break;
 			}
+			case "nontransformerbranch":
+				//Gets broken down into lines / series reactors / series capacitors
+				//First cut make it be lines
+				processLine(lines.get(0), record);
+				break;
 			default:
 				System.out.println("[writeRecord] No processor for "+pclass.getClassName().toLowerCase());	
 			}
 		}
 		catch(Exception e)
 		{
-			System.err.println("PssePSMWriter issue with writing csv : "+e);
+			System.err.println("PssePSMWriter issue with writing csv | "+e);
 		}
 		
 	}
@@ -200,7 +213,7 @@ class PssePSMWriter implements PsseRecWriter
 	{
 		for(int i = 0; i < _writers.size(); ++i)
 		{
-			System.out.println("[cleanup] Closing Writer "+(i+1)+"/"+_writers.size());
+//			System.out.println("[cleanup] Closing Writer "+(i+1)+"/"+_writers.size());
 			_writers.get(i).close();
 		}
 	}
@@ -209,15 +222,12 @@ class PssePSMWriter implements PsseRecWriter
 	{
 		// Bus data order
 		// ID, Name, NominalKV, Substation, IsBusBarSection, FrequencySourcePriority
+		//Anything from PSSE is a busbar section
 		
 		List<String>data = new ArrayList<>();
-		String[] nodeHeaders = {"i", "name", "basekv"};
+		String[] nodeHeaders = {"i", "name", "baskv"};
 		
 		if(_busMap == null)_busMap = buildMap(fld);
-		
-//		data.add(getData(record, _busMap.get("i"))); //ID
-//		data.add(getData(record, _busMap.get("name"))); //Name
-//		data.add(getData(record, _busMap.get("basekv"))); //NominalKV
 		
 		for(int i = 0; i < nodeHeaders.length; ++i)
 		{
@@ -226,7 +236,6 @@ class PssePSMWriter implements PsseRecWriter
 		
 		PrintWriter pw = getWriter("Node");
 		pw.println(buildCsvLine(data));
-
 	}
 	
 	private void processLoad(PsseField[] fld, String[] record) throws FileNotFoundException
@@ -237,7 +246,7 @@ class PssePSMWriter implements PsseRecWriter
 		if(_loadMap == null) _loadMap = buildMap(fld);
 		
 		//Load.csv
-		data.add(getData(record, _loadMap.get("id"))+"_"+getData(record, _loadMap.get("i"))); //ID
+		data.add(getData(record, _loadMap.get("id"))+"_"+getData(record, _loadMap.get("i"))+"_load"); //ID
 		data.add(getData(record, _loadMap.get("id"))); //Name
 		data.add(getData(record, _loadMap.get("i"))); //Node
 		
@@ -246,7 +255,7 @@ class PssePSMWriter implements PsseRecWriter
 		
 		//PsmCaseLoad.csv
 		data.clear();
-		data.add(getData(record, _loadMap.get("id"))+"_"+getData(record, _loadMap.get("i"))); //ID
+		data.add(getData(record, _loadMap.get("id"))+"_"+getData(record, _loadMap.get("i"))+"_load"); //ID
 		data.add(getData(record, _loadMap.get("pl"))); //MW
 		data.add(getData(record, _loadMap.get("ql"))); //MVAr
 		
@@ -258,30 +267,109 @@ class PssePSMWriter implements PsseRecWriter
 	{
 		List<String> data = new ArrayList<>();
 		String[] genHeaders = {"id","pb","pt"};
-		String[] genCaseHeaders = {"pg,vs"};
 		PrintWriter pw;
 		
 		if(_genMap == null) _genMap = buildMap(fld);
 		
+		Float pb = getFloat(record, _genMap.get("pb"));
+		Float pt = getFloat(record, _genMap.get("pt"));
+		Float pg = getFloat(record, _genMap.get("pg"));
+		
 		//GeneratingUnit.csv
-		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))); //ID
+		//"ID,Name,MinOperatingMW,MaxOperatingMW,GeneratingUnitType,GenControlMode"
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_gu"); //ID
 		for(int i = 0; i < genHeaders.length; ++i)
 		{
 			data.add(getData(record, _genMap.get(genHeaders[i])));
 		}
-		
+		if(pb < 0)
+		{
+			if(!(pt < 1 && pb > -1))
+			{
+				data.add("Hydro");
+			}
+			else
+			{
+				data.add("Thermal");
+			}
+		}
+		else
+		{
+			data.add("Thermal");
+		}
+		data.add("Setpoint");
 		pw = getWriter("GeneratingUnit");
 		pw.println(buildCsvLine(data));
 		
 		//PsmCaseGeneratingUnit.csv
+		//"ID,MW,MWSetPoint,GeneratorOperatingMode"
 		data.clear();
-		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i")));
-		for(int i = 0; i < genCaseHeaders.length; ++i)
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_gu");
+		data.add(pg.toString());
+		data.add(pg.toString());
+		pw = getWriter("PsmCaseGeneratingUnit");
+		pw.println(buildCsvLine(data));
+		
+		//SynchronousMachine.csv
+		//"ID,Name,Node,GeneratingUnit,RegulatedNode"
+		data.clear();
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_sm"); //ID
+		data.add(getData(record, _genMap.get("id"))); //Name
+		data.add(getData(record, _genMap.get("i"))); //Node
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_gu"); //GeneratingUnit
+		String ireg = getData(record, _genMap.get("ireg"));
+		if(ireg.equals("0")) ireg = "";
+		data.add(ireg); //RegulatedNode
+		pw = getWriter("SynchronousMachine");
+		pw.println(buildCsvLine(data));
+		
+		//PsmCaseSynchronousMachine.csv
+		//"ID,SynchronousMachingOperatingMode,AVRMode,KVSetPoint,MVArSetpoint,MVAr"
+		data.clear();
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_sm"); //ID
+		//SynchronousOperatingMode
+		if(pt < 1 && pb > -1)//CON
 		{
-			data.add(getData(record, _genMap.get(genCaseHeaders[i])));
+			data.add("CON");
+		}
+		else if(pb >= 0 && pt >= pb)//GEN
+		{
+			data.add("GEN");
+		}
+		else if(pb < 0 && pt > 0 && pg < 0)//PMP
+		{
+			data.add("PMP");
+		}
+		else
+		{
+			data.add("");
 		}
 		
-		pw = getWriter("PsmCaseGeneratingUnit");
+		if(getData(record, _genMap.get("qt")).equals(getData(record, _genMap.get("qg"))) && getData(record, _genMap.get("qt")).equals(getData(record, _genMap.get("qb"))))
+		{
+			data.add("OFF"); //AVRMode
+			data.add(getData(record, _genMap.get("vs")));//KVSetPoint
+			data.add(getData(record, _genMap.get("vs")));//MVArSetPoint
+		}
+		else
+		{
+			data.add("ON"); //AVRMode
+			data.add(getData(record, _genMap.get("vs")));//KVSetPoint
+			data.add(""); //MVArSetPoint
+		}
+		data.add(getData(record, _genMap.get("qg")));//MVAr
+		pw = getWriter("PsmCaseSynchronousMachine");
+		pw.println(buildCsvLine(data));
+		
+		//ReactiveCapabilityCurve.csv
+		//ID,SynchronousMachine,MW,MinMVAr,MaxMVAr
+		data.clear();
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_crv2"); //ID
+		data.add(getData(record,_genMap.get("id"))+"_"+getData(record,_genMap.get("i"))+"_sm"); //SynchronousMachine
+		data.add(getData(record, _genMap.get("pg")));//MW
+		data.add(getData(record, _genMap.get("qb")));//MinMVAr
+		data.add(getData(record, _genMap.get("qt")));//MaxMVAr
+		pw = getWriter("ReactiveCapabilityCurve");
 		pw.println(buildCsvLine(data));
 	}
 	
@@ -292,40 +380,217 @@ class PssePSMWriter implements PsseRecWriter
 		
 		if(_areaMap == null) _areaMap = buildMap(fld);
 		
-		data.add(getData(record, _areaMap.get("i")));
+		data.add(getData(record, _areaMap.get("i"))+"_ca");
 		data.add(getData(record, _areaMap.get("arname")));
 		
 		pw = getWriter("ControlArea");
 		pw.println(buildCsvLine(data));
 	}
 	
-	private void processTransformer(PsseField[] fld, String[] record) throws FileNotFoundException
+	private void processTransformer(List<PsseField[]> lines, String[] record) throws FileNotFoundException, PsseModelException
 	{
 		List<String> data = new ArrayList<>();
 		PrintWriter pw;
 		
-		if(_tfmrMap == null) _tfmrMap = buildMap(fld);
+		if(_tfmrMap == null) _tfmrMap = buildMap(lines);
+		
+		//Determine if 2 or 3 winding transformer
+		if(getFloat(record, _tfmrMap.get("k")) == 0 || _tfmrMap.get("k") == _tfmrMap.getNoEntryValue())
+		{
+			process2Wdg(record);
+		}
+		else
+		{
+			process3Wdg(record);
+		}
+	}
+	
+	private void process2Wdg(String[] record) throws FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		String name = getData(record, _tfmrMap.get("name"));
 		
 		//Transformer.csv
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))); //ID
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"))+"_tfmr"); //ID
 		data.add(getData(record, _tfmrMap.get("name"))); //Name
-		
-		int wdgCount = 0;//Winding Count
-		if(_tfmrMap.get("i") != _tfmrMap.getNoEntryValue()) wdgCount++;
-		if(_tfmrMap.get("j") != _tfmrMap.getNoEntryValue()) wdgCount++;
-		if(_tfmrMap.get("k") != _tfmrMap.getNoEntryValue()) wdgCount++;
-		data.add(""+wdgCount);
+		data.add("2"); //WindingCount
 		
 		pw = getWriter("Transformer");
 		pw.println(buildCsvLine(data));
 		
 		//TransformerWinding.csv
+		data.clear();
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_wdg"); //ID
+		data.add(getData(record, _tfmrMap.get("name"))); //Name
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_tfmr"); //Transformer Winding
+		data.add(getData(record, _tfmrMap.get("i")));//Node1
+		data.add(getData(record, _tfmrMap.get("j")));//Node2
+		data.add(getData(record, _tfmrMap.get("r1-2")));//R
+		data.add(getData(record, _tfmrMap.get("x1-2")));//X
+		data.add(getData(record, _tfmrMap.get("mag2")));//Bmag
+		data.add(getData(record, _tfmrMap.get("rata1")));//NormalOperatingLimit
+		pw = getWriter("TransformerWinding");
+		pw.println(buildCsvLine(data));
 		
-		//PsmCaseTransformerWinding.csv
+		//PsmCaseTransformerWinding.csv don't need, doesn't exist
 		
-		//RatioTapChanger.csv
 		
-		//PsmCaseRatioTapChanger.csv
+		//RatioTapChanger.csv - High
+		data.clear();
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ftap"); //ID
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_wdg"); //Transformer Winding
+		data.add(getData(record, _tfmrMap.get("i"))); //TapNode
+		
+		//RatioTapChanger.csv - Low
+		data.clear();
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ttap"); //ID
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_wdg"); //Transformer Winding
+		data.add(getData(record, _tfmrMap.get("j"))); //TapNode
+		
+		//PsmCaseRatioTapChanger.csv - High
+		data.clear();
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ftap"); //ID
+		data.add(getData(record, _tfmrMap.get("windv1"))); //Ratio
+		
+		//RatioTapChanger.csv - Low
+		data.clear();
+		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ttap"); //ID
+		data.add(getData(record, _tfmrMap.get("windv2"))); //Ratio
+		
+		//Ratio can be a different ratio for each winding
+		//1kv side is always going to be 1.0 for the ratio
+		//other side ratio will be windv1
+		
+		//NOMV1/2/3 is the winding neutral kv for the high side
+		//Low side is always going to be 1.0
+		
+		//ANG1 
+		
+	}
+	
+	private void process3Wdg(String[] record) throws PsseModelException, FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		String name;
+		String[] wdg = {"i", "j", "k"};
+		float[] r = new float[3];
+		float[] x = new float[3];
+		//Need to convert from a 3 winding to 3 2 winding transformers
+		//First going to create a node for the 3 transformers to connect to
+		
+		//Node.csv
+		// ID, Name, NominalKV, Substation, IsBusBarSection, FrequencySourcePriority
+		String nodeId = getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"))+"_"+getData(record, _tfmrMap.get("k"));
+		data.add(nodeId+"_3wdg"); //ID
+		data.add(getData(record, _tfmrMap.get("name"))+"_3wdgNode"); //Name
+		data.add("1"); //NominalKV
+		pw = getWriter("Node");
+		pw.println(buildCsvLine(data));
+		
+		
+		//If cz != 1 then it needs to be converted
+		float cz = getFloat(record, _tfmrMap.get("cz"));
+		
+		//Get R / X values
+		r[0] = getFloat(record, _tfmrMap.get("r1-2"));
+		r[1] = getFloat(record, _tfmrMap.get("r2-3"));
+		r[1] = getFloat(record, _tfmrMap.get("r3-1"));
+		x[0] = getFloat(record, _tfmrMap.get("x1-2"));
+		x[1] = getFloat(record, _tfmrMap.get("x2-3"));
+		x[1] = getFloat(record, _tfmrMap.get("x3-1"));
+		
+		//bmag value
+		float bmag = getFloat(record, _tfmrMap.get("mag2"))/ 3f;
+		
+		if(cz != 1)
+		{
+			System.out.println("[process3Wdg] cz = "+cz);
+			
+			//Create Delta Network
+			DeltaNetwork dn = convert3W(r,x);
+			Complex[] cplx = {dn.getZ12(), dn.getZ23(), dn.getZ31()};
+			
+			for(int i = 0; i < 3; ++i)
+			{
+				r[i] = cplx[i].im();
+				x[i] = cplx[i].re();
+			}
+			
+			dn.getZ12().re(); //r
+			dn.getZ12().im(); //x
+			
+		}
+		
+		//Create the individual transformers
+		for(int i = 0; i < 3; ++i)
+		{
+			//Transformer.csv
+			name = getData(record, _tfmrMap.get("name"));
+			if(name.equals("") || name == null) name = wdg[i]+"_"+nodeId+"_tfmr";
+			data.clear();
+			data.add(wdg[i]+"_"+nodeId+"_tfmr");//ID
+			data.add(name);//Name
+			data.add("2");//Windings
+			pw = getWriter("Transformer");
+			pw.println(buildCsvLine(data));
+			
+			//TransformerWinding.csv
+			data.clear();
+			data.add(wdg[i]+"_"+nodeId+"_wdg");//ID
+			data.add(wdg[i]+"_"+getData(record, _tfmrMap.get("name"))+"_wdg");//Name
+			data.add(wdg[i]+"_"+nodeId+"_tfmr");//Transformer
+			data.add(getData(record, _tfmrMap.get(wdg[i])));//Node1
+			data.add(nodeId);//Node2
+			data.add(""+r[i]);//R
+			data.add(""+x[i]);//X
+			data.add(""+bmag);//Bmag mag2/3 assign evenly
+			data.add(getData(record, _tfmrMap.get("rata"+(1+i))));//NormalOperatingLimit rata1 / rata2 / rata3
+			pw = getWriter("TransformerWinding");
+			pw.println(buildCsvLine(data));
+			
+			//RatioTapChanger.csv - High
+			data.clear();
+			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_ftap"); //ID
+			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_wdg"); //Transformer Winding
+			data.add(getData(record, _tfmrMap.get(wdg[i]))); //TapNode
+			
+			//RatioTapChanger.csv - Low
+			data.clear();
+			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_ttap"); //ID
+			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_wdg"); //Transformer Winding
+			data.add(nodeId); //TapNode
+		}
+		
+	}
+	
+	private void processLine(PsseField[] fld, String[] record) throws FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		
+		if(_lineMap == null) _lineMap = buildMap(fld);
+		
+		int node1 = getInt(record, _lineMap.get("i"));
+		int node2 = getInt(record, _lineMap.get("j"));
+		if(node1 < 0) node1 = node1 * -1;
+		if(node2 < 0) node2 = node2 * -1;
+		
+		//Line.csv
+		data.add(getData(record, _lineMap.get("i"))+"_"+getData(record, _lineMap.get("j"))+"_line");//ID
+		data.add(getData(record, _lineMap.get("i"))+"_"+getData(record, _lineMap.get("j"))+"_line");//Name
+		data.add(""+node1);//Node1
+		data.add(""+node2);//Node2
+		data.add(getData(record, _lineMap.get("r")));//R
+		data.add(getData(record, _lineMap.get("x")));//X
+		data.add(getData(record, _lineMap.get("b")));//Bch?
+		//NormalOperatingLimit
+		pw = getWriter("Line");
+		pw.println(buildCsvLine(data));
+		
+		//PsmCaseLine.csv
+		data.clear();
 	}
 	
 	private TObjectIntMap<String> buildMap(PsseField[] fld)
@@ -338,6 +603,41 @@ class PssePSMWriter implements PsseRecWriter
 		}
 		
 		return map;
+	}
+	
+	private TObjectIntMap<String> buildMap(List<PsseField[]> lines)
+	{
+		int size = 0;
+		int lSize = lines.size();
+		
+		//Determine the size of the map
+		for(int i = 0; i < lSize; ++i)
+		{
+			size += lines.get(i).length;
+		}
+		
+		TObjectIntMap<String> map = new TObjectIntHashMap<>(size, 1f, _invalidOffset);
+		int offset = 0;
+		
+		for(int i = 0; i < lSize; ++i)
+		{
+			PsseField[] fld = lines.get(i);
+			for(int j = 0; j < fld.length; ++j)
+			{
+				map.put(fld[j].getName().toLowerCase(), offset);
+				offset++;
+			}
+		}
+		
+		return map;
+	}
+	
+	private DeltaNetwork convert3W(float[] r, float[] x) throws PsseModelException
+	{
+		return new DeltaNetwork(
+				new Complex(r[0], x[0]), //1_2
+				new Complex(r[1], x[1]), //2_3
+				new Complex(r[2], x[2])); //3_1
 	}
 	
 	private PrintWriter getWriter(String fileName) throws FileNotFoundException
@@ -356,7 +656,7 @@ class PssePSMWriter implements PsseRecWriter
 			//Add to the map
 			_writerMap.put(fileName, _writers.size());
 			//Create writer and add it to the array
-			System.out.println("[getWriter] Creating PrintWriter with path "+_outdir.getAbsolutePath()+"/"+fileName+".csv");
+//			System.out.println("[getWriter] Creating PrintWriter with path "+_outdir.getAbsolutePath()+"/"+fileName+".csv");
 			pw = new PrintWriter(new File(_outdir.getAbsolutePath()+"/"+fileName+".csv"));
 			//Write column headers for the new csv
 			pw.println(getHeaders(fileName));
@@ -372,9 +672,23 @@ class PssePSMWriter implements PsseRecWriter
 	
 	private String getData(String[] record, int offset)
 	{
-		if(offset == _invalidOffset) return "";
+		if(offset == _invalidOffset) return _invalidData;
 		
 		return record[offset];
+	}
+	
+	private float getFloat(String[] record, int offset)
+	{
+		if(offset == _invalidOffset) return Float.NaN;
+		
+		return Float.parseFloat(record[offset]);
+	}
+	
+	private int getInt(String[] record, int offset)
+	{
+		if(offset == _invalidOffset) return -9999;
+		
+		return Integer.parseInt(record[offset]);
 	}
 	
 	private String getHeaders(String fileName)
@@ -383,6 +697,7 @@ class PssePSMWriter implements PsseRecWriter
 		switch(fileName.toLowerCase())
 		{
 		case "node":
+//			h = "ID,Name,NominalKV,Substation,FrequencySourcePriority";
 			h = "ID,Name,NominalKV";
 			break;
 		case "load":
@@ -392,12 +707,20 @@ class PssePSMWriter implements PsseRecWriter
 			h = "ID,MW,MVAr";
 			break;
 		case "generatingunit":
-//			h = "ID,Name,MinOperatingMW,MaxOperatingMW,GeneratingUnitType,GenControlMode";
-			h = "ID,Name,MinOperatingMW,MaxOperatingMW";
+			h = "ID,Name,MinOperatingMW,MaxOperatingMW,GeneratingUnitType,GenControlMode";
 			break;
 		case "psmcasegeneratingunit":
 //			h = "ID,MW,MWSetPoint,GeneratorOperatingMode";
 			h = "ID,MW,MWSetPoint";
+			break;
+		case "synchronousmachine":
+			h = "ID,Name,Node,GeneratingUnit,RegulatedNode";
+			break;
+		case "psmcasesynchronousmachine":
+			h = "ID,SynchronousMachingOperatingMode,AVRMode,KVSetPoint,MVArSetpoint,MVAr";
+			break;
+		case "reactivecapabilitycurve":
+			h = "ID,SynchronousMachine,MW,MinMVAr,MaxMVAr";
 			break;
 		case "controlarea":
 			h = "ID,Name";
@@ -405,11 +728,21 @@ class PssePSMWriter implements PsseRecWriter
 		case "transformer":
 			h = "ID,Name,WindingCount";
 			break;
+		case "transformerwinding":
+			h = "ID,Name,Transformer,Node1,Node2,R,X,Bmag,NormalOperatingLimit";
+			break;
+		case "line":
+//			h = "ID,Name,Node1,Node2,R,X,Bch,NormalOperatingLimit";
+			h = "ID,Name,Node1,Node2,R,X,Bch";
+			break;
+		case "psmcaseline":
+			h = "ID,FromMW,FromMVAr,ToMW,ToMVAr";
+			break;
 		default:
 			h = "HeadersNotFound";
 		}
 		
-		System.out.println("[getHeaders] Header for "+fileName+" = "+h);
+//		System.out.println("[getHeaders] Header for "+fileName+" = "+h);
 		return h;
 	}
 	
