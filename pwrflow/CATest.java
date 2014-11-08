@@ -4,15 +4,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Map.Entry;
+import java.util.EnumSet;
 import java.util.Set;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
-import com.powerdata.openpa.pwrflow.CAWorker.Results;
+import com.powerdata.openpa.pwrflow.CAWorker.Result;
 import com.powerdata.openpa.pwrflow.CAWorker.Status;
-import com.powerdata.openpa.pwrflow.CAWorker.VoltViol;
 import com.powerdata.openpa.pwrflow.ContingencySet.Contingency;
 
 public class CATest extends BasicContingencyManager
@@ -24,39 +22,44 @@ public class CATest extends BasicContingencyManager
 		_pw = pw;
 	}
 
-
+	static Set<Status> _VoltageViol = EnumSet.of(Status.HighVoltageFail, Status.LowVoltage, Status.VoltageCollapse, Status.HighVoltage);
+	
 	@Override
-	protected void report(Contingency c, Results r, PAModel m) throws PAModelException
+	protected void report(Contingency c, Set<Result> r, PAModel m) throws PAModelException
 	{
-		Set<Status> stat = r.getStatus();
-		_pw.format("Contingency \"%s\": %s ", c.getName(), stat.toString());
-		if (stat.contains(Status.LoadLoss))
-			_pw.format("%7.3f%% system load loss", r.getLoadDropped()*100f);
-		_pw.println();
-
-		if (stat.contains(Status.HighVoltage)
-				|| stat.contains(Status.VoltageCollapse))
-		{
-			for(VoltViol vv : r.getVoltViol())
-			{
-				_pw.format("\tvoltage @ %s: %f \n", vv.getBus().getName(), vv.getV());
-			}
-		}		
-		if (stat.contains(Status.Overloads))
-		{
-			for (Entry<ListMetaType, int[]> oe : r.getOverloads().entrySet())
-			{
-				if (oe.getValue().length > 0)
-				{
-					_pw.format("\t%s: ", oe.getKey().toString());
-					for (int i : oe.getValue())
-					{
-						_pw.format("%s, ", _model.getList(oe.getKey()).getName(i));
-					}
-					_pw.println();
-				}
-			}
-		}
+//		
+//		
+//		
+//		
+//		Set<Status> stat = r.getStatus();
+//		_pw.format("Contingency \"%s\": %s ", c.getName(), stat.toString());
+//		if (stat.contains(Status.LoadLoss))
+//			_pw.format("%7.3f%% system load loss", r.getLoadDropped()*100f);
+//		_pw.println();
+//
+//		if (stat.contains(Status.HighVoltageFail)
+//				|| stat.contains(Status.VoltageCollapse))
+//		{
+//			for(VoltViol vv : r.getVoltViol())
+//			{
+//				_pw.format("\tvoltage @ %s: %f \n", vv.getBus().getName(), vv.getV());
+//			}
+//		}		
+//		if (stat.contains(Status.Overloads))
+//		{
+//			for (Entry<ListMetaType, Set<Overload>> oe : r.getOverloads().entrySet())
+//			{
+//				if (oe.getValue().size() > 0)
+//				{
+//					_pw.format("\t%s: ", oe.getKey().toString());
+//					forcom.powerdata.openpa.ListMetaType (Overload i : oe.getValue())
+//					{
+//						_pw.format("%s, ", _model.getList(oe.getKey()).getName(i.getIndex()));
+//					}
+//					_pw.println();
+//				}
+//			}
+//		}
 	}
 
 	@Override
@@ -127,4 +130,5 @@ public class CATest extends BasicContingencyManager
 			(double) te / ((double) cset.size()));
 		pw.close();
 	}
+
 }

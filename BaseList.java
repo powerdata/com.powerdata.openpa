@@ -32,13 +32,19 @@ public interface BaseList<T extends BaseObject> extends List<T>
 	
 	T getByID(String id) throws PAModelException;
 
-//	T[] toArray(int[] indexes);
-//	
-//	
-//	int[] getIndexesFromKeys(int[] keys);
-
 	ListMetaType getListMeta();
 
 	int getIndex(int ndx);
+
+	boolean objEquals(int ndx, Object obj);
+
+	int objHash(int ndx);
+
+	public static int CalcListHash(ListMetaType t, int key)
+	{
+		return 400009 * t.ordinal() + key;
+	}
+	
+
 
 }

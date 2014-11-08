@@ -6,12 +6,12 @@ import java.util.Set;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.pwrflow.CAWorker.Results;
+import com.powerdata.openpa.pwrflow.CAWorker.Result;
 import com.powerdata.openpa.pwrflow.ContingencySet.Contingency;
 
 public abstract class ContingencyManager
 {
-	PAModel _model;
+	protected PAModel _model;
 	
 	public ContingencyManager(PAModel m)
 	{
@@ -65,7 +65,7 @@ public abstract class ContingencyManager
 	
 	
 	public abstract void runSet(ContingencySet set);
-	protected abstract void report(Contingency c, Results r, PAModel m) throws PAModelException;
+	protected abstract void report(Contingency c, Set<Result> r, PAModel m) throws PAModelException;
 	protected abstract void recordException(Contingency c, PAModelException e);
 
 }

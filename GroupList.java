@@ -48,5 +48,17 @@ public class GroupList extends GroupListI<Group>
 		return null;
 	}
 
+	@Override
+	public boolean objEquals(int ndx, Object obj)
+	{
+		BaseObject o = (BaseObject) obj;
+		return System.identityHashCode(this) == System.identityHashCode(o.getList()) && getKey(ndx) == o.getKey();
+	}
 
+	@Override
+	public int objHash(int ndx)
+	{
+		return System.identityHashCode(this) + getKey(ndx);
+	}
+	
 }

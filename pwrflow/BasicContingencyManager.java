@@ -1,13 +1,10 @@
 package com.powerdata.openpa.pwrflow;
 
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import com.powerdata.openpa.CloneModelBuilder;
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.pwrflow.ContingencySet.Contingency;
@@ -26,7 +23,7 @@ public abstract class BasicContingencyManager extends ContingencyManager
 		public CAWorkerNoRat(PAModel model, String cname) {super(model, cname);}
 
 		@Override
-		Map<ListMetaType, int[]> getOverloads(Set<Island> collapsed) {return new EnumMap<>(ListMetaType.class);}
+		public Set<Result> getOverloads() {return Collections.emptySet();}
 	}
 	
 	static BiFunction<PAModel, String, CAWorker> _useratings = CAWorker::new,
@@ -55,6 +52,7 @@ public abstract class BasicContingencyManager extends ContingencyManager
 	@Override
 	public void runSet(ContingencySet set)
 	{
+		
 		Stream<Contingency> cstream = _par ? set.parallelStream() : set.stream();
 		cstream.forEach(c -> applyContingency(c));
 	}
@@ -76,5 +74,4 @@ public abstract class BasicContingencyManager extends ContingencyManager
 			recordException(c, e);
 		}
 	}
-
 }
