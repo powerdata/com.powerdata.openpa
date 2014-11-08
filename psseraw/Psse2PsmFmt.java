@@ -133,6 +133,7 @@ class PssePSMWriter implements PsseRecWriter
 	protected TObjectIntMap<String> _areaMap;
 	protected TObjectIntMap<String> _lineMap;
 	protected TObjectIntMap<String> _tfmrMap;
+	protected TObjectIntMap<String> _ownerMap;
 
 	protected List<PrintWriter> _writers;
 	protected File _outdir;
@@ -196,6 +197,9 @@ class PssePSMWriter implements PsseRecWriter
 				//Gets broken down into lines / series reactors / series capacitors
 				//First cut make it be lines
 				processLine(lines.get(0), record);
+				break;
+			case "owner":
+				processOwner(lines.get(0), record);
 				break;
 			default:
 				System.out.println("[writeRecord] No processor for "+pclass.getClassName().toLowerCase());	
@@ -593,6 +597,19 @@ class PssePSMWriter implements PsseRecWriter
 		data.clear();
 	}
 	
+	private void processOwner(PsseField[] fld, String[] record) throws FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		
+		if(_ownerMap == null) _ownerMap = buildMap(fld);
+		
+		data.add(getData(record, _ownerMap.get("i"))+"_org");
+		data.add(getData(record,_ownerMap.get("owname")));
+		pw = getWriter("Organization");
+		pw.println(buildCsvLine(data));
+	}
+	
 	private TObjectIntMap<String> buildMap(PsseField[] fld)
 	{
 		TObjectIntMap<String> map = new TObjectIntHashMap<>(fld.length, 1f, _invalidOffset);
@@ -737,6 +754,9 @@ class PssePSMWriter implements PsseRecWriter
 			break;
 		case "psmcaseline":
 			h = "ID,FromMW,FromMVAr,ToMW,ToMVAr";
+			break;
+		case "organization":
+			h = "ID,Name";
 			break;
 		default:
 			h = "HeadersNotFound";
