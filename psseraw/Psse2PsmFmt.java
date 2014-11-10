@@ -445,22 +445,29 @@ class PssePSMWriter implements PsseRecWriter
 		data.add(tfmrID+"_ftap"); //ID
 		data.add(tfmrID+"_wdg"); //Transformer Winding
 		data.add(getData(record, _tfmrMap.get("i"))); //TapNode
+		pw = getWriter("RatioTapChanger");
+		pw.println(buildCsvLine(data));
 		
 		//RatioTapChanger.csv - Low
 		data.clear();
 		data.add(tfmrID+"_ttap"); //ID
 		data.add(tfmrID+"_wdg"); //Transformer Winding
 		data.add(getData(record, _tfmrMap.get("j"))); //TapNode
+		pw.println(buildCsvLine(data));
 		
 		//PsmCaseRatioTapChanger.csv - High
 		data.clear();
 		data.add(tfmrID+"_ftap"); //ID
 		data.add(getData(record, _tfmrMap.get("windv1"))); //Ratio
+		pw = getWriter("PsmCaseRatioTapChanger");
+		pw.println(buildCsvLine(data));
+		
 		
 		//PsmCaseRatioTapChanger.csv - Low
 		data.clear();
 		data.add(tfmrID+"_ttap"); //ID
 		data.add(getData(record, _tfmrMap.get("windv2"))); //Ratio
+		pw.println(buildCsvLine(data));
 		
 		//Ratio can be a different ratio for each winding
 		//1kv side is always going to be 1.0 for the ratio
@@ -748,6 +755,12 @@ class PssePSMWriter implements PsseRecWriter
 			break;
 		case "transformerwinding":
 			h = "ID,Name,Transformer,Node1,Node2,R,X,Bmag,NormalOperatingLimit";
+			break;
+		case "ratiotapchanger":
+			h = "ID,TransformerWinding,TapNode";
+			break;
+		case "psmcaseratiotapchanger":
+			h = "ID,Ratio";
 			break;
 		case "line":
 //			h = "ID,Name,Node1,Node2,R,X,Bch,Length,NormalOperatingLimit";
