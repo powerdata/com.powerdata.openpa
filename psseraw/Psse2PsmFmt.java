@@ -413,10 +413,10 @@ class PssePSMWriter implements PsseRecWriter
 	{
 		List<String> data = new ArrayList<>();
 		PrintWriter pw;
-		String name = getData(record, _tfmrMap.get("name"));
+		String tfmrID = getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"));
 		
 		//Transformer.csv
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"))+"_tfmr"); //ID
+		data.add(tfmrID+"_tfmr"); //ID
 		data.add(getData(record, _tfmrMap.get("name"))); //Name
 		data.add("2"); //WindingCount
 		
@@ -425,9 +425,9 @@ class PssePSMWriter implements PsseRecWriter
 		
 		//TransformerWinding.csv
 		data.clear();
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_wdg"); //ID
+		data.add(tfmrID+"_wdg"); //ID
 		data.add(getData(record, _tfmrMap.get("name"))); //Name
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_tfmr"); //Transformer Winding
+		data.add(tfmrID+"_tfmr"); //Transformer Winding
 		data.add(getData(record, _tfmrMap.get("i")));//Node1
 		data.add(getData(record, _tfmrMap.get("j")));//Node2
 		data.add(getData(record, _tfmrMap.get("r1-2")));//R
@@ -442,24 +442,24 @@ class PssePSMWriter implements PsseRecWriter
 		
 		//RatioTapChanger.csv - High
 		data.clear();
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ftap"); //ID
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_wdg"); //Transformer Winding
+		data.add(tfmrID+"_ftap"); //ID
+		data.add(tfmrID+"_wdg"); //Transformer Winding
 		data.add(getData(record, _tfmrMap.get("i"))); //TapNode
 		
 		//RatioTapChanger.csv - Low
 		data.clear();
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ttap"); //ID
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_wdg"); //Transformer Winding
+		data.add(tfmrID+"_ttap"); //ID
+		data.add(tfmrID+"_wdg"); //Transformer Winding
 		data.add(getData(record, _tfmrMap.get("j"))); //TapNode
 		
 		//PsmCaseRatioTapChanger.csv - High
 		data.clear();
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ftap"); //ID
+		data.add(tfmrID+"_ftap"); //ID
 		data.add(getData(record, _tfmrMap.get("windv1"))); //Ratio
 		
-		//RatioTapChanger.csv - Low
+		//PsmCaseRatioTapChanger.csv - Low
 		data.clear();
-		data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_ttap"); //ID
+		data.add(tfmrID+"_ttap"); //ID
 		data.add(getData(record, _tfmrMap.get("windv2"))); //Ratio
 		
 		//Ratio can be a different ratio for each winding
@@ -590,7 +590,7 @@ class PssePSMWriter implements PsseRecWriter
 		data.add(getData(record, _lineMap.get("x")));//X
 		data.add(getData(record, _lineMap.get("b")));//Bch?
 		data.add(getData(record, _lineMap.get("len")));//Length
-		//NormalOperatingLimit
+		//NormalOperatingLimit - I think this is RateA?
 		pw = getWriter("Line");
 		pw.println(buildCsvLine(data));
 		
