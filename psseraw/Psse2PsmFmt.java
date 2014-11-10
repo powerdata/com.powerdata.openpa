@@ -22,9 +22,9 @@ import com.powerdata.openpa.tools.DeltaNetwork;
 public class Psse2PsmFmt extends PsseProcessor 
 {
 	
-	List<PsseRecWriter> _writerList;
-	File _outdir;
-	static PssePSMWriter _csvWriter;
+	protected List<PsseRecWriter> _writerList;
+	protected File _outdir;
+	protected static PssePSMWriter _csvWriter;
 	
 	public Psse2PsmFmt(Reader rawpsse, String specversion, File outdir) throws IOException,
 			PsseProcException 
@@ -589,6 +589,7 @@ class PssePSMWriter implements PsseRecWriter
 		data.add(getData(record, _lineMap.get("r")));//R
 		data.add(getData(record, _lineMap.get("x")));//X
 		data.add(getData(record, _lineMap.get("b")));//Bch?
+		data.add(getData(record, _lineMap.get("len")));//Length
 		//NormalOperatingLimit
 		pw = getWriter("Line");
 		pw.println(buildCsvLine(data));
@@ -749,8 +750,8 @@ class PssePSMWriter implements PsseRecWriter
 			h = "ID,Name,Transformer,Node1,Node2,R,X,Bmag,NormalOperatingLimit";
 			break;
 		case "line":
-//			h = "ID,Name,Node1,Node2,R,X,Bch,NormalOperatingLimit";
-			h = "ID,Name,Node1,Node2,R,X,Bch";
+//			h = "ID,Name,Node1,Node2,R,X,Bch,Length,NormalOperatingLimit";
+			h = "ID,Name,Node1,Node2,R,X,Bch,Length";
 			break;
 		case "psmcaseline":
 			h = "ID,FromMW,FromMVAr,ToMW,ToMVAr";
