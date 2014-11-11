@@ -393,15 +393,19 @@ class PssePSMWriter implements PsseRecWriter
 	
 	private void processTransformer(List<PsseField[]> lines, String[] record) throws FileNotFoundException, PsseModelException
 	{
-		List<String> data = new ArrayList<>();
-		PrintWriter pw;
-		
 		if(_tfmrMap == null) _tfmrMap = buildMap(lines);
 		
 		//Determine if 2 or 3 winding transformer
 		if(getFloat(record, _tfmrMap.get("k")) == 0 || _tfmrMap.get("k") == _tfmrMap.getNoEntryValue())
 		{
-			process2Wdg(record);
+			if(Math.abs(getInt(record, _tfmrMap.get("cod1"))) == 3)
+			{
+				processPhaseShifter(record);
+			}
+			else
+			{
+				process2Wdg(record);
+			}
 		}
 		else
 		{
@@ -415,11 +419,22 @@ class PssePSMWriter implements PsseRecWriter
 		PrintWriter pw;
 		String tfmrID = getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"));
 		
+		//Debugging
+//		System.out.println("[process2Wdg] Fields: "+Arrays.toString(_tfmrMap.keys()));
+//		System.out.println("\n[process2Wdg] COD: "+getData(record, _tfmrMap.get("cod1")));
+//		System.out.println("[process2Wdg] RMA: "+getData(record, _tfmrMap.get("rma1")));
+//		System.out.println("[process2Wdg] RMI: "+getData(record, _tfmrMap.get("rmi1")));
+//		System.out.println("[process2Wdg] VMA: "+getData(record, _tfmrMap.get("vma1")));
+//		System.out.println("[process2Wdg] VMI: "+getData(record, _tfmrMap.get("vmi1")));
+		
+//		if(Math.abs(getInt(record, _tfmrMap.get("cod1"))) == 3) System.out.println("[process2Wdg] COD1 - Phase Shifter");
+//		if(getInt(record, _tfmrMap.get("cod2")) == 3) System.out.println("[process2Wdg] COD2 - Phase Shifter");
+//		if(getInt(record, _tfmrMap.get("cod3")) == 3) System.out.println("[process2Wdg] COD3 - Phase Shifter");
+
 		//Transformer.csv
 		data.add(tfmrID+"_tfmr"); //ID
 		data.add(getData(record, _tfmrMap.get("name"))); //Name
 		data.add("2"); //WindingCount
-		
 		pw = getWriter("Transformer");
 		pw.println(buildCsvLine(data));
 		
@@ -517,8 +532,6 @@ class PssePSMWriter implements PsseRecWriter
 		
 		if(cz != 1)
 		{
-			System.out.println("[process3Wdg] cz = "+cz);
-			
 			//Create Delta Network
 			DeltaNetwork dn = convert3W(r,x);
 			Complex[] cplx = {dn.getZ12(), dn.getZ23(), dn.getZ31()};
@@ -574,6 +587,64 @@ class PssePSMWriter implements PsseRecWriter
 			data.add(nodeId); //TapNode
 		}
 		
+	}
+	
+	private void processPhaseShifter(String[] record) throws FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		String tfmrID = getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"));
+		
+		//Transformer.csv
+		data.add(tfmrID+"_phase"); //ID
+		data.add(getData(record, _tfmrMap.get("name"))); //Name
+		data.add("2"); //WindingCount
+		pw = getWriter("Transformer");
+		pw.println(buildCsvLine(data));
+		
+		//TransformerWinding.csv
+		data.clear();
+		data.add(tfmrID+"_wdg"); //ID
+		data.add(getData(record, _tfmrMap.get("name"))); //Name
+		data.add(tfmrID+"_phase"); //Transformer Winding
+		data.add(getData(record, _tfmrMap.get("i")));//Node1
+		data.add(getData(record, _tfmrMap.get("j")));//Node2
+		data.add(getData(record, _tfmrMap.get("r1-2")));//R
+		data.add(getData(record, _tfmrMap.get("x1-2")));//X
+		data.add(getData(record, _tfmrMap.get("mag2")));//Bmag
+		data.add(getData(record, _tfmrMap.get("rata1")));//NormalOperatingLimit
+		pw = getWriter("TransformerWinding");
+		pw.println(buildCsvLine(data));
+		
+		//PhaseTapChanger.csv high
+		data.clear();
+		data.add(tfmrID+"_ptc1");//ID
+		data.add(getData(record, _tfmrMap.get("i")));//TapNode
+		data.add(tfmrID+"_wdg");//TransformerWinding
+		pw = getWriter("PhaseTapChanger");
+		pw.println(buildCsvLine(data));
+		
+		//PhaseTapChanger.csv low
+		data.clear();
+		data.add(tfmrID+"_ptc2");//ID
+		data.add(getData(record, _tfmrMap.get("j")));//TapNode
+		data.add(tfmrID+"_wdg");//TransformerWinding
+		pw.println(buildCsvLine(data));
+		
+		//PsmCasePhaseTapChanger.csv high
+		data.clear();
+		data.add(tfmrID+"_ptc1");//ID
+		data.add("true");//ControlStatus TODO: Test value only
+		data.add(getData(record,_tfmrMap.get("rma1")));//PhaseShift
+		pw = getWriter("PsmCasePhaseTapChanger");
+		pw.println(buildCsvLine(data));
+		
+		//PsmCasePhaseTapChanger.csv low
+		data.clear();
+		data.add(tfmrID+"_ptc2");//ID
+		data.add("true");//ControlStatus TODO: Test value only
+		data.add(getData(record,_tfmrMap.get("rmi1")));//PhaseShift
+		pw.println(buildCsvLine(data));
 	}
 	
 	private void processLine(PsseField[] fld, String[] record) throws FileNotFoundException
@@ -762,6 +833,12 @@ class PssePSMWriter implements PsseRecWriter
 		case "psmcaseratiotapchanger":
 			h = "ID,Ratio";
 			break;
+		case "phasetapchanger":
+			h = "ID,TapNode,TransformerWinding";
+			break;	
+		case "psmcasephasetapchanger":
+			h = "ID,ControlStatus,PhaseShift";
+			break;	
 		case "line":
 //			h = "ID,Name,Node1,Node2,R,X,Bch,Length,NormalOperatingLimit";
 			h = "ID,Name,Node1,Node2,R,X,Bch,Length";
