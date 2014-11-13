@@ -30,7 +30,7 @@ public class Psse2PsmFmt extends PsseProcessor
 			PsseProcException 
 	{
 		super(rawpsse, specversion);
-		System.out.println("[constructor]");
+//		System.out.println("[constructor]");
 		_writerList = new ArrayList<>();
 		_outdir = outdir;
 		_csvWriter = new PssePSMWriter(_outdir);
@@ -85,37 +85,20 @@ public class Psse2PsmFmt extends PsseProcessor
 	@Override
 	public void process() throws PsseProcException, IOException 
 	{
-		// TODO Auto-generated method stub
-		
 		for (PsseClass pc : getPsseClassSet().getPsseClasses())
 		{
-//			PsseRecWriter w = getWriter(pc.getClassName());
 			PsseRecWriter w = _csvWriter;
 			if (!pc.getLines().isEmpty())
 			{
 				pc.processRecords(_rdr, w, _cset);
-//				System.out.println("[process] pc class = "+pc.getClassName());
 			}
 		}
-		
-//		System.out.println("[process] Buses: "+_cset.getBus().getLines());
-		
 		//super.process();
-	}
-	
-	protected PsseRecWriter getWriter(String psseClassName, String colName)
-	{
-		System.out.println("[getWriter] 2 arg writer");
-		
-		return _csvWriter;
 	}
 
 	@Override
-	protected PsseRecWriter getWriter(String psseClassName) {
-		// TODO Auto-generated method stub
-		System.out.println("[getWriter] 1 arg writer");
-		
-		
+	protected PsseRecWriter getWriter(String psseClassName) 
+	{
 		return _csvWriter;
 	}
 	
@@ -134,6 +117,7 @@ class PssePSMWriter implements PsseRecWriter
 	protected TObjectIntMap<String> _lineMap;
 	protected TObjectIntMap<String> _tfmrMap;
 	protected TObjectIntMap<String> _ownerMap;
+	protected TObjectIntMap<String> _shuntMap;
 
 	protected List<PrintWriter> _writers;
 	protected File _outdir;
@@ -176,33 +160,36 @@ class PssePSMWriter implements PsseRecWriter
 				processLoad(lines.get(0), record);
 				break;
 			case "generator":
-			{
 				processGenerator(lines.get(0), record);
 				break;
-			}
 			case "areainterchange":
-			{
-				for(int i = 0; i < n; ++i)
-				{
-					processArea(lines.get(0), record);
-				}
+				processArea(lines.get(0), record);
 				break;
-			}
 			case "transformer":
-			{
 				processTransformer(lines, record);
 				break;
-			}
 			case "nontransformerbranch":
 				//Gets broken down into lines / series reactors / series capacitors
 				//First cut make it be lines
 				processLine(lines.get(0), record);
 				break;
+			case "switchedshunt":
+				if(_shuntMap == null) _shuntMap = buildMap(lines.get(0));
+				int modsw = getInt(record, _shuntMap.get("modsw"));
+				if(modsw == 3)
+				{
+					processSVC(lines.get(0), record);
+				}
+				else 
+				{
+					processSwitchedShunt(lines.get(0), record); //TODO Currently working on
+				}
+				break;
 			case "owner":
 				processOwner(lines.get(0), record);
 				break;
 			default:
-				System.out.println("[writeRecord] No processor for "+pclass.getClassName().toLowerCase());	
+//				System.out.println("[writeRecord] No processor for "+pclass.getClassName().toLowerCase());	
 			}
 		}
 		catch(Exception e)
@@ -647,6 +634,75 @@ class PssePSMWriter implements PsseRecWriter
 		pw.println(buildCsvLine(data));
 	}
 	
+	private void processSwitchedShunt(PsseField[] fld, String[] record) throws FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		List<Float> shuntB = new ArrayList<>();
+		boolean isReac;
+		
+		if(_shuntMap == null) _shuntMap = buildMap(fld);
+	
+		for(int i = 1; i < 9; i ++)
+		{
+//			System.out.println("[processSwitchedShunt] N"+i+" = "+getData(record,_shuntMap.get("n"+i)));
+			Float b = getFloat(record, _shuntMap.get("b"+i));
+			if (!b.isNaN()) shuntB.add(b);
+		}
+
+		for(int i = 0; i < shuntB.size(); ++i)
+		{
+			isReac = (shuntB.get(i)< 0f)?true:false;
+			int n = getInt(record,_shuntMap.get("n"+i));
+			
+			for(int j = 0; j < n; ++j)
+			{
+				//ShuntCapacitor.csv || ShuntReactor.csv
+				data.clear();
+				data.add(i+"_"+(j+1)+"_"+getData(record, _shuntMap.get("i"))+"_shunt");//ID
+				data.add(i+"_"+(j+1)+"_"+getData(record, _shuntMap.get("i"))+"_shunt");//Name
+				data.add(getData(record, _shuntMap.get("i")));//Node
+				data.add(shuntB.get(i).toString());//MVAr
+				pw = (isReac)?getWriter("ShuntReactor"):getWriter("ShuntCapacitor");
+				pw.println(buildCsvLine(data));;
+			}
+		}
+		
+//		for(int i = 0; i < fld.length; ++i)
+//		{		
+//			System.out.println("[processSwitchedShunt] Shunt data: "+fld[i].getName());
+//		}
+	}
+	
+	private void processSVC(PsseField[] fld, String[] record) throws FileNotFoundException
+	{
+		List<String> data = new ArrayList<>();
+		PrintWriter pw;
+		List<Float> svcB = new ArrayList<>();
+		
+		if(_shuntMap == null) _shuntMap = buildMap(fld);
+		
+		for(int i = 1; i < 9; i ++)
+		{
+			Float b = getFloat(record, _shuntMap.get("b"+i));
+			if (!b.isNaN()) svcB.add(b);
+		}
+		
+		for(int i = 0; i < svcB.size(); ++i)
+		{
+			//SVC.csv
+			data.clear();
+			data.add(i+"_"+getData(record, _shuntMap.get("i"))+"_svc");//ID
+			data.add(i+"_"+getData(record, _shuntMap.get("i"))+"_svc");//Name
+			data.add(getData(record, _shuntMap.get("i")));//Node
+			data.add(getData(record, _shuntMap.get("vswlo")));//MinMVAr - VSWLO
+			data.add(getData(record, _shuntMap.get("vswhi")));//MaxMVAr - VSWHI
+			data.add("");//Slope
+			pw = getWriter("SVC");
+			pw.println(buildCsvLine(data));
+		}
+	}
+	
 	private void processLine(PsseField[] fld, String[] record) throws FileNotFoundException
 	{
 		List<String> data = new ArrayList<>();
@@ -773,16 +829,16 @@ class PssePSMWriter implements PsseRecWriter
 		return record[offset];
 	}
 	
-	private float getFloat(String[] record, int offset)
+	private Float getFloat(String[] record, int offset)
 	{
-		if(offset == _invalidOffset) return Float.NaN;
+		if(offset == _invalidOffset || record[offset].equals("")) return Float.NaN;
 		
 		return Float.parseFloat(record[offset]);
 	}
 	
 	private int getInt(String[] record, int offset)
 	{
-		if(offset == _invalidOffset) return -9999;
+		if(offset == _invalidOffset || record[offset].equals("")) return -9999;
 		
 		return Integer.parseInt(record[offset]);
 	}
@@ -845,6 +901,13 @@ class PssePSMWriter implements PsseRecWriter
 			break;
 		case "psmcaseline":
 			h = "ID,FromMW,FromMVAr,ToMW,ToMVAr";
+			break;
+		case "shuntcapacitor":
+		case "shuntreactor":
+			h = "ID,Name,Node,MVAr";
+			break;
+		case "svc":
+			h = "ID, Name, Node,MinMVAr,MaxMVAr,Slope";
 			break;
 		case "organization":
 			h = "ID,Name";
