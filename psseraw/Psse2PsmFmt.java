@@ -182,7 +182,7 @@ class PssePSMWriter implements PsseRecWriter
 				}
 				else 
 				{
-					processSwitchedShunt(lines.get(0), record); //TODO Currently working on
+					processSwitchedShunt(lines.get(0), record);
 				}
 				break;
 			case "owner":
@@ -204,7 +204,6 @@ class PssePSMWriter implements PsseRecWriter
 	{
 		for(int i = 0; i < _writers.size(); ++i)
 		{
-//			System.out.println("[cleanup] Closing Writer "+(i+1)+"/"+_writers.size());
 			_writers.get(i).close();
 		}
 	}
@@ -406,18 +405,9 @@ class PssePSMWriter implements PsseRecWriter
 		PrintWriter pw;
 		String tfmrID = getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get("i"))+"_"+getData(record, _tfmrMap.get("j"));
 		
-		//Debugging
-//		System.out.println("[process2Wdg] Fields: "+Arrays.toString(_tfmrMap.keys()));
-//		System.out.println("\n[process2Wdg] COD: "+getData(record, _tfmrMap.get("cod1")));
-//		System.out.println("[process2Wdg] RMA: "+getData(record, _tfmrMap.get("rma1")));
-//		System.out.println("[process2Wdg] RMI: "+getData(record, _tfmrMap.get("rmi1")));
-//		System.out.println("[process2Wdg] VMA: "+getData(record, _tfmrMap.get("vma1")));
-//		System.out.println("[process2Wdg] VMI: "+getData(record, _tfmrMap.get("vmi1")));
+		//TODO Debugging section
+		System.out.println("[process2Wdg] CW: "+getData(record, _tfmrMap.get("cw")));
 		
-//		if(Math.abs(getInt(record, _tfmrMap.get("cod1"))) == 3) System.out.println("[process2Wdg] COD1 - Phase Shifter");
-//		if(getInt(record, _tfmrMap.get("cod2")) == 3) System.out.println("[process2Wdg] COD2 - Phase Shifter");
-//		if(getInt(record, _tfmrMap.get("cod3")) == 3) System.out.println("[process2Wdg] COD3 - Phase Shifter");
-
 		//Transformer.csv
 		data.add(tfmrID+"_tfmr"); //ID
 		data.add(getData(record, _tfmrMap.get("name"))); //Name
@@ -438,9 +428,6 @@ class PssePSMWriter implements PsseRecWriter
 		data.add(getData(record, _tfmrMap.get("rata1")));//NormalOperatingLimit
 		pw = getWriter("TransformerWinding");
 		pw.println(buildCsvLine(data));
-		
-		//PsmCaseTransformerWinding.csv don't need, doesn't exist
-		
 		
 		//RatioTapChanger.csv - High
 		data.clear();
@@ -572,6 +559,19 @@ class PssePSMWriter implements PsseRecWriter
 			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_ttap"); //ID
 			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_wdg"); //Transformer Winding
 			data.add(nodeId); //TapNode
+			
+			//PsmCaseRatioTapChanger.csv - High
+			data.clear();
+			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_ftap");
+			data.add(getData(record, _tfmrMap.get("windv"+i))); //Ratio
+			pw = getWriter("PsmCaseRatioTapChanger");
+			pw.println(buildCsvLine(data));
+			
+			//PsmCaseRatioTapChanger.csv - Low
+			data.clear();
+			data.add(getData(record, _tfmrMap.get("name"))+"_"+getData(record, _tfmrMap.get(wdg[i]))+"_ttap"); //ID
+			data.add("1.0"); //Ratio
+			pw.println(buildCsvLine(data));
 		}
 		
 	}
@@ -621,7 +621,14 @@ class PssePSMWriter implements PsseRecWriter
 		//PsmCasePhaseTapChanger.csv high
 		data.clear();
 		data.add(tfmrID+"_ptc1");//ID
-		data.add("true");//ControlStatus TODO: Test value only
+		if(getInt(record, _tfmrMap.get("cod1")) < 0) //ControlStatus
+		{
+			data.add("false");
+		}
+		else 
+		{
+			data.add("true");
+		}
 		data.add(getData(record,_tfmrMap.get("rma1")));//PhaseShift
 		pw = getWriter("PsmCasePhaseTapChanger");
 		pw.println(buildCsvLine(data));
@@ -629,7 +636,14 @@ class PssePSMWriter implements PsseRecWriter
 		//PsmCasePhaseTapChanger.csv low
 		data.clear();
 		data.add(tfmrID+"_ptc2");//ID
-		data.add("true");//ControlStatus TODO: Test value only
+		if(getInt(record, _tfmrMap.get("cod1")) < 0) //ControlStatus
+		{
+			data.add("false");
+		}
+		else 
+		{
+			data.add("true");
+		}
 		data.add(getData(record,_tfmrMap.get("rmi1")));//PhaseShift
 		pw.println(buildCsvLine(data));
 	}
@@ -645,7 +659,6 @@ class PssePSMWriter implements PsseRecWriter
 	
 		for(int i = 1; i < 9; i ++)
 		{
-//			System.out.println("[processSwitchedShunt] N"+i+" = "+getData(record,_shuntMap.get("n"+i)));
 			Float b = getFloat(record, _shuntMap.get("b"+i));
 			if (!b.isNaN()) shuntB.add(b);
 		}
@@ -667,11 +680,6 @@ class PssePSMWriter implements PsseRecWriter
 				pw.println(buildCsvLine(data));;
 			}
 		}
-		
-//		for(int i = 0; i < fld.length; ++i)
-//		{		
-//			System.out.println("[processSwitchedShunt] Shunt data: "+fld[i].getName());
-//		}
 	}
 	
 	private void processSVC(PsseField[] fld, String[] record) throws FileNotFoundException
@@ -724,7 +732,7 @@ class PssePSMWriter implements PsseRecWriter
 		data.add(getData(record, _lineMap.get("x")));//X
 		data.add(getData(record, _lineMap.get("b")));//Bch?
 		data.add(getData(record, _lineMap.get("len")));//Length
-		//NormalOperatingLimit - I think this is RateA?
+		//TODO NormalOperatingLimit - I think this is RateA?
 		pw = getWriter("Line");
 		pw.println(buildCsvLine(data));
 		
@@ -808,7 +816,6 @@ class PssePSMWriter implements PsseRecWriter
 			//Add to the map
 			_writerMap.put(fileName, _writers.size());
 			//Create writer and add it to the array
-//			System.out.println("[getWriter] Creating PrintWriter with path "+_outdir.getAbsolutePath()+"/"+fileName+".csv");
 			pw = new PrintWriter(new File(_outdir.getAbsolutePath()+"/"+fileName+".csv"));
 			//Write column headers for the new csv
 			pw.println(getHeaders(fileName));
@@ -916,7 +923,6 @@ class PssePSMWriter implements PsseRecWriter
 			h = "HeadersNotFound";
 		}
 		
-//		System.out.println("[getHeaders] Header for "+fileName+" = "+h);
 		return h;
 	}
 	
