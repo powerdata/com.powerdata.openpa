@@ -8,7 +8,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface PhaseShifterList extends ACBranchListIfc<PhaseShifter>
 {
-	static final PhaseShifterList EMPTY = EmptyLists.EMPTY_PHASESHIFTERS;
+	static PhaseShifterList emptyList() {return EmptyLists.EMPTY_PHASESHIFTERS;}
 	
 	ControlMode getControlMode(int ndx) throws PAModelException;
 	ControlMode[] getControlMode() throws PAModelException;

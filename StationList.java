@@ -8,7 +8,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface StationList extends GroupListIfc<Station>
 {
-	static final StationList EMPTY = EmptyLists.EMPTY_STATIONS;
+	static StationList emptyList() {return EmptyLists.EMPTY_STATIONS;}
 	
     static Set<ColumnMeta> _Cols = EnumSet.copyOf(Arrays.asList(new ColumnMeta[]
     {

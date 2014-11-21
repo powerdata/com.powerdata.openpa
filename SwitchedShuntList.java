@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface SwitchedShuntList extends OneTermDevListIfc<SwitchedShunt>
 {
-	static final SwitchedShuntList EMPTY = EmptyLists.EMPTY_SWITCHEDSHUNTS;
+	static SwitchedShuntList emptyList() {return EmptyLists.EMPTY_SWITCHEDSHUNTS;}
 	
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SwshB, ColumnMeta.SwshID,

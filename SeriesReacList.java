@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface SeriesReacList extends ACBranchListIfc<SeriesReac>
 {
-	static final SeriesReacList EMPTY = EmptyLists.EMPTY_SERIESREACS;
+	static SeriesReacList emptyList() {return EmptyLists.EMPTY_SERIESREACS;}
 	
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SerreacBUSFROM,

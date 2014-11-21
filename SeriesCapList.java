@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface SeriesCapList extends ACBranchListIfc<SeriesCap>
 {
-	static final SeriesCapList EMPTY = EmptyLists.EMPTY_SERIESCAPS;
+	static SeriesCapList emptyList() {return EmptyLists.EMPTY_SERIESCAPS;}
 	
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SercapBUSFROM,

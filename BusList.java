@@ -14,7 +14,7 @@ import com.powerdata.openpa.impl.EmptyLists;
  */
 public interface BusList extends GroupListIfc<Bus>
 {
-	public static final BusList EMPTY = EmptyLists.EMPTY_BUSES;
+	static BusList emptyList() {return EmptyLists.EMPTY_BUSES;}
 	
 	float getVM(int ndx) throws PAModelException;
 

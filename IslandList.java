@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface IslandList extends GroupListIfc<Island>
 {
-	public static final IslandList EMPTY = EmptyLists.EMPTY_ISLANDS;
+	static IslandList emptyList() {return EmptyLists.EMPTY_ISLANDS;}
 	
 	boolean isEnergized(int ndx) throws PAModelException;
 	boolean[] isEnergized() throws PAModelException;

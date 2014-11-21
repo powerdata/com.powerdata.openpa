@@ -8,7 +8,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface OwnerList extends GroupListIfc<Owner>
 {
-	static public final OwnerList EMPTY = EmptyLists.EMPTY_OWNERS;
+	static OwnerList emptyList() {return EmptyLists.EMPTY_OWNERS;}
 	
 	static Set<ColumnMeta> Cols = EnumSet
 			.copyOf(Arrays.asList(new ColumnMeta[] { ColumnMeta.OwnerID,

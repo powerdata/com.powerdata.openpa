@@ -167,10 +167,10 @@ public class EmptyLists
 		@Override public void setB(float[] b) {throw new UnsupportedOperationException();}
 	}
 	
-	public static final class EmptyShuntCapList extends EmptyFixedShuntList<ShuntCapacitor> implements ShuntCapList {}
-	public static final class EmptyShuntReacList extends EmptyFixedShuntList<ShuntReactor> implements ShuntReacList {}
+	private static final class EmptyShuntCapList extends EmptyFixedShuntList<ShuntCapacitor> implements ShuntCapList {}
+	private static final class EmptyShuntReacList extends EmptyFixedShuntList<ShuntReactor> implements ShuntReacList {}
 	
-	public static final class EmptyGenList extends EmptyOneTermDevList<Gen> implements GenList
+	private static final class EmptyGenList extends EmptyOneTermDevList<Gen> implements GenList
 	{
 		@Override public Type getType(int ndx) {throw new IndexOutOfBoundsException();}
 		@Override public void setType(int ndx, Type t) {throw new IndexOutOfBoundsException();}
@@ -399,6 +399,9 @@ public class EmptyLists
 	public static final StationList EMPTY_STATIONS = new EmptyStationList();
 	public static final VoltageLevelList EMPTY_VOLTAGELEVELS = new EmptyVoltageLevelList();
 	public static final LoadList EMPTY_LOADS = new EmptyLoadList();
+	public static final ShuntCapList EMPTY_SHUNTCAPS = new EmptyShuntCapList();
+	public static final ShuntReacList EMPTY_SHUNTREACS = new EmptyShuntReacList();
+	public static final GenList EMPTY_GENS = new EmptyGenList();
 	public static final SVCList EMPTY_SVCS= new EmptySVCList();
 	public static final LineList EMPTY_LINES = new EmptyLineList();
 	public static final PhaseShifterList EMPTY_PHASESHIFTERS =

@@ -288,7 +288,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		// Didn't see a csv in doc
 		// PD3 builder returns an empty list
 		
-		return SwitchedShuntList.EMPTY;
+		return SwitchedShuntList.emptyList();
 	}
 
 	@Override
@@ -297,7 +297,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		// TODO Incomplete
 		// Didn't see a csv in doc
 		// PD3 builder returns an empty list
-		return TwoTermDCLineList.EMPTY;
+		return TwoTermDCLineList.emptyList();
 	}
 
 	@Override

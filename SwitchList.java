@@ -8,7 +8,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface SwitchList extends TwoTermDevListIfc<Switch>
 {
-	static final SwitchList EMPTY = EmptyLists.EMPTY_SWITCHES;
+	static SwitchList emptyList() {return EmptyLists.EMPTY_SWITCHES;}
 	
 	State getState(int ndx) throws PAModelException;
 	void setState(int ndx, State state) throws PAModelException;

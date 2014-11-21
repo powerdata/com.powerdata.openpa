@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface LineList extends ACBranchListIfc<Line>
 {
-	static final LineList EMPTY = EmptyLists.EMPTY_LINES;
+	static LineList emptyList() {return EmptyLists.EMPTY_LINES;}
 	
 	float getFromBchg(int ndx) throws PAModelException;
 	void setFromBchg(int ndx, float b) throws PAModelException;

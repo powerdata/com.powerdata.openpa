@@ -8,7 +8,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface SVCList extends OneTermDevListIfc<SVC>
 {
-	static final SVCList EMPTY = EmptyLists.EMPTY_SVCS;
+	static SVCList emptyList() {return EmptyLists.EMPTY_SVCS;}
 	
 	float getMinQ(int ndx) throws PAModelException;
 	void setMinQ(int ndx, float mvar) throws PAModelException;

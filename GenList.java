@@ -5,9 +5,12 @@ import java.util.EnumSet;
 import java.util.Set;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
+import com.powerdata.openpa.impl.EmptyLists;
 
 public interface GenList extends OneTermDevListIfc<Gen>
 {
+	static GenList emptyList() {return EmptyLists.EMPTY_GENS;}
+	
 	Type getType(int ndx) throws PAModelException;
 	
 	void setType(int ndx, Type t) throws PAModelException;

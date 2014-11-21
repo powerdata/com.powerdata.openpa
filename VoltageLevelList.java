@@ -7,7 +7,8 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface VoltageLevelList extends GroupListIfc<VoltageLevel>
 {
-	static final VoltageLevelList EMPTY = EmptyLists.EMPTY_VOLTAGELEVELS;
+	static VoltageLevelList emptyList() {return EmptyLists.EMPTY_VOLTAGELEVELS;}
+	
 	float getBaseKV(int ndx) throws PAModelException;
 	void setBaseKV(int ndx, float k) throws PAModelException;
 	float[] getBaseKV() throws PAModelException;

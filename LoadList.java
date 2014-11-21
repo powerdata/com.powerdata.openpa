@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface LoadList extends OneTermDevListIfc<Load>
 {
-	static final LoadList EMPTY = EmptyLists.EMPTY_LOADS;
+	static LoadList emptyList() {return EmptyLists.EMPTY_LOADS;}
 	
 	float getMaxP(int ndx) throws PAModelException;
 	void setMaxP(int ndx, float mw) throws PAModelException;

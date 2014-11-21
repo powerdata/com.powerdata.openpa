@@ -108,12 +108,12 @@ public class RATCWorker
 			_col.put(ColumnMeta.GenOOS, oos); 
 			_col.put(ColumnMeta.GenTYPE, () -> new Gen.Type[] {Gen.Type.Thermal});
 			_col.put(ColumnMeta.GenMODE, () -> new Gen.Mode[] {Gen.Mode.MAN});
-			_col.put(ColumnMeta.GenOPMINP, () -> fzero);
-			_col.put(ColumnMeta.GenOPMAXP, () -> f200);
+			_col.put(ColumnMeta.GenOPMINP, fzero);
+			_col.put(ColumnMeta.GenOPMAXP, f200);
 			_col.put(ColumnMeta.GenMINQ, () -> new float[] {-200f});
-			_col.put(ColumnMeta.GenMAXQ, () -> f200);
+			_col.put(ColumnMeta.GenMAXQ, f200);
 			_col.put(ColumnMeta.GenPS, () -> new float[] {100f});
-			_col.put(ColumnMeta.GenQS, () -> fzero);
+			_col.put(ColumnMeta.GenQS, fzero);
 			_col.put(ColumnMeta.GenAVR, () -> new boolean[] {true});
 			_col.put(ColumnMeta.GenVS, () -> new float[] {1f});
 			_col.put(ColumnMeta.GenREGBUS, fbus);

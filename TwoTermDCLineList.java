@@ -7,7 +7,7 @@ import com.powerdata.openpa.impl.EmptyLists;
 
 public interface TwoTermDCLineList extends TwoTermDevListIfc<TwoTermDCLine>
 {
-	static final TwoTermDCLineList EMPTY = EmptyLists.EMPTY_TWOTERMDCLINES;
+	static TwoTermDCLineList emptyList() {return EmptyLists.EMPTY_TWOTERMDCLINES;}
 	
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.T2dcBUSFROM,

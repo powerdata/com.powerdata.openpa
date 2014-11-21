@@ -4,9 +4,12 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 import com.powerdata.openpa.TwoTermDev.Side;
+import com.powerdata.openpa.impl.EmptyLists;
 
 public interface TransformerList extends ACBranchListIfc<Transformer>
 {
+	static TransformerList emptyList() {return EmptyLists.EMPTY_TRANSFORMERS;}
+	
 	boolean isRegEnabled(int ndx) throws PAModelException;
 	void setRegEnabled(int ndx, boolean enabl) throws PAModelException;
 	boolean[] isRegEnabled() throws PAModelException;
