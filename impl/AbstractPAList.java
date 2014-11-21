@@ -2,11 +2,9 @@ package com.powerdata.openpa.impl;
 
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
@@ -622,6 +620,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	 * This function is used by the refresh function to make sure 
 	 * any data access from now on will have just "new" data
 	 */
+	@Override
 	public void reset()
 	{
 		// clear all the columns
@@ -744,48 +743,39 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 		return _keyndx.getOffsets(keys);
 	}
 
-	public int[] getIndexesFromIDs(String[] ids) throws PAModelException
-	{
-		int size = ids.length;
-		int[] indexes = new int[size];
-		
-		if (_idMap == null) mapIDs();
-		
-		for(int i = 0; i < size; ++i)
-		{
-//			System.out.println("\n------\nid: "+ids[i]);
-//			System.out.println("_idMap: "+_idMap.get(ids[i]));
-			indexes[i] = _idMap.get(ids[i]);
-		}
-		
-		return indexes;
-	}
-	
-	public T[] toArray(int[] indexes)
-	{
-		T[] us = newArray(_size);
-		for(int i=0; i < _size; ++i)
-			us[i] = get(i);
-		int n = indexes.length;
-		T[] rv = newArray(n);
-		for(int i=0; i < n; ++i)
-			rv[i] = us[indexes[i]];
-		return rv;
-	}
-	
-	@SuppressWarnings("unchecked")
-	T[] newArray(int size)
-	{
-		return (T[]) Array.newInstance(get(0).getClass(), size);
-	}
-
-	protected int[] getIndexes(T[] objects)
-	{
-		int n = objects.length;
-		int[] keys = new int[n];
-		for(int i=0; i < n; ++i)
-			keys[i] = objects[i].getKey();
-		return _keyndx.getOffsets(keys);
-	}
-
+//	public int[] getIndexesFromIDs(String[] ids) throws PAModelException
+//	{
+//		int size = ids.length;
+//		int[] indexes = new int[size];
+//		
+//		if (_idMap == null) mapIDs();
+//		
+//		for(int i = 0; i < size; ++i)
+//		{
+////			System.out.println("\n------\nid: "+ids[i]);
+////			System.out.println("_idMap: "+_idMap.get(ids[i]));
+//			indexes[i] = _idMap.get(ids[i]);
+//		}
+//		
+//		return indexes;
+//	}
+//	
+//	public T[] toArray(int[] indexes)
+//	{
+//		T[] us = newArray(_size);
+//		for(int i=0; i < _size; ++i)
+//			us[i] = get(i);
+//		int n = indexes.length;
+//		T[] rv = newArray(n);
+//		for(int i=0; i < n; ++i)
+//			rv[i] = us[indexes[i]];
+//		return rv;
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	T[] newArray(int size)
+//	{
+//		return (T[]) Array.newInstance(get(0).getClass(), size);
+//	}
+//
 }

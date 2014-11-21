@@ -4,7 +4,7 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SwitchedShunt;
 import com.powerdata.openpa.SwitchedShuntList;
 
-public class SwitchedShuntSubList extends SubList<SwitchedShunt> implements SwitchedShuntList
+public class SwitchedShuntSubList extends OneTermDevSubList<SwitchedShunt> implements SwitchedShuntList
 {
 	SwitchedShuntList _src;
 	

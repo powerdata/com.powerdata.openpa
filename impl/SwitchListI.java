@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.SwitchList;
@@ -123,11 +122,4 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 	{
 		return new Switch(this, index);
 	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.Switch;
-	}
-
 }

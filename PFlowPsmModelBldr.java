@@ -9,11 +9,9 @@ import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import com.powerdata.openpa.Gen.Type;
@@ -34,9 +32,7 @@ import com.powerdata.openpa.impl.ShuntCapListI;
 import com.powerdata.openpa.impl.ShuntReacListI;
 import com.powerdata.openpa.impl.StationListI;
 import com.powerdata.openpa.impl.SwitchListI;
-import com.powerdata.openpa.impl.SwitchedShuntListI;
 import com.powerdata.openpa.impl.TransformerListI;
-import com.powerdata.openpa.impl.TwoTermDCLineListI;
 import com.powerdata.openpa.impl.VoltageLevelListI;
 
 public class PFlowPsmModelBldr extends PflowModelBuilder 
@@ -286,22 +282,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	}
 
 	@Override
-	protected SwitchedShuntListI loadSwitchedShunts() throws PAModelException 
+	protected SwitchedShuntList loadSwitchedShunts() throws PAModelException 
 	{
 		// TODO Incomplete
 		// Didn't see a csv in doc
 		// PD3 builder returns an empty list
 		
-		return SwitchedShuntListI.Empty;
+		return SwitchedShuntList.EMPTY;
 	}
 
 	@Override
-	protected TwoTermDCLineListI loadTwoTermDCLines() throws PAModelException 
+	protected TwoTermDCLineList loadTwoTermDCLines() throws PAModelException 
 	{
 		// TODO Incomplete
 		// Didn't see a csv in doc
 		// PD3 builder returns an empty list
-		return TwoTermDCLineListI.Empty;
+		return TwoTermDCLineList.EMPTY;
 	}
 
 	@Override

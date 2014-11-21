@@ -17,25 +17,25 @@ import com.powerdata.openpa.ColChange;
  */
 public class PAModelI implements PAModel
 {
-	private BusListI 			_buses;
-	private SwitchListI			_switches;
-	private LineListI			_lines;
+	private BusList 			_buses;
+	private SwitchList			_switches;
+	private LineList			_lines;
 	private IslandList			_islands;
-	private AreaListI			_areas;
-	private OwnerListI			_owners;
-	private StationListI 		_stations;
-	private VoltageLevelListI 	_vlevs;
-	private TransformerListI	_transformers;
-	private PhaseShifterListI 	_phshifts;
-	private SeriesReacListI 	_serreacs;
-	private SeriesCapListI 		_sercaps;
-	private GenListI 			_gens;
-	private LoadListI 			_loads;
-	private ShuntReacListI 		_shuntreacs;
-	private ShuntCapListI 		_shuntcaps;
-	private TwoTermDCLineListI 	_t2dclines;
-	private SwitchedShuntListI 	_swshunts;
-	private SVCListI 			_svcs;
+	private AreaList			_areas;
+	private OwnerList			_owners;
+	private StationList 		_stations;
+	private VoltageLevelList 	_vlevs;
+	private TransformerList	_transformers;
+	private PhaseShifterList 	_phshifts;
+	private SeriesReacList 	_serreacs;
+	private SeriesCapList 		_sercaps;
+	private GenList 			_gens;
+	private LoadList 			_loads;
+	private ShuntReacList 		_shuntreacs;
+	private ShuntCapList 		_shuntcaps;
+	private TwoTermDCLineList 	_t2dclines;
+	private SwitchedShuntList 	_swshunts;
+	private SVCList 			_svcs;
 	 
 	ModelBuilderI _bldr;
 	
@@ -65,7 +65,7 @@ public class PAModelI implements PAModel
 	}
 
 	SuperList _slist = new SuperList(this);
-	ArrayList<AbstractPAList<? extends BaseObject>> _created = new ArrayList<AbstractPAList<? extends BaseObject>>();
+	ArrayList<BaseList<? extends BaseObject>> _created = new ArrayList<BaseList<? extends BaseObject>>();
 	
 	@FunctionalInterface
 	interface ListConsumer<T extends BaseList<? extends BaseObject>>
@@ -98,7 +98,7 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	public AreaListI getAreas() throws PAModelException
+	public AreaList getAreas() throws PAModelException
 	{
 		if (_areas == null)
 		{
@@ -109,14 +109,14 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	public OwnerListI getOwners() throws PAModelException
+	public OwnerList getOwners() throws PAModelException
 	{
 		if (_owners == null) _owners = _bldr.loadOwners();
 		return _owners;
 	}
 	
 	@Override
-	public StationListI getStations() throws PAModelException
+	public StationList getStations() throws PAModelException
 	{
 		if (_stations == null)
 		{
@@ -127,7 +127,7 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	public VoltageLevelListI getVoltageLevels() throws PAModelException
+	public VoltageLevelList getVoltageLevels() throws PAModelException
 	{
 		if (_vlevs == null)
 		{
@@ -138,7 +138,7 @@ public class PAModelI implements PAModel
 	}
 
 	@Override
-	public BusListI getBuses() throws PAModelException
+	public BusList getBuses() throws PAModelException
 	{
 		if (_buses == null)
 		{
@@ -365,7 +365,7 @@ public class PAModelI implements PAModel
 	{
 		long sn = 0;
 		// reset all devices list
-		for(AbstractPAList<? extends BaseObject> b : _created) b.reset();
+		for(BaseList<? extends BaseObject> b : _created) b.reset();
 		// refresh the islands if they exist
 		if(_islands != null) refreshIslands();
 		

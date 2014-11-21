@@ -1,10 +1,27 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.SwitchedShuntListI;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
+import com.powerdata.openpa.impl.EmptyLists;
 
-public interface SwitchedShuntList extends BaseList<SwitchedShunt>
+public interface SwitchedShuntList extends OneTermDevListIfc<SwitchedShunt>
 {
-
-	static public final SwitchedShuntList Empty = new SwitchedShuntListI();
+	static final SwitchedShuntList EMPTY = EmptyLists.EMPTY_SWITCHEDSHUNTS;
+	
+	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
+			.asList(new ColumnMeta[] { ColumnMeta.SwshB, ColumnMeta.SwshID,
+					ColumnMeta.SwshNAME, ColumnMeta.SwshOOS, ColumnMeta.SwshP,
+					ColumnMeta.SwshQ }));
+	@Override
+	default Set<ColumnMeta> getColTypes()
+	{
+		return Cols;
+	}
+	@Override
+	default ListMetaType getListMeta()
+	{
+		return ListMetaType.SwitchedShunt;
+	}
 
 }

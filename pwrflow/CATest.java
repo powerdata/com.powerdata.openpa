@@ -20,6 +20,7 @@ public class CATest extends BasicContingencyManager
 	{
 		super(m, startPfResults);
 		_pw = pw;
+		_pw.println("Contingency,ContDevType,ContFrArea,ContToArea,Violation,ViolDevType,Type,Value");
 	}
 
 	static Set<Status> _VoltageViol = EnumSet.of(Status.HighVoltageFail, Status.LowVoltage, Status.VoltageCollapse, Status.HighVoltage);
@@ -27,39 +28,7 @@ public class CATest extends BasicContingencyManager
 	@Override
 	protected void report(Contingency c, Set<Result> r, PAModel m) throws PAModelException
 	{
-//		
-//		
-//		
-//		
-//		Set<Status> stat = r.getStatus();
-//		_pw.format("Contingency \"%s\": %s ", c.getName(), stat.toString());
-//		if (stat.contains(Status.LoadLoss))
-//			_pw.format("%7.3f%% system load loss", r.getLoadDropped()*100f);
-//		_pw.println();
-//
-//		if (stat.contains(Status.HighVoltageFail)
-//				|| stat.contains(Status.VoltageCollapse))
-//		{
-//			for(VoltViol vv : r.getVoltViol())
-//			{
-//				_pw.format("\tvoltage @ %s: %f \n", vv.getBus().getName(), vv.getV());
-//			}
-//		}		
-//		if (stat.contains(Status.Overloads))
-//		{
-//			for (Entry<ListMetaType, Set<Overload>> oe : r.getOverloads().entrySet())
-//			{
-//				if (oe.getValue().size() > 0)
-//				{
-//					_pw.format("\t%s: ", oe.getKey().toString());
-//					forcom.powerdata.openpa.ListMetaType (Overload i : oe.getValue())
-//					{
-//						_pw.format("%s, ", _model.getList(oe.getKey()).getName(i.getIndex()));
-//					}
-//					_pw.println();
-//				}
-//			}
-//		}
+		
 	}
 
 	@Override
@@ -120,7 +89,7 @@ public class CATest extends BasicContingencyManager
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(pout)));
 		CATest ca = new CATest(m, orig, pw);
 //		ca.setParallel(true);
-		ca.setDebug(true);
+		ca.setDebug(false);
 		if (ignoreRatings) ca.setIgnoreRatings(true);
 		ContingencySet cset = new ContingencySet(m);
 		long ts = System.currentTimeMillis();

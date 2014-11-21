@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.BusGrpMapBldr;
+import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GroupListI;
@@ -35,7 +36,7 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 	};
 	BoolData _egzd;
 	protected FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
-	BusListI _buses;
+	BusList _buses;
 	
 	public IslandListI(PAModelI model) throws PAModelException
 	{

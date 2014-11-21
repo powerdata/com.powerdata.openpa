@@ -1,6 +1,7 @@
 package com.powerdata.openpa;
 
 import java.util.AbstractList;
+import java.util.Set;
 
 public class OneTermDevList extends AbstractList<OneTermDev> implements OneTermDevListIfc<OneTermDev>
 {
@@ -211,5 +212,11 @@ public class OneTermDevList extends AbstractList<OneTermDev> implements OneTermD
 	public int objHash(int ndx)
 	{
 		return _src.objHash(ndx);
+	}
+
+	@Override
+	public Set<ColumnMeta> getColTypes()
+	{
+		return _src.getColTypes();
 	}
 }

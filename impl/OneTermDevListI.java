@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.OneTermDevListIfc;
@@ -11,7 +12,7 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 {
 	IntData _bus;
 	FloatData _p, _q;
-	BusListI _buses;
+	BusList _buses;
 
 	protected OneTermDevListI() {super();}
 

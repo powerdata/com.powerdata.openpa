@@ -1,6 +1,9 @@
 package com.powerdata.openpa;
 
-import com.powerdata.openpa.impl.BusListI;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
+import com.powerdata.openpa.impl.EmptyLists;
 
 
 /**
@@ -11,9 +14,8 @@ import com.powerdata.openpa.impl.BusListI;
  */
 public interface BusList extends GroupListIfc<Bus>
 {
-
-	static BusList	Empty	= new BusListI();
-
+	public static final BusList EMPTY = EmptyLists.EMPTY_BUSES;
+	
 	float getVM(int ndx) throws PAModelException;
 
 	void setVM(int ndx, float vm) throws PAModelException;
@@ -72,4 +74,18 @@ public interface BusList extends GroupListIfc<Bus>
 	
 	void setVoltageLevel(VoltageLevel[] l) throws PAModelException;
 
+	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
+			.asList(new ColumnMeta[] { ColumnMeta.BusAREA,
+					ColumnMeta.BusFREQSRCPRI, ColumnMeta.BusID,
+					ColumnMeta.BusNAME, ColumnMeta.BusOWNER,
+					ColumnMeta.BusSTATION, ColumnMeta.BusVA,
+					ColumnMeta.BusVLEV, ColumnMeta.BusVM }));
+	@Override
+	default Set<ColumnMeta> getColTypes()
+	{
+		return Cols;
+	}
+
+	@Override
+	default ListMetaType getListMeta() {return ListMetaType.Bus;}
 }

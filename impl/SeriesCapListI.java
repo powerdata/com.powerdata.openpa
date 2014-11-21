@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SeriesCap;
 import com.powerdata.openpa.SeriesCapList;
@@ -52,11 +51,5 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 	public SeriesCap get(int index)
 	{
 		return new SeriesCap(this, index);
-	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.SeriesCap;
 	}
 }
