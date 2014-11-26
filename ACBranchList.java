@@ -1,6 +1,7 @@
 package com.powerdata.openpa;
 
 import java.util.AbstractList;
+import java.util.Set;
 
 public class ACBranchList extends AbstractList<ACBranch> implements ACBranchListIfc<ACBranch>
 {
@@ -525,6 +526,12 @@ public class ACBranchList extends AbstractList<ACBranch> implements ACBranchList
 	public int objHash(int ndx)
 	{
 		return _src.objHash(ndx);
+	}
+
+	@Override
+	public Set<ColumnMeta> getColTypes()
+	{
+		return _src.getColTypes();
 	}
 	
 }

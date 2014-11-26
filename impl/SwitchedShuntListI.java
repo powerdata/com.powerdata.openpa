@@ -1,27 +1,50 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
+import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SwitchedShunt;
 import com.powerdata.openpa.SwitchedShuntList;
 
-public class SwitchedShuntListI extends AbstractPAList<SwitchedShunt> implements SwitchedShuntList
+public class SwitchedShuntListI extends OneTermDevListI<SwitchedShunt> implements SwitchedShuntList
 {
-	public final static SwitchedShuntListI Empty = new SwitchedShuntListI();
-	static final PAListEnum _PFld = new PAListEnum()
+	static final OneTermDevEnum _PFld = new OneTermDevEnum()
 	{
 		@Override
 		public ColumnMeta id() {return ColumnMeta.SwshID;}
 		@Override
 		public ColumnMeta name() {return ColumnMeta.SwshNAME;}
+		@Override
+		public ColumnMeta insvc()
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
+		@Override
+		public ColumnMeta bus()
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
+		@Override
+		public ColumnMeta p()
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
+		@Override
+		public ColumnMeta q()
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
 	};
 
-	public SwitchedShuntListI(PAModelI model, int[] keys)
+	public SwitchedShuntListI(PAModelI model, int[] keys) throws PAModelException
 	{
 		super(model, keys, _PFld);
 	}
 
-	public SwitchedShuntListI(PAModelI model, int size)
+	public SwitchedShuntListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);
 	}
@@ -33,11 +56,4 @@ public class SwitchedShuntListI extends AbstractPAList<SwitchedShunt> implements
 	{
 		return new SwitchedShunt(this, index);
 	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.SwitchedShunt;
-	}
-
 }

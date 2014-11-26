@@ -2,7 +2,6 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
@@ -77,12 +76,6 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 	public Transformer get(int index)
 	{
 		return new Transformer(this, index);
-	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.Transformer;
 	}
 
 	@Override
@@ -373,5 +366,4 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 	{
 		_tstep.set(step);
 	}
-
 }

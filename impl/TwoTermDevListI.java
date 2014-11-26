@@ -1,6 +1,7 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDev;
@@ -9,7 +10,7 @@ import com.powerdata.openpa.TwoTermDevListIfc;
 public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 		OutOfServiceListI<T> implements TwoTermDevListIfc<T>
 {
-	BusListI _buses;
+	BusList _buses;
 	
 	IntData _fbus, _tbus;
 	FloatData _fp, _fq, _tp, _tq;

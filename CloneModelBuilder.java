@@ -30,12 +30,12 @@ public class CloneModelBuilder extends ModelBuilderI
 	PAModel _srcmdl;
 
 	@FunctionalInterface
-	private interface DataLoader<R>
+	protected interface DataLoader<R>
 	{
 		R load() throws PAModelException;
 	}
 
-	Map<ColumnMeta,DataLoader<?>> _col = new EnumMap<>(ColumnMeta.class);
+	protected Map<ColumnMeta,DataLoader<?>> _col = new EnumMap<>(ColumnMeta.class);
 	Set<ColumnMeta> _local;
 	
 	public CloneModelBuilder(PAModel srcmdl, Set<ColumnMeta> local)

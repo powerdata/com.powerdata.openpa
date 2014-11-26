@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PhaseShifter;
 import com.powerdata.openpa.PhaseShifter.ControlMode;
@@ -65,11 +64,6 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 	public PhaseShifter get(int index)
 	{
 		return new PhaseShifter(this, index);
-	}
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.PhaseShifter;
 	}
 	@Override
 	public ControlMode getControlMode(int ndx) throws PAModelException

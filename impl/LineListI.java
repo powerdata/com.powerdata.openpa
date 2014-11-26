@@ -3,7 +3,6 @@ package com.powerdata.openpa.impl;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.LineList;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 
 public class LineListI extends ACBranchListI<Line> implements LineList
@@ -129,10 +128,5 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 	public Line get(int index)
 	{
 		return new Line(this, index);
-	}
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.Line;
 	}
 }

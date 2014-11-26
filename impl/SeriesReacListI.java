@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SeriesReac;
 import com.powerdata.openpa.SeriesReacList;
@@ -52,11 +51,5 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 	public SeriesReac get(int index)
 	{
 		return new SeriesReac(this, index);
-	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.SeriesReac;
 	}
 }

@@ -1,18 +1,16 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
 import com.powerdata.openpa.PAModelException;
 
 public class GenListI extends OneTermDevListI<Gen> implements GenList
 {
-	public static final GenList Empty = new GenListI();
-	
 	static final OneTermDevEnum _PFld = new OneTermDevEnum()
 	{
 		@Override
@@ -41,7 +39,7 @@ public class GenListI extends OneTermDevListI<Gen> implements GenList
 	BoolData _avr = new BoolData(ColumnMeta.GenAVR);
 	IntData _rbus = new IntData(ColumnMeta.GenREGBUS);
 	
-	BusListI _buses;
+	BusList _buses;
 	
 	protected GenListI() {super();}
 	
@@ -325,12 +323,6 @@ public class GenListI extends OneTermDevListI<Gen> implements GenList
 	public void setRegBus(Bus[] b) throws PAModelException
 	{
 		_rbus.set(_buses.getIndexes(b));
-	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.Gen;
 	}
 
 }

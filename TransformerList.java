@@ -1,12 +1,14 @@
 package com.powerdata.openpa;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
 import com.powerdata.openpa.TwoTermDev.Side;
-import com.powerdata.openpa.impl.TransformerListI;
+import com.powerdata.openpa.impl.EmptyLists;
 
 public interface TransformerList extends ACBranchListIfc<Transformer>
 {
-
-	static final TransformerList Empty = new TransformerListI();
+	static TransformerList emptyList() {return EmptyLists.EMPTY_TRANSFORMERS;}
 	
 	boolean isRegEnabled(int ndx) throws PAModelException;
 	void setRegEnabled(int ndx, boolean enabl) throws PAModelException;
@@ -56,4 +58,29 @@ public interface TransformerList extends ACBranchListIfc<Transformer>
 	float[] getToStepSize() throws PAModelException;
 	void setToStepSize(int ndx, float step) throws PAModelException;
 	void setToStepSize(float[] step) throws PAModelException;
+	static Set<ColumnMeta> _Cols = EnumSet.copyOf(Arrays
+			.asList(new ColumnMeta[] { ColumnMeta.TfmrANG, ColumnMeta.TfmrBMAG,
+					ColumnMeta.TfmrBUSFROM, ColumnMeta.TfmrBUSTO,
+					ColumnMeta.TfmrGMAG, ColumnMeta.TfmrHASREG,
+					ColumnMeta.TfmrID, ColumnMeta.TfmrMAXREGKV,
+					ColumnMeta.TfmrMINREGKV, ColumnMeta.TfmrMNTPFROM,
+					ColumnMeta.TfmrMNTPTO, ColumnMeta.TfmrMXTPFROM,
+					ColumnMeta.TfmrMXTPTO, ColumnMeta.TfmrNAME,
+					ColumnMeta.TfmrOOS, ColumnMeta.TfmrPFROM,
+					ColumnMeta.TfmrPTO, ColumnMeta.TfmrQFROM,
+					ColumnMeta.TfmrQTO, ColumnMeta.TfmrR, ColumnMeta.TfmrRATLT,
+					ColumnMeta.TfmrREGBUS, ColumnMeta.TfmrREGENAB,
+					ColumnMeta.TfmrREGSIDE, ColumnMeta.TfmrSTEPFROM,
+					ColumnMeta.TfmrSTEPTO, ColumnMeta.TfmrTAPFROM,
+					ColumnMeta.TfmrTAPTO, ColumnMeta.TfmrX }));
+	@Override
+	default Set<ColumnMeta> getColTypes()
+	{
+		return _Cols;
+	}
+	@Override
+	default ListMetaType getListMeta()
+	{
+		return ListMetaType.Transformer;
+	}
 }

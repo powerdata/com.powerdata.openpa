@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.ShuntReacList;
 import com.powerdata.openpa.ShuntReactor;
@@ -42,12 +41,6 @@ public class ShuntReacListI extends FixedShuntListI<ShuntReactor> implements Shu
 	public ShuntReactor get(int index)
 	{
 		return new ShuntReactor(this, index);
-	}
-
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.ShuntReac;
 	}
 
 }

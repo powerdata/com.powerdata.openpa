@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.List;
 import com.powerdata.openpa.Area;
+import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMap;
 import com.powerdata.openpa.BusList;
@@ -13,9 +14,12 @@ import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
+import com.powerdata.openpa.OwnerList;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Station;
+import com.powerdata.openpa.StationList;
 import com.powerdata.openpa.VoltageLevel;
+import com.powerdata.openpa.VoltageLevelList;
 
 
 public class BusListI extends GroupListI<Bus> implements BusList
@@ -77,10 +81,10 @@ public class BusListI extends GroupListI<Bus> implements BusList
 			_vl = new IntData(ColumnMeta.BusVLEV),
 			_fspri = new IntData(ColumnMeta.BusFREQSRCPRI);
 	
-	AreaListI _arealist;
-	OwnerListI _ownerlist;
-	StationListI _stationlist;
-	VoltageLevelListI _vllist;
+	AreaList _arealist;
+	OwnerList _ownerlist;
+	StationList _stationlist;
+	VoltageLevelList _vllist;
 	
 	public BusListI(){super();}
 	
@@ -285,6 +289,5 @@ public class BusListI extends GroupListI<Bus> implements BusList
 		 */
 		return getByKey(b.getKey());
 	}
-	
-	
+
 }

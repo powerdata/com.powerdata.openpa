@@ -1,10 +1,16 @@
 package com.powerdata.openpa;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Gen.Type;
+import com.powerdata.openpa.impl.EmptyLists;
 
 public interface GenList extends OneTermDevListIfc<Gen>
 {
+	static GenList emptyList() {return EmptyLists.EMPTY_GENS;}
+	
 	Type getType(int ndx) throws PAModelException;
 	
 	void setType(int ndx, Type t) throws PAModelException;
@@ -92,4 +98,24 @@ public interface GenList extends OneTermDevListIfc<Gen>
 	Bus[] getRegBus()throws PAModelException;
 	
 	void setRegBus(Bus[] b)throws PAModelException;
+
+	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
+			.asList(new ColumnMeta[] { ColumnMeta.GenAVR, ColumnMeta.GenBUS,
+					ColumnMeta.GenID, ColumnMeta.GenMAXQ, ColumnMeta.GenMINQ,
+					ColumnMeta.GenMODE, ColumnMeta.GenNAME, ColumnMeta.GenOOS,
+					ColumnMeta.GenOPMAXP, ColumnMeta.GenOPMINP,
+					ColumnMeta.GenP, ColumnMeta.GenPS, ColumnMeta.GenQ,
+					ColumnMeta.GenQS, ColumnMeta.GenREGBUS, ColumnMeta.GenTYPE,
+					ColumnMeta.GenVS }));
+	@Override
+	default Set<ColumnMeta> getColTypes()
+	{
+		return Cols;
+	}
+	@Override
+	default ListMetaType getListMeta()
+	{
+		return ListMetaType.Gen;
+	}
+
 }
