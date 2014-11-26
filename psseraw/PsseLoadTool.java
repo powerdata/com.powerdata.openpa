@@ -2,6 +2,8 @@ package com.powerdata.openpa.psseraw;
 
 public class PsseLoadTool implements Psse2PsmEquipment 
 {
+	
+	
 	protected String _id;
 	protected String _name;
 	protected String _node;
@@ -17,6 +19,10 @@ public class PsseLoadTool implements Psse2PsmEquipment
 		_mvar = ql;
 	}
 	
+	public PsseLoadTool(PsseField[] fld, String[] record)
+	{
+		
+	}
 	
 	@Override
 	public String toCsv(String type) 

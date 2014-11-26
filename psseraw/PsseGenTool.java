@@ -182,4 +182,5 @@ public class PsseGenTool implements Psse2PsmEquipment
 	public String getMvarSetPoint() { return _mvarSetPoint; }
 	public String getMinMvar() { return _minMvar; }
 	public String getMaxMvar() { return _maxMvar; }
+	public static TObjectIntMap<String> getMap() { return _fldMap; }
 }

@@ -109,6 +109,15 @@ class PssePSMWriter implements PsseRecWriter
 	static final int _invalidOffset = -1;
 	static final String _invalidData = "";
 	
+	protected List<PsseBusTool> _nodes;
+	protected List<PsseLoadTool> _loads;
+	protected List<PsseGenTool> _gens;
+	protected List<PsseAreaTool> _areas;
+	protected List<PsseLineTool> _lines;
+	protected List<PsseTransformerTool> _tfmrs;
+	protected List<Psse3WdgTool> _3wdgs;
+	
+	
 	protected TObjectIntMap<String> _writerMap;
 	protected TObjectIntMap<String> _busMap;
 	protected TObjectIntMap<String> _loadMap;
@@ -132,61 +141,49 @@ class PssePSMWriter implements PsseRecWriter
 			throws PsseProcException 
 	{	
 		List<PsseField[]> lines = pclass.getLines();
-
-		//Debugging messages
-//		for(int i = 0; i < lines.size(); ++i)
-//		{
-//			System.out.println("\n[writeRecord] pclass = "+pclass.getClassName());
-//			for(int j = 0; j < lines.get(i).length; ++j)
-//			{
-//				System.out.println("[writeRecord] lines.get("+i+")["+j+"] = "+lines.get(i)[j].getName());
-//			}
-//		}
-//		System.out.println("\n[writeRecord] pclass = "+pclass.getClassName());
-//		for(int i = 0; i < record.length; ++i)
-//		{
-//			System.out.println("[writeRecord] record["+i+"/"+record.length+"] = "+record[i]);
-//		}
 		
-		int n = lines.size();
 		try
 		{
 			switch(pclass.getClassName().toLowerCase())
 			{
 			case "bus":
-				processBus(lines.get(0), record);
+//				processBus(lines.get(0), record);
+				if(_nodes == null) _nodes = new ArrayList<>();
+				_nodes.add(new PsseBusTool(lines.get(0), record));
 				break;
 			case "load":
-				processLoad(lines.get(0), record);
+				if(_loads == null) _loads = new ArrayList<>();
+				_loads.add(new PsseLoadTool(lines.get(0), record));
+//				processLoad(lines.get(0), record);
 				break;
 			case "generator":
-				processGenerator(lines.get(0), record);
+//				processGenerator(lines.get(0), record);
 				break;
 			case "areainterchange":
-				processArea(lines.get(0), record);
+//				processArea(lines.get(0), record);
 				break;
 			case "transformer":
-				processTransformer(lines, record);
+//				processTransformer(lines, record);
 				break;
 			case "nontransformerbranch":
 				//Gets broken down into lines / series reactors / series capacitors
 				//First cut make it be lines
-				processLine(lines.get(0), record);
+//				processLine(lines.get(0), record);
 				break;
 			case "switchedshunt":
 				if(_shuntMap == null) _shuntMap = buildMap(lines.get(0));
 				int modsw = getInt(record, _shuntMap.get("modsw"));
 				if(modsw == 3)
 				{
-					processSVC(lines.get(0), record);
+//					processSVC(lines.get(0), record);
 				}
 				else 
 				{
-					processSwitchedShunt(lines.get(0), record);
+//					processSwitchedShunt(lines.get(0), record);
 				}
 				break;
 			case "owner":
-				processOwner(lines.get(0), record);
+//				processOwner(lines.get(0), record);
 				break;
 			default:
 //				System.out.println("[writeRecord] No processor for "+pclass.getClassName().toLowerCase());	

@@ -33,5 +33,5 @@ public class PsseAreaTool implements Psse2PsmEquipment
 	{
 		return "ID,Name";
 	}
-
+	public static TObjectIntMap<String> getMap() { return _fldMap; }
 }

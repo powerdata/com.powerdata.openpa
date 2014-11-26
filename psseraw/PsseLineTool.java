@@ -51,5 +51,5 @@ public class PsseLineTool implements Psse2PsmEquipment
 	public String getX() { return _x; }
 	public String getBch() { return _bch; }
 	public String getLength() { return _length; }
-	
+	public static TObjectIntMap<String> getMap() { return _fldMap; }
 }

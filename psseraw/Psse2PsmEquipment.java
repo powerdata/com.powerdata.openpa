@@ -20,7 +20,6 @@ public interface Psse2PsmEquipment
 	default TObjectIntMap<String> buildMap(PsseField[] fld)
 	{
 		TObjectIntMap<String> map = new TObjectIntHashMap<>(fld.length, 1f, _invalidOffset);
-		
 		for(int i = 0; i < fld.length; ++i)
 		{
 			map.put(fld[i].getName().toLowerCase(), i);
