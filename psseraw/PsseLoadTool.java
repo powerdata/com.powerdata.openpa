@@ -1,8 +1,10 @@
 package com.powerdata.openpa.psseraw;
 
-public class PsseLoadTool implements Psse2PsmEquipment 
+import gnu.trove.map.TObjectIntMap;
+
+public class PsseLoadTool implements PsseEquipment 
 {
-	
+	protected static TObjectIntMap<String> _fldMap;
 	
 	protected String _id;
 	protected String _name;
@@ -21,22 +23,52 @@ public class PsseLoadTool implements Psse2PsmEquipment
 	
 	public PsseLoadTool(PsseField[] fld, String[] record)
 	{
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
 		
+		_id 	= record[_fldMap.get("id")]+"_"+record[_fldMap.get("i")]+"_load";
+		_name 	= record[_fldMap.get("id")];
+		_node 	= record[_fldMap.get("i")];
+		_mw		= record[_fldMap.get("pl")];
+		_mvar	= record[_fldMap.get("ql")];
+	}
+	
+	public enum LoadFiles
+	{
+		Load,
+		PsmCaseLoad
 	}
 	
 	@Override
 	public String toCsv(String type) 
 	{ 
-		switch(type.toLowerCase())
+		return toCsv(LoadFiles.valueOf(type));
+	}
+	
+	public String toCsv(LoadFiles file)
+	{
+		switch(file)
 		{
-		case "load":
+		case Load:
 			String[] l = {_id, _name, _node};
 			return arrayToCsv(l);
-		case "psmcaseload":
+		case PsmCaseLoad:
 			String[] lc = {_id, _mw, _mvar};
 			return arrayToCsv(lc);
 		default:
 			return null;
+		}
+	}
+	
+	public String getHeaders(LoadFiles file)
+	{
+		switch(file)
+		{
+		case Load:
+			return "ID,Name,Node";
+		case PsmCaseLoad:
+			return "ID,MW,MVAr";
+		default:
+			return "";
 		}
 	}
 

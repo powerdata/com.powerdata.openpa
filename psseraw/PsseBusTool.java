@@ -2,7 +2,7 @@ package com.powerdata.openpa.psseraw;
 
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseBusTool implements Psse2PsmEquipment 
+public class PsseBusTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	
@@ -21,7 +21,7 @@ public class PsseBusTool implements Psse2PsmEquipment
 	
 	public PsseBusTool(PsseField[] fld, String[] record)
 	{
-		if(_fldMap == null) _fldMap = buildMap(fld);
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
 		
 		_id 	= record[_fldMap.get("i")];
 		_name	= record[_fldMap.get("name")];
@@ -54,6 +54,11 @@ public class PsseBusTool implements Psse2PsmEquipment
 	{
 		// ID,Name,NominalKV,Substation,FrequencySourcePriority
 		return _id+","+_name+","+_baskv;
+	}
+	
+	public String getHeaders()
+	{
+		return "ID,Name,NominalKV";
 	}
 
 	//Getters

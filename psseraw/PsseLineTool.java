@@ -2,7 +2,7 @@ package com.powerdata.openpa.psseraw;
 
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseLineTool implements Psse2PsmEquipment 
+public class PsseLineTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	
@@ -19,11 +19,11 @@ public class PsseLineTool implements Psse2PsmEquipment
 	{
 		// TODO Auto-generated constructor stub
 		//Based on PSS/E version 30
-		if(_fldMap == null) _fldMap = buildMap(fld);
-		_id 	= record[_fldMap.get("id")]+"_"+record[_fldMap.get("i")]+"_"+record[_fldMap.get("j")]+"_line";
-		_name 	= record[_fldMap.get("id")];
-		_node1 	= record[_fldMap.get("i")];
-		_node2 	= record[_fldMap.get("j")];
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
+		_node1 	= ""+Math.abs(Integer.parseInt(record[_fldMap.get("i")]));
+		_node2 	= ""+Math.abs(Integer.parseInt(record[_fldMap.get("j")]));
+		_id 	= record[_fldMap.get("ckt")]+"_"+_node1+"_"+_node2+"_line";
+		_name 	= _id;
 		_r		= record[_fldMap.get("r")];
 		_x		= record[_fldMap.get("x")];
 		_bch	= record[_fldMap.get("b")];

@@ -2,7 +2,7 @@ package com.powerdata.openpa.psseraw;
 
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseGenTool implements Psse2PsmEquipment 
+public class PsseGenTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	
@@ -28,7 +28,7 @@ public class PsseGenTool implements Psse2PsmEquipment
 	
 	public PsseGenTool(PsseField[] fld, String[] record)
 	{
-		if(_fldMap == null) _fldMap = buildMap(fld);
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
 		
 		String baseId = record[_fldMap.get("id")]+"_"+record[_fldMap.get("i")];
 		_genId = baseId+"_gu";
@@ -75,11 +75,11 @@ public class PsseGenTool implements Psse2PsmEquipment
 	public String findUnitType()
 	{
 		String type;
-		int pb = Integer.parseInt(_minOpMw);
-		int pt = Integer.parseInt(_maxOpMw);
+		float pb = Float.parseFloat(_minOpMw);
+		float pt = Float.parseFloat(_maxOpMw);
 		if(pb < 0)
 		{
-			type = (!(pt < 1 && pb > -1))?"Hydro":"Thermal";
+			type = (!(pt < 1f && pb > -1f))?"Hydro":"Thermal";
 		}
 		else
 		{
@@ -94,15 +94,15 @@ public class PsseGenTool implements Psse2PsmEquipment
 		float pb = Float.parseFloat(_minOpMw);
 		float pg = Float.parseFloat(_mwSetPoint);
 		
-		if(pt < 1 && pb > -1)
+		if(pt < 1f && pb > -1f)
 		{
 			return "CON";
 		}
-		else if(pb >= 0 && pt >= pb)
+		else if(pb >= 0f && pt >= pb)
 		{
 			return "GEN";
 		}
-		else if(pb < 0 && pt > 0 && pg < 0)
+		else if(pb < 0f && pt > 0f && pg < 0f)
 		{
 			return "PMP";
 		}
@@ -152,11 +152,11 @@ public class PsseGenTool implements Psse2PsmEquipment
 		case PsmCaseGeneratingUnit:
 			return "ID,MW,MWSetPoint,GeneratorOperatingMode";
 		case PsmCaseSynchronousMachine:
-			return "ID,Name,Node,GeneratingUnit,RegulatedNode";
+			return "ID,SynchronousMachineOperatingMode,AVRMode,KVSetpoint,MVAr";
 		case ReactiveCapabilityCurve:
 			return "ID,SynchronousMachingOperatingMode,AVRMode,KVSetPoint,MVArSetpoint,MVAr";
 		case SynchronousMachine:
-			return "ID,SynchronousMachine,MW,MinMVAr,MaxMVAr";
+			return "ID,Name,Node,GeneratingUnit,RegulatedNode";
 		default:
 			return "";
 		}

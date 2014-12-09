@@ -2,7 +2,7 @@ package com.powerdata.openpa.psseraw;
 
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseAreaTool implements Psse2PsmEquipment 
+public class PsseAreaTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	
@@ -11,7 +11,7 @@ public class PsseAreaTool implements Psse2PsmEquipment
 	
 	public PsseAreaTool(PsseField[] fld, String[] record) 
 	{
-		if(_fldMap == null) _fldMap = buildMap(fld);
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
 		
 		_id = record[_fldMap.get("i")]+"_ca";
 		_name = record[_fldMap.get("arname")];

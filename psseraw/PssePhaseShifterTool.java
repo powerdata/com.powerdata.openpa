@@ -2,9 +2,11 @@ package com.powerdata.openpa.psseraw;
 
 import java.util.List;
 
+import com.powerdata.openpa.psseraw.PsseTransformerTool.TfmrFiles;
+
 import gnu.trove.map.TObjectIntMap;
 
-public class PssePhaseShifterTool implements Psse2PsmEquipment 
+public class PssePhaseShifterTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	
@@ -26,7 +28,7 @@ public class PssePhaseShifterTool implements Psse2PsmEquipment
 	
 	public PssePhaseShifterTool(List<PsseField[]> lines, String[] record) 
 	{
-		if(_fldMap == null) _fldMap = buildMap(lines);
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(lines);
 	
 		_name 			= record[_fldMap.get("name")];
 		_wdgCount 		= 2;

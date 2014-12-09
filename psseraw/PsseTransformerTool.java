@@ -4,7 +4,7 @@ import java.util.List;
 
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseTransformerTool implements Psse2PsmEquipment 
+public class PsseTransformerTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	
@@ -27,7 +27,7 @@ public class PsseTransformerTool implements Psse2PsmEquipment
 	
 	public PsseTransformerTool(List<PsseField[]> lines, String[] record)
 	{
-		if(_fldMap == null) _fldMap = buildMap(lines);
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(lines);
 		
 		_name 			= record[_fldMap.get("name")];
 		_node1 			= record[_fldMap.get("i")];
@@ -36,8 +36,9 @@ public class PsseTransformerTool implements Psse2PsmEquipment
 		_x				= record[_fldMap.get("x1-2")];
 		_bmag 			= record[_fldMap.get("mag2")];
 		_normOpLimit	= record[_fldMap.get("rata1")];
-		_ratioHigh		= record[_fldMap.get("")];
-		_ratioLow		= record[_fldMap.get("")];
+		_ratioHigh		= record[_fldMap.get("windv1")];
+		_ratioLow		= record[_fldMap.get("windv2")];
+		_wdgCount 		= 2;
 	
 		String idBase 	= _name+"_"+_node1+"_"+_node2;
 		_tfmrId 		= idBase+"_tfmr";
@@ -98,6 +99,36 @@ public class PsseTransformerTool implements Psse2PsmEquipment
 		default:
 			return "";
 		}
+	}
+	
+
+	public static TfmrType getTfmrType(List<PsseField[]> lines, String[] record) 
+	{
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(lines);
+		
+		int k = Integer.parseInt(record[_fldMap.get("k")]);
+		String cod1 = record[_fldMap.get("cod1")];
+		
+		if(k == 0 || k == _fldMap.getNoEntryValue())
+		{
+			if(cod1.equals("3"))
+			{
+				return TfmrType.PhaseShifter;
+			}
+			else
+			{
+				return TfmrType.TwoWinding;
+			}
+		}
+		
+		return TfmrType.ThreeWinding;
+	}
+
+	public enum TfmrType
+	{
+		TwoWinding,
+		ThreeWinding,
+		PhaseShifter
 	}
 	
 	//Getters

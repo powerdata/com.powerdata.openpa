@@ -4,7 +4,7 @@ import java.util.List;
 
 import gnu.trove.map.TObjectIntMap;
 
-public class Psse3WdgTool implements Psse2PsmEquipment 
+public class Psse3WdgTool implements PsseEquipment 
 {
 	protected static TObjectIntMap<String> _fldMap;
 	protected static TObjectIntMap<String> _nodeMap;
@@ -17,9 +17,9 @@ public class Psse3WdgTool implements Psse2PsmEquipment
 	
 	public Psse3WdgTool(List<PsseField[]> lines, String[] record) 
 	{
-		if(_fldMap == null) _fldMap = buildMap(lines);
+		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(lines);
 		if(_baseRecord == null) _baseRecord = createBaseRecord(record);
-		
+
 		String[] rec1 = makeRec1(record);
 		String[] rec2 = makeRec2(record);
 		String[] rec3 = makeRec3(record);
@@ -31,19 +31,36 @@ public class Psse3WdgTool implements Psse2PsmEquipment
 
 	private String[] makeRec1(String[] record)
 	{
-		return null; //TODO
-		//ID
-		//
+		String[] rec		 		= _baseRecord.clone();
+		rec[_fldMap.get("i")] 		= record[_fldMap.get("i")];//node1
+		rec[_fldMap.get("r1-2")] 	= record[_fldMap.get("r1-2")];//r
+		rec[_fldMap.get("x1-2")] 	= record[_fldMap.get("x1-2")];//x
+		rec[_fldMap.get("rata1")] 	= record[_fldMap.get("rata1")];//normoplimit
+		rec[_fldMap.get("windv1")]	= record[_fldMap.get("windv1")];//ratio high
+		return rec;
+
 	}
 	
 	private String[] makeRec2(String[] record)
 	{
-		return null; //TODO
+		String[] rec 				= _baseRecord.clone();
+		rec[_fldMap.get("i")] 		= record[_fldMap.get("j")];//node1
+		rec[_fldMap.get("r1-2")] 	= record[_fldMap.get("r2-3")];//r
+		rec[_fldMap.get("x1-2")] 	= record[_fldMap.get("x2-3")];//x
+		rec[_fldMap.get("rata1")] 	= record[_fldMap.get("rata2")];//normoplimit
+		rec[_fldMap.get("windv1")]	= record[_fldMap.get("windv2")];//ratio high
+		return rec;
 	}
 	
 	private String[] makeRec3(String[] record)
 	{
-		return null; //TODO
+		String[] rec 				= _baseRecord.clone();
+		rec[_fldMap.get("i")] 		= record[_fldMap.get("k")];//node1
+		rec[_fldMap.get("r1-2")] 	= record[_fldMap.get("r3-1")];//r
+		rec[_fldMap.get("x1-2")] 	= record[_fldMap.get("x3-1")];//x
+		rec[_fldMap.get("rata1")] 	= record[_fldMap.get("rata3")];//normoplimit
+		rec[_fldMap.get("windv1")]	= record[_fldMap.get("windv3")];//ratio high
+		return rec;
 	}
 	
 	private String[] makeNodeRec(String[] record)
@@ -66,11 +83,14 @@ public class Psse3WdgTool implements Psse2PsmEquipment
 	{
 		 String[] base = new String[record.length];
 		 
-		 base[_fldMap.get("name")] = record[_fldMap.get("name")];
-		 
-		 
-		 
-		return null; //TODO
+		 base[_fldMap.get("name")] 		= record[_fldMap.get("name")];
+		 base[_fldMap.get("j")] 		= record[_fldMap.get("i")]+"_"
+										+record[_fldMap.get("j")]+"_"
+										+record[_fldMap.get("k")];
+		 float bmag 					= Float.parseFloat(record[_fldMap.get("mag2")]) / 3f;
+		 base[_fldMap.get("mag2")]		= ""+bmag;
+		 base[_fldMap.get("windv2")]	= "1.0";
+		 return base;
 	}
 	
 	@Override
