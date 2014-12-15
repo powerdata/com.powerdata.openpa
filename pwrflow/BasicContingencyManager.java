@@ -31,10 +31,9 @@ public abstract class BasicContingencyManager extends ContingencyManager
 	
 	private boolean _par = false;
 	BiFunction<PAModel, String, CAWorker> _cawrkr = _useratings;
-	IslandConv[] _startPFResults;
-	boolean _enadbg = false;
+	ConvergenceList _startPFResults;
 
-	public BasicContingencyManager(PAModel m, IslandConv[] startPfResults)
+	public BasicContingencyManager(PAModel m, ConvergenceList startPfResults)
 	{
 		super(m);
 		_startPFResults = startPfResults;
@@ -42,8 +41,6 @@ public abstract class BasicContingencyManager extends ContingencyManager
 		// as many times as desired to create new models
 	}
 
-	public void setDebug(boolean d) {_enadbg = d;}
-	
 	public void setParallel(boolean p) {_par = p;}
 	public boolean getParallel() {return _par;}
 	public void setIgnoreRatings(boolean i) {_cawrkr = i ? _noratings : _useratings;}
@@ -65,7 +62,6 @@ public abstract class BasicContingencyManager extends ContingencyManager
 			c.execute(clm);
 			clm.refreshIslands();
 			CAWorker w = _cawrkr.apply(clm, c.getName());
-			if (_enadbg) w.setDbg(true);
 			w.runContingency();
 			report(c, w.getResults(_startPFResults), clm);
 		}

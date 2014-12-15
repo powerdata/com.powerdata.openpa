@@ -2,7 +2,7 @@ package com.powerdata.openpa.tools;
 
 import java.util.Arrays;
 
-public class LinkNet implements Cloneable
+public class LinkNet
 {
 	public static final int Empty = -1;
 	public static final int NoNode = -2;
@@ -331,20 +331,20 @@ public class LinkNet implements Cloneable
 	}
 	/** Permanently remove a branch */
 	
+	public LinkNet() {}
+	
 	/**
-	 * Creates and returns a copy of this object.
+	 * Make a copy of a LinkNet
+	 * @param src
 	 */
-	@Override
-	public LinkNet clone()
+	public LinkNet(LinkNet src)
 	{
-		LinkNet rv = new LinkNet();
-		rv._brcnt = _brcnt;
-		rv._cnt = _cnt.clone();
-		rv._far = _far.clone();
-		rv._list = _list.clone();
-		rv._maxBusNdx = _maxBusNdx;
-		rv._next = _next.clone();
-		return rv;	
+		_brcnt = src._brcnt;
+		_cnt = src._cnt.clone();
+		_far = src._far.clone();
+		_list = src._list.clone();
+		_maxBusNdx = src._maxBusNdx;
+		_next = src._next.clone();
 	}
 
 	/**

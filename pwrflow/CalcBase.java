@@ -18,9 +18,10 @@ import com.powerdata.openpa.tools.ComplexList;
 
 public abstract class CalcBase
 {
-	int[] _oosndx;
+//	int[] _oosndx;
 	PAModelException _e = null;
-	
+
+	/*
 	public static int[] GetInService(OutOfServiceList<? extends OutOfService> list) throws PAModelException
 	{
 		boolean[] oos = list.isOutOfSvc();
@@ -30,27 +31,21 @@ public abstract class CalcBase
 			map[i] = oos[i]?1:0;
 		return new GroupMap(map,2).get(0);
 	}
-	
+	*/
+	/*
 	public static <T extends ACBranch, U extends ACBranchListIfc<T>> 
 		ComplexList ComputeListY(U list) throws PAModelException
 	{
 		int nbr = list.size();
 		ComplexList y = new ComplexList(nbr, true);
 		ComplexList z = new ComplexList(list.getR(), list.getX());
-//		float[] r = list.getR(), x = list.getX();
 		for(int i=0; i < nbr; ++i)
-		{
-//			float tr = r[i], tx = x[i];
-//			float om = (float) Math.log10(tr/tx);
-//			if (om >= 0.1f)
-//				tr /= ((float) Math.pow(10, Math.round(om)+1));
 			y.set(i, z.get(i).inv());
-//			y.set(i, new Complex(tr, tx).inv());
-		}
 		return y;
 		
 	}
-
+	*/
+	/*
 	public interface Composite
 	{
 		CalcBase getCalc();
@@ -73,7 +68,7 @@ public abstract class CalcBase
 		public ACBranchFlow getCalc() {return _calc;}
 		public ComplexList getY() {return _y;}
 	}
-
+	
 	public static class FixedShuntComposite implements Composite
 	{
 		FixedShuntList _shunts;
@@ -122,7 +117,7 @@ public abstract class CalcBase
 	{
 		_oosndx = GetInService(baseList);
 	}
-	
+	*/
 	public abstract void applyMismatches(float[] pmm, float[] qmm);
 	public abstract void calc(float[] va, float[] vm);
 	

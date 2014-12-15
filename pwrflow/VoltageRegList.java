@@ -8,7 +8,7 @@ import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.tools.PAMath;
-
+@Deprecated
 public abstract class VoltageRegList extends AbstractList<com.powerdata.openpa.pwrflow.VoltageRegList.VoltageReg>
 {
 	interface Monitor
@@ -65,7 +65,6 @@ public abstract class VoltageRegList extends AbstractList<com.powerdata.openpa.p
 //			{
 //				if (svcInAVr(s))
 //				{
-//					//TODO:  logic not yet tested
 //					_minq[i] += PAMath.mva2pu(s.getMinQ(), 100f);
 //					_maxq[i] += PAMath.mva2pu(s.getMaxQ(), 100f);
 ////					vsp += s.getVS();

@@ -71,13 +71,13 @@ public class SVC extends OneTermDev
 		_list.setRegBus(_ndx, b);
 	}
 	
-	/** get slope (kV/MVAr per-cent on largest magnitude admittance limit) */
+	/** get slope (kV/MVAr per-unit on largest magnitude admittance limit) */
 	public float getSlope() throws PAModelException
 	{
 		return _list.getSlope(_ndx);
 	}
 	
-	/** set slope (kV/MVAr per-cent on largest magnitude admittance limit) */
+	/** set slope (kV/MVAr per-unit on largest magnitude admittance limit) */
 	public void setSlope(float slope) throws PAModelException
 	{
 		_list.setSlope(_ndx, slope);

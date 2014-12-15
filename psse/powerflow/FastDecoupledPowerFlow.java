@@ -30,7 +30,7 @@ import com.powerdata.openpa.psse.util.BusGroupList;
 import com.powerdata.openpa.psse.util.ImpedanceFilter;
 import com.powerdata.openpa.psse.util.MinZMagFilter;
 import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.FactorizedBMatrix;
+import com.powerdata.openpa.tools.FactorizedFltMatrix;
 import com.powerdata.openpa.tools.LinkNet;
 import com.powerdata.openpa.tools.PAMath;
 //import com.powerdata.openpa.tools.SparseBMatrix;
@@ -49,7 +49,7 @@ public class FastDecoupledPowerFlow
 	/** maximum iterations before giving up */
 	int _itermax = 40;
 	PsseModel _model;
-	FactorizedBMatrix _bp, _bpp;
+	FactorizedFltMatrix _bp, _bpp;
 //	SparseBMatrix _prepbpp;
 	int[] _hotislands;
 	float[] _vm, _va;
@@ -517,7 +517,7 @@ public class FastDecoupledPowerFlow
 		dumpMatrix(_bpp, tdir, "factbpp.csv");
 	}
 	
-	void dumpMatrix(FactorizedBMatrix b, File tdir, String nm)
+	void dumpMatrix(FactorizedFltMatrix b, File tdir, String nm)
 			throws IOException, PsseModelException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(

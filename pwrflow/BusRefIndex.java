@@ -1,6 +1,6 @@
 package com.powerdata.openpa.pwrflow;
 
-import java.util.HashMap;
+import java.util.WeakHashMap;
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.Bus;
@@ -64,17 +64,18 @@ public class BusRefIndex
 			_to = TwoTermDevListIfc::getToBus;
 		}
 		
-		public int[][] getTwoTerm() throws PAModelException
+		public TwoTerm getTwoTerm() throws PAModelException
 		{
 			if (_tondx == null) _tondx = buildNdx(_to);
-			return new int[][] {super.get(), _tondx};
+//			return new int[][] {super.get(), _tondx};
+			return new TwoTerm(super.get(), _tondx);
 		}
 		
 	}
 	
-	HashMap<OneTermDevListIfc<? extends OneTermDev>,
-		ListIndex<OneTermDevListIfc<? extends OneTermDev>>> _map1t = new HashMap<>();
-	HashMap<TwoTermDevListIfc<? extends TwoTermDev>, ListIndex2T> _map2t = new HashMap<>();
+	WeakHashMap<OneTermDevListIfc<? extends OneTermDev>,
+		ListIndex<OneTermDevListIfc<? extends OneTermDev>>> _map1t = new WeakHashMap<>();
+	WeakHashMap<TwoTermDevListIfc<? extends TwoTermDev>, ListIndex2T> _map2t = new WeakHashMap<>();
 	BusGroupResolver _idx;
 	
 	BusList _buses;
@@ -98,7 +99,19 @@ public class BusRefIndex
 		return i.get();
 	}	
 
-	public <T extends TwoTermDevListIfc<? extends TwoTermDev>> int[][] get2TBus(T t2list) throws PAModelException
+	public static class TwoTerm
+	{
+		int[] _f, _t;
+		public TwoTerm(int[] f, int[] t)
+		{
+			_f = f;
+			_t = t;
+		}
+		public int[] getFromBus() {return _f;}
+		public int[] getToBus() {return _t;}
+	}
+	
+	public <T extends TwoTermDevListIfc<? extends TwoTermDev>> TwoTerm get2TBus(T t2list) throws PAModelException
 	{
 		ListIndex2T i = _map2t.get(t2list);
 		if (i == null)

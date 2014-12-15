@@ -15,10 +15,12 @@ import java.util.AbstractList;
  * 
  */
 
+@Deprecated
 public class SparseMatrixFactorizer
 		extends
 		AbstractList<com.powerdata.openpa.tools.SparseMatrixFactorizer.EliminatedBus>
 {
+	@Deprecated
 	public class EliminatedBus
 	{
 		int _ndx;
@@ -48,6 +50,7 @@ public class SparseMatrixFactorizer
 	int _size;
 	int _factbrcnt = 0;
 	
+	@Deprecated
 	public SparseMatrixFactorizer(LinkNet matrix, int[] saveBusNdx)
 	{
 		int nnd = matrix.getMaxBusNdx();

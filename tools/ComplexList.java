@@ -84,4 +84,17 @@ public class ComplexList extends ComplexListBase<Complex>
 		return new Complex(_v1[index], _v2[index]);
 	}
 	
+	public ComplexList inv()
+	{
+		ComplexList rv = new ComplexList(_size, true);
+		float[] nre = rv.re(), nim = rv.im();
+		for(int i=0; i < _size; ++i)
+		{
+			Complex c = get(i).inv();
+			nre[i] = c.re();
+			nim[i] = c.im();
+		}
+		return rv;
+	}
+	
 }

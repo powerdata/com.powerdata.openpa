@@ -5,18 +5,19 @@ import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.pwrflow.BusRefIndex;
+import com.powerdata.openpa.pwrflow.BusRefIndex.TwoTerm;
 
 public class LineOPA extends ExportOpenPA<LineList>
 {
 	public LineOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
 		super(m.getLines(), Line.values().length);
-		int[][] bx = bri.get2TBus(_list);
+		TwoTerm bx = bri.get2TBus(_list);
 		BusList buses = bri.getBuses();
 		assign(Line.ID, new StringWrap(i -> _list.getID(i)));
 		assign(Line.Name, new StringWrap(i -> _list.getName(i)));
-		assign(Line.Node1, new StringWrap(i -> buses.get(bx[0][i]).getID()));
-		assign(Line.Node2, new StringWrap(i -> buses.get(bx[1][i]).getID()));
+		assign(Line.Node1, new StringWrap(i -> buses.get(bx.getFromBus()[i]).getID()));
+		assign(Line.Node2, new StringWrap(i -> buses.get(bx.getToBus()[i]).getID()));
 		assign(Line.R, i -> String.valueOf(_list.getR(i)));
 		assign(Line.X, i -> String.valueOf(_list.getX(i)));
 		assign(Line.Bch, i -> String.valueOf(_list.getFromBchg(i)+_list.getToBchg(i)));
