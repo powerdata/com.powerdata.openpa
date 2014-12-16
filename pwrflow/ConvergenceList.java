@@ -18,7 +18,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 	public enum Status
 	{
 		Untested, Converge, NoReferenceBus, VoltageCollapse, HighVoltage,
-			Pmismatch, Qmismatch, BlowsUp; 
+			Pmismatch, Qmismatch, BlowsUp, ReferenceOnly; 
 	}
 
 	public interface WorstVoltage
@@ -80,6 +80,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		_PrtMap.put(Status.Pmismatch, sball);
 		_PrtMap.put(Status.Qmismatch, sball);
 		_PrtMap.put(Status.BlowsUp, sball);
+		_PrtMap.put(Status.ReferenceOnly, sbnd);
 	}
 	
 	public class ConvergenceInfo
@@ -186,7 +187,6 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		Arrays.fill(_qw, null);
 		Arrays.fill(_worstvbus, 0);
 		Arrays.fill(_worstv, 1f);
-		Arrays.fill(_status, Status.Untested);
 		
 		for(int i=0; i < nislands; ++i)
 		{
@@ -204,6 +204,11 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 				{
 					_status[i] = Status.BlowsUp;
 				}
+				else if (p.getStatus() == Mismatch.Status.RefOnly ||
+						q.getStatus() == Mismatch.Status.RefOnly)
+				{
+					_status[i] = Status.ReferenceOnly;
+				}
 				else
 				{
 					if(Math.abs(q.getValue()) > _qtol)
@@ -218,8 +223,8 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 				_pw[i] = p;
 				_qw[i] = q;
 			}
+			System.out.println(get(i));
 		}
-		System.out.println(this.toString());
 		return completed();
 	}
 

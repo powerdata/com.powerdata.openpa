@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.tools.PAMath;
@@ -20,28 +21,39 @@ public class Mismatch
 {
 	public enum Status
 	{
-		OK, BlowsUp;
+		OK, BlowsUp, RefOnly;
 	}
 
-	public static class WorstMM
+	public interface WorstMM
+	{
+		Status getStatus();
+		float getValue();
+		Bus getBus();
+		String toString(String unit);
+	}
+	
+	static class BasicWorstMM implements WorstMM
 	{
 		Status _s;
 		float _wval;
 		Bus _wbus;
-		WorstMM(float wval, Bus wbus)
+		BasicWorstMM(float wval, Bus wbus)
 		{
 			_s = Status.OK;
 			_wval = wval;
 			_wbus = wbus;
 		}
-		WorstMM(Status s, float wval, Bus wbus)
+		BasicWorstMM(Status s, float wval, Bus wbus)
 		{
 			_s = s;
 			_wval = wval;
 			_wbus = wbus;
 		}
+		@Override
 		public Status getStatus() {return Status.OK;}
+		@Override
 		public float getValue() {return _wval;}
+		@Override
 		public Bus getBus() {return _wbus;}
 
 		public String toString(String unit)
@@ -57,7 +69,21 @@ public class Mismatch
 			}
 			return "";
 		}
-		
+	}
+	
+	static class NoBusMM implements WorstMM
+	{
+		@Override
+		public Status getStatus() {return Status.RefOnly;}
+		@Override
+		public float getValue() {return 0f;}
+		@Override
+		public Bus getBus() {return null;}
+		@Override
+		public String toString(String unit)
+		{
+			return "No Comparable Buses [reference only]";
+		}
 		
 	}
 	
@@ -100,8 +126,9 @@ public class Mismatch
 	 */
 	public WorstMM test(Island i)
 	{
-		float wval = Float.MIN_VALUE;
+		float wval = 0f;
 		int wndx = -1;
+		BusList buses = _bri.getBuses();
 		for(BusType btype : _bustypes)
 		{
 			for(int b : _btu.getBuses(btype, i))
@@ -109,17 +136,21 @@ public class Mismatch
 				float v = _mm[b];
 				if (!Float.isFinite(v))
 				{
-					return new WorstMM(Status.BlowsUp, 0, _bri.getBuses().get(b));
+					return new BasicWorstMM(Status.BlowsUp, 0, buses.get(b));
 				}
 				
-				if (Math.abs(wval) < Math.abs(v))
+				if (Math.abs(wval) < Math.abs(v) || wndx == -1)
 				{
 					wval = v;
 					wndx = b;
 				}
 			}
 		}
-		return new WorstMM(wval, _bri.getBuses().get(wndx));
+		if (wndx == -1)
+		{
+			return new NoBusMM();
+		}
+		return new BasicWorstMM(wval, _bri.getBuses().get(wndx));
 	}
 	
 	/**
