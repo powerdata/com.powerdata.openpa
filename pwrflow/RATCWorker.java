@@ -1,16 +1,14 @@
 package com.powerdata.openpa.pwrflow;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import com.powerdata.openpa.ACBranch;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.CloneModelBuilder;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Gen;
@@ -46,11 +44,6 @@ import com.powerdata.openpa.impl.LoadListI;
 
 public class RATCWorker
 {
-	public static class Result
-	{
-		
-	}
-	
 	protected PAModel _model;
 	protected ACBranch _targ;
 	protected BusRefIndex _bri;
@@ -68,20 +61,21 @@ public class RATCWorker
 		FDPowerFlow pf = new FDPowerFlow(model, _bri);
 		pf.runPF();
 		pf.updateResults();
-		try
-		{
-			new ListDumper().dump(_model, new File("/run/shm/actest"));
-		}
-		catch (IOException | ReflectiveOperationException | RuntimeException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try
+//		{
+//			new ListDumper().dump(_model, new File("/run/shm/actest"));
+//		}
+//		catch (IOException | ReflectiveOperationException | RuntimeException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		//TODO:  make the bus type util creation external to the ac power flow
 		_btu = pf.getBusTypes();
 	}
 	
 	float[] _lodf, _ratc;
+	ACBranchListIfc<? extends ACBranch> _branches;
 	
 	public void runRATC() throws PAModelException
 	{
@@ -89,19 +83,21 @@ public class RATCWorker
 		PAModel dcmodel = rmb.load();
 		DCPowerFlow dcpf = new DCPowerFlow(dcmodel, _bri, _btu);
 		dcpf.runPF().updateResults();
-		try
-		{
-			new ListDumper().dump(dcmodel, new File("/run/shm/dctest"));
-		}
-		catch (IOException | ReflectiveOperationException | RuntimeException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try
+//		{
+//			new ListDumper().dump(dcmodel, new File("/run/shm/dctest"));
+//		}
+//		catch (IOException | ReflectiveOperationException | RuntimeException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		int nlodf = _model.getLines().size();
 		_lodf = new float[nlodf];
 		_ratc = new float[nlodf];
+		// TODO:  Update to support all AC branches
 		LineList dclineflow = dcmodel.getLines(), aclineflow = _model.getLines();
+		_branches = aclineflow;
 		ACBranch dctarg = dclineflow.get(_targ.getIndex());
 		/** fraction of artificial 100MW flow across target */
 		float lnfact = Math.abs(dctarg.getFromP())/100f;
@@ -118,31 +114,47 @@ public class RATCWorker
 			}
 		}
 		
-		try
-		{
-			File dir = new File("/run/shm");
-			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(dir, "lodf-palco.csv"))));
-			pw.println("LineName,X,ACFlow(MW),LODF,RATC Order");
-			for(int i=0; i < nlodf; ++i)
-			{
-				ACBranch ac = aclineflow.get(i);
-				pw.format("\"%s\",%f,%f,%f,%f\n",
-					ac.getName(), ac.getX(), ac.getFromP(), _lodf[i], _ratc[i]);
-			}
-			pw.close();
-		}
-		catch(Exception x)
-		{
-			x.printStackTrace();
-		}
-		
-		
+//		try
+//		{
+//			File dir = new File("/run/shm");
+//			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(dir, "lodf-palco.csv"))));
+//			pw.println("LineName,X,ACFlow(MW),LODF,RATC Order");
+//			for(int i=0; i < nlodf; ++i)
+//			{
+//				ACBranch ac = aclineflow.get(i);
+//				pw.format("\"%s\",%f,%f,%f,%f\n",
+//					ac.getName(), ac.getX(), ac.getFromP(), _lodf[i], _ratc[i]);
+//			}
+//			pw.close();
+//		}
+//		catch(Exception x)
+//		{
+//			x.printStackTrace();
+//		}
+//		
+//		
+	}
+	
+	public class Result
+	{
+		int _ndx;
+		Result(int ndx) {_ndx = ndx;}
+		public ACBranch getBranch() {return _branches.get(_ndx);}
+		public float getLODF() {return _lodf[_ndx];}
+		public float getOrder() {return _ratc[_ndx];}
 	}
 	
 	public List<Result> getResults()
 	{
-		//TODO:  implement this
-		return Collections.emptyList();
+		List<Result> rv = new AbstractList<Result>()
+		{
+			@Override
+			public Result get(int index) {return new Result(index);}
+
+			@Override
+			public int size() {return _branches.size();}
+		};
+		return rv;
 	}
 	
 	/**

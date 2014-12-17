@@ -223,7 +223,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 				_pw[i] = p;
 				_qw[i] = q;
 			}
-			System.out.println(get(i));
+//			System.out.println(get(i));
 		}
 		return completed();
 	}
