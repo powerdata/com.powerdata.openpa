@@ -135,13 +135,19 @@ public class RATCWorker
 //		
 	}
 	
-	public class Result
+	public class Result implements Comparable<Result>
 	{
 		int _ndx;
 		Result(int ndx) {_ndx = ndx;}
 		public ACBranch getBranch() {return _branches.get(_ndx);}
 		public float getLODF() {return _lodf[_ndx];}
 		public float getOrder() {return _ratc[_ndx];}
+		@Override
+		public int compareTo(Result o)
+		{
+			return Float.compare(getOrder(), o.getOrder());
+		}
+		
 	}
 	
 	public List<Result> getResults()
