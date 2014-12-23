@@ -1,10 +1,5 @@
 package com.powerdata.openpa.tools.psmfmt;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-
-import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.StationList;

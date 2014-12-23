@@ -1,14 +1,7 @@
 package com.powerdata.openpa;
 
-public interface OneTermDevListIfc<T extends OutOfService> extends OutOfServiceList<T>
+public interface OneTermDevListIfc<T extends OneTermDev> extends OutOfServiceList<T>,OneTermBaseList<T>
 {
-	/**
-	 * Return the connected Bus object
-	 * @param ndx offset within this list
-	 * @return Connected Bus object
-	 */
-	Bus getBus(int ndx) throws PAModelException;
-
 	void setBus(int ndx, Bus b) throws PAModelException;
 	
 	Bus[] getBus() throws PAModelException;

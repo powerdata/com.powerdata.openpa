@@ -4,17 +4,17 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 /**
- * Keep a more efficient version of the factorized sparse matrix.  
+ * Keep a more efficient version of the float-valued factorized sparse matrix.  
  * 
  * @author chris@powerdata.com
  *
  */
 
-public class FactorizedBMatrix
+public class FactorizedFltMatrix
 {
 	float[] _bd, _adjbo;
 	int[] _p, _q, _elimbusord;
-	public FactorizedBMatrix(float[] bDiag, float[] bOffDiag,
+	public FactorizedFltMatrix(float[] bDiag, float[] bOffDiag,
 			int[] p, int[] q, int[] elimNdOrder,int elimBusCnt,
 			int[] elimBrOrder, int elimBranchCount)
 	{

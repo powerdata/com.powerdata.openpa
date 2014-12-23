@@ -1,15 +1,18 @@
 package com.powerdata.openpa.pwrflow;
 
 import java.io.File;
+import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import com.powerdata.openpa.ACBranch;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.CloneModelBuilder;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Gen;
+import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
@@ -41,40 +44,123 @@ import com.powerdata.openpa.impl.LoadListI;
 
 public class RATCWorker
 {
-	public static class Result
+	protected PAModel _model;
+	protected ACBranch _targ;
+	protected BusRefIndex _bri;
+	protected BusTypeUtil _btu;
+	protected boolean _swapgenside = false;
+	
+	@SuppressWarnings("deprecation")
+	public RATCWorker(PAModel model, ACBranch target) throws PAModelException
 	{
+		System.out.format("Target: %s\n", target.getName());
+		_model = model;
+		_targ = target;
+		if (_targ.getFromP() < 0f) _swapgenside = true;
+		_bri = BusRefIndex.CreateFromSingleBus(model);
+		FDPowerFlow pf = new FDPowerFlow(model, _bri);
+		pf.runPF();
+		pf.updateResults();
+//		try
+//		{
+//			new ListDumper().dump(_model, new File("/run/shm/actest"));
+//		}
+//		catch (IOException | ReflectiveOperationException | RuntimeException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		//TODO:  make the bus type util creation external to the ac power flow
+		_btu = pf.getBusTypes();
+	}
+	
+	float[] _lodf, _ratc;
+	ACBranchListIfc<? extends ACBranch> _branches;
+	
+	public void runRATC() throws PAModelException
+	{
+		RATCModelBuilder rmb = new RATCModelBuilder(_model);
+		PAModel dcmodel = rmb.load();
+		DCPowerFlow dcpf = new DCPowerFlow(dcmodel, _bri, _btu);
+		dcpf.runPF().updateResults();
+//		try
+//		{
+//			new ListDumper().dump(dcmodel, new File("/run/shm/dctest"));
+//		}
+//		catch (IOException | ReflectiveOperationException | RuntimeException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		int nlodf = _model.getLines().size();
+		_lodf = new float[nlodf];
+		_ratc = new float[nlodf];
+		// TODO:  Update to support all AC branches
+		LineList dclineflow = dcmodel.getLines(), aclineflow = _model.getLines();
+		_branches = aclineflow;
+		ACBranch dctarg = dclineflow.get(_targ.getIndex());
+		/** fraction of artificial 100MW flow across target */
+		float lnfact = Math.abs(dctarg.getFromP())/100f;
+		_lodf[_targ.getIndex()] = lnfact;
+		float netfrac = 1f-lnfact;
+		float div = 1f/(100f*netfrac);
+		for(int i=0; i < nlodf; ++i)
+		{
+			if (i != _targ.getIndex())
+			{
+				ACBranch dc = dclineflow.get(i), ac = aclineflow.get(i);
+				_lodf[i] = dc.getFromP() * div;
+				_ratc[i] = _lodf[i] * ac.getFromP();
+			}
+		}
+		
+//		try
+//		{
+//			File dir = new File("/run/shm");
+//			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(dir, "lodf-palco.csv"))));
+//			pw.println("LineName,X,ACFlow(MW),LODF,RATC Order");
+//			for(int i=0; i < nlodf; ++i)
+//			{
+//				ACBranch ac = aclineflow.get(i);
+//				pw.format("\"%s\",%f,%f,%f,%f\n",
+//					ac.getName(), ac.getX(), ac.getFromP(), _lodf[i], _ratc[i]);
+//			}
+//			pw.close();
+//		}
+//		catch(Exception x)
+//		{
+//			x.printStackTrace();
+//		}
+//		
+//		
+	}
+	
+	public class Result implements Comparable<Result>
+	{
+		int _ndx;
+		Result(int ndx) {_ndx = ndx;}
+		public ACBranch getBranch() {return _branches.get(_ndx);}
+		public float getLODF() {return _lodf[_ndx];}
+		public float getOrder() {return _ratc[_ndx];}
+		@Override
+		public int compareTo(Result o)
+		{
+			return Float.compare(getOrder(), o.getOrder());
+		}
 		
 	}
 	
-	protected PAModel _model;
-	protected ACBranch _targ;
-	
-	public RATCWorker(PAModel model, ACBranch target)
-	{
-		_model = model;
-		_targ = target;
-	}
-	
-	public void runRATC()
-	{
-//		PAModel clone = cloneModel();
-	}
-	
-	/**
-	 * Clone a PAModel with local attributes specific to RATC (powerflow):
-	 *
-	 * @return
-	 */
-	PAModel cloneModel()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public List<Result> getResults()
 	{
-		//TODO:  implement this
-		return Collections.emptyList();
+		List<Result> rv = new AbstractList<Result>()
+		{
+			@Override
+			public Result get(int index) {return new Result(index);}
+
+			@Override
+			public int size() {return _branches.size();}
+		};
+		return rv;
 	}
 	
 	/**
@@ -100,9 +186,17 @@ public class RATCWorker
 			DataLoader<int[]> tbus = () -> new int[] {_targ.getToBus().getIndex()};
 			DataLoader<boolean[]> oos = () -> new boolean[] {false};
 			
+			DataLoader<int[]> genbus=fbus, loadbus=tbus;
+			if (_swapgenside)
+			{
+				genbus = tbus;
+				loadbus = fbus;
+			}
+			
+			
 			_col.put(ColumnMeta.GenID, gname);
 			_col.put(ColumnMeta.GenNAME, gname);
-			_col.put(ColumnMeta.GenBUS, fbus);
+			_col.put(ColumnMeta.GenBUS, genbus);
 			_col.put(ColumnMeta.GenP, fzero);
 			_col.put(ColumnMeta.GenQ, fzero);
 			_col.put(ColumnMeta.GenOOS, oos); 
@@ -110,13 +204,13 @@ public class RATCWorker
 			_col.put(ColumnMeta.GenMODE, () -> new Gen.Mode[] {Gen.Mode.MAN});
 			_col.put(ColumnMeta.GenOPMINP, fzero);
 			_col.put(ColumnMeta.GenOPMAXP, f200);
-			_col.put(ColumnMeta.GenMINQ, () -> new float[] {-200f});
+			_col.put(ColumnMeta.GenMINQ, () -> new float[] {-100f});
 			_col.put(ColumnMeta.GenMAXQ, f200);
 			_col.put(ColumnMeta.GenPS, () -> new float[] {100f});
 			_col.put(ColumnMeta.GenQS, fzero);
 			_col.put(ColumnMeta.GenAVR, () -> new boolean[] {true});
 			_col.put(ColumnMeta.GenVS, () -> new float[] {1f});
-			_col.put(ColumnMeta.GenREGBUS, fbus);
+			_col.put(ColumnMeta.GenREGBUS, genbus);
 		
 			DataLoader<String[]> lname = () -> new String[] {"RATC_LOAD"};
 			DataLoader<float[]> pld = () -> new float[]{-100f};
@@ -124,7 +218,7 @@ public class RATCWorker
 			
 			_col.put(ColumnMeta.LoadID, lname);
 			_col.put(ColumnMeta.LoadNAME, lname);
-			_col.put(ColumnMeta.LoadBUS, tbus);
+			_col.put(ColumnMeta.LoadBUS, loadbus);
 			_col.put(ColumnMeta.LoadP, pld);
 			_col.put(ColumnMeta.LoadQ, qld);
 			_col.put(ColumnMeta.LoadOOS, oos);
@@ -221,10 +315,12 @@ public class RATCWorker
 		final File outdir = poutdir;
 		if (!outdir.exists()) outdir.mkdirs();
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
+		bldr.enableFlatVoltage(true);
+		bldr.setLeastX(0.0001f);
 		PAModel base = bldr.load();
-		RATCWorker rw = new RATCWorker(base, base.getLines().get(0));
-		RATCModelBuilder rmb = rw.new RATCModelBuilder(base);
-		new ListDumper().dump(rmb.load(), outdir);
+		RATCWorker rw = new RATCWorker(base, base.getLines().getByKey(6512));
+		rw.runRATC();
+//		new ListDumper().dump(rmb.load(), outdir);
 	}
 
 }

@@ -16,7 +16,7 @@ import com.powerdata.openpa.pwrflow.ContingencySet.Contingency;
 public class CATest extends BasicContingencyManager
 {
 	PrintWriter _pw;
-	public CATest(PAModel m, IslandConv[] startPfResults, PrintWriter pw)
+	public CATest(PAModel m, ConvergenceList startPfResults, PrintWriter pw)
 	{
 		super(m, startPfResults);
 		_pw = pw;
@@ -75,21 +75,16 @@ public class CATest extends BasicContingencyManager
 //		bldr.setBadXLimit(2f);
 		PAModel m = bldr.load();
 		
-		IslandConv[] orig = null;
+		ConvergenceList orig = null;
 
 		{
-			FDPFCore pf = new FDPFCore(m);
-//			PFMismatchDbg dbg = new PFMismatchDbg(new File(new File("/run/shm/pfdbg"), "baseline"));
-//			FDPFCore pf = dbg.getPF(m); 
+			FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBus(m));
 			orig = pf.runPF();
 			pf.updateResults();
-//			dbg.write();
 		}
 		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(pout)));
 		CATest ca = new CATest(m, orig, pw);
-//		ca.setParallel(true);
-		ca.setDebug(false);
 		if (ignoreRatings) ca.setIgnoreRatings(true);
 		ContingencySet cset = new ContingencySet(m);
 		long ts = System.currentTimeMillis();

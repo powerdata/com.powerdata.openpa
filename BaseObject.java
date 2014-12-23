@@ -5,10 +5,8 @@ package com.powerdata.openpa;
  * @author chris@powerdata.com
  *
  */
-public interface BaseObject
+public interface BaseObject extends BaseObjectCore
 {
-	/** get Index within master list owned by PAModel */
-	int getIndex();
 	/** get unique String object identifier */
 	String getID()throws PAModelException;
 	/** set unique String object identifier */

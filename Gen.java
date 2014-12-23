@@ -145,4 +145,16 @@ public class Gen extends OneTermDev
 	{
 		_list.setRegBus(_ndx, b);
 	}
+	
+	public boolean unitInAVR() throws PAModelException
+	{
+		return isGenerating() && isRegKV();
+	}
+	
+	public boolean isGenerating() throws PAModelException
+	{
+		Mode m = getMode();
+		return !isOutOfSvc() && m != Mode.PMP && m != Mode.OFF;
+	}
+
 }

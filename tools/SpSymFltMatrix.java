@@ -2,16 +2,21 @@ package com.powerdata.openpa.tools;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
-import com.powerdata.openpa.tools.SpSymMtrxFactPattern.EliminatedBus;
+import com.powerdata.openpa.tools.SpSymMtrxFactPattern.EliminatedNode;
 
 /**
- * Sparse Symmetric susceptance matrix
+ * Sparse Symmetric matrix with a floating-point value
  * 
  * @author chris@powerdata.com
  * 
  */
-public class SpSymBMatrix
+public class SpSymFltMatrix extends SpSymMatrixBase
 {
+	/**
+	 * Inner Factorizer class to perform factorization against floating-point value
+	 * @author chris@powerdata.com
+	 *
+	 */
 	protected class Factorizer extends SpSymMtrxFactorizer
 	{
 		Factorizer(float[] bdiag, float[] boffdiag)
@@ -86,39 +91,38 @@ public class SpSymBMatrix
 
 	protected float[] _bdiag, _boffdiag;
 	protected int[][] _save;
-	protected LinkNet _net;
-	SpSymMtrxFactPattern _pat;
 	
-	public SpSymBMatrix(LinkNet net, float[] bdiag, float[] boffdiag)
+	/**
+	 * Create a new sparse symmetric matrix with floating-point values.
+	 * @param net Adjacency matrix
+	 * @param bdiag 
+	 * @param boffdiag
+	 */
+	public SpSymFltMatrix(LinkNet net, float[] bdiag, float[] boffdiag)
 	{
-		_net = net;
+		super(net);
 		_bdiag = bdiag.clone();
 		_boffdiag = boffdiag.clone();
 	}
+	
+	protected SpSymFltMatrix(LinkNet net)
+	{
+		super(net);
+	}
+	
+	protected void setBDiag(float[] bdiag) {_bdiag = bdiag;}
+	protected void setBOffDiag(float[] boffdiag) {_boffdiag = boffdiag;}
 
-	public FactorizedBMatrix factorize(int[] ref)
+	public FactorizedFltMatrix factorize(int[] ref)
 	{
 		Factorizer f = new Factorizer(_bdiag, _boffdiag);
 		f.eliminate(_net, ref);
-		return new FactorizedBMatrix(f.getBDiag(), f.getBOffDiag(),
+		return new FactorizedFltMatrix(f.getBDiag(), f.getBOffDiag(),
 				f.getElimFromNode(), f.getElimToNode(), f.getElimNdOrder(),
-				f.getElimNdCount(), f.getElimBrOrder(), f.getElimBranchCount());
+				f.getElimNdCount(), f.getElimEdgeOrder(), f.getElimEdgeCount());
 	}
 	
-	public SpSymMtrxFactPattern savePattern(int[] ref)
-	{
-		_pat = new SpSymMtrxFactPattern();
-		_pat.eliminate(_net, ref);
-		return _pat;
-	}
-	
-	public void savePattern(SpSymMtrxFactPattern pattern)
-	{
-		_pat = pattern;
-	}
-	
-	/** modify susceptance entry */
-	public void incB(int f, int t, float b)
+	public void incVal(int f, int t, float b)
 	{
 		if (f == t)
 			_bdiag[f] += b;
@@ -153,17 +157,17 @@ public class SpSymBMatrix
 	 * @return factorized susceptance matrix
 	 * 
 	 */
-	public FactorizedBMatrix factorizeFromPattern()
+	public FactorizedFltMatrix factorize(SpSymMtrxFactPattern pat)
 	{
 		Factorizer f = new Factorizer(_bdiag, _boffdiag);
-		f.ensureCapacity(_pat.getElimBranchCount());
+		f.ensureCapacity(pat.getElimEdgeCount());
 		/* fake out the factorize, but use the same equations for B */
-		for (EliminatedBus ebusr : _pat.getEliminatedBuses())
+		for (EliminatedNode ebusr : pat.getEliminatedBuses())
 		{
 			int[] cbus = ebusr.getRemainingNodes();
-			int[] cbr = ebusr.getElimBranches();
-			f.elimStart(ebusr.getElimBusNdx(), cbus, cbr);
-			int[] tbr = ebusr.getRemainingBranches();
+			int[] cbr = ebusr.getElimEdges();
+			f.elimStart(ebusr.getElimNodeNdx(), cbus, cbr);
+			int[] tbr = ebusr.getFilledInEdges();
 			int nmut = cbus.length, imut = 0;
 			for (int i = 0; i < nmut; ++i)
 			{
@@ -171,10 +175,10 @@ public class SpSymBMatrix
 					f.mutual(i, cbr[j], tbr[imut++]);
 			}
 		}
-		return new FactorizedBMatrix(f.getBDiag(), f.getBOffDiag(),
-				_pat.getElimFromNode(), _pat.getElimToNode(),
-				_pat.getElimNdOrder(), _pat.getElimNdCount(),
-				_pat.getElimBrOrder(), _pat.getElimBranchCount());
+		return new FactorizedFltMatrix(f.getBDiag(), f.getBOffDiag(),
+				pat.getElimFromNode(), pat.getElimToNode(),
+				pat.getElimNdOrder(), pat.getElimNdCount(),
+				pat.getElimEdgeOrder(), pat.getElimEdgeCount());
 	}
 
 	public void dump(String[] name, PrintWriter pw)
@@ -192,5 +196,10 @@ public class SpSymBMatrix
 				
 		}
 		
+	}
+
+	public float[] getBDiag()
+	{
+		return _bdiag;
 	}
 }

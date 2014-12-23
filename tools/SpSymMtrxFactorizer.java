@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public abstract class SpSymMtrxFactorizer
 {
-	protected int[]	_elimndorder	= new int[0], _ep = new int[0],
+	protected int[]	/** eliminated node order */_elimndorder	= new int[0], _ep = new int[0],
 			_eq = new int[0], _elimbrorder = new int[0];
 	protected int	_elimbrcnt		= 0, _iord=0;
 
@@ -18,13 +18,17 @@ public abstract class SpSymMtrxFactorizer
 	 * Called during elimination when a new node is being eliminated. Subclass
 	 * should implement to provide appropriate services
 	 * 
-	 * @param elimbus
+	 * @param elimnode
 	 *            Node being eliminated
-	 * @param cbus
-	 *            connected nodes
-	 * @param cbr
+	 * @param cnd
+	 *            connected node indexes
+	 * @param cedge
+	 * 		      connected edge indexes
 	 */
-	protected abstract void elimStart(int elimbus, int[] cbus, int[] cbr);
+	protected abstract void elimStart(int elimnode, int[] cnd, int[] cedge);
+	/**
+	 * Called during elimination to post processing
+	 */
 	protected abstract void elimStop();
 	/**
 	 * Called to allow subclass to manage mutual connections.
@@ -32,7 +36,7 @@ public abstract class SpSymMtrxFactorizer
 	 * @param imut
 	 *            index of the mutual record in operation
 	 * @param adjbr
-	 *            off-diagonal muutal connection
+	 *            off-diagonal mutual connection
 	 * @param targbr
 	 *            id of target branch
 	 */
@@ -60,12 +64,18 @@ public abstract class SpSymMtrxFactorizer
 		return newsize;
 	}
 
-
+	/** Called to set up subclass for new elimination run */
 	protected abstract void setup(LinkNet matrix);
 
-	public void eliminate(LinkNet matrix, int[] ref)
+	/** 
+	 * reduce network to the set of ref buses
+	 * 
+	 * @param matrix Sparse adjacency matrix
+	 * @param ref Buses to be retained in the equivalent network.
+	 */
+	public void eliminate(LinkNet mtrx, int[] ref)
 	{
-		matrix = matrix.clone();
+		LinkNet matrix = new LinkNet(mtrx);
 		setup(matrix);
 		int nmbr = matrix.getBranchCount();
 		int cap = nmbr*3;
@@ -140,65 +150,69 @@ public abstract class SpSymMtrxFactorizer
 			elimStop();
 			elimndorder[_iord++] = elimbus;
 			elimbus = bcq.peek();
-//			if (elimbus == -1)
-//			{
-//				/*
-//				 * Handle buses at the end that get eliminated radially - make
-//				 * sure it gets added to elimndorder
-//				 */
-//				for(int i=0; i < nbus; ++i)
-//				{
-//					int b = cbus[i];
-//					if (ccnt[b] == 0)
-//					{
-//						int[] empty = new int[0];
-//						elimStart(elimbus, empty, empty);
-//						elimStop();
-//						elimndorder[_iord++] = b;
-//					}
-//				}
-//			}
 		}
-//		int[] empty = new int[0];
-//		for(int i=0; i < nlast; ++i)
-//		{
-//			elimStart(-1, empty, empty);
-//			elimStop();
-//			elimndorder[_iord++] = last[i];
-//		}
 		_elimndorder = elimndorder;
 		finish();
 		_elimbrcnt = brord;
 	}
 	
+	/**
+	 * Notify subclass that elimination is complete.
+	 */
 	protected abstract void finish();
 	
+	/**
+	 * Returns a list of how the nodes were eliminated
+	 * 
+	 * @return array of node indexes in elimination order
+	 */
 	public int[] getElimNdOrder()
 	{
 		return _elimndorder;
 	}
 
+	/**
+	 * Get the number of nodes eliminated
+	 * 
+	 * @return Number of nodes eliminated
+	 */
 	public int getElimNdCount()
 	{
 		return _iord;
 	}
 	
-	public int getElimBranchCount()
+	/**
+	 * Get the number of edges that were eliminated during nodal elimination
+	 * @return Number of edges that were eliminated during nodal elimination
+	 */
+	public int getElimEdgeCount()
 	{
 		return _elimbrcnt;
 	}
 
+	/**
+	 * Get the from-side nodes of eliminated edges
+	 * @return From-side nodes of eliminated edges
+	 */
 	public int[] getElimFromNode()
 	{
 		return _ep;
 	}
 
+	/**
+	 * Get the to-side nodes of eliminated edges
+	 * @return To-side nodes of eliminated edges
+	 */
 	public int[] getElimToNode()
 	{
 		return _eq;
 	}
 	
-	public int[] getElimBrOrder()
+	/**
+	 * Get the order in which edges were eliminated
+	 * @return array containing edge indexes in order of elimination
+	 */
+	public int[] getElimEdgeOrder()
 	{
 		return _elimbrorder;
 	}

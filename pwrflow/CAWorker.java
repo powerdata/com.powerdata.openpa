@@ -1,7 +1,5 @@
 package com.powerdata.openpa.pwrflow;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
 import com.powerdata.openpa.ACBranch;
@@ -24,6 +22,8 @@ import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.Switch.State;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TwoTermDev;
+import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
+import com.powerdata.openpa.pwrflow.ConvergenceList.WorstVoltage;
 import com.powerdata.openpa.tools.PAMath;
 
 public class CAWorker
@@ -142,54 +142,29 @@ public class CAWorker
 		}
 	}
 	PAModel _m;
-	IslandConv[] _pfres;
+	ConvergenceList _pfres;
 	BusList _snglbus;
 	boolean _dbg = false;
-	private String _cname;
 	static float _minv = 0.945f, _maxv = 1.054f;
 	public CAWorker(PAModel model, String cname)
 	{
 		_m = model;
-		_cname = cname;
-	}
-	public void setDbg(boolean d)
-	{
-		_dbg = d;
 	}
 	public void runContingency() throws PAModelException
 	{
-		FDPFCore pf = null;
-		PFMismatchDbg d = null;
-		File dir = null;
-		if (_dbg)
-		{
-			// TODO: make this configurable
-			dir = new File(String.format("/run/shm/contingency/%s", _cname));
-			if (!dir.exists()) dir.mkdirs();
-			d = new PFMismatchDbg(dir);
-			pf = d.getPF(_m);
-		}
-		else
-			pf = new FDPFCore(_m);
+		BusRefIndex bri = BusRefIndex.CreateFromSingleBus(_m);
+		FDPowerFlow pf = new FDPowerFlow(_m, bri);
 		pf.setMaxIterations(100);
 		_pfres = pf.runPF();
 		pf.updateResults();
-		_snglbus = pf.getBuses();
-		if (_dbg) try
-		{
-			d.write();
-			new ListDumper().dump(_m, dir);
-		}
-		catch (IOException |ReflectiveOperationException e)
-		{
-			throw new PAModelException(e);
-		}
+		_snglbus = bri.getBuses();
 	}
-	public IslandConv[] getPFResults()
+	public ConvergenceList getPFResults()
 	{
 		return _pfres;
 	}
-	public Set<Result> getResults(IslandConv[] orig) throws PAModelException
+	
+	public Set<Result> getResults(ConvergenceList orig) throws PAModelException
 	{
 		Set<Result> rv = new HashSet<Result>();
 		/*
@@ -200,32 +175,33 @@ public class CAWorker
 		float old = 0f, nld = 0f;
 		Set<Island> islandFailures = new HashSet<>();
 		BusList mbuses = _m.getBuses();
-		for (IslandConv i : _pfres)
+		for (ConvergenceInfo i : _pfres)
 		{
 			nld += i.getLoadMW();
-			if (i.lvFail())
+			ConvergenceList.Status cs = i.getStatus();
+			if (cs == ConvergenceList.Status.VoltageCollapse)
 			{
-				Bus b = mbuses.getByBus(i.lvBus());
-				rv.add(new VoltageViol(Status.VoltageCollapse, b, i
-						.lowestV()));
+				WorstVoltage wv = i.getWorstVoltage();
+				Bus b = mbuses.getByBus(wv.getBus());
+				rv.add(new VoltageViol(Status.VoltageCollapse, b, wv.getVM()));
 			}
-			else if (i.hvFail())
+			else if (cs == ConvergenceList.Status.HighVoltage)
 			{
-				Bus b = mbuses.getByBus(i.hvBus());
-				rv.add(new VoltageViol(Status.HighVoltageFail, b, i
-						.highestV()));
+				WorstVoltage wv = i.getWorstVoltage();
+				Bus b = mbuses.getByBus(wv.getBus());
+				rv.add(new VoltageViol(Status.HighVoltageFail, b, wv.getVM()));
 			}
-			if (!i.solved()) islandFailures.add(i.getIsland());
+			if (cs != ConvergenceList.Status.Converge) islandFailures.add(i.getIsland());
 		}
 		/*
 		 * Detect system load drop
 		 */
-		for (IslandConv i : orig)
+		for (ConvergenceInfo i : orig)
 			old += i.getLoadMW();
 		float pct = nld / old;
 		if (pct < .99f) // TODO: make tunable
 			rv.add(new ValuedResult(Status.LoadLoss, 1f - pct));
-		else if (orig.length != _pfres.length)
+		else if (orig.size() != _pfres.size())
 			rv.add(new Result(Status.IslandSplit));
 		rv.addAll(getOverloads());
 		rv.addAll(getVoltageViolations(islandFailures));
@@ -352,8 +328,8 @@ public class CAWorker
 	{
 		Set<Result> rv = new HashSet<>();
 		Set<Island> nsolved = new HashSet<>();
-		for (IslandConv i : _pfres)
-			if (!i.solved()) nsolved.add(i.getIsland());
+		for (ConvergenceInfo i : _pfres)
+			if (i.getStatus() != ConvergenceList.Status.Converge) nsolved.add(i.getIsland());
 		for (ACBranchList list : _m.getACBranches())
 		{
 			for (ACBranch d : list)

@@ -16,38 +16,64 @@ import java.util.Arrays;
 public class SpSymMtrxFactPattern extends SpSymMtrxFactorizer
 		
 {
-	public class EliminatedBusList extends AbstractList<EliminatedBus>
+	public class EliminatedNodeList extends AbstractList<EliminatedNode>
 	{
 		@Override
 		public int size() {return _iord;}
 		@Override
-		public EliminatedBus get(int ndx) {return new EliminatedBus(ndx);}
+		public EliminatedNode get(int ndx) {return new EliminatedNode(ndx);}
 
 	};
 	
-	public class EliminatedBus
+	public class EliminatedNode
 	{
+		/** Index of this eliminated node within the Eliminated Node List */
 		int _ndx;
-		EliminatedBus(int ndx)
+		
+		/**
+		 * Create a new Eliminated Node
+		 * @param ndx Index of EliminatedNode within EliminatedNOdeList
+		 */
+		EliminatedNode(int ndx)
 		{
 			_ndx = ndx;
 		}
 		
-		public int getOrder() {return _ndx;}
-		public int getElimBusNdx() {return _elimndorder[_ndx];}
+		/**
+		 * Get the index of the node within the original order used by the matrix
+		 * @return Index of the node within the original order used by the matrix
+		 */
+		public int getElimNodeNdx() {return _elimndorder[_ndx];}
+		/**
+		 * 
+		 * @return
+		 */
+		/** 
+		 * Get the set of nodes connected to the eliminated node
+		 * @return Set of nodes connected to the eliminated node
+		 */
 		public int[] getRemainingNodes() {return _n[_ndx];}
-		public int[] getElimBranches() {return _bfr[_ndx];}
-		public int[] getRemainingBranches() {return _btr[_ndx];}
+		/**
+		 * Get the set of eliminated edges
+		 * @return Set of eliminated edges same order as getRemainingNodes()
+		 */
+		public int[] getElimEdges() {return _bfr[_ndx];}
+		/**
+		 * Get the filled-in edges. The order of edges is formed by traversing
+		 * the rows of the upper triangle in the "mutual" submatrix
+		 * 
+		 * @return filled-in edges
+		 */
+		public int[] getFilledInEdges() {return _btr[_ndx];}
 
 		@Override
 		public String toString()
 		{
-			return String
-					.format("Index=%d, elimpos=%d, connected nd=%s br=%s, target br=%s",
-							_elimndorder[_ndx], _ndx,
-							Arrays.toString(getRemainingNodes()),
-							Arrays.toString(getElimBranches()),
-							Arrays.toString(getRemainingBranches()));
+			return String.format("Index=%d, elimpos=%d, connected nd=%s br=%s, target br=%s",
+				_elimndorder[_ndx], _ndx,
+				Arrays.toString(getRemainingNodes()),
+				Arrays.toString(getElimEdges()),
+				Arrays.toString(getFilledInEdges()));
 		}
 	}
 
@@ -71,9 +97,9 @@ public class SpSymMtrxFactPattern extends SpSymMtrxFactorizer
 		_n = Arrays.copyOf(_n, _iord);
 	}
 
-	public EliminatedBusList getEliminatedBuses()
+	public EliminatedNodeList getEliminatedBuses()
 	{
-		return new EliminatedBusList();
+		return new EliminatedNodeList();
 	}
 	
 	@Override

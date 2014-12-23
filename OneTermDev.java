@@ -1,7 +1,10 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.OneTermBaseList.OneTermBase;
 
-public class OneTermDev extends OutOfService
+
+public class OneTermDev extends OutOfService implements OneTermBase
+
 {
 	OneTermDevListIfc<? extends OneTermDev>	_list;
 
@@ -11,12 +14,6 @@ public class OneTermDev extends OutOfService
 		_list = list;
 	}
 
-	/** Device terminal Bus */
-	public Bus getBus() throws PAModelException
-	{
-		return _list.getBus(_ndx);
-	}
-	
 	/** Get device active power in MW */
 	public float getP() throws PAModelException
 	{
@@ -39,6 +36,12 @@ public class OneTermDev extends OutOfService
 	public void setQ(float q) throws PAModelException
 	{
 		_list.setQ(_ndx, q);
+	}
+
+	@Override
+	public Bus getBus() throws PAModelException
+	{
+		return _list.getBus(_ndx);
 	}
 	
 }
