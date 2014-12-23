@@ -11,6 +11,15 @@ public class SwitchOPA extends ExportOpenPA<SwitchList>
 	public SwitchOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
 		super(m.getSwitches(), Switch.values().length);
+		
+		//TODO testing
+		SwitchList sl = m.getSwitches();
+		System.out.println();
+		for(int i = 0; i < sl.size(); ++i)
+		{
+//			System.out.println("[SwitchOPA] SwitchID = "+sl.get(i).getID());
+		}
+		
 		int[][] bx = bri.get2TBus(_list);
 		BusList buses = bri.getBuses();
 		assign(Switch.ID, new StringWrap(i -> _list.getID(i)));

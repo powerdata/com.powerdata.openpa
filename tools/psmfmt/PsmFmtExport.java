@@ -6,11 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.EnumSet;
+
 import com.powerdata.openpa.CloneModelBuilder;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
+import com.powerdata.openpa.SwitchList;
 import com.powerdata.openpa.pwrflow.BusRefIndex;
 
 public class PsmFmtExport
@@ -137,6 +139,15 @@ public class PsmFmtExport
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
 		PAModel m = bldr.load();
+		
+		//TODO testing
+		SwitchList sl = m.getSwitches();
+		System.out.println();
+		for(int i = 0; i < sl.size(); ++i)
+		{
+			System.out.println("[PsmFmtExport] SwitchID = "+sl.get(i).getID());
+		}
+		
 		PsmFmtExport exp = new PsmFmtExport(m, useSingleBus);
 		exp.setModelName(mdlname);
 		exp.export(outdir);
