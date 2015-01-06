@@ -140,14 +140,6 @@ public class PsmFmtExport
 		bldr.enableFlatVoltage(true);
 		PAModel m = bldr.load();
 		
-		//TODO testing
-		SwitchList sl = m.getSwitches();
-		System.out.println();
-		for(int i = 0; i < sl.size(); ++i)
-		{
-			System.out.println("[PsmFmtExport] SwitchID = "+sl.get(i).getID());
-		}
-		
 		PsmFmtExport exp = new PsmFmtExport(m, useSingleBus);
 		exp.setModelName(mdlname);
 		exp.export(outdir);
