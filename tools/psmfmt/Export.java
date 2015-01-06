@@ -38,13 +38,11 @@ abstract class Export
 	{
 		for(int i=0; i < n; ++i)
 		{
-//			System.out.println(""); //TODO
 			boolean first = true;
 			for (FmtInfo f : fi)
 			{
 				if (f != null)
 				{
-//					System.out.println("[Export.java] "+f.col+" - "+f.value.apply(i)); //TODO
 					if (first)
 						first = false;
 					else
