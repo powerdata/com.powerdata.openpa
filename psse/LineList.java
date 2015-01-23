@@ -98,4 +98,10 @@ public abstract class LineList extends PsseBaseList<Line>
 
 	public float getMVA(int ndx) throws PsseModelException { return 0.0f; }
 	public float getMVAPercent(int ndx) throws PsseModelException { return 0.0f; }
+	
+	public float[] getRATEA() { return null;}
+	public float[] getRATEB() { return null;}
+	public float[] getRATEC() { return null;}
+
+	
 }	
