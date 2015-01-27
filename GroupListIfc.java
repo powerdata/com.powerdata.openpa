@@ -35,5 +35,6 @@ public interface GroupListIfc<T extends Group> extends BaseList<T>
 	SVCList getSVCs(int ndx) throws PAModelException;
 	
 	T getByBus(Bus b) throws PAModelException;
-	
+
+	int[] translateBusIndexes(int[] indexes);
 }

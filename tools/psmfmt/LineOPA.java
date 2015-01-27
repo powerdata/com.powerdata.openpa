@@ -1,18 +1,17 @@
 package com.powerdata.openpa.tools.psmfmt;
 
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.BusList;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
-import com.powerdata.openpa.pwrflow.BusRefIndex.TwoTerm;
 
 public class LineOPA extends ExportOpenPA<LineList>
 {
 	public LineOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
 		super(m.getLines(), Line.values().length);
-		TwoTerm bx = bri.get2TBus(_list);
+		BusRefIndex.TwoTerm bx = bri.get2TBus(_list);
 		BusList buses = bri.getBuses();
 		assign(Line.ID, new StringWrap(i -> _list.getID(i)));
 		assign(Line.Name, new StringWrap(i -> _list.getName(i)));

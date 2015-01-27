@@ -3,6 +3,7 @@ package com.powerdata.openpa.pwrflow;
 import java.util.AbstractList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.PAModelException;

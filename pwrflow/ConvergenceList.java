@@ -183,8 +183,8 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 	public boolean test()
 	{
 		int nislands = _islands.size();
-		Arrays.fill(_pw, null);
-		Arrays.fill(_qw, null);
+		Arrays.fill(_pw, Mismatch.NullMM);
+		Arrays.fill(_qw, Mismatch.NullMM);
 		Arrays.fill(_worstvbus, 0);
 		Arrays.fill(_worstv, 1f);
 		

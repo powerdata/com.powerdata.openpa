@@ -8,12 +8,11 @@ import java.io.PrintWriter;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PhaseShifterList;
 import com.powerdata.openpa.TransformerList;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
-import com.powerdata.openpa.pwrflow.BusRefIndex.TwoTerm;
 
 public class TransformerWindingOPA extends ExportOpenPA<ACBranchListIfc<? extends ACBranch>>
 {
@@ -33,7 +32,7 @@ public class TransformerWindingOPA extends ExportOpenPA<ACBranchListIfc<? extend
 
 	void assign(ACBranchListIfc<? extends ACBranch> list, BusRefIndex bri) throws PAModelException
 	{
-		TwoTerm bx = bri.get2TBus(list);
+		BusRefIndex.TwoTerm bx = bri.get2TBus(list);
 		BusList buses = bri.getBuses();
 		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+"_wnd"));
 		assign(TransformerWinding.Name, new StringWrap(i -> list.getName(i)));

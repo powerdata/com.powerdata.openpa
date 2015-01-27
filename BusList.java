@@ -88,4 +88,5 @@ public interface BusList extends GroupListIfc<Bus>
 
 	@Override
 	default ListMetaType getListMeta() {return ListMetaType.Bus;}
+
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Island;
@@ -153,7 +154,7 @@ public class DCPowerFlow
 		{
 			zero(list.getFromP(), list.getToP(), list.getFromQ(), list.getToQ());
 		}
-		BusRefIndex bri = BusRefIndex.CreateFromSingleBus(m);
+		BusRefIndex bri = BusRefIndex.CreateFromSingleBuses(m);
 		BusTypeUtil btu = new BusTypeUtil(m, bri);
 		System.out.println("Slack Buses:");
 		for (Island i : m.getIslands())

@@ -4,8 +4,10 @@ import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.tools.PAMath;
@@ -21,7 +23,7 @@ public class Mismatch
 {
 	public enum Status
 	{
-		OK, BlowsUp, RefOnly;
+		OK, BlowsUp, RefOnly, Null;
 	}
 
 	public interface WorstMM
@@ -86,6 +88,28 @@ public class Mismatch
 		}
 		
 	}
+	
+	public static final WorstMM NullMM = new WorstMM(){
+
+		@Override
+		public Status getStatus() {
+			return Status.Null;
+		}
+
+		@Override
+		public float getValue() {
+			return 0;
+		}
+
+		@Override
+		public Bus getBus() {
+			return null;
+		}
+
+		@Override
+		public String toString(String unit) {
+			return "No mismatch";
+		}};
 	
 	float[] _mm;
 	BusRefIndex _bri;

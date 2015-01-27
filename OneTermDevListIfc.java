@@ -24,4 +24,12 @@ public interface OneTermDevListIfc<T extends OneTermDev> extends OutOfServiceLis
 	
 	void setQ(float[] q) throws PAModelException;
 
+	default public int[] getBusIndexes() throws PAModelException
+	{
+		int n = size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getBus(i).getIndex();
+		return rv;
+	}
 }

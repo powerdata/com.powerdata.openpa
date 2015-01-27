@@ -1,8 +1,8 @@
 package com.powerdata.openpa.tools.psmfmt;
 
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
 
 public class NodeOPA extends ExportOpenPA<BusList>
 {

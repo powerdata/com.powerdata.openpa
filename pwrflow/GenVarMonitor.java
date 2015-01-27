@@ -1,10 +1,17 @@
 package com.powerdata.openpa.pwrflow;
 
+import gnu.trove.map.hash.TIntIntHashMap;
+
 import java.util.Arrays;
+import java.util.List;
+
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
+import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.impl.BasicBusGrpMap;
+import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SpSymFltMatrix;
 
@@ -22,13 +29,13 @@ public class GenVarMonitor
 	@FunctionalInterface
 	public interface Action
 	{
-		void take(Bus bus, float qinj);
+		void take(Bus bus, float qinj) throws PAModelException;
 	}
 	
 	@FunctionalInterface
 	interface Monitor
 	{
-		boolean test(float mm, int i);
+		boolean test(float mm, int i) throws PAModelException;
 	}
 
 	SpSymFltMatrix _bpp;
@@ -43,45 +50,25 @@ public class GenVarMonitor
 	Monitor[] _monitors;
 	/** no monitoring */
 	Monitor _nomon = (i,j) -> false;
-	/** Monitor low pv bus limits and convert if needed */
-	Monitor _pvmonlow = new Monitor()
-	{
-		@Override
-		public boolean test(float mm, int i)
-		{
-			boolean rv = false;
-			if(mm < _minq[i])
-			{
-				cvtPV2PQ(i);
-				_pv2pq.take(_pvbuses.get(i), mm);
-				rv = true;
-			}
-			return rv;
-		}
-	};
-
-	/** Monitor high pv bus limits and convert if needed */
-	Monitor _pvmonhi = new Monitor()
-	{
-		@Override
-		public boolean test(float mm, int i)
-		{
-			boolean rv = false;
-			if(mm > _maxq[i])
-			{
-				cvtPV2PQ(i);
-				_pv2pq.take(_pvbuses.get(i), mm);
-				rv = true;
-			}
-			return rv;
-		}
-	};
-
 	/** Action to take to convert pv to pq */
 	Action _pv2pq;
+	/** track pv bus to hot island index */
+	List<int[]> _busbyisland;
 	
+	/** Monitor low pv bus limits and convert if needed */
+	Monitor _pvmon = (mm,i) -> 
+	{
+		boolean rv = false;
+		if(mm < _minq[i] || mm > _maxq[i])
+		{
+			cvtPV2PQ(i);
+			_pv2pq.take(_pvbuses.get(i), mm);
+			rv = true;
+		}
+		return rv;
+	};
 	
-	public GenVarMonitor(SpSymFltMatrix bpp, BusList pvbuses, Action pv2pq,
+	public GenVarMonitor(SpSymFltMatrix bpp, BusList pvbuses, IslandList hotislands, Action pv2pq,
 			Action pq2pv) throws PAModelException
 	{
 		_bpp = bpp;
@@ -89,19 +76,31 @@ public class GenVarMonitor
 		/* save the original buses for each PV bus in the list */
 		int nbus = pvbuses.size();
 		_pvidx = new int[nbus];
+		/* correlate the pvbuses with appropriate hot island */
+		int nhot = hotislands.size();
+		TIntIntHashMap imap = new TIntIntHashMap(nhot, 0.5f, -1, -1);
+		for(int ii=0; ii < nhot; ++ii)
+			imap.put(hotislands.getIndex(ii), ii);
+		
+		int[] bmap = new int[nbus];
+		
 		for(int i=0; i < nbus; ++i)
-			_pvidx[i] = _pvbuses.get(i).getIndex();
-			
+		{
+			Bus b = _pvbuses.get(i);
+			_pvidx[i] = b.getIndex();
+			bmap[i] = imap.get(b.getIsland().getIndex());
+		}
+		_busbyisland = new BasicBusGrpMap(bmap, nhot).map();
+		_pv2pq = pv2pq;
 		saveOriginalB();
 		setupMonitors();
 		configureLimits();
-		_pv2pq = pv2pq;
 	}
 	
 	void setupMonitors()
 	{
 		_monitors = new Monitor[_pvbuses.size()];
-		Arrays.fill(_monitors, _pv2pq);
+		Arrays.fill(_monitors, _pvmon);
 	}
 
 	void cvtPV2PQ(int i)
@@ -132,26 +131,44 @@ public class GenVarMonitor
 		_maxq = new float[nbus];
 		_viol = new boolean[nbus];
 		
-		for(Bus bus : _pvbuses)
+		for(int i=0; i < nbus; ++i)
 		{
+			Bus bus = _pvbuses.get(i);
 			float mnq=0f, mxq=0f;
-			int bx = bus.getIndex();
+//			int bx = bus.getIndex();
 			for(Gen g : bus.getGenerators())
 			{
-				mnq += PAMath.mva2pu(g.getMinQ(), _sbase);
-				mxq += PAMath.mva2pu(g.getMaxQ(), _sbase);
+				if(g.isGenerating() && g.isRegKV())
+				{
+					mnq += PAMath.mva2pu(g.getMinQ(), _sbase);
+					mxq += PAMath.mva2pu(g.getMaxQ(), _sbase);
+				}
 			}
-			_minq[bx] = mnq;
-			_maxq[bx] = mxq;
+			_minq[i] = mnq;
+			_maxq[i] = mxq;
 		}
 	}
 	
-	public void monitor(Mismatch qmm)
+	public void monitor(Mismatch qmm, ConvergenceList rv) throws PAModelException
 	{
 		float[] mm = qmm.get();
-		int n = _pvbuses.size();
-		for(int i=0; i < n; ++i)
-			_monitors[i].test(mm[i], i);
+		int nrv = rv.size();
+		for(int irv = 0; irv < nrv; ++irv)
+		{
+			ConvergenceInfo ci = rv.get(irv);
+			if (Math.abs(ci.getWorstQ().getValue()) < 0.1f)
+			{
+				for(int i : _busbyisland.get(irv))
+				{
+					_monitors[i].test(mm[_pvbuses.getIndex(i)], i);
+				}
+			}
+		}
+//		int n = _pvbuses.size();
+//		for(int i=0; i < n; ++i)
+//		{
+//			_monitors[i].test(mm[_pvbuses.getIndex(i)], i);
+//		}
 	}
 	
 	

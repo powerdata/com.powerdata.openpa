@@ -1,9 +1,9 @@
 package com.powerdata.openpa.tools.psmfmt;
 
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PhaseShifterList;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
 
 public class PhaseTapChangerOPA extends ExportOpenPA<PhaseShifterList>
 {

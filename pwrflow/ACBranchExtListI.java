@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
 import com.powerdata.openpa.tools.Complex;

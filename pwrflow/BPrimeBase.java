@@ -16,9 +16,12 @@ public class BPrimeBase extends SpSymFltMatrix
 		{
 			BMtrxElem elem = bldr.get(i);
 			int[] bus = adj.getBusesForBranch(i);
-			boffdiag[i] = elem.getTransferB();
-			bdiag[bus[0]] += elem.getFromSelfB();
-			bdiag[bus[1]] += elem.getToSelfB();
+			if(bus[0] != bus[1])
+			{
+				boffdiag[i] = elem.getTransferB();
+				bdiag[bus[0]] += elem.getFromSelfB();
+				bdiag[bus[1]] += elem.getToSelfB();
+			}
 		}
 		setBDiag(bdiag);
 		setBOffDiag(boffdiag);

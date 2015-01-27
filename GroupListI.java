@@ -273,4 +273,16 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		return get(_bgmap.getGrp(b.getIndex()));
 	}
 
+	@Override
+	public int[] translateBusIndexes(int[] indexes)
+	{
+		int n = indexes.length;
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+		{
+			rv[i] = _bgmap.getGrp(indexes[i]);
+		}
+		return rv;
+	}
+	
 }

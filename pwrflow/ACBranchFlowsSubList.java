@@ -1,11 +1,7 @@
 package com.powerdata.openpa.pwrflow;
 
-import com.powerdata.openpa.ACBranch;
-import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow;
-import com.powerdata.openpa.tools.PAMath;
 
 public class ACBranchFlowsSubList extends ACBranchExtSublist<ACBranchFlow>
 		implements ACBranchFlows
@@ -51,17 +47,19 @@ public class ACBranchFlowsSubList extends ACBranchExtSublist<ACBranchFlow>
 	@Override
 	public void applyMismatches(Mismatch pmm, Mismatch qmm) throws PAModelException
 	{
-		int n = size();
-
-		for(int i=0; i < n; ++i)
-		{
-			int fbx = getFromBus(i).getIndex();
-			int tbx = getToBus(i).getIndex();
-			pmm.add(fbx, getFromPpu(i));
-			pmm.add(tbx,getToPpu(i));
-			qmm.add(fbx, getFromQpu(i));
-			qmm.add(tbx, getToQpu(i));
-		}
+//		int n = size();
+//
+//		for(int i=0; i < n; ++i)
+//		{
+//			int fbx = getFromBus(i).getIndex();
+//			int tbx = getToBus(i).getIndex();
+//			pmm.add(fbx, getFromPpu(i));
+//			pmm.add(tbx,getToPpu(i));
+//			qmm.add(fbx, getFromQpu(i));
+//			qmm.add(tbx, getToQpu(i));
+//		}
+		
+		_src.applyMismatches(pmm, qmm, _ndx);
 	}
 
 	@Override
@@ -75,5 +73,11 @@ public class ACBranchFlowsSubList extends ACBranchExtSublist<ACBranchFlow>
 	{
 		_src.update(_ndx[ndx]);
 	}
-	
+
+	@Override
+	public void applyMismatches(Mismatch pmm, Mismatch qmm, int[] subset) throws PAModelException
+	{
+		throw new UnsupportedOperationException(
+				"Subset of a sublist not implemented (yet)");
+	}
 }

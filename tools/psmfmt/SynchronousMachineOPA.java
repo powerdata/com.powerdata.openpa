@@ -1,10 +1,10 @@
 package com.powerdata.openpa.tools.psmfmt;
 
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
 
 public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 {
@@ -12,7 +12,7 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 	{
 		super(m.getGenerators(), SynchronousMachine.values().length);
 		int[] bx = bri.get1TBus(_list);
-		int[] rx = bri.mapBusFcn(_list, GenList::getRegBus);
+		int[] rx = bri.mapBusFcn(_list, i->_list.getRegBus(i));
 		BusList buses = bri.getBuses();
 		assign(SynchronousMachine.ID, i -> String.format("\"%s_sm\"", _list.get(i)));
 		assign(SynchronousMachine.Name, new StringWrap(i -> _list.getName(i)));

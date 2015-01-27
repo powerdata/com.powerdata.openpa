@@ -118,4 +118,6 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 		ColumnMeta q();
 	}
 	
+	public int[] getBusIndexes() throws PAModelException {return _bus.get();}
+
 }

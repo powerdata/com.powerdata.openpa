@@ -8,6 +8,7 @@ import com.powerdata.openpa.BaseObject;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Group;
 import com.powerdata.openpa.GroupList;
 import com.powerdata.openpa.Island;
@@ -152,7 +153,7 @@ public class CAWorker
 	}
 	public void runContingency() throws PAModelException
 	{
-		BusRefIndex bri = BusRefIndex.CreateFromSingleBus(_m);
+		BusRefIndex bri = BusRefIndex.CreateFromSingleBuses(_m);
 		FDPowerFlow pf = new FDPowerFlow(_m, bri);
 		pf.setMaxIterations(100);
 		_pfres = pf.runPF();

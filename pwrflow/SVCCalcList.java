@@ -2,6 +2,7 @@ package com.powerdata.openpa.pwrflow;
 import java.util.AbstractList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.OneTermBaseList;
 import com.powerdata.openpa.OneTermBaseList.OneTermBase;
 import com.powerdata.openpa.PAModelException;
@@ -109,7 +110,7 @@ public class SVCCalcList extends AbstractList<com.powerdata.openpa.pwrflow.SVCCa
 		_svcs = svcs;
 		_buses = bri.getBuses();
 		_busidx = bri.get1TBus(svcs);
-		_regidx = bri.mapBusFcn(svcs, (i,j) -> i.getRegBus(j));
+		_regidx = bri.mapBusFcn(svcs, i -> svcs.getRegBus(i));
 	}
 	
 	public SVC getSVC(int ndx)

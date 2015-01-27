@@ -46,4 +46,22 @@ public interface TwoTermDevListIfc<T extends TwoTermDev> extends TwoTermBaseList
 	
 	void setToQ(float[] mvar) throws PAModelException;
 
+	default int[] getFromBusIndexes() throws PAModelException
+	{
+		int n = size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getFromBus(i).getIndex();
+		return rv;
+		
+	}
+	
+	default int[] getToBusIndexes() throws PAModelException
+	{
+		int n = size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getToBus(i).getIndex();
+		return rv;
+	}
 }

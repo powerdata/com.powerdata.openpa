@@ -179,4 +179,7 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 		ColumnMeta tp(); 
 		ColumnMeta tq(); 
 	}
+	
+	public int[] getFromBusIndexes() throws PAModelException {return _fbus.get();}
+	public int[] getToBusIndexes() throws PAModelException {return _tbus.get();}
 }

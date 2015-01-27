@@ -6,6 +6,7 @@ import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.PhaseShifter;
 import com.powerdata.openpa.SVC;

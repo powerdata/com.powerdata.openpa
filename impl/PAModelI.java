@@ -5,7 +5,6 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import com.powerdata.openpa.*;
 import com.powerdata.openpa.ColChange;
 
@@ -17,7 +16,7 @@ import com.powerdata.openpa.ColChange;
  */
 public class PAModelI implements PAModel
 {
-	private BusList 			_buses;
+	private BusListI 			_buses;
 	private SwitchList			_switches;
 	private LineList			_lines;
 	private IslandList			_islands;
@@ -36,6 +35,7 @@ public class PAModelI implements PAModel
 	private TwoTermDCLineList 	_t2dclines;
 	private SwitchedShuntList 	_swshunts;
 	private SVCList 			_svcs;
+	private SingleBusList		_sbus = null;
 	 
 	ModelBuilderI _bldr;
 	
@@ -91,10 +91,10 @@ public class PAModelI implements PAModel
 	
 	@Override
 	@Nodump
-	public IslandList refreshIslands() throws PAModelException
+	public void refreshTopology() throws PAModelException
 	{
-		_islands = _bldr.loadIslands();
-		return _islands;
+		_islands = null;
+		_sbus = null;
 	}
 	
 	@Override
@@ -138,7 +138,7 @@ public class PAModelI implements PAModel
 	}
 
 	@Override
-	public BusList getBuses() throws PAModelException
+	public BusListI getBuses() throws PAModelException
 	{
 		if (_buses == null)
 		{
@@ -314,9 +314,13 @@ public class PAModelI implements PAModel
 	
 	@Override
 	@Nodump
-	public BusList getSingleBus() throws PAModelException
+	public SingleBusList getSingleBus() throws PAModelException
 	{
-		return new SingleBusList(this);
+		if (_sbus == null)
+		{
+			_sbus = new SingleBusList(this);
+		}
+		return _sbus;
 	}
 
 	@Override
@@ -367,7 +371,7 @@ public class PAModelI implements PAModel
 		// reset all devices list
 		for(BaseList<? extends BaseObject> b : _created) b.reset();
 		// refresh the islands if they exist
-		if(_islands != null) refreshIslands();
+		refreshTopology();
 		
 		return sn;
 	}

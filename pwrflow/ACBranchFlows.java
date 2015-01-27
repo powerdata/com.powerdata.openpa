@@ -40,6 +40,8 @@ public interface ACBranchFlows extends ACBranchExtList<com.powerdata.openpa.pwrf
 	
 	void applyMismatches(Mismatch pmm, Mismatch qmm) throws PAModelException;
 
+	void applyMismatches(Mismatch pmm, Mismatch qmm, int[] subset) throws PAModelException;
+
 	void update() throws PAModelException;
 	
 	void update(int ndx) throws PAModelException;

@@ -48,8 +48,10 @@ public class EmptyLists
 		@Override public LoadList getLoads(int ndx) {throw new IndexOutOfBoundsException();} 
 		@Override public ShuntReacList getShuntReactors(int ndx) {throw new IndexOutOfBoundsException();} 
 		@Override public ShuntCapList getShuntCapacitors(int ndx) {throw new IndexOutOfBoundsException();} 
-		@Override public SVCList getSVCs(int ndx) {throw new IndexOutOfBoundsException();} 
-		@Override public T getByBus(Bus b) {throw new UnsupportedOperationException();} 
+		@Override public SVCList getSVCs(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public int[] translateBusIndexes(int[] indexes) {return null;}
+		@Override public T getByBus(Bus b) {return null;}
+		
 	}
 	
 	private static final class EmptyAreaList extends EmptyGroup<Area> implements AreaList {}

@@ -332,7 +332,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public VoltageLevel getVoltageLevel(int ndx) throws PAModelException
 	{
-		return getBuses(ndx).getVoltageLevel(0);
+		return _buses.get(_bgmap.map().get(ndx)[0]).getVoltageLevel();
 	}
 
 	@Override

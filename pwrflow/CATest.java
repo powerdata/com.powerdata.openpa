@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.EnumSet;
 import java.util.Set;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
@@ -78,7 +79,7 @@ public class CATest extends BasicContingencyManager
 		ConvergenceList orig = null;
 
 		{
-			FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBus(m));
+			FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBuses(m));
 			orig = pf.runPF();
 			pf.updateResults();
 		}

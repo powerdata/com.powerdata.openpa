@@ -6,23 +6,27 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.IslandList;
-import com.powerdata.openpa.Load;
 import com.powerdata.openpa.LoadList;
+import com.powerdata.openpa.OneTermDev;
+import com.powerdata.openpa.OneTermDevListIfc;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow;
+import com.powerdata.openpa.pwrflow.GenVarMonitor.Action;
 import com.powerdata.openpa.tools.FactorizedFltMatrix;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SpSymMtrxFactPattern;
@@ -72,8 +76,6 @@ public class FDPowerFlow
 	float _tol = 0.005f;
 	/** system MVA base */
 	float _sbase = 100f;
-	/** PV Buses */
-	BusList _pvbuses;
 	/** system Buses (single-bus view) */
 	BusList _buses;
 	/** Track the voltage set points for PV buses.  Note that remote regulated buses
@@ -81,24 +83,71 @@ public class FDPowerFlow
 	VoltageSetPoint _vsp;
 	/** energized islands */
 	IslandList _hotislands;
-	/** Active generators */
-	GenList _actvgen;
-	/** active generators controlling voltage (ordered as _actvgen) */
-	boolean[] _isavr;
 	/** active loads */
-	LoadList _actvload;
+	Active1TData _actvld;
+	/** active generators */
+	ActiveGenData _actvgen;
 	/** SVC calculator */
 	SVCCalcList _svc;
 	/** fixed shunt calculators */
 	ArrayList<FixedShuntCalcList> _fshcalc = new ArrayList<>();
 	/** monitor vars */
-	//TODO:  GenVarMonitor _varmon;
+	GenVarMonitor _varmon;
 	/** report mismatches externally */
 	List<PFMismatchReporter> _mmreport = new ArrayList<>();
 	/** resulting voltage magnitudes (p.u.) */
 	float[] _vm;
 	/** resulting voltage angles (rad) */
 	float[] _va;
+	
+	/** Provide appropriate data access for 1-terminal device data during mismatch calculations */
+	@FunctionalInterface
+	interface ActiveDataAccess
+	{
+		float[] get() throws PAModelException;
+	}
+	
+	/** Cache some load data for faster access */
+	private class Active1TData
+	{
+		private int[] _bus;
+		float[] _p;
+		ActiveDataAccess _qa;
+		Active1TData(OneTermDevListIfc<? extends OneTermDev> actvdata, ActiveDataAccess pa, ActiveDataAccess qa)
+			throws PAModelException
+		{
+			_bus = _bri.get1TBus(actvdata);
+			_p = pa.get();
+			_qa = qa;
+		}
+		
+		float[] getP() throws PAModelException {return _p;}
+		float[] getQ() throws PAModelException {return _qa.get();}
+		int[] getBus() {return _bus;}
+		
+	}
+	private class ActiveGenData extends Active1TData
+	{
+		int[] revidx;
+		boolean[] inavr;
+		ActiveGenData(GenList actvgen, boolean[] inavr, int[] revidx) throws PAModelException
+		{
+			super(actvgen, () -> actvgen.getPS(), () -> actvgen.getQS());
+			this.inavr = inavr;
+			this.revidx = revidx;
+		}
+		/**
+		 * Toggle the AVR state of the given generator 
+		 * @return true if the generate was active, false otherwise
+		 */
+		boolean stopAVR(Gen g)
+		{
+			int rx = revidx[g.getIndex()];
+			if (rx == -1) return false;
+			inavr[revidx[g.getIndex()]] = false;
+			return true;
+		}
+	}
 	
 	public FDPowerFlow(PAModel model, BusRefIndex bri) throws PAModelException
 	{
@@ -110,8 +159,10 @@ public class FDPowerFlow
 		
 		/* build AC branch calculators (one for each dev type) */
 		for(ACBranchList l : model.getACBranches())
+		{
 			_brcalc.add(new ACBranchFlowsSubList(new ACBranchFlowsI(l, _bri),
 				SubLists.getInServiceIndexes(l)));
+		}
 		
 		/* build adjacency matrix */
 		_adj = new ACBranchAdjacencies<>(_brcalc, 
@@ -125,7 +176,6 @@ public class FDPowerFlow
 		SVCList[] psvc = partitionSVCs();
 		SVCList nonPvSvc = psvc[1];
 		_svc = new SVCCalcList(nonPvSvc, _bri);
-		
 
 		/* organize the model into bus types and select reference buses for each island */
 		//TODO:  Externalize BusTypeUtil creation so that it can be created once for multiple uses
@@ -141,22 +191,26 @@ public class FDPowerFlow
 		_bdblprime_mtrx = new BDblPrime<ACBranchFlow>(_adj, shInSvc, _svc, _bri);
 		
 		/* Build a list of buses with type PV */
-		_pvbuses = SubLists.getBusSublist(_buses, 
+		BusList pvbuses = SubLists.getBusSublist(_buses, 
 			_btu.getBuses(BusType.PV));
-		
-		for(Bus b : _pvbuses)
-			_bdblprime_mtrx.incBdiag(b.getIndex(), 1e+06f);
 		
 		setupHotIslands();
 		
-		 _vsp = new VoltageSetPoint(_pvbuses, _buses, _model.getIslands().size());
-		
-		/** set up lists for remaining equipment */
-		_actvload = SubLists.getLoadInsvc(_model.getLoads());
+		_varmon = new GenVarMonitor(_bdblprime_mtrx, pvbuses, _hotislands, _cvtpvpq, null);
 
+		for(Bus b : pvbuses)
+			_bdblprime_mtrx.incBdiag(b.getIndex(), 1e+06f);
+		
+		 _vsp = new VoltageSetPoint(pvbuses, _buses, _model.getIslands().size());
+		
+		/* set up lists for remaining equipment */
+		 LoadList loads = SubLists.getLoadInsvc(_model.getLoads());
+		 _actvld = new Active1TData(loads, () -> loads.getP(), () -> loads.getQ());
+		 
 		/* set up the fixed shunt calculators */
 		for(FixedShuntListIfc<? extends FixedShunt> fsh : shInSvc)
 			_fshcalc.add(new FixedShuntCalcList(fsh, _bri));
+		
 	}
 	
 	/**
@@ -192,6 +246,8 @@ public class FDPowerFlow
 		int ngen = gens.size(), np=0;
 		int[] pidx = new int[ngen];
 		boolean[] qidx = new boolean[ngen];
+		int[] revidx = new int[ngen];
+		Arrays.fill(revidx, -1);
 		
 		for(Island island : islands)
 		{
@@ -205,14 +261,17 @@ public class FDPowerFlow
 						h = true;
 						idx[nhot++] = island.getIndex();
 					}
-					pidx[np] = g.getIndex();
+					int lx = g.getIndex();
+					pidx[np] = lx;
+					revidx[lx] = np;
 					qidx[np++] = g.isRegKV();
 				}
 			}
 		}
 		_hotislands = SubLists.getIslandSublist(islands, Arrays.copyOf(idx, nhot));
-		_actvgen = SubLists.getGenSublist(_model.getGenerators(), Arrays.copyOf(pidx, np));
-		_isavr = Arrays.copyOf(qidx, np);
+		_actvgen = new ActiveGenData(SubLists.getGenSublist(
+			_model.getGenerators(), Arrays.copyOf(pidx, np)),
+			Arrays.copyOf(qidx, np), revidx);
 	}
 
 	FactorizedFltMatrix getBDblPrime()
@@ -223,6 +282,26 @@ public class FDPowerFlow
 		}
 		return _bDblPrime;
 	}
+	
+	@FunctionalInterface
+	private interface GetFloat<T>
+	{
+		float get(T o) throws PAModelException;
+	}
+
+	Action _cvtpvpq = (b,q) ->
+	{
+		_bDblPrime = null;
+		_btu.changeType(BusType.PQ, b.getIndex(), b.getIsland().getIndex());
+		GetFloat<Gen> fv = (q > 0f) ? j -> j.getMaxQ() : j -> j.getMinQ();
+		for(Gen g : b.getGenerators())
+		{
+			if(_actvgen.stopAVR(g))
+			{
+				g.setQS(fv.get(g));
+			}
+		}
+	};
 	
 	static Collection<BusType> _ActvMismatchTypes = EnumSet.of(BusType.PQ, BusType.PV);
 	static Collection<BusType> _ReacMismatchTypes = EnumSet.of(BusType.PQ);
@@ -263,8 +342,10 @@ public class FDPowerFlow
 			/* solve a new set of voltages and angles */
 			if (incomplete)
 			{
+				/* check for limit violations */
+				_varmon.monitor(qmm, rv);
 				/* check remote-monitored buses and adjust any setpoints as needed */
-				_vsp.applyRemotes(_vm, rv);
+//				_vsp.applyRemotes(_vm, rv);
 				/* correct magnitudes */
 				applyCorrections(_vm, _vm, getBDblPrime(), qmm);
 				/* correct angles */
@@ -324,29 +405,34 @@ public class FDPowerFlow
 			r.reportMismatch(pmm, qmm, vm, va, _btu.getTypes());
 	}
 
-
 	void applyLoadMism(Mismatch pmm, Mismatch qmm) throws PAModelException
 	{
 		float[] p = pmm.get(), q = qmm.get();
-		for(Load l : _actvload)
+		int[] bus = _actvld._bus;
+		int n = bus.length;
+		float[] lp = _actvld.getP(), lq = _actvld.getQ();
+		for(int i=0; i < n; ++i)
 		{
-			int b = _buses.getByBus(l.getBus()).getIndex();
-			p[b] -= PAMath.mva2pu(l.getP(), _sbase);
-			q[b] -= PAMath.mva2pu(l.getQ(), _sbase);
+			int b = bus[i];
+			p[b] -= PAMath.mva2pu(lp[i], _sbase);
+			q[b] -= PAMath.mva2pu(lq[i], _sbase);
 		}
 	}
 
 	void applyGenMism(Mismatch pmm, Mismatch qmm) throws PAModelException
 	{
 		float[] p = pmm.get(), q = qmm.get();
-		int ngen = _actvgen.size();
-		int[] bx = _bri.get1TBus(_actvgen);
+		int[] bx = _actvgen.getBus();
+		int ngen = bx.length;
+		float[] pg = PAMath.mva2pu(_actvgen.getP(), _sbase);
+		float[] qg = PAMath.mva2pu(_actvgen.getQ(), _sbase);
+		boolean[] isavr = _actvgen.inavr;
 		for(int i=0; i < ngen; ++i)
 		{
-			Gen g = _actvgen.get(i);
 			int b = bx[i];
-			p[b] -= PAMath.mva2pu(g.getPS(), _sbase);
-			if(!_isavr[i]) q[b] -= PAMath.mva2pu(g.getQS(), _sbase);
+			p[b] -= pg[i];
+			if(!isavr[i]) 
+				q[b] -= qg[i];
 		}
 	}
 	
@@ -416,13 +502,16 @@ public class FDPowerFlow
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
 		bldr.setLeastX(0.0001f);
+//		bldr.setUnitRegOverride(true);
 //		bldr.enableRCorrection(true);
 		PAModel m = bldr.load();
 
-		FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBus(m));
+		FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBuses(m));
 		pf.addMismatchReporter(new PFMismatchDbg(outdir));
+		pf.setMaxIterations(400);
 		ConvergenceList results = pf.runPF();
 		results.forEach(l -> System.out.println(l));
+		new ListDumper().dumpList(new File("/tmp/branches.csv"), m.getLines());
 	}
 
 

@@ -3,17 +3,24 @@ package com.powerdata.openpa.pwrflow;
 import java.util.Arrays;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchListIfc;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.tools.Complex;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow;
-import com.powerdata.openpa.pwrflow.BusRefIndex.TwoTerm;
 
 public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements ACBranchFlows
 {
 	float _sbase = 100f;
 	float[] _fp, _tp, _fq, _tq;
-	
+	BusRefIndex.TwoTerm _bus;
+	float[] _brbmag;
+	float[] _fbch;
+	float[] _tbch;
+	float[] _ftap;
+	float[] _ttap;
+	float[] _lshift;
+
 	
 	public ACBranchFlowsI(ACBranchListIfc<? extends ACBranch> branches, BusRefIndex bri)
 		throws PAModelException
@@ -24,6 +31,13 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		_tp = new float[n];
 		_fq = new float[n];
 		_tq = new float[n];
+		_bus = _bri.get2TBus(_list);
+		_brbmag = _list.getBmag();
+		_fbch = _list.getFromBchg();
+		_tbch = _list.getToBchg();
+		_ftap = _list.getFromTap();
+		_ttap = _list.getToTap();
+		_lshift = _list.getShift();
 	}
 	
 
@@ -48,18 +62,16 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		Arrays.fill(_tp,  0f);
 		Arrays.fill(_fq,  0f);
 		Arrays.fill(_tq,  0f);
-		BusRefIndex.TwoTerm bus = _bri.get2TBus(_list);
-		int[] fb = bus.getFromBus(), tb = bus.getToBus();
+		int[] fb = _bus.getFromBus(), tb = _bus.getToBus();
 		for(int i=0; i < n; ++i)
 		{
-			ACBranch br = _list.get(i);
 			Complex y = _y.get(i);
 			
 			int f = fb[i], t = tb[i];
 			float fvm = vm[f], tvm = vm[t], fva = va[f], tva = va[t];
-			float shift = fva - tva - br.getShift();
+			float shift = fva - tva - _lshift[i];
 
-			float ft = br.getFromTap(), tt = br.getToTap();
+			float ft = _ftap[i], tt = _ttap[i];
 			float tvmpq = fvm * tvm / (ft * tt);
 			float tvmp2 = fvm * fvm / (ft * ft);
 			float tvmq2 = tvm * tvm / (tt * tt);
@@ -70,11 +82,11 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 			float bcos = ctvmpq * yb;
 			float gsin = stvmpq * yg;
 			float bsin = stvmpq * yb;
-			float ybmag = yb + br.getBmag();
+			float ybmag = yb + _brbmag[i];
 			_fp[i] = -gcos - bsin + tvmp2 * yg;
-			_fq[i] = -gsin + bcos - tvmp2 * (ybmag + br.getFromBchg());
+			_fq[i] = -gsin + bcos - tvmp2 * (ybmag + _fbch[i]);
 			_tp[i] = -gcos + bsin + tvmq2 * yg;
-			_tq[i] = gsin + bcos - tvmq2 * (ybmag + br.getToBchg());
+			_tq[i] = gsin + bcos - tvmq2 * (ybmag + _tbch[i]);
 		}
 	}
 	
@@ -95,10 +107,28 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		_apply(_fq, _tq, qmm);
 	}
 	
+	@Override
+	public void applyMismatches(Mismatch pmm, Mismatch qmm, int[] subset) throws PAModelException
+	{
+		_apply(_fp, _tp, pmm, subset);
+		_apply(_fq, _tq, qmm, subset);
+	}
+	
+	void _apply(float[] f, float[] t, Mismatch mm, int[] subset) throws PAModelException
+	{
+//		TwoTerm bx = mm.getBusRefIndex().get2TBus(_list);
+		int[] fndx = _bus.getFromBus(), tndx = _bus.getToBus();
+		for(int i : subset)
+		{
+			mm.add(fndx[i], f[i]);
+			mm.add(tndx[i], t[i]);
+		}
+	}
+
 	void _apply(float[] f, float[] t, Mismatch mm) throws PAModelException
 	{
-		TwoTerm bx = mm.getBusRefIndex().get2TBus(_list);
-		int[] fndx = bx.getFromBus(), tndx = bx.getToBus();
+//		TwoTerm bx = mm.getBusRefIndex().get2TBus(_list);
+		int[] fndx = _bus.getFromBus(), tndx = _bus.getToBus();
 		int n = size();
 		for(int i=0; i < n; ++i)
 		{
@@ -127,6 +157,7 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		b.setFromQ(PAMath.pu2mva(_fq[ndx], _sbase));
 		b.setToQ(PAMath.pu2mva(_tq[ndx], _sbase));
 	}
+
 
 
 }

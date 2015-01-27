@@ -15,8 +15,8 @@ public interface PAModel extends PALists
 	
 	/** return the islands */ 
 	IslandList getIslands() throws PAModelException;
-	/** refresh the island list to reflect changes to topology or generator state */ 
-	IslandList refreshIslands() throws PAModelException;
+	/** refresh the island and singlebus list to reflect changes to topology or generator state */ 
+	void refreshTopology() throws PAModelException;
 	/** get Areas */
 	AreaList getAreas() throws PAModelException;
 	/** get owners */
@@ -41,4 +41,5 @@ public interface PAModel extends PALists
 	void clearChanges();
 	// TODO: Check if this is really what we want to do 
 	long refresh() throws PAModelException;
+
 }
