@@ -1,7 +1,6 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.ShuntCapList;
 import com.powerdata.openpa.ShuntCapacitor;
@@ -41,10 +40,4 @@ public class ShuntCapListI extends FixedShuntListI<ShuntCapacitor> implements Sh
 	{
 		return new ShuntCapacitor(this, index);
 	}
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.ShuntCap;
-	}
-
 }

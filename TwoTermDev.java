@@ -1,7 +1,9 @@
 package com.powerdata.openpa;
 
+import com.powerdata.openpa.TwoTermBaseList.TwoTermBase;
 
-public class TwoTermDev extends OutOfService
+
+public class TwoTermDev extends OutOfService implements TwoTermBase
 {
 	TwoTermDevListIfc<? extends TwoTermDev> _list;
 	
@@ -13,18 +15,18 @@ public class TwoTermDev extends OutOfService
 		_list = list;
 	}
 
-	/** get from-side Bus */
+	@Override
 	public Bus getFromBus() throws PAModelException
 	{
 		return _list.getFromBus(_ndx);
 	}
-	
-	/** get to-side bus */
+
+	@Override
 	public Bus getToBus() throws PAModelException
 	{
 		return _list.getToBus(_ndx);
 	}
-	
+
 	/** from-side active power (MW) */
 	public float getFromP() throws PAModelException
 	{

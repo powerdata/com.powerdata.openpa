@@ -105,4 +105,5 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 	{
 		return ListMetaType.Load;
 	}
+	
 }

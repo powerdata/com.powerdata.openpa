@@ -4,7 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.powerdata.openpa.impl.BasicBusGrpMap;
 import com.powerdata.openpa.tools.LinkNet;
 
@@ -19,6 +18,7 @@ public class BusGrpMapBldr
 	LinkNet _lnet;
 	int _nbus;
 	int _nbr = 0;
+	BusRefIndex _bri;
 	
 	public BusGrpMapBldr(PALists model) throws PAModelException
 	{
@@ -27,102 +27,63 @@ public class BusGrpMapBldr
 		_nbus = model.getBuses().size();
 		_lnet.ensureCapacity(_nbus-1, 0);
 		_lnet.addBuses(0, _nbus);
+		_bri = BusRefIndex.CreateFromConnectivityBuses(model);
 	}
 	
 	public BusGrpMapBldr addSwitches() throws PAModelException
 	{
-		SwitchList list = _model.getSwitches();
-		int n = list.size();
-		_nbr += n;
-		_lnet.ensureCapacity(0, _nbr);
-		for(Switch s : list)
-			if (incSW(s)) addDev2T(s);
+		addDev(_model.getSwitches(), d -> incSW(d));
 		return this;
 	}
 
-	int addDev2T(TwoTermDev d) throws PAModelException
+	@FunctionalInterface
+	interface T2DevPredicate<T extends TwoTermDev>
 	{
-		int fb = d.getFromBus().getIndex();
-		int tb = d.getToBus().getIndex();
-		return _lnet.addBranch(fb, tb);
+		boolean test(T d) throws PAModelException;
 	}
-
-	public BusGrpMapBldr addLines() throws PAModelException
+	
+	<T extends TwoTermDev> void  addDev(TwoTermDevListIfc<T> list, T2DevPredicate<T> p) throws PAModelException
 	{
-		LineList list = _model.getLines();
 		int n = list.size();
 		_nbr += n;
 		_lnet.ensureCapacity(0, _nbr);
-		for(Line s : list)
+		BusRefIndex.TwoTerm tt = _bri.get2TBus(list);
+		int[] frm = tt.getFromBus(), to = tt.getToBus();
+		for(int i=0; i < n; ++i)
 		{
-			if (incLN(s))
-				addDev2T(s);
+			if (p.test(list.get(i)))
+				_lnet.addBranch(frm[i], to[i]);
 		}
+	}
+	
+	public BusGrpMapBldr addLines() throws PAModelException
+	{
+		addDev(_model.getLines(), d -> incLN(d));
 		return this;
 	}
 	public BusGrpMapBldr addSeriesReac() throws PAModelException
 	{
-		SeriesReacList list = _model.getSeriesReactors();
-		int n = list.size();
-		_nbr += n;
-		_lnet.ensureCapacity(0, _nbr);
-		for(SeriesReac s : list)
-		{
-			if (incSR(s))
-				addDev2T(s);
-		}
+		addDev(_model.getSeriesReactors(), d -> incSR(d));
 		return this;
 	}
 	public BusGrpMapBldr addSeriesCap() throws PAModelException
 	{
-		SeriesCapList list = _model.getSeriesCapacitors();
-		int n = list.size();
-		_nbr += n;
-		_lnet.ensureCapacity(0, _nbr);
-		for(SeriesCap s : list)
-		{
-			if (incSC(s))
-				addDev2T(s);
-		}
+		addDev(_model.getSeriesCapacitors(), d -> incSC(d));
 		return this;
 	}
 	public BusGrpMapBldr addTransformers() throws PAModelException
 	{
-		TransformerList list = _model.getTransformers();
-		int n = list.size();
-		_nbr += n;
-		_lnet.ensureCapacity(0, _nbr);
-		for(Transformer s : list)
-		{
-			if (incTX(s))
-				addDev2T(s);
-		}
+		addDev(_model.getTransformers(), d -> incTX(d));
 		return this;
 	}
 	public BusGrpMapBldr addPhaseShifters() throws PAModelException
 	{
-		PhaseShifterList list = _model.getPhaseShifters();
-		int n = list.size();
-		_nbr += n;
-		_lnet.ensureCapacity(0, _nbr);
-		for(PhaseShifter s : list)
-		{
-			if (incPS(s))
-				addDev2T(s);
-		}
+		addDev(_model.getPhaseShifters(), d -> incPS(d));
 		return this;
 	}
 	public BusGrpMapBldr addTwoTermDCLines() throws PAModelException
 	{
-		TwoTermDCLineList list = _model.getTwoTermDCLines();
-		int n = list.size();
-		_nbr += n;
-		_lnet.ensureCapacity(0, _nbr);
-		for(TwoTermDCLine s : list)
-		{
-			if (incD2(s))
-				addDev2T(s);
-		}
+		addDev(_model.getTwoTermDCLines(), d -> incD2(d));
 		return this;
 	}
 	
@@ -181,7 +142,6 @@ public class BusGrpMapBldr
 		}
 		
 	};
-	
 
 	static class BBusGrpMap extends BasicBusGrpMap
 	{
@@ -198,7 +158,6 @@ public class BusGrpMapBldr
 					_map[b] = ig;
 			}
 		}
-
 		
 	}
 	

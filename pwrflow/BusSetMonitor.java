@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.impl.GroupMap;
 
+@Deprecated
 public class BusSetMonitor
 {
 	Monitor[] _mon;

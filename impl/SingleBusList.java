@@ -1,5 +1,8 @@
 package com.powerdata.openpa.impl;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.Bus;
@@ -329,7 +332,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public VoltageLevel getVoltageLevel(int ndx) throws PAModelException
 	{
-		return getBuses(ndx).getVoltageLevel(0);
+		return _buses.get(_bgmap.map().get(ndx)[0]).getVoltageLevel();
 	}
 
 	@Override
@@ -366,5 +369,15 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	{
 		return ListMetaType.Bus;
 	}
-
+	static Set<ColumnMeta> _Cols = EnumSet.copyOf(Arrays
+		.asList(new ColumnMeta[] { ColumnMeta.BusAREA,
+				ColumnMeta.BusFREQSRCPRI, ColumnMeta.BusID,
+				ColumnMeta.BusNAME, ColumnMeta.BusOWNER,
+				ColumnMeta.BusSTATION, ColumnMeta.BusVA,
+				ColumnMeta.BusVLEV, ColumnMeta.BusVM }));
+@Override
+public Set<ColumnMeta> getColTypes()
+{
+	return _Cols;
+}
 }

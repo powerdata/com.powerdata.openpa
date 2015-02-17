@@ -2,7 +2,6 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.GroupListI;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.VoltageLevel;
 import com.powerdata.openpa.VoltageLevelList;
@@ -69,11 +68,4 @@ public class VoltageLevelListI extends GroupListI<VoltageLevel> implements
 		return new VoltageLevel(this, index);
 	}
 
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.VoltageLevel;
-	}
-	
-	
 }

@@ -2,13 +2,11 @@ package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.GroupListI;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Station;
 import com.powerdata.openpa.StationList;
 
 public class StationListI extends GroupListI<Station> implements StationList
 {
-	public final static StationListI Empty = new StationListI();
 	static final PAListEnum _PFld = new PAListEnum()
 	{
 		@Override
@@ -42,9 +40,4 @@ public class StationListI extends GroupListI<Station> implements StationList
 		return new Station(this, index);
 	}
 
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.Station;
-	}
 }

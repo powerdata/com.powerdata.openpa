@@ -18,23 +18,20 @@ import com.powerdata.openpa.SwitchList;
 import com.powerdata.openpa.TransformerList;
 import com.powerdata.openpa.TwoTermDCLineList;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-
 public abstract class GroupSubList<T extends Group> extends SubList<T> implements GroupListIfc<T>
 {
 	GroupListIfc<T> _src;
-	TIntIntHashMap _grp;
 
 	public GroupSubList(GroupListIfc<T> src, int[] ndx)
 	{
 		super(src, ndx);
 		_src = src;
 		
-		_grp = new TIntIntHashMap(_size, 0.5f, -1, -1);
-		for(int i=0; i < _size; ++i)
-		{
-			_grp.put(_ndx[i], i);
-		}
+//		_grp = new TIntIntHashMap(_size, 0.5f, -1, -1);
+//		for(int i=0; i < _size; ++i)
+//		{
+//			_grp.put(_ndx[i], i);
+//		}
 	}
 
 	@Override
@@ -116,11 +113,15 @@ public abstract class GroupSubList<T extends Group> extends SubList<T> implement
 	}
 
 	@Override
-	public T getByBus(Bus b)
+	public T getByBus(Bus b) throws PAModelException
 	{
-		int bgx = _grp.get(getByBus(b).getIndex());
-		return (bgx == -1) ? null : get(bgx);
+		return _src.getByBus(b);
 	}
 
-	
+	@Override
+	public int[] translateBusIndexes(int[] indexes)
+	{
+		return _src.translateBusIndexes(indexes);
+	}
+
 }

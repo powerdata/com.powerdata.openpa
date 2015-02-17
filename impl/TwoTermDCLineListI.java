@@ -1,14 +1,12 @@
 package com.powerdata.openpa.impl;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDCLine;
 import com.powerdata.openpa.TwoTermDCLineList;
 
 public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implements TwoTermDCLineList
 {
-	public final static TwoTermDCLineListI Empty = new TwoTermDCLineListI();
 	static final TwoTermDevEnum _PFld = new TwoTermDevEnum()
 	{
 		@Override
@@ -47,10 +45,4 @@ public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implement
 	{
 		return new TwoTermDCLine(this, index);
 	}
-	@Override
-	public ListMetaType getListMeta()
-	{
-		return ListMetaType.TwoTermDCLine;
-	}
-
 }

@@ -1,5 +1,8 @@
 package com.powerdata.openpa;
 
+import java.util.Collections;
+import java.util.Set;
+
 
 
 /**
@@ -59,6 +62,12 @@ public class GroupList extends GroupListI<Group>
 	public int objHash(int ndx)
 	{
 		return System.identityHashCode(this) + getKey(ndx);
+	}
+
+	@Override
+	public Set<ColumnMeta> getColTypes()
+	{
+		return Collections.emptySet();
 	}
 	
 }

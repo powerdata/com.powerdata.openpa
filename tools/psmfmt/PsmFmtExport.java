@@ -6,12 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.EnumSet;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.CloneModelBuilder;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
 
 public class PsmFmtExport
 {
@@ -24,8 +24,8 @@ public class PsmFmtExport
 	public PsmFmtExport(PAModel model, boolean singlebus) throws PAModelException
 	{
 		_model = model;
-		_bri = singlebus ? BusRefIndex.CreateFromSingleBus(model) : 
-			BusRefIndex.CreateFromConnectivityBus(model);
+		_bri = singlebus ? BusRefIndex.CreateFromSingleBuses(model) : 
+			BusRefIndex.CreateFromConnectivityBuses(model);
 		_sbus = singlebus;
 	}
 	
@@ -137,6 +137,7 @@ public class PsmFmtExport
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
 		PAModel m = bldr.load();
+		
 		PsmFmtExport exp = new PsmFmtExport(m, useSingleBus);
 		exp.setModelName(mdlname);
 		exp.export(outdir);

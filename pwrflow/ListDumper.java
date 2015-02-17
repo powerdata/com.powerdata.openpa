@@ -10,10 +10,10 @@ import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PflowModelBuilder;
+import com.powerdata.openpa.TwoTermBaseList;
 import com.powerdata.openpa.impl.Nodump;
 
 public class ListDumper
@@ -38,7 +38,7 @@ public class ListDumper
 					while(rtype.getInterfaces().length > 0)
 					{
 						Class<?> ifc = rtype.getInterfaces()[0];
-						if (ifc == BaseList.class
+						if ((ifc == BaseList.class||ifc == TwoTermBaseList.class)
 								&& m.getParameterTypes().length == 0)
 						{
 							String nm = m.getName();

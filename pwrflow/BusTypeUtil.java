@@ -6,8 +6,10 @@ import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.PhaseShifter;
+import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
@@ -20,6 +22,7 @@ import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SeriesCap;
 import com.powerdata.openpa.SeriesReac;
+import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.Switch;
 import com.powerdata.openpa.Switch.State;
 import com.powerdata.openpa.Transformer;
@@ -44,16 +47,24 @@ public class BusTypeUtil
 	public BusTypeUtil(PAModel model, BusRefIndex bri) throws PAModelException
 	{
 		_model = model;
-		setup(bri, null);
+		SVCList svcs = model.getSVCs();
+		int nsvc = svcs.size(), npv=0;
+		int[] sx = new int[nsvc];
+		for(SVC s : svcs)
+		{
+			if (s.getSlope() == 0f && !s.isOutOfSvc())
+				sx[npv++] = s.getIndex();
+		}
+		setup(bri, SubLists.getSVCSublist(svcs, sx));
 	}
 	
-	public BusTypeUtil(PAModel model, BusRefIndex bri, int[] svcpv) throws PAModelException
+	public BusTypeUtil(PAModel model, BusRefIndex bri, SVCList pvsvc) throws PAModelException
 	{
 		_model = model;
-		setup(bri, svcpv);
+		setup(bri, pvsvc);
 	}
 	
-	void setup(BusRefIndex bri, int[] svcpv) throws PAModelException
+	void setup(BusRefIndex bri, SVCList svcpv) throws PAModelException
 	{
 		BusList buses = bri.getBuses();
 		int nbus = buses.size();
@@ -220,7 +231,7 @@ public class BusTypeUtil
 		return t + NGRP * i;
 	}
 	
-	void configureTypes(Island island, BusRefIndex bri, float[] pmax, float[] qmax, int[] svcpv)
+	void configureTypes(Island island, BusRefIndex bri, float[] pmax, float[] qmax, SVCList svcpv)
 			throws PAModelException
 	{
 		GenList gens = island.getGenerators();
@@ -230,30 +241,25 @@ public class BusTypeUtil
 		
 		for(int i=0; i < ngen; ++i)
 		{
-			Gen.Mode mode = gens.getMode(i);
-			if (!gens.isOutOfSvc(i) && gens.isRegKV(i) && mode != Gen.Mode.OFF && mode != Gen.Mode.PMP)
+			Gen g = gens.get(i);
+			if (g.unitInAVR())
 			{
 				int bx = gbx[i];
 				_type[bx] = PV;
-				pmax[bx] += gens.getOpMaxP(i);
-				qmax[bx] += gens.getMaxQ(i) - gens.getMinQ(i);
+				pmax[bx] += g.getOpMaxP();
+				qmax[bx] += g.getMaxQ() - g.getMinQ();
 				_itype[bx] = calcigrp(indx, PV); 
 			}
 		}
 		
-		if (svcpv != null)
+		BusList sbus = bri.getBuses();
+		for (SVC s : svcpv)
 		{
-			SVCList svcs = island.getSVCs();
-			int[] sbx = bri.get1TBus(svcs);
-			int nsvc = svcpv.length;
-			for (int i = 0; i < nsvc; ++i)
+			if (!s.isOutOfSvc())
 			{
-				if (!svcs.isOutOfSvc(i))
-				{
-					int bx = sbx[svcpv[i]];
-					_type[bx] = PV;
-					_itype[bx] = calcigrp(indx, PV);
-				}
+				int bx = sbus.getByBus(s.getBus()).getIndex(); 
+				_type[bx] = PV;
+				_itype[bx] = calcigrp(indx, PV);
 			}
 		}
 	}
@@ -280,7 +286,7 @@ public class BusTypeUtil
 		return m.get(type.ordinal());
 	}
 	
-	int[] getBuses(BusType type, int island)
+	int[] getBuses(BusType type, Island island)
 	{
 		GroupMap m = _imap.get();
 		if (m == null)
@@ -288,7 +294,7 @@ public class BusTypeUtil
 			m = new GroupMap(_itype, _nigrp);
 			_imap = new WeakReference<>(m);
 		}
-		return m.get(calcigrp(island, type.ordinal()));
+		return m.get(calcigrp(island.getIndex(), type.ordinal()));
 	}
 
 	public BusType[] getTypes()
@@ -319,4 +325,5 @@ public class BusTypeUtil
 		_type[bus] = ntype.ordinal();
 	}
 	
+
 }

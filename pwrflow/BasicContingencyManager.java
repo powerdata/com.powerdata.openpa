@@ -31,10 +31,9 @@ public abstract class BasicContingencyManager extends ContingencyManager
 	
 	private boolean _par = false;
 	BiFunction<PAModel, String, CAWorker> _cawrkr = _useratings;
-	IslandConv[] _startPFResults;
-	boolean _enadbg = false;
+	ConvergenceList _startPFResults;
 
-	public BasicContingencyManager(PAModel m, IslandConv[] startPfResults)
+	public BasicContingencyManager(PAModel m, ConvergenceList startPfResults)
 	{
 		super(m);
 		_startPFResults = startPfResults;
@@ -42,8 +41,6 @@ public abstract class BasicContingencyManager extends ContingencyManager
 		// as many times as desired to create new models
 	}
 
-	public void setDebug(boolean d) {_enadbg = d;}
-	
 	public void setParallel(boolean p) {_par = p;}
 	public boolean getParallel() {return _par;}
 	public void setIgnoreRatings(boolean i) {_cawrkr = i ? _noratings : _useratings;}
@@ -54,7 +51,12 @@ public abstract class BasicContingencyManager extends ContingencyManager
 	{
 		
 		Stream<Contingency> cstream = _par ? set.parallelStream() : set.stream();
+		long ts = System.currentTimeMillis();
+		System.err.format("Processing %d contingencies\n", set.size());
 		cstream.forEach(c -> applyContingency(c));
+		long t = System.currentTimeMillis() - ts;
+		long sec = Math.round((double) t/1000.0);
+		System.err.format("Contingencies processed in %d sec (avg %6.2f ms)", sec, ((float)t)/((float)set.size()));
 	}
 	
 	void applyContingency(Contingency c)
@@ -63,9 +65,8 @@ public abstract class BasicContingencyManager extends ContingencyManager
 		{
 			PAModel clm = new CloneModelBuilder(_model, _localcols).load();
 			c.execute(clm);
-			clm.refreshIslands();
+			clm.refreshTopology();
 			CAWorker w = _cawrkr.apply(clm, c.getName());
-			if (_enadbg) w.setDbg(true);
 			w.runContingency();
 			report(c, w.getResults(_startPFResults), clm);
 		}

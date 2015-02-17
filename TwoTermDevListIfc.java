@@ -1,17 +1,13 @@
 package com.powerdata.openpa;
 
-public interface TwoTermDevListIfc<T extends TwoTermDev> extends OutOfServiceList<T>
+public interface TwoTermDevListIfc<T extends TwoTermDev> extends TwoTermBaseList<T>, OutOfServiceList<T>
 {
-	Bus getFromBus(int ndx) throws PAModelException;
-	
 	void setFromBus(int ndx, Bus b) throws PAModelException;
 	
 	Bus[] getFromBus() throws PAModelException;
 	
 	void setFromBus(Bus[] b) throws PAModelException;
 
-	Bus getToBus(int ndx) throws PAModelException;
-	
 	void setToBus(int ndx, Bus b) throws PAModelException;
 	
 	Bus[] getToBus() throws PAModelException;
@@ -50,4 +46,22 @@ public interface TwoTermDevListIfc<T extends TwoTermDev> extends OutOfServiceLis
 	
 	void setToQ(float[] mvar) throws PAModelException;
 
+	default int[] getFromBusIndexes() throws PAModelException
+	{
+		int n = size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getFromBus(i).getIndex();
+		return rv;
+		
+	}
+	
+	default int[] getToBusIndexes() throws PAModelException
+	{
+		int n = size();
+		int[] rv = new int[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = getToBus(i).getIndex();
+		return rv;
+	}
 }

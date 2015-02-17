@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.EnumSet;
 import java.util.Set;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
@@ -16,10 +17,11 @@ import com.powerdata.openpa.pwrflow.ContingencySet.Contingency;
 public class CATest extends BasicContingencyManager
 {
 	PrintWriter _pw;
-	public CATest(PAModel m, IslandConv[] startPfResults, PrintWriter pw)
+	public CATest(PAModel m, ConvergenceList startPfResults, PrintWriter pw)
 	{
 		super(m, startPfResults);
 		_pw = pw;
+		_pw.println("Contingency,ContDevType,ContFrArea,ContToArea,Violation,ViolDevType,Type,Value");
 	}
 
 	static Set<Status> _VoltageViol = EnumSet.of(Status.HighVoltageFail, Status.LowVoltage, Status.VoltageCollapse, Status.HighVoltage);
@@ -27,39 +29,7 @@ public class CATest extends BasicContingencyManager
 	@Override
 	protected void report(Contingency c, Set<Result> r, PAModel m) throws PAModelException
 	{
-//		
-//		
-//		
-//		
-//		Set<Status> stat = r.getStatus();
-//		_pw.format("Contingency \"%s\": %s ", c.getName(), stat.toString());
-//		if (stat.contains(Status.LoadLoss))
-//			_pw.format("%7.3f%% system load loss", r.getLoadDropped()*100f);
-//		_pw.println();
-//
-//		if (stat.contains(Status.HighVoltageFail)
-//				|| stat.contains(Status.VoltageCollapse))
-//		{
-//			for(VoltViol vv : r.getVoltViol())
-//			{
-//				_pw.format("\tvoltage @ %s: %f \n", vv.getBus().getName(), vv.getV());
-//			}
-//		}		
-//		if (stat.contains(Status.Overloads))
-//		{
-//			for (Entry<ListMetaType, Set<Overload>> oe : r.getOverloads().entrySet())
-//			{
-//				if (oe.getValue().size() > 0)
-//				{
-//					_pw.format("\t%s: ", oe.getKey().toString());
-//					forcom.powerdata.openpa.ListMetaType (Overload i : oe.getValue())
-//					{
-//						_pw.format("%s, ", _model.getList(oe.getKey()).getName(i.getIndex()));
-//					}
-//					_pw.println();
-//				}
-//			}
-//		}
+		
 	}
 
 	@Override
@@ -106,21 +76,16 @@ public class CATest extends BasicContingencyManager
 //		bldr.setBadXLimit(2f);
 		PAModel m = bldr.load();
 		
-		IslandConv[] orig = null;
+		ConvergenceList orig = null;
 
 		{
-			FDPFCore pf = new FDPFCore(m);
-//			PFMismatchDbg dbg = new PFMismatchDbg(new File(new File("/run/shm/pfdbg"), "baseline"));
-//			FDPFCore pf = dbg.getPF(m); 
+			FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBuses(m));
 			orig = pf.runPF();
 			pf.updateResults();
-//			dbg.write();
 		}
 		
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(pout)));
 		CATest ca = new CATest(m, orig, pw);
-//		ca.setParallel(true);
-		ca.setDebug(true);
 		if (ignoreRatings) ca.setIgnoreRatings(true);
 		ContingencySet cset = new ContingencySet(m);
 		long ts = System.currentTimeMillis();

@@ -5,11 +5,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TransformerList;
-import com.powerdata.openpa.pwrflow.BusRefIndex;
-import com.powerdata.openpa.tools.psmfmt.ExportOpenPA.StringWrap;
 
 public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 {
@@ -18,10 +17,10 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 	public RatioTapChangerOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
 		super(m.getTransformers(), RatioTapChanger.values().length);
-		int[][] bx = bri.get2TBus(_list);
-		assignTap(bx[0], bri, 'f');
+		BusRefIndex.TwoTerm bx = bri.get2TBus(_list);
+		assignTap(bx.getFromBus(), bri, 'f');
 		_lfi = _finfo.clone();
-		assignTap(bx[1], bri, 't');
+		assignTap(bx.getToBus(), bri, 't');
 		
 	}
 	
