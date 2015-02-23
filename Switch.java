@@ -50,4 +50,12 @@ public class Switch extends TwoTermDev
 	{
 		_list.setEnabled(_ndx, enable);
 	}
+	public float getTransitTime() throws PAModelException
+	{
+		return _list.getTransitTime(_ndx);
+	}
+	public void setTransitTime(float t) throws PAModelException
+	{
+		_list.setTransitTime(_ndx, t);
+	}
 }

@@ -33,6 +33,7 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 	EnumData<State> _state =  new EnumData<State>(ColumnMeta.SwSTATE);
 	BoolData _opld = new BoolData(ColumnMeta.SwOPLD),
 			_enab = new BoolData(ColumnMeta.SwENAB);
+	FloatData _ttrans = new FloatData(ColumnMeta.SwTRTIME);
 	
 	protected SwitchListI(){super();}
 	
@@ -122,4 +123,30 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 	{
 		return new Switch(this, index);
 	}
+
+	@Override
+	public float getTransitTime(int ndx) throws PAModelException
+	{
+		return _ttrans.get(ndx);
+	}
+
+	@Override
+	public float[] getTransitTime() throws PAModelException
+	{
+		return _ttrans.get();
+	}
+
+	@Override
+	public void setTransitTime(int ndx, float t) throws PAModelException
+	{
+		_ttrans.set(ndx, t);
+	}
+
+	@Override
+	public void setTransitTime(float[] t) throws PAModelException
+	{
+		_ttrans.set(t);
+	}
+	
+	
 }

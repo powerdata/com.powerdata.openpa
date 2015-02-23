@@ -264,6 +264,7 @@ public enum ColumnMeta
 	/** Switch STATE */ 								SwSTATE,
 	/** Switch Operable under load */ 					SwOPLD,
 	/** Switch Enabled */ 								SwENAB,
+	/** Switch transit time (sec) */					SwTRTIME,
 
 	/*
 	 * Two-Terminal DC Line 
