@@ -10,7 +10,7 @@ public class CasePhaseTapChangerOPA extends ExportOpenPA<PhaseShifterList>
 	public CasePhaseTapChangerOPA(PAModel m) throws PAModelException
 	{
 		super(m.getPhaseShifters(), CasePhaseTapChanger.values().length);
-		assign(CasePhaseTapChanger.ID, new StringWrap(i -> _list.getID(i)));
+		assign(CasePhaseTapChanger.ID, new StringWrap(i -> _list.getID(i)+":tap"));
 		assign(CasePhaseTapChanger.ControlStatus,
 			i -> String.valueOf(_list.getControlMode(i) == ControlMode.FixedMW));
 		assign(CasePhaseTapChanger.PhaseShift,

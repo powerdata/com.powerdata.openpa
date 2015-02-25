@@ -26,10 +26,10 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 	
 	void assignTap(int[] tnode, BusRefIndex bri, char side)
 	{
-		assign(RatioTapChanger.ID, i -> String.format("\"%s_%ctap\"", _list.getID(i), side));
+		assign(RatioTapChanger.ID, i -> String.format("\"%s:%ctap\"", _list.getID(i), side));
 		assign(RatioTapChanger.TapNode, new StringWrap(i -> bri.getBuses().get(tnode[i]).getID()));
 		assign(RatioTapChanger.TransformerWinding,
-			new StringWrap(i -> _list.getID(i)+"_wnd"));
+			new StringWrap(i -> _list.getID(i)+":wnd1"));
 	}
 
 

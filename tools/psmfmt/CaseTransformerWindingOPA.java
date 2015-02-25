@@ -37,7 +37,7 @@ public class CaseTransformerWindingOPA extends ExportOpenPA<TransformerList>
 
 	void assign(ACBranchListIfc<? extends ACBranch> list) throws PAModelException
 	{
-		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+"_wnd"));
+		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+":wnd1"));
 		assign(CaseTransformerWinding.FromMW, i -> String.valueOf(list.getFromP(i)));
 		assign(CaseTransformerWinding.FromMVAr, i -> String.valueOf(list.getFromQ(i)));
 		assign(CaseTransformerWinding.ToMW, i -> String.valueOf(list.getToP(i)));

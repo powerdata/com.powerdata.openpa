@@ -34,7 +34,7 @@ public class TransformerWindingOPA extends ExportOpenPA<ACBranchListIfc<? extend
 	{
 		BusRefIndex.TwoTerm bx = bri.get2TBus(list);
 		BusList buses = bri.getBuses();
-		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+"_wnd"));
+		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+":wnd1"));
 		assign(TransformerWinding.Name, new StringWrap(i -> list.getName(i)));
 		assign(TransformerWinding.Transformer, new StringWrap(i -> list.getID(i)));
 		assign(TransformerWinding.Node1, new StringWrap(i -> buses.get(bx.getFromBus()[i]).getID()));

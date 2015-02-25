@@ -11,10 +11,10 @@ public class PhaseTapChangerOPA extends ExportOpenPA<PhaseShifterList>
 	{
 		super(m.getPhaseShifters(), PhaseTapChanger.values().length);
 		int[] bx = bri.get2TBus(_list).getToBus();
-		assign(PhaseTapChanger.ID, i -> String.format("\"%s_tap\"", _list.getID(i)));
+		assign(PhaseTapChanger.ID, i -> String.format("\"%s:tap\"", _list.getID(i)));
 		assign(PhaseTapChanger.TapNode, new StringWrap(i -> bri.getBuses().get(bx[i]).getID()));
 		assign(PhaseTapChanger.TransformerWinding,
-			i -> String.format("\"%s_wnd\"", _list.getID(i)));
+			i -> String.format("\"%s:wnd1\"", _list.getID(i)));
 	}
 
 	@Override
