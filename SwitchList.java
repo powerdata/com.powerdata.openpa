@@ -22,12 +22,16 @@ public interface SwitchList extends TwoTermDevListIfc<Switch>
 	void setEnabled(int ndx, boolean enable) throws PAModelException;
 	boolean[] isEnabled() throws PAModelException;
 	void setEnabled(boolean[] enable) throws PAModelException;
+	float getTransitTime(int ndx) throws PAModelException;
+	float[] getTransitTime() throws PAModelException;
+	void setTransitTime(int ndx, float t) throws PAModelException;
+	void setTransitTime(float[] t) throws PAModelException;
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SwBUSFROM,
 					ColumnMeta.SwBUSTO, ColumnMeta.SwENAB, ColumnMeta.SwID,
 					ColumnMeta.SwNAME, ColumnMeta.SwOOS, ColumnMeta.SwOPLD,
 					ColumnMeta.SwPFROM, ColumnMeta.SwPTO, ColumnMeta.SwQFROM,
-					ColumnMeta.SwQTO }));
+					ColumnMeta.SwQTO, ColumnMeta.SwTRTIME}));
 	@Override
 	default Set<ColumnMeta> getColTypes()
 	{

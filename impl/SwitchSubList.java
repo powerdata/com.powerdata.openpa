@@ -93,6 +93,31 @@ public class SwitchSubList extends TwoTermDevSubList<Switch> implements SwitchLi
 	}
 
 	@Override
+	public float getTransitTime(int ndx) throws PAModelException
+	{
+		return _src.getTransitTime(_ndx[ndx]);
+	}
+
+	@Override
+	public float[] getTransitTime() throws PAModelException
+	{
+		return mapFloat(_src.getTransitTime());
+	}
+
+	@Override
+	public void setTransitTime(int ndx, float t) throws PAModelException
+	{
+		_src.setTransitTime(_ndx[ndx], t);
+	}
+
+	@Override
+	public void setTransitTime(float[] t) throws PAModelException
+	{
+		for(int i=0; i < _size; ++i)
+			_src.setTransitTime(_ndx[i], t[i]);
+	}
+
+	@Override
 	public Switch get(int index)
 	{
 		return new Switch(this, index);

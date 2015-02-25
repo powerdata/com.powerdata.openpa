@@ -388,6 +388,10 @@ public class EmptyLists
 		@Override public void setEnabled(int ndx, boolean enable) {throw new IndexOutOfBoundsException();}
 		@Override public boolean[] isEnabled() {return new boolean[0];}
 		@Override public void setEnabled(boolean[] enable) {throw new UnsupportedOperationException();}
+		@Override public float getTransitTime(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public void setTransitTime(int ndx, float t) {throw new IndexOutOfBoundsException();}
+		@Override public float[] getTransitTime() {return new float[0];}
+		@Override public void setTransitTime(float[] t) {throw new UnsupportedOperationException();}
 	}
 	
 	private static final class EmptyTwoTermDCLineList extends EmptyTwoTermDevList<TwoTermDCLine> implements TwoTermDCLineList {}
