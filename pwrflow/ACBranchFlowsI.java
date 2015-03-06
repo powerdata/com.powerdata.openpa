@@ -66,7 +66,6 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		for(int i=0; i < n; ++i)
 		{
 			Complex y = _y.get(i);
-			
 			int f = fb[i], t = tb[i];
 			float fvm = vm[f], tvm = vm[t], fva = va[f], tva = va[t];
 			float shift = fva - tva - _lshift[i];
@@ -83,10 +82,10 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 			float gsin = stvmpq * yg;
 			float bsin = stvmpq * yb;
 			float ybmag = yb + _brbmag[i];
-			_fp[i] = -gcos - bsin + tvmp2 * yg;
-			_fq[i] = -gsin + bcos - tvmp2 * (ybmag + _fbch[i]);
-			_tp[i] = -gcos + bsin + tvmq2 * yg;
-			_tq[i] = gsin + bcos - tvmq2 * (ybmag + _tbch[i]);
+			_fp[i] = gcos + bsin - tvmp2 * yg;
+			_fq[i] = gsin - bcos + tvmp2 * (ybmag + _fbch[i]);
+			_tp[i] = gcos - bsin - tvmq2 * yg;
+			_tq[i] = -gsin - bcos + tvmq2 * (ybmag + _tbch[i]);
 		}
 	}
 	
@@ -157,9 +156,6 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		b.setFromQ(PAMath.pu2mva(_fq[ndx], _sbase));
 		b.setToQ(PAMath.pu2mva(_tq[ndx], _sbase));
 	}
-
-
-
 }
 
 

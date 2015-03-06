@@ -146,7 +146,7 @@ public class CAWorker
 	ConvergenceList _pfres;
 	BusList _snglbus;
 	boolean _dbg = false;
-	static float _minv = 0.945f, _maxv = 1.054f;
+	static float _minv = 0.948f, _maxv = 1.052f;
 	public CAWorker(PAModel model, String cname)
 	{
 		_m = model;

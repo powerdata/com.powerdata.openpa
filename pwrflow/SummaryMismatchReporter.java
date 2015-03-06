@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.pwrflow.FDPowerFlow.PFMismatchReporter;
-import com.powerdata.openpa.tools.PAMath;
 
-public class PFMismatchDbg implements PFMismatchReporter
+public class SummaryMismatchReporter implements MismatchReporter
 {
 	static class MMInfo
 	{
@@ -24,7 +22,7 @@ public class PFMismatchDbg implements PFMismatchReporter
 			this.va = va.clone();
 			this.pmm = pmm.clone();
 			this.qmm = qmm.clone();
-			this.type = type.clone();
+			if (type != null) this.type = type.clone();
 		}
 	}
 	ArrayList<MMInfo> mmlist = new ArrayList<>();
@@ -32,11 +30,10 @@ public class PFMismatchDbg implements PFMismatchReporter
 	int _iter = 0;
 	BusList _buses;
 	
-	public PFMismatchDbg(File dir)
+	public SummaryMismatchReporter(File dir)
 	{
 		_dir = dir;
 	}
-	
 	
 	public void write() throws IOException, PAModelException
 	{
@@ -55,10 +52,11 @@ public class PFMismatchDbg implements PFMismatchReporter
 			for(int i=0; i < mmlist.size(); ++i)
 			{
 				MMInfo mm = mmlist.get(i);
-				mmdbg.format(",%s,%f,%f,%f,%f", mm.type[b].toString(),
-					PAMath.rad2deg(mm.va[b]), mm.vm[b],
-					PAMath.pu2mva(mm.pmm[b], 100f),
-					PAMath.pu2mva(mm.qmm[b], 100f));
+				String type = (mm.type == null) ? "" : mm.type[b].toString();  
+				mmdbg.format(",%s,%f,%f,%f,%f", type,
+					mm.va[b], mm.vm[b],
+					mm.pmm[b],
+					mm.qmm[b]);
 			}
 			mmdbg.println();
 		}
@@ -70,19 +68,20 @@ public class PFMismatchDbg implements PFMismatchReporter
 
 
 	@Override
-	public void reportBegin(BusList buses)
+	public SummaryMismatchReporter reportBegin(BusList buses)
 	{
 		_buses = buses;
 		mmlist.clear();
 		++_iter;
+		return this;
 	}
 
 
 	@Override
-	public void reportMismatch(Mismatch pmm, Mismatch qmm, 
+	public void reportMismatch(float[] pmm, float[] qmm, 
 			float[] vm, float[] va, BusType[] type)
 	{
-		mmlist.add(new MMInfo(vm, va, pmm.get(), qmm.get(), type));
+		mmlist.add(new MMInfo(vm, va, pmm, qmm, type));
 	}
 
 	@Override
@@ -96,6 +95,12 @@ public class PFMismatchDbg implements PFMismatchReporter
 		{
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean reportLast()
+	{
+		return false;
 	}
 	
 }

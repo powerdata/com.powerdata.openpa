@@ -223,17 +223,18 @@ public class SVCCalcList extends AbstractList<com.powerdata.openpa.pwrflow.SVCCa
 				else
 				{
 					_state[i] = SVCState.Normal;
-					_b[i] = 0;
-					_q[i] = (vmsc - vm) / s;
+//					_b[i] = -1f/s;
+					_b[i] = 0f;
+					_q[i] = (vmsc - vm) / (100f*s);
+					System.err.format("SVC: %f\n", _q[i]);
 				}
 			}
 			else
 			{
 				_state[i] = SVCState.FixedMVAr;
-				float qs = svc.getQS();
+				float qs = svc.getQS()/_sbase;
 				_q[i] = (qs > 0f) ? Math.min(qs, bcap * vmsq) : Math.max(qs,  breac * vmsq);
 			}
-			
 		}
 	}
 
@@ -242,7 +243,7 @@ public class SVCCalcList extends AbstractList<com.powerdata.openpa.pwrflow.SVCCa
 		float[] m = qmm.get();
 		int n = size();
 		for(int i=0; i < n; ++i)
-			m[_busidx[i]] -= _q[i];
+			m[_busidx[i]] += _q[i];
 	}
 
 	public void update() throws PAModelException

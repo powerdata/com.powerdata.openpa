@@ -1,16 +1,14 @@
 package com.powerdata.openpa.pwrflow;
 
-import gnu.trove.list.array.TIntArrayList;
 import java.util.AbstractSet;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import com.powerdata.openpa.ACBranchList;
+import java.util.Set;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.OutOfService;
-import com.powerdata.openpa.OutOfServiceList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 
@@ -45,17 +43,15 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	
 	static class ContImpl implements Contingency
 	{
-		ListInfo _li;
 		OutOfService _cobj;
-		ContImpl(ListInfo li, OutOfService cobj)
+		ContImpl(OutOfService cobj)
 		{
-			_li = li;
 			_cobj = cobj;
 		}
 		@Override
 		public void execute(PAModel cmodel) throws PAModelException
 		{
-			_Accessors.get(_li.getType()).set(cmodel, _cobj.getIndex());
+			_Accessors.get(_cobj.getList().getListMeta()).set(cmodel, _cobj.getIndex());
 		}
 		
 		@Override
@@ -69,11 +65,11 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 			String rv=null;
 			try
 			{
-				rv = String.format("%s %s", _li.getType().toString(), _cobj.getID());
+				ListMetaType lt = _cobj.getList().getListMeta();
+				rv = String.format("%s %s", lt.toString(), _cobj.getID());
 			}
 			catch (PAModelException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return rv;
@@ -86,67 +82,33 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	}
 
 	
-	int _size = 0;
-	class ListInfo
-	{
-		int[] _ofs;
-		OutOfServiceList<? extends OutOfService> _list;
-		
-		ListInfo(int[] ofs, OutOfServiceList<? extends OutOfService> list)
-		{
-			_ofs = ofs;
-			_list = list;
-		}
-
-		public ListMetaType getType()
-		{
-			return _list.getListMeta();
-		}
-		
-		public int[] getOffsets() {return _ofs;}
-		
-		public OutOfServiceList<? extends OutOfService> getList() {return _list;}
-
-		@Override
-		public String toString()
-		{
-			return String.format("%s %s", getType().toString(), Arrays.toString(_ofs));
-		}
-		
-		
-	}
-	Map<ListMetaType, ListInfo> _oos = 
-			new EnumMap<>(ListMetaType.class);
-	PAModel _m;
+	Set<OutOfService> _oos = new HashSet<>();
 	
 	public ContingencySet(PAModel m) throws PAModelException
 	{
 //		mapContingencies(m.getGenerators());
 		//TODO:  Add in distributed slack to power flow before adding generators
-		for(ACBranchList brlist : m.getACBranches())
-			mapContingencies(brlist);
-	}
-	
-	void mapContingencies(OutOfServiceList<? extends OutOfService> list) throws PAModelException
-	{
-		if (!list.isEmpty())
+//		for(ACBranchList brlist : m.getACBranches())
+//			mapContingencies(brlist);
+		for(OutOfService o : m.getLines())
 		{
-			_oos.put(list.getListMeta(), new ListInfo(mapOOS(list), list));
+			if (!o.isOutOfSvc()) _oos.add(o);
 		}
 	}
 
-	int[] mapOOS(OutOfServiceList<? extends OutOfService> list) throws PAModelException
+	/**
+	 * Create a set of contingencies from a collection of equipment lists
+	 * @param m OpenPAModel  
+	 * @param list
+	 * @throws PAModelException
+	 */
+	public ContingencySet(Collection<? extends OutOfService> oos)
+			throws PAModelException
 	{
-		TIntArrayList r = new TIntArrayList();
-		for(OutOfService b : list)
+		for(OutOfService o : oos)
 		{
-			if (!b.isOutOfSvc())
-			{
-				r.add(b.getIndex());
-				++_size;
-			}
+			if (!o.isOutOfSvc()) _oos.add(o);
 		}
-		return r.toArray();
 	}
 	
 	@Override
@@ -154,33 +116,22 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	{
 		return new Iterator<Contingency>()
 		{
-			Iterator<Entry<ListMetaType,ListInfo>> _mapi = _oos.entrySet().iterator();
-			ListInfo _info = _mapi.next().getValue();
-			int _li = 0, _nli = _info.getOffsets().length;
-			
+			Iterator<OutOfService> _i = _oos.iterator();
 			@Override
 			public boolean hasNext()
 			{
-				return (_li < _nli || _mapi.hasNext()); 
+				return _i.hasNext();
 			}
-
 			@Override
 			public Contingency next()
 			{
-				if (_li >= _nli)
-				{
-					_info = _mapi.next().getValue();
-					_nli = _info.getOffsets().length;
-					_li = 0;
-				}
-				return new ContImpl(_info, _info.getList().get(_li++));
+				return new ContImpl(_i.next());
 			}
 		};
 	}
-
 	@Override
 	public int size()
 	{
-		return _size;
+		return _oos.size();
 	}
 }

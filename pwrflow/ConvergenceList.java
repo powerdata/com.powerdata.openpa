@@ -258,21 +258,29 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 			}
 		}
 
-		_worstv[islx] = wn;
-		_worstvbus[islx] = wnbus;
-
-		_worstv[islx] = wx;
-		_worstvbus[islx] = wxbus;
-
 		if (wn < 0.5f)
 		{
 			_status[islx] = Status.VoltageCollapse;
 			rv = false;
+			_worstv[islx] = wn;
+			_worstvbus[islx] = wnbus;
 		}
 		else if (wx > 2f)
 		{
 			_status[islx] = Status.HighVoltage;
 			rv = false;
+			_worstv[islx] = wx;
+			_worstvbus[islx] = wxbus;
+		}
+		else if (Math.abs(1f-wn) > Math.abs(1f-wx))
+		{
+			_worstv[islx] = wn;
+			_worstvbus[islx] = wnbus;
+		}
+		else
+		{
+			_worstv[islx] = wx;
+			_worstvbus[islx] = wxbus;
 		}
 		
 		return rv;

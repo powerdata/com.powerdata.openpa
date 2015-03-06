@@ -49,7 +49,6 @@ public abstract class BasicContingencyManager extends ContingencyManager
 	@Override
 	public void runSet(ContingencySet set)
 	{
-		
 		Stream<Contingency> cstream = _par ? set.parallelStream() : set.stream();
 		long ts = System.currentTimeMillis();
 		System.err.format("Processing %d contingencies\n", set.size());

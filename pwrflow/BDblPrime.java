@@ -8,12 +8,15 @@ import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
+import com.powerdata.openpa.pwrflow.SVCCalcList.SVCCalc;
 import com.powerdata.openpa.tools.PAMath;
 
 public class BDblPrime<T extends ACBranchExt> extends BPrimeBase
 {
 	BusList _buses;
 	float _sbase = 100f;
+	SVCCalcList _svc;
+	float[] _lastsvc;
 	
 	public BDblPrime(ACBranchAdjacencies<T> adj,
 			Collection<FixedShuntListIfc<? extends FixedShunt>> fsh, 
@@ -23,6 +26,8 @@ public class BDblPrime<T extends ACBranchExt> extends BPrimeBase
 		super(adj, new ACBranchBppElemBldr(adj));
 		_buses = bri.getBuses();
 		addFixedShunts(fsh);
+		_svc = svc;
+		_lastsvc = new float[_svc.size()];
 //		addSVCs(m.getSVCs(), bri);
 		//TODO:  dynamically adjust B'' for SVC's that are at their reactive limits
 	}
@@ -39,5 +44,16 @@ public class BDblPrime<T extends ACBranchExt> extends BPrimeBase
 			}
 		}
 	}
-
+	public void adjustSVC() throws PAModelException
+	{
+		for (SVCCalc c : _svc)
+		{
+			int ix = c.getIndex();
+			float last = _lastsvc[ix];
+			int bidx = c.getBus().getIndex();
+			_bdiag[bidx] += last;
+			last = c.getBpp();
+			_bdiag[bidx] -= last;
+		}
+	}
 }

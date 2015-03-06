@@ -23,6 +23,7 @@ import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Island;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.impl.BasicBusGrpMap;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.pwrflow.Mismatch.WorstMM;
@@ -81,6 +82,16 @@ public class VoltageSetPoint
 					else
 						v = g.getVS() / regbus.getVoltageLevel().getBaseKV();
 					
+					vsp += v;
+					++ngen;
+				}
+			}
+			for(SVC c : b.getSVCs())
+			{
+				if (!c.isOutOfSvc() && c.isRegKV() && c.getSlope() == 0f)
+				{
+					Bus regbus = c.getRegBus();
+					float v = c.getVS() / regbus.getVoltageLevel().getBaseKV();
 					vsp += v;
 					++ngen;
 				}

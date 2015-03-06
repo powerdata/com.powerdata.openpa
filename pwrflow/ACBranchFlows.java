@@ -3,7 +3,8 @@ package com.powerdata.openpa.pwrflow;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
 
-public interface ACBranchFlows extends ACBranchExtList<com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow>
+public interface ACBranchFlows extends 
+	ACBranchExtList<com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow>
 {
 	public static class ACBranchFlow extends ACBranchExt
 	{
@@ -42,8 +43,17 @@ public interface ACBranchFlows extends ACBranchExtList<com.powerdata.openpa.pwrf
 
 	void applyMismatches(Mismatch pmm, Mismatch qmm, int[] subset) throws PAModelException;
 
+	/**
+	 * Update results to PAModel
+	 * @throws PAModelException
+	 */
 	void update() throws PAModelException;
 	
+	/**
+	 * Update results to PAModel
+	 * @param ndx index of branch flow object within the list to update
+	 * @throws PAModelException
+	 */
 	void update(int ndx) throws PAModelException;
 	
 }

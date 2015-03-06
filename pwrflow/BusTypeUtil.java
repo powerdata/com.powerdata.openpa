@@ -36,10 +36,12 @@ public class BusTypeUtil
 	PAModel _model;
 	int[] _type, _itype;
 	int _nisland, _nigrp;
-	static public final int PV = BusType.PV.ordinal();
-	static public final int PQ = BusType.PQ.ordinal();
-	static public final int REF = BusType.Reference.ordinal();
-	static public final int NGRP = BusType.values().length;
+	static private final int PV = BusType.PV.ordinal();
+	static private final int PQ = BusType.PQ.ordinal();
+	static private final int REF = BusType.Reference.ordinal();
+	/** internal-only code to represent the possibility that a pump is regulating KV, may be able to remove it */
+	static private final int PVNR = -PV;
+	static private final int NGRP = BusType.values().length;
 
 	WeakReference<GroupMap> _tmap = new WeakReference<>(null),
 			_imap = new WeakReference<>(null);
@@ -80,7 +82,7 @@ public class BusTypeUtil
 		{
 			_itype[i] = calcigrp(buses.getIsland(i).getIndex(), PQ);
 		}
-		
+		/** Group buses that are effectively in the same station */
 		GroupList glist = new GroupList(_model, new BusGrpMapBldr(_model)
 		{
 			@Override
@@ -128,8 +130,7 @@ public class BusTypeUtil
 			.addSeriesCap()
 			.addSeriesReac()
 			.addSwitches()
-			.addTransformers()
-			.addTwoTermDCLines().getMap());
+			.addTransformers().getMap());
 
 		float[] pmax = new float[nbus], qmax = new float[nbus];
 		for(Island i : islands)
@@ -196,19 +197,23 @@ public class BusTypeUtil
 	{
 		float qm = 0f;
 		Bus br = null;
-		
+		boolean pmp = false;
 		for (Bus b : g.getBuses())
 		{
 			Bus sb = sbuses.getByBus(b);
 			int sbndx = sb.getIndex();
 			float tqm = qmax[sbndx];
-			if (qm < tqm)
+			if (_type[sbndx] == PVNR)
+			{
+				pmp = true;
+			}
+			else if (qm < tqm)
 			{
 				qm = tqm;
 				br = sb;
 			}
 		}
-		return (br == null) ? null : new Score(Math.round(yb/2f + pmax[br.getIndex()] + qm), br);
+		return (br == null || pmp) ? null : new Score(Math.round(yb/2f + pmax[br.getIndex()] + qm), br);
 //		return (br == null) ? null : new Score(Math.round(qm), br);
 	}
 
@@ -246,9 +251,13 @@ public class BusTypeUtil
 			{
 				int bx = gbx[i];
 				_type[bx] = PV;
-				pmax[bx] += g.getOpMaxP();
-				qmax[bx] += g.getMaxQ() - g.getMinQ();
-				_itype[bx] = calcigrp(indx, PV); 
+				int t = (g.getMode() == Gen.Mode.PMP) ? PVNR : PV;
+				if (t != PVNR)
+				{
+					pmax[bx] += g.getOpMaxP();
+					qmax[bx] += g.getMaxQ() - g.getMinQ();
+				}
+				_itype[bx] = calcigrp(indx, t); 
 			}
 		}
 		
