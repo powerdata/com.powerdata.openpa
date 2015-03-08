@@ -450,7 +450,7 @@ public class FDPowerFlow
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
 		bldr.setLeastX(0.0001f);
-		bldr.setUnitRegOverride(true);
+		bldr.setUnitRegOverride(false);
 //		bldr.enableRCorrection(true);
 		PAModel m = bldr.load();
 
