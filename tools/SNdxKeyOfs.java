@@ -148,13 +148,13 @@ class OfsNdx extends SNdxKeyOfs
 	@Override
 	public boolean containsKey(int key)
 	{
-		return (key >= _minkey && _offsets[key - _minkey] != -1);
+		return (key >= _minkey  && ((key-_minkey) < _offsets.length) && _offsets[key - _minkey] != -1);
 	}
 
 	@Override
 	public int getOffset(int key)
 	{
-		return (key < _minkey)?-1:(_offsets[key-_minkey]);
+		return ((key < _minkey) || (key-_minkey) >= _offsets.length)?-1:(_offsets[key-_minkey]);
 	}
 
 	@Override
