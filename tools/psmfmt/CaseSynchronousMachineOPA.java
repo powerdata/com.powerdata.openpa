@@ -23,7 +23,8 @@ public class CaseSynchronousMachineOPA extends ExportOpenPA<GenList>
 		super(m.getGenerators(), CaseSynchronousMachine.values().length);
 		//assign(CaseSynchronousMachine.ID, i -> String.format("\"%s\"", _list.get(i)));
 		assign(CaseSynchronousMachine.ID, new StringWrap(i -> createID(_list.get(i))));
-		assign(CaseSynchronousMachine.AVRMode, i -> _list.isRegKV(i)?"ON":"OFF");
+//		assign(CaseSynchronousMachine.AVRMode, i -> _list.isRegKV(i)?"ON":"OFF");
+		assign(CaseSynchronousMachine.AVRMode, i -> !_list.isRegKV(i)?"ON":"OFF"); //RegKV comes from pd3openpa.pddef which has reversed AVRMode to get RegMode, just reversing it back here
 		assign(CaseSynchronousMachine.SynchronousMachineOperatingMode,
 			i -> _GenMode.getOrDefault(_list.getMode(i), "GEN"));
 		assign(CaseSynchronousMachine.KVSetPoint, i -> String.valueOf(_list.getVS(i)));

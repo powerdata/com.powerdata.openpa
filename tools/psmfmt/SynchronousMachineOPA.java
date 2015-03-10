@@ -36,11 +36,6 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 		//IDs as of 2/19/2015
 		//Generator: "Company:Station:Class:Name"
 		//SynchMach: "Company:Station:Voltage:Class:Name"
-		Bus b = g.getBus();
-		System.out.println("\n[SynchronousMachineOPA.java]\nGenID: "+g.getID()
-				+"\nBusID: "+b.getID()
-				+"\nBusName: "+b.getName()
-				+"\nBusStation: "+b.getStation().getID());
 		String[] idBase = g.getID().split(":");
 		if(idBase.length == 4)
 		{
