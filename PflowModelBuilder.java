@@ -42,6 +42,7 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	boolean	_genregterm;
 	/** disable branches with bad Z values */
 	float _badXLimit = Float.MAX_VALUE;
+	private boolean _svcdroop = false;
 
 	/** disable branches with bad Z values */
 	public float getBadXLimit() {return _badXLimit;}
@@ -113,6 +114,16 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	public void setUnitRegOverride(boolean override)
 	{
 		_genregterm = override;
+	}
+	
+	public boolean getSVCDroop()
+	{
+		return _svcdroop ;
+	}
+	
+	public void setSVCDroop(boolean usedroop)
+	{
+		_svcdroop = usedroop;
 	}
 	
 	/**

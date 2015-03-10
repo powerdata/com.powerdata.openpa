@@ -23,6 +23,7 @@ public class PsseHeader
 	{
 		Pattern.compile("PSS/E-"),
 		Pattern.compile("PSS\\(R\\)E-"),
+		Pattern.compile("PSS\\(tm\\)E-"),
 		Pattern.compile("PSS\\(R\\)E "),
 		Pattern.compile("RAWD VER ")
 	};

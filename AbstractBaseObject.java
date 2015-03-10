@@ -12,15 +12,15 @@ public class AbstractBaseObject implements BaseObject
 	protected int _ndx;
 	protected BaseList<? extends BaseObject> _list;
 	
-	public static final BaseObject Null = new AbstractBaseObject(null, -1)
-	{
-		@Override
-		public String toString()
-		{
-			return "Null";
-		}
-	};
-	
+//	public static final BaseObject Null = new AbstractBaseObject(null, -1)
+//	{
+//		@Override
+//		public String toString()
+//		{
+//			return "Null";
+//		}
+//	};
+//	
 	public AbstractBaseObject(BaseList<? extends BaseObject> list, int ndx)
 	{
 		_list = list;

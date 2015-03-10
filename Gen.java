@@ -154,7 +154,7 @@ public class Gen extends OneTermDev
 	public boolean isGenerating() throws PAModelException
 	{
 		Mode m = getMode();
-		return !isOutOfSvc() && m != Mode.PMP && m != Mode.OFF;
+		return !isOutOfSvc() && m != Mode.OFF;
 	}
 
 }

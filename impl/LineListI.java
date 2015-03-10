@@ -71,7 +71,7 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 		}
 	};
 	FloatData _fb = new FloatData(ColumnMeta.LineBFROM), _tb = new FloatData(
-			ColumnMeta.LineBTO);
+			ColumnMeta.LineBTO); 
 	public LineListI()
 	{
 		super();

@@ -85,10 +85,10 @@ public class FixedShuntCalcList extends AbstractList<com.powerdata.openpa.pwrflo
 	{
 		int n = size();
 		float[] mm = qmm.get();
-		int[] bndx = qmm.getBusRefIndex().get1TBus(_src);
+//		int[] bndx = qmm.getBusRefIndex().get1TBus(_src);
 		for(int i=0; i < n; ++i)
 		{
-			mm[bndx[i]] -= _q[i]; 
+			mm[_buslist[i]] += _q[i]; 
 		}
 	}
 

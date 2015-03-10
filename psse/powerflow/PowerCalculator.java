@@ -576,7 +576,7 @@ public class PowerCalculator
 		PsseModel model = PsseModel.Open(uri);
 		BusGroup2TDevList tn = new BusGroup2TDevList(model);
 		PowerCalculator pc = new PowerCalculator(model, 
-			new MinZMagFilter(model.getBranches(), 0.0001f), 
+			new MinZMagFilter(model.getBranches(), 0.00001f), 
 			tn);
 		MismatchReport mmr = new MismatchReport(model, tn);
 		pc.setDebugEnabled(mmr);

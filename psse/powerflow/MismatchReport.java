@@ -128,7 +128,7 @@ public class MismatchReport
 		Island island = _islands.findForBus(b.getBuses().get(0));
 		
 		String btmp = String.format(
-				"%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%f,%f,%f,%f,%f,", 
+				"%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',%f,%f,%f,%f,%f,", 
 				i, b.getObjectID(), b.getDebugName(),
 				island.isEnergized() ? "true" : "false", island.getIndex(), 
 				b.getBusType(), PAMath.rad2deg(_va[i]), _vm[i], 
@@ -159,7 +159,7 @@ public class MismatchReport
 				qq = _qto[ttdev];
 			}
 			out.print(btmp);
-			out.format("\"%s\",\"%s\",%f,%f\n", ttd.getObjectID(),
+			out.format("\'%s\',\'%s\',%f,%f\n", ttd.getObjectID(),
 					ttd.getObjectName(), PAMath.pu2mva(pp, _model.getSBASE()), PAMath.pu2mva(qq, _model.getSBASE()));
 
 		}

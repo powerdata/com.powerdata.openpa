@@ -124,10 +124,10 @@ public class CAWorker
 	public enum Status
 	{
 		Success(6), LoadLoss(1), IslandSplit(5), Overloads(2), VoltageCollapse(
-				0), HighVoltageFail(3), LowVoltage(4), HighVoltage(7);
+				0), HighVoltageFail(3), LowVoltage(4), HighVoltage(7), NoRating(8);
 		static final Status[] StatusByCode = new Status[] { VoltageCollapse,
 				LoadLoss, Overloads, HighVoltageFail, LowVoltage, IslandSplit,
-				Success, HighVoltage };
+				Success, HighVoltage, NoRating};
 		Status(int dbcode)
 		{
 			_dbcode = dbcode;
@@ -146,7 +146,7 @@ public class CAWorker
 	ConvergenceList _pfres;
 	BusList _snglbus;
 	boolean _dbg = false;
-	static float _minv = 0.945f, _maxv = 1.054f;
+	static float _minv = 0.948f, _maxv = 1.052f;
 	public CAWorker(PAModel model, String cname)
 	{
 		_m = model;
@@ -341,9 +341,11 @@ public class CAWorker
 				{
 					float mva = Math.max(
 						PAMath.calcMVA(d.getFromP(), d.getFromQ()),
-						PAMath.calcMVA(d.getToP(), d.getToQ())), mrat = d
-							.getLTRating();
-					if (mva > mrat)
+						PAMath.calcMVA(d.getToP(), d.getToQ()));
+					float mrat = d.getLTRating();
+					if (mrat == 0f)
+						rv.add(new Violation(Status.NoRating, d, mva));
+					else if (mva > mrat)
 						rv.add(new Violation(Status.Overloads, d, mva / mrat));
 				}
 			}

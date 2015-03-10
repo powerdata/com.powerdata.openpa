@@ -1,15 +1,14 @@
 package com.powerdata.openpa.pwrflow;
 
 import gnu.trove.map.hash.TIntIntHashMap;
-
 import java.util.Arrays;
 import java.util.List;
-
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.PAModelException;
+import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.impl.BasicBusGrpMap;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.tools.PAMath;
@@ -58,6 +57,7 @@ public class GenVarMonitor
 	/** Monitor low pv bus limits and convert if needed */
 	Monitor _pvmon = (mm,i) -> 
 	{
+		mm = -mm;
 		boolean rv = false;
 		if(mm < _minq[i] || mm > _maxq[i])
 		{
@@ -105,6 +105,12 @@ public class GenVarMonitor
 
 	void cvtPV2PQ(int i)
 	{
+		try
+		{
+		if (_pvbuses.getName(i).equals("CHSTRSVC 4"))
+		{
+			int xxx = 5;
+		}}catch(PAModelException e) {}
 		/*
 		 * restore B without the artifically large admittance, making it a PQ
 		 * bus once again
@@ -135,13 +141,20 @@ public class GenVarMonitor
 		{
 			Bus bus = _pvbuses.get(i);
 			float mnq=0f, mxq=0f;
-//			int bx = bus.getIndex();
 			for(Gen g : bus.getGenerators())
 			{
 				if(g.isGenerating() && g.isRegKV())
 				{
 					mnq += PAMath.mva2pu(g.getMinQ(), _sbase);
 					mxq += PAMath.mva2pu(g.getMaxQ(), _sbase);
+				}
+			}
+			for(SVC s : bus.getSVCs())
+			{
+				if (!s.isOutOfSvc() && s.isRegKV())
+				{
+					mnq += PAMath.mva2pu(s.getMinQ(), _sbase);
+					mxq += PAMath.mva2pu(s.getMaxQ(), _sbase);
 				}
 			}
 			_minq[i] = mnq;
@@ -160,7 +173,8 @@ public class GenVarMonitor
 			{
 				for(int i : _busbyisland.get(irv))
 				{
-					_monitors[i].test(mm[_pvbuses.getIndex(i)], i);
+					Bus b = _pvbuses.get(i);
+					_monitors[i].test(mm[b.getIndex()], i);
 				}
 			}
 		}

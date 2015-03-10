@@ -49,7 +49,6 @@ public abstract class BasicContingencyManager extends ContingencyManager
 	@Override
 	public void runSet(ContingencySet set)
 	{
-		
 		Stream<Contingency> cstream = _par ? set.parallelStream() : set.stream();
 		long ts = System.currentTimeMillis();
 		System.err.format("Processing %d contingencies\n", set.size());
@@ -58,6 +57,7 @@ public abstract class BasicContingencyManager extends ContingencyManager
 		long sec = Math.round((double) t/1000.0);
 		System.err.format("Contingencies processed in %d sec (avg %6.2f ms)", sec, ((float)t)/((float)set.size()));
 	}
+	int _cont = 0;
 	
 	void applyContingency(Contingency c)
 	{

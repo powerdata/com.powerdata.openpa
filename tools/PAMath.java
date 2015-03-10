@@ -76,8 +76,7 @@ public class PAMath
 	/** convert p.u. impedance to 100 MVA base */
 	public static Complex rebaseZ100 (Complex zval, float mvabase)
 	{
-		float ratio = 100F/mvabase;
-		return (mvabase==100F)?zval:new Complex(zval.re()*ratio, zval.im()*ratio);
+		return (mvabase==100F)?zval:zval.mult(100F/mvabase);
 	}
 
 	public static float calcMVA(float mw, float mvar)

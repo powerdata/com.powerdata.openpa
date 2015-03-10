@@ -234,7 +234,16 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.SwSTATE, () -> _srcmdl.getSwitches().getState());
 		_col.put(ColumnMeta.SwOPLD, () -> _srcmdl.getSwitches().isOperableUnderLoad());
 		_col.put(ColumnMeta.SwENAB, () -> _srcmdl.getSwitches().isEnabled());
-
+		
+		_col.put(ColumnMeta.T2dcID, () -> _srcmdl.getTwoTermDCLines().getID());
+		_col.put(ColumnMeta.T2dcNAME, () -> _srcmdl.getTwoTermDCLines().getName());
+		_col.put(ColumnMeta.T2dcBUSFROM, () -> extractIndex(_srcmdl.getTwoTermDCLines().getFromBus()));
+		_col.put(ColumnMeta.T2dcBUSTO, () -> extractIndex(_srcmdl.getTwoTermDCLines().getToBus()));
+		_col.put(ColumnMeta.T2dcOOS, () -> _srcmdl.getTwoTermDCLines().isOutOfSvc());
+		_col.put(ColumnMeta.T2dcPFROM, () -> _srcmdl.getTwoTermDCLines().getFromP());
+		_col.put(ColumnMeta.T2dcQFROM, () -> _srcmdl.getTwoTermDCLines().getFromQ());
+		_col.put(ColumnMeta.T2dcPTO, () -> _srcmdl.getTwoTermDCLines().getToP());
+		_col.put(ColumnMeta.T2dcQTO, () -> _srcmdl.getTwoTermDCLines().getToQ());
 	}
 	
 	<T extends BaseObject> int[] extractIndex(T[] obj)
