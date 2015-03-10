@@ -35,7 +35,7 @@ public class RatioTapChangerOPAExtended extends ExportOpenPA<TransformerList>
 		_hasLTC = xfrView.col("hasLTC");
 		_hSide	= xfrView.col("hside");
 		
-		System.out.println("[RatioTapChangerOPAExtended] Number of keys: "+_list.getKeys().length);
+//		System.out.println("[RatioTapChangerOPAExtended] Number of keys: "+_list.getKeys().length);
 		BusRefIndex.TwoTerm bx = bri.get2TBus(_list);
 		assignTap(bx.getFromBus(), bri, 'f');
 		_lfi = _finfo.clone();
@@ -79,7 +79,7 @@ public class RatioTapChangerOPAExtended extends ExportOpenPA<TransformerList>
 			e.printStackTrace();
 		}
 		
-		System.out.println("\nRatioTapChangerOPAExnteded]\nKey: "+key+"\nisMax: "+isMax+"\nKV: "+kv);
+//		System.out.println("\nRatioTapChangerOPAExnteded]\nKey: "+key+"\nisMax: "+isMax+"\nKV: "+kv);
 		return kv;
 	}
 

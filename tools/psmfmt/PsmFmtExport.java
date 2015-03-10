@@ -155,7 +155,7 @@ public class PsmFmtExport
 		boolean useExtended = false;
 		String mdlname = null;
 		String pddef = "/home/derek/git/psm7/src/com/powerdata/pa/api/pd3openpa.pddef";
-		String cim = "/home/derek/holding/CSVtoSES/input/xfrcim.pdx";
+		String cim2 = "/home/derek/holding/CSVtoSES/input/cimExtended.pdx";
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -177,12 +177,10 @@ public class PsmFmtExport
 					break;
 				case "extended":
 					useExtended = true;
+					cim2 = args[i++]; // Currently need a second cim that is a copy of the uri for creating views
 					break;
 				case "pddef":
 					pddef = args[i++];
-					break;
-				case "cim":
-					cim = args[i++];
 					break;
 			}
 		}
@@ -200,7 +198,7 @@ public class PsmFmtExport
 		exp.setModelName(mdlname);
 		if(useExtended)
 		{
-			PDDB db = PDDB.GetPDDB(cim);
+			PDDB db = PDDB.GetPDDB(cim2);
 			db.loadPddef(pddef);
 			exp.exportExtended(outdir, db);
 		}
