@@ -346,7 +346,11 @@ public class CAWorker
 					if (mrat == 0f)
 						rv.add(new Violation(Status.NoRating, d, mva));
 					else if (mva > mrat)
-						rv.add(new Violation(Status.Overloads, d, mva / mrat));
+					{
+						float pct = mva / mrat;
+						if (pct > 1.02f)
+							rv.add(new Violation(Status.Overloads, d, pct));
+					}
 				}
 			}
 		}
