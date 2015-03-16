@@ -84,7 +84,7 @@ public class RatioTapChangerOPAExtended extends ExportOpenPA<TransformerList>
 	}
 
 	@Override
-	void export(File outputdir) throws PAModelException, IOException
+	public void export(File outputdir) throws PAModelException, IOException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outputdir, getPsmFmtName()+".csv"))));

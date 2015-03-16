@@ -48,7 +48,7 @@ public class TransformerWindingOPA extends ExportOpenPA<ACBranchListIfc<? extend
 	}
 
 	@Override
-	void export(File outputdir) throws PAModelException, IOException
+	public void export(File outputdir) throws PAModelException, IOException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outputdir, getPsmFmtName()+".csv"))));

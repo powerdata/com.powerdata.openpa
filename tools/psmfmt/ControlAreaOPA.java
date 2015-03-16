@@ -4,9 +4,9 @@ import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 
-class ControlAreaOPA extends ExportOpenPA<AreaList>
+public class ControlAreaOPA extends ExportOpenPA<AreaList>
 {
-	ControlAreaOPA(PAModel m) throws PAModelException
+	public ControlAreaOPA(PAModel m) throws PAModelException
 	{
 		super(m.getAreas(), ControlArea.values().length);
 		assign(ControlArea.ID, new StringWrap(i -> _list.getID(i)));

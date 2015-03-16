@@ -20,7 +20,7 @@ public class CaseGeneratingUnitOPA extends ExportOpenPA<GenList>
 	}
 	
 	
-	CaseGeneratingUnitOPA(PAModel m) throws PAModelException
+	public CaseGeneratingUnitOPA(PAModel m) throws PAModelException
 	{
 		super(m.getGenerators(), CaseGeneratingUnit.values().length);
 		assign(CaseGeneratingUnit.ID, new StringWrap(i -> _list.getID(i)));

@@ -7,7 +7,7 @@ import com.powerdata.openpa.PAModelException;
 public class CaseLineOPA extends ExportOpenPA<LineList>
 {
 
-	CaseLineOPA(PAModel m) throws PAModelException
+	public CaseLineOPA(PAModel m) throws PAModelException
 	{
 		super(m.getLines(), CaseLine.values().length);
 		assign(CaseLine.ID, new StringWrap(i -> _list.getID(i)));

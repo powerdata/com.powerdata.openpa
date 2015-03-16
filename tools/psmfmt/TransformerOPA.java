@@ -40,7 +40,7 @@ public class TransformerOPA extends ExportOpenPA<ACBranchListIfc<? extends ACBra
 	protected String getPsmFmtName() {return PsmMdlFmtObject.Transformer.toString();}
 
 	@Override
-	void export(File outputdir) throws PAModelException, IOException
+	public void export(File outputdir) throws PAModelException, IOException
 	{
 		PrintWriter pw = new PrintWriter(new BufferedWriter(
 			new FileWriter(new File(outputdir, getPsmFmtName()+".csv"))));

@@ -13,16 +13,14 @@ import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
-import com.powerdata.pd3.PDDB;
-import com.powerdata.pd3.PDDBException;
 
 public class PsmFmtExport
 {
-	PAModel _model;
-	BusRefIndex _bri;
-	boolean _sbus;
-	String _mdlname, _mdldesc, _mdlver;
-	Float _freq;
+	protected PAModel _model;
+	protected BusRefIndex _bri;
+	protected boolean _sbus;
+	protected String _mdlname, _mdldesc, _mdlver;
+	protected Float _freq;
 
 	public PsmFmtExport(PAModel model, boolean singlebus) throws PAModelException
 	{
@@ -75,50 +73,7 @@ public class PsmFmtExport
 		new ReactiveCapabilityCurveOPA(_model).export(odir);
 	}
 	
-	public void exportExtended(File odir, PDDB db) throws PAModelException, IOException, PDDBException
-	{
-		if (!odir.exists()) odir.mkdirs();
-		exportMeta(odir);
-		new ControlAreaOPA(_model).export(odir);
-		new GeneratingUnitOPA(_model).export(odir);
-		new LineOPA(_model, _bri).export(odir);
-		new LoadOPA(_model, _bri).export(odir);
-		new NodeOPA(_bri).export(odir);
-		new OrganizationOPA(_model).export(odir);
-		new PhaseTapChangerOPA(_model, _bri).export(odir);
-		new RatioTapChangerOPAExtended(_model, _bri, db).export(odir);
-		new SeriesCapacitorOPA(_model, _bri).export(odir);
-		new SeriesReactorOPA(_model, _bri).export(odir);
-		new ShuntCapacitorOPA(_model, _bri).export(odir);
-		new ShuntReactorOPA(_model, _bri).export(odir);
-		new SubstationOPA(_model).export(odir);
-		new SynchronousMachineOPA(_model, _bri).export(odir);
-		new SvcOPA(_model, _bri).export(odir);
-		if (_sbus)
-		{
-			File f = new File(odir, PsmMdlFmtObject.Switch.toString()+".csv");
-			if (f.exists()) f.delete();
-		}
-		else
-			new SwitchOPA(_model, _bri).export(odir);
-		new SwitchTypeOPA().export(odir);
-		new CaseLoadOPA(_model).export(odir);
-		new CaseGeneratingUnitOPA(_model).export(odir);
-		new CaseSynchronousMachineOPA(_model).export(odir);
-		new CaseSvcOPA(_model).export(odir);
-		new CasePhaseTapChangerOPAExtended(_model, db).export(odir);
-		new CaseRatioTapChangerOPAExtended(_model, db).export(odir); 
-		new TransformerOPA(_model).export(odir);
-		new TransformerWindingOPA(_model, _bri).export(odir);
-		new CaseSwitchOPA(_model).export(odir);
-		new CaseLineOPA(_model).export(odir);
-		new CaseTransformerWindingOPA(_model).export(odir);
-		new CaseSeriesCapacitorOPA(_model).export(odir);
-		new CaseSeriesReactorOPA(_model).export(odir);
-		new ReactiveCapabilityCurveOPA(_model).export(odir);
-	}
-	
-	void exportMeta(File odir) throws IOException
+	protected void exportMeta(File odir) throws IOException
 	{
 		String fn = PsmMdlFmtObject.ModelParameters.toString() + ".csv";
 		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(odir, fn))));
@@ -152,10 +107,7 @@ public class PsmFmtExport
 		String uri = null;
 		File outdir = new File(System.getProperty("user.dir"));
 		boolean useSingleBus = false;
-		boolean useExtended = false;
 		String mdlname = null;
-		String pddef = "/home/derek/git/psm7/src/com/powerdata/pa/api/pd3openpa.pddef";
-		String cim2 = "/home/derek/holding/CSVtoSES/input/cimExtended.pdx";
 		for(int i=0; i < args.length;)
 		{
 			String s = args[i++].toLowerCase();
@@ -175,13 +127,6 @@ public class PsmFmtExport
 				case "modelname":
 					mdlname = args[i++];
 					break;
-				case "extended":
-					useExtended = true;
-					cim2 = args[i++]; // Currently need a second cim that is a copy of the uri for creating views
-					break;
-				case "pddef":
-					pddef = args[i++];
-					break;
 			}
 		}
 		if (uri == null)
@@ -196,16 +141,7 @@ public class PsmFmtExport
 		
 		PsmFmtExport exp = new PsmFmtExport(m, useSingleBus);
 		exp.setModelName(mdlname);
-		if(useExtended)
-		{
-			PDDB db = PDDB.GetPDDB(cim2);
-			db.loadPddef(pddef);
-			exp.exportExtended(outdir, db);
-		}
-		else
-		{	
-			exp.export(outdir);
-		}
+		exp.export(outdir);
 			
 		CloneModelBuilder clm = new CloneModelBuilder(m, EnumSet.noneOf(ColumnMeta.class));
 		PsmFmtExport exp2 = new PsmFmtExport(clm.load(), useSingleBus);

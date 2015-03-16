@@ -6,7 +6,7 @@ import com.powerdata.openpa.SwitchList;
 
 public class CaseSwitchOPA extends ExportOpenPA<SwitchList>
 {
-	CaseSwitchOPA(PAModel m) throws PAModelException
+	public CaseSwitchOPA(PAModel m) throws PAModelException
 	{
 		super(m.getSwitches(), CaseSwitch.values().length);
 		assign(CaseSwitch.ID, new StringWrap(i -> _list.getID(i)));

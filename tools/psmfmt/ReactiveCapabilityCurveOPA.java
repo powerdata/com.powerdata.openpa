@@ -7,7 +7,7 @@ import com.powerdata.openpa.PAModelException;
 public class ReactiveCapabilityCurveOPA extends ExportOpenPA<GenList>
 {
 
-	ReactiveCapabilityCurveOPA(PAModel m) throws PAModelException
+	public ReactiveCapabilityCurveOPA(PAModel m) throws PAModelException
 	{
 		super(m.getGenerators(), ReactiveCapabilityCurve.values().length);
 		assignCurve1();

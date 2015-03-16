@@ -7,7 +7,7 @@ import com.powerdata.openpa.SeriesReacList;
 public class CaseSeriesReactorOPA extends ExportOpenPA<SeriesReacList>
 {
 
-	CaseSeriesReactorOPA(PAModel m) throws PAModelException
+	public CaseSeriesReactorOPA(PAModel m) throws PAModelException
 	{
 		super(m.getSeriesReactors(), CaseSeriesReactor.values().length);
 		assign(CaseSeriesReactor.ID, new StringWrap(i -> _list.getID(i)));

@@ -7,7 +7,7 @@ import com.powerdata.openpa.SeriesCapList;
 public class CaseSeriesCapacitorOPA extends ExportOpenPA<SeriesCapList>
 {
 
-	CaseSeriesCapacitorOPA(PAModel m) throws PAModelException
+	public CaseSeriesCapacitorOPA(PAModel m) throws PAModelException
 	{
 		super(m.getSeriesCapacitors(), CaseSeriesCapacitor.values().length);
 		assign(CaseSeriesCapacitor.ID, new StringWrap(i -> _list.getID(i)));

@@ -7,7 +7,7 @@ import com.powerdata.openpa.PAModelException;
 
 public class GeneratingUnitOPA extends ExportOpenPA<GenList>
 {
-	GeneratingUnitOPA(PAModel m) throws PAModelException
+	public GeneratingUnitOPA(PAModel m) throws PAModelException
 	{
 		super(m.getGenerators(), GeneratingUnit.values().length);
 		
