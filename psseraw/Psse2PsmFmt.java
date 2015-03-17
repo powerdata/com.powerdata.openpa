@@ -292,13 +292,13 @@ class PssePSMWriter implements PsseRecWriter
 	private void writeLoads() throws FileNotFoundException
 	{
 		PrintWriter loadW = getWriter("Load");
-		PrintWriter loadCaseW = getWriter("PsmLoadCase");
+		PrintWriter loadCaseW = getWriter("PsmCaseLoad");
 		loadW.println(_loads.get(0).getHeaders(PsseLoadTool.LoadFiles.Load));
 		loadCaseW.println(_loads.get(0).getHeaders(PsseLoadTool.LoadFiles.PsmCaseLoad));
 		for(int i = 0; i < _loads.size(); ++i)
 		{
 			loadW.println(_loads.get(i).toCsv(PsseLoadTool.LoadFiles.Load));
-			loadW.println(_loads.get(i).toCsv(PsseLoadTool.LoadFiles.PsmCaseLoad));
+			loadCaseW.println(_loads.get(i).toCsv(PsseLoadTool.LoadFiles.PsmCaseLoad));
 		}
 	}
 	
