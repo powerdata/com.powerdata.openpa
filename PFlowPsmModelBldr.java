@@ -81,13 +81,13 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	
 	//Not yet importing
-	SimpleCSV _voltageRelayCSV;
-	SimpleCSV _curRelayCSV;
-	SimpleCSV _freqRelayCSV;
-	SimpleCSV _loadAreaCSV;
-	SimpleCSV _modelParmsCSV;
-	SimpleCSV _primeMoverCSV;
-	SimpleCSV _relayOperateCSV;
+//	SimpleCSV _voltageRelayCSV;
+//	SimpleCSV _curRelayCSV;
+//	SimpleCSV _freqRelayCSV;
+//	SimpleCSV _loadAreaCSV;
+//	SimpleCSV _modelParmsCSV;
+//	SimpleCSV _primeMoverCSV;
+//	SimpleCSV _relayOperateCSV;
 	
 	//Hashmaps
 	TObjectIntMap<String> _loadCaseMap;
