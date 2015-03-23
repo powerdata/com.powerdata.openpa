@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Utility to easiy read and write CSV files.
+ * Utility to easily read and write CSV files.
  * 
  * This requires that the first row in the file is the "header" and not
  * data.
@@ -93,6 +93,7 @@ public class SimpleCSV
 		ArrayList<String> vals = _colsByName.get(col);
 		return (vals == null)?null:vals.toArray(new String[0]);
 	}
+	public boolean hasCol(String col) { return (_colsByName.get(col) != null); }
 	public float[] getFloats(int col) { return getFloats(get(col)); }
 	public float[] getFloats(String col) { return getFloats(get(col)); }
 	public float[] getFloats(String svals[])
