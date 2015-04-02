@@ -3,7 +3,7 @@ com.powerdata.openpa
 
 Status of this README
 -----
-4/1/2015.  OpenPA has undergone a major rewrite through early 2015.  The com.powerdata.openpa.psse*.* packages
+4/1/2015.  OpenPA has undergone a major rewrite through early 2015.  The `com.powerdata.openpa.psse*.*` packages
 are deprecated, no longer supported, and will be removed in the near future.
 
 This README file and JavaDoc both need work, but we will try to at least provide enough information to load a 
@@ -15,8 +15,8 @@ The goal of the API is to make model access simple and fast regardless of the ba
 
 Dependencies
 ------
-Java 8
-[Trove Collections](http://trove.starlight-systems.com/)
+* Java 8
+* [Trove Collections](http://trove.starlight-systems.com/)
 
 
 Data source formats
@@ -59,9 +59,9 @@ The model object can now be used to access data both for reading and writing.
 A simple example can be found in the main() method of com.powerdata.openpa.pwrflow.TestModel.java
 
 To run it:
-1)  build openpa.jar from the source
-2)  unzip the model data into a directory (/home/chris/cascadia in this example)
-3)  provide a directory for output files (leave blank to assume the current working dir)
+1.  build openpa.jar from the source
+2.  unzip the model data into a directory (/home/chris/cascadia in this example)
+3.  provide a directory for output files (leave blank to assume the current working dir)
 
 java -cp openpa.jar com.powerdata.openpa.pwrflow.TestModel --uri psmfmt:dir=/home/chris/cascadia
 
