@@ -20,14 +20,14 @@ public class CaseRatioTapChangerOPA extends ExportOpenPA<TransformerList>
 		assignTo();
 	}
 	
-	void assignFrom()
+	protected void assignFrom()
 	{
 		assign(CaseRatioTapChanger.ID, new StringWrap(i -> _list.getID(i)+":ftap"));
 		assign(CaseRatioTapChanger.Ratio,
 			i -> String.valueOf(_list.getFromTap(i)));
 	}
 	
-	void assignTo()
+	protected void assignTo()
 	{
 		assign(CaseRatioTapChanger.ID, new StringWrap(i -> _list.getID(i)+":ttap"));
 		assign(CaseRatioTapChanger.Ratio,

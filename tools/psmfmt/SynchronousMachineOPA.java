@@ -1,6 +1,5 @@
 package com.powerdata.openpa.tools.psmfmt;
 
-import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Gen;

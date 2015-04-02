@@ -6,10 +6,10 @@ import com.powerdata.openpa.PAModelException;
 import java.util.function.IntFunction;
 
 
-abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> extends Export
+public abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> extends Export
 {
-	T _list;
-	ExportOpenPA(T list, int ncol)
+	protected T _list;
+	protected ExportOpenPA(T list, int ncol)
 	{
 		_list = list;
 		_finfo = new FmtInfo[ncol];
@@ -19,12 +19,12 @@ abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> extends Ex
 	{
 		String get(int i) throws PAModelException;
 	}
-	FmtInfo[] _finfo;
+	protected FmtInfo[] _finfo;
 
-	class StringWrap implements ListAccess
+	public class StringWrap implements ListAccess
 	{
 		ListAccess _base;
-		StringWrap(ListAccess base) {_base = base;}
+		public StringWrap(ListAccess base) {_base = base;}
 		
 		@Override
 		public String get(int i) throws PAModelException
@@ -40,7 +40,7 @@ abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> extends Ex
 		}
 	}
 	
-	void assign(Enum<?> id, ListAccess f)
+	protected void assign(Enum<?> id, ListAccess f)
 	{
 		int n = id.ordinal();
 		FmtInfo fi = new FmtInfo(id.toString(), 

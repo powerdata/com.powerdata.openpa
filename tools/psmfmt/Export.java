@@ -29,7 +29,7 @@ abstract class Export
 		pw.close();
 	}
 
-	void printData(PrintWriter pw)
+	protected void printData(PrintWriter pw)
 	{
 		printData(pw, getFmtInfo(), getCount());
 	}
@@ -54,7 +54,7 @@ abstract class Export
 		}
 	}
 
-	void printHeader(PrintWriter pw)
+	protected void printHeader(PrintWriter pw)
 	{
 		boolean first = true;
 		for (FmtInfo f : getFmtInfo())
