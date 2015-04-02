@@ -59,9 +59,9 @@ The model object can now be used to access data both for reading and writing.
 A simple example can be found in the main() method of com.powerdata.openpa.pwrflow.TestModel.java
 
 To run it:
-1.  build openpa.jar from the source
-2.  unzip the model data into a directory (/home/chris/cascadia in this example)
-3.  provide a directory for output files (leave blank to assume the current working dir)
+1. build openpa.jar from the source
+2. unzip the model data into a directory (/home/chris/cascadia in this example)
+3. provide a directory for output files (leave blank to assume the current working dir)
 
 java -cp openpa.jar com.powerdata.openpa.pwrflow.TestModel --uri psmfmt:dir=/home/chris/cascadia
 
