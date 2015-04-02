@@ -28,32 +28,24 @@ public class TestModel
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fout)));
 		for(Bus b : buses)
 		{
-			out.format("%05d %05d %s\n", b.getIndex(), b.getKey(), b.toString());
+			out.format("%s\n", b.getID());
 			out.format("\tBuses:\n");
 			for(Bus b1 : b.getBuses())
-				out.format("\t\t%d %d %s\n", b1.getIndex(), b1.getKey(), b1.getName());
+				out.format("\t\t%s\n", b1.getID());
 
 			out.format("\tTwo-Term Devs:\n");
 			
 			for(TwoTermDevList b1list : b.getTwoTermDevices())
 			{
 				for(TwoTermDev b1 : b1list)
-				{
-					Bus f = b1.getFromBus(), t = b1.getToBus();
-					out.format("\t\t%d %d %s %d %d %s %d %d %s\n", b1.getIndex(), b1.getKey(), b1,
-						f.getIndex(), f.getKey(), f, t.getIndex(), t.getKey(), t);
-				}
+					out.format("\t\t%s\n", b1.getID());
 			}
 			out.println();
 			out.format("\tOne-Term Devs:\n");
 			for (OneTermDevList b1list : b.getOneTermDevices())
 			{
 				for (OneTermDev b1 : b1list)
-				{
-					Bus ob = b1.getBus();
-					out.format("\t\t%d %d %s %d %d %s\n", b1.getIndex(),
-						b1.getKey(), b1, ob.getIndex(), ob.getKey(), ob);
-				}
+					out.format("\t\t%s\n", b1.getID());
 			}
 			out.println();
 		}
