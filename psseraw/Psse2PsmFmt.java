@@ -11,13 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.powerdata.openpa.psse.PsseModelException;
-import com.powerdata.openpa.psse.util.TransformerRaw;
-import com.powerdata.openpa.tools.Complex;
-import com.powerdata.openpa.tools.DeltaNetwork;
 
 public class Psse2PsmFmt extends PsseProcessor 
 {
@@ -213,14 +208,6 @@ class PssePSMWriter implements PsseRecWriter
 		{
 			_writers.get(i).close();
 		}
-	}
-	
-	private DeltaNetwork convert3W(float[] r, float[] x) throws PsseModelException
-	{
-		return new DeltaNetwork(
-				new Complex(r[0], x[0]), //1_2
-				new Complex(r[1], x[1]), //2_3
-				new Complex(r[2], x[2])); //3_1
 	}
 	
 	private PrintWriter getWriter(String fileName) throws FileNotFoundException
