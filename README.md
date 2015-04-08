@@ -9,11 +9,6 @@ Status of this README
 This README file and JavaDoc both need work, but we will try to at least provide enough information to load a 
 test model and work with the library.
 
-Data Formats
-------
-
-There is a
-
 Dependencies
 ------
 * Java 8
@@ -34,6 +29,7 @@ A sample model is available:
 [CASCADIA model (contains switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia.zip)
 
 *PSS/e Files*
+
 PSS/e files for version 30 can be converted to the PowerSimulator CSV format using com.powerdata.openpa.psseraw.Psse2PsmFmt
 
 
