@@ -65,6 +65,7 @@ To run it:
 java -cp openpa.jar com.powerdata.openpa.pwrflow.TestModel --uri psmfmt:dir=/home/chris/cascadia
 
 This should output:
+
 1. buses.txt - a dump of all the equipment on each connectivity bus
 2. tnode.txt - a similar dump, but using a single-bus topology common for power apps.
 
