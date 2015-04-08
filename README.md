@@ -1,17 +1,18 @@
 com.powerdata.openpa
 ====================
 
+The goal of the API is to make model access simple and fast regardless of the back-end being used.
+
+
 Status of this README
 -----
-4/1/2015.  OpenPA has undergone a major rewrite through early 2015.  The `com.powerdata.openpa.psse*.*` packages
-are deprecated, no longer supported, and will be removed in the near future.
-
 This README file and JavaDoc both need work, but we will try to at least provide enough information to load a 
 test model and work with the library.
 
-Java classes sub-module for Open Source Power Apps and Utilities
+Data Formats
+------
 
-The goal of the API is to make model access simple and fast regardless of the back-end being used.
+There is a
 
 Dependencies
 ------
@@ -32,7 +33,8 @@ A sample model is available:
 
 [CASCADIA model (contains switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia.zip)
 
-Converters from other formats such as PSS/e and PSLF to the PowerSimulator formats will be available in the future.
+*PSS/e Files*
+PSS/e files for version 30 can be converted to the PowerSimulator CSV format using com.powerdata.openpa.psseraw.Psse2PsmFmt
 
 
 PAModel Usage
@@ -67,6 +69,16 @@ To run it:
 java -cp openpa.jar com.powerdata.openpa.pwrflow.TestModel --uri psmfmt:dir=/home/chris/cascadia
 
 This should output:
-1)  buses.txt - a dump of all the equipment on each connectivity bus
-2)  tnode.txt - a similar dump, but using a single-bus topology common for power apps.
+1. buses.txt - a dump of all the equipment on each connectivity bus
+2. tnode.txt - a similar dump, but using a single-bus topology common for power apps.
+
+Changes
+------
+2015-04-08.  Remove OpenPA version 1 psse code.  The com.powerdata.openpa.psse\*.\* packages have been removed.  
+
+TO-DO:
+------
+* Cleanup JavaDoc and Generate and add link
+* Document applications and utilities (sparse matrix, power calculations, AC & DC power flows)
+* add section on performance best practices
 
