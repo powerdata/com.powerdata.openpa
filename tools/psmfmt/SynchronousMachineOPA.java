@@ -15,7 +15,6 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 		int[] bx = bri.get1TBus(_list);
 		int[] rx = bri.mapBusFcn(_list, i->_list.getRegBus(i));
 		BusList buses = bri.getBuses();
-//		assign(SynchronousMachine.ID, i -> String.format("\"%s\"", _list.get(i)));
 		assign(SynchronousMachine.ID, new StringWrap(i -> createID(_list.get(i))));
 		assign(SynchronousMachine.Name, new StringWrap(i -> _list.getName(i)));
 		assign(SynchronousMachine.Node, new StringWrap(i -> buses.get(bx[i]).getID()));
@@ -38,7 +37,6 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 		String[] idBase = g.getID().split(":");
 		if(idBase.length == 4)
 		{
-			//g.getBus().getVoltageLevel().getName()
 			//ID has expected number of ':'
 			return idBase[0]+":"
 					+idBase[1]+":"
