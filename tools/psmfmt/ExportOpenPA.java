@@ -15,7 +15,7 @@ public abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> ext
 		_finfo = new FmtInfo[ncol];
 	}
 
-	interface ListAccess
+	public interface ListAccess
 	{
 		String get(int i) throws PAModelException;
 	}
