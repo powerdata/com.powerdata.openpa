@@ -91,6 +91,8 @@ public class LinkNet
 	 */
 	public int addBranch(int fromBusNdx, int toBusNdx)
 	{
+		// if either side of the branch is not connected, do nothing
+		if((fromBusNdx == -1) || (toBusNdx == -1)) return -1;
 		int endp = (_brcnt++) * 2;
 		int endq = endp + 1;
 
