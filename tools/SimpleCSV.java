@@ -124,6 +124,21 @@ public class SimpleCSV
 		}
 		return fvals;
 	}
+	public double[] getDoubles(int col) { return getDoubles(get(col)); }
+	public double[] getDoubles(String col) { return getDoubles(get(col)); }
+	public double[] getDoubles(String svals[])
+	{
+		double[] fvals = null;
+		if (svals != null)
+		{
+			fvals = new double[_rowCount];
+			for(int i=0; i<_rowCount; i++)
+			{
+				fvals[i] = (svals[i].trim().equals("")? 0F : Double.parseDouble(svals[i]));
+			}
+		}
+		return fvals;
+	}
 	//
 	//	Set values based on column offset
 	//
