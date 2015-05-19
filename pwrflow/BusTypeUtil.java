@@ -45,7 +45,7 @@ public class BusTypeUtil
 
 	WeakReference<GroupMap> _tmap = new WeakReference<>(null),
 			_imap = new WeakReference<>(null);
-	
+	public BusTypeUtil() {}
 	public BusTypeUtil(PAModel model, BusRefIndex bri) throws PAModelException
 	{
 		_model = model;

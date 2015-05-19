@@ -36,14 +36,13 @@ public class FixedShuntCalcList extends AbstractList<com.powerdata.openpa.pwrflo
 		{
 			return FixedShuntCalcList.this.getShunt(_ndx);
 		}
-		
 	}
-
 
 	FixedShuntListIfc<? extends FixedShunt> _src;
 	BusList _buses;
 	int[] _buslist;
 	float[] _q, _b;
+	//TODO: handle SBASE more intelligently
 	float _sbase = 100f;
 	
 	public FixedShuntCalcList(FixedShuntListIfc<? extends FixedShunt> src,

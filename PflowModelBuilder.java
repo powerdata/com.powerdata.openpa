@@ -134,7 +134,6 @@ public abstract class PflowModelBuilder extends ModelBuilderI
 	 */
 	public static PflowModelBuilder Create(String uri) throws PAModelException
 	{
-		//System.out.println("uri: "+uri);
 		String[] tok = uri.split(":", 2);
 		String clsnm = _SchemeToInputClass.get(tok[0]);
 		if (clsnm == null) throw new PAModelException("Scheme not defined for Input: "+tok[0]);

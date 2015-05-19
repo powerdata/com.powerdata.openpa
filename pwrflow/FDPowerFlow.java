@@ -23,7 +23,8 @@ import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow;
-import com.powerdata.openpa.pwrflow.GenVarMonitor.Action;
+import com.powerdata.openpa.pwrflow.BusMonitor.Action;
+import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.tools.FactorizedFltMatrix;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SpSymMtrxFactPattern;
@@ -50,7 +51,7 @@ public class FDPowerFlow
 	/** Network adjacency matrix */
 	ACBranchAdjacencies<ACBranchFlow> _adj;
 	/** Bus types */
-	BusTypeUtil _btu;
+	BusTypeUtil _btu = null;
 	/** matrix elimination pattern for B'' bus type changes */
 	SpSymMtrxFactPattern _pat;
 	/** Factorized B' matrix */
@@ -62,7 +63,11 @@ public class FDPowerFlow
 	/** Maximum number of iterations */
 	int _maxit = 40;
 	/** Convergence Tolerance */
-	float _tol = 0.005f;
+	float _cnvtol = 0.005f;
+	/** Unit limit tolerance when distributing slack */
+	float _pdisttol = 1f;
+	/** slack dist activation tolerance */
+	float _pdistacttol = 0.1f;
 	/** system MVA base */
 	float _sbase = 100f;
 	/** system Buses (single-bus view) */
@@ -74,6 +79,8 @@ public class FDPowerFlow
 	IslandList _hotislands;
 	/** monitor vars */
 	GenVarMonitor _varmon;
+	/** Monitor slack & distribute */
+	DistributedSlackMonitor _dsmon = null;
 	/** report mismatches externally */
 	List<MismatchReporter> _mmreport = new ArrayList<>();
 	/** resulting voltage magnitudes (p.u.) */
@@ -86,6 +93,156 @@ public class FDPowerFlow
 	ActiveGenData _actvgen;
 	/** Keep the reactive mismatches around in order to update generators and SVC's */
 	Mismatch _qmm;
+	/** track single-buses in order of hot island */
+//	List<int[]> _busbyisland;
+	
+	/**
+	 * Track slack participation for each (hot) island.
+	 * @author chris@powerdata.com
+	 *
+	 */
+	class DistInfo
+	{
+		GenList _gens;
+		float _max;
+		DistInfo(GenList gens) throws PAModelException
+		{
+			_gens = gens;
+			_max = 0f;
+			for(Gen g : gens) _max += g.getOpMaxP();
+		}
+		GenList getGens() {return _gens;}
+		/**
+		 * Distribute slack
+		 * @param mm mismatch in MW
+		 * @throws PAModelException
+		 */
+		
+		
+		
+		abstract class Distributor
+		{
+			@Override
+			public String toString()
+			{
+				return String.format("mm=%f, rem=%f, dmax=%f, _max=%f, _reduced=%f\n",
+					_mm, _rem, _dmax, _max, _reduced);
+			}
+			float _rem, _dmax = _max, _reduced = 0f;
+			boolean[] _avail = new boolean[_gens.size()];
+			float _mm;
+			Distributor(float mm)
+			{
+				_rem = -mm;
+				_mm = -mm;
+				Arrays.fill(_avail, true);
+			}
+			
+			void distribute() throws PAModelException
+			{
+				int n = _gens.size();
+				while(testRemaining())
+				{
+					_dmax -= _reduced;
+					for(int i=0; i < n; ++i)
+					{
+						Gen g = _gens.get(i);
+						if (_avail[i])
+						{
+							float pmax = g.getOpMaxP();
+							float pemer = pmax * _pdisttol;
+							float prof = g.getOpMaxP() / _dmax;
+							float pdes = prof * _mm, ps = g.getPS();
+							float pavail = calcAvail(pdes, pemer, ps);
+							if(testAvail(pdes, pavail))
+							{
+								_avail[i] = false;
+								pdes = pavail;
+								_reduced += pmax;
+							}
+							g.setPS(ps+pdes);
+							_rem -= pdes;
+						}
+					}
+				}
+			}
+			abstract boolean testRemaining();
+			abstract boolean testAvail(float pdes, float pavail);
+			abstract float calcAvail(float pdes, float pemer, float ps);
+		}
+		
+		class PosMMDistributor extends Distributor
+		{
+			PosMMDistributor(float mm) {super(mm);}
+			@Override
+			boolean testRemaining() {return (_rem > _cnvtol);}
+			@Override
+			boolean testAvail(float pdes, float pavail) {return (pavail > pdes);}
+			@Override
+			float calcAvail(float pdes, float pemer, float ps) {return Math.min(pdes,  pemer - ps);}
+		}
+		
+		class NegMMDistributor extends Distributor
+		{
+			NegMMDistributor(float mm) {super(mm);}
+			@Override
+			boolean testRemaining() {return (_rem < -_cnvtol);}
+			@Override
+			boolean testAvail(float pdes, float pavail) {return (pdes > pavail);}
+			@Override
+			float calcAvail(float pdes, float pemer, float ps) {return Math.max(pdes,  -ps);}
+		}
+		
+		void distribute(float mm) throws PAModelException 
+		{
+			((mm > 0f) ?new NegMMDistributor(mm) : new PosMMDistributor(mm)).distribute(); 
+		}
+	}
+
+	/**
+	 * Monitor slack buses and take action to distribute
+	 * @author chris@powerdata.com
+	 *
+	 */
+	class DistributedSlackMonitor extends BusMonitor
+	{
+		List<DistInfo> _dilist;
+		Monitor _slkmon = (mm, i) -> 
+		{
+			_dilist.get(i).distribute(PAMath.pu2mva(mm, _sbase));
+			return false;
+		};
+
+
+		DistributedSlackMonitor() throws PAModelException
+		{
+			super(_buses, FDPowerFlow.this._btu, EnumSet.of(BusType.Reference), _hotislands);
+			_dilist = new ArrayList<>(_hotislands.size());
+			for(Island h : _hotislands)
+				_dilist.add(new DistInfo(findOnlineGens(h.getGenerators())));
+			Arrays.fill(_monitors, _slkmon);
+
+		}
+		/** restrict down to generators that are actually generating MW */
+		GenList findOnlineGens(GenList generators) throws PAModelException
+		{
+			int nrv = 0, ng = generators.size();
+			int[] rv = new int[ng];
+			for (int i=0; i < ng; ++i)
+			{
+				Gen g = generators.get(i);
+				if (g.isGenerating())
+					rv[nrv++] = i;
+			}
+			return SubLists.getGenSublist(generators, Arrays.copyOf(rv, nrv));
+		}
+		@Override
+		protected boolean testIsland(ConvergenceInfo ci)
+		{
+			return Math.abs(ci.getWorstP().getValue()) < _pdistacttol;
+		}
+
+	}
 	
 	public FDPowerFlow(PAModel model, BusRefIndex bri) throws PAModelException
 	{
@@ -122,14 +279,16 @@ public class FDPowerFlow
 		BusList pvbuses = SubLists.getBusSublist(_buses, 
 			_btu.getBuses(BusType.PV));
 		
-		_varmon = new GenVarMonitor(_bdblprime_mtrx, pvbuses, _hotislands, _cvtpvpq, null);
-
+		_varmon = new GenVarMonitor(_hotislands, _btu, _buses, _bdblprime_mtrx, _cvtpvpq, null);
+		_dsmon = new DistributedSlackMonitor();
 		for(Bus b : pvbuses)
 			_bdblprime_mtrx.incBdiag(b.getIndex(), 1e+06f);
 		
 		 _vsp = new VoltageSetPoint(pvbuses, _buses, _model.getIslands().size());
 		
 	}
+	
+	
 	
 	private void cleanupOldResults() throws PAModelException
 	{
@@ -145,13 +304,17 @@ public class FDPowerFlow
 	{
 		int[] revidx;
 		boolean[] inavr;
+		GenList _gens;
 		ActiveGenData(GenList actvgen, boolean[] inavr,
 				int[] revidx, float sbase) throws PAModelException
 		{
 			super(_bri, actvgen, () -> actvgen.getPS(), () -> actvgen.getQS(), sbase);
 			this.inavr = inavr;
 			this.revidx = revidx;
+			_gens = actvgen;
 		}
+		
+		GenList getGens() {return _gens;}
 		/**
 		 * Toggle the AVR state of the given generator
 		 * 
@@ -171,8 +334,8 @@ public class FDPowerFlow
 			float[] p = pmm.get(), q = qmm.get();
 			int[] bx = _actvgen.getBus();
 			int ngen = bx.length;
-			float[] pg = PAMath.mva2pu(_actvgen.getP(), _sbase);
-			float[] qg = PAMath.mva2pu(_actvgen.getQ(), _sbase);
+			float[] pg = PAMath.mva2pu(getP(), _sbase);
+			float[] qg = PAMath.mva2pu(getQ(), _sbase);
 			for(int i=0; i < ngen; ++i)
 			{
 				int b = bx[i];
@@ -181,8 +344,6 @@ public class FDPowerFlow
 					q[b] += qg[i];
 			}
 		}
-		
-		
 	}
 	
 	/**
@@ -207,6 +368,11 @@ public class FDPowerFlow
 		int[] revidx = new int[ngen];
 		Arrays.fill(revidx, -1);
 		
+//		int nsbus = _buses.size();
+//		/** map the "hot" island index to each single bus */
+//		int[] sbisland = new int[nsbus];
+//		Arrays.fill(sbisland, -1);
+		
 		for(Island island : islands)
 		{
 			boolean h = false;
@@ -217,6 +383,9 @@ public class FDPowerFlow
 					if (!h)
 					{
 						h = true;
+//						/* track which buses are in this island */
+//						for(Bus b : island.getBuses())
+//							sbisland[_buses.getByBus(b).getIndex()] = nhot;
 						idx[nhot++] = island.getIndex();
 					}
 					int lx = g.getIndex();
@@ -225,7 +394,9 @@ public class FDPowerFlow
 					qidx[np++] = g.isRegKV();
 				}
 			}
+
 		}
+//		_busbyisland = new BasicBusGrpMap(sbisland, nhot).map();
 		_hotislands = SubLists.getIslandSublist(islands, Arrays.copyOf(idx, nhot));
 		_actvgen = new ActiveGenData(SubLists.getGenSublist(gens, Arrays.copyOf(pidx, np)), 
 			Arrays.copyOf(qidx, np), revidx, _sbase);
@@ -261,6 +432,8 @@ public class FDPowerFlow
 		}
 	};
 	
+	/** Bus types to compare for convergence. */
+
 	static Collection<BusType> _ActvMismatchTypes = EnumSet.of(BusType.PQ, BusType.PV);
 	static Collection<BusType> _ReacMismatchTypes = EnumSet.of(BusType.PQ);
 	
@@ -280,7 +453,7 @@ public class FDPowerFlow
 		/** reactive power mismatches */
 		_qmm = new Mismatch(_bri, _btu, _ReacMismatchTypes);
 		/** Convergence information for each island */
-		ConvergenceList rv = new ConvergenceList(_hotislands, _btu, pmm, _qmm, _tol, _tol, _vm);
+		ConvergenceList rv = new ConvergenceList(_hotislands, _btu, pmm, _qmm, _cnvtol, _cnvtol, _vm);
 		/** apply voltage setpoints to vm */
 		_vsp.applyToVMag(_vm);
 		
@@ -295,12 +468,14 @@ public class FDPowerFlow
 			
 			/* test for convergence */
 			incomplete = !rv.test();
+			/* distribute slack */
+			_dsmon.monitor(pmm.get(), rv);
 			
 			/* solve a new set of voltages and angles */
 			if (incomplete)
 			{
 				/* check for limit violations */
-				_varmon.monitor(_qmm, rv);
+				_varmon.monitor(_qmm.get(), rv);
 				/* check remote-monitored buses and adjust any setpoints as needed */
 //				_vsp.applyRemotes(_vm, rv);
 				/* correct magnitudes */
@@ -404,13 +579,74 @@ public class FDPowerFlow
 		updateBusResults();
 		_accalc.updateResults();
 		updateVarMismatches();
+		updateGenActivePower();
 	}
 	
-	public void setMaxIterations(int i)
+	/** update active generators to their active setpoints */
+	void updateGenActivePower() throws PAModelException
 	{
-		_maxit = i;
+		
+		for(Gen g : _actvgen.getGens())
+			g.setP(g.getPS());
+		
 	}
 
+	/**
+	 * Set maximum iterations (both active and reactive).  Default is 40.
+	 * @param i max iteration count.
+	 */
+	public void setMaxIterations(int i) {_maxit = i;}
+	/**
+	 * Get maximum iterations.  Default is 40.
+	 * @return maximum iterations
+	 */
+	public int getMaxInterations() {return _maxit;}
+	/**
+	 * Set the convergence tolerance for both active and reactive mismatches.  Default is 5.
+	 * @param tol MVA value to meet or beat in order to be converged
+	 */
+	public void setCovergenceTolerance(float tol) {_cnvtol = PAMath.mva2pu(tol, _sbase);}
+	/**
+	 * Get the convergence tolerance for both active and reactive mismatches.  Default is 5.
+	 * @return Convergence tolerance in MVA
+	 */
+	public float getConvergenceTolerance() {return PAMath.pu2mva(_cnvtol, _sbase);}
+	/**
+	 * Set the slack activation tolerance. If the largest active mismatch is
+	 * within this value, then slack is distributed for that iteration.  Defaults to 10
+	 * 
+	 * @param tol
+	 *            Slack activation tolerance in MW
+	 */
+	public void setSlackActivationTolerance(float tol)
+	{
+		_pdistacttol = PAMath.mva2pu(tol, _sbase);
+	}
+	/**
+	 * Get the slack activation tolerance. If the largest active mismatch is
+	 * within this value, then slack is distributed for that iteration.  Defaults to 10
+	 * 
+	 * @return Slack activation tolerance in MW
+	 */
+	public float getSlackActivationTolerance()
+	{
+		return PAMath.pu2mva(_pdistacttol, _sbase);
+	}
+	/**
+	 * Set the unit active limit tolerance. Units can be available for slack
+	 * distribution up to this level. Defaults to 100%
+	 * 
+	 * @param tol
+	 *            percent of unit limit.
+	 */
+	public void setUnitActiveLimitTolerance(float tol) {_pdisttol = tol/100f;}
+	/**
+	 * Get the unit active limit tolerance. Units can be available for slack
+	 * distribution up to this level. Defaults to 100%
+	 * 
+	 * @return percent of unit limit.
+	 */
+	public float getUnitActiveLimitTolerance() {return _pdisttol*100f;}
 	
 	@Deprecated
 	public BusTypeUtil getBusTypes() {return _btu;}
@@ -450,9 +686,10 @@ public class FDPowerFlow
 		PAModel m = bldr.load();
 
 		FDPowerFlow pf = new FDPowerFlow(m, BusRefIndex.CreateFromSingleBuses(m));
-//		pf.addMismatchReporter(new DetailMismatchReporter(m, outdir, true));
+//		pf.addMismatchReporter(new DetailMismatchReporter(m, outdir, false));
 		pf.addMismatchReporter(new SummaryMismatchReporter(outdir));
 		pf.setMaxIterations(40);
+		pf.setSlackActivationTolerance(0.5f);
 		ConvergenceList results = pf.runPF();
 		pf.updateResults();
 		results.forEach(l -> System.out.println(l));
@@ -545,39 +782,42 @@ public class FDPowerFlow
 	 */
 	void updateVarMismatches() throws PAModelException
 	{
-		for (int bx : _btu.getBuses(BusType.PV))
+		for (BusType btype : new BusType[] { BusType.PV, BusType.Reference })
 		{
-			Bus b = _buses.get(bx);
-			float m = PAMath.mva2pu(_qmm.get(bx), _sbase);
-			VarAllocator[] vm = loadAllocators(b, m);
-			int n = vm.length;
-			while (m != 0f)
+			for (int bx : _btu.getBuses(btype))
 			{
-				float[] pct = calcPcts(vm, m);
-				float unallocated = 0f;
-				for (int i = 0; i < n; ++i)
+				Bus b = _buses.get(bx);
+				float m = -PAMath.pu2mva(_qmm.get(bx), _sbase);
+				VarAllocator[] vm = loadAllocators(b, m);
+				int n = vm.length;
+				while (m != 0f)
 				{
-					VarAllocator a = vm[i];
-					/** q max limit */
-					float qm = a.getQLim();
-					/** MVAr to assign */
-					float qa = a.getQ() + m * pct[i];
-					/** difference from limit */
-					float qd = qm - qa;
-					/*
-					 * If the difference has the opposite sign as the q max,
-					 * then we exceeded the capability. Put the difference back
-					 * on to the mismatch for now
-					 */
-					if (Math.signum(qm) == -1f * Math.signum(qd))
+					float[] pct = calcPcts(vm, m);
+					float unallocated = 0f;
+					for (int i = 0; i < n; ++i)
 					{
-						unallocated += qd;
-						qa = qm;
-						a.disable();
+						VarAllocator a = vm[i];
+						/** q max limit */
+						float qm = a.getQLim();
+						/** MVAr to assign */
+						float qa = m * pct[i];
+						/** difference from limit */
+						float qd = qm - qa;
+						/*
+						 * If the difference has the opposite sign as the q max,
+						 * then we exceeded the capability. Put the difference
+						 * back on to the mismatch for now
+						 */
+						if (Math.signum(qm) == -1f * Math.signum(qd))
+						{
+							unallocated += qd;
+							qa = qm;
+							a.disable();
+						}
+						a.setQ(qa);
 					}
-					a.setQ(qa);
+					m = unallocated;
 				}
-				m = unallocated;
 			}
 		}
 	}
@@ -622,8 +862,11 @@ public class FDPowerFlow
 		int n = 0;
 		for (Gen g : gens)
 		{
-			VarAllocator va = VarAllocator.Create(g, m);
-			if (va != null) rv[n++] = va;
+			if (g.isGenerating())
+			{
+				VarAllocator va = VarAllocator.Create(g, m);
+				if (va != null) rv[n++] = va;
+			}
 		}
 		for (SVC g : svcs)
 		{

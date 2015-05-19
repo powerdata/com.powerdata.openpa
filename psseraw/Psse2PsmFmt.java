@@ -64,6 +64,8 @@ public class Psse2PsmFmt extends PsseProcessor
 			System.err.println("Unable to locate PSS/E file");
 		}
 		
+		if (!outdir.exists()) outdir.mkdirs();
+		
 		Reader psseReader = new BufferedReader(new FileReader(psse));
 		Psse2PsmFmt toPsm = new Psse2PsmFmt(psseReader, "30", outdir);
 		

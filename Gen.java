@@ -1,5 +1,8 @@
 package com.powerdata.openpa;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class Gen extends OneTermDev
 {
 	GenList _list;
@@ -18,6 +21,8 @@ public class Gen extends OneTermDev
 	}
 
 	public enum Type {Unknown, Thermal, Hydro};
+
+	static Set<Mode> GenModes = EnumSet.complementOf(EnumSet.of(Mode.OFF, Mode.PMP));
 	
 	public Gen(GenList list, int ndx)
 	{
@@ -151,10 +156,10 @@ public class Gen extends OneTermDev
 		return isGenerating() && isRegKV();
 	}
 	
+	
 	public boolean isGenerating() throws PAModelException
 	{
-		Mode m = getMode();
-		return !isOutOfSvc() && m != Mode.OFF;
+		return !isOutOfSvc() && GenModes.contains(getMode());
 	}
 
 }

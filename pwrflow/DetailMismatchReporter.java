@@ -14,7 +14,6 @@ import com.powerdata.openpa.OneTermDevList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDCLine;
-import com.powerdata.openpa.tools.PAMath;
 
 public class DetailMismatchReporter implements MismatchReporter
 {

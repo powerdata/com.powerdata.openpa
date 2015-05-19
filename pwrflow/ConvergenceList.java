@@ -17,8 +17,16 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 {
 	public enum Status
 	{
-		Untested, Converge, NoReferenceBus, VoltageCollapse, HighVoltage,
-			Pmismatch, Qmismatch, BlowsUp, ReferenceOnly; 
+		/** Convergence not yet tested */ 							Untested,
+		/** Converged */ 											Converge,
+		/** No Angle Reference Bus specified */ 					NoReferenceBus,
+		/** Voltage collapsed in island */ 							VoltageCollapse, 
+		/** Voltage too high (over 2.0) in island */ 				HighVoltage,
+		/** active power mismatch */ 								Pmismatch,
+		/** reactive power mismatch */ 								Qmismatch,
+		/** Solution not stable */ 									BlowsUp,
+		/** Degenerate case, no real island */ 						ReferenceOnly,
+		/** active power converged, trying to distribute slack */ 	SlackDist; 
 	}
 
 	public interface WorstVoltage
@@ -36,6 +44,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 	float _ptol, _qtol;
 	float[] _vm;
 	int[] _niter;
+	BusTypeUtil _btu;
 	
 	public ConvergenceList(IslandList hotislands, BusTypeUtil btu,
 			Mismatch pmm, Mismatch qmm, float ptol, float qtol, float[] vm)
@@ -53,6 +62,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		_worstv = new float[n];
 		_ptol = ptol;
 		_qtol = qtol;
+		_btu = btu;
 		for (int i = 0; i < n; ++i)
 		{
 			_status[i] = (btu.getBuses(BusType.Reference, _islands.get(i)).length == 0) ?
@@ -79,6 +89,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		_PrtMap.put(Status.HighVoltage, sbvolt);
 		_PrtMap.put(Status.Pmismatch, sball);
 		_PrtMap.put(Status.Qmismatch, sball);
+		_PrtMap.put(Status.SlackDist, sball);
 		_PrtMap.put(Status.BlowsUp, sball);
 		_PrtMap.put(Status.ReferenceOnly, sbnd);
 	}
@@ -215,6 +226,8 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 						_status[i] = Status.Qmismatch;
 					else if (Math.abs(p.getValue()) > _ptol)
 						_status[i] = Status.Pmismatch;
+					else if (Math.abs(_pmm.get(_btu.getBuses(BusType.Reference, island)[0])) > _ptol)
+						_status[i] = Status.SlackDist;
 					else
 						_status[i] = Status.Converge;
 					
@@ -299,7 +312,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 	}
 
 	static Set<Status> _Incomplete = EnumSet.of(Status.Untested,
-		Status.Pmismatch, Status.Qmismatch);
+		Status.Pmismatch, Status.Qmismatch, Status.SlackDist);
 	
 	public boolean completed()
 	{

@@ -928,7 +928,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	private void buildOwnerMap() throws PAModelException
 	{
 		if(_orgCSV == null) loadOwners();
-		String[] ownerIDs = _orgCSV.get("ID");
+		String[] ownerIDs = _orgCSV.hasCol("ID") ? _orgCSV.get("ID") : new String[0];
 		_ownerMap = new TObjectIntHashMap<>(ownerIDs.length);
 		
 		for(int i = 0; i < ownerIDs.length; ++i)
@@ -941,7 +941,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	private void buildAreaMap() throws PAModelException
 	{
 		if(_areaCSV == null)loadAreas();
-		String[] areaIDs = _areaCSV.get("ID");
+		String[] areaIDs = _areaCSV.hasCol("ID") ? _areaCSV.get("ID") : new String[0];
 		_areaMap = new TObjectIntHashMap<>(areaIDs.length);
 		
 		for(int i = 0; i < areaIDs.length; ++i)
@@ -957,8 +957,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		if(_stationOffsetMap == null) buildSubstationMap();
 		if(_busCSV == null) loadBuses();
 		
-		String[] busStationIDs = _busCSV.get("Substation");
-		String[] stationAreaIDs = _substationCSV.get("ControlArea");
+		String[] busStationIDs = _busCSV.hasCol("Substation") ? _busCSV.get("Substation") : new String[0];
+		String[] stationAreaIDs = _substationCSV.hasCol("ControlArea") ? _substationCSV.get("ControlArea") : new String[0];
 		String[] stationOwnerIDs = _substationCSV.get("Organization");
 		_stationAreaIndex = new int[stationAreaIDs.length];
 		_stationOwnerIndex = new int[stationAreaIDs.length];
@@ -1002,7 +1002,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	{
 		if(_stationOffsetMap == null) buildSubstationMap();
 		if(_busCSV == null) loadBuses();
-		String[] substationIDs = _busCSV.get("Substation");
+		String[] substationIDs = _busCSV.hasCol("Substation") ? _busCSV.get("Substation") : new String[0];
 		_busStationIndex = new int[substationIDs.length];
 		
 		for(int i = 0; i < substationIDs.length; ++i)
@@ -1823,7 +1823,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	private void buildSubstationMap() throws PAModelException
 	{
 		if(_substationCSV == null) loadStations();
-		String[] subIDs = _substationCSV.get("ID");
+		String[] subIDs = _substationCSV.hasCol("ID") ? _substationCSV.get("ID") : new String[0];
 		_stationOffsetMap = new TObjectIntHashMap<>(subIDs.length);
 		
 		for(int i = 0; i < subIDs.length; ++i)
