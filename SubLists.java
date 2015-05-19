@@ -1,7 +1,6 @@
 package com.powerdata.openpa;
 
 import java.util.Arrays;
-import java.util.WeakHashMap;
 import com.powerdata.openpa.impl.AreaSubList;
 import com.powerdata.openpa.impl.BusSubList;
 import com.powerdata.openpa.impl.GenSubList;

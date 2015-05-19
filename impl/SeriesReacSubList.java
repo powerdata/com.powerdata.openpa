@@ -4,7 +4,7 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SeriesReac;
 import com.powerdata.openpa.SeriesReacList;
 
-public class SeriesReacSubList extends ACBranchSubList<SeriesReac> implements SeriesReacList
+public class SeriesReacSubList extends ACBranchSubListBase<SeriesReac> implements SeriesReacList
 {
 	SeriesReacList _src;
 	

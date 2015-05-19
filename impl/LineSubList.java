@@ -4,7 +4,7 @@ import com.powerdata.openpa.Line;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.ListMetaType;
 
-public class LineSubList extends ACBranchSubList<Line> implements LineList
+public class LineSubList extends ACBranchSubListBase<Line> implements LineList
 {
 	LineList _src;
 	

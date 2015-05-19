@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.OutOfService;
 import com.powerdata.openpa.PAModel;
@@ -86,16 +88,19 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	
 	public ContingencySet(PAModel m) throws PAModelException
 	{
-//		mapContingencies(m.getGenerators());
-		//TODO:  Add in distributed slack to power flow before adding generators
-//		for(ACBranchList brlist : m.getACBranches())
-//			mapContingencies(brlist);
-		for(OutOfService o : m.getLines())
+		for(ACBranchList br : m.getACBranches())
+			addOos(br);
+		addOos(m.getGenerators());
+	}
+
+	private void addOos(List<? extends OutOfService> ooslist) throws PAModelException
+	{
+		for (OutOfService o : ooslist)
 		{
 			if (!o.isOutOfSvc()) _oos.add(o);
 		}
 	}
-
+	
 	/**
 	 * Create a set of contingencies from a collection of equipment lists
 	 * @param m OpenPAModel  
@@ -105,10 +110,10 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	public ContingencySet(Collection<? extends OutOfService> oos)
 			throws PAModelException
 	{
-		for(OutOfService o : oos)
-		{
-			if (!o.isOutOfSvc()) _oos.add(o);
-		}
+			for (OutOfService o : oos)
+			{
+				if (!o.isOutOfSvc()) _oos.add(o);
+			}
 	}
 	
 	@Override

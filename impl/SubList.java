@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import java.lang.reflect.Array;
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.BaseObject;
+import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 
 public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
@@ -135,4 +136,12 @@ public abstract class SubList<T extends BaseObject> extends AbstractBaseList<T>
 	{
 		return _src.getIndex(_ndx[ndx]);
 	}
+
+	@Override
+	public ListMetaType getListMeta()
+	{
+		return _src.getListMeta();
+	}
+	
+	
 }

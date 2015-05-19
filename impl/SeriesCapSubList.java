@@ -4,7 +4,7 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.SeriesCap;
 import com.powerdata.openpa.SeriesCapList;
 
-public class SeriesCapSubList extends ACBranchSubList<SeriesCap> implements SeriesCapList
+public class SeriesCapSubList extends ACBranchSubListBase<SeriesCap> implements SeriesCapList
 {
 	SeriesCapList _src;
 	

@@ -7,7 +7,7 @@ import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
 import com.powerdata.openpa.TwoTermDev.Side;
 
-public class TransformerSubList extends ACBranchSubList<Transformer> implements TransformerList
+public class TransformerSubList extends ACBranchSubListBase<Transformer> implements TransformerList
 {
 	TransformerList _src;
 	

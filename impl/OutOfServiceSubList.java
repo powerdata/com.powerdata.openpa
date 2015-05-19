@@ -1,5 +1,7 @@
 package com.powerdata.openpa.impl;
 
+import java.util.Set;
+import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.OutOfService;
 import com.powerdata.openpa.OutOfServiceList;
 import com.powerdata.openpa.PAModelException;
@@ -40,4 +42,12 @@ public abstract class OutOfServiceSubList<T extends OutOfService> extends SubLis
 			_src.setOutOfSvc(_ndx[i], state[i]);
 	}
 
+	@Override
+	public Set<ColumnMeta> getColTypes()
+	{
+		return _src.getColTypes();
+	}
+
+	
+	
 }
