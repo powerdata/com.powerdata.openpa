@@ -12,7 +12,7 @@ import com.powerdata.openpa.TransformerList;
 
 public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 {
-	FmtInfo[] _lfi;
+	protected FmtInfo[] _lfi;
 	
 	public RatioTapChangerOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
@@ -26,10 +26,12 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 	
 	void assignTap(int[] tnode, BusRefIndex bri, char side)
 	{
-		assign(RatioTapChanger.ID, i -> String.format("\"%s:%ctap\"", _list.getID(i), side));
-		assign(RatioTapChanger.TapNode, new StringWrap(i -> bri.getBuses().get(tnode[i]).getID()));
+		assign(RatioTapChanger.ID,
+				i -> String.format("\"%s:%ctap\"", _list.getID(i), side));
+		assign(RatioTapChanger.TapNode,
+				new StringWrap(i -> bri.getBuses().get(tnode[i]).getID()));
 		assign(RatioTapChanger.TransformerWinding,
-			new StringWrap(i -> _list.getID(i)+":wnd1"));
+				new StringWrap(i -> _list.getID(i)+":wnd1"));
 	}
 
 
@@ -42,7 +44,6 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 		printData(pw, _lfi, getCount());
 		printData(pw);
 		pw.close();
-
 	}
 
 	@Override
