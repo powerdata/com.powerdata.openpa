@@ -107,6 +107,7 @@ public class PsmFmtExport
 		String uri = null;
 		File outdir = new File(System.getProperty("user.dir"));
 		boolean useSingleBus = false;
+		boolean showErrors = false;
 		String mdlname = null;
 		for(int i=0; i < args.length;)
 		{
@@ -127,6 +128,9 @@ public class PsmFmtExport
 				case "modelname":
 					mdlname = args[i++];
 					break;
+				case "showerrors":
+					showErrors = true;
+					break;
 			}
 		}
 		if (uri == null)
@@ -138,6 +142,15 @@ public class PsmFmtExport
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.enableFlatVoltage(true);
 		PAModel m = bldr.load();
+		
+		if(showErrors && bldr.hasErrors())
+		{
+			String[] errors = bldr.getErrors();
+			for(int i = 0; i < errors.length; ++i)
+			{
+				System.err.println("Error "+(i+1)+" of "+errors.length+": "+errors[i]);
+			}
+		}
 		
 		PsmFmtExport exp = new PsmFmtExport(m, useSingleBus);
 		exp.setModelName(mdlname);

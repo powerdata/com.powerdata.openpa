@@ -1,5 +1,8 @@
 package com.powerdata.openpa.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
@@ -35,9 +38,12 @@ import com.powerdata.openpa.*;
 public abstract class ModelBuilderI implements com.powerdata.openpa.ModelBuilder
 {
 	protected PAModelI _m;
+	protected List<String> _errorList;
 	@Override
 	public PAModel load() throws PAModelException
 	{
+		_errorList = new ArrayList<>();
+		
 		loadPrep();
 		_m = new PAModelI(this);
 		return _m;
@@ -64,6 +70,12 @@ public abstract class ModelBuilderI implements com.powerdata.openpa.ModelBuilder
 	protected abstract SeriesReacList loadSeriesReactors() throws PAModelException;
 	protected abstract PhaseShifterList loadPhaseShifters() throws PAModelException;
 	protected abstract TransformerList loadTransformers() throws PAModelException;
-
+	
 	protected abstract <R> R load(ListMetaType ltype, ColumnMeta ctype, int[] keys) throws PAModelException;
+	
+	protected void addError(String msg) { _errorList.add(msg); }
+	@Override
+	public boolean hasErrors() { return !_errorList.isEmpty(); }
+	@Override
+	public String[] getErrors() { return _errorList.toArray(new String[_errorList.size()]); }
 }
