@@ -21,7 +21,6 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 		assignTap(bx.getFromBus(), bri, 'f');
 		_lfi = _finfo.clone();
 		assignTap(bx.getToBus(), bri, 't');
-		
 	}
 	
 	void assignTap(int[] tnode, BusRefIndex bri, char side)
@@ -33,7 +32,6 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 		assign(RatioTapChanger.TransformerWinding,
 				new StringWrap(i -> _list.getID(i)+":wnd1"));
 	}
-
 
 	@Override
 	public void export(File outputdir) throws PAModelException, IOException
