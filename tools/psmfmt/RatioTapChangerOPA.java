@@ -18,19 +18,23 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 	{
 		super(m.getTransformers(), RatioTapChanger.values().length);
 		BusRefIndex.TwoTerm bx = bri.get2TBus(_list);
-		assignTap(bx.getFromBus(), bri, 'f');
-		_lfi = _finfo.clone();
-		assignTap(bx.getToBus(), bri, 't');
+		assignTap(bx.getFromBus(), bri, 'f', _finfo);
+//		_lfi = _finfo.clone();
+		_lfi = new FmtInfo[RatioTapChanger.values().length];
+		assignTap(bx.getToBus(), bri, 't', _lfi);
 	}
 	
-	void assignTap(int[] tnode, BusRefIndex bri, char side)
+	void assignTap(int[] tnode, BusRefIndex bri, char side, FmtInfo[] finfo)
 	{
 		assign(RatioTapChanger.ID,
-				i -> String.format("\"%s:%ctap\"", _list.getID(i), side));
+				i -> String.format("\"%s:%ctap\"", _list.getID(i), side),
+				finfo);
 		assign(RatioTapChanger.TapNode,
-				new StringWrap(i -> bri.getBuses().get(tnode[i]).getID()));
+				new StringWrap(i -> bri.getBuses().get(tnode[i]).getID()),
+				finfo);
 		assign(RatioTapChanger.TransformerWinding,
-				new StringWrap(i -> _list.getID(i)+":wnd1"));
+				new StringWrap(i -> _list.getID(i)+":wnd1"),
+				finfo);
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class RatioTapChangerOPA extends ExportOpenPA<TransformerList>
 			new FileWriter(new File(outputdir, getPsmFmtName()+".csv"))));
 		printHeader(pw);
 		printData(pw, _lfi, getCount());
-		printData(pw);
+		printData(pw, _finfo, getCount());
 		pw.close();
 	}
 
