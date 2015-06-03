@@ -53,7 +53,6 @@ public abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> ext
 					try
 					{
 						rv = f.get(value);
-//						System.out.println("[ExportOpenPA] rv: "+rv);
 					}
 					catch(PAModelException e)
 					{
@@ -64,8 +63,30 @@ public abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> ext
 			});
 		_finfo[n] = fi;
 	}
-
-
+	
+	protected void assign(Enum<?> id, ListAccess f, FmtInfo[] finfo)
+	{
+		int n = id.ordinal();
+		FmtInfo fi = new FmtInfo(id.toString(), 
+			new IntFunction<String>()
+			{
+				@Override
+				public String apply(int value)
+				{
+					String rv = null;
+					try
+					{
+						rv = f.get(value);
+					}
+					catch(PAModelException e)
+					{
+						e.printStackTrace();
+					}
+					return rv;
+				}
+			});
+		finfo[n] = fi;
+	}
 
 	@Override
 	protected int getCount()
@@ -73,13 +94,9 @@ public abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> ext
 		return _list.size();
 	}
 
-
-
 	@Override
 	protected FmtInfo[] getFmtInfo()
 	{
 		return _finfo;
 	}
-
-
 }
