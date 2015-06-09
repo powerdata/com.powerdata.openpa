@@ -94,6 +94,21 @@ public class SimpleCSV
 		return (vals == null)?null:vals.toArray(new String[0]);
 	}
 	public boolean hasCol(String col) { return (_colsByName.get(col) != null); }
+	public long[] getLongs(int col) { return getLongs(get(col)); }
+	public long[] getLongs(String col) { return getLongs(get(col)); }
+	public long[] getLongs(String svals[])
+	{
+		long fvals[] = null;
+		if (svals != null)
+		{
+			fvals = new long[_rowCount];
+			for(int i = 0; i < _rowCount; ++i)
+			{
+				fvals[i] = Long.parseLong(svals[i]);
+			}
+		}
+		return fvals;
+	}
 	public float[] getFloats(int col) { return getFloats(get(col)); }
 	public float[] getFloats(String col) { return getFloats(get(col)); }
 	public float[] getFloats(String svals[])
