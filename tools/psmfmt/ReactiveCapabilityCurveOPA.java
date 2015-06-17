@@ -27,7 +27,7 @@ public class ReactiveCapabilityCurveOPA extends ExportOpenPA<GenList>
 		assign(ReactiveCapabilityCurve.ID,
 				i -> String.format("\"%s_crv1\"",_list.getID(i)));
 		assign(ReactiveCapabilityCurve.SynchronousMachine,
-				i -> String.format("\"%s\"", _list.get(i)));
+				i -> SynchronousMachineOPA.createID(_list.get(i)));
 		assign(ReactiveCapabilityCurve.MW, 
 				i -> String.valueOf(_list.getOpMinP(i)));
 		assign(ReactiveCapabilityCurve.MinMVAr, 
@@ -42,7 +42,7 @@ public class ReactiveCapabilityCurveOPA extends ExportOpenPA<GenList>
 				i -> String.format("\"%s_crv2\"",_list.getID(i)),
 				_fi);
 		assign(ReactiveCapabilityCurve.SynchronousMachine,
-				i -> String.format("\"%s\"", _list.get(i)),
+				i -> SynchronousMachineOPA.createID(_list.get(i)),
 				_fi);
 		assign(ReactiveCapabilityCurve.MW, 
 				i -> String.valueOf(_list.getOpMaxP(i)),

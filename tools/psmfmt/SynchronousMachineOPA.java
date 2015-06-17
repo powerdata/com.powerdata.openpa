@@ -29,7 +29,7 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 		return PsmMdlFmtObject.SynchronousMachine.toString();
 	}
 	
-	private String createID(Gen g) throws PAModelException
+	public static String createID(Gen g) throws PAModelException
 	{
 		//IDs as of 2/19/2015
 		//Generator: "Company:Station:Class:Name"
@@ -50,6 +50,5 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 			System.out.println("[SynchronousMachineOPA.java] Generator ID likely contains at least one \":\". For now the ID is being set as the generator's ID appened with \":SM\"");
 			return g.toString()+":SM";
 		}
-		
 	}
 }
