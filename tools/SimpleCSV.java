@@ -86,12 +86,12 @@ public class SimpleCSV
 	public String[] get(int col)
 	{
 		ArrayList<String> vals = _cols.get(col);
-		return (vals == null)?null:vals.toArray(new String[0]);
+		return (vals == null)?new String[0]:vals.toArray(new String[0]);
 	}
 	public String[] get(String col)
 	{
 		ArrayList<String> vals = _colsByName.get(col);
-		return (vals == null)?null:vals.toArray(new String[0]);
+		return (vals == null)?new String[0]:vals.toArray(new String[0]);
 	}
 	public boolean hasCol(String col) { return (_colsByName.get(col) != null); }
 	public long[] getLongs(int col) { return getLongs(get(col)); }
@@ -227,9 +227,12 @@ public class SimpleCSV
 		BufferedReader r = new BufferedReader(new InputStreamReader(in));
 		_colNames = null;
 		// assume a header
+		int ccnt = 0;
 		String line = r.readLine();
-		setHeader(new StringParse(line,",").setQuoteChar('\'').getTokens());
-		int ccnt = _cols.size();
+		if (line != null) {
+			setHeader(new StringParse(line, ",").setQuoteChar('\'').getTokens());
+			ccnt = _cols.size();
+		}
 		// load the data
 		while((line = r.readLine()) != null)
 		{

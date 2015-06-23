@@ -80,13 +80,21 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 		return super.getID(ndx);
 	}
 
+	@FunctionalInterface
+	private interface StationName
+	{
+		String get(int index) throws PAModelException;
+	}
 	protected void createNames() throws PAModelException
 	{
 		String[] nm = new String[_size];
 		String[] id = new String[_size];
+		
+		StationName sn = _model.getStations().isEmpty() ? i -> "" : i -> getStation(i).getName(); 
+		
 		for(int i=0; i < _size; ++i)
 		{
-			String s = getStation(i).getName();
+			String s = sn.get(i);
 			StringBuilder ns = new StringBuilder();
 			Bus sel = _buses.getByKey(getKey(i));
 			String bn = sel.getName();

@@ -1770,7 +1770,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			_windingMap.put(windingIDs[i], i);
 			_wdgToTfmrMap.put(tfmrInWdgIDs[i], i);
 //			System.out.println("[buildTransformerMaps] _windingCaseMap.put("+wdgCaseIDs[i]+", "+i+")");
-			_windingCaseMap.put(wdgCaseIDs[i], i);
+			if(wdgCaseIDs.length > 0) _windingCaseMap.put(wdgCaseIDs[i], i);
 		}
 		
 		//Build maps based only on Phase Tap
