@@ -156,10 +156,10 @@ public class PsmFmtExport
 		exp.setModelName(mdlname);
 		exp.export(outdir);
 			
-		CloneModelBuilder clm = new CloneModelBuilder(m, EnumSet.noneOf(ColumnMeta.class));
-		PsmFmtExport exp2 = new PsmFmtExport(clm.load(), useSingleBus);
-		exp2.setModelDescription(mdlname+"COMP");
-		exp2.export(new File("/run/shm/compare"));
+//		CloneModelBuilder clm = new CloneModelBuilder(m, EnumSet.noneOf(ColumnMeta.class));
+//		PsmFmtExport exp2 = new PsmFmtExport(clm.load(), useSingleBus);
+//		exp2.setModelDescription(mdlname+"COMP");
+//		exp2.export(new File("/run/shm/compare"));
 	}
 
 }
