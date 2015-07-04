@@ -36,6 +36,7 @@ public enum ColumnMeta
 	/** Gen AVR state */ 								GenAVR(ListMetaType.Gen), 
 	/** Gen voltage setpoint */ 						GenVS(ListMetaType.Gen), 
 	/** Gen regulated bus */ 							GenREGBUS(ListMetaType.Gen),
+	/** Gen Ramp Rate */								GenRAMP(ListMetaType.Gen),
 	
 	/*
 	 * Load
