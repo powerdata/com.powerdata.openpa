@@ -28,6 +28,9 @@ A sample model is available:
 
 [CASCADIA model (contains switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia.zip)
 
+[CASCADIA model (topological view, no switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia_tn.zip)
+
+
 *PSS/e Files*
 
 PSS/e files for version 30 can be converted to the PowerSimulator CSV format using com.powerdata.openpa.psseraw.Psse2PsmFmt
