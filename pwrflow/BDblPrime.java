@@ -17,7 +17,6 @@ import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
-import com.powerdata.openpa.pwrflow.SVCCalcList.SVCCalc;
 import com.powerdata.openpa.tools.PAMath;
 
 /**
