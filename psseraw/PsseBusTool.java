@@ -10,13 +10,15 @@ public class PsseBusTool implements PsseEquipment
 	protected String _name;
 	protected String _baskv;
 	protected String _owner;
+	protected String _area;
 	
-	public PsseBusTool(String i, String name, String baskv, String owner)
+	public PsseBusTool(String i, String name, String baskv, String area, String owner)
 	{
 		_id = i;
 		_name = name;
 		_baskv = baskv;
 		_owner = owner;
+		_area = area;
 	}
 	
 	public PsseBusTool(PsseField[] fld, String[] record)
@@ -27,6 +29,7 @@ public class PsseBusTool implements PsseEquipment
 		_name	= record[_fldMap.get("name")];
 		_baskv 	= record[_fldMap.get("baskv")];
 		_owner	= record[_fldMap.get("owner")];
+		_area   = record[_fldMap.get("area")];
 	}
 	
 	public PsseBusTool(String[] record)
@@ -41,6 +44,7 @@ public class PsseBusTool implements PsseEquipment
 			_name	= record[_fldMap.get("name")];
 			_baskv 	= record[_fldMap.get("baskv")];
 			_owner	= record[_fldMap.get("owner")];
+			_area 	= record[_fldMap.get("area")];
 		}
 	}
 	
@@ -53,12 +57,13 @@ public class PsseBusTool implements PsseEquipment
 	public String toCsv(String type) 
 	{
 		// ID,Name,NominalKV,Substation,FrequencySourcePriority
-		return _id+","+_name+","+_baskv;
+		return String.format("%s,%s,%s,%s_ca,%s_org",
+			_id, _name, _baskv, _area, _owner);
 	}
 	
 	public String getHeaders()
 	{
-		return "ID,Name,NominalKV";
+		return "ID,Name,NominalKV,Owner,Area";
 	}
 
 	//Getters
@@ -66,5 +71,6 @@ public class PsseBusTool implements PsseEquipment
 	public String getName() { return _name; }
 	public String getBasekv() { return _baskv; }
 	public String getOwner() { return _owner; }
+	public String getArea() {return _area;}
 	public static TObjectIntMap<String> getMap() { return _fldMap; }
 }

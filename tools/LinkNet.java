@@ -48,8 +48,9 @@ public class LinkNet
 	 * @param maxBusNdx Maximum bus number to be used.
 	 * @param branchCount Maximum number of branches.
 	 */
-	public void ensureCapacity(int maxBusNdx, int branchCount)
+	public boolean ensureCapacity(int maxBusNdx, int branchCount)
 	{
+		boolean rv = false;
 		if (++maxBusNdx > _maxBusNdx)
 		{
 			_maxBusNdx = maxBusNdx;
@@ -59,16 +60,20 @@ public class LinkNet
 				_list = Arrays.copyOf(_list, maxBusNdx*2);
 				Arrays.fill(_list, l, _list.length, NoNode);
 				_cnt = Arrays.copyOf(_cnt, _list.length);
+				rv = true;
 			}
 		}
-		if (branchCount >= _next.length)
+		int br2 = branchCount * 2;
+		if (br2 >= _next.length)
 		{
 			int l = _next.length;
-			_next = Arrays.copyOf(_next, branchCount*2);
+			_next = Arrays.copyOf(_next, br2);
 			Arrays.fill(_next, l, _next.length, Empty);
 			_far = Arrays.copyOf(_far, _next.length);
 			Arrays.fill(_far, l, _far.length, Empty);
+			rv = true;
 		}
+		return rv;
 	}
 	/**
 	 * Return the number of branches in the LinkNet.

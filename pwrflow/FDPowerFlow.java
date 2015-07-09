@@ -22,7 +22,6 @@ import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.SubLists;
-import com.powerdata.openpa.pwrflow.ACBranchFlows.ACBranchFlow;
 import com.powerdata.openpa.pwrflow.BusMonitor.Action;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.tools.FactorizedFltMatrix;
@@ -49,7 +48,7 @@ public class FDPowerFlow
 	/** Track the single-bus topology view */
 	BusRefIndex _bri;
 	/** Network adjacency matrix */
-	ACBranchAdjacencies<ACBranchFlow> _adj;
+	ACBranchAdjacencies _adj;
 	/** Bus types */
 	BusTypeUtil _btu = null;
 	/** matrix elimination pattern for B'' bus type changes */
@@ -57,7 +56,7 @@ public class FDPowerFlow
 	/** Factorized B' matrix */
 	FactorizedFltMatrix _bPrime;
 	/** B'' matrix */
-	BDblPrime<ACBranchFlow> _bdblprime_mtrx;
+	BDblPrime _bdblprime_mtrx;
 	/** factorized B' matrix */
 	volatile FactorizedFltMatrix _bDblPrime = null;
 	/** Maximum number of iterations */
@@ -94,7 +93,6 @@ public class FDPowerFlow
 	/** Keep the reactive mismatches around in order to update generators and SVC's */
 	Mismatch _qmm;
 	/** track single-buses in order of hot island */
-//	List<int[]> _busbyisland;
 	
 	/**
 	 * Track slack participation for each (hot) island.
@@ -258,10 +256,14 @@ public class FDPowerFlow
 		
 		Collection<FixedShuntListIfc<? extends FixedShunt>> fsh = ACPowerCalc.setupFixedShunts(model);
 		_accalc = new ACPowerCalc(model, bri, fsh, ACPowerCalc.setupActiveLoads(bri, model, _sbase), _actvgen);
+		
+		int nbranch = _accalc.getBranchFlows().stream().mapToInt(i -> i.size()).sum(); 
+		BPrime.MatrixElementBuilder bldrBp = new BPrime.MatrixElementBuilder(_buses.size(), nbranch);
+		BDblPrime.MatrixElementBuilder bldrBpp = new BDblPrime.MatrixElementBuilder(_buses.size(), nbranch);
+		bldrBpp.addFixedShunts(fsh, bri, _sbase);
 
 		/* build adjacency matrix */
-		_adj = new ACBranchAdjacencies<>(_accalc.getBranchFlows(), 
-				_buses.size());
+		_adj = new ACBranchAdjacencies(_accalc.getBranchFlows(), _buses, bldrBp, bldrBpp);
 
 		/* organize the model into bus types and select reference buses for each island */
 		_btu = new BusTypeUtil(model, _bri, _accalc.getPvSvcList());		
@@ -270,10 +272,10 @@ public class FDPowerFlow
 		_pat.eliminate(_adj, _btu.getBuses(BusType.Reference));
 		
 		/* Build B' (store it already factorized) */
-		_bPrime = new BPrime<>(_adj).factorize(_pat);
+		_bPrime = new BPrime(_adj, bldrBp).factorize(_pat);
 		
 		/* Build B'' (keep the actual matrix object to allow for changes of element values) */
-		_bdblprime_mtrx = new BDblPrime<ACBranchFlow>(_adj, fsh, _accalc.getSVCCalc(), _bri);
+		_bdblprime_mtrx = new BDblPrime(_adj, bldrBpp);
 		
 		/* Build a list of buses with type PV */
 		BusList pvbuses = SubLists.getBusSublist(_buses, 
@@ -368,11 +370,6 @@ public class FDPowerFlow
 		int[] revidx = new int[ngen];
 		Arrays.fill(revidx, -1);
 		
-//		int nsbus = _buses.size();
-//		/** map the "hot" island index to each single bus */
-//		int[] sbisland = new int[nsbus];
-//		Arrays.fill(sbisland, -1);
-		
 		for(Island island : islands)
 		{
 			boolean h = false;
@@ -383,9 +380,6 @@ public class FDPowerFlow
 					if (!h)
 					{
 						h = true;
-//						/* track which buses are in this island */
-//						for(Bus b : island.getBuses())
-//							sbisland[_buses.getByBus(b).getIndex()] = nhot;
 						idx[nhot++] = island.getIndex();
 					}
 					int lx = g.getIndex();
@@ -396,9 +390,9 @@ public class FDPowerFlow
 			}
 
 		}
-//		_busbyisland = new BasicBusGrpMap(sbisland, nhot).map();
 		_hotislands = SubLists.getIslandSublist(islands, Arrays.copyOf(idx, nhot));
-		_actvgen = new ActiveGenData(SubLists.getGenSublist(gens, Arrays.copyOf(pidx, np)), 
+		_actvgen = new ActiveGenData(SubLists.getGenSublist(gens, 
+			Arrays.copyOf(pidx, np)), 
 			Arrays.copyOf(qidx, np), revidx, _sbase);
 		
 	}
@@ -696,32 +690,6 @@ public class FDPowerFlow
 		
 	}
 
-//	/**  update var mismatches back to units & SVC's */
-//	class VarMismatchAllocator
-//	{
-//		final GetFloat<Gen> _gminq = l -> l.getMinQ(),
-//				_gmaxq = l -> l.getMaxQ();
-//		final GetFloat<SVC> _sminq = l -> l.getMinQ(),
-//				_smaxq = l -> l.getMaxQ();
-//		
-//		
-//		void updateVarMismatches() throws PAModelException
-//		{
-//			for(int bx : _btu.getBuses(BusType.PV))
-//			{
-//				Bus b = _buses.get(bx);
-//				updateBusMismatch(b, _qmm.get(bx));
-//			}
-//		}
-//
-//		private void updateBusMismatch(Bus b, float m) throws PAModelException
-//		{
-//			SVCList svcs = b.getSVCs();
-//			GenList gens = b.getGenerators();
-//			
-//		}
-//	}
-	
 	abstract static class VarAllocator
 	{
 		boolean _disable = false;

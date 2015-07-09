@@ -10,7 +10,7 @@ import com.powerdata.openpa.PAModelException;
  *
  * @param <T>
  */
-public abstract class ACBranchSubListBase<T extends ACBranch> extends TwoTermDevSubList<T> implements
+public class ACBranchSubListBase<T extends ACBranch> extends TwoTermDevSubList<T> implements
 		ACBranchListIfc<T>
 {
 	
@@ -272,4 +272,12 @@ public abstract class ACBranchSubListBase<T extends ACBranch> extends TwoTermDev
 			_src.setLTRating(_ndx[i], mva[i]);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(int index)
+	{
+		return (T) new ACBranch(this, index);
+	}
+
+	
 }

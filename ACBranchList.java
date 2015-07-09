@@ -534,4 +534,9 @@ public class ACBranchList extends AbstractList<ACBranch> implements ACBranchList
 		return _src.getColTypes();
 	}
 	
+	/**
+	 * return the unwrapped version of the list
+	 * @return
+	 */
+	public 	ACBranchListIfc<? extends ACBranch> getBaseList() {return _src;}
 }

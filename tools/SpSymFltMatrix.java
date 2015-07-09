@@ -5,12 +5,18 @@ import java.util.Arrays;
 import com.powerdata.openpa.tools.SpSymMtrxFactPattern.EliminatedNode;
 
 /**
- * Sparse Symmetric matrix with a floating-point value
+ * Sparse Symmetric matrix with a floating-point value.
+ * 
+ * This class effectively "wraps" a set of adjacencies (LinkNet) created independently. It
+ * is intended to allow the same set of adjacencies to be used in multiple
+ * matrices...as such no changes are permitted to adjacencies after this object
+ * is constructed and initialized.  
+ * 
  * 
  * @author chris@powerdata.com
  * 
  */
-public class SpSymFltMatrix extends SpSymMatrixBase
+public class SpSymFltMatrix
 {
 	/**
 	 * Inner Factorizer class to perform factorization against floating-point value
@@ -89,45 +95,39 @@ public class SpSymFltMatrix extends SpSymMatrixBase
 		}
 	}
 
+	protected LinkNet _adj;
 	protected float[] _bdiag, _boffdiag;
-	protected int[][] _save;
 	
+
 	/**
-	 * Create a new sparse symmetric matrix with floating-point values.
-	 * @param net Adjacency matrix
-	 * @param bdiag 
-	 * @param boffdiag
+	 * Expect that the sub class has enough information to
 	 */
-	public SpSymFltMatrix(LinkNet net, float[] bdiag, float[] boffdiag)
-	{
-		super(net);
-		_bdiag = bdiag.clone();
-		_boffdiag = boffdiag.clone();
-	}
-	
-	protected SpSymFltMatrix(LinkNet net)
-	{
-		super(net);
-	}
-	
+	protected SpSymFltMatrix() {}
+	protected void setAdjacencies(LinkNet adj) {_adj = adj;}
 	protected void setBDiag(float[] bdiag) {_bdiag = bdiag;}
 	protected void setBOffDiag(float[] boffdiag) {_boffdiag = boffdiag;}
 
 	public FactorizedFltMatrix factorize(int[] ref)
 	{
 		Factorizer f = new Factorizer(_bdiag, _boffdiag);
-		f.eliminate(_net, ref);
+		f.eliminate(_adj, ref);
 		return new FactorizedFltMatrix(f.getBDiag(), f.getBOffDiag(),
 				f.getElimFromNode(), f.getElimToNode(), f.getElimNdOrder(),
 				f.getElimNdCount(), f.getElimEdgeOrder(), f.getElimEdgeCount());
 	}
 	
+	/**
+	 * Increment the value in the matrix.  Since 
+	 * @param f
+	 * @param t
+	 * @param b
+	 */
 	public void incVal(int f, int t, float b)
 	{
 		if (f == t)
 			_bdiag[f] += b;
 		else
-			_boffdiag[_net.findBranch(f, t)] += b;
+			_boffdiag[_adj.findBranch(f, t)] += b;
 	}
 	
 	/** modify susceptence entry on the diagonal */
@@ -184,10 +184,10 @@ public class SpSymFltMatrix extends SpSymMatrixBase
 	public void dump(String[] name, PrintWriter pw)
 	{
 		pw.println("BranchNdx,Btran,FromNdx,FromName,FromBself,ToNdx,ToName,ToBself");
-		int nbr = _net.getBranchCount();
+		int nbr = _adj.getBranchCount();
 		for(int i=0; i < nbr; ++i)
 		{
-			int[] nd = _net.getBusesForBranch(i);
+			int[] nd = _adj.getBusesForBranch(i);
 			int f = nd[0], t = nd[1];
 			pw.format("%d,%f,%d,'%s',%f,%d,'%s',%f\n",
 				i, _boffdiag[i],

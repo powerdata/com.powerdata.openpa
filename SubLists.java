@@ -1,8 +1,13 @@
 package com.powerdata.openpa;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import com.powerdata.openpa.impl.ACBranchSubListBase;
 import com.powerdata.openpa.impl.AreaSubList;
 import com.powerdata.openpa.impl.BusSubList;
+import com.powerdata.openpa.impl.FixedShuntSubList;
 import com.powerdata.openpa.impl.GenSubList;
 import com.powerdata.openpa.impl.IslandSubList;
 import com.powerdata.openpa.impl.LineSubList;
@@ -177,8 +182,51 @@ public class SubLists
 	{
 		return getTwoTermDCLineSublist(list, getInServiceIndexes(list));
 	}
+
+	public static <T extends ACBranch> ACBranchListIfc<T> getBranchSublist(ACBranchListIfc<T> list, 
+		int[] indexes) throws PAModelException
+	{
+		return new ACBranchSubListBase<T>(list, indexes);
+	}
 	
-	public static int[] getInServiceIndexes(OutOfServiceList<? extends OutOfService> list) throws PAModelException
+	public static <T extends ACBranch> ACBranchListIfc<T> getBranchInsvc(ACBranchListIfc<T> list)
+		throws PAModelException
+	{
+		return getBranchSublist(list, getInServiceIndexes(list));
+	}
+	
+	public static Set<ACBranchList> getBranchInsvc(Collection<ACBranchList> list)
+			throws PAModelException
+	{
+		Set<ACBranchList> rv = new HashSet<>(list.size());
+		for(ACBranchList l : list)
+			rv.add(new ACBranchList(getBranchInsvc(l)));
+		return rv;
+	}
+	
+	public static <T extends FixedShunt> FixedShuntListIfc<T> getFixedShuntSublist(FixedShuntListIfc<T> list, 
+		int[] indexes) throws PAModelException
+	{
+		return new FixedShuntSubList<T>(list, indexes);
+	}
+	
+	public static <T extends FixedShunt> FixedShuntListIfc<T> getFixedShuntInsvc(FixedShuntListIfc<T> list)
+		throws PAModelException
+	{
+		return getFixedShuntSublist(list, getInServiceIndexes(list));
+	}
+	
+	public static Set<FixedShuntList> getFixedShuntInsvc(Collection<FixedShuntList> list)
+			throws PAModelException
+	{
+		Set<FixedShuntList> rv = new HashSet<>(list.size());
+		for(FixedShuntList l : list)
+			rv.add(new FixedShuntList(getFixedShuntInsvc(l)));
+		return rv;
+	}
+
+	public static int[] getInServiceIndexes(OutOfServiceList<? extends OutOfService> list)
+			throws PAModelException
 	{
 		int n = list.size();
 		int[] rv = new int[n];

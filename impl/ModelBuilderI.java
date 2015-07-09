@@ -8,25 +8,8 @@ import com.powerdata.openpa.IslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.impl.AreaListI;
 import com.powerdata.openpa.impl.BusListI;
-import com.powerdata.openpa.impl.GenListI;
-import com.powerdata.openpa.impl.LineListI;
-import com.powerdata.openpa.impl.LoadListI;
-import com.powerdata.openpa.impl.OwnerListI;
 import com.powerdata.openpa.impl.PAModelI;
-import com.powerdata.openpa.impl.PhaseShifterListI;
-import com.powerdata.openpa.impl.SVCListI;
-import com.powerdata.openpa.impl.SeriesCapListI;
-import com.powerdata.openpa.impl.SeriesReacListI;
-import com.powerdata.openpa.impl.ShuntCapListI;
-import com.powerdata.openpa.impl.ShuntReacListI;
-import com.powerdata.openpa.impl.StationListI;
-import com.powerdata.openpa.impl.SwitchListI;
-import com.powerdata.openpa.impl.SwitchedShuntListI;
-import com.powerdata.openpa.impl.TransformerListI;
-import com.powerdata.openpa.impl.TwoTermDCLineListI;
-import com.powerdata.openpa.impl.VoltageLevelListI;
 import com.powerdata.openpa.*;
 
 /**

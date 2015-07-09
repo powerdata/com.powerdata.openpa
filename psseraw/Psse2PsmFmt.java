@@ -166,8 +166,8 @@ class PssePSMWriter implements PsseRecWriter
 				
 				Psse3WdgTool tfmr = new Psse3WdgTool(lines,record);
 				_tfmrs.add(tfmr.getTfmr1());
-				_tfmrs.add(tfmr.getTfmr1());
-				_tfmrs.add(tfmr.getTfmr1());
+				_tfmrs.add(tfmr.getTfmr2());
+				_tfmrs.add(tfmr.getTfmr3());
 				_nodes.add(tfmr.getNode());
 				
 				break;
@@ -315,7 +315,6 @@ class PssePSMWriter implements PsseRecWriter
 	private void writeLines() throws FileNotFoundException
 	{
 		PrintWriter lineW = getWriter("Line");
-		PrintWriter lineCaseW = getWriter("PsmCaseLine");
 		lineW.println(_lines.get(0).getHeaders());
 		for(int i = 0; i < _lines.size(); ++i)
 		{

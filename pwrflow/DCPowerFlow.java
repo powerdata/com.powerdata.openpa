@@ -45,12 +45,13 @@ public class DCPowerFlow
 		 * Build adjacency matrix using lists of the in-service branches
 		 */
 		_insvc = getInService();
-		ACBranchAdjacencies<ACBranchExt> adj = new ACBranchAdjacencies<>(_insvc,
-				_buses.size());
+		BPrime.MatrixElementBuilder bldr = new BPrime.MatrixElementBuilder(_buses.size(),
+			_insvc.stream().mapToInt(i -> i.size()).sum());
+		ACBranchAdjacencies adj = new ACBranchAdjacencies(_insvc, _buses, bldr);
 		/*
 		 * Generate and factorize the B' matrix
 		 */
-		FactorizedFltMatrix flm = new BPrime<ACBranchExt>(adj).factorize(
+		FactorizedFltMatrix flm = new BPrime(adj, bldr).factorize(
 			_btu.getBuses(BusType.Reference));
 		/*
 		 * Set up P mismatches for load & gen, and solve the angles
@@ -100,15 +101,6 @@ public class DCPowerFlow
 				PAMath.mva2pu(g.getPS(), _sbase);
 		}
 	}
-//	void setupDevMismatches(float[] mm, OneTermDevListIfc<? extends OneTermDev> list)
-//		throws PAModelException
-//	{
-//		for (OneTermDev d : list)
-//		{
-//			mm[_buses.getByBus(d.getBus()).getIndex()] += PAMath.mva2pu(
-//				d.getP(), _sbase);
-//		}
-//	}
 
 	private Collection<ACBranchExtList<ACBranchExt>> getInService() throws PAModelException
 	{

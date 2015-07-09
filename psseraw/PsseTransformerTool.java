@@ -22,6 +22,7 @@ public class PsseTransformerTool implements PsseEquipment
 	protected String _ratioHigh;
 	protected String _ratioLow;
 	protected int _wdgCount;
+	protected String _nomv1, _nomv2;
 	
 	
 	
@@ -38,6 +39,8 @@ public class PsseTransformerTool implements PsseEquipment
 		_normOpLimit	= record[_fldMap.get("rata1")];
 		_ratioHigh		= record[_fldMap.get("windv1")];
 		_ratioLow		= record[_fldMap.get("windv2")];
+		_nomv1			= record[_fldMap.get("nomv1")];
+		_nomv2			= record[_fldMap.get("nomv2")];
 		_wdgCount 		= 2;
 	
 		String idBase 	= _name+"_"+_node1+"_"+_node2;
@@ -77,7 +80,7 @@ public class PsseTransformerTool implements PsseEquipment
 			String t[] = {_tfmrId, _name, ""+_wdgCount};
 			return arrayToCsv(t);
 		case TransformerWinding:
-			String w[] = {_wdgId,_name,_tfmrId,_node1,_node2,_r,_x,_bmag,_normOpLimit};
+			String w[] = {_wdgId,_name,_tfmrId,_node1,_node2,_r,_x,_bmag,_normOpLimit,_nomv1,_nomv2};
 			return arrayToCsv(w);
 		default:
 			return "";
@@ -95,7 +98,7 @@ public class PsseTransformerTool implements PsseEquipment
 		case Transformer:
 			return "ID,Name,WindingCount";
 		case TransformerWinding:
-			return "ID,Name,Transformer,Node1,Node2,R,X,Bmag,NormalOperatingLimit";
+			return "ID,Name,Transformer,Node1,Node2,R,X,Bmag,NormalOperatingLimit,NeutralKV1,NeutralKV2";
 		default:
 			return "";
 		}

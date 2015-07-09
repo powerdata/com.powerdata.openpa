@@ -4,7 +4,7 @@ import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.PAModelException;
 
-public abstract class FixedShuntSubList<T extends FixedShunt> extends OneTermDevSubList<T> implements FixedShuntListIfc<T>
+public class FixedShuntSubList<T extends FixedShunt> extends OneTermDevSubList<T> implements FixedShuntListIfc<T>
 {
 	FixedShuntListIfc<T> _src;
 	
@@ -37,6 +37,13 @@ public abstract class FixedShuntSubList<T extends FixedShunt> extends OneTermDev
 	{
 		for(int i=0; i < _size; ++i)
 			_src.setB(_ndx[i], b[i]);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get(int index)
+	{
+		return (T) new FixedShunt(this, index);
 	}
 
 }

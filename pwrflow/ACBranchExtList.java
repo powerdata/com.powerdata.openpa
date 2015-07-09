@@ -1,8 +1,13 @@
 package com.powerdata.openpa.pwrflow;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import com.powerdata.openpa.ACBranch;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermBaseList;
 import com.powerdata.openpa.tools.Complex;
@@ -89,4 +94,36 @@ public interface ACBranchExtList<T extends com.powerdata.openpa.pwrflow.ACBranch
 	Bus getFromBus(int ndx) throws PAModelException;
 	
 	ACBranch getBranch(int ndx);
+	
+	/**
+	 * Create a set of extended branch lists
+	 * 
+	 * @param branch_lists Collection of branch lists (can be from PAModel.getACBranches())
+	 * @param bri Bus references to differentiate single bus versus topological (single) bus
+	 * @return Set of extended branch lists
+	 * @throws PAModelException
+	 */
+	
+	public static <T extends ACBranchExt> Set<ACBranchExtList<T>> LoadExtension(
+		Collection<? extends ACBranchListIfc<? extends ACBranch>> branch_lists, BusRefIndex bri)
+		throws PAModelException
+	{
+		Set<ACBranchExtList<T>> rv = new HashSet<>();
+		for(ACBranchListIfc<? extends ACBranch> l : branch_lists)
+			rv.add(new ACBranchExtListI<>(l, bri));
+		return rv;
+	}
+	
+	/**
+	 * Create a single extended branch list
+	 * @param list
+	 * @param bri
+	 * @return
+	 * @throws PAModelException
+	 */
+	public static <T extends ACBranchExt> ACBranchExtList<T> LoadExtension(
+		ACBranchListIfc<? extends ACBranch> list, BusRefIndex bri) throws PAModelException
+	{
+		return new ACBranchExtListI<>(list, bri);
+	}
 }
