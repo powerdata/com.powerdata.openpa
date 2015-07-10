@@ -297,11 +297,13 @@ class PssePSMWriter implements PsseRecWriter
 		PrintWriter genCaseW = getWriter("PsmCaseGeneratingUnit");
 		PrintWriter synchW = getWriter("SynchronousMachine");
 		PrintWriter synchCaseW = getWriter("PsmCaseSynchronousMachine");
+		PrintWriter mvarCrvW = getWriter("ReactiveCapabilityCurve");
 		
 		genW.println(_gens.get(0).getHeaders(PsseGenTool.GenFiles.GeneratingUnit));
 		genCaseW.println(_gens.get(0).getHeaders(PsseGenTool.GenFiles.PsmCaseGeneratingUnit));
 		synchW.println(_gens.get(0).getHeaders(PsseGenTool.GenFiles.SynchronousMachine));
 		synchCaseW.println(_gens.get(0).getHeaders(PsseGenTool.GenFiles.PsmCaseSynchronousMachine));
+		mvarCrvW.println(_gens.get(0).getHeaders(PsseGenTool.GenFiles.ReactiveCapabilityCurve));
 		
 		for(int i = 0; i < _gens.size(); ++i)
 		{
@@ -309,6 +311,7 @@ class PssePSMWriter implements PsseRecWriter
 			genCaseW.println(_gens.get(i).toCsv(PsseGenTool.GenFiles.PsmCaseGeneratingUnit));
 			synchW.println(_gens.get(i).toCsv(PsseGenTool.GenFiles.SynchronousMachine));
 			synchCaseW.println(_gens.get(i).toCsv(PsseGenTool.GenFiles.PsmCaseSynchronousMachine));
+			mvarCrvW.println(_gens.get(i).toCsv(PsseGenTool.GenFiles.ReactiveCapabilityCurve));
 		}
 	}
 	

@@ -19,7 +19,7 @@ public class PsseGenTool implements PsseEquipment
 	protected String _mwSetPoint;
 	protected String _node;
 	protected String _regNode;
-	protected String _synchOpMode;
+	protected String _synchOpMode, _genOpMode;
 	protected String _avrMode;
 	protected String _kvSetPoint;
 	protected String _mvarSetPoint;
@@ -45,6 +45,7 @@ public class PsseGenTool implements PsseEquipment
 		_node = record[_fldMap.get("i")];
 		_regNode = record[_fldMap.get("ireg")];
 		_synchOpMode = findSynchOpMode();
+		_genOpMode = findGenOpMode(); 
 		_mvar = record[_fldMap.get("qg")];
 		_minMvar = record[_fldMap.get("qb")];
 		_maxMvar = record[_fldMap.get("qt")];
@@ -112,6 +113,18 @@ public class PsseGenTool implements PsseEquipment
 		}
 	}
 	
+	public String findGenOpMode()
+	{
+		if(_synchOpMode.equals("GEN"))
+		{
+			float pg = Float.parseFloat(_mwSetPoint);
+			if (pg == 0f)
+				return "OFF";
+			else
+				return "LFC";
+		}
+		return "";
+	}
 	
 	@Override
 	public String toCsv(String file) 
@@ -127,7 +140,7 @@ public class PsseGenTool implements PsseEquipment
 			String g[] = {_genId, _name, _minOpMw, _maxOpMw, _unitType, _ctrlMode};
 			return arrayToCsv(g);
 		case PsmCaseGeneratingUnit:
-			String cg[] = {_genId, _mw, _mwSetPoint};
+			String cg[] = {_genId, _mw, _mwSetPoint, _genOpMode};
 			return arrayToCsv(cg);
 		case SynchronousMachine:
 			String s[] = {_synchId, _name, _node, _genId, _regNode};
@@ -154,7 +167,7 @@ public class PsseGenTool implements PsseEquipment
 		case PsmCaseSynchronousMachine:
 			return "ID,SynchronousMachineOperatingMode,AVRMode,KVSetpoint,MVAr";
 		case ReactiveCapabilityCurve:
-			return "ID,SynchronousMachingOperatingMode,AVRMode,KVSetPoint,MVArSetpoint,MVAr";
+			return "ID,SynchronousMachine,MW,MinMVAr,MaxMVAr";
 		case SynchronousMachine:
 			return "ID,Name,Node,GeneratingUnit,RegulatedNode";
 		default:

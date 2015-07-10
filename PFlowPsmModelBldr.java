@@ -1051,19 +1051,14 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	private Gen.Mode[] getGenMode() throws PAModelException
 	{
 		if(_genCSV == null) loadGens();
-		String[] opMode = _genCSV.get("GenControlMode");
-		Gen.Mode genModes[] = new Gen.Mode[opMode.length];
-		if(opMode.equals(null))
+		String[] opMode = _genCaseCSV.get("GeneratorOperatingMode");
+		String[] id = _genCSV.get("ID");
+		int n = _genCSV.getRowCount();
+		Gen.Mode genModes[] = new Gen.Mode[n];
+		for(int i = 0; i < n; ++i)
 		{
-			System.err.println("[PFlowPsmModelBldr] Error generator column \"GenControlMode\". Does it exist in the CSV?");
-			Arrays.fill(genModes, null);
-		}
-		else
-		{
-			for(int i = 0; i < opMode.length; ++i)
-			{
-				genModes[i] = Gen.Mode.valueOf(opMode[i].toUpperCase());
-			}
+			int cx = this._genCaseMap.get(id[i]);
+			genModes[i] = Gen.Mode.valueOf(opMode[cx].toUpperCase());
 		}
 		
 		return genModes;
@@ -1390,7 +1385,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		{
 			for(int i = 0; i < ids.length; ++i)
 			{
-				data[i] = unsortedData[_lineCaseMap.get(ids[i])];
+				if (_lineCaseMap.containsKey(ids[i]))
+					data[i] = unsortedData[_lineCaseMap.get(ids[i])];
 			}
 		}
 		
@@ -1726,7 +1722,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 //			System.out.println("\n============\n[getWindingCaseData] Col: \""+col+"\"\n[getWindingCaseData] IDs["+i+"/"+ids.size()+" | "+_ratioTapChgCSV.getRowCount()+"] = "+ids.get(i));
 //			System.out.println("[getWindingCaseData] wdgIDs["+_wdgToTfmrMap.get(ids.get(i))+"] = "+wdgIDs[_wdgToTfmrMap.get(ids.get(i))]);
 //			System.out.println("[getWindingCaseData] data["+_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])+"] = "+unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])]);
-				data[i] = unsortedData[_windingCaseMap.get(wdgIDs[_wdgToTfmrMap.get(ids.get(i))])];
+				String wid = wdgIDs[_wdgToTfmrMap.get(ids.get(i))];
+				if (_windingCaseMap.containsKey(wid))
+					data[i] = unsortedData[_windingCaseMap.get(wid)];
 			}			
 		}
 		
@@ -1863,7 +1861,6 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		String[] synchGenIDs = _synchMachineCSV.get("GeneratingUnit");
 		String[] reacSynchIDs = _reacCapCurveCSV.get("SynchronousMachine");
 		
-		
 		_genCaseMap = new TObjectIntHashMap<>(genCaseIDs.length);
 		_syncCasehMap = new TObjectIntHashMap<>(synchCaseIDs.length);
 		_genToSynchMap = new TObjectIntHashMap<>(genCaseIDs.length);
@@ -1875,7 +1872,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			_genCaseMap.put(genCaseIDs[i], i); // Takes generating unit ID
 			_syncCasehMap.put(synchCaseIDs[i], i); // Takes synch machine ID
 			_genToSynchMap.put(synchGenIDs[i], i); //Takes generating ID
-			_synchToCurveMap.put(reacSynchIDs[i], i); //Takes synch machine ID
+			if(i < reacSynchIDs.length)
+				_synchToCurveMap.put(reacSynchIDs[i], i); //Takes synch machine ID
 		}
 	}
 	
