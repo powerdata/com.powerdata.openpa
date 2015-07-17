@@ -30,6 +30,8 @@ A sample model is available:
 
 [CASCADIA model (topological view, no switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia_tn.zip)
 
+[6-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/6-bus.zip)
+
 
 *PSS/e Files*
 
