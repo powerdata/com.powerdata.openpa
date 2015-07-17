@@ -60,8 +60,22 @@ public class DCPowerFlow
 		return this;
 	}
 	
+	/**
+	 * Get the solved angles
+	 * @return solved angles for the single-bus topology
+	 */
+	public float[] getVA() {return _ang;}
+	
 	public void updateResults() throws PAModelException
 	{
+		for(ACBranchList list : _model.getACBranches())
+		{
+			Arrays.fill(list.getFromP(), 0f);
+			Arrays.fill(list.getFromQ(), 0f);
+			Arrays.fill(list.getToP(), 0f);
+			Arrays.fill(list.getToQ(), 0f);
+		}
+		
 		for (List<ACBranchExt> list : _insvc)
 		{
 			for (ACBranchExt brx : list)
@@ -114,6 +128,9 @@ public class DCPowerFlow
 	}
 	public static void main(String... args) throws Exception
 	{
+		/*
+		 * Process parameters
+		 */
 		String uri = null;
 		File poutdir = new File(System.getProperty("user.dir"));
 		for (int i = 0; i < args.length;)
@@ -139,16 +156,30 @@ public class DCPowerFlow
 		}
 		final File outdir = poutdir;
 		if (!outdir.exists()) outdir.mkdirs();
+
+		/*
+		 * Create and configure a model builder, enforcing that branch
+		 * reactance is not too close to zero.
+		 */
 		PflowModelBuilder bldr = PflowModelBuilder.Create(uri);
 		bldr.setLeastX(0.0001f);
+		
+		/*
+		 * Load the model
+		 */
 		PAModel m = bldr.load();
-		for (ACBranchList list : m.getACBranches())
-		{
-			zero(list.getFromP(), list.getToP(), list.getFromQ(), list.getToQ());
-		}
+
+		/*
+		 * eliminate closed switches and use a single-bus topology 
+		 */
 		BusRefIndex bri = BusRefIndex.CreateFromSingleBuses(m);
+		
+		/*
+		 * Determine angle reference for each island
+		 */
 		BusTypeUtil btu = new BusTypeUtil(m, bri);
 		System.out.println("Slack Buses:");
+		
 		for (Island i : m.getIslands())
 		{
 			if (i.isEnergized())
@@ -157,12 +188,19 @@ public class DCPowerFlow
 						.getBuses().get(btu.getBuses(BusType.Reference)[0]));
 			}
 		}
+		
+		/*
+		 * Create a DC Power Flow object, run the power flow, and 
+		 * update results back to the PAModel provided
+		 */
 		new DCPowerFlow(m, bri, btu).runPF().updateResults();
+		
+		/*
+		 * Dump the entire PAModel out to CSV files.  Branch tables have
+		 * results in FromP and ToP columns.  Note that the ListDumper object
+		 * is a debugging tool and serves as an example.  It is not intended 
+		 * as a finished product.
+		 */
 		new ListDumper().dump(m, outdir);
-	}
-	static void zero(float[]... arrays)
-	{
-		for (float[] a : arrays)
-			Arrays.fill(a, 0f);
 	}
 }

@@ -2,22 +2,16 @@ package com.powerdata.openpa.pwrflow;
 
 import java.io.File;
 import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
+
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchListIfc;
+import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusRefIndex;
-import com.powerdata.openpa.CloneModelBuilder;
-import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
-import com.powerdata.openpa.impl.GenListI;
-import com.powerdata.openpa.impl.LoadListI;
 
 /**
  * Remedial adaptive topology control (RATC)
@@ -45,18 +39,34 @@ import com.powerdata.openpa.impl.LoadListI;
 public class RATCWorker
 {
 	protected PAModel _model;
-	protected ACBranch _targ;
 	protected BusRefIndex _bri;
 	protected BusTypeUtil _btu;
-	protected boolean _swapgenside = false;
+	Bus _source, _sink;
+	ACBranch _targ;
+	
+	void setEnds(ACBranch target) throws PAModelException
+	{
+		Bus f = target.getFromBus();
+		Bus t = target.getToBus();
+		if (target.getFromP() < 0f)
+		{
+			_source = t;
+			_sink = f;
+		}
+		else
+		{
+			_source = f;
+			_sink = t;
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	public RATCWorker(PAModel model, ACBranch target) throws PAModelException
 	{
 		System.out.format("Target: %s\n", target.getName());
-		_model = model;
 		_targ = target;
-		if (_targ.getFromP() < 0f) _swapgenside = true;
+		_model = model;
+		setEnds(target);
 		_bri = BusRefIndex.CreateFromSingleBuses(model);
 		FDPowerFlow pf = new FDPowerFlow(model, _bri);
 		pf.runPF();
@@ -77,9 +87,10 @@ public class RATCWorker
 	float[] _lodf, _ratc;
 	ACBranchListIfc<? extends ACBranch> _branches;
 	
+	
 	public void runRATC() throws PAModelException
 	{
-		RATCModelBuilder rmb = new RATCModelBuilder(_model);
+		ShiftFactorModelBuilder rmb = new ShiftFactorModelBuilder(_model, _source, _sink);
 		PAModel dcmodel = rmb.load();
 		DCPowerFlow dcpf = new DCPowerFlow(dcmodel, _bri, _btu);
 		dcpf.runPF().updateResults();
@@ -163,130 +174,6 @@ public class RATCWorker
 		return rv;
 	}
 	
-	/**
-	 * Create a model builder that can provide a model configured with only a
-	 * single generate and load on either side of the target branch
-	 * 
-	 * @author chris@powerdata.com
-	 *
-	 */
-	class RATCModelBuilder extends CloneModelBuilder
-	{
-		
-		@Override
-		protected void loadPrep()
-		{
-			super.loadPrep();
-			
-			/* replace entries to return our fabricated data */
-			DataLoader<String[]> gname = () -> new String[] {"RATC_SRC"};
-			DataLoader<float[]> fzero = () -> new float[] {0f};
-			DataLoader<float[]> f200 = () -> new float[] {200f};
-			DataLoader<int[]> fbus = () -> new int[] {_targ.getFromBus().getIndex()};
-			DataLoader<int[]> tbus = () -> new int[] {_targ.getToBus().getIndex()};
-			DataLoader<boolean[]> oos = () -> new boolean[] {false};
-			
-			DataLoader<int[]> genbus=fbus, loadbus=tbus;
-			if (_swapgenside)
-			{
-				genbus = tbus;
-				loadbus = fbus;
-			}
-			
-			
-			_col.put(ColumnMeta.GenID, gname);
-			_col.put(ColumnMeta.GenNAME, gname);
-			_col.put(ColumnMeta.GenBUS, genbus);
-			_col.put(ColumnMeta.GenP, fzero);
-			_col.put(ColumnMeta.GenQ, fzero);
-			_col.put(ColumnMeta.GenOOS, oos); 
-			_col.put(ColumnMeta.GenTYPE, () -> new Gen.Type[] {Gen.Type.Thermal});
-			_col.put(ColumnMeta.GenMODE, () -> new Gen.Mode[] {Gen.Mode.MAN});
-			_col.put(ColumnMeta.GenOPMINP, fzero);
-			_col.put(ColumnMeta.GenOPMAXP, f200);
-			_col.put(ColumnMeta.GenMINQ, () -> new float[] {-100f});
-			_col.put(ColumnMeta.GenMAXQ, f200);
-			_col.put(ColumnMeta.GenPS, () -> new float[] {100f});
-			_col.put(ColumnMeta.GenQS, fzero);
-			_col.put(ColumnMeta.GenAVR, () -> new boolean[] {true});
-			_col.put(ColumnMeta.GenVS, () -> new float[] {1f});
-			_col.put(ColumnMeta.GenREGBUS, genbus);
-		
-			DataLoader<String[]> lname = () -> new String[] {"RATC_LOAD"};
-			DataLoader<float[]> pld = () -> new float[]{-100f};
-			DataLoader<float[]> qld = () -> new float[]{-10f};
-			
-			_col.put(ColumnMeta.LoadID, lname);
-			_col.put(ColumnMeta.LoadNAME, lname);
-			_col.put(ColumnMeta.LoadBUS, loadbus);
-			_col.put(ColumnMeta.LoadP, pld);
-			_col.put(ColumnMeta.LoadQ, qld);
-			_col.put(ColumnMeta.LoadOOS, oos);
-			_col.put(ColumnMeta.LoadPMAX, pld);
-			_col.put(ColumnMeta.LoadQMAX, qld);
-
-		}
-
-		@Override
-		protected LoadListI loadLoads() throws PAModelException
-		{
-			return new LoadListI(_m, 1);
-		}
-
-
-
-		@Override
-		protected GenListI loadGens() throws PAModelException
-		{
-			return new GenListI(_m, 1);
-		}
-
-
-
-		public RATCModelBuilder(PAModel srcmdl)
-		{
-			super(srcmdl, _localCols);
-			// TODO Auto-generated constructor stub
-		}
-		
-	}
-	
-	static Set<ColumnMeta> _localCols = EnumSet.copyOf(Arrays.asList(new ColumnMeta[]
-	{
-		ColumnMeta.BusVM,
-		ColumnMeta.BusVA,
-		
-		ColumnMeta.ShcapQ,
-		ColumnMeta.ShreacQ,
-		
-		ColumnMeta.SvcQ,
-		
-		ColumnMeta.LinePFROM,
-		ColumnMeta.LinePTO,
-		ColumnMeta.LineQFROM,
-		ColumnMeta.LineQTO,
-		
-		ColumnMeta.SercapPFROM,
-		ColumnMeta.SercapPTO,
-		ColumnMeta.SercapQFROM,
-		ColumnMeta.SercapQTO,
-			
-		ColumnMeta.SerreacPFROM,
-		ColumnMeta.SerreacPTO,
-		ColumnMeta.SerreacQFROM,
-		ColumnMeta.SerreacQTO,
-		
-		ColumnMeta.PhashPFROM,
-		ColumnMeta.PhashPTO,
-		ColumnMeta.PhashQFROM,
-		ColumnMeta.PhashQTO,
-		
-		ColumnMeta.TfmrPFROM,
-		ColumnMeta.TfmrPTO,
-		ColumnMeta.TfmrQFROM,
-		ColumnMeta.TfmrQTO,
-	}));
-
 	public static void main(String[] args) throws Exception
 	{
 		String uri = null;

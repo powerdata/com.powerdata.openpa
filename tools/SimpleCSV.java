@@ -99,10 +99,11 @@ public class SimpleCSV
 	public long[] getLongs(String svals[])
 	{
 		long fvals[] = null;
+		int n = svals.length;
 		if (svals != null)
 		{
-			fvals = new long[_rowCount];
-			for(int i = 0; i < _rowCount; ++i)
+			fvals = new long[n];
+			for(int i = 0; i < n; ++i)
 			{
 				fvals[i] = Long.parseLong(svals[i]);
 			}
@@ -114,10 +115,11 @@ public class SimpleCSV
 	public float[] getFloats(String svals[])
 	{
 		float fvals[] = null;
+		int n = svals.length;
 		if (svals != null)
 		{
-			fvals = new float[_rowCount];
-			for(int i=0; i<_rowCount; i++)
+			fvals = new float[n];
+			for(int i=0; i<n; i++)
 			{
 				fvals[i] = Float.parseFloat(svals[i]);
 			}
@@ -129,10 +131,11 @@ public class SimpleCSV
 	public int[] getInts(String svals[])
 	{
 		int fvals[] = null;
+		int n = svals.length;
 		if (svals != null)
 		{
-			fvals = new int[_rowCount];
-			for(int i=0; i<_rowCount; i++)
+			fvals = new int[n];
+			for(int i=0; i<n; i++)
 			{
 				fvals[i] = Integer.parseInt(svals[i]);
 			}
@@ -144,10 +147,11 @@ public class SimpleCSV
 	public double[] getDoubles(String svals[])
 	{
 		double[] fvals = null;
+		int n = svals.length;
 		if (svals != null)
 		{
-			fvals = new double[_rowCount];
-			for(int i=0; i<_rowCount; i++)
+			fvals = new double[n];
+			for(int i=0; i<n; i++)
 			{
 				fvals[i] = (svals[i].trim().equals("")? 0F : Double.parseDouble(svals[i]));
 			}

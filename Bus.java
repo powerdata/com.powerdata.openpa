@@ -85,4 +85,12 @@ public class Bus extends Group
 	{
 		_list.setVoltageLevel(_ndx, l);
 	}
+
+	@Override
+	public BusList getList()
+	{
+		return _list;
+	}
+	
+	
 }
