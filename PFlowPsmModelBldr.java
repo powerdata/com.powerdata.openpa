@@ -7,13 +7,11 @@ import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TFloatIntHashMap;
 import gnu.trove.map.hash.TIntFloatHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.powerdata.openpa.Gen.Type;
 import com.powerdata.openpa.tools.QueryString;
 import com.powerdata.openpa.tools.SimpleCSV;
@@ -654,7 +652,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case LineR:
 			return (R) _lineCSV.getFloats("R");
 		case LineX:
-			return (R) _lineCSV.getFloats("X");
+			return (R) calcX(_lineCSV.getFloats("X"));
 		case LineBFROM:
 		case LineBTO:
 			return (R) getLineB();
@@ -682,7 +680,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SercapR:
 			return (R) _seriesCapCSV.getFloats("R");
 		case SercapX:
-			return (R) _seriesCapCSV.getFloats("X");
+			return (R) calcX(_seriesCapCSV.getFloats("X"));
 		case SercapRATLT:
 			return (R) _seriesCapCSV.getFloats("NormalOperatingLimit");
 		//Series Reactor
@@ -707,7 +705,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case SerreacR:
 			return (R) _seriesReacCSV.getFloats("R");
 		case SerreacX:
-			return (R) _seriesReacCSV.getFloats("X");
+			return (R) calcX(_seriesReacCSV.getFloats("X"));
 		case SerreacRATLT:
 			return (R) _seriesReacCSV.getFloats("NormalOperatingLimit");
 		//Phase Shifter
@@ -734,7 +732,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case PhashR:
 			return (R) getTransformerDataFloats("R", "winding", false);
 		case PhashX:
-			return (R) getTransformerDataFloats("X", "winding", false);
+			return (R) calcX(getTransformerDataFloats("X", "winding", false));
 		case PhashGMAG:
 			if(_transformerMap == null) buildTransformerMaps();
 			return (R) returnFalseNumber(_phaseShifterIDs.size());
@@ -773,7 +771,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrR:
 			return (R) getTransformerDataFloats("R", "winding", true);
 		case TfmrX:
-			return (R) getTransformerDataFloats("X", "winding", true);
+			return (R) calcX(getTransformerDataFloats("X", "winding", true));
 		case TfmrGMAG:
 			if(_transformerMap == null) buildTransformerMaps();
 			System.out.println("[TfmrGMAG] called");
@@ -831,6 +829,22 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		}
 	}
 	
+	private float[] calcX(float[] xraw)
+	{
+		int nraw = xraw.length;
+		float lx = getLeastX();
+		float[] x = xraw.clone();
+		for(int i=0; i < nraw; ++i)
+		{
+			float tx = xraw[i];
+			if (Math.abs(tx) < lx)
+			{
+				x[i] = ((tx<0f)?-1:1) * lx;	
+			}
+		}
+		return x;
+	}
+
 	private float[] returnFalseNumber(int size)
 	{
 		float[] data = new float[size];
