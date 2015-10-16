@@ -8,7 +8,7 @@ import com.powerdata.openpa.OneTermDevListIfc;
 import com.powerdata.openpa.PAModelException;
 
 public abstract class OneTermDevListI<T extends OneTermDev> extends
-		OutOfServiceListI<T> implements OneTermDevListIfc<T>
+		InServiceListI<T> implements OneTermDevListIfc<T>
 {
 	IntData _bus;
 	FloatData _p, _q;
@@ -111,7 +111,7 @@ public abstract class OneTermDevListI<T extends OneTermDev> extends
 		_q.set(q);
 	}
 
-	interface OneTermDevEnum extends OutOfServiceEnum
+	interface OneTermDevEnum extends InServiceEnum
 	{
 		ColumnMeta bus();
 		ColumnMeta p();

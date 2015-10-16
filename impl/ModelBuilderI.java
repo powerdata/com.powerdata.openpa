@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.powerdata.openpa.ColumnMeta;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
@@ -41,7 +41,7 @@ public abstract class ModelBuilderI implements com.powerdata.openpa.ModelBuilder
 	protected abstract OwnerList loadOwners() throws PAModelException;
 	protected abstract StationList loadStations() throws PAModelException;
 	protected abstract VoltageLevelList loadVoltageLevels() throws PAModelException;
-	protected abstract IslandList loadIslands() throws PAModelException;
+	protected abstract ElectricalIslandList loadIslands() throws PAModelException;
 	protected abstract SVCList loadSVCs() throws PAModelException;
 	protected abstract SwitchedShuntList loadSwitchedShunts() throws PAModelException;
 	protected abstract TwoTermDCLineList loadTwoTermDCLines() throws PAModelException;

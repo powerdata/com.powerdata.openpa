@@ -5,7 +5,6 @@ import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
-import com.powerdata.openpa.TwoTermDev.Side;
 
 public class TransformerListI extends TransformerBaseListI<Transformer> implements TransformerList
 {
@@ -16,7 +15,7 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.TfmrBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.TfmrOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.TfmrINSVC;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.TfmrPFROM;}
 		@Override
@@ -50,7 +49,7 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 	BoolData _isreg = new BoolData(ColumnMeta.TfmrREGENAB),
 			_hasreg = new BoolData(ColumnMeta.TfmrHASREG);
 	
-	EnumData<Side> _regside = new EnumData<>(ColumnMeta.TfmrREGSIDE);
+	IntData _tapbus = new IntData(ColumnMeta.TfmrTAPBUS);
 	FloatData _minkv = new FloatData(ColumnMeta.TfmrMINREGKV),
 			_maxkv = new FloatData(ColumnMeta.TfmrMAXREGKV),
 			_fmntap = new FloatData(ColumnMeta.TfmrMNTPFROM),
@@ -103,27 +102,27 @@ public class TransformerListI extends TransformerBaseListI<Transformer> implemen
 	}
 
 	@Override
-	public Side getRegSide(int ndx) throws PAModelException
+	public Bus getTapBus(int ndx) throws PAModelException
 	{
-		return _regside.get(ndx);
+		return _buses.get(_tapbus.get(ndx));
 	}
 
 	@Override
-	public Side[] getRegSide() throws PAModelException
+	public Bus[] getTapBus() throws PAModelException
 	{
-		return _regside.get();
+		return _buses.toArray(_tapbus.get());
 	}
 
 	@Override
-	public void setRegSide(int ndx, Side s) throws PAModelException
+	public void setTapBus(int ndx, Bus s) throws PAModelException
 	{
-		_regside.set(ndx, s);
+		_tapbus.set(ndx, s.getIndex());
 	}
 
 	@Override
-	public void setRegSide(Side[] s) throws PAModelException
+	public void setTapBus(Bus[] s) throws PAModelException
 	{
-		_regside.set(s);
+		_tapbus.set(_buses.getIndexes(s));
 	}
 
 	@Override

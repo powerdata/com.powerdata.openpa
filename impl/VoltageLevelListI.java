@@ -35,7 +35,7 @@ public class VoltageLevelListI extends GroupListI<VoltageLevel> implements
 
 	void setupMap(int[] busref, int ngrp)
 	{
-		_bgmap = new BasicBusGrpMap(getIndexesFromKeys(busref), ngrp);
+		_bgmap = new BasicGroupIndex(getIndexesFromKeys(busref), ngrp);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public interface LoadList extends OneTermDevListIfc<Load>
 	void setMaxQ(float[] mvar) throws PAModelException;
 	static Set<ColumnMeta> Cols = EnumSet
 			.copyOf(Arrays.asList(new ColumnMeta[] { ColumnMeta.LoadBUS,
-					ColumnMeta.LoadID, ColumnMeta.LoadNAME, ColumnMeta.LoadOOS,
+					ColumnMeta.LoadID, ColumnMeta.LoadNAME, ColumnMeta.LoadINSVC,
 					ColumnMeta.LoadP, ColumnMeta.LoadPMAX, ColumnMeta.LoadQ,
 					ColumnMeta.LoadQMAX }));
 	@Override

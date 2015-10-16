@@ -9,7 +9,7 @@ import com.powerdata.openpa.impl.AreaSubList;
 import com.powerdata.openpa.impl.BusSubList;
 import com.powerdata.openpa.impl.FixedShuntSubList;
 import com.powerdata.openpa.impl.GenSubList;
-import com.powerdata.openpa.impl.IslandSubList;
+import com.powerdata.openpa.impl.ElectricalIslandSubList;
 import com.powerdata.openpa.impl.LineSubList;
 import com.powerdata.openpa.impl.LoadSubList;
 import com.powerdata.openpa.impl.OwnerSubList;
@@ -38,9 +38,9 @@ public class SubLists
 		return new BusSubList(list, indexes);
 	}
 	
-	public static IslandList getIslandSublist(IslandList list, int[] indexes)
+	public static ElectricalIslandList getIslandSublist(ElectricalIslandList list, int[] indexes)
 	{
-		return new IslandSubList(list, indexes);
+		return new ElectricalIslandSubList(list, indexes);
 	}
 	
 	public static OwnerList getOwnerSublist(OwnerList list, int[] indexes)
@@ -225,15 +225,15 @@ public class SubLists
 		return rv;
 	}
 
-	public static int[] getInServiceIndexes(OutOfServiceList<? extends OutOfService> list)
+	public static int[] getInServiceIndexes(InServiceList<? extends InService> list)
 			throws PAModelException
 	{
 		int n = list.size();
 		int[] rv = new int[n];
 		int size = 0;
-		boolean[] oos = list.isOutOfSvc();
+		boolean[] insvc = list.isInService();
 		for (int i = 0; i < n; ++i)
-			if (!oos[i]) rv[size++] = i;
+			if (insvc[i]) rv[size++] = i;
 		return Arrays.copyOf(rv, size);
 		
 	}

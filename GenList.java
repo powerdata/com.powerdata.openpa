@@ -102,7 +102,7 @@ public interface GenList extends OneTermDevListIfc<Gen>
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.GenAVR, ColumnMeta.GenBUS,
 					ColumnMeta.GenID, ColumnMeta.GenMAXQ, ColumnMeta.GenMINQ,
-					ColumnMeta.GenMODE, ColumnMeta.GenNAME, ColumnMeta.GenOOS,
+					ColumnMeta.GenMODE, ColumnMeta.GenNAME, ColumnMeta.GenINSVC,
 					ColumnMeta.GenOPMAXP, ColumnMeta.GenOPMINP,
 					ColumnMeta.GenP, ColumnMeta.GenPS, ColumnMeta.GenQ,
 					ColumnMeta.GenQS, ColumnMeta.GenREGBUS, ColumnMeta.GenTYPE,

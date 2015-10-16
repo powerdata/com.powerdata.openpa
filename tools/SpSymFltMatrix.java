@@ -54,7 +54,13 @@ public class SpSymFltMatrix
 		protected void mutual(int imut, int adjbr, int targbr)
 		{
 			if (targbr != -1) 
+			{
 				bo[targbr] += temp[imut] * bo[adjbr];
+			if (Math.abs(bo[targbr]) <  1e-6f)
+			{
+				int xxx = 5;
+			}
+			}
 		}
 
 		@Override

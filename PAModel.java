@@ -14,7 +14,7 @@ public interface PAModel extends PALists
 	SwitchedShuntList getSwitchedShunts() throws PAModelException;
 	
 	/** return the islands */ 
-	IslandList getIslands() throws PAModelException;
+	ElectricalIslandList getElectricalIslands() throws PAModelException;
 	/** refresh the island and singlebus list to reflect changes to topology or generator state */ 
 	void refreshTopology() throws PAModelException;
 	/** get Areas */
@@ -29,7 +29,7 @@ public interface PAModel extends PALists
 	/** get Single Bus view of nodes interconnected by closed switches */
 	BusList getSingleBus() throws PAModelException;
 	
-	GroupList createGroups(BusGrpMap map);
+	GroupList createGroups(GroupIndex map);
 	
 	/**
 	 * Get a set of changes made to the model

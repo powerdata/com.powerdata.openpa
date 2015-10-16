@@ -5,7 +5,7 @@ import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.OneTermDevListIfc;
 import com.powerdata.openpa.PAModelException;
 
-public abstract class OneTermDevSubList<T extends OneTermDev> extends OutOfServiceSubList<T> implements OneTermDevListIfc<T>
+public abstract class OneTermDevSubList<T extends OneTermDev> extends InServiceSubList<T> implements OneTermDevListIfc<T>
 {
 	OneTermDevListIfc<T> _src;
 	

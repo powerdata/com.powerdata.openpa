@@ -6,12 +6,12 @@ import java.util.List;
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.BusGrpMap;
+import com.powerdata.openpa.GroupIndex;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.GroupListI;
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIsland;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
 import com.powerdata.openpa.OwnerList;
@@ -24,7 +24,7 @@ import com.powerdata.openpa.VoltageLevelList;
 
 public class BusListI extends GroupListI<Bus> implements BusList
 {
-	static class UnityBusGrpMap implements BusGrpMap
+	static class UnityBusGrpMap implements GroupIndex
 	{
 		int _size;
 		WeakReference<int[]> _tok = new WeakReference<>(null);
@@ -185,15 +185,15 @@ public class BusListI extends GroupListI<Bus> implements BusList
 	
 
 	@Override
-	public Island getIsland(int ndx) throws PAModelException
+	public ElectricalIsland getIsland(int ndx) throws PAModelException
 	{
-		return _model.getIslands().getByBus(get(ndx));
+		return _model.getElectricalIslands().getByBus(get(ndx));
 	}
 
-	public Island[] getIsland() throws PAModelException
+	public ElectricalIsland[] getIsland() throws PAModelException
 	{
-		IslandList islands = _model.getIslands();
-		Island[] rv = new Island[_size];
+		ElectricalIslandList islands = _model.getElectricalIslands();
+		ElectricalIsland[] rv = new ElectricalIsland[_size];
 		for(int i=0; i < _size; ++i)
 			rv[i] = islands.getByBus(get(i));
 		return rv;

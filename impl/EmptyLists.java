@@ -7,7 +7,6 @@ import com.powerdata.openpa.Gen.Type;
 import com.powerdata.openpa.PhaseShifter.ControlMode;
 import com.powerdata.openpa.SVC.SVCState;
 import com.powerdata.openpa.Switch.State;
-import com.powerdata.openpa.TwoTermDev.Side;
 
 
 public class EmptyLists
@@ -70,7 +69,7 @@ public class EmptyLists
 		@Override public void setFreqSrcPri(int ndx, int fsp) {throw new IndexOutOfBoundsException();} 
 		@Override public int[] getFreqSrcPri() {return new int[0];} 
 		@Override public void setFreqSrcPri(int[] fsp) {throw new IndexOutOfBoundsException();} 
-		@Override public Island getIsland(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public ElectricalIsland getIsland(int ndx) {throw new IndexOutOfBoundsException();}
 		@Override public Area getArea(int ndx) {throw new IndexOutOfBoundsException();} 
 		@Override public void setArea(int ndx, Area a) {throw new IndexOutOfBoundsException();} 
 		@Override public Area[] getArea() {return new Area[0];} 
@@ -89,7 +88,7 @@ public class EmptyLists
 		@Override public void setVoltageLevel(VoltageLevel[] l) {throw new UnsupportedOperationException();} 
 	}
 	
-	private static final class EmptyIslandList extends EmptyGroup<Island> implements IslandList
+	private static final class EmptyIslandList extends EmptyGroup<ElectricalIsland> implements ElectricalIslandList
 	{
 		@Override public boolean isEnergized(int ndx) {throw new IndexOutOfBoundsException();}
 		@Override public boolean[] isEnergized() {return new boolean[0];} 
@@ -109,15 +108,15 @@ public class EmptyLists
 		@Override public void setBaseKV(float[] kv) {throw new UnsupportedOperationException();}
 	}
 	
-	private abstract static class EmptyOutOfServiceList<T extends OutOfService> extends EmptyBase<T> implements OutOfServiceList<T>
+	private abstract static class EmptyInServiceList<T extends InService> extends EmptyBase<T> implements InServiceList<T>
 	{
-		@Override public boolean isOutOfSvc(int ndx) {throw new IndexOutOfBoundsException();}
-		@Override public boolean[] isOutOfSvc() {return new boolean[0];}
-		@Override public void setOutOfSvc(int ndx, boolean s) {throw new IndexOutOfBoundsException();}
-		@Override public void setOutOfSvc(boolean[] s) {throw new UnsupportedOperationException();} 
+		@Override public boolean isInService(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public boolean[] isInService() {return new boolean[0];}
+		@Override public void setInService(int ndx, boolean s) {throw new IndexOutOfBoundsException();}
+		@Override public void setInService(boolean[] s) {throw new UnsupportedOperationException();} 
 	}
 	
-	private static abstract class  EmptyOneTermDevList<T extends OneTermDev> extends EmptyOutOfServiceList<T> implements OneTermDevListIfc<T>
+	private static abstract class  EmptyOneTermDevList<T extends OneTermDev> extends EmptyInServiceList<T> implements OneTermDevListIfc<T>
 	{
 		@Override public Bus getBus(int ndx) {throw new IndexOutOfBoundsException();} 
 		@Override public void setBus(int ndx, Bus b) {throw new IndexOutOfBoundsException();} 
@@ -133,7 +132,7 @@ public class EmptyLists
 		@Override public void setQ(float[] q) {throw new UnsupportedOperationException();} 
 	}
 	
-	private static abstract class EmptyTwoTermDevList<T extends TwoTermDev> extends EmptyOutOfServiceList<T> implements TwoTermDevListIfc<T>
+	private static abstract class EmptyTwoTermDevList<T extends TwoTermDev> extends EmptyInServiceList<T> implements TwoTermDevListIfc<T>
 	{
 		@Override public Bus getFromBus(int ndx) {throw new IndexOutOfBoundsException();} 
 		@Override public void setFromBus(int ndx, Bus b) {throw new IndexOutOfBoundsException();} 
@@ -319,6 +318,26 @@ public class EmptyLists
 		@Override public ControlMode[] getControlMode() { return new ControlMode[0];}
 		@Override public void setControlMode(int ndx, ControlMode m) {throw new IndexOutOfBoundsException();}
 		@Override public void setControlMode(ControlMode[] m) {throw new UnsupportedOperationException();}
+		@Override public boolean hasReg(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public boolean[] hasReg() {throw new UnsupportedOperationException();}
+		@Override public void setReg(int ndx, boolean v) {throw new IndexOutOfBoundsException();}
+		@Override public void setReg(boolean[] v) {throw new UnsupportedOperationException();}
+		@Override public float getMaxAng(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public void setMaxAng(int ndx, float v) {throw new IndexOutOfBoundsException();}
+		@Override public float[] getMaxAng() {throw new UnsupportedOperationException();}
+		@Override public void setMaxAng(float[] v) {throw new IndexOutOfBoundsException();}
+		@Override public float getMinAng(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public void setMinAng(int ndx, float v) {throw new IndexOutOfBoundsException();}
+		@Override public float[] getMinAng() {throw new UnsupportedOperationException();}
+		@Override public void setMinAng(float[] v) {throw new UnsupportedOperationException();}
+		@Override public float getRegMaxMW(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public float[] getRegMaxMW() {throw new UnsupportedOperationException();}
+		@Override public void setRegMaxMW(int ndx, float mw) {throw new IndexOutOfBoundsException();}
+		@Override public void setRegMaxMW(float[] mw) {throw new UnsupportedOperationException();}
+		@Override public float getRegMinMW(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public void setRegMinMW(int ndx, float mw) {throw new IndexOutOfBoundsException();}
+		@Override public float[] getRegMinMW() {throw new UnsupportedOperationException();}
+		@Override public void setRegMinMW(float[] mw) {throw new UnsupportedOperationException();}
 	}
 	private static final class EmptySeriesCapList extends EmptyACBranchList<SeriesCap> implements SeriesCapList {}
 	private static final class EmptySeriesReacList extends EmptyACBranchList<SeriesReac> implements SeriesReacList {}
@@ -328,10 +347,10 @@ public class EmptyLists
 		@Override public void setRegEnabled(int ndx, boolean enabl) {throw new IndexOutOfBoundsException();}
 		@Override public boolean[] isRegEnabled() {return new boolean[0];}
 		@Override public void setRegEnabled(boolean[] enabl) {throw new UnsupportedOperationException();}
-		@Override public Side getRegSide(int ndx) {throw new IndexOutOfBoundsException();}
-		@Override public Side[] getRegSide() {return new Side[0];}
-		@Override public void setRegSide(int ndx, Side s) {throw new IndexOutOfBoundsException();}
-		@Override public void setRegSide(Side[] s) {throw new UnsupportedOperationException();}
+		@Override public Bus getTapBus(int ndx) {throw new IndexOutOfBoundsException();}
+		@Override public Bus[] getTapBus() {throw new UnsupportedOperationException();}
+		@Override public void setTapBus(int ndx, Bus s) {throw new IndexOutOfBoundsException();}
+		@Override public void setTapBus(Bus[] s) {throw new UnsupportedOperationException();}
 		@Override public float getMinKV(int ndx) {throw new IndexOutOfBoundsException();}
 		@Override public void setMinKV(int ndx, float kv) {throw new IndexOutOfBoundsException();}
 		@Override public float[] getMinKV() {return new float[0];}
@@ -400,7 +419,7 @@ public class EmptyLists
 	
 	public static final AreaList EMPTY_AREAS = new EmptyAreaList();
 	public static final BusList EMPTY_BUSES = new EmptyBusList();
-	public static final IslandList EMPTY_ISLANDS = new EmptyIslandList();
+	public static final ElectricalIslandList EMPTY_ISLANDS = new EmptyIslandList();
 	public static final OwnerList EMPTY_OWNERS = new EmptyOwnerList();
 	public static final StationList EMPTY_STATIONS = new EmptyStationList();
 	public static final VoltageLevelList EMPTY_VOLTAGELEVELS = new EmptyVoltageLevelList();

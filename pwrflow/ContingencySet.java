@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.ListMetaType;
-import com.powerdata.openpa.OutOfService;
+import com.powerdata.openpa.InService;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
 
@@ -21,7 +21,7 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 		/** execute the contingency against the given model */
 		void execute(PAModel cmodel) throws PAModelException;
 		String getName();
-		OutOfService getContObj();
+		InService getContObj();
 	}
 	
 	@FunctionalInterface 
@@ -33,20 +33,20 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	static protected Map<ListMetaType,EquipOOS> _Accessors = new EnumMap<>(ListMetaType.class);
 	static
 	{
-		_Accessors.put(ListMetaType.Gen, (m,i) -> m.getGenerators().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.SVC, (m,i) -> m.getSVCs().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.TwoTermDCLine, (m,i) -> m.getTwoTermDCLines().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.Line, (m,i) -> m.getLines().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.SeriesCap, (m,i) -> m.getSeriesCapacitors().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.SeriesReac, (m,i) -> m.getSeriesReactors().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.PhaseShifter, (m,i) -> m.getPhaseShifters().setOutOfSvc(i, true));
-		_Accessors.put(ListMetaType.Transformer, (m,i) -> m.getTransformers().setOutOfSvc(i, true));
+		_Accessors.put(ListMetaType.Gen, (m,i) -> m.getGenerators().setInService(i, true));
+		_Accessors.put(ListMetaType.SVC, (m,i) -> m.getSVCs().setInService(i, true));
+		_Accessors.put(ListMetaType.TwoTermDCLine, (m,i) -> m.getTwoTermDCLines().setInService(i, true));
+		_Accessors.put(ListMetaType.Line, (m,i) -> m.getLines().setInService(i, true));
+		_Accessors.put(ListMetaType.SeriesCap, (m,i) -> m.getSeriesCapacitors().setInService(i, true));
+		_Accessors.put(ListMetaType.SeriesReac, (m,i) -> m.getSeriesReactors().setInService(i, true));
+		_Accessors.put(ListMetaType.PhaseShifter, (m,i) -> m.getPhaseShifters().setInService(i, true));
+		_Accessors.put(ListMetaType.Transformer, (m,i) -> m.getTransformers().setInService(i, true));
 	}
 	
 	static class ContImpl implements Contingency
 	{
-		OutOfService _cobj;
-		ContImpl(OutOfService cobj)
+		InService _cobj;
+		ContImpl(InService cobj)
 		{
 			_cobj = cobj;
 		}
@@ -77,27 +77,27 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 			return rv;
 		}
 		@Override
-		public OutOfService getContObj()
+		public InService getContObj()
 		{
 			return _cobj;
 		}
 	}
 
 	
-	Set<OutOfService> _oos = new HashSet<>();
+	Set<InService> _oos = new HashSet<>();
 	
 	public ContingencySet(PAModel m) throws PAModelException
 	{
 		for(ACBranchList br : m.getACBranches())
-			addOos(br);
-		addOos(m.getGenerators());
+			addInService(br);
+		addInService(m.getGenerators());
 	}
 
-	private void addOos(List<? extends OutOfService> ooslist) throws PAModelException
+	private void addInService(List<? extends InService> ooslist) throws PAModelException
 	{
-		for (OutOfService o : ooslist)
+		for (InService o : ooslist)
 		{
-			if (!o.isOutOfSvc()) _oos.add(o);
+			if (o.isInService()) _oos.add(o);
 		}
 	}
 	
@@ -107,12 +107,12 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	 * @param list
 	 * @throws PAModelException
 	 */
-	public ContingencySet(Collection<? extends OutOfService> oos)
+	public ContingencySet(Collection<? extends InService> oos)
 			throws PAModelException
 	{
-			for (OutOfService o : oos)
+			for (InService o : oos)
 			{
-				if (!o.isOutOfSvc()) _oos.add(o);
+				if (o.isInService()) _oos.add(o);
 			}
 	}
 	
@@ -121,7 +121,7 @@ public class ContingencySet extends AbstractSet<com.powerdata.openpa.pwrflow.Con
 	{
 		return new Iterator<Contingency>()
 		{
-			Iterator<OutOfService> _i = _oos.iterator();
+			Iterator<InService> _i = _oos.iterator();
 			@Override
 			public boolean hasNext()
 			{

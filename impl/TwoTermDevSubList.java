@@ -5,7 +5,7 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.TwoTermDevListIfc;
 
-public abstract class TwoTermDevSubList<T extends TwoTermDev> extends OutOfServiceSubList<T> implements TwoTermDevListIfc<T>
+public abstract class TwoTermDevSubList<T extends TwoTermDev> extends InServiceSubList<T> implements TwoTermDevListIfc<T>
 {
 	TwoTermDevListIfc<T> _src;
 

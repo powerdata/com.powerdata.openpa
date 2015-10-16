@@ -5,7 +5,6 @@ import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.Transformer;
 import com.powerdata.openpa.TransformerList;
-import com.powerdata.openpa.TwoTermDev.Side;
 
 public class TransformerSubList extends ACBranchSubListBase<Transformer> implements TransformerList
 {
@@ -55,28 +54,28 @@ public class TransformerSubList extends ACBranchSubListBase<Transformer> impleme
 	}
 
 	@Override
-	public Side getRegSide(int ndx) throws PAModelException
+	public Bus getTapBus(int ndx) throws PAModelException
 	{
-		return _src.getRegSide(_ndx[ndx]);
+		return _src.getTapBus(_ndx[ndx]);
 	}
 
 	@Override
-	public Side[] getRegSide() throws PAModelException
+	public Bus[] getTapBus() throws PAModelException
 	{
-		return mapObject(_src.getRegSide());
+		return mapObject(_src.getTapBus());
 	}
 
 	@Override
-	public void setRegSide(int ndx, Side s) throws PAModelException
+	public void setTapBus(int ndx, Bus s) throws PAModelException
 	{
-		_src.setRegSide(_ndx[ndx], s);
+		_src.setTapBus(_ndx[ndx], s);
 	}
 
 	@Override
-	public void setRegSide(Side[] s) throws PAModelException
+	public void setTapBus(Bus[] s) throws PAModelException
 	{
 		for(int i=0; i < _size; ++i)
-			_src.setRegSide(_ndx[i], s[i]);
+			_src.setTapBus(_ndx[i], s[i]);
 	}
 
 	@Override

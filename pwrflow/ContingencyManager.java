@@ -27,39 +27,39 @@ public abstract class ContingencyManager
 		ColumnMeta.ShreacQ,
 		
 		ColumnMeta.SvcQ,
-		ColumnMeta.SvcOOS,
+		ColumnMeta.SvcINSVC,
 		
 		ColumnMeta.LinePFROM,
 		ColumnMeta.LinePTO,
 		ColumnMeta.LineQFROM,
 		ColumnMeta.LineQTO,
-		ColumnMeta.LineOOS,
+		ColumnMeta.LineINSVC,
 		
 		ColumnMeta.SercapPFROM,
 		ColumnMeta.SercapPTO,
 		ColumnMeta.SercapQFROM,
 		ColumnMeta.SercapQTO,
-		ColumnMeta.SercapOOS,
+		ColumnMeta.SercapINSVC,
 			
 		ColumnMeta.SerreacPFROM,
 		ColumnMeta.SerreacPTO,
 		ColumnMeta.SerreacQFROM,
 		ColumnMeta.SerreacQTO,
-		ColumnMeta.SerreacOOS,
+		ColumnMeta.SerreacINSVC,
 		
 		ColumnMeta.PhashPFROM,
 		ColumnMeta.PhashPTO,
 		ColumnMeta.PhashQFROM,
 		ColumnMeta.PhashQTO,
-		ColumnMeta.PhashOOS,
+		ColumnMeta.PhashINSVC,
 		
 		ColumnMeta.TfmrPFROM,
 		ColumnMeta.TfmrPTO,
 		ColumnMeta.TfmrQFROM,
 		ColumnMeta.TfmrQTO,
-		ColumnMeta.TfmrOOS,
+		ColumnMeta.TfmrINSVC,
 		
-		ColumnMeta.GenOOS,
+		ColumnMeta.GenINSVC,
 		
 	}));
 	

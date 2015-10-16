@@ -7,7 +7,7 @@ import java.util.Set;
 import com.powerdata.openpa.impl.AreaListI;
 import com.powerdata.openpa.impl.BusListI;
 import com.powerdata.openpa.impl.GenListI;
-import com.powerdata.openpa.impl.IslandListI;
+import com.powerdata.openpa.impl.ElectricalIslandListI;
 import com.powerdata.openpa.impl.LineListI;
 import com.powerdata.openpa.impl.LoadListI;
 import com.powerdata.openpa.impl.ModelBuilderI;
@@ -66,7 +66,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.GenBUS, () -> extractIndex(_srcmdl.getGenerators().getBus()));
 		_col.put(ColumnMeta.GenP, () -> _srcmdl.getGenerators().getP());
 		_col.put(ColumnMeta.GenQ, () -> _srcmdl.getGenerators().getQ());
-		_col.put(ColumnMeta.GenOOS, () -> _srcmdl.getGenerators().isOutOfSvc());
+		_col.put(ColumnMeta.GenINSVC, () -> _srcmdl.getGenerators().isInService());
 		_col.put(ColumnMeta.GenTYPE, () -> _srcmdl.getGenerators().getType());
 		_col.put(ColumnMeta.GenMODE, () -> _srcmdl.getGenerators().getMode());
 		_col.put(ColumnMeta.GenOPMINP, () -> _srcmdl.getGenerators().getOpMinP());
@@ -84,7 +84,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.LoadBUS, () -> extractIndex(_srcmdl.getLoads().getBus()));
 		_col.put(ColumnMeta.LoadP, () -> _srcmdl.getLoads().getP());
 		_col.put(ColumnMeta.LoadQ, () -> _srcmdl.getLoads().getQ());
-		_col.put(ColumnMeta.LoadOOS, () -> _srcmdl.getLoads().isOutOfSvc());
+		_col.put(ColumnMeta.LoadINSVC, () -> _srcmdl.getLoads().isInService());
 		_col.put(ColumnMeta.LoadPMAX, () -> _srcmdl.getLoads().getMaxP());
 		_col.put(ColumnMeta.LoadQMAX, () -> _srcmdl.getLoads().getMaxQ());
 
@@ -93,7 +93,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.ShcapBUS, () -> extractIndex(_srcmdl.getShuntCapacitors().getBus()));
 		_col.put(ColumnMeta.ShcapP, () -> _srcmdl.getShuntCapacitors().getP());
 		_col.put(ColumnMeta.ShcapQ, () -> _srcmdl.getShuntCapacitors().getQ());
-		_col.put(ColumnMeta.ShcapOOS, () -> _srcmdl.getShuntCapacitors().isOutOfSvc());
+		_col.put(ColumnMeta.ShcapINSVC, () -> _srcmdl.getShuntCapacitors().isInService());
 		_col.put(ColumnMeta.ShcapB, () -> _srcmdl.getShuntCapacitors().getB());
 
 		_col.put(ColumnMeta.ShreacID, () -> _srcmdl.getShuntReactors().getID());
@@ -101,7 +101,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.ShreacBUS, () -> extractIndex(_srcmdl.getShuntReactors().getBus()));
 		_col.put(ColumnMeta.ShreacP, () -> _srcmdl.getShuntReactors().getP());
 		_col.put(ColumnMeta.ShreacQ, () -> _srcmdl.getShuntReactors().getQ());
-		_col.put(ColumnMeta.ShreacOOS, () -> _srcmdl.getShuntReactors().isOutOfSvc());
+		_col.put(ColumnMeta.ShreacINSVC, () -> _srcmdl.getShuntReactors().isInService());
 		_col.put(ColumnMeta.ShreacB, () -> _srcmdl.getShuntReactors().getB());
 		
 		_col.put(ColumnMeta.SvcID, () -> _srcmdl.getSVCs().getID());
@@ -109,7 +109,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.SvcBUS, () -> extractIndex(_srcmdl.getSVCs().getBus()));
 		_col.put(ColumnMeta.SvcP, () -> _srcmdl.getSVCs().getP());
 		_col.put(ColumnMeta.SvcQ, () -> _srcmdl.getSVCs().getQ());
-		_col.put(ColumnMeta.SvcOOS, () -> _srcmdl.getSVCs().isOutOfSvc());
+		_col.put(ColumnMeta.SvcINSVC, () -> _srcmdl.getSVCs().isInService());
 		_col.put(ColumnMeta.SvcQMIN, () -> _srcmdl.getSVCs().getMinQ());
 		_col.put(ColumnMeta.SvcQMAX, () -> _srcmdl.getSVCs().getMaxQ());
 		_col.put(ColumnMeta.SvcAVR, () -> _srcmdl.getSVCs().isRegKV());
@@ -136,7 +136,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.LineNAME, () -> _srcmdl.getLines().getName());
 		_col.put(ColumnMeta.LineBUSFROM, () -> extractIndex(_srcmdl.getLines().getFromBus()));
 		_col.put(ColumnMeta.LineBUSTO, () -> extractIndex(_srcmdl.getLines().getToBus()));
-		_col.put(ColumnMeta.LineOOS, () -> _srcmdl.getLines().isOutOfSvc());
+		_col.put(ColumnMeta.LineINSVC, () -> _srcmdl.getLines().isInService());
 		_col.put(ColumnMeta.LinePFROM, () -> _srcmdl.getLines().getFromP());
 		_col.put(ColumnMeta.LineQFROM, () -> _srcmdl.getLines().getFromQ());
 		_col.put(ColumnMeta.LinePTO, () -> _srcmdl.getLines().getToP());
@@ -151,7 +151,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.SercapNAME, () -> _srcmdl.getSeriesCapacitors().getName());
 		_col.put(ColumnMeta.SercapBUSFROM, () -> extractIndex(_srcmdl.getSeriesCapacitors().getFromBus()));
 		_col.put(ColumnMeta.SercapBUSTO, () -> extractIndex(_srcmdl.getSeriesCapacitors().getToBus()));
-		_col.put(ColumnMeta.SercapOOS, () -> _srcmdl.getSeriesCapacitors().isOutOfSvc());
+		_col.put(ColumnMeta.SercapINSVC, () -> _srcmdl.getSeriesCapacitors().isInService());
 		_col.put(ColumnMeta.SercapPFROM, () -> _srcmdl.getSeriesCapacitors().getFromP());
 		_col.put(ColumnMeta.SercapQFROM, () -> _srcmdl.getSeriesCapacitors().getFromQ());
 		_col.put(ColumnMeta.SercapPTO, () -> _srcmdl.getSeriesCapacitors().getToP());
@@ -164,7 +164,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.SerreacNAME, () -> _srcmdl.getSeriesReactors().getName());
 		_col.put(ColumnMeta.SerreacBUSFROM, () -> extractIndex(_srcmdl.getSeriesReactors().getFromBus()));
 		_col.put(ColumnMeta.SerreacBUSTO, () -> extractIndex(_srcmdl.getSeriesReactors().getToBus()));
-		_col.put(ColumnMeta.SerreacOOS, () -> _srcmdl.getSeriesReactors().isOutOfSvc());
+		_col.put(ColumnMeta.SerreacINSVC, () -> _srcmdl.getSeriesReactors().isInService());
 		_col.put(ColumnMeta.SerreacPFROM, () -> _srcmdl.getSeriesReactors().getFromP());
 		_col.put(ColumnMeta.SerreacQFROM, () -> _srcmdl.getSeriesReactors().getFromQ());
 		_col.put(ColumnMeta.SerreacPTO, () -> _srcmdl.getSeriesReactors().getToP());
@@ -177,7 +177,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.PhashNAME, () -> _srcmdl.getPhaseShifters().getName());
 		_col.put(ColumnMeta.PhashBUSFROM, () -> extractIndex(_srcmdl.getPhaseShifters().getFromBus()));
 		_col.put(ColumnMeta.PhashBUSTO, () -> extractIndex(_srcmdl.getPhaseShifters().getToBus()));
-		_col.put(ColumnMeta.PhashOOS, () -> _srcmdl.getPhaseShifters().isOutOfSvc());
+		_col.put(ColumnMeta.PhashINSVC, () -> _srcmdl.getPhaseShifters().isInService());
 		_col.put(ColumnMeta.PhashPFROM, () -> _srcmdl.getPhaseShifters().getFromP());
 		_col.put(ColumnMeta.PhashQFROM, () -> _srcmdl.getPhaseShifters().getFromQ());
 		_col.put(ColumnMeta.PhashPTO, () -> _srcmdl.getPhaseShifters().getToP());
@@ -186,17 +186,22 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.PhashX, () -> _srcmdl.getPhaseShifters().getX());
 		_col.put(ColumnMeta.PhashGMAG, () -> _srcmdl.getPhaseShifters().getGmag());
 		_col.put(ColumnMeta.PhashBMAG, () -> _srcmdl.getPhaseShifters().getBmag());
-		_col.put(ColumnMeta.PhashCTRLMODE, () -> _srcmdl.getPhaseShifters().getControlMode());
 		_col.put(ColumnMeta.PhashANG, () -> _srcmdl.getPhaseShifters().getShift());
 		_col.put(ColumnMeta.PhashTAPFROM, () -> _srcmdl.getPhaseShifters().getFromTap());
 		_col.put(ColumnMeta.PhashTAPTO, () -> _srcmdl.getPhaseShifters().getToTap());
+		_col.put(ColumnMeta.PhashCTRLMODE, () -> _srcmdl.getPhaseShifters().getControlMode());
 		_col.put(ColumnMeta.PhashRATLT, () -> _srcmdl.getPhaseShifters().getLTRating());
+		_col.put(ColumnMeta.PhashHASREG, () -> _srcmdl.getPhaseShifters().hasReg());
+		_col.put(ColumnMeta.PhashMXANG, () -> _srcmdl.getPhaseShifters().getMaxAng());
+		_col.put(ColumnMeta.PhashMNANG, () -> _srcmdl.getPhaseShifters().getMinAng());
+		_col.put(ColumnMeta.PhashMXMW, () -> _srcmdl.getPhaseShifters().getRegMaxMW());
+		_col.put(ColumnMeta.PhashMNMW, () -> _srcmdl.getPhaseShifters().getRegMinMW());
 
 		_col.put(ColumnMeta.TfmrID, () -> _srcmdl.getTransformers().getID());
 		_col.put(ColumnMeta.TfmrNAME, () -> _srcmdl.getTransformers().getName());
 		_col.put(ColumnMeta.TfmrBUSFROM, () -> extractIndex(_srcmdl.getTransformers().getFromBus()));
 		_col.put(ColumnMeta.TfmrBUSTO, () -> extractIndex(_srcmdl.getTransformers().getToBus()));
-		_col.put(ColumnMeta.TfmrOOS, () -> _srcmdl.getTransformers().isOutOfSvc());
+		_col.put(ColumnMeta.TfmrINSVC, () -> _srcmdl.getTransformers().isInService());
 		_col.put(ColumnMeta.TfmrPFROM, () -> _srcmdl.getTransformers().getFromP());
 		_col.put(ColumnMeta.TfmrQFROM, () -> _srcmdl.getTransformers().getFromQ());
 		_col.put(ColumnMeta.TfmrPTO, () -> _srcmdl.getTransformers().getToP());
@@ -208,25 +213,25 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.TfmrANG, () -> _srcmdl.getTransformers().getShift());
 		_col.put(ColumnMeta.TfmrTAPFROM, () -> _srcmdl.getTransformers().getFromTap());
 		_col.put(ColumnMeta.TfmrTAPTO, () -> _srcmdl.getTransformers().getToTap());
-		_col.put(ColumnMeta.TfmrMNTPFROM, () -> _srcmdl.getTransformers().getFromMinTap());
-		_col.put(ColumnMeta.TfmrMNTPTO, () -> _srcmdl.getTransformers().getToMinTap());
-		_col.put(ColumnMeta.TfmrMXTPFROM, () -> _srcmdl.getTransformers().getFromMaxTap());
-		_col.put(ColumnMeta.TfmrMXTPTO, () -> _srcmdl.getTransformers().getToMaxTap());
-		_col.put(ColumnMeta.TfmrSTEPFROM, () -> _srcmdl.getTransformers().getFromStepSize());
-		_col.put(ColumnMeta.TfmrSTEPTO, () -> _srcmdl.getTransformers().getToStepSize());
 		_col.put(ColumnMeta.TfmrRATLT, () -> _srcmdl.getTransformers().getLTRating());
 		_col.put(ColumnMeta.TfmrMINREGKV, () -> _srcmdl.getTransformers().getMinKV());
 		_col.put(ColumnMeta.TfmrMAXREGKV, () -> _srcmdl.getTransformers().getMaxKV());
 		_col.put(ColumnMeta.TfmrREGBUS, () -> extractIndex(_srcmdl.getTransformers().getRegBus()));
+		_col.put(ColumnMeta.TfmrTAPBUS, () -> _srcmdl.getTransformers().getTapBus());
 		_col.put(ColumnMeta.TfmrREGENAB, () -> _srcmdl.getTransformers().isRegEnabled());
 		_col.put(ColumnMeta.TfmrHASREG, () -> _srcmdl.getTransformers().hasLTC());
-		_col.put(ColumnMeta.TfmrREGSIDE, () -> _srcmdl.getTransformers().getRegSide());
+		_col.put(ColumnMeta.TfmrMNTPFROM, () -> _srcmdl.getTransformers().getFromMinTap());
+		_col.put(ColumnMeta.TfmrMXTPFROM, () -> _srcmdl.getTransformers().getFromMaxTap());
+		_col.put(ColumnMeta.TfmrMNTPTO, () -> _srcmdl.getTransformers().getToMinTap());
+		_col.put(ColumnMeta.TfmrMXTPTO, () -> _srcmdl.getTransformers().getToMaxTap());
+		_col.put(ColumnMeta.TfmrSTEPFROM, () -> _srcmdl.getTransformers().getFromStepSize());
+		_col.put(ColumnMeta.TfmrSTEPTO, () -> _srcmdl.getTransformers().getToStepSize());
 
 		_col.put(ColumnMeta.SwID, () -> _srcmdl.getSwitches().getID());
 		_col.put(ColumnMeta.SwNAME, () -> _srcmdl.getSwitches().getName());
 		_col.put(ColumnMeta.SwBUSFROM, () -> extractIndex(_srcmdl.getSwitches().getFromBus()));
 		_col.put(ColumnMeta.SwBUSTO, () -> extractIndex(_srcmdl.getSwitches().getToBus()));
-		_col.put(ColumnMeta.SwOOS, () -> _srcmdl.getSwitches().isOutOfSvc());
+		_col.put(ColumnMeta.SwINSVC, () -> _srcmdl.getSwitches().isInService());
 		_col.put(ColumnMeta.SwPFROM, () -> _srcmdl.getSwitches().getFromP());
 		_col.put(ColumnMeta.SwQFROM, () -> _srcmdl.getSwitches().getFromQ());
 		_col.put(ColumnMeta.SwPTO, () -> _srcmdl.getSwitches().getToP());
@@ -239,7 +244,7 @@ public class CloneModelBuilder extends ModelBuilderI
 		_col.put(ColumnMeta.T2dcNAME, () -> _srcmdl.getTwoTermDCLines().getName());
 		_col.put(ColumnMeta.T2dcBUSFROM, () -> extractIndex(_srcmdl.getTwoTermDCLines().getFromBus()));
 		_col.put(ColumnMeta.T2dcBUSTO, () -> extractIndex(_srcmdl.getTwoTermDCLines().getToBus()));
-		_col.put(ColumnMeta.T2dcOOS, () -> _srcmdl.getTwoTermDCLines().isOutOfSvc());
+		_col.put(ColumnMeta.T2dcINSVC, () -> _srcmdl.getTwoTermDCLines().isInService());
 		_col.put(ColumnMeta.T2dcPFROM, () -> _srcmdl.getTwoTermDCLines().getFromP());
 		_col.put(ColumnMeta.T2dcQFROM, () -> _srcmdl.getTwoTermDCLines().getFromQ());
 		_col.put(ColumnMeta.T2dcPTO, () -> _srcmdl.getTwoTermDCLines().getToP());
@@ -308,9 +313,9 @@ public class CloneModelBuilder extends ModelBuilderI
 	}
 
 	@Override
-	protected IslandList loadIslands() throws PAModelException
+	protected ElectricalIslandList loadIslands() throws PAModelException
 	{
-		return new IslandListI(_m);
+		return new ElectricalIslandListI(_m);
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
-import com.powerdata.openpa.impl.BasicBusGrpMap;
+import com.powerdata.openpa.impl.BasicGroupIndex;
 import com.powerdata.openpa.tools.LinkNet;
 
 /**
@@ -42,7 +42,7 @@ public class BusGrpMapBldr
 		boolean test(T d) throws PAModelException;
 	}
 	
-	<T extends TwoTermDev> void  addDev(TwoTermDevListIfc<T> list, T2DevPredicate<T> p) throws PAModelException
+	<T extends TwoTermDev> void addDev(TwoTermDevListIfc<T> list, T2DevPredicate<T> p) throws PAModelException
 	{
 		int n = list.size();
 		_nbr += n;
@@ -114,7 +114,7 @@ public class BusGrpMapBldr
 	/** subclass to define which objects get included, default to all */
 	protected boolean incD2(TwoTermDCLine d) throws PAModelException {return true;}
 	
-	public BusGrpMap getMap() 
+	public GroupIndex getMap() 
 	{
 		int[][] grps = _lnet.findGroups();
 		return new BBusGrpMap(grps, _nbus);
@@ -143,7 +143,7 @@ public class BusGrpMapBldr
 		
 	};
 
-	static class BBusGrpMap extends BasicBusGrpMap
+	static class BBusGrpMap extends BasicGroupIndex
 	{
 		public BBusGrpMap(int[][] grps, int nbus)
 		{

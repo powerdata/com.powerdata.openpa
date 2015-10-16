@@ -27,6 +27,12 @@ import java.util.HashMap;
  */
 public class SimpleCSV
 {
+
+	@Override
+	public String toString()
+	{
+		return (_meta != null) ? String.format("SimpleCSV - %s",_meta) : super.toString();
+	}
 	/** Array of column names */
 	String _colNames[] = null;
 	/** Array of columns */
@@ -35,6 +41,8 @@ public class SimpleCSV
 	HashMap<String,ArrayList<String>> _colsByName = new HashMap<String,ArrayList<String>>();
 	/** Number of rows */
 	int _rowCount = 0;
+	/** meta information */
+	String _meta;
 
 	public SimpleCSV(){}
 	public SimpleCSV(InputStream in) throws IOException
@@ -49,6 +57,10 @@ public class SimpleCSV
 	{
 		load(file);
 	}
+	
+	public void setMeta(String meta) {_meta = meta;}
+	public String getMeta() {return _meta;}
+	
 	public String[] getColumnNames() { return _colNames; }
 	public int getRowCount() { return _rowCount; }
 	public int getColCount() { return (_colNames != null)?_colNames.length:0; }
@@ -126,10 +138,23 @@ public class SimpleCSV
 		}
 		return fvals;
 	}
+	public boolean[] getBooleans(int col) {return getBooleans(get(col));}
+	public boolean[] getBooleans(String col) {return getBooleans(get(col));}
+	public boolean[] getBooleans(String[] svals)
+	{
+		int n = svals.length;
+		if(n == 0) return new boolean[0];
+		boolean[] rv = new boolean[n];
+		for(int i=0; i < n; ++i)
+			rv[i] = Boolean.parseBoolean(svals[i]);
+		return rv;
+	}
+	
 	public int[] getInts(int col) { return getInts(get(col)); }
 	public int[] getInts(String col) { return getInts(get(col)); }
 	public int[] getInts(String svals[])
 	{
+		if (svals.length == 0) return new int[0];
 		int fvals[] = null;
 		int n = svals.length;
 		if (svals != null)
@@ -221,6 +246,7 @@ public class SimpleCSV
 	public void load(File file) throws IOException
 	{
 		if (!file.exists()) return;
+		_meta = file.getName();
 		FileInputStream in = new FileInputStream(file);
 		load(in);
 		in.close();

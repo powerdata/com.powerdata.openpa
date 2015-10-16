@@ -12,7 +12,7 @@ public interface ShuntCapList extends FixedShuntListIfc<ShuntCapacitor>
 	static Set<ColumnMeta> _Cols = EnumSet
 			.copyOf(Arrays.asList(new ColumnMeta[] { ColumnMeta.ShcapB,
 					ColumnMeta.ShcapBUS, ColumnMeta.ShcapID,
-					ColumnMeta.ShcapNAME, ColumnMeta.ShcapOOS,
+					ColumnMeta.ShcapNAME, ColumnMeta.ShcapINSVC,
 					ColumnMeta.ShcapP, ColumnMeta.ShcapQ }));
 	@Override
 	default Set<ColumnMeta> getColTypes()

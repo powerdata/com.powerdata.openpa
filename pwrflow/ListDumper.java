@@ -10,7 +10,10 @@ import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.BaseList;
+import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.TwoTermBaseList;
@@ -198,5 +201,9 @@ public class ListDumper
 		bldr.enableFlatVoltage(true);
 		bldr.setLeastX(0.0001f);
 		new ListDumper().dump(bldr.load(), outdir);
+//		PAModel m = bldr.load();
+//		BusList l = m.getSingleBus();
+//		new ListDumper().dumpList(new File(outdir, "cmtest.csv"), l);
+//		for(Bus b : l) System.err.format("%d %s\n", b.getIndex(), b.getName());
 	}
 }

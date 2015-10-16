@@ -45,9 +45,9 @@ public class Transformer extends ACBranch
 	{
 		return _list.getRegBus(_ndx);
 	}
-	public Side getRegSide() throws PAModelException
+	public Bus getTapBus() throws PAModelException
 	{
-		return _list.getRegSide(_ndx);
+		return _list.getTapBus(_ndx);
 	}
 	
 	public float getFromMinTap() throws PAModelException

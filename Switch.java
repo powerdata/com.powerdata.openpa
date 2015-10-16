@@ -9,7 +9,6 @@ public class Switch extends TwoTermDev
 		boolean _state;
 		public boolean getState() {return _state;}
 
-		
 		public static State fromBoolean(boolean b) {return b?State.Open:State.Closed;}
 		
 		public static State[] fromBoolean(boolean[] b)
@@ -18,6 +17,21 @@ public class Switch extends TwoTermDev
 			State[] rv = new State[n];
 			for(int i=0; i < n; ++i)
 				rv[i] = fromBoolean(b[i]);
+			return rv;
+		}
+		
+		public static State fromString(String s)
+		{
+			char c = Character.toLowerCase(s.charAt(0));
+			return (c=='t'||c=='o')?State.Open:State.Closed;
+		}
+		
+		public static State[] fromString(String[] s)
+		{
+			int n = s.length;
+			State[] rv = new State[n];
+			for(int i=0; i < n; ++i)
+				rv[i] = fromString(s[i]);
 			return rv;
 		}
 		

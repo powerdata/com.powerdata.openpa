@@ -31,7 +31,7 @@ public class StationListI extends GroupListI<Station> implements StationList
 
 	void setupMap(int[] busref, int ngrp)
 	{
-		_bgmap = new BasicBusGrpMap(getIndexesFromKeys(busref), ngrp);
+		_bgmap = new BasicGroupIndex(getIndexesFromKeys(busref), ngrp);
 	}
 	
 	@Override

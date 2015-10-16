@@ -61,7 +61,7 @@ public class Bus extends Group
 		_list.setFreqSrcPri(_ndx, fsp);
 	}
 	
-	public Island getIsland() throws PAModelException
+	public ElectricalIsland getIsland() throws PAModelException
 	{
 		return _list.getIsland(_ndx);
 	}

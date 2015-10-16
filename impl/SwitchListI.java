@@ -19,7 +19,7 @@ public class SwitchListI extends TwoTermDevListI<Switch> implements SwitchList
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.SwBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SwOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.SwINSVC;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.SwPFROM;}
 		@Override

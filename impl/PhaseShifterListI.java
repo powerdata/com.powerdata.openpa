@@ -15,7 +15,7 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.PhashBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.PhashOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.PhashINSVC;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.PhashPFROM;}
 		@Override
@@ -47,6 +47,12 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 	};
 
 	EnumData<ControlMode> _cmode = new EnumData<ControlMode>(ColumnMeta.PhashCTRLMODE);
+	BoolData _hasreg = new BoolData(ColumnMeta.PhashHASREG);
+	FloatData _maxang = new FloatData(ColumnMeta.PhashMXANG);
+	FloatData _minang = new FloatData(ColumnMeta.PhashMNANG);
+	FloatData _maxmw = new FloatData(ColumnMeta.PhashMXMW);
+	FloatData _minmw = new FloatData(ColumnMeta.PhashMNMW);
+
 	
 	public PhaseShifterListI(PAModelI model, int[] keys) throws PAModelException
 	{
@@ -84,5 +90,105 @@ public class PhaseShifterListI extends TransformerBaseListI<PhaseShifter> implem
 	public void setControlMode(ControlMode[] m) throws PAModelException
 	{
 		_cmode.set(m);
+	}
+	@Override
+	public boolean hasReg(int ndx) throws PAModelException
+	{
+		return _hasreg.get(ndx);
+	}
+	@Override
+	public boolean[] hasReg() throws PAModelException
+	{
+		return _hasreg.get();
+	}
+	@Override
+	public void setReg(int ndx, boolean v) throws PAModelException
+	{
+		_hasreg.set(ndx, v);
+	}
+	@Override
+	public void setReg(boolean[] v) throws PAModelException
+	{
+		_hasreg.set(v);
+	}
+	@Override
+	public float getMaxAng(int ndx) throws PAModelException
+	{
+		return _maxang.get(ndx);
+	}
+	@Override
+	public float[] getMaxAng() throws PAModelException
+	{
+		return _maxang.get();
+	}
+	@Override
+	public void setMaxAng(int ndx, float v) throws PAModelException
+	{
+		_maxang.set(ndx, v);
+	}
+	@Override
+	public void setMaxAng(float[] v) throws PAModelException
+	{
+		_maxang.set(v);
+	}
+	@Override
+	public float getMinAng(int ndx) throws PAModelException
+	{
+		return _minang.get(ndx);
+	}
+	@Override
+	public void setMinAng(int ndx, float v) throws PAModelException
+	{
+		_minang.set(ndx, v);
+	}
+	@Override
+	public float[] getMinAng() throws PAModelException
+	{
+		return _minang.get();
+	}
+	@Override
+	public void setMinAng(float[] v) throws PAModelException
+	{
+		_minang.set(v);
+	}
+	@Override
+	public float getRegMaxMW(int ndx) throws PAModelException
+	{
+		return _maxmw.get(ndx);
+	}
+	@Override
+	public float[] getRegMaxMW() throws PAModelException
+	{
+		return _maxmw.get();
+	}
+	@Override
+	public void setRegMaxMW(int ndx, float mw) throws PAModelException
+	{
+		_maxmw.set(ndx, mw);
+	}
+	@Override
+	public void setRegMaxMW(float[] mw) throws PAModelException
+	{
+		_maxmw.set(mw);
+	}
+	@Override
+	public float getRegMinMW(int ndx) throws PAModelException
+	{
+		return _minmw.get(ndx);
+	}
+	@Override
+	public void setRegMinMW(int ndx, float mw) throws PAModelException
+	{
+		_minmw.set(ndx, mw);
+	}
+	@Override
+	public float[] getRegMinMW() throws PAModelException
+	{
+		return _minmw.get();
+	}
+	@Override
+	public void setRegMinMW(float[] mw) throws PAModelException
+	{
+		_minmw.set(mw);
 	}
 }

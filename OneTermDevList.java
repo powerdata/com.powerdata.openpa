@@ -162,27 +162,27 @@ public class OneTermDevList extends AbstractList<OneTermDev> implements OneTermD
 	}
 
 	@Override
-	public boolean isOutOfSvc(int ndx) throws PAModelException
+	public boolean isInService(int ndx) throws PAModelException
 	{
-		return _src.isOutOfSvc(ndx);
+		return _src.isInService(ndx);
 	}
 
 	@Override
-	public void setOutOfSvc(int ndx, boolean state) throws PAModelException
+	public void setInService(int ndx, boolean state) throws PAModelException
 	{
-		_src.setOutOfSvc(ndx, state);
+		_src.setInService(ndx, state);
 	}
 
 	@Override
-	public boolean[] isOutOfSvc() throws PAModelException
+	public boolean[] isInService() throws PAModelException
 	{
-		return _src.isOutOfSvc();
+		return _src.isInService();
 	}
 
 	@Override
-	public void setOutOfSvc(boolean[] state) throws PAModelException
+	public void setInService(boolean[] state) throws PAModelException
 	{
-		_src.setOutOfSvc(state);
+		_src.setInService(state);
 	}
 
 	@Override

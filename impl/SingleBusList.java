@@ -10,7 +10,7 @@ import com.powerdata.openpa.BusGrpMapBldr;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.GroupListI;
-import com.powerdata.openpa.Island;
+import com.powerdata.openpa.ElectricalIsland;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
 import com.powerdata.openpa.PAModelException;
@@ -76,7 +76,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	@Override
 	public String getID(int ndx) throws PAModelException
 	{
-		if(_id.rw == null) createNames();
+		if(_name.rw == null) createNames();
 		return super.getID(ndx);
 	}
 
@@ -245,7 +245,7 @@ public class SingleBusList extends GroupListI<Bus> implements BusList
 	}
 
 	@Override
-	public Island getIsland(int ndx) throws PAModelException
+	public ElectricalIsland getIsland(int ndx) throws PAModelException
 	{
 		return getBuses(ndx).getIsland(0);
 	}

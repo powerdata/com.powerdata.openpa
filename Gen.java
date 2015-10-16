@@ -9,6 +9,7 @@ public class Gen extends OneTermDev
 	
 	public enum Mode
 	{
+		/** Unknown */ Unknown,
 		/** Off */ OFF, 
 		/** On in unknown mode */ ON, 
 		/** On with manual active power setpoint */ MAN, 
@@ -159,7 +160,7 @@ public class Gen extends OneTermDev
 	
 	public boolean isGenerating() throws PAModelException
 	{
-		return !isOutOfSvc() && GenModes.contains(getMode());
+		return isInService() && GenModes.contains(getMode());
 	}
 
 }

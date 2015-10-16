@@ -23,7 +23,7 @@ public class SVCListI extends OneTermDevListI<SVC> implements SVCList
 		@Override
 		public ColumnMeta q() {return ColumnMeta.SvcQ;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SvcOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.SvcINSVC;}
 	};
 
 	BusList _buses;

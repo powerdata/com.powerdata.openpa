@@ -65,13 +65,25 @@ public class BPrime extends SpSymFltMatrix
 	 */
 	public BPrime(PAModel model) throws PAModelException
 	{
+		/* Organize buses into a single-bus (study) topology */
 		BusRefIndex bri = BusRefIndex.CreateFromSingleBuses(model);
 		BusList buses = bri.getBuses();
+		
+		/* restrict branches to those in-service */
 		Set<ACBranchList> branches = SubLists.getBranchInsvc(model.getACBranches());
+		
+		/* create an element builder suitable for b' */
 		MatrixElementBuilder bldr = new MatrixElementBuilder(buses.size(), 
 			branches.stream().mapToInt(i -> i.size()).sum());
+		
+		/*
+		 * Create adjacenies for all the AC branches. This also has the ability
+		 * to create the matrix elements at the same time for convenience
+		 */
 		ACBranchAdjacencies adj = new ACBranchAdjacencies(
 			ACBranchExtList.LoadExtension(branches, bri),buses, bldr);
+		
+		/* construct the actual matrix with both adjacencies and values */
 		construct(adj, bldr);
 	}
 	
@@ -111,5 +123,6 @@ public class BPrime extends SpSymFltMatrix
 		bp.dump(m.getSingleBus().getName(), pw);
 		pw.flush();
 		pw.close();
+		
 	}
 }

@@ -19,7 +19,7 @@ public class PAModelI implements PAModel
 	private BusListI 			_buses;
 	private SwitchList			_switches;
 	private LineList			_lines;
-	private IslandList			_islands;
+	private ElectricalIslandList			_islands;
 	private AreaList			_areas;
 	private OwnerList			_owners;
 	private StationList 		_stations;
@@ -83,7 +83,7 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	public IslandList getIslands() throws PAModelException
+	public ElectricalIslandList getElectricalIslands() throws PAModelException
 	{
 		if (_islands == null) _islands = _bldr.loadIslands();
 		return _islands;
@@ -313,7 +313,6 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	@Nodump
 	public SingleBusList getSingleBus() throws PAModelException
 	{
 		if (_sbus == null)
@@ -348,7 +347,7 @@ public class PAModelI implements PAModel
 	}
 	
 	@Override
-	public GroupList createGroups(BusGrpMap map)
+	public GroupList createGroups(GroupIndex map)
 	{
 		return new GroupList(this, map);
 	}

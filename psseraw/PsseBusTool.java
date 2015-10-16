@@ -1,76 +1,87 @@
 package com.powerdata.openpa.psseraw;
 
+import java.io.IOException;
+import com.powerdata.openpa.psseraw.PsseRepository.CaseFormat;
+import com.powerdata.openpa.psseraw.PsseRepository.PsmFormat;
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseBusTool implements PsseEquipment 
+public class PsseBusTool extends PsseEquipment 
 {
-	protected static TObjectIntMap<String> _fldMap;
+	static String _ShuntFmt = "\"%s\",\"%s\",\"%s\",%s,false,,,\n";
+
+	int _i;
+	int _name;
+	int _baskv;
+	int _owner;
+	int _area;
+	int _zone;
+	int _vm, _va, _bl;
 	
-	protected String _id;
-	protected String _name;
-	protected String _baskv;
-	protected String _owner;
-	protected String _area;
-	
-	public PsseBusTool(String i, String name, String baskv, String area, String owner)
+	public PsseBusTool(PsseClass pc, PsseRepository rep) throws IOException
 	{
-		_id = i;
-		_name = name;
-		_baskv = baskv;
-		_owner = owner;
-		_area = area;
-	}
-	
-	public PsseBusTool(PsseField[] fld, String[] record)
-	{
-		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
+		super(rep);
+		TObjectIntMap<String> fldMap = PsseEquipment.buildMap(pc.getLines());
+		_i = fldMap.get("i");
+		_name = fldMap.get("name");
+		_baskv = fldMap.get("baskv");
+		_owner = fldMap.get("owner");
+		_area = fldMap.get("area");
+		_zone = fldMap.get("zone");
+		_vm = fldMap.get("vm");
+		_va = fldMap.get("va");
+		_bl = fldMap.get("bl");
 		
-		_id 	= record[_fldMap.get("i")];
-		_name	= record[_fldMap.get("name")];
-		_baskv 	= record[_fldMap.get("baskv")];
-		_owner	= record[_fldMap.get("owner")];
-		_area   = record[_fldMap.get("area")];
-	}
-	
-	public PsseBusTool(String[] record)
-	{
-		if(_fldMap == null) 
-		{
-			System.err.println("[PsseBusTool.java] Cannot create bus. No field map found.");
-		}
-		else
-		{
-			_id 	= record[_fldMap.get("i")];
-			_name	= record[_fldMap.get("name")];
-			_baskv 	= record[_fldMap.get("baskv")];
-			_owner	= record[_fldMap.get("owner")];
-			_area 	= record[_fldMap.get("area")];
-		}
-	}
-	
-	public String toCsv()
-	{
-		return toCsv("");
-	}
-	
-	@Override
-	public String toCsv(String type) 
-	{
-		// ID,Name,NominalKV,Substation,FrequencySourcePriority
-		return String.format("%s,%s,%s,%s_ca,%s_org",
-			_id, _name, _baskv, _area, _owner);
-	}
-	
-	public String getHeaders()
-	{
-		return "ID,Name,NominalKV,Owner,Area";
 	}
 
-	//Getters
-	public String getId() { return _id; }
-	public String getName() { return _name; }
-	public String getBasekv() { return _baskv; }
-	public String getOwner() { return _owner; }
-	public String getArea() {return _area;}
-	public static TObjectIntMap<String> getMap() { return _fldMap; }
+	@Override
+	public void writeRecord(PsseClass pclass, String[] record) 
+		throws PsseProcException
+	{
+		String i = record[_i];
+		String id = mkId(i);
+		String name = record[_name];
+		String ownid = PsseOwnerTool.mkId(record[_owner]);
+		String areaid = PsseAreaTool.mkId(record[_area]);
+		float baskv = getFloat(record[_baskv]);
+		_rep.findWriter(PsmFormat.Node).format("\"%s\",\"%s\",%s,\"%s\",\"%s\",true\n",
+			id, name, record[_baskv],
+			ownid,
+			areaid);
+		_rep.findWriter(CaseFormat.Node).format("\"%s\",%s,%f\n",
+			id, record[_va], getFloat(record[_vm])*baskv);
+		_rep.mapBusInfo(id, name, baskv, ownid, areaid);
+		
+		float bl = getFloat(record[_bl]);
+		String shid = mkShuntId(i), shname = mkShuntName(i);
+		if(bl < 0f)
+		{
+			_rep.findWriter(PsmFormat.ShuntReactor).format(_ShuntFmt,
+				shid, shname, i, _DFmt4.format(bl));
+			_rep.findWriter(CaseFormat.ShuntReactor).format("\"%s\",,true\n", 
+				shid);
+		}
+		else if(bl > 0f)
+		{
+			_rep.findWriter(PsmFormat.ShuntCapacitor).format(_ShuntFmt,
+				shid, shname, i, _DFmt4.format(bl));
+			_rep.findWriter(CaseFormat.ShuntCapacitor).format("\"%s\",,true\n", 
+				shid);
+		}
+	}
+	
+	private String mkShuntName(String i)
+	{
+		return i+"_bsh";
+	}
+
+	private String mkShuntId(String i)
+	{
+		return i+"_bsh";
+	}
+
+	public static String mkId(String i)
+	{
+		return i;
+	}
+	
 }

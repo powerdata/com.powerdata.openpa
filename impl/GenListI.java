@@ -24,7 +24,7 @@ public class GenListI extends OneTermDevListI<Gen> implements GenList
 		@Override
 		public ColumnMeta q() {return ColumnMeta.GenQ;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.GenOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.GenINSVC;}
 	};
 	
 	EnumData<Gen.Type> _type = new EnumData<Gen.Type>(ColumnMeta.GenTYPE);

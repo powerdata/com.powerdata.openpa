@@ -21,7 +21,7 @@ public interface LineList extends ACBranchListIfc<Line>
 			.asList(new ColumnMeta[] { ColumnMeta.LineBFROM,
 					ColumnMeta.LineBTO, ColumnMeta.LineBUSFROM,
 					ColumnMeta.LineBUSTO, ColumnMeta.LineID,
-					ColumnMeta.LineNAME, ColumnMeta.LineOOS,
+					ColumnMeta.LineNAME, ColumnMeta.LineINSVC,
 					ColumnMeta.LinePFROM, ColumnMeta.LinePTO,
 					ColumnMeta.LineQFROM, ColumnMeta.LineQTO, ColumnMeta.LineR,
 					ColumnMeta.LineRATLT, ColumnMeta.LineX }));

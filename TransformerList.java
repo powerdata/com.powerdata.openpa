@@ -3,7 +3,6 @@ package com.powerdata.openpa;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
-import com.powerdata.openpa.TwoTermDev.Side;
 import com.powerdata.openpa.impl.EmptyLists;
 
 public interface TransformerList extends ACBranchListIfc<Transformer>
@@ -14,10 +13,10 @@ public interface TransformerList extends ACBranchListIfc<Transformer>
 	void setRegEnabled(int ndx, boolean enabl) throws PAModelException;
 	boolean[] isRegEnabled() throws PAModelException;
 	void setRegEnabled(boolean[] enabl) throws PAModelException;
-	Side getRegSide(int ndx) throws PAModelException;
-	Side[] getRegSide() throws PAModelException;
-	void setRegSide(int ndx, Side s) throws PAModelException;
-	void setRegSide(Side[] s) throws PAModelException;
+	Bus getTapBus(int ndx) throws PAModelException;
+	Bus[] getTapBus() throws PAModelException;
+	void setTapBus(int ndx, Bus s) throws PAModelException;
+	void setTapBus(Bus[] s) throws PAModelException;
 	float getMinKV(int ndx) throws PAModelException;
 	void setMinKV(int ndx, float kv) throws PAModelException;
 	float[] getMinKV() throws PAModelException;
@@ -59,20 +58,38 @@ public interface TransformerList extends ACBranchListIfc<Transformer>
 	void setToStepSize(int ndx, float step) throws PAModelException;
 	void setToStepSize(float[] step) throws PAModelException;
 	static Set<ColumnMeta> _Cols = EnumSet.copyOf(Arrays
-			.asList(new ColumnMeta[] { ColumnMeta.TfmrANG, ColumnMeta.TfmrBMAG,
-					ColumnMeta.TfmrBUSFROM, ColumnMeta.TfmrBUSTO,
-					ColumnMeta.TfmrGMAG, ColumnMeta.TfmrHASREG,
-					ColumnMeta.TfmrID, ColumnMeta.TfmrMAXREGKV,
-					ColumnMeta.TfmrMINREGKV, ColumnMeta.TfmrMNTPFROM,
-					ColumnMeta.TfmrMNTPTO, ColumnMeta.TfmrMXTPFROM,
-					ColumnMeta.TfmrMXTPTO, ColumnMeta.TfmrNAME,
-					ColumnMeta.TfmrOOS, ColumnMeta.TfmrPFROM,
-					ColumnMeta.TfmrPTO, ColumnMeta.TfmrQFROM,
-					ColumnMeta.TfmrQTO, ColumnMeta.TfmrR, ColumnMeta.TfmrRATLT,
-					ColumnMeta.TfmrREGBUS, ColumnMeta.TfmrREGENAB,
-					ColumnMeta.TfmrREGSIDE, ColumnMeta.TfmrSTEPFROM,
-					ColumnMeta.TfmrSTEPTO, ColumnMeta.TfmrTAPFROM,
-					ColumnMeta.TfmrTAPTO, ColumnMeta.TfmrX }));
+			.asList(new ColumnMeta[] { 
+				ColumnMeta.TfmrID,
+				ColumnMeta.TfmrNAME,
+				ColumnMeta.TfmrBUSFROM,
+				ColumnMeta.TfmrBUSTO,
+				ColumnMeta.TfmrINSVC,
+				ColumnMeta.TfmrPFROM,
+				ColumnMeta.TfmrQFROM,
+				ColumnMeta.TfmrPTO,
+				ColumnMeta.TfmrQTO,
+				ColumnMeta.TfmrR,
+				ColumnMeta.TfmrX,
+				ColumnMeta.TfmrGMAG,
+				ColumnMeta.TfmrBMAG,
+				ColumnMeta.TfmrANG,
+				ColumnMeta.TfmrTAPFROM,
+				ColumnMeta.TfmrTAPTO,
+				ColumnMeta.TfmrRATLT,
+				ColumnMeta.TfmrMINREGKV,
+				ColumnMeta.TfmrMAXREGKV,
+				ColumnMeta.TfmrREGBUS,
+				ColumnMeta.TfmrTAPBUS,
+				ColumnMeta.TfmrREGENAB,
+				ColumnMeta.TfmrHASREG,
+				ColumnMeta.TfmrMNTPFROM,
+				ColumnMeta.TfmrMXTPFROM,
+				ColumnMeta.TfmrMNTPTO,
+				ColumnMeta.TfmrMXTPTO,
+				ColumnMeta.TfmrSTEPFROM,
+				ColumnMeta.TfmrSTEPTO
+			
+			}));
 	@Override
 	default Set<ColumnMeta> getColTypes()
 	{

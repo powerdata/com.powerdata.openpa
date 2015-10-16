@@ -37,7 +37,7 @@ public class AreaListI extends GroupListI<Area> implements AreaList
 	}
 	void setupMap(int[] busref, int ngrp)
 	{
-		_bgmap = new BasicBusGrpMap(getIndexesFromKeys(busref), ngrp);
+		_bgmap = new BasicGroupIndex(getIndexesFromKeys(busref), ngrp);
 	}
 	@Override
 	public Area get(int index)

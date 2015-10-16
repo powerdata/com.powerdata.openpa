@@ -38,7 +38,7 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 		@Override
 		public ColumnMeta insvc()
 		{
-			return ColumnMeta.LoadOOS;
+			return ColumnMeta.LoadINSVC;
 		}
 	};
 	public LoadListI()

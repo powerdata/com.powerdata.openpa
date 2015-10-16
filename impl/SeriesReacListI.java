@@ -14,7 +14,7 @@ public class SeriesReacListI extends ACBranchListI<SeriesReac> implements Series
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.SerreacBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SerreacOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.SerreacINSVC;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.SerreacPFROM;}
 		@Override

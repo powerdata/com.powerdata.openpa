@@ -22,7 +22,7 @@ public class LineListI extends ACBranchListI<Line> implements LineList
 		@Override
 		public ColumnMeta insvc()
 		{
-			return ColumnMeta.LineOOS;
+			return ColumnMeta.LineINSVC;
 		}
 		@Override
 		public ColumnMeta fp()

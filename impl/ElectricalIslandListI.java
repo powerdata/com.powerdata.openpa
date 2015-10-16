@@ -5,8 +5,8 @@ import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.ColumnMeta;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GroupListI;
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIsland;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.PAModelException;
@@ -19,7 +19,7 @@ import com.powerdata.openpa.TwoTermDCLine;
 import com.powerdata.openpa.Gen.Mode;
 import com.powerdata.openpa.Switch.State;
 
-public class IslandListI extends GroupListI<Island> implements IslandList
+public class ElectricalIslandListI extends GroupListI<ElectricalIsland> implements ElectricalIslandList
 {
 	static final PAListEnum _PFld = new PAListEnum()
 	{
@@ -38,7 +38,7 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 	protected FloatData _freq = new FloatData(ColumnMeta.IslandFREQ);
 	BusList _buses;
 	
-	public IslandListI(PAModelI model) throws PAModelException
+	public ElectricalIslandListI(PAModelI model) throws PAModelException
 	{
 		super(model, new BusGrpMapBldr(model)
 		{
@@ -50,45 +50,45 @@ public class IslandListI extends GroupListI<Island> implements IslandList
 			@Override
 			protected boolean incLN(Line d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 			@Override
 			protected boolean incSR(SeriesReac d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 			@Override
 			protected boolean incSC(SeriesCap d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 			@Override
 			protected boolean incTX(Transformer d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 			@Override
 			protected boolean incPS(PhaseShifter d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 			@Override
 			protected boolean incD2(TwoTermDCLine d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 		}.addAll().getMap(), _PFld);
 		_buses = model.getBuses();
 		setupEgStatus();
 	}
-	public IslandListI() 
+	public ElectricalIslandListI() 
 	{
 		super();
 	};
 	@Override
-	public Island get(int index)
+	public ElectricalIsland get(int index)
 	{
-		return new Island(this, index);
+		return new ElectricalIsland(this, index);
 	}
 	void setupEgStatus() throws PAModelException
 	{

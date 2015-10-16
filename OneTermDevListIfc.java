@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-public interface OneTermDevListIfc<T extends OneTermDev> extends OutOfServiceList<T>,OneTermBaseList<T>
+public interface OneTermDevListIfc<T extends OneTermDev> extends InServiceList<T>,OneTermBaseList<T>
 {
 	void setBus(int ndx, Bus b) throws PAModelException;
 	

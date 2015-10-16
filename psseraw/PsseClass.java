@@ -18,7 +18,7 @@ import com.powerdata.openpa.tools.StringParse;
  */
 public class PsseClass
 {
-	protected static final String parseDelim = ",";
+	protected static final String parseDelim = ", ";
 	protected static final char quoteChar = '\'';
 	
 	protected String _classnm;
@@ -86,7 +86,7 @@ public class PsseClass
 		int endofs = rvofs + pl.length;
 		StringParse sp = parseLine(l);
 		while (sp.hasMoreTokens() && rvofs < endofs)
-			rec[rvofs++] = sp.nextToken().trim();
+			rec[rvofs++] = sp.nextToken().trim().replace('"', '_');
 		Arrays.fill(rec, rvofs, endofs, "");
 		return endofs;
 		
@@ -109,6 +109,7 @@ public class PsseClass
 	protected StringParse parseLine(String line)
 	{
 		StringParse sp = new StringParse(line, parseDelim);
+		sp.setMergeDelimiters(true);
 		sp.setQuoteChar(quoteChar);
 		return sp;
 	}

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchList;
+import com.powerdata.openpa.Area;
+import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.OneTermDev;
@@ -65,7 +67,8 @@ public class DetailMismatchReporter implements MismatchReporter
 			_pad = bpad.toString();
 			for (Bus b : _buses)
 			{
-				_pw.format("\"%s\",\"%s\",", b.getID(), b.getArea().getName());
+				Area a = b.getArea();
+				_pw.format("\"%s\",\"%s\",", b.getID(), (a.getIndex() == -1) ? "" : a.getName());
 				if (usesta) _pw.format("\"%s\",", b.getStation().getName());
 				int idx = b.getIndex();
 				_pw.format("\"%s\",\"%s\",%f,%f,%f,%f,%f\n", b.getName(), (type == null) ? "" : type[idx], 

@@ -1,199 +1,120 @@
 package com.powerdata.openpa.psseraw;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import com.powerdata.openpa.psseraw.PsseRepository.BusInfo;
+import com.powerdata.openpa.psseraw.PsseRepository.CaseFormat;
+import com.powerdata.openpa.psseraw.PsseRepository.PsmFormat;
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseGenTool implements PsseEquipment 
+public class PsseGenTool extends PsseEquipment 
 {
-	protected static TObjectIntMap<String> _fldMap;
+	static String IdFmt = "%s-%s-%s";
+	static String CrvFmt = "\"%s\",\"%s\",%s,%s,%s\n";
 	
-	protected String _genId;
-	protected String _synchId;
-	protected String _curveId;
-	protected String _name;
-	protected String _maxOpMw;
-	protected String _minOpMw;
-	protected String _unitType;
-	protected String _ctrlMode;
-	protected String _mw;
-	protected String _mvar;
-	protected String _mwSetPoint;
-	protected String _node;
-	protected String _regNode;
-	protected String _synchOpMode, _genOpMode;
-	protected String _avrMode;
-	protected String _kvSetPoint;
-	protected String _mvarSetPoint;
-	protected String _minMvar;
-	protected String _maxMvar;
+	int _i;
+	int _id;
+	int _pt;
+	int _pb;
+	int _pg;
+	int _qg;
+	int _ireg;
+	int _vs;
+	int _qb;
+	int _qt;
+	int _zr, _zx;
+	int _stat;
 	
-	public PsseGenTool(PsseField[] fld, String[] record)
+	public PsseGenTool(PsseClass pc, PsseRepository rep) throws IOException
 	{
-		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
+		super(rep);
+		TObjectIntMap<String> fldMap = PsseEquipment.buildMap(pc.getLines());
 		
-		String baseId = record[_fldMap.get("id")]+"_"+record[_fldMap.get("i")];
-		_genId = baseId+"_gu";
-		_synchId = baseId+"_sm";
-		_curveId = baseId+"_crv2";
-		
-		_name = record[_fldMap.get("id")];
-		_minOpMw = record[_fldMap.get("pb")];
-		_maxOpMw = record[_fldMap.get("pt")];
-		_unitType = findUnitType();
-		_ctrlMode = "Setpoint";
-		_mw = record[_fldMap.get("pg")];
-		_mwSetPoint = record[_fldMap.get("pg")];
-		_node = record[_fldMap.get("i")];
-		_regNode = record[_fldMap.get("ireg")];
-		_synchOpMode = findSynchOpMode();
-		_genOpMode = findGenOpMode(); 
-		_mvar = record[_fldMap.get("qg")];
-		_minMvar = record[_fldMap.get("qb")];
-		_maxMvar = record[_fldMap.get("qt")];
-		
-		if(_maxMvar.equals(_mvar) && _maxMvar.equals(_minMvar))
-		{
-			_avrMode = "OFF";
-			_kvSetPoint = record[_fldMap.get("vs")];
-			_mvarSetPoint = _kvSetPoint;
-		}
-		else
-		{
-			_avrMode = "ON";
-			_kvSetPoint = record[_fldMap.get("vs")];
-			_mvarSetPoint = "";
-		}
+		_id = fldMap.get("id");
+		_pb = fldMap.get("pb");
+		_pt = fldMap.get("pt");
+		_pg = fldMap.get("pg");
+		_i = fldMap.get("i");
+		_ireg = fldMap.get("ireg");
+		_qg = fldMap.get("qg");
+		_qb = fldMap.get("qb");
+		_qt = fldMap.get("qt");
+		_vs = fldMap.get("vs");
+		_zr = fldMap.get("zr");
+		_zx = fldMap.get("zx");
+		_stat = fldMap.get("stat");
+	}
+
+	static String mkGenId(String busi, String id)
+	{
+		return String.format(IdFmt, "gen", busi, id);
 	}
 	
-	public enum GenFiles
+	static String mkGenName(String busName, String id)
 	{
-		GeneratingUnit,
-		PsmCaseGeneratingUnit,
-		SynchronousMachine,
-		PsmCaseSynchronousMachine,
-		ReactiveCapabilityCurve
+		return String.format("%s-%s", busName, id);
 	}
 	
-	public String findUnitType()
+	static String mkSyncMachId(String busi, String id)
 	{
-		String type;
-		float pb = Float.parseFloat(_minOpMw);
-		float pt = Float.parseFloat(_maxOpMw);
-		if(pb < 0)
-		{
-			type = (!(pt < 1f && pb > -1f))?"Hydro":"Thermal";
-		}
-		else
-		{
-			type = "Thermal";
-		}
-		
-		return type;
-	}
-	public String findSynchOpMode()
-	{
-		float pt = Float.parseFloat(_maxOpMw);
-		float pb = Float.parseFloat(_minOpMw);
-		float pg = Float.parseFloat(_mwSetPoint);
-		
-		if(pt < 1f && pb > -1f)
-		{
-			return "CON";
-		}
-		else if(pb >= 0f && pt >= pb)
-		{
-			return "GEN";
-		}
-		else if(pb < 0f && pt > 0f && pg < 0f)
-		{
-			return "PMP";
-		}
-		else
-		{
-			return "";
-		}
+		return String.format(IdFmt, "sm", busi, id);
 	}
 	
-	public String findGenOpMode()
+	static String mkSyncMachName(String busName, String id)
 	{
-		if(_synchOpMode.equals("GEN"))
-		{
-			float pg = Float.parseFloat(_mwSetPoint);
-			if (pg == 0f)
-				return "OFF";
-			else
-				return "LFC";
-		}
-		return "";
+		return String.format("%s-%s", busName, id);
+	}
+
+	static String mkCurveId(String busi, String id)
+	{
+		return String.format(IdFmt, "smvarcrv", busi, id);
 	}
 	
 	@Override
-	public String toCsv(String file) 
+	public void writeRecord(PsseClass pclass, String[] record) throws PsseProcException
 	{
-		return toCsv(GenFiles.valueOf("type"));
-	}
-	
-	public String toCsv(GenFiles file)
-	{
-		switch(file)
+		String i = record[_i], id = record[_id];
+		String genid = mkGenId(i, id);
+		String smid = mkSyncMachId(i, id);
+		BusInfo binfo = _rep.getBusInfo(i);
+		String busname = binfo.getName();
+		float vs = 1f;
+		String svs = record[_vs];
+		if (svs != null && !svs.isEmpty())
+			vs = Float.parseFloat(svs);
+		String insvc = String.valueOf(record[_stat].equals("1"));
+		_rep.findWriter(PsmFormat.GeneratingUnit).format("\"%s\",\"%s\",%s,%s\n",
+			genid, mkGenName(busname, id), record[_pb], record[_pt]);
+		_rep.findWriter(CaseFormat.GeneratingUnit).format("\"%s\",%s,%s\n", 
+			genid, record[_pg], insvc);
+		
+		String ireg = record[_ireg];
+		
+		_rep.findWriter(PsmFormat.SynchronousMachine).format("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,%s\n",
+			smid, mkSyncMachName(busname, id), i, genid, 
+			ireg.equals("0")?i:ireg, record[_zr], record[_zx]);
+		String qb = record[_qb], qt = record[_qt];
+		String pb = record[_pb], pt = record[_pt];
+		float fqg = getFloat(record[_qg]), fqt = getFloat(qt), fqb = getFloat(qb);
+		boolean qsame = fqg == fqt && fqg == fqb;
+		boolean avr = true, nocrv = false;
+		if(qsame)
 		{
-		case GeneratingUnit:
-			String g[] = {_genId, _name, _minOpMw, _maxOpMw, _unitType, _ctrlMode};
-			return arrayToCsv(g);
-		case PsmCaseGeneratingUnit:
-			String cg[] = {_genId, _mw, _mwSetPoint, _genOpMode};
-			return arrayToCsv(cg);
-		case SynchronousMachine:
-			String s[] = {_synchId, _name, _node, _genId, _regNode};
-			return arrayToCsv(s);
-		case PsmCaseSynchronousMachine:
-			String cs[] = {_synchId, _avrMode, _kvSetPoint, _mvarSetPoint, _mvar};
-			return arrayToCsv(cs);
-		case ReactiveCapabilityCurve:
-			String r[] = {_curveId, _synchId, _mw, _minMvar, _maxMvar};
-			return arrayToCsv(r);
-		default:
-			return null;
+			nocrv = true;
+			if(fqg != 0f) avr = false;
 		}
-	}
-	
-	public String getHeaders(GenFiles file)
-	{
-		switch(file)
-		{
-		case GeneratingUnit:
-			return "ID,Name,MinOperatingMW,MaxOperatingMW,GeneratingUnitType,GenControlMode";
-		case PsmCaseGeneratingUnit:
-			return "ID,MW,MWSetPoint,GeneratorOperatingMode";
-		case PsmCaseSynchronousMachine:
-			return "ID,SynchronousMachineOperatingMode,AVRMode,KVSetpoint,MVAr";
-		case ReactiveCapabilityCurve:
-			return "ID,SynchronousMachine,MW,MinMVAr,MaxMVAr";
-		case SynchronousMachine:
-			return "ID,Name,Node,GeneratingUnit,RegulatedNode";
-		default:
-			return "";
-		}
-	}
 
-	// Getters
-	public String getGenId() { return _genId; }
-	public String getSynchId() { return _synchId; }
-	public String getCurveId() { return _curveId; }
-	public String getName() { return _name; }
-	public String getMaxOperatingMw() { return _maxOpMw; }
-	public String getMinOperatingMw() { return _minOpMw; }
-	public String getGenUnitType() { return _unitType; }
-	public String getGenControlMode() { return _ctrlMode; }
-	public String getMw() { return _mw; }
-	public String getMvar() { return _mvar; }
-	public String getMwSetPoint() { return _mwSetPoint; }
-	public String getNode() { return _node; }
-	public String getRegulatingNode() { return _regNode; }
-	public String getSynchronousOpMode() { return _synchOpMode; }
-	public String getAvrMode() { return _avrMode; }
-	public String getKvSetPoint() { return _kvSetPoint; }
-	public String getMvarSetPoint() { return _mvarSetPoint; }
-	public String getMinMvar() { return _minMvar; }
-	public String getMaxMvar() { return _maxMvar; }
-	public static TObjectIntMap<String> getMap() { return _fldMap; }
+		_rep.findWriter(CaseFormat.SynchronousMachine).format("\"%s\",%s,%s,%s,%s,%s\n",
+			smid, Boolean.toString(avr), vs * binfo.getBaskv(), avr ? "" : record[_qg],record[_qg], insvc);
+		
+		if (!nocrv)
+		{
+			PrintWriter crv = _rep.findWriter(PsmFormat.ReactiveCapabilityCurve);
+			String crvid = mkCurveId(i, id);
+			crv.format(CrvFmt, crvid, smid, pb, qb, qt);
+			crv.format(CrvFmt, crvid, smid, pt, qb, qt);
+		}
+		
+	}
+	
 }

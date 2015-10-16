@@ -53,14 +53,14 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		D2
 	}
 	
-	protected BusGrpMap _bgmap;
+	protected GroupIndex _bgmap;
 	WeakReference<List<int[]>> _areamap = new WeakReference<>(null);
 
 	protected GroupListI() {super();}
 	
 	PALists _lmodel;
 	
-	protected GroupListI(PALists model, int[] keys, BusGrpMap busgrp)
+	protected GroupListI(PALists model, int[] keys, GroupIndex busgrp)
 	{
 		super(null, keys, null);
 		_lmodel = model;
@@ -68,7 +68,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	protected GroupListI(PALists model, BusGrpMap busgrp)
+	protected GroupListI(PALists model, GroupIndex busgrp)
 	{
 		super(null, busgrp.size(), null);
 		_lmodel = model;
@@ -76,7 +76,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	protected GroupListI(PAModelI model, int[] keys, BusGrpMap busgrp, PAListEnum pfld)
+	protected GroupListI(PAModelI model, int[] keys, GroupIndex busgrp, PAListEnum pfld)
 	{
 		super(model, keys, pfld);
 		_lmodel = model;
@@ -84,7 +84,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		Arrays.fill(_lstref, new WeakReference<>(null));
 	}
 
-	protected GroupListI(PAModelI model, BusGrpMap busgrp, PAListEnum pfld)
+	protected GroupListI(PAModelI model, GroupIndex busgrp, PAListEnum pfld)
 	{
 		super(model, busgrp.size(), pfld);
 		_lmodel = model;

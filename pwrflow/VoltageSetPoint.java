@@ -11,14 +11,14 @@ import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.BusGrpMap;
+import com.powerdata.openpa.GroupIndex;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
-import com.powerdata.openpa.Island;
+import com.powerdata.openpa.ElectricalIsland;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
-import com.powerdata.openpa.impl.BasicBusGrpMap;
+import com.powerdata.openpa.impl.BasicGroupIndex;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 
 
@@ -40,9 +40,9 @@ public class VoltageSetPoint
 	/** remote regulated buses */
 	int[] _rmtregbus;
 	/** map _rmtregbus to set of local PV buses */
-	BusGrpMap _rmtregmap;
+	GroupIndex _rmtregmap;
 	/** map islands to _rmtregbus */
-	BusGrpMap _rmtregbyisl;
+	GroupIndex _rmtregbyisl;
 	/** remote setpoints */
 	float[] _rmtvsp;
 	
@@ -81,7 +81,7 @@ public class VoltageSetPoint
 			}
 			for(SVC c : b.getSVCs())
 			{
-				if (!c.isOutOfSvc() && c.isRegKV() && c.getSlope() == 0f)
+				if (c.isInService() && c.isRegKV() && c.getSlope() == 0f)
 				{
 					Bus regbus = c.getRegBus();
 					float v = c.getVS() / regbus.getVoltageLevel().getBaseKV();
@@ -92,7 +92,8 @@ public class VoltageSetPoint
 			_vsp[i] = vsp/((float) ngen);
 		}
 		
-		processRemote(rgens, nIslands);
+		//TODO: restore this, buggy when no regulated bus specified
+//		processRemote(rgens, nIslands);
 	}
 	
 	static class RmtVsp
@@ -156,8 +157,8 @@ public class VoltageSetPoint
 		}
 		_rmtregbus = rmtregbus.toArray();
 		int nrmt = rmtregbus.size();
-		_rmtregmap = new BasicBusGrpMap(rmtregmap, nrmt);
-		_rmtregbyisl = new BasicBusGrpMap(rmtregbyisl.toArray(), nIslands);
+		_rmtregmap = new BasicGroupIndex(rmtregmap, nrmt);
+		_rmtregbyisl = new BasicGroupIndex(rmtregbyisl.toArray(), nIslands);
 		_rmtvsp = new float[nrmt];
 		for(int i=0; i < nrmt; ++i)
 		{
@@ -235,7 +236,7 @@ public class VoltageSetPoint
 		}
 	}
 
-	void applyIslandRemote(float[] vm, Island island)
+	void applyIslandRemote(float[] vm, ElectricalIsland island)
 	{
 		int[] ibus = _rmtregbyisl.map().get(island.getIndex());
 		for(int rb : ibus)

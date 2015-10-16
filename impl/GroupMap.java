@@ -68,8 +68,7 @@ public class GroupMap extends AbstractList<int[]>
 		return rv;
 	}
 	
-	//TODO:  This should not have to be public after pss/e api is retired
-	public void fill(int[] rv, int ofs, int grpndx)
+	protected void fill(int[] rv, int ofs, int grpndx)
 	{
 		int s = start[grpndx];
 		while (s != -1)

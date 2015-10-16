@@ -8,7 +8,7 @@ import java.util.List;
  * @author chris@powerdata.com
  *
  */
-public interface BusGrpMap
+public interface GroupIndex
 {
 	int size();
 
@@ -18,7 +18,7 @@ public interface BusGrpMap
 	List<int[]> map();
 	
 	
-	public static BusGrpMap Empty = new BusGrpMap()
+	public static GroupIndex Empty = new GroupIndex()
 	{
 		@Override
 		public int size() {return 0;}

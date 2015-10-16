@@ -18,7 +18,7 @@ public class GroupList extends GroupListI<Group>
 	 * @param lists Set of lists used to form groups and provide equipment sublists
 	 * @param busgrp Map from bus to group
 	 */
-	public GroupList(PALists lists, BusGrpMap busgrp)
+	public GroupList(PALists lists, GroupIndex busgrp)
 	{
 		super(lists, busgrp);
 	}
@@ -29,7 +29,7 @@ public class GroupList extends GroupListI<Group>
 	 * @param keys Set of keys to assign each group
 	 * @param busgrp Map from bus to group
 	 */
-	public GroupList(PALists model, int[] keys, BusGrpMap busgrp)
+	public GroupList(PALists model, int[] keys, GroupIndex busgrp)
 	{
 		super(model, keys, busgrp);
 	}

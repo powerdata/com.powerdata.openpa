@@ -3,11 +3,11 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.TwoTermBaseList.TwoTermBase;
 
 
-public class TwoTermDev extends OutOfService implements TwoTermBase
+public class TwoTermDev extends InService implements TwoTermBase
 {
 	TwoTermDevListIfc<? extends TwoTermDev> _list;
 	
-	public enum Side {From,To};
+//	public enum Side {From,To};
 	
 	public TwoTermDev(TwoTermDevListIfc<? extends TwoTermDev> list, int ndx)
 	{

@@ -12,7 +12,7 @@ public interface SeriesReacList extends ACBranchListIfc<SeriesReac>
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SerreacBUSFROM,
 					ColumnMeta.SerreacBUSTO, ColumnMeta.SerreacID,
-					ColumnMeta.SerreacNAME, ColumnMeta.SerreacOOS,
+					ColumnMeta.SerreacNAME, ColumnMeta.SerreacINSVC,
 					ColumnMeta.SerreacPFROM, ColumnMeta.SerreacPTO,
 					ColumnMeta.SerreacQFROM, ColumnMeta.SerreacQTO,
 					ColumnMeta.SerreacR, ColumnMeta.SerreacRATLT,

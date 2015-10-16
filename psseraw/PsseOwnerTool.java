@@ -1,37 +1,32 @@
 package com.powerdata.openpa.psseraw;
 
+import java.io.IOException;
+import com.powerdata.openpa.psseraw.PsseRepository.PsmFormat;
 import gnu.trove.map.TObjectIntMap;
 
-public class PsseOwnerTool implements PsseEquipment 
+public class PsseOwnerTool extends PsseEquipment 
 {
-	protected static TObjectIntMap<String> _fldMap;
+	int _i, _namex;
 	
-	
-	protected String _id;
-	protected String _name;
-	
-	public PsseOwnerTool(PsseField[] fld, String[] record) 
+	public PsseOwnerTool(PsseClass pc, PsseRepository rep) throws IOException 
 	{
-		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
-		
-		_id = record[_fldMap.get("i")]+"_org";
-		_name = record[_fldMap.get("owname")];
+		super(rep);
+		TObjectIntMap<String> fldMap = PsseEquipment.buildMap(pc.getLines());
+		_i = fldMap.get("i");
+		_namex = fldMap.get("owname");
+	}
+
+	static public String mkId(String psseId)
+	{
+		return new StringBuilder(psseId).append("_org").toString();
 	}
 
 	@Override
-	public String toCsv(String type) 
+	public void writeRecord(PsseClass pclass, String[] record)
+		throws PsseProcException
 	{
-		return toCSV();
-	}
-	
-	public String toCSV()
-	{ 
-		return _id+","+_name;
-	}
-	
-	public String getHeaders()
-	{
-		return "ID,Name";
+		_rep.findWriter(PsmFormat.Organization).format(
+			"\"%s\",\"%s\"\n", mkId(record[_i]), record[_namex]);
 	}
 
 }

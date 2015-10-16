@@ -2,10 +2,10 @@ package com.powerdata.openpa.impl;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import com.powerdata.openpa.BusGrpMap;
+import com.powerdata.openpa.GroupIndex;
 
 
-public class BasicBusGrpMap implements BusGrpMap
+public class BasicGroupIndex implements GroupIndex
 {
 	
 	protected WeakReference<List<int[]>> _grps = new WeakReference<>(null);
@@ -13,13 +13,13 @@ public class BasicBusGrpMap implements BusGrpMap
 	protected int[] _map;
 	protected int _ngrp;
 	
-	public BasicBusGrpMap()
+	public BasicGroupIndex()
 	{
 		_ngrp = 0;
 		_map = null;
 	}
 	
-	public BasicBusGrpMap(int[] map, int ngrp)
+	public BasicGroupIndex(int[] map, int ngrp)
 	{
 		_map = map;
 		_ngrp = ngrp;

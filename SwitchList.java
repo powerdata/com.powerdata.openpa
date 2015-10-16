@@ -29,7 +29,7 @@ public interface SwitchList extends TwoTermDevListIfc<Switch>
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SwBUSFROM,
 					ColumnMeta.SwBUSTO, ColumnMeta.SwENAB, ColumnMeta.SwID,
-					ColumnMeta.SwNAME, ColumnMeta.SwOOS, ColumnMeta.SwOPLD,
+					ColumnMeta.SwNAME, ColumnMeta.SwINSVC, ColumnMeta.SwOPLD,
 					ColumnMeta.SwPFROM, ColumnMeta.SwPTO, ColumnMeta.SwQFROM,
 					ColumnMeta.SwQTO, ColumnMeta.SwTRTIME}));
 	@Override

@@ -8,8 +8,8 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import com.powerdata.openpa.Bus;
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIsland;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.pwrflow.Mismatch.WorstMM;
 
@@ -35,7 +35,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		float getVM();
 	}
 	
-	IslandList _islands;
+	ElectricalIslandList _islands;
 	Status[] _status;
 	Mismatch _pmm, _qmm;
 	WorstMM[] _pw, _qw;
@@ -46,7 +46,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 	int[] _niter;
 	BusTypeUtil _btu;
 	
-	public ConvergenceList(IslandList hotislands, BusTypeUtil btu,
+	public ConvergenceList(ElectricalIslandList hotislands, BusTypeUtil btu,
 			Mismatch pmm, Mismatch qmm, float ptol, float qtol, float[] vm)
 	{
 		
@@ -148,7 +148,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		{
 			return _wvolt;
 		}
-		public Island getIsland()
+		public ElectricalIsland getIsland()
 		{
 			return _islands.get(_ndx);
 		}
@@ -201,7 +201,7 @@ public class ConvergenceList extends AbstractList<com.powerdata.openpa.pwrflow.C
 		
 		for(int i=0; i < nislands; ++i)
 		{
-			Island island = _islands.get(i);
+			ElectricalIsland island = _islands.get(i);
 			if (_status[i] == Status.NoReferenceBus || _status[i] == Status.Converge)
 				continue;
 			/* first check voltage problems */

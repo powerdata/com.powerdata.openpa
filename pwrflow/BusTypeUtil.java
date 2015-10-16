@@ -15,8 +15,8 @@ import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
 import com.powerdata.openpa.Group;
 import com.powerdata.openpa.GroupList;
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIsland;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.LineList;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
@@ -54,7 +54,7 @@ public class BusTypeUtil
 		int[] sx = new int[nsvc];
 		for(SVC s : svcs)
 		{
-			if (s.getSlope() == 0f && !s.isOutOfSvc())
+			if (s.getSlope() == 0f && s.isInService())
 				sx[npv++] = s.getIndex();
 		}
 		setup(bri, SubLists.getSVCSublist(svcs, sx));
@@ -72,7 +72,7 @@ public class BusTypeUtil
 		int nbus = buses.size();
 		_type = new int[nbus];
 		_itype = new int[nbus];
-		IslandList islands = _model.getIslands();
+		ElectricalIslandList islands = _model.getElectricalIslands();
 		_nisland = islands.size();
 		_nigrp = _nisland * NGRP;
 		
@@ -94,37 +94,37 @@ public class BusTypeUtil
 			@Override
 			protected boolean incLN(Line d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 
 			@Override
 			protected boolean incSR(SeriesReac d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 
 			@Override
 			protected boolean incSC(SeriesCap d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 
 			@Override
 			protected boolean incTX(Transformer d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 
 			@Override
 			protected boolean incPS(PhaseShifter d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}
 
 			@Override
 			protected boolean incD2(TwoTermDCLine d) throws PAModelException
 			{
-				return !d.isOutOfSvc();
+				return d.isInService();
 			}}
 			.addPhaseShifters()
 			.addSeriesCap()
@@ -133,7 +133,7 @@ public class BusTypeUtil
 			.addTransformers().getMap());
 
 		float[] pmax = new float[nbus], qmax = new float[nbus];
-		for(Island i : islands)
+		for(ElectricalIsland i : islands)
 		{
 			if (i.isEnergized()) configureTypes(i, bri, pmax, qmax, svcpv);
 		}
@@ -157,7 +157,7 @@ public class BusTypeUtil
 		
 	}
 	
-	void findWidestPaths(GroupList glist, BusList sbuses, IslandList islands,
+	void findWidestPaths(GroupList glist, BusList sbuses, ElectricalIslandList islands,
 			float[] pmax, float[] qmax) throws PAModelException
 	{
 		int ni = islands.size();
@@ -236,7 +236,7 @@ public class BusTypeUtil
 		return t + NGRP * i;
 	}
 	
-	void configureTypes(Island island, BusRefIndex bri, float[] pmax, float[] qmax, SVCList svcpv)
+	void configureTypes(ElectricalIsland island, BusRefIndex bri, float[] pmax, float[] qmax, SVCList svcpv)
 			throws PAModelException
 	{
 		GenList gens = island.getGenerators();
@@ -264,7 +264,7 @@ public class BusTypeUtil
 		BusList sbus = bri.getBuses();
 		for (SVC s : svcpv)
 		{
-			if (!s.isOutOfSvc())
+			if (s.isInService())
 			{
 				int bx = sbus.getByBus(s.getBus()).getIndex(); 
 				_type[bx] = PV;
@@ -278,7 +278,7 @@ public class BusTypeUtil
 		Complex ysum = new Complex(0,0);
 		for(ACBranch b : lines)
 		{
-			if (!b.isOutOfSvc())
+			if (b.isInService())
 				ysum = ysum.add(new Complex(b.getR(), b.getX()).inv());
 		}
 		return ysum.abs();
@@ -295,7 +295,7 @@ public class BusTypeUtil
 		return m.get(type.ordinal());
 	}
 	
-	int[] getBuses(BusType type, Island island)
+	int[] getBuses(BusType type, ElectricalIsland island)
 	{
 		GroupMap m = _imap.get();
 		if (m == null)

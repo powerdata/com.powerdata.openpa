@@ -3,7 +3,7 @@ package com.powerdata.openpa.impl;
 import com.powerdata.openpa.Area;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
-import com.powerdata.openpa.Island;
+import com.powerdata.openpa.ElectricalIsland;
 import com.powerdata.openpa.ListMetaType;
 import com.powerdata.openpa.Owner;
 import com.powerdata.openpa.PAModelException;
@@ -101,7 +101,7 @@ public class BusSubList extends GroupSubList<Bus> implements BusList
 	}
 
 	@Override
-	public Island getIsland(int ndx) throws PAModelException
+	public ElectricalIsland getIsland(int ndx) throws PAModelException
 	{
 		return _src.getIsland(_ndx[ndx]);
 	}

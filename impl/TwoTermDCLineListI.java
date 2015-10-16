@@ -18,7 +18,7 @@ public class TwoTermDCLineListI extends TwoTermDevListI<TwoTermDCLine> implement
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.T2dcBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.T2dcOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.T2dcINSVC;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.T2dcPFROM;}
 		@Override

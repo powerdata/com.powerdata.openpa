@@ -5,7 +5,7 @@ import java.util.EnumSet;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.Gen;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
@@ -46,7 +46,7 @@ public class GenVarMonitor extends BusMonitor
 		return rv;
 	};
 	
-	public GenVarMonitor(IslandList hotislands, BusTypeUtil btu, BusList buses,
+	public GenVarMonitor(ElectricalIslandList hotislands, BusTypeUtil btu, BusList buses,
 			SpSymFltMatrix bpp, Action pv2pq, Action pq2pv)
 			throws PAModelException
 	{
@@ -100,7 +100,7 @@ public class GenVarMonitor extends BusMonitor
 			}
 			for(SVC s : bus.getSVCs())
 			{
-				if (!s.isOutOfSvc() && s.isRegKV())
+				if (s.isInService() && s.isRegKV())
 				{
 					mnq += PAMath.mva2pu(s.getMinQ(), _sbase);
 					mxq += PAMath.mva2pu(s.getMaxQ(), _sbase);

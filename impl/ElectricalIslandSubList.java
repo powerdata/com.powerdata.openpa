@@ -1,13 +1,13 @@
 package com.powerdata.openpa.impl;
 
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIsland;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.PAModelException;
 
-public class IslandSubList extends GroupSubList<Island> implements IslandList
+public class ElectricalIslandSubList extends GroupSubList<ElectricalIsland> implements ElectricalIslandList
 {
-	IslandList _src;
-	public IslandSubList(IslandList src, int[] ndx)
+	ElectricalIslandList _src;
+	public ElectricalIslandSubList(ElectricalIslandList src, int[] ndx)
 	{
 		super(src, ndx);
 		_src = src;
@@ -51,8 +51,8 @@ public class IslandSubList extends GroupSubList<Island> implements IslandList
 	}
 
 	@Override
-	public Island get(int index)
+	public ElectricalIsland get(int index)
 	{
-		return new Island(this, index);
+		return new ElectricalIsland(this, index);
 	}
 }

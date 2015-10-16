@@ -28,7 +28,7 @@ public class Psse2CSV extends PsseProcessor
 	}
 
 	@Override
-	protected PsseRecWriter getWriter(String psseClassName) {return _wrtr;}
+	protected PsseRecWriter getWriter(String pclass) {return _wrtr;}
 
 	public void cleanup() {_wrtr.cleanup();}
 
@@ -172,7 +172,6 @@ class PsseCSVWriter implements PsseRecWriter
 		}
 	}
 
-	@Override
 	public void cleanup()
 	{
 		for (PrintWriter pw : _fmap.values())

@@ -8,7 +8,7 @@ import java.util.Iterator;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.BusRefIndex;
-import com.powerdata.openpa.Island;
+import com.powerdata.openpa.ElectricalIsland;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.tools.PAMath;
 
@@ -148,7 +148,7 @@ public class Mismatch
 	 * Find the worst mismatch for the set of buses configured
 	 * @return worst mismatch value
 	 */
-	public WorstMM test(Island i)
+	public WorstMM test(ElectricalIsland i)
 	{
 		float wval = 0f;
 		int wndx = -1;
@@ -180,7 +180,7 @@ public class Mismatch
 	/**
 	 * Get the bus types configured for testing 
 	 */
-	public Collection<int[]> getTestBuses(Island i)
+	public Collection<int[]> getTestBuses(ElectricalIsland i)
 	{
 		return new AbstractCollection<int[]>()
 		{

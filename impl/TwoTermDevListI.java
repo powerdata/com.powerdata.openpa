@@ -8,7 +8,7 @@ import com.powerdata.openpa.TwoTermDev;
 import com.powerdata.openpa.TwoTermDevListIfc;
 
 public abstract class TwoTermDevListI<T extends TwoTermDev> extends
-		OutOfServiceListI<T> implements TwoTermDevListIfc<T>
+		InServiceListI<T> implements TwoTermDevListIfc<T>
 {
 	BusList _buses;
 	
@@ -170,7 +170,7 @@ public abstract class TwoTermDevListI<T extends TwoTermDev> extends
 	{
 		_tq.set(mvar);
 	}
-	interface TwoTermDevEnum extends OutOfServiceEnum
+	interface TwoTermDevEnum extends InServiceEnum
 	{
 		ColumnMeta fbus();
 		ColumnMeta tbus();

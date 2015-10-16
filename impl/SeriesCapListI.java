@@ -14,7 +14,7 @@ public class SeriesCapListI extends ACBranchListI<SeriesCap> implements SeriesCa
 		@Override
 		public ColumnMeta tbus() {return ColumnMeta.SercapBUSTO;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.SercapOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.SercapINSVC;}
 		@Override
 		public ColumnMeta fp() {return ColumnMeta.SercapPFROM;}
 		@Override

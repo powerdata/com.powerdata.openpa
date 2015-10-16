@@ -36,7 +36,7 @@ public class OwnerListI extends GroupListI<Owner> implements OwnerList
 	}
 	void setupMap(int[] busref, int ngrp)
 	{
-		_bgmap = new BasicBusGrpMap(getIndexesFromKeys(busref), ngrp);
+		_bgmap = new BasicGroupIndex(getIndexesFromKeys(busref), ngrp);
 	}
 	@Override
 	public Owner get(int index)

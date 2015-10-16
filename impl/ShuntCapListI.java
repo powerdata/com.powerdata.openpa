@@ -20,7 +20,7 @@ public class ShuntCapListI extends FixedShuntListI<ShuntCapacitor> implements Sh
 		@Override
 		public ColumnMeta q() {return ColumnMeta.ShcapQ;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.ShcapOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.ShcapINSVC;}
 		@Override
 		public ColumnMeta b() {return ColumnMeta.ShcapB;}
 	};

@@ -12,7 +12,7 @@ public interface TwoTermDCLineList extends TwoTermDevListIfc<TwoTermDCLine>
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.T2dcBUSFROM,
 					ColumnMeta.T2dcBUSTO, ColumnMeta.T2dcID,
-					ColumnMeta.T2dcNAME, ColumnMeta.T2dcOOS,
+					ColumnMeta.T2dcNAME, ColumnMeta.T2dcINSVC,
 					ColumnMeta.T2dcPFROM, ColumnMeta.T2dcPTO,
 					ColumnMeta.T2dcQFROM, ColumnMeta.T2dcQTO }));
 	@Override

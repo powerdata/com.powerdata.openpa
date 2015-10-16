@@ -1,82 +1,44 @@
 package com.powerdata.openpa.psseraw;
 
 import gnu.trove.map.TObjectIntMap;
+import java.io.IOException;
+import com.powerdata.openpa.psseraw.PsseRepository.CaseFormat;
+import com.powerdata.openpa.psseraw.PsseRepository.PsmFormat;
 
-public class PsseLoadTool implements PsseEquipment 
+public class PsseLoadTool extends PsseEquipment 
 {
-	protected static TObjectIntMap<String> _fldMap;
-	
-	protected String _id;
-	protected String _name;
-	protected String _node;
-	protected String _mw;
-	protected String _mvar;
-	
-	public PsseLoadTool(String i, String id, String pl, String ql)
+	int _i, _id, _mw, _mvar, _status;
+
+	public PsseLoadTool(PsseClass pc, PsseRepository rep) throws IOException
 	{
-		_id = id+"_"+i+"_load";
-		_name = id;
-		_node = i;
-		_mw = pl;
-		_mvar = ql;
-	}
-	
-	public PsseLoadTool(PsseField[] fld, String[] record)
-	{
-		if(_fldMap == null) _fldMap = PsseEquipment.buildMap(fld);
-		
-		_id 	= record[_fldMap.get("id")]+"_"+record[_fldMap.get("i")]+"_load";
-		_name 	= record[_fldMap.get("id")];
-		_node 	= record[_fldMap.get("i")];
-		_mw		= record[_fldMap.get("pl")];
-		_mvar	= record[_fldMap.get("ql")];
-	}
-	
-	public enum LoadFiles
-	{
-		Load,
-		PsmCaseLoad
+		super(rep);
+		TObjectIntMap<String> fldMap = PsseEquipment.buildMap(pc.getLines());
+		_i = fldMap.get("i");
+		_id = fldMap.get("id");
+		_mw = fldMap.get("pl");
+		_mvar = fldMap.get("ql");
+		_status = fldMap.get("status");
 	}
 	
 	@Override
-	public String toCsv(String type) 
-	{ 
-		return toCsv(LoadFiles.valueOf(type));
-	}
-	
-	public String toCsv(LoadFiles file)
+	public void writeRecord(PsseClass pclass, String[] record) throws PsseProcException
 	{
-		switch(file)
-		{
-		case Load:
-			String[] l = {_id, _name, _node};
-			return arrayToCsv(l);
-		case PsmCaseLoad:
-			String[] lc = {_id, _mw, _mvar};
-			return arrayToCsv(lc);
-		default:
-			return null;
-		}
-	}
-	
-	public String getHeaders(LoadFiles file)
-	{
-		switch(file)
-		{
-		case Load:
-			return "ID,Name,Node";
-		case PsmCaseLoad:
-			return "ID,MW,MVAr";
-		default:
-			return "";
-		}
+		String id = mkId(record[_i], record[_id]);
+		_rep.findWriter(PsmFormat.Load).format("\"%s\",\"%s\",\"%s\"\n",
+			id, mkname(record), record[_i]);
+		_rep.findWriter(CaseFormat.Load).format("\"%s\",%s,%s,%s\n",
+			id, record[_mw], record[_mvar], Boolean.toString(getBoolean(record[_status], true)));
 	}
 
-	//Getters
-	public String getId() { return _id; }
-	public String getName() { return _name; }
-	public String getNode() { return _node; }
-	public String getMW() { return _mw; }
-	public String getMVAr() { return _mvar;}
+	private String mkname(String[] record)
+	{
+		return String.format("%s-%s", _rep.getBusName(record[_i]), record[_id]);
+	}
+
+
+	public static String mkId(String psseBus, String psseId)
+	{
+		return String.format("load-%s-%s", psseBus, psseId);
+	}
 
 }

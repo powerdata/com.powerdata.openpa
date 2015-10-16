@@ -11,7 +11,7 @@ import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.Group;
 import com.powerdata.openpa.GroupList;
-import com.powerdata.openpa.Island;
+import com.powerdata.openpa.ElectricalIsland;
 import com.powerdata.openpa.Line;
 import com.powerdata.openpa.PALists;
 import com.powerdata.openpa.PAModel;
@@ -174,7 +174,7 @@ public class CAWorker
 		 * system load (nld)
 		 */
 		float old = 0f, nld = 0f;
-		Set<Island> islandFailures = new HashSet<>();
+		Set<ElectricalIsland> islandFailures = new HashSet<>();
 		BusList mbuses = _m.getBuses();
 		for (ConvergenceInfo i : _pfres)
 		{
@@ -222,7 +222,7 @@ public class CAWorker
 				}
 				private boolean test(TwoTermDev d) throws PAModelException
 				{
-					return !d.isOutOfSvc()
+					return d.isInService()
 							&& vmInRange(d.getFromBus()) == vmInRange(d
 									.getToBus());
 				}
@@ -279,14 +279,14 @@ public class CAWorker
 	static FloatPredicate Under = i -> i < _minv, Over = i -> i > _maxv;
 	static BiFloatPredicate Min = (i, j) -> i < j, Max = (i, j) -> i > j;
 	static BiFloatPredicate LMin = Min.and(Under), LMax = Max.and(Over);
-	public Set<Result> getVoltageViolations(Set<Island> islandFailures) throws PAModelException
+	public Set<Result> getVoltageViolations(Set<ElectricalIsland> islandFailures) throws PAModelException
 	{
 		Set<Result> rv = new HashSet<>();
 		VoltagePockets vplist = new VoltagePockets(_m);
 		BusList cbuses = _m.getBuses();
 		for (Group vp : vplist)
 		{
-			Island gi = vp.getBuses().get(0).getIsland();
+			ElectricalIsland gi = vp.getBuses().get(0).getIsland();
 			if (!islandFailures.contains(gi))
 			{
 				float viol = 1f;
@@ -328,14 +328,14 @@ public class CAWorker
 	public Set<Result> getOverloads() throws PAModelException
 	{
 		Set<Result> rv = new HashSet<>();
-		Set<Island> nsolved = new HashSet<>();
+		Set<ElectricalIsland> nsolved = new HashSet<>();
 		for (ConvergenceInfo i : _pfres)
 			if (i.getStatus() != ConvergenceList.Status.Converge) nsolved.add(i.getIsland());
 		for (ACBranchList list : _m.getACBranches())
 		{
 			for (ACBranch d : list)
 			{
-				if (!d.isOutOfSvc()
+				if (d.isInService()
 						&& !nsolved.contains(d.getFromBus().getIsland())
 						&& !nsolved.contains(d.getToBus().getIsland()))
 				{

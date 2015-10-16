@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Set;
 import com.powerdata.openpa.Bus;
 import com.powerdata.openpa.BusList;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.PAModelException;
-import com.powerdata.openpa.impl.BasicBusGrpMap;
+import com.powerdata.openpa.impl.BasicGroupIndex;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 
 
@@ -55,7 +55,7 @@ public abstract class BusMonitor
 	 * @throws PAModelException
 	 */
 	protected BusMonitor(BusList sbus, BusTypeUtil btu, Set<BusType> types,
-			IslandList hot) throws PAModelException
+			ElectricalIslandList hot) throws PAModelException
 	{
 		_sbus = sbus;
 		_btu = btu;
@@ -79,7 +79,7 @@ public abstract class BusMonitor
 				}
 			}
 		}
-		_posbyisland = new BasicBusGrpMap(bmap, nhot).map();
+		_posbyisland = new BasicGroupIndex(bmap, nhot).map();
 		_mbus = Arrays.copyOf(trbus, ntr);
 		_monitors = new Monitor[ntr];
 	}

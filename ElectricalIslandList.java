@@ -5,9 +5,9 @@ import java.util.EnumSet;
 import java.util.Set;
 import com.powerdata.openpa.impl.EmptyLists;
 
-public interface IslandList extends GroupListIfc<Island>
+public interface ElectricalIslandList extends GroupListIfc<ElectricalIsland>
 {
-	static IslandList emptyList() {return EmptyLists.EMPTY_ISLANDS;}
+	static ElectricalIslandList emptyList() {return EmptyLists.EMPTY_ISLANDS;}
 	
 	boolean isEnergized(int ndx) throws PAModelException;
 	boolean[] isEnergized() throws PAModelException;

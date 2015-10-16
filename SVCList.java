@@ -57,7 +57,7 @@ public interface SVCList extends OneTermDevListIfc<SVC>
 	static Set<ColumnMeta> Cols = EnumSet
 			.copyOf(Arrays.asList(new ColumnMeta[] { ColumnMeta.SvcAVR,
 					ColumnMeta.SvcBUS, ColumnMeta.SvcID, ColumnMeta.SvcNAME,
-					ColumnMeta.SvcOMODE, ColumnMeta.SvcOOS, ColumnMeta.SvcP,
+					ColumnMeta.SvcOMODE, ColumnMeta.SvcINSVC, ColumnMeta.SvcP,
 					ColumnMeta.SvcQ, ColumnMeta.SvcQMAX, ColumnMeta.SvcQMIN,
 					ColumnMeta.SvcQS, ColumnMeta.SvcREGBUS,
 					ColumnMeta.SvcSLOPE, ColumnMeta.SvcVS }));

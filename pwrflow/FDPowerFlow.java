@@ -13,8 +13,8 @@ import com.powerdata.openpa.FixedShunt;
 import com.powerdata.openpa.FixedShuntListIfc;
 import com.powerdata.openpa.Gen;
 import com.powerdata.openpa.GenList;
-import com.powerdata.openpa.Island;
-import com.powerdata.openpa.IslandList;
+import com.powerdata.openpa.ElectricalIsland;
+import com.powerdata.openpa.ElectricalIslandList;
 import com.powerdata.openpa.OneTermDev;
 import com.powerdata.openpa.PAModel;
 import com.powerdata.openpa.PAModelException;
@@ -75,7 +75,7 @@ public class FDPowerFlow
 	 * are not PV buses, but instead are managed to adjust the PV bus setpoints  */
 	VoltageSetPoint _vsp;
 	/** energized islands */
-	IslandList _hotislands;
+	ElectricalIslandList _hotislands;
 	/** monitor vars */
 	GenVarMonitor _varmon;
 	/** Monitor slack & distribute */
@@ -216,7 +216,7 @@ public class FDPowerFlow
 		{
 			super(_buses, FDPowerFlow.this._btu, EnumSet.of(BusType.Reference), _hotislands);
 			_dilist = new ArrayList<>(_hotislands.size());
-			for(Island h : _hotislands)
+			for(ElectricalIsland h : _hotislands)
 				_dilist.add(new DistInfo(findOnlineGens(h.getGenerators())));
 			Arrays.fill(_monitors, _slkmon);
 
@@ -286,11 +286,9 @@ public class FDPowerFlow
 		for(Bus b : pvbuses)
 			_bdblprime_mtrx.incBdiag(b.getIndex(), 1e+06f);
 		
-		 _vsp = new VoltageSetPoint(pvbuses, _buses, _model.getIslands().size());
+		 _vsp = new VoltageSetPoint(pvbuses, _buses, _model.getElectricalIslands().size());
 		
 	}
-	
-	
 	
 	private void cleanupOldResults() throws PAModelException
 	{
@@ -359,7 +357,7 @@ public class FDPowerFlow
 	 */	
 	void setupHotIslands() throws PAModelException
 	{
-		IslandList islands = _model.getIslands();
+		ElectricalIslandList islands = _model.getElectricalIslands();
 		int nisl = islands.size(), nhot = 0;
 		int[] idx = new int[nisl];
 		
@@ -370,7 +368,7 @@ public class FDPowerFlow
 		int[] revidx = new int[ngen];
 		Arrays.fill(revidx, -1);
 		
-		for(Island island : islands)
+		for(ElectricalIsland island : islands)
 		{
 			boolean h = false;
 			for(Gen g : island.getGenerators())
@@ -845,7 +843,7 @@ public class FDPowerFlow
 	}	
 	boolean isPVSvc(SVC svc) throws PAModelException
 	{
-		return (!svc.isOutOfSvc() && svc.isRegKV() && svc.getSlope() == 0f);
+		return (svc.isInService() && svc.isRegKV() && svc.getSlope() == 0f);
 	}
 }
 

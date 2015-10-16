@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import com.powerdata.openpa.OneTermBaseList.OneTermBase;
 
 
-public class OneTermDev extends OutOfService implements OneTermBase
+public class OneTermDev extends InService implements OneTermBase
 
 {
 	OneTermDevListIfc<? extends OneTermDev>	_list;

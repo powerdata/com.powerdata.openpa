@@ -1,10 +1,10 @@
 package com.powerdata.openpa;
 
-public class Island extends Group
+public class ElectricalIsland extends Group
 {
-	protected IslandList _list;
+	protected ElectricalIslandList _list;
 	
-	public Island(IslandList list, int ndx)
+	public ElectricalIsland(ElectricalIslandList list, int ndx)
 	{
 		super(list, ndx);
 		_list = list;

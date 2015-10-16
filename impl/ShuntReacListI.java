@@ -20,7 +20,7 @@ public class ShuntReacListI extends FixedShuntListI<ShuntReactor> implements Shu
 		@Override
 		public ColumnMeta q() {return ColumnMeta.ShreacQ;}
 		@Override
-		public ColumnMeta insvc() {return ColumnMeta.ShreacOOS;}
+		public ColumnMeta insvc() {return ColumnMeta.ShreacINSVC;}
 		@Override
 		public ColumnMeta b() {return ColumnMeta.ShreacB;}
 	};

@@ -40,7 +40,7 @@ public interface BusList extends GroupListIfc<Bus>
 	
 	void setFreqSrcPri(int[] fsp) throws PAModelException;
 
-	Island getIsland(int ndx) throws PAModelException;
+	ElectricalIsland getIsland(int ndx) throws PAModelException;
 
 	Area getArea(int ndx) throws PAModelException;
 

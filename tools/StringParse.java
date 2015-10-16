@@ -14,6 +14,7 @@ public class StringParse
 	int _nxtOfs;
 	int _strlen;
 	char _quoteChar = '"';
+	boolean _mergeDelim = false;
 
 	public StringParse(String bufferToParse, String delimiters,
 			boolean keepQuotes)
@@ -49,15 +50,17 @@ public class StringParse
 		_quoteChar = qchar;
 		return this;
 	}
+	
+	public void setMergeDelimiters(boolean md) {_mergeDelim = md;}
 
 	protected void advancePastWhitespace()
 	{
 		while ((_nxtOfs < _strlen) && (_whiteSpace.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
 			++_nxtOfs;
 	}
-	protected void advancePastDelimiter()
+	protected void advancePastDelimiters()
 	{
-		if ((_nxtOfs < _strlen)	&& (_delimiters.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
+		while ((_nxtOfs < _strlen)	&& (_delimiters.indexOf(_parseLine.charAt(_nxtOfs)) >= 0))
 			++_nxtOfs;		
 	}
 
@@ -76,6 +79,7 @@ public class StringParse
 
 	public String nextToken()
 	{
+		if (_mergeDelim) advancePastDelimiters();
 		// advance to the next token
 		advancePastWhitespace();
 		// make sure we aren't done

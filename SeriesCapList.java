@@ -12,7 +12,7 @@ public interface SeriesCapList extends ACBranchListIfc<SeriesCap>
 	static Set<ColumnMeta> Cols = EnumSet.copyOf(Arrays
 			.asList(new ColumnMeta[] { ColumnMeta.SercapBUSFROM,
 					ColumnMeta.SercapBUSTO, ColumnMeta.SercapID,
-					ColumnMeta.SercapNAME, ColumnMeta.SercapOOS,
+					ColumnMeta.SercapNAME, ColumnMeta.SercapINSVC,
 					ColumnMeta.SercapPFROM, ColumnMeta.SercapPTO,
 					ColumnMeta.SercapQFROM, ColumnMeta.SercapQTO,
 					ColumnMeta.SercapR, ColumnMeta.SercapRATLT,
