@@ -47,6 +47,7 @@ public class ListDumper
 							String nm = m.getName();
 							String title = nm.substring(3);
 							File nfile = new File(outdir, title + ".csv");
+							System.err.format("Writing results of %s to %s\n", nm, nfile.getName());
 							BaseList<?> list = (BaseList<?>) m.invoke(model,
 								new Object[] {});
 							if (list != null)

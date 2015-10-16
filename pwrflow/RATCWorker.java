@@ -142,7 +142,9 @@ public class RATCWorker
 	 * 
 	 * @author chris@powerdata.com
 	 *
+	 * TODO:  Merge this and ShiftFactorModelBuilder
 	 */
+	@Deprecated
 	class RATCModelBuilder extends CloneModelBuilder
 	{
 		

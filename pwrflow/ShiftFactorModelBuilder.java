@@ -34,7 +34,7 @@ public class ShiftFactorModelBuilder extends CloneModelBuilder
 		DataLoader<String[]> gname = () -> new String[] {"SOURCE"};
 		DataLoader<float[]> fzero = () -> new float[] {0f};
 		DataLoader<float[]> f200 = () -> new float[] {200f};
-		DataLoader<boolean[]> oos = () -> new boolean[] {false};
+		DataLoader<boolean[]> insvc = () -> new boolean[] {true};
 		DataLoader<int[]> src = () -> new int[] {_source};
 		DataLoader<int[]> sink = () -> new int[] {_sink};
 		
@@ -44,7 +44,7 @@ public class ShiftFactorModelBuilder extends CloneModelBuilder
 		_col.put(ColumnMeta.GenBUS, src);
 		_col.put(ColumnMeta.GenP, fzero);
 		_col.put(ColumnMeta.GenQ, fzero);
-		_col.put(ColumnMeta.GenOOS, oos); 
+		_col.put(ColumnMeta.GenINSVC, insvc); 
 		_col.put(ColumnMeta.GenTYPE, () -> new Gen.Type[] {Gen.Type.Thermal});
 		_col.put(ColumnMeta.GenMODE, () -> new Gen.Mode[] {Gen.Mode.MAN});
 		_col.put(ColumnMeta.GenOPMINP, fzero);
@@ -66,7 +66,7 @@ public class ShiftFactorModelBuilder extends CloneModelBuilder
 		_col.put(ColumnMeta.LoadBUS, sink);
 		_col.put(ColumnMeta.LoadP, pld);
 		_col.put(ColumnMeta.LoadQ, qld);
-		_col.put(ColumnMeta.LoadOOS, oos);
+		_col.put(ColumnMeta.LoadINSVC, insvc);
 		_col.put(ColumnMeta.LoadPMAX, pld);
 		_col.put(ColumnMeta.LoadQMAX, qld);
 
