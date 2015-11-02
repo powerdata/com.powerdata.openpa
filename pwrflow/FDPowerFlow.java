@@ -27,6 +27,7 @@ import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.tools.FactorizedFltMatrix;
 import com.powerdata.openpa.tools.PAMath;
 import com.powerdata.openpa.tools.SpSymMtrxFactPattern;
+import com.powerdata.openpa.tools.psmfmt.PsmFmtExport;
 
 /**
  * Fast-decoupled AC Power Flow
@@ -685,6 +686,9 @@ public class FDPowerFlow
 		ConvergenceList results = pf.runPF();
 		pf.updateResults();
 		results.forEach(l -> System.out.println(l));
+		
+		PsmFmtExport exp = new PsmFmtExport(m, false);
+		exp.export(new File("/tmp/ieee24"));
 		
 	}
 

@@ -58,6 +58,10 @@ public abstract class ExportOpenPA<T extends BaseList<? extends BaseObject>> ext
 					{
 						e.printStackTrace();
 					}
+					catch(ArrayIndexOutOfBoundsException bex)
+					{
+						rv = "";
+					}
 					return rv;
 				}
 			});

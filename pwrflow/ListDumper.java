@@ -62,7 +62,7 @@ public class ListDumper
 		}
 	}
 
-	void dumpList(File nfile, BaseList<?> list) throws IOException,
+	public void dumpList(File nfile, BaseList<?> list) throws IOException,
 			ReflectiveOperationException, IllegalArgumentException
 	{
 		Method[] methods = list.getClass().getMethods();

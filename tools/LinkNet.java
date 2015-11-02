@@ -1,11 +1,18 @@
 package com.powerdata.openpa.tools;
 
 import java.util.Arrays;
+import java.util.function.IntConsumer;
 
 public class LinkNet
 {
 	public static final int Empty = -1;
 	public static final int NoNode = -2;
+	
+	@FunctionalInterface
+	protected interface AddPostProc
+	{
+		void accept(int fend, int tend);
+	}
 	
 	/**
 	 * Each item in this list contains an identifier to a link list stored in
@@ -20,9 +27,21 @@ public class LinkNet
 	protected int _brcnt = 0;
 	/** Number of connections for each bus */
 	protected int _cnt[] = new int[0];
+	/** Number of eliminated connections on each bus */
+	protected int[] _ecnt = new int[0];
 	/** Maximum bus index plus 1 */
 	protected int _maxBusNdx = 0;
 
+	/**
+	 * Utility to switch an object into or out-of an eliminated state 
+	 * @param far
+	 * @return
+	 */
+	static protected int changeElimState(int index)
+	{
+		return -index - 2;
+	}
+	
 	/** Explicitly add buses to the system so that isolated buses are tracked */
 	public void addBuses(int[] vbuses)
 	{
@@ -60,6 +79,8 @@ public class LinkNet
 				_list = Arrays.copyOf(_list, maxBusNdx*2);
 				Arrays.fill(_list, l, _list.length, NoNode);
 				_cnt = Arrays.copyOf(_cnt, _list.length);
+				if (_ecnt != null)
+					_ecnt = Arrays.copyOf(_ecnt, _list.length);
 				rv = true;
 			}
 		}
@@ -96,6 +117,18 @@ public class LinkNet
 	 */
 	public int addBranch(int fromBusNdx, int toBusNdx)
 	{
+		return _addBranch(fromBusNdx, toBusNdx, (ef,et) ->
+		{
+			_far[ef] = toBusNdx;
+			_far[et] = fromBusNdx;
+			
+			++(_cnt[fromBusNdx]);
+			++(_cnt[toBusNdx]);
+		});
+	}
+	
+	protected int _addBranch(int fromBusNdx, int toBusNdx, AddPostProc c)
+	{
 		// if either side of the branch is not connected, do nothing
 		if((fromBusNdx == -1) || (toBusNdx == -1)) return -1;
 		int endp = (_brcnt++) * 2;
@@ -109,12 +142,8 @@ public class LinkNet
 		_next[endq] = _list[toBusNdx];
 		_list[toBusNdx] = endq;
 		
-		_far[endp] = toBusNdx;
-		_far[endq] = fromBusNdx;
+		c.accept(endp, endq);
 		
-		++(_cnt[fromBusNdx]);
-		++(_cnt[toBusNdx]);
-
 		return endp / 2;
 	}
 
@@ -137,6 +166,53 @@ public class LinkNet
 		}
 		return -1;
 	}
+	
+	/**
+	 * Look for a branch between the two buses, even if is marked as eliminated.
+	 * Will return the first found.
+	 * 
+	 * @param fromBusNdx
+	 *            From bus index
+	 * @param toBusNdx
+	 *            To bus index
+	 * @return first branch found or -1 if not found. Value <= -2 indicates
+	 *         eliminated, use convertElimBranch() on this value to retrieve the
+	 *         correct branch offset
+	 * 
+	 */
+	public int findBranchElim(int fromBusNdx, int toBusNdx)
+	{
+		int end = _list[fromBusNdx];
+		while (end >= 0)
+		{
+			int far = _far[end];
+			if (far < -1) far = changeElimState(far);
+			if (far == toBusNdx)
+			{
+				int end2 = end/2;
+				return (far < -1) ? changeElimState(end2) : end2;
+			}
+			end = _next[end];
+		}
+		return -1;
+	}
+	
+//	protected int testElimBus(int far)
+//	{
+//		return (far < 0) ? (far*-1)-2 : far;
+//	}
+//	
+//	protected int convertBranchToElim(int brndx)
+//	{
+//		return (brndx * -1) - 2;
+//	}
+//	
+//	public int convertElimBranch(int branchid)
+//	{
+//		return (branchid >= -1) ? branchid : (branchid + 2) * -1;
+//	}
+//
+
 	/**
 	 * Return the number of connections for a bus.
 	 * @param busNdx
@@ -144,9 +220,7 @@ public class LinkNet
 	 */
 	public int getConnectionCount(int busNdx) { return _cnt[busNdx]; }
 	/**
-	 * Return all of the branches for a specific bus.  This list
-	 * will be in the same order as the array of connected buses
-	 * returned by findBuses().
+	 * Return all of the branches for a specific bus.
 	 * 
 	 * @param busNdx Starting bus.
 	 * @return Array of branches.
@@ -163,6 +237,26 @@ public class LinkNet
 		}
 		return branches;
 	}
+	/**
+	 * Return all of the eliminated branches for a specific bus.
+	 * 
+	 * @param busNdx Starting bus.
+	 * @return Array of branches.
+	 */
+	public int[] findBranchesElim(int busNdx)
+	{
+		int[] branches = new int[_ecnt[busNdx]];
+		int ndx = 0;
+		int end = _list[busNdx];
+		while(end >= 0)
+		{
+			if (_far[end] < -1) 
+				branches[ndx++] = end/2;
+			end = _next[end];
+		}
+		return branches;
+	}
+	
 	/**
 	 * Return the buses connected to the specified bus.
 	 * @param busNdx Bus to find connections for.
@@ -207,6 +301,28 @@ public class LinkNet
 		return new int[][] {buses, branches};
 	}
 	/**
+	 * Return both buses and branches in a single call for eliminated branches.
+	 * @return array of nodes at index 0, and branches at index 1
+	 */
+	public int[][] findElimConnections(int busNdx)
+	{
+		int buses[] = new int[_ecnt[busNdx]];
+		int branches[] = new int[_ecnt[busNdx]];
+		int ndx = 0;
+		int end = _list[busNdx];
+		while (end >= 0)
+		{
+			int far = _far[end];
+			if (far < -1)
+			{
+				buses[ndx] = changeElimState(far);
+				branches[ndx++] = end / 2;
+			}
+			end = _next[end];
+		}
+		return new int[][] {buses, branches};
+	}
+	/**
 	 * Return an array of all valid bus indexes.  This array will omit any
 	 * undefined bus indexes.
 	 * @return array of bus indexes.
@@ -238,6 +354,45 @@ public class LinkNet
 	 * @return two dimensional array[group][buses]
 	 */
 	public int[][] findGroups()
+	{
+		return findGroupMap().findGroups();
+	}
+	
+	public class GroupMap
+	{
+		/** map bus to island */
+		int[] busIslandMap;
+		/** number of islands */
+		int nisland;
+		/** number of bus counts in each island */
+		int[] islandCounts;
+		GroupMap(int[] m, int n, int[] ic)
+		{
+			busIslandMap = m;
+			nisland = n;
+			islandCounts = ic;
+		}
+		
+		public int[] getBusIslandMap() {return busIslandMap;}
+		public int getIslandCount() {return nisland;}
+		public int[] getIslandBusCounts() {return islandCounts;}
+		public int[][] findGroups()
+		{
+			int bcnt = getMaxBusNdx();
+			// Organize results into a 2d array
+			int iofs[] = new int[nisland];
+			int islands[][] = new int[nisland][];
+			for(int i=0; i<nisland; i++) islands[i] = new int[islandCounts[i]];
+			for(int i=0; i<bcnt; i++)
+			{
+				int indx = busIslandMap[i];
+				if (indx >= 0) islands[indx][iofs[indx]++] = i;
+			}
+			return islands;
+		}
+	}
+	
+	public GroupMap findGroupMap()
 	{
 		int bcnt = getMaxBusNdx();
 		/** create a very simple stack */
@@ -291,52 +446,60 @@ public class LinkNet
 			}
 			++nisland;
 		}
-		
-		// Organize results into a 2d array
-		int iofs[] = new int[nisland];
-		int islands[][] = new int[nisland][];
-		for(int i=0; i<nisland; i++) islands[i] = new int[islandCounts[i]];
-		for(int i=0; i<bcnt; i++)
-		{
-			int indx = busIslandMap[i];
-			if (indx >= 0) islands[indx][iofs[indx]++] = i;
-		}
-		return islands;
+		return new GroupMap(busIslandMap, nisland, islandCounts);
 	}
 	/**
 	 * Remove a branch from service.
 	 * @param brofs
-	 * @param eliminate
+	 * @return true if the status was changed
 	 */
-	public void eliminateBranch(int brofs, boolean eliminate)
+	public boolean eliminateBranch(int brofs)
 	{
+		boolean rv = false;
+		if (brofs < -1) brofs = changeElimState(brofs);
 		int enda = brofs*2;
-		boolean eliminated = _far[enda] < 0;
-		if (eliminate != eliminated)
+		boolean eliminated = _far[enda] < -1;
+		if (!eliminated)
 		{
-			int endb = enda+1;
-			if (eliminated)
-			{
-				_far[enda] *= -1;
-				_far[endb] *= -1;
-				_far[enda] -= 2;
-				_far[endb] -= 2;
-				++(_cnt[_far[enda]]);
-				++(_cnt[_far[endb]]);
-			}
-			else
-			{
-				--(_cnt[_far[enda]]);
-				--(_cnt[_far[endb]]);
-				_far[enda] += 2;
-				_far[endb] += 2;
-				_far[enda] *= -1;
-				_far[endb] *= -1;
-				
-			}
+			rv = true;
+			int endb = enda + 1;
+			int fa = _far[enda];
+			int fb = _far[endb];
+			++(_ecnt[fa]);
+			++(_ecnt[fb]);
+			--(_cnt[fa]);
+			--(_cnt[fb]);
+			fa = changeElimState(fa);
+			fb = changeElimState(fb);
+			_far[enda] = fa;
+			_far[endb] = fb;
 		}
+		return rv;
 	}
-	/** Permanently remove a branch */
+
+	public boolean restoreBranch(int brofs)
+	{
+		boolean rv = false;
+		if (brofs < -1) brofs = changeElimState(brofs);
+		int enda = brofs*2;
+		boolean eliminated = _far[enda] < -1;
+		
+		if(eliminated)
+		{
+			rv = true;
+			int endb = enda+1;
+			int fa = _far[enda];
+			int fb = _far[endb];
+			fa = changeElimState(fa);
+			fb = changeElimState(fb);
+			++(_cnt[fa]);
+			++(_cnt[fb]);
+			--(_ecnt[fa]);
+			--(_ecnt[fb]);
+		}
+		
+		return rv;
+	}
 	
 	public LinkNet() {}
 	
@@ -352,6 +515,49 @@ public class LinkNet
 		_list = src._list.clone();
 		_maxBusNdx = src._maxBusNdx;
 		_next = src._next.clone();
+	}
+	
+	/**
+	 * Apply a function to each bus located within group as the given bus. Will
+	 * also iterate over the given bus.
+	 * 
+	 * TODO: At some point we should compare this and findGroupMap to see if a
+	 * common base will perform. Currently, we're duplicating the traversal code
+	 * 
+	 * TODO:  The stack and "seen" arrays are fully-sized, which is
+	 * probably silly for small islands.
+	 * 
+	 * @param startBus
+	 * @param bf
+	 *            Function to apply
+	 */
+	public void forEachInGroup(int startBus, IntConsumer bf)
+	{
+		int bcnt = getMaxBusNdx();
+		/** create a very simple stack */
+		int stack[] = new int[bcnt];
+		int stackptr = 0;
+		boolean[] seen = new boolean[bcnt];
+
+		stack[stackptr++] = startBus;
+		seen[startBus] = true;
+		while(stackptr > 0)
+		{
+			int p = stack[--stackptr];
+			bf.accept(p);
+			int end = _list[p];
+			while (end >= 0)
+			{
+				int far = _far[end];
+				if(far >= 0 && !seen[far])
+				{
+					stack[stackptr++] = far;
+					seen[far] = true;
+				}
+				end = _next[end];
+			}
+		}
+		
 	}
 
 	/**
@@ -423,4 +629,5 @@ public class LinkNet
 	{
 		return _cnt.clone();
 	}
+	public int[] getElimConnectionCounts() {return _ecnt.clone();}
 }

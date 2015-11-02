@@ -70,6 +70,7 @@ public class PsmFmtExport
 		new CaseTransformerWindingOPA(_model).export(odir);
 		new CaseSeriesCapacitorOPA(_model).export(odir);
 		new CaseSeriesReactorOPA(_model).export(odir);
+		new CaseNodeOPA(_model).export(odir);
 		new ReactiveCapabilityCurveOPA(_model).export(odir);
 	}
 	

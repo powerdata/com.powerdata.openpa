@@ -56,10 +56,6 @@ public class SpSymFltMatrix
 			if (targbr != -1) 
 			{
 				bo[targbr] += temp[imut] * bo[adjbr];
-			if (Math.abs(bo[targbr]) <  1e-6f)
-			{
-				int xxx = 5;
-			}
 			}
 		}
 

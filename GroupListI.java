@@ -111,6 +111,11 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 		return _bgmap.getGrp(b.getIndex());
 	}
 
+	protected void setupMap(GroupIndex idx)
+	{
+		_bgmap = idx;
+		_size = _bgmap.size();
+	}
 
 	/** get equipment lists for each bus */
 	protected List<int[]> getMap2T(EqType ltype,

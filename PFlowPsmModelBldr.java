@@ -1494,8 +1494,17 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	
 	boolean[] resolveOOS(int[] idx, String[] data)
 	{
-		return (data.length == 0) ? new boolean[idx.length] : 
-			getBooleanData(idx, data); 
+		if(data.length == 0)
+		{
+			boolean[] rv = new boolean[idx.length];
+			Arrays.fill(rv, true);
+			return rv;
+		}
+		else
+		{
+			return getBooleanData(idx, data); 
+		}
+			 
 	}
 	
 	private float[] invertValues(float[] origData)
