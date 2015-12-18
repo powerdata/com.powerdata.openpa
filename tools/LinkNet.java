@@ -79,8 +79,7 @@ public class LinkNet
 				_list = Arrays.copyOf(_list, maxBusNdx*2);
 				Arrays.fill(_list, l, _list.length, NoNode);
 				_cnt = Arrays.copyOf(_cnt, _list.length);
-				if (_ecnt != null)
-					_ecnt = Arrays.copyOf(_ecnt, _list.length);
+				_ecnt = Arrays.copyOf(_ecnt, _list.length);
 				rv = true;
 			}
 		}
@@ -511,6 +510,7 @@ public class LinkNet
 	{
 		_brcnt = src._brcnt;
 		_cnt = src._cnt.clone();
+		_ecnt = src._ecnt.clone();
 		_far = src._far.clone();
 		_list = src._list.clone();
 		_maxBusNdx = src._maxBusNdx;
