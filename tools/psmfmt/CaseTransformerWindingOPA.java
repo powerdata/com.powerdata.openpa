@@ -14,15 +14,9 @@ import com.powerdata.openpa.TransformerList;
 
 public class CaseTransformerWindingOPA extends ExportOpenPA<TransformerList>
 {
-
-	@Override
-	protected String getPsmFmtName()
-	{
-		return "PsmCase" + PsmCaseFmtObject.TransformerWinding.toString();
-	}
+	protected int _ntx, _nps;
+	protected FmtInfo[] _txi;
 	
-	int _ntx, _nps;
-	FmtInfo[] _txi;
 	public CaseTransformerWindingOPA(PAModel m) throws PAModelException
 	{
 		super(null, TransformerWinding.values().length);
@@ -35,9 +29,9 @@ public class CaseTransformerWindingOPA extends ExportOpenPA<TransformerList>
 		assign(plist);
 	}
 
-	void assign(ACBranchListIfc<? extends ACBranch> list) throws PAModelException
+	protected void assign(ACBranchListIfc<? extends ACBranch> list) throws PAModelException
 	{
-		assign(TransformerWinding.ID, new StringWrap(i -> list.getID(i)+":wnd1"));
+		assign(CaseTransformerWinding.ID, new StringWrap(i -> list.getID(i)+":wnd1"));
 		assign(CaseTransformerWinding.FromMW, i -> String.valueOf(list.getFromP(i)));
 		assign(CaseTransformerWinding.FromMVAr, i -> String.valueOf(list.getFromQ(i)));
 		assign(CaseTransformerWinding.ToMW, i -> String.valueOf(list.getToP(i)));
@@ -54,5 +48,10 @@ public class CaseTransformerWindingOPA extends ExportOpenPA<TransformerList>
 		printData(pw, _finfo, _nps);
 		pw.close();
 	}
-
+	
+	@Override
+	protected String getPsmFmtName()
+	{
+		return "PsmCase" + PsmCaseFmtObject.TransformerWinding.toString();
+	}
 }

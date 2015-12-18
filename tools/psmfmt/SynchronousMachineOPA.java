@@ -46,8 +46,8 @@ public class SynchronousMachineOPA extends ExportOpenPA<GenList>
 		}
 		else
 		{
-			System.out.println("\n[SynchronousMachineOPA.java] ID \""+g.getID()+"\" split into "+idBase.length+" parts");
-			System.out.println("[SynchronousMachineOPA.java] Generator ID likely contains at least one \":\". For now the ID is being set as the generator's ID appened with \":SM\"");
+//			System.out.println("\n[SynchronousMachineOPA.java] ID \""+g.getID()+"\" split into "+idBase.length+" parts");
+//			System.out.println("[SynchronousMachineOPA.java] Generator ID likely contains at least one \":\". For now the ID is being set as the generator's ID appened with \":SM\"");
 			return g.toString()+":SM";
 		}
 	}

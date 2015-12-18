@@ -16,8 +16,9 @@ import com.powerdata.openpa.TransformerList;
 
 public class TransformerWindingOPA extends ExportOpenPA<ACBranchListIfc<? extends ACBranch>>
 {
-	int _ntx, _nps;
-	FmtInfo[] _txi;
+	protected int _ntx, _nps;
+	protected FmtInfo[] _txi;
+	
 	public TransformerWindingOPA(PAModel m, BusRefIndex bri) throws PAModelException
 	{
 		super(null, TransformerWinding.values().length);
