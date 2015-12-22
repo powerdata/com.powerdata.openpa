@@ -15,6 +15,7 @@ public class CaseSeriesCapacitorOPA extends ExportOpenPA<SeriesCapList>
 		assign(CaseSeriesCapacitor.FromMVAr, i -> String.valueOf(_list.getFromQ(i)));
 		assign(CaseSeriesCapacitor.ToMW, i -> String.valueOf(_list.getToP(i)));
 		assign(CaseSeriesCapacitor.ToMVAr, i -> String.valueOf(_list.getToQ(i)));
+		assign(CaseSeriesCapacitor.InService, i -> String.valueOf(_list.isInService(i)));
 	}
 
 	@Override

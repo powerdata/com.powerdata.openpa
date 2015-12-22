@@ -12,6 +12,7 @@ public class CaseLoadOPA extends ExportOpenPA<LoadList>
 		assign(CaseLoad.ID, new StringWrap(i -> _list.getID(i)));
 		assign(CaseLoad.MW, i -> String.valueOf(-_list.getP(i)));
 		assign(CaseLoad.MVAr, i -> String.valueOf(-_list.getQ(i)));
+		assign(CaseLoad.InService, i -> String.valueOf(_list.isInService(i)));
 	}
 	
 	@Override

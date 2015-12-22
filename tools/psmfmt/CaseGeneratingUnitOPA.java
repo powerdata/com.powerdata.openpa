@@ -28,6 +28,7 @@ public class CaseGeneratingUnitOPA extends ExportOpenPA<GenList>
 		assign(CaseGeneratingUnit.MWSetPoint, i -> String.valueOf(_list.getPS(i)));
 		assign(CaseGeneratingUnit.GeneratorOperatingMode,
 			i -> _ModeMap.getOrDefault(_list.getMode(i), ""));
+		assign(CaseGeneratingUnit.InService, i -> String.valueOf(_list.isInService(i)));
 	}
 	
 	@Override

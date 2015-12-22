@@ -36,6 +36,7 @@ public class CaseTransformerWindingOPA extends ExportOpenPA<TransformerList>
 		assign(CaseTransformerWinding.FromMVAr, i -> String.valueOf(list.getFromQ(i)));
 		assign(CaseTransformerWinding.ToMW, i -> String.valueOf(list.getToP(i)));
 		assign(CaseTransformerWinding.ToMVAr, i -> String.valueOf(list.getToQ(i)));
+		assign(CaseTransformerWinding.InService, i -> String.valueOf(list.isInService(i)));
 	}
 
 	@Override

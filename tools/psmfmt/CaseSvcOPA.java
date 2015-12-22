@@ -14,6 +14,7 @@ public class CaseSvcOPA extends ExportOpenPA<SVCList>
 			new StringWrap(i -> _list.isRegKV(i)?"Volt":"MVAr"));
 		assign(CaseSVC.MVArSetPoint, i -> String.valueOf(_list.getQS(i)));
 		assign(CaseSVC.VoltageSetpoint, i -> String.valueOf(_list.getVS(i)));
+		assign(CaseSVC.InService, i -> String.valueOf(_list.isInService(i)));
 	}
 
 

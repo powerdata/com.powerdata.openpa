@@ -30,6 +30,7 @@ public class CaseSynchronousMachineOPA extends ExportOpenPA<GenList>
 		assign(CaseSynchronousMachine.KVSetPoint, i -> String.valueOf(_list.getVS(i)));
 		assign(CaseSynchronousMachine.MVArSetpoint, i -> String.valueOf(_list.getQS(i)));
 		assign(CaseSynchronousMachine.MVAr, i -> String.valueOf(_list.getQ(i)));
+		assign(CaseSynchronousMachine.InService, i -> String.valueOf(_list.isInService(i)));
 	}
 
 	@Override

@@ -15,6 +15,7 @@ public class CaseSeriesReactorOPA extends ExportOpenPA<SeriesReacList>
 		assign(CaseSeriesReactor.FromMVAr, i -> String.valueOf(_list.getFromQ(i)));
 		assign(CaseSeriesReactor.ToMW, i -> String.valueOf(_list.getToP(i)));
 		assign(CaseSeriesReactor.ToMVAr, i -> String.valueOf(_list.getToQ(i)));
+		assign(CaseSeriesReactor.InService, i -> String.valueOf(_list.isInService(i)));
 	}
 
 	@Override
