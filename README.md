@@ -83,4 +83,5 @@ TO-DO:
 * Cleanup JavaDoc and Generate and add link
 * Document applications and utilities (sparse matrix, power calculations, AC & DC power flows)
 * add section on performance best practices
+* Explain how to contribute
 
