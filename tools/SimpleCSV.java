@@ -138,6 +138,23 @@ public class SimpleCSV
 		}
 		return fvals;
 	}
+	public short[] getShorts(int col) { return getShorts(get(col)); }
+	public short[] getShorts(String col) { return getShorts(get(col)); }
+	public short[] getShorts(String svals[])
+	{
+		short hvals[] = null;
+		int n = svals.length;
+		if (svals != null)
+		{
+			hvals = new short[n];
+			for(int i=0; i<n; i++)
+			{
+				hvals[i] = Short.parseShort(svals[i]);
+			}
+		}
+		return hvals;
+	}
+
 	public boolean[] getBooleans(int col) {return getBooleans(get(col));}
 	public boolean[] getBooleans(String col) {return getBooleans(get(col));}
 	public boolean[] getBooleans(String[] svals)
