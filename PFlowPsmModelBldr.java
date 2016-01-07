@@ -376,10 +376,29 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			String[] senabl = _ratioTapChgCaseCSV.get("LTCEnable");
 			String[] sminkv = _ratioTapChgCSV.get("MinKV");
 			String[] smaxkv = _ratioTapChgCSV.get("MaxKV");
-			boolean[] fisreg = getBooleanData(_from.tapx, sisreg, false);
-			boolean[] tisreg = getBooleanData(_to.tapx, sisreg, false);
-			int[] freg = _busrb.revndx(sregnd, _from.tapx);
-			int[] treg = _busrb.revndx(sregnd, _to.tapx);
+			boolean[] fisreg, tisreg;
+			if(sisreg.length == 0)
+			{
+				fisreg = new boolean[0];
+				tisreg = fisreg;
+			}
+			else
+			{
+				fisreg = getBooleanData(_from.tapx, sisreg, false);
+				tisreg = getBooleanData(_to.tapx, sisreg, false);
+			}
+			int[] freg;
+			int[] treg;
+			if(sregnd == null)
+			{
+				freg = _busrb.revndx(sregnd, _from.tapx);
+				treg = _busrb.revndx(sregnd, _to.tapx);
+			}
+			else
+			{
+				freg = new int[0];
+				treg = freg;
+			}
 			int[] ftn = _busrb.revndx(stapnd, _from.tapx);
 			int[] ttn = _busrb.revndx(stapnd, _to.tapx);
 			boolean[] fenabl = getBooleanData(_from.tapx, senabl, false);
@@ -391,7 +410,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			
 			for(int i=0; i < size(); ++i)
 			{
-				if(fisreg[i])
+				if(fisreg.length > 0 && fisreg[i])
 				{
 					_hasreg[i] = true;
 					_regbus[i] = freg[i];
@@ -400,7 +419,7 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 					_minkv[i] = fminkv[i];
 					_maxkv[i] = fmaxkv[i];
 				}
-				else if (tisreg[i])
+				else if (tisreg.length > 0 && tisreg[i])
 				{
 					_hasreg[i] = true;
 					_regbus[i] = treg[i];
@@ -412,11 +431,11 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 				else
 				{
 					_hasreg[i] = false;
-					_regbus[i] = freg[i];
+//					_regbus[i] = freg[i];
 					_tapbus[i] = ftn[i];
-					_ltcenabl[i] = fenabl[i];
-					_minkv[i] = fminkv[i];
-					_maxkv[i] = fmaxkv[i];
+//					_ltcenabl[i] = fenabl[i];
+//					_minkv[i] = fminkv[i];
+//					_maxkv[i] = fmaxkv[i];
 				}
 				
 			}
@@ -1358,9 +1377,9 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 		case TfmrX:
 			return (R) getFloatData(_xf.getWindingIndex(), _tfmrWindingCSV.get("X"));
 		case TfmrGMAG:
-			return (R) getFloatData(_xf.getWindingIndex(), _tfmrWindingCSV.get("Gmag"));
+			return (R) getFloatData(_xf.getWindingIndex(), _tfmrWindingCSV.get("Gmag"), 0f);
 		case TfmrBMAG:
-			return (R) getFloatData(_xf.getWindingIndex(), _tfmrWindingCSV.get("Bmag"));
+			return (R) getFloatData(_xf.getWindingIndex(), _tfmrWindingCSV.get("Bmag"), 0f);
 		case TfmrANG:
 			return (R)  _xf.calcShift();
 		case TfmrTAPFROM:
