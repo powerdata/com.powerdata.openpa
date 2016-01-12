@@ -909,7 +909,6 @@ public class ObservableIslandList extends
 		ObservableIslandList olist = new ObservableIslandList(model, report);
 		ListDumper ld = new ListDumper(); 
 		ld.dumpList(new File(outdir, "ObservableIsland.csv"), olist);
-		ld.dumpList(new File(outdir, "ElecIsland.csv"), model.getElectricalIslands());
 		
 		/*
 		 * Print out the buses under each observable island
