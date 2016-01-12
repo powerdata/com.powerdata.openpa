@@ -49,6 +49,23 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 public class ObservableIslandList extends 
 	GroupListI<com.powerdata.openpa.se.ObservableIslandList.ObservableIsland>
 {
+
+	/**
+	 * Single Observable Island.
+	 */
+	public class ObservableIsland extends Group
+	{
+		public ObservableIsland(int ndx)
+		{
+			super(ObservableIslandList.this, ndx);
+		}
+		
+		public boolean hasVoltage() throws PAModelException
+		{
+			return ObservableIslandList.this.hasVoltage(_ndx);
+		}
+	}
+
 	enum BranchState {NotFound, Known, Unknown;}
 
 	/** Provide in interface to trace debug information in different implementations */
@@ -96,6 +113,11 @@ public class ObservableIslandList extends
 	
 	String[] _id = null;
 	
+	/**
+	 * Create a new observable island list
+	 * @param model
+	 * @throws PAModelException
+	 */
 	public ObservableIslandList(PAModel model) throws PAModelException
 	{
 //		super(model, new ObsIslandBldrNew(model, _NDbg).constructIndex());
@@ -104,6 +126,11 @@ public class ObservableIslandList extends
 		_dbg = _NDbg;
 	}
 	
+	/**
+	 * Create a new observable island list with debugging enabled
+	 * @param model
+	 * @throws PAModelException
+	 */
 	public ObservableIslandList(PAModel model, Debug debug) throws PAModelException
 	{
 //		super(model, new ObsIslandBldrNew(model, debug).constructIndex());
@@ -112,19 +139,6 @@ public class ObservableIslandList extends
 		_dbg = debug;
 	}
 	
-	public class ObservableIsland extends Group
-	{
-		public ObservableIsland(int ndx)
-		{
-			super(ObservableIslandList.this, ndx);
-		}
-		
-		public boolean hasVoltage() throws PAModelException
-		{
-			return ObservableIslandList.this.hasVoltage(_ndx);
-		}
-	}
-
 	@Override
 	public ListMetaType getListMeta() {return null;}
  
@@ -251,6 +265,16 @@ public class ObservableIslandList extends
 			_dbg = dbg;
 			_bri = BusRefIndex.CreateFromSingleBuses(_model);
 		}
+		
+		/**
+		 * Test if a branch is metered.
+		 * 
+		 * TODO:  OpenPA/PSIM needs to be extended to handle a telemetered state directly.
+		 * 
+		 * @param br Branch to test for telemetry
+		 * @return true if branch has telemetry, false otherwise
+		 * @throws PAModelException
+		 */
 		boolean isBranchMetered(ACBranch br) throws PAModelException
 		{
 			return  br.getFromP() != 0f || 
@@ -302,6 +326,12 @@ public class ObservableIslandList extends
 			
 		}
 
+		/**
+		 * Test if the bus has injections from Loads 
+		 * @param b Bus to check for load injections
+		 * @return
+		 * @throws PAModelException
+		 */
 		private boolean testLoadInj(Bus b) throws PAModelException
 		{
 			for(Load l : SubLists.getLoadInsvc(b.getLoads()))
@@ -310,6 +340,12 @@ public class ObservableIslandList extends
 			return true;
 		}
 
+		/**
+		 * Test if the bus has injections from SVC's
+		 * @param b Bus to check for load injections
+		 * @return
+		 * @throws PAModelException
+		 */
 		private boolean testSvcInj(Bus b) throws PAModelException
 		{
 			for(SVC s : SubLists.getSVCInsvc(b.getSVCs()))
@@ -317,6 +353,12 @@ public class ObservableIslandList extends
 			return true;
 		}
 
+		/**
+		 * Test if the bus has injections from Generators
+		 * @param b Bus to check for load injections
+		 * @return
+		 * @throws PAModelException
+		 */
 		private boolean testGenInj(Bus b) throws PAModelException
 		{
 			for(Gen g : SubLists.getGenInsvc(b.getGenerators()))
@@ -336,6 +378,14 @@ public class ObservableIslandList extends
 			return true;
 		}
 
+		/**
+		 * Construct the index (ties buses to observable island). This is the
+		 * actual point at which observability will be determined. The returned
+		 * index maps bus offsets to an observable island.
+		 * 
+		 * @return
+		 * @throws PAModelException
+		 */
 		abstract GroupIndex constructIndex() throws PAModelException;
 	}
 
@@ -352,30 +402,43 @@ public class ObservableIslandList extends
 			super(model, dbg);
 		}
 
+		/** ObsIsle object in bus-order */
 		ObsIsle[] _bus2Island;
+		/** remaining available injections */
 		Set<Bus> _availableInj = new HashSet<>();
+		/** remaining unknown branches */
 		Set<ACBranch> _unknownBranch = new HashSet<>();
-		Set<ObsIsle> _objIslands = new HashSet<>();
+		/** Current set of ObjIsle's */
+		Set<ObsIsle> _obsIslands = new HashSet<>();
 		
 		
+		/**
+		 * represetation of an ObservableIsland during construction of the list.
+		 * 
+		 * @author chris@powerdata.com
+		 *
+		 */
 		class ObsIsle extends HashSet<Bus>
 		{
 			private static final long serialVersionUID = 1L;
 
+			/** Pick a token bus that can be used for identification */
 			Bus _token;
 			
+			/** Create a new Observable Island with a single bus */
 			public ObsIsle(Bus b) throws PAModelException
 			{
 				add(b);
 				_token = b;
 			}
 
+			/** Merge another obsverable island into ours */
 			public ObsIsle merge(ObsIsle src)
 			{
 				addAll(src);
 				for(Bus b : src)
 					_bus2Island[b.getIndex()] = this;
-				_objIslands.remove(src);
+				_obsIslands.remove(src);
 				return this;
 			}
 
@@ -410,21 +473,23 @@ public class ObservableIslandList extends
 			}
 		}
 
+		/** Run the DOE observability algorithm and map each bus to it's island */
 		@Override
 		GroupIndex constructIndex() throws PAModelException
 		{
-			// set up the available injections
+			/** List of buses in single-bus view */
 			BusList buses = _bri.getBuses();
+			/** Number of "single" buses */
 			int nbus = buses.size();
 			_bus2Island = new ObsIsle[nbus];
+
 			for(int i=0; i < nbus; ++i)
 			{
 				Bus b = buses.get(i);
 				ObsIsle oi = new ObsIsle(b);
 				_bus2Island[i] = oi;
-				_objIslands.add(oi);
-				if(testInjections(b))
-					_availableInj.add(b);
+				_obsIslands.add(oi);
+				if(testInjections(b)) _availableInj.add(b);
 			}
 			
 			initializeBranches();
@@ -434,7 +499,7 @@ public class ObservableIslandList extends
 			int[] map = new int[nbus];
 			Arrays.fill(map,  -1);
 			int ibus = 0;
-			for(ObsIsle objisle : _objIslands)
+			for(ObsIsle objisle : _obsIslands)
 			{
 				for(Bus b : objisle)
 					map[b.getIndex()] = ibus;
@@ -444,9 +509,15 @@ public class ObservableIslandList extends
 			return new BasicGroupIndex(map, ibus);
 		}
 
+
+		/**
+		 * Run the measurement extension step of the DOE algorithm 
+		 *
+		 * @throws PAModelException
+		 */
 		void extendMeasurements() throws PAModelException
 		{
-			BusList sbus = _model.getSingleBus();
+			BusList sbus = _bri.getBuses();
 			int nUnkBr = -1;
 			int nInj = -1;
 			while (nUnkBr != _unknownBranch.size()
@@ -455,7 +526,7 @@ public class ObservableIslandList extends
 				nUnkBr = _unknownBranch.size();
 				nInj = _availableInj.size();
 				/*
-				 * step 1 loop through the unknown branches and check for the
+				 * DOE step 1 loop through the unknown branches and check for the
 				 * same island on each side
 				 */
 				Iterator<ACBranch> bri = _unknownBranch.iterator();
@@ -491,10 +562,23 @@ public class ObservableIslandList extends
 				}
 				
 			}
-		}		
+		}	
+		
+		/**
+		 * As part of step 2, we need to know if all the branches adjacent to a
+		 * bus have their remote side in the same island.
+		 * 
+		 * @param bus
+		 *            Bus to evaluate
+		 * @return the ObsIsle of the remote sides of the branches, or else null
+		 *         if the test failed.
+		 * @throws PAModelException
+		 */
 		ObsIsle testUnknownBranches(Bus bus) throws PAModelException
 		{
-			BusList sbus = _model.getSingleBus();
+			/** List of buses in single-bus topology */
+			BusList sbus = _bri.getBuses();
+			/** remote side of first branch */
 			ObsIsle rmti = null;
 			for (ACBranchList brlist : bus.getACBranches())
 			{
@@ -502,22 +586,40 @@ public class ObservableIslandList extends
 				{
 					if (_unknownBranch.contains(b))
 					{
-						/* figure out which bus we're on */
+						/*
+						 * Model elements have references to connectivity buses.
+						 * We need to find the appropriate "single" bus
+						 */
 						Bus f = sbus.getByBus(b.getFromBus());
 						Bus t = sbus.getByBus(b.getToBus());
+						/** remote or "other" bus for this branch */
 						Bus rb = (f.equals(bus)) ? t : f;
+						/** observable island of remote bus for this branch */
 						ObsIsle rbi = _bus2Island[rb.getIndex()];
+						/*
+						 * Set the remote side of the first branch so we can
+						 * compare the remaining branches
+						 */
 						if (rmti == null)
 							rmti = rbi;
+						/*
+						 * if any one of the branch far sides does not match the
+						 * first one, then the test failed.
+						 */
 						else if (!rmti.equals(rbi)) return null;
 					}
 				}
 			}
 			return rmti;
 		}		
+		/**
+		 * Performs the "initialize branches" phase of the DOE algorithm.
+		 * 
+		 * @throws PAModelException
+		 */
 		void initializeBranches() throws PAModelException
 		{
-			BusList sbus = _model.getSingleBus();
+			BusList sbus = _bri.getBuses();
 			Collection<ACBranchList> l = SubLists.getBranchInsvc(_model.getACBranches());
 			for(ACBranchList blist : l)
 			{
@@ -560,7 +662,7 @@ public class ObservableIslandList extends
 	
 	/**
 	 * <ul>
-	 * This is a work in progress, and attempts several existing OpenPA tools as
+	 * This is a work in progress, and attempts to make use of some existing OpenPA tools as
 	 * possible optimizations:
 	 * <li>superimpose both the known branches and unknown branches within the
 	 * same {@link LinkNet} object, utilizing LinkNet's ability to eliminate
@@ -676,7 +778,7 @@ public class ObservableIslandList extends
 			 * 
 			 * We should consider for performance in this loop. For example, if
 			 * we merge, we kick out of forEach. Instead, maybe we should
-			 * greedily try to operate on the rest of the list. This should be
+			 * try to operate on the rest of the list similar to DOE. This should be
 			 * tested, but for now we think that:
 			 *
 			 * 1. We have a higher chance of getting more buses with single
@@ -770,6 +872,7 @@ public class ObservableIslandList extends
 		}
 		
 	}
+	
 	public static void main(String...args) throws Exception
 	{
 		String uri = null;
@@ -851,7 +954,6 @@ public class ObservableIslandList extends
 				w.println(_Hdr.get(r));
 				_map.put(r, w);
 			}
-			_map.put(Report.Log, new PrintWriter(System.err, true));
 		}
 
 		@Override
