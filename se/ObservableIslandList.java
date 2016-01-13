@@ -1011,7 +1011,7 @@ public class ObservableIslandList extends
 			PrintWriter pw = _map.get(Report.Log); 
 			try
 			{
-				pw.format("Recognize branch %s in island %s\n",
+				pw.format("Recognize branch %s in island %s by step 1\n",
 					_brmap.get(branch).getID(), _sbus.get(obsisle).getID());
 			}
 			catch (PAModelException e)
