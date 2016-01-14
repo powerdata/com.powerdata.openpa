@@ -26,11 +26,7 @@ OpenPA Models can be loaded from multiple sources.  The primary source we use is
 
 A sample model is available:
 
-[CASCADIA model (contains switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia.zip)
-
-[CASCADIA model (topological view, no switches)](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/cascadia_tn.zip)
-
-[6-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/6bus.zip)
+[24-bus model](http://powerdata.github.io/com.powerdata.openpa/psmfmtmodels/24-bus.zip)
 
 
 *PSS/e Files*
@@ -76,6 +72,7 @@ This should output:
 
 Changes
 ------
+2016-01-13.  Add 24-bus model, clean up links for PSIM formats
 2015-04-08.  Remove OpenPA version 1 psse code.  The com.powerdata.openpa.psse\*.\* packages have been removed.  
 
 TO-DO:
