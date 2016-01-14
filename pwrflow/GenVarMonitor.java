@@ -10,7 +10,7 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.SVC;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
 import com.powerdata.openpa.tools.PAMath;
-import com.powerdata.openpa.tools.SpSymFltMatrix;
+import com.powerdata.openpa.tools.matrix.SpSymFltMatrix;
 
 /**
  * Monitor generator vars and convert bus type if needed

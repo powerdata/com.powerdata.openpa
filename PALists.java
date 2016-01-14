@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Standard power system equipment lists
@@ -55,7 +55,7 @@ public interface PALists
 	 * @throws PAModelException
 	 *             Method uses reflection to find all one-terminal device lists
 	 */
-	Set<OneTermDevList> getOneTermDevices() throws PAModelException;
+	List<OneTermDevList> getOneTermDevices() throws PAModelException;
 
 	/**
 	 * get all two-terminal devices
@@ -63,7 +63,7 @@ public interface PALists
 	 * @throws PAModelException
 	 *             Method uses reflection to find all two-terminal devices
 	 */
-	Set<TwoTermDevList> getTwoTermDevices() throws PAModelException;
+	List<TwoTermDevList> getTwoTermDevices() throws PAModelException;
 
 	/**
 	 * get all AC Branches
@@ -71,8 +71,8 @@ public interface PALists
 	 * @throws PAModelException
 	 *             Method uses reflection to find all ACBranch devices
 	 */
-	Set<ACBranchList> getACBranches() throws PAModelException;
+	List<ACBranchList> getACBranches() throws PAModelException;
 	
-	Set<FixedShuntList> getFixedShunts() throws PAModelException;
+	List<FixedShuntList> getFixedShunts() throws PAModelException;
 
 }

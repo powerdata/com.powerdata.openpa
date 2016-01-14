@@ -44,7 +44,7 @@ public class ACPowerCalc
 	/** system MVA base */
 	float _sbase = 100f;
 	/** ac branch calculators for each type */
-	Collection<ACBranchFlows> _brcalc = new ArrayList<>();
+	List<ACBranchFlows> _brcalc = new ArrayList<>();
 	/** SVC calculator */
 	SVCCalcList _svc;
 	/** keep the partitioned SVC results around for a reasonable amount of time */
@@ -52,7 +52,7 @@ public class ACPowerCalc
 	/** PA Model */
 	PAModel _model;
 	/** fixed shunt calculators */
-	Collection<FixedShuntCalcList> _fshcalc = new ArrayList<>();
+	List<FixedShuntCalcList> _fshcalc = new ArrayList<>();
 	/** active loads */
 	Active1TData _actvld, _actvgen;
 
@@ -128,10 +128,10 @@ public class ACPowerCalc
 	}
 
 	/** return fixed shunt calculator (one for each list) */
-	public Collection<FixedShuntCalcList> getFixedShuntCalc() {return _fshcalc;}
+	public List<FixedShuntCalcList> getFixedShuntCalc() {return _fshcalc;}
 	
 	/** return AC Branch calculator (one for each type of branch) */
-	public Collection<ACBranchFlows> getBranchFlows() {return _brcalc;}
+	public List<ACBranchFlows> getBranchFlows() {return _brcalc;}
 
 	/** return SVC calculator for SVC's modeled with positive slope */
 	public SVCCalcList getSVCCalc() {return _svc;}
@@ -193,6 +193,12 @@ public class ACPowerCalc
 		_svc.calc(vm);
 	}
 	
+	/**
+	 * Calculate all bus mismatches 
+	 * @param pmm
+	 * @param qmm
+	 * @throws PAModelException
+	 */
 	public void applyMismatch(Mismatch pmm, Mismatch qmm) throws PAModelException
 	{
 		for(ACBranchFlows flows : _brcalc)
@@ -208,6 +214,7 @@ public class ACPowerCalc
 	
 	}
 	
+	/** Update results back into the OpenPA lists */
 	public void updateResults() throws PAModelException
 	{
 		for(ACBranchFlows flows : _brcalc)

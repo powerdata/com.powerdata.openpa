@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import com.powerdata.openpa.AreaList;
 import com.powerdata.openpa.BaseList;
 import com.powerdata.openpa.Bus;
@@ -62,7 +63,7 @@ public class ListDumper
 		}
 	}
 
-	public void dumpList(File nfile, BaseList<?> list) throws IOException,
+	public void dumpList(File nfile, List<?> list) throws IOException,
 			ReflectiveOperationException, IllegalArgumentException
 	{
 		Method[] methods = list.getClass().getMethods();
@@ -138,7 +139,7 @@ public class ListDumper
 						v = "<null>";
 					}
 					boolean isstr = !Number.class.isInstance(v);
-					if (isstr) pw.print('\'');
+					if (isstr) pw.print('"');
 					String vs = null;
 					try
 					{
@@ -149,7 +150,7 @@ public class ListDumper
 						vs = "<null>";
 					}
 					pw.print((vs==null)?"<null>":vs);
-					if (isstr) pw.print('\'');
+					if (isstr) pw.print('"');
 				}
 				pw.println();
 			}

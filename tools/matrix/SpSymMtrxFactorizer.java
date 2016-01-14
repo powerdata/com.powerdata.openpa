@@ -1,6 +1,8 @@
-package com.powerdata.openpa.tools;
+package com.powerdata.openpa.tools.matrix;
 
 import java.util.Arrays;
+import com.powerdata.openpa.tools.BusConnectionsPriQ;
+import com.powerdata.openpa.tools.LinkNet;
 
 /**
  * Symmetric (Sparse) Matrix factorization base.

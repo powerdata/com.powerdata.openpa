@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.powerdata.openpa.*;
@@ -807,7 +808,7 @@ public class ObservableIslandList extends
 		
 		BusConnectionsPriQ initBranches(ConcurrentGroupLinkNet onet, boolean[] availInj) throws PAModelException
 		{
-			Set<ACBranchList> brset = SubLists.getBranchInsvc(_model.getACBranches());
+			List<ACBranchList> brset = SubLists.getBranchInsvc(_model.getACBranches());
 			int nbr = brset.stream().mapToInt(i -> i.size()).sum();
 			int nbus = _bri.getBuses().size();
 			onet.ensureCapacity(nbus-1, nbr);

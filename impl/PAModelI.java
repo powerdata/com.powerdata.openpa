@@ -3,6 +3,7 @@ package com.powerdata.openpa.impl;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.powerdata.openpa.*;
@@ -323,25 +324,25 @@ public class PAModelI implements PAModel
 	}
 
 	@Override
-	public Set<OneTermDevList> getOneTermDevices() throws PAModelException
+	public List<OneTermDevList> getOneTermDevices() throws PAModelException
 	{
 		return _slist.getOneTermDevs();
 	}
 
 	@Override
-	public Set<TwoTermDevList> getTwoTermDevices() throws PAModelException
+	public List<TwoTermDevList> getTwoTermDevices() throws PAModelException
 	{
 		return _slist.getTwoTermDevs();
 	}
 
 	@Override
-	public Set<ACBranchList> getACBranches() throws PAModelException
+	public List<ACBranchList> getACBranches() throws PAModelException
 	{
 		return _slist.getACBranches();
 	}
 
 	@Override
-	public Set<FixedShuntList> getFixedShunts() throws PAModelException
+	public List<FixedShuntList> getFixedShunts() throws PAModelException
 	{
 		return _slist.getFixedShunts();
 	}

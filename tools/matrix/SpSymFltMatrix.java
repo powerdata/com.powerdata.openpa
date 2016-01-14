@@ -1,8 +1,9 @@
-package com.powerdata.openpa.tools;
+package com.powerdata.openpa.tools.matrix;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
-import com.powerdata.openpa.tools.SpSymMtrxFactPattern.EliminatedNode;
+import com.powerdata.openpa.tools.LinkNet;
+import com.powerdata.openpa.tools.matrix.SpSymMtrxFactPattern.EliminatedNode;
 
 /**
  * Sparse Symmetric matrix with a floating-point value.
@@ -16,7 +17,7 @@ import com.powerdata.openpa.tools.SpSymMtrxFactPattern.EliminatedNode;
  * @author chris@powerdata.com
  * 
  */
-public class SpSymFltMatrix
+public class SpSymFltMatrix implements FloatMatrix
 {
 	/**
 	 * Inner Factorizer class to perform factorization against floating-point value
@@ -118,13 +119,8 @@ public class SpSymFltMatrix
 				f.getElimNdCount(), f.getElimEdgeOrder(), f.getElimEdgeCount());
 	}
 	
-	/**
-	 * Increment the value in the matrix.  Since 
-	 * @param f
-	 * @param t
-	 * @param b
-	 */
-	public void incVal(int f, int t, float b)
+	@Override
+	public void addValue(int f, int t, float b)
 	{
 		if (f == t)
 			_bdiag[f] += b;
@@ -203,5 +199,39 @@ public class SpSymFltMatrix
 	public float[] getBDiag()
 	{
 		return _bdiag;
+	}
+	@Override
+	public int getRowCount()
+	{
+		return _bdiag.length;
+	}
+	@Override
+	public int getColumnCount()
+	{
+		return _bdiag.length;
+	}
+	@Override
+	public void setValue(int row, int column, float value)
+	{
+		if (row == column)
+			_bdiag[row] = value;
+		else
+			_boffdiag[_adj.findBranch(row, column)] = value;
+	}
+	@Override
+	public float getValue(int row, int column)
+	{
+		if (row == column)
+			return _bdiag[row];
+		else
+			return _boffdiag[_adj.findBranch(row, column)];
+	}
+	@Override
+	public void multValue(int row, int column, float value)
+	{
+		if (row == column)
+			_bdiag[row] *= value;
+		else
+			_boffdiag[_adj.findBranch(row, column)] *= value;
 	}
 }

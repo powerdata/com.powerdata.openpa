@@ -26,6 +26,17 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		throws PAModelException
 	{
 		super(branches, bri);
+		prep();
+	}
+	
+	public ACBranchFlowsI(ACBranchExtList<? extends ACBranchExt> copy) throws PAModelException
+	{
+		super(copy);
+		prep();
+	}
+
+	private void prep() throws PAModelException
+	{
 		int n = size();
 		_fp = new float[n];
 		_tp = new float[n];
@@ -40,7 +51,6 @@ public class ACBranchFlowsI extends ACBranchExtListI<ACBranchFlow> implements AC
 		_lshift = _list.getShift();
 	}
 	
-
 	@Override
 	public ACBranchFlow get(int index)
 	{

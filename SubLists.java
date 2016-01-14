@@ -1,9 +1,8 @@
 package com.powerdata.openpa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import com.powerdata.openpa.impl.ACBranchSubListBase;
 import com.powerdata.openpa.impl.AreaSubList;
 import com.powerdata.openpa.impl.BusSubList;
@@ -195,10 +194,10 @@ public class SubLists
 		return getBranchSublist(list, getInServiceIndexes(list));
 	}
 	
-	public static Set<ACBranchList> getBranchInsvc(Collection<ACBranchList> list)
+	public static List<ACBranchList> getBranchInsvc(List<ACBranchList> list)
 			throws PAModelException
 	{
-		Set<ACBranchList> rv = new HashSet<>(list.size());
+		List<ACBranchList> rv = new ArrayList<>(list.size());
 		for(ACBranchList l : list)
 			rv.add(new ACBranchList(getBranchInsvc(l)));
 		return rv;
@@ -216,10 +215,10 @@ public class SubLists
 		return getFixedShuntSublist(list, getInServiceIndexes(list));
 	}
 	
-	public static Set<FixedShuntList> getFixedShuntInsvc(Collection<FixedShuntList> list)
+	public static List<FixedShuntList> getFixedShuntInsvc(List<FixedShuntList> list)
 			throws PAModelException
 	{
-		Set<FixedShuntList> rv = new HashSet<>(list.size());
+		List<FixedShuntList> rv = new ArrayList<>(list.size());
 		for(FixedShuntList l : list)
 			rv.add(new FixedShuntList(getFixedShuntInsvc(l)));
 		return rv;

@@ -2,7 +2,9 @@ package com.powerdata.openpa.impl;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import com.powerdata.openpa.ACBranch;
@@ -36,9 +38,9 @@ public class SuperList
 		}
 		
 		@SuppressWarnings("unchecked")
-		Set<T> getSet() throws PAModelException
+		List<T> getList() throws PAModelException
 		{
-			Set<T> rv = new HashSet<>();
+			List<T> rv = new ArrayList<>();
 			try
 			{
 				for (Method m : _m)
@@ -54,10 +56,10 @@ public class SuperList
 		}
 	}
 	
-	WeakReference<Set<TwoTermDevList>> _l2   = new WeakReference<>(null);
-	WeakReference<Set<OneTermDevList>> _l1   = new WeakReference<>(null);
-	WeakReference<Set<ACBranchList>>   _lac  = new WeakReference<>(null);
-	WeakReference<Set<FixedShuntList>> _lfsh = new WeakReference<>(null);
+	WeakReference<List<TwoTermDevList>> _l2   = new WeakReference<>(null);
+	WeakReference<List<OneTermDevList>> _l1   = new WeakReference<>(null);
+	WeakReference<List<ACBranchList>>   _lac  = new WeakReference<>(null);
+	WeakReference<List<FixedShuntList>> _lfsh = new WeakReference<>(null);
 	
 	public SuperList(PALists lists)
 	{
@@ -82,60 +84,60 @@ public class SuperList
 	}
 	
 	<T extends BaseList<? extends BaseObject>, U extends BaseList<? extends BaseObject>> 
-	Set<U> wrap(Set<T> slist, Function<T, U> alloc)
+	List<U> wrap(List<T> slist, Function<T, U> alloc)
 {
-	HashSet<U> rv = new HashSet<>(slist.size());
+	List<U> rv = new ArrayList<>(slist.size());
 	for (T l : slist)
 		rv.add(alloc.apply(l));
 	return rv;
 }
 
 
-	public Set<OneTermDevList> getOneTermDevs() throws PAModelException
+	public List<OneTermDevList> getOneTermDevs() throws PAModelException
 	{
-		Set<OneTermDevList> rv = _l1.get();
+		List<OneTermDevList> rv = _l1.get();
 		if (rv == null)
 		{
 			Member<OneTermDevListIfc<? extends OneTermDev>> m =
 				loadMethods(OneTermDevListIfc.class);
-			rv = wrap(m.getSet(), OneTermDevList::new);
+			rv = wrap(m.getList(), OneTermDevList::new);
 			_l1 = new WeakReference<>(rv);
 		}
 		return rv;
 	}
 	
-	public Set<TwoTermDevList> getTwoTermDevs() throws PAModelException
+	public List<TwoTermDevList> getTwoTermDevs() throws PAModelException
 	{
-		Set<TwoTermDevList> rv = _l2.get();
+		List<TwoTermDevList> rv = _l2.get();
 		if (rv == null)
 		{
 			Member<TwoTermDevListIfc<? extends TwoTermDev>> m = loadMethods(TwoTermDevListIfc.class);
-			rv = wrap(m.getSet(), TwoTermDevList::new);
+			rv = wrap(m.getList(), TwoTermDevList::new);
 			_l2 = new WeakReference<>(rv);
 		}
 		return rv;
 	}
 	
-	public Set<ACBranchList> getACBranches() throws PAModelException
+	public List<ACBranchList> getACBranches() throws PAModelException
 	{
-		Set<ACBranchList> rv = _lac.get();
+		List<ACBranchList> rv = _lac.get();
 		if (rv == null)
 		{
 			Member<ACBranchListIfc<? extends ACBranch>> m = loadMethods(ACBranchListIfc.class);
-			rv = wrap(m.getSet(), ACBranchList::new);
+			rv = wrap(m.getList(), ACBranchList::new);
 			_lac = new WeakReference<>(rv);
 		}
 		return rv;
 	}
 	
-	public Set<FixedShuntList> getFixedShunts() throws PAModelException
+	public List<FixedShuntList> getFixedShunts() throws PAModelException
 	{
-		Set<FixedShuntList> rv = _lfsh.get();
+		List<FixedShuntList> rv = _lfsh.get();
 		if (rv == null)
 		{
 			Member<FixedShuntListIfc<? extends FixedShunt>> m =
 				loadMethods(FixedShuntListIfc.class);
-			rv = wrap(m.getSet(), FixedShuntList::new);
+			rv = wrap(m.getList(), FixedShuntList::new);
 			_lfsh = new WeakReference<>(rv);
 		}
 		return rv;

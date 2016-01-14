@@ -19,8 +19,8 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
-import com.powerdata.openpa.tools.FactorizedFltMatrix;
 import com.powerdata.openpa.tools.PAMath;
+import com.powerdata.openpa.tools.matrix.FactorizedFltMatrix;
 
 public class DCPowerFlow
 {

@@ -1,6 +1,6 @@
 package com.powerdata.openpa;
 
-import java.util.Set;
+import java.util.List;
 import com.powerdata.openpa.impl.SuperList;
 
 
@@ -95,25 +95,25 @@ public class Group extends AbstractBaseObject implements PALists
 	}
 
 	@Override
-	public Set<OneTermDevList> getOneTermDevices() throws PAModelException
+	public List<OneTermDevList> getOneTermDevices() throws PAModelException
 	{
 		return _slist.getOneTermDevs();
 	}
 
 	@Override
-	public Set<TwoTermDevList> getTwoTermDevices() throws PAModelException
+	public List<TwoTermDevList> getTwoTermDevices() throws PAModelException
 	{
 		return _slist.getTwoTermDevs();
 	}
 
 	@Override
-	public Set<ACBranchList> getACBranches() throws PAModelException
+	public List<ACBranchList> getACBranches() throws PAModelException
 	{
 		return _slist.getACBranches();
 	}
 
 	@Override
-	public Set<FixedShuntList> getFixedShunts() throws PAModelException
+	public List<FixedShuntList> getFixedShunts() throws PAModelException
 	{
 		return _slist.getFixedShunts();
 	}

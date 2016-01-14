@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.BusList;
@@ -18,7 +18,7 @@ import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
 import com.powerdata.openpa.tools.PAMath;
-import com.powerdata.openpa.tools.SpSymFltMatrix;
+import com.powerdata.openpa.tools.matrix.SpSymFltMatrix;
 
 
 /**
@@ -104,7 +104,7 @@ public class BDblPrime extends SpSymFltMatrix
 	{
 		BusRefIndex bri = BusRefIndex.CreateFromSingleBuses(model);
 		BusList buses = bri.getBuses();
-		Set<ACBranchList> branches = SubLists.getBranchInsvc(model.getACBranches());
+		List<ACBranchList> branches = SubLists.getBranchInsvc(model.getACBranches());
 		MatrixElementBuilder bldr = new MatrixElementBuilder(buses.size(), 
 			branches.stream().mapToInt(i -> i.size()).sum());
 		ACBranchAdjacencies adj = new ACBranchAdjacencies(

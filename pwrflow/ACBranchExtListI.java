@@ -1,6 +1,7 @@
 package com.powerdata.openpa.pwrflow;
 
 import java.util.AbstractList;
+import java.util.List;
 import com.powerdata.openpa.ACBranch;
 import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.Bus;
@@ -14,7 +15,7 @@ public class ACBranchExtListI<T extends ACBranchExt> extends
 		AbstractList<T> implements ACBranchExtList<T>
 {
 	ACBranchListIfc<? extends ACBranch> _list;
-	ComplexList _y;
+	List<Complex> _y;
 	BusRefIndex _bri;
 	
 	public ACBranchExtListI(ACBranchListIfc<? extends ACBranch> list, 
@@ -32,6 +33,17 @@ public class ACBranchExtListI<T extends ACBranchExt> extends
 		}.inv();
 	}
 	
+	public ACBranchExtListI(ACBranchExtList<? extends ACBranchExt> copy)
+	{
+		_list = copy.getList();
+		_y = copy.getY();
+		_bri = copy.getBusRefIndex();
+	}
+	
+	@Override
+	public ACBranchListIfc<? extends ACBranch> getList() {return _list;}
+	@Override
+	public BusRefIndex getBusRefIndex() {return _bri;}
 
 	@Override
 	public int size() {return _list.size();}
@@ -43,7 +55,7 @@ public class ACBranchExtListI<T extends ACBranchExt> extends
 	}
 	
 	@Override
-	public ComplexList getY() {return _y;}
+	public List<Complex> getY() {return _y;}
 
 	@Override
 	public Bus getFromBus(int ndx) throws PAModelException

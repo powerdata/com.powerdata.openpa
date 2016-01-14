@@ -1,4 +1,4 @@
-package com.powerdata.openpa.tools;
+package com.powerdata.openpa.tools.matrix;
 
 import java.io.PrintWriter;
 import java.util.Arrays;

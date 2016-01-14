@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Set;
+import java.util.List;
 import com.powerdata.openpa.ACBranchList;
 import com.powerdata.openpa.BusList;
 import com.powerdata.openpa.BusRefIndex;
@@ -13,7 +13,7 @@ import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.PflowModelBuilder;
 import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
-import com.powerdata.openpa.tools.SpSymFltMatrix;
+import com.powerdata.openpa.tools.matrix.SpSymFltMatrix;
 
 public class BPrime extends SpSymFltMatrix 
 {
@@ -70,7 +70,7 @@ public class BPrime extends SpSymFltMatrix
 		BusList buses = bri.getBuses();
 		
 		/* restrict branches to those in-service */
-		Set<ACBranchList> branches = SubLists.getBranchInsvc(model.getACBranches());
+		List<ACBranchList> branches = SubLists.getBranchInsvc(model.getACBranches());
 		
 		/* create an element builder suitable for b' */
 		MatrixElementBuilder bldr = new MatrixElementBuilder(buses.size(), 

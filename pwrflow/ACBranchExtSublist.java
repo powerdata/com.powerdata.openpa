@@ -3,7 +3,9 @@ package com.powerdata.openpa.pwrflow;
 import java.util.AbstractList;
 import java.util.List;
 import com.powerdata.openpa.ACBranch;
+import com.powerdata.openpa.ACBranchListIfc;
 import com.powerdata.openpa.Bus;
+import com.powerdata.openpa.BusRefIndex;
 import com.powerdata.openpa.PAModelException;
 import com.powerdata.openpa.pwrflow.ACBranchExtList.ACBranchExt;
 import com.powerdata.openpa.tools.Complex;
@@ -59,5 +61,15 @@ public class ACBranchExtSublist<T extends ACBranchExt> extends AbstractList<T> i
 	public ACBranch getBranch(int ndx)
 	{
 		return _src.getBranch(_ndx[ndx]);
+	}
+	@Override
+	public ACBranchListIfc<? extends ACBranch> getList()
+	{
+		throw new UnsupportedOperationException("Method not implemented");
+	}
+	@Override
+	public BusRefIndex getBusRefIndex()
+	{
+		throw new UnsupportedOperationException("Method not implemented");
 	}
 }

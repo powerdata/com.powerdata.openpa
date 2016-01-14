@@ -1,7 +1,8 @@
-package com.powerdata.openpa.tools;
+package com.powerdata.openpa.tools.matrix;
 
 import java.util.AbstractList;
 import java.util.Arrays;
+import com.powerdata.openpa.tools.LinkNet;
 
 /**
  * Symmetric (Sparse) Matrix factorization pattern. Perform elimination and keep

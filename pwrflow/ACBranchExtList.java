@@ -121,9 +121,14 @@ public interface ACBranchExtList<T extends com.powerdata.openpa.pwrflow.ACBranch
 	 * @return
 	 * @throws PAModelException
 	 */
-	public static <T extends ACBranchExt> ACBranchExtList<T> LoadExtension(
+	static <T extends ACBranchExt> ACBranchExtList<T> LoadExtension(
 		ACBranchListIfc<? extends ACBranch> list, BusRefIndex bri) throws PAModelException
 	{
 		return new ACBranchExtListI<>(list, bri);
 	}
+
+	ACBranchListIfc<? extends ACBranch> getList();
+
+	BusRefIndex getBusRefIndex();
+	
 }

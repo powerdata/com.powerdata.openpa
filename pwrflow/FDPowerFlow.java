@@ -24,9 +24,9 @@ import com.powerdata.openpa.SVCList;
 import com.powerdata.openpa.SubLists;
 import com.powerdata.openpa.pwrflow.BusMonitor.Action;
 import com.powerdata.openpa.pwrflow.ConvergenceList.ConvergenceInfo;
-import com.powerdata.openpa.tools.FactorizedFltMatrix;
 import com.powerdata.openpa.tools.PAMath;
-import com.powerdata.openpa.tools.SpSymMtrxFactPattern;
+import com.powerdata.openpa.tools.matrix.FactorizedFltMatrix;
+import com.powerdata.openpa.tools.matrix.SpSymMtrxFactPattern;
 import com.powerdata.openpa.tools.psmfmt.PsmFmtExport;
 
 /**

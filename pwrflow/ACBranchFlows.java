@@ -26,7 +26,6 @@ public interface ACBranchFlows extends
 				getFromPpu(), getFromQpu(),
 				getToPpu(), getToQpu());
 		}
-		
 	}
 
 	float getFromPpu(int ndx);
