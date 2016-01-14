@@ -223,7 +223,8 @@ public interface JacobianMatrix extends Matrix<JacobianElement>
 		//TODO:  Shunts & SVC's
 		
 		/* Print out the matrix to a csv file */
-		PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(outdir, "jacobian-matrix.csv"))));
+		PrintWriter pw = new PrintWriter(new BufferedWriter(
+			new FileWriter(new File(outdir, "jacobian-matrix.csv"))));
 		jm.dump(pw, new MatrixDebug<JacobianElement>()
 		{
 			@Override
