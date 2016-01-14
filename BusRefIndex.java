@@ -57,6 +57,17 @@ public interface BusRefIndex
 	TwoTerm get2TBus(TwoTermDevListIfc<? extends TwoTermDev> t1list) throws PAModelException;
 
 	/**
+	 * Convert a connectivity-based bus to this topology
+	 * @param b the Connectivity-based bus
+	 * @return toplology-based bus
+	 * @throws PAModelException 
+	 */
+	default Bus getByBus(Bus b) throws PAModelException
+	{
+		return getBuses().getByBus(b);
+	}
+	
+	/**
 	 * Function that takes a list and index, and return a Bus object
 	 * 
 	 * @author chris@powerdata.com

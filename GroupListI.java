@@ -175,6 +175,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	/**
 	 * return list of buses as appropriate.
 	 */
+	@Override
 	public BusList getBuses(int ndx) throws PAModelException
 	{
 		BusList list = _lmodel.getBuses();
@@ -182,12 +183,14 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 	
 	/** return list of switches */
+	@Override
 	public SwitchList getSwitches(int ndx) throws PAModelException
 	{
 		SwitchList list = _lmodel.getSwitches();
 		return new SwitchSubList(list, getMap2T(EqType.SW, list).get(ndx));
 	}
 	/** return list of lines */
+	@Override
 	public LineList getLines(int ndx) throws PAModelException
 	{
 		LineList list = _lmodel.getLines();
@@ -195,6 +198,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 			getMap2T(EqType.LN, list).get(ndx));
 	}
 	/** return list of series reactors */
+	@Override
 	public SeriesReacList getSeriesReactors(int ndx) throws PAModelException
 	{
 		SeriesReacList list = _lmodel.getSeriesReactors();
@@ -203,6 +207,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 	
 	/** return list of series capacitors */
+	@Override
 	public SeriesCapList getSeriesCapacitors(int ndx) throws PAModelException
 	{
 		SeriesCapList list = _lmodel.getSeriesCapacitors();
@@ -210,6 +215,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 			getMap2T(EqType.SC, list).get(ndx));
 	}
 	/** return list of transformers */
+	@Override
 	public TransformerList getTransformers(int ndx) throws PAModelException
 	{
 		TransformerList list = _lmodel.getTransformers();
@@ -218,6 +224,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 	
 	/** return list of phase shifters */
+	@Override
 	public PhaseShifterList getPhaseShifters(int ndx) throws PAModelException
 	{
 		PhaseShifterList list = _lmodel.getPhaseShifters();
@@ -226,6 +233,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 	
 	/** return list of two-terminal DC Lines */
+	@Override
 	public TwoTermDCLineList getTwoTermDCLines(int ndx) throws PAModelException
 	{
 		TwoTermDCLineList list = _lmodel.getTwoTermDCLines();
@@ -234,6 +242,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 	
 	/** return list of generators */
+	@Override
 	public GenList getGenerators(int ndx) throws PAModelException
 	{
 		GenList list = _lmodel.getGenerators();
@@ -242,6 +251,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 
 	/** return list of loads */
+	@Override
 	public LoadList getLoads(int ndx) throws PAModelException
 	{
 		LoadList list = _lmodel.getLoads();
@@ -249,6 +259,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 			getMap1T(EqType.LD, list).get(ndx));
 	}
 	/** return list of shunt reactors */
+	@Override
 	public ShuntReacList getShuntReactors(int ndx) throws PAModelException
 	{
 		ShuntReacList list = _lmodel.getShuntReactors();
@@ -257,6 +268,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 	
 	/** return list of shunt capacitors */
+	@Override
 	public ShuntCapList getShuntCapacitors(int ndx) throws PAModelException
 	{
 		ShuntCapList list = _lmodel.getShuntCapacitors();
@@ -265,6 +277,7 @@ public abstract class GroupListI<T extends Group> extends AbstractPAList<T> impl
 	}
 
 	/** return list of SVC's */
+	@Override
 	public SVCList getSVCs(int ndx) throws PAModelException
 	{
 		SVCList list = _lmodel.getSVCs();

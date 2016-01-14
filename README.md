@@ -1,8 +1,15 @@
 com.powerdata.openpa
 ====================
 
-The goal of the API is to make model access simple and fast regardless of the back-end being used.
+The goal of the OpenPA API is to make model access simple and fast regardless of the back-end being used,
+and provide some basic utilities to help operate on a model.  Our aim is to help application engineers:
 
+* Focus development effort on core algorithm
+* Access to real-world models during development
+* Avoid dependencies with database, data formats, and proprietary systems
+* Static and real-time data packaged in simple well-defined objects
+* Consistent API promotes reduced integration effort
+* reduced application footprint
 
 Status of this README
 -----
@@ -73,6 +80,7 @@ This should output:
 Changes
 ------
 2016-01-13.  Add 24-bus model, clean up links for PSIM formats
+
 2015-04-08.  Remove OpenPA version 1 psse code.  The com.powerdata.openpa.psse\*.\* packages have been removed.  
 
 TO-DO:

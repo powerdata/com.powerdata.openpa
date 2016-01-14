@@ -3,7 +3,7 @@ package com.powerdata.openpa;
 import java.util.List;
 
 /**
- * Abstract groupings of buses on some (or no) criteria
+ * Partition buses into groupings
  * 
  * @author chris@powerdata.com
  *

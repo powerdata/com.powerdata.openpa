@@ -28,7 +28,10 @@ import gnu.trove.map.hash.TIntObjectHashMap;
  * "Contribution to Power State Estimation and Transient Stability Analysis" ,
  * Feb 1984.
  * </p>
- * 
+ * <p>
+ * Measurement Telemetered status is not yet available directly in OpenPA or the PSIM CSV formats.
+ * As such, we look for non-zero measurements on devices connected to known-energized buses.
+ * </p>
  * <p>
  * This class provides a list of observable islands built using
  * {@link ObsIslandBldrDOE} (inner static class for now). This class has been
@@ -109,9 +112,14 @@ public class ObservableIslandList extends
 		public void trackBranch(int br, ACBranch branch) {}
 	};
 	
+	/** Electrical model and state */
 	PAModel _model;
+	/** Optional debug container */
 	Debug _dbg;
-	
+	/**
+	 * Used for parent list support that requires names and ID's for list
+	 * elements.  This would not normally be used in production, only debugging
+	 */
 	String[] _id = null;
 	
 	/**
@@ -256,8 +264,11 @@ public class ObservableIslandList extends
 	 */
 	static abstract class ObsIslandBldr
 	{
+		/** Use to convert equipment buses into the desired topology */
 		BusRefIndex _bri;
+		/** Representation of model network and state */
 		PAModel _model;
+		/** Optional debug container */
 		Debug _dbg;
 		
 		ObsIslandBldr(PAModel model, Debug dbg) throws PAModelException
@@ -487,9 +498,16 @@ public class ObservableIslandList extends
 			for(int i=0; i < nbus; ++i)
 			{
 				Bus b = buses.get(i);
+				/* create a new ObjIsle for each bus */
 				ObsIsle oi = new ObsIsle(b);
+				/* track each island by bus order */
 				_bus2Island[i] = oi;
+				/* track the new island */
 				_obsIslands.add(oi);
+				/*
+				 * test for injection measurements and if present, add to the
+				 * available injections set
+				 */
 				if(testInjections(b)) _availableInj.add(b);
 			}
 			
@@ -497,6 +515,12 @@ public class ObservableIslandList extends
 			
 			extendMeasurements();
 			
+			/*
+			 * Observability is now complete. Create the map used to construct
+			 * the full Observable Island list. For each bus, indicate which
+			 * objservable island it belongs to. A value of -1 in the map array
+			 * means that a bus is not in any island.
+			 */
 			int[] map = new int[nbus];
 			Arrays.fill(map,  -1);
 			int ibus = 0;
@@ -507,6 +531,10 @@ public class ObservableIslandList extends
 				++ibus;
 			}
 			
+			/*
+			 * BasicGroupIndex is the means by which we communicate the bus ->
+			 * island mapping to the group list parent
+			 */
 			return new BasicGroupIndex(map, ibus);
 		}
 
@@ -536,6 +564,7 @@ public class ObservableIslandList extends
 					ACBranch b = bri.next();
 					/** from-side bus in the single-bus topology */
 					Bus f = sbus.getByBus(b.getFromBus());
+					/** to-side bus in sngle-bus topology */
 					Bus t = sbus.getByBus(b.getToBus());
 					ObsIsle fi = _bus2Island[f.getIndex()];
 					if (fi == _bus2Island[t.getIndex()])
@@ -544,6 +573,7 @@ public class ObservableIslandList extends
 						_dbg.step1KnownBranch(b.hashCode(), fi.getIndex());
 					}
 				}
+				
 				/* step 2 loop through available injections and try to apply */
 				Iterator<Bus> busi = _availableInj.iterator();
 				while (busi.hasNext())
@@ -566,7 +596,7 @@ public class ObservableIslandList extends
 		}	
 		
 		/**
-		 * As part of step 2, we need to know if all the branches adjacent to a
+		 * As part of step 2, we need to know if all the branches incident to a
 		 * bus have their remote side in the same island.
 		 * 
 		 * @param bus
@@ -577,8 +607,6 @@ public class ObservableIslandList extends
 		 */
 		ObsIsle testUnknownBranches(Bus bus) throws PAModelException
 		{
-			/** List of buses in single-bus topology */
-			BusList sbus = _bri.getBuses();
 			/** remote side of first branch */
 			ObsIsle rmti = null;
 			for (ACBranchList brlist : bus.getACBranches())
@@ -591,8 +619,8 @@ public class ObservableIslandList extends
 						 * Model elements have references to connectivity buses.
 						 * We need to find the appropriate "single" bus
 						 */
-						Bus f = sbus.getByBus(b.getFromBus());
-						Bus t = sbus.getByBus(b.getToBus());
+						Bus f = _bri.getByBus(b.getFromBus());
+						Bus t = _bri.getByBus(b.getToBus());
 						/** remote or "other" bus for this branch */
 						Bus rb = (f.equals(bus)) ? t : f;
 						/** observable island of remote bus for this branch */
@@ -620,7 +648,7 @@ public class ObservableIslandList extends
 		 */
 		void initializeBranches() throws PAModelException
 		{
-			BusList sbus = _bri.getBuses();
+			/** restrict branches to those in-service */
 			Collection<ACBranchList> l = SubLists.getBranchInsvc(_model.getACBranches());
 			for(ACBranchList blist : l)
 			{
@@ -640,8 +668,8 @@ public class ObservableIslandList extends
 					}
 					else
 					{
-						Bus fbus = sbus.getByBus(br.getFromBus());
-						Bus tbus = sbus.getByBus(br.getToBus());
+						Bus fbus = _bri.getByBus(br.getFromBus());
+						Bus tbus = _bri.getByBus(br.getToBus());
 						Bus inj = null;
 						if(_availableInj.contains(fbus)) inj = fbus;
 						else if (_availableInj.contains(tbus)) inj = tbus;
@@ -656,7 +684,7 @@ public class ObservableIslandList extends
 
 		ObsIsle getObsIsle(Bus bus) throws PAModelException
 		{
-			return _bus2Island[_bri.getBuses().getByBus(bus).getIndex()];
+			return _bus2Island[_bri.getByBus(bus).getIndex()];
 		}
 		
 	}
@@ -933,7 +961,6 @@ public class ObservableIslandList extends
 		PAModel _model;
 		BusList _sbus;
 		TIntObjectHashMap<ACBranch> _brmap = new TIntObjectHashMap<>();
-		
 		
 		static
 		{
