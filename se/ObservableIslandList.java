@@ -29,8 +29,9 @@ import gnu.trove.map.hash.TIntObjectHashMap;
  * Feb 1984.
  * </p>
  * <p>
- * Measurement Telemetered status is not yet available directly in OpenPA or the PSIM CSV formats.
- * As such, we look for non-zero measurements on devices connected to known-energized buses.
+ * Measurement Telemetered status is not yet available directly in OpenPA or the
+ * PSIM CSV formats. As such, we look for non-zero measurements on devices
+ * connected to known-energized buses.
  * </p>
  * <p>
  * This class provides a list of observable islands built using
@@ -289,10 +290,11 @@ public class ObservableIslandList extends
 		 */
 		boolean isBranchMetered(ACBranch br) throws PAModelException
 		{
-			return  br.getFromP() != 0f || 
+			boolean hot = br.getFromBus().getIsland().isEnergized();
+			return  hot && (br.getFromP() != 0f || 
 					br.getToP() != 0f ||
 					br.getFromQ() != 0f ||
-					br.getToQ() != 0f;
+					br.getToQ() != 0f);
 			
 		}
 		
