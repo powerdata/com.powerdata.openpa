@@ -4,4 +4,5 @@ com.powerdata.openpa.psseraw
 com.powerdata.openpa.pwrflow
 com.powerdata.openpa.se
 com.powerdata.openpa.tools
+com.powerdata.openpa.tools.matrix
 com.powerdata.openpa.tools.psmfmt
