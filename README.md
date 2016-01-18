@@ -11,6 +11,16 @@ and provide some basic utilities to help operate on a model.  Our aim is to help
 * Consistent API promotes reduced integration effort
 * reduced application footprint
 
+Javadoc
+-------
+The [Javadoc](http://powerdata.github.io/com.powerdata.openpa) is not complete
+in the sense that every method and attribute has a description,
+but many of the descriptions are in place and
+the class hierarchies are easier to traverse.
+
+[http://powerdata.github.io/com.powerdata.openpa]
+
+
 Status of this README
 -----
 This README file and JavaDoc both need work, but we will try to at least provide enough information to load a 
@@ -19,7 +29,7 @@ test model and work with the library.
 Dependencies
 ------
 * Java 8
-* [Trove Collections](http://trove.starlight-systems.com/)
+* [Trove Collections](https://bitbucket.org/trove4j/trove)
 
 
 Data source formats
