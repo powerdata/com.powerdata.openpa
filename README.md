@@ -11,6 +11,8 @@ and provide some basic utilities to help operate on a model.  Our aim is to help
 * Consistent API promotes reduced integration effort
 * reduced application footprint
 
+A set of overview slides can be found at https://docs.google.com/presentation/d/1_DKizCW9ad2nULGHm8U6IQ3n_LDC1RXziFQ6xcX4F2I/edit?usp=sharing
+
 Javadoc
 -------
 The [Javadoc](http://powerdata.github.io/com.powerdata.openpa) is not complete
