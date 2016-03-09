@@ -45,8 +45,10 @@ public class LoadListI extends OneTermDevListI<Load> implements LoadList
 	{
 		super();
 	}
-	FloatData _pmx = new FloatData(ColumnMeta.LoadPMAX), _qmx = new FloatData(
-			ColumnMeta.LoadQMAX);
+
+	FloatData _pmx = new FloatData(ColumnMeta.LoadPMAX);
+	FloatData _qmx = new FloatData(ColumnMeta.LoadQMAX);	
+	
 	public LoadListI(PAModelI model, int size) throws PAModelException
 	{
 		super(model, size, _PFld);

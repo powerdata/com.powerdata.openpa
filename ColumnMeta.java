@@ -284,7 +284,11 @@ public enum ColumnMeta
 	/** Two-Term DC Line from-side MW */ 				T2dcPFROM(ListMetaType.TwoTermDCLine), 
 	/** Two-Term DC Line from-side MVAr */ 				T2dcQFROM(ListMetaType.TwoTermDCLine), 
 	/** Two-Term DC Line to-side MW */ 					T2dcPTO(ListMetaType.TwoTermDCLine), 
-	/** Two-Term DC Line to-side MVAr */ 				T2dcQTO(ListMetaType.TwoTermDCLine), 
+	/** Two-Term DC Line to-side MVAr */ 				T2dcQTO(ListMetaType.TwoTermDCLine),
+	
+	/** Steam Turbine ID */								SteamTurbineID(ListMetaType.SteamTurbine), 
+	/** Steam Turbine Name */							SteamTurbineNAME(ListMetaType.SteamTurbine), 
+	/** Steam Supply */									SteamTurbineSteamSupply(ListMetaType.SteamTurbine), 
 
 ;
 	

@@ -28,6 +28,7 @@ import com.powerdata.openpa.impl.SeriesReacListI;
 import com.powerdata.openpa.impl.ShuntCapListI;
 import com.powerdata.openpa.impl.ShuntReacListI;
 import com.powerdata.openpa.impl.StationListI;
+import com.powerdata.openpa.impl.SteamTurbineListI;
 import com.powerdata.openpa.impl.SwitchListI;
 import com.powerdata.openpa.impl.TransformerListI;
 import com.powerdata.openpa.impl.VoltageLevelListI;
@@ -76,6 +77,8 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 	SimpleCSV _lineCaseCSV;
 	SimpleCSV _windingCaseCSV;
 	SimpleCSV _svcCaseCSV;
+	
+	SimpleCSV _steamTurbineCSV;
 	
 	
 	//Not yet importing
@@ -775,6 +778,24 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			throw new PAModelException(e);
 		}
 	}
+	
+	
+
+	@Override
+	protected SteamTurbineList loadSteamTurbines() throws PAModelException
+	{
+		try
+		{
+			_steamTurbineCSV = new SimpleCSV(new File(_dir, "SteamTurbine.csv"));
+			return new SteamTurbineListI(_m, _steamTurbineCSV.getRowCount());
+		}
+		catch (IOException e)
+		{
+			throw new PAModelException(e);
+		}
+	}
+
+
 
 	/**
 	 * build reference indexes. These create a list of offsets for a related
@@ -1120,6 +1141,23 @@ public class PFlowPsmModelBldr extends PflowModelBuilder
 			return (R) getFloatData(_smCaseIdx, _synchCaseCSV.get("KVSetPoint"));
 		case GenREGBUS:
 			return (R) getGenRegBus();
+
+		// Steam Turbine 
+		case SteamTurbineID:
+			return (R) _steamTurbineCSV.get("ID");
+		case SteamTurbineNAME:
+			return (R) _steamTurbineCSV.get("Name");
+		case SteamTurbineSteamSupply:
+		{
+			int n = _steamTurbineCSV.getRowCount();
+			String[] stList = _steamTurbineCSV.get("SteamSupply");
+			SteamTurbine.SteamSupply[] stType = new SteamTurbine.SteamSupply[n];
+			Arrays.fill(stType, SteamTurbine.SteamSupply.Unknown);
+			for(int i = 0; i < n; i++)
+				stType[i] = SteamTurbine.SteamSupply.valueOf(stList[i]);
+			return (R) stType;
+		}	
+			
 		//Load
 		case LoadID:
 			return	(R) _loadCSV.get("ID");

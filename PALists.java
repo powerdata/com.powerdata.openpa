@@ -49,6 +49,9 @@ public interface PALists
 	/** return list of SVC's */
 	SVCList getSVCs() throws PAModelException;
 	
+	/** return list of Steam Turbines */
+	SteamTurbineList getSteamTurbines() throws PAModelException;
+	
 	/**
 	 * get all one-terminal devices 
 	 * 

@@ -76,7 +76,9 @@ public class PAModelI implements PAModel
 	
 	
 	Map<ListMetaType, ListConsumer<? extends BaseList<? extends BaseObject>>> _lists = 
-			new EnumMap<>(ListMetaType.class);	
+			new EnumMap<>(ListMetaType.class);
+	SteamTurbineList _sturb;
+	
 	@Override
 	public BaseList<? extends BaseObject> getList(ListMetaType type) throws PAModelException
 	{
@@ -237,6 +239,18 @@ public class PAModelI implements PAModel
 		return _loads;
 	}
 
+	@Override
+	public SteamTurbineList getSteamTurbines() throws PAModelException
+	{
+		if (_sturb == null)
+		{
+			_sturb = _bldr.loadSteamTurbines();
+			_created.add(_sturb);
+		}
+		return _sturb;
+	}
+
+	
 	@Override
 	public ShuntReacList getShuntReactors() throws PAModelException
 	{

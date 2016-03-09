@@ -48,6 +48,7 @@ public abstract class ModelBuilderI implements com.powerdata.openpa.ModelBuilder
 	protected abstract ShuntCapList loadShuntCapacitors() throws PAModelException;
 	protected abstract ShuntReacList loadShuntReactors() throws PAModelException;
 	protected abstract LoadList loadLoads() throws PAModelException;
+	protected abstract SteamTurbineList loadSteamTurbines() throws PAModelException;
 	protected abstract GenList loadGens() throws PAModelException;
 	protected abstract SeriesCapList loadSeriesCapacitors() throws PAModelException;
 	protected abstract SeriesReacList loadSeriesReactors() throws PAModelException;

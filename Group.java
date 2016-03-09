@@ -118,4 +118,10 @@ public class Group extends AbstractBaseObject implements PALists
 		return _slist.getFixedShunts();
 	}
 
+	@Override
+	public SteamTurbineList getSteamTurbines() throws PAModelException
+	{
+		throw new PAModelException("Not yet implemented");
+	}
+
 }

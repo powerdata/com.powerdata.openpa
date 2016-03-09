@@ -478,7 +478,7 @@ public abstract class AbstractPAList<T extends BaseObject> extends AbstractBaseL
 	{
 		E[] rw, ro;
 		
-		EnumData(ColumnMeta coltype)
+		public EnumData(ColumnMeta coltype)
 		{
 			super(coltype);
 		}

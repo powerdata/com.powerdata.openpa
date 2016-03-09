@@ -401,4 +401,10 @@ public class CloneModelBuilder extends ModelBuilderI
 		}
 		return r;
 	}
+
+	@Override
+	protected SteamTurbineList loadSteamTurbines() throws PAModelException
+	{
+		throw new PAModelException("Not yet implemented");
+	}
 }
