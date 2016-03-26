@@ -560,6 +560,7 @@ h1.hidden {
 .seeLabel, .simpleTagLabel, .throwsLabel, .typeNameLabel, .typeNameLink {
     font-weight:bold;
 }
+.cmdparmname {font-weight:bold;}
 .deprecationComment, .emphasizedPhrase, .interfaceName {
     font-style:italic;
 }
